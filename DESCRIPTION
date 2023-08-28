@@ -1,38 +1,50 @@
 Package: tyler
-Title: Common functions that Tyler uses.  
+Title: Common Functions For Mystery Caller Or Audit Studies Evaluating
+    Patient Access to Care.
 Version: 0.0.0.9000
-Authors@R: person("Tyler", "Muffly", email = "tyler.muffly@dhha.com", role = c("aut", "cre"))
-Description: The tyler package provides functions to perform mystery caller studies. Part of these studies are search and process National Provider Identifier (NPI) numbers. It includes a function to search for NPI numbers based on first and last names and process the search results. The package also offers functionality to generate tables summarizing NPI search and demographic data. The package aims to simplify the process of working with NPI data and generating informative tables for analysis and reporting.
+Authors@R: 
+    person("Tyler", "Muffly", , "tyler.muffly@dhha.com", role = c("aut", "cre"))
+Description: The tyler package provides functions to perform mystery
+    caller studies. Part of these studies are search and process National
+    Provider Identifier (NPI) numbers. It includes a function to search
+    for NPI numbers based on first and last names and process the search
+    results. The package also offers functionality to generate tables
+    summarizing NPI search and demographic data. The package aims to
+    simplify the process of working with NPI data and generating
+    informative tables for analysis and reporting.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+Depends: 
+    R (>= 2.10)
 Imports:
     arsenal,
     dplyr,
     exploratory,
-    tidyverse,
     humaniformat,
     janitor,
     knitr,
+    magrittr,
     memoise,
     npi,
     readr,
     readxl,
     stringr,
-    magrittr,
-    tibble
+    tibble,
+    tidyverse
 Suggests:
     ggplot2,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
 Collate:
-    generate_overall_table.R
-    search_and_process_npi.R
-    Splitting_dataframe_to_send_to_callers.R
-    clean_phase_1_results.R
-    arsenal_tables_write.R
-    calculate_proportion.R
-    MaxTable.R
-    MinTable.R
-    QualityCheck.R
+    'generate_overall_table.R'
+    'search_and_process_npi.R'
+    'Splitting_dataframe_to_send_to_callers.R'
+    'clean_phase_1_results.R'
+    'arsenal_tables_write.R'
+    'calculate_proportion.R'
+    'MaxTable.R'
+    'MinTable.R'
+    'QualityCheck.R'
