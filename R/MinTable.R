@@ -13,8 +13,9 @@
 #' @export
 
 MinTable <- function(InVec, mult = FALSE) {
-  if (!is.factor(InVec))
+  if (!is.factor(InVec)) {
     InVec <- factor(InVec)
+  }
   A <- tabulate(InVec)
   if (isTRUE(mult)) {
     levels(InVec)[A == min(A)]

@@ -27,19 +27,15 @@
 #' no_match_percentage <- output$no_match_percentage
 #' no_match_percentage
 #' }
-
-
-
 # Create a function to search and process NPI numbers
 search_and_process_npi <- function(input_file,
                                    enumeration_type = "ind",
                                    limit = 5L,
                                    country_code = "US",
                                    filter_credentials = c("MD", "DO")) {
-
   # Load necessary packages
   library(dplyr)
-  library(stats)  # Import stats package to access na.omit
+  library(stats) # Import stats package to access na.omit
   library(devtools)
   install_github("ropensci/npi")
   library(npi)
@@ -51,8 +47,10 @@ search_and_process_npi <- function(input_file,
   # Check if the input_file contains the full path name.
   # If not, remind the user to use the full file path.
   if (!file.exists(input_file)) {
-    stop("The specified file '", input_file, "' does not exist.\n",
-         "Please provide the full path to the file.")
+    stop(
+      "The specified file '", input_file, "' does not exist.\n",
+      "Please provide the full path to the file."
+    )
   }
 
   # Read data from different file formats (RDS, CSV, or XLS/XLSX)
@@ -74,13 +72,13 @@ search_and_process_npi <- function(input_file,
   gc()
   fc <- cache_filesystem(file.path(".cache"))
   npi_search_memo <- memoise(npi_search, cache = fc)
-#
-#   # Read data from the input file
-#   data <- readxl::read_xlsx(input_file) %>%
-#     dplyr::mutate(first = humaniformat::first_name(full_name),
-#                   last = humaniformat::last_name(full_name),
-#                   last = stringr::str_remove_all(last, "[^[:alnum:]]")) %>%
-#     stats::na.omit()  # Remove rows with missing first or last names
+  #
+  #   # Read data from the input file
+  #   data <- readxl::read_xlsx(input_file) %>%
+  #     dplyr::mutate(first = humaniformat::first_name(full_name),
+  #                   last = humaniformat::last_name(full_name),
+  #                   last = stringr::str_remove_all(last, "[^[:alnum:]]")) %>%
+  #     stats::na.omit()  # Remove rows with missing first or last names
 
   # Define input data from df
   first_names <- data$first
@@ -88,15 +86,20 @@ search_and_process_npi <- function(input_file,
 
   # Create a function to perform the NPI search and processing
   search_npi <- function(first_name, last_name) {
-    tryCatch({
-      npi_search_memo(first_name = first_name,
-                      last_name = last_name,
-                      enumeration_type = "ind",
-                      limit = 10)
-    }, error = function(e) {
-      message(sprintf("Error for %s %s\n%s", first_name, last_name, e$message))
-      NULL
-    })
+    tryCatch(
+      {
+        npi_search_memo(
+          first_name = first_name,
+          last_name = last_name,
+          enumeration_type = "ind",
+          limit = 10
+        )
+      },
+      error = function(e) {
+        message(sprintf("Error for %s %s\n%s", first_name, last_name, e$message))
+        NULL
+      }
+    )
   }
 
   # Create an empty list to store the search results
@@ -160,4 +163,3 @@ search_and_process_npi <- function(input_file,
 # Call the function with the input file name
 # input_file <- "data/Sent_to_npi_search.xlsx"
 # output <- search_and_process_npi(input_file)
-
