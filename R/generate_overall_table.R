@@ -18,7 +18,6 @@
 #' # Generate the overall table
 #' generate_overall_table("data/Table1.rds", "output_tables")
 #' }
-
 generate_overall_table <- function(input_file, output_dir) {
   # Load necessary packages
   install.packages("arsenal")
@@ -54,7 +53,7 @@ generate_overall_table <- function(input_file, output_dir) {
   # Generate the overall table using arsenal::tableby
   cat("Generating the overall table using arsenal::tableby...\n")
   overall_arsenal_table <- arsenal::tableby(
-    ~ .,
+    ~.,
     data = x,
     control = tableby.control(
       test = F,
@@ -89,7 +88,7 @@ generate_overall_table <- function(input_file, output_dir) {
   overall <- summary(
     overall_arsenal_table,
     text = TRUE,
-    title = 'Table: Characteristics of Obstetrics and Gynecology Subspecialists Practicing at Obstetrics and Gynecology Residency Programs',
+    title = "Table: Characteristics of Obstetrics and Gynecology Subspecialists Practicing at Obstetrics and Gynecology Residency Programs",
     pfootnote = FALSE
   )
 
