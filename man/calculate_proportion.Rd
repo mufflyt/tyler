@@ -23,7 +23,7 @@ and generates a tabulation of the counts and proportions.
 library(tyler)
 df <- data.frame(gender = c("Male", "Female", "Male", "Male", "Female"))
 result <- calculate_proportion(df, gender)
-#print(result$proportion)
-#print(result$tabyl_result)
+# print(result$proportion)
+# print(result$tabyl_result)
 }
 }

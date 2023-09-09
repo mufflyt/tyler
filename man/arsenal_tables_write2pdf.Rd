@@ -19,7 +19,7 @@ This function takes an Arsenal Table object and saves it as a PDF file in the "t
 overall <- summary(
   overall_arsenal_table,
   text = T,
-  title = 'Table: Characteristics of Obstetrics and Gynecology Subspecialists Practicing at Obstetrics and Gynecology Residency Programs',
+  title = "Table: Characteristics of Obstetrics and Gynecology Subspecialists Practicing at Obstetrics and Gynecology Residency Programs",
   pfootnote = FALSE
 )
 arsenal_tables_write2pdf(overall, "arsenal_overall_table_one")

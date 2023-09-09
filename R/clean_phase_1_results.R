@@ -99,8 +99,8 @@ clean_phase_1_results <- function(file_path) {
   cat("You're awesome! Data is now ready for assigning lab assistants to each person!\n")
 }
 
-# Provide the path to the CSV file.  This is the ifnal phase 1 data from Hannah.
-file_path <- "/Users/tylermuffly/Dropbox (Personal)/Mystery shopper/mystery_shopper/obgyn/data/phase1_results/ACOG Calling List Phase 1 Final.xls"
-
-# Call the function and save the cleaned dataframe
-clean_phase_1_results(file_path)
+# # Provide the path to the CSV file.  This is the ifnal phase 1 data from Hannah.
+# file_path <- "/Users/tylermuffly/Dropbox (Personal)/Mystery shopper/mystery_shopper/obgyn/data/phase1_results/ACOG Calling List Phase 1 Final.xls"
+#
+# # Call the function and save the cleaned dataframe
+# clean_phase_1_results(file_path)
