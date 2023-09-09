@@ -16,3 +16,10 @@ None
 This function reads the Phase 1 results data file, performs various cleaning and transformation operations,
 and prepares the data for further analysis, including assigning lab assistants.
 }
+\examples{
+\dontrun{
+library(tyler)
+file_path <- "/path/to/your/input/file.xls"
+clean_phase_1_results(file_path)
+}
+}

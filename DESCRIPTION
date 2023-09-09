@@ -1,9 +1,9 @@
 Package: tyler
 Title: Common Functions For Mystery Caller Or Audit Studies Evaluating
     Patient Access to Care.
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
-    person("Tyler", "Muffly", , "tyler.muffly@dhha.com", role = c("aut", "cre"))
+    person("Tyler", "Muffly", email = "tyler.muffly@dhha.com", role = c("aut", "cre"))
 Description: The tyler package provides functions to perform mystery
     caller studies. Part of these studies are search and process National
     Provider Identifier (NPI) numbers. It includes a function to search
@@ -48,3 +48,18 @@ Collate:
     'MaxTable.R'
     'MinTable.R'
     'QualityCheck.R'
+    'tyler-package.R'
+    'utils-pipe.R'
+    'ACOG_Districts.R'
+    'acgme.R'
+    'taxonomy.R'
+    'land_area.R'
+    'geocode.R'
+    'load_matching_data.R'
+    'install_and_load_libraries.R'
+    'install_exploratory_packages.R'
+    'remove_constant_vars.R'
+    'remove_near_zero_var.R'
+    'run_create_base_map.R'
+    'create_base_map.R'
+
