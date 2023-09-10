@@ -62,4 +62,5 @@ Collate:
     'remove_near_zero_var.R'
     'run_create_base_map.R'
     'create_base_map.R'
-
+URL: https://github.com/mufflyt/tyler
+BugReports: https://github.com/mufflyt/tyler/issues
