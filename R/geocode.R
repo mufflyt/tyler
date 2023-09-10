@@ -23,31 +23,34 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key, output_file
   # Load the required packages
   library(ggmap)
   library(tidyverse)
+  library(readr)
+  library(tidyr)
+  library(tidyverse)
 
   # Register the Google Maps API key
   # Google geocoding ----
   #https://www.jessesadler.com/post/geocoding-with-r/
   #Google map API, https://console.cloud.google.com/google/maps-apis/overview?pli=1
-  register_google(key = google_maps_api_key)
+  ggmap::register_google(key = google_maps_api_key)
 
   # Read the data
-  data <- read_csv(file_path)
+  data <- readr::read_csv(file_path)
 
   # Filter unique addresses
-  unique_addresses <- distinct(data, address)
+  unique_addresses <- dplyr::distinct(data, address)
 
   # Geocode the unique addresses
   geocoded_data <- unique_addresses %>%
-    rowwise() %>%
-    mutate(geocode_result = list(geocode(address, output = "latlon", source = "google"))) %>%
-    unnest_wider(geocode_result) %>%
-    select(-address, address, lon, lat)
+    dplyr::rowwise() %>%
+    dplyr::mutate(geocode_result = list(geocode(address, output = "latlon", source = "google"))) %>%
+    tidyr::unnest_wider(geocode_result) %>%
+    dplyr::select(-address, address, lon, lat)
 
   # Join the geocoded data back with the original data
-  final_data <- left_join(data, geocoded_data, by = "address")
+  final_data <- dplyr::left_join(data, geocoded_data, by = "address")
 
   # Write the geocoded data back to a CSV
-  write_csv(final_data, output_file_path)
+  readr::write_csv(final_data, output_file_path)
 
   # Return the final data
   return(final_data)

@@ -14,10 +14,10 @@
 
 qualitycheck <- function(df, filepath = "obgyn/data/final_obgyn_results_of_Marcos_code/quality_check_table.csv") {
   temp <- df %>%
-    group_by(npi, name) %>% # Group the data by 'npi' and 'name'
-    summarise(N = n()) %>% # Calculate the count of observations within each group and create a column named 'N'
-    arrange(desc(N)) %>% # Arrange the data in descending order based on the 'N' column
-    filter(N > 2) # Keep only the rows where the count 'N' is greater than 2
+    dplyr::group_by(npi, name) %>% # Group the data by 'npi' and 'name'
+    dplyr::summarise(N = n()) %>% # Calculate the count of observations within each group and create a column named 'N'
+    dplyr::arrange(desc(N)) %>% # Arrange the data in descending order based on the 'N' column
+    dplyr::filter(N > 2) # Keep only the rows where the count 'N' is greater than 2
 
   # Save the original temp data frame to a CSV file
   write.csv(temp, file = filepath, row.names = FALSE)

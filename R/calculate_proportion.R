@@ -17,12 +17,12 @@
 #' }
 calculate_proportion <- function(df, variable_name) {
   tabyl_result <- df %>%
-    count({{ variable_name }}, name = "n") %>%
-    mutate(percent = n / sum(n))
+    dplyr::count({{ variable_name }}, name = "n") %>%
+    dplyr::mutate(percent = n / sum(n))
 
   most_common <- tabyl_result %>%
     filter(percent == max(percent)) %>%
-    pull({{ variable_name }})
+    dplyr::pull({{ variable_name }})
 
   proportion_variable <- max(tabyl_result$percent)
   proportion_variable <- round(proportion_variable * 100, 1)

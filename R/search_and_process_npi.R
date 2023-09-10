@@ -71,7 +71,7 @@ search_and_process_npi <- function(input_file,
   }
 
   fc <- cache_filesystem(file.path(".cache"))
-  npi_search_memo <- memoise(npi_search, cache = fc)
+  npi_search_memo <- memoise::memoise(npi_search, cache = fc)
 
   first_names <- data$first
   last_names <- data$last
