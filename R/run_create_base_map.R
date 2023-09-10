@@ -19,3 +19,4 @@ cat("                            fillOpacity = 0.8)\n\n\033[0m")
 
 # Example usage
 #my_map <- create_base_map("<h1>Custom Map Title</h1>")
+

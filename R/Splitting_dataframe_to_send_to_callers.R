@@ -64,15 +64,15 @@ split_and_save <- function(input_path, output_directory, lab_assistant_names) {
 
   # Add the 'lab_assistant_assigned_to_call' column based on the lab_assistant_names
   sample_data <- sample_data %>%
-    mutate(lab_assistant_assigned_to_call = rep(lab_assistant_names, length.out = nrow(sample_data))) %>%
-    select(for_redcap, lab_assistant_assigned_to_call, everything())
+    dplyr::mutate(lab_assistant_assigned_to_call = rep(lab_assistant_names, length.out = nrow(sample_data))) %>%
+    dplyr::select(for_redcap, lab_assistant_assigned_to_call, everything())
 
   cat("Saving the complete file before splitting...\n")
 
   # Save the complete data to a separate Excel file
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
   complete_output_file <- paste0(output_directory, "/complete_non_split_version_", current_datetime, ".xlsx")
-  write.xlsx(sample_data, complete_output_file)
+  openxlsx::write.xlsx(sample_data, complete_output_file)
   cat("Saved unsplit and complete data to", complete_output_file, "\n")
 
   cat("Splitting data and saving to separate Excel files...\n")
@@ -93,30 +93,10 @@ split_and_save <- function(input_path, output_directory, lab_assistant_names) {
     output_file <- paste0(output_directory, "/", lab_assistant_name, "_", current_datetime, "_", nrow(lab_assistant_data), "_rows_", first_row_id, "_to_", last_row_id, ".xlsx")
 
     # Write the lab assistant's data to the output Excel file
-    write.xlsx(lab_assistant_data, output_file)
+    openxlsx::write.xlsx(lab_assistant_data, output_file)
   }
 
   cat("Each of the lab assistant's split files have been saved successfully!\n")
   cat("Output directory:", output_directory, "\n")
 }
 
-
-# Usage example
-input_path <- "/Users/tylermuffly/Dropbox (Personal)/Mystery shopper/mystery_shopper/obgyn/data/phase2/clean_phase_1_results_2023-08-13_13-27-58.csv"
-output_directory <- "/Users/tylermuffly/Dropbox (Personal)/Mystery shopper/mystery_shopper/obgyn/data/phase2/For_each_caller"
-
-lab_assistant_names <-
-  c(
-    "Mayu Bickner",
-    "Ellie O’Brien",
-    "Natalya Sparks",
-    "Nelly Mulenga",
-    "Morgan Matous",
-    "Wyanet Bresnitz",
-    "Sophie Whitehead"
-  )
-
-library(janitor)
-lab_assistant_names <- janitor::make_clean_names(lab_assistant_names)
-
-split_and_save(input_path, output_directory, lab_assistant_names)
