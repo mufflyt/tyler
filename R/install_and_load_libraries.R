@@ -7,10 +7,10 @@
 #' @return A character vector containing the names of the loaded packages.
 #'
 #' @importFrom remotes install_github
-#' @importFrom exploratory
+#' @import exploratory
+#' @import tidyverse
 #' @importFrom devtools install_github
 #' @importFrom renv snapshot
-#' @importFrom tidyverse install.packages
 #'
 #' @examples
 #' install_and_load_libraries()
