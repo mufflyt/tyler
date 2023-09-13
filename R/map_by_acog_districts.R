@@ -7,8 +7,8 @@
 #' @importFrom sf st_transform st_sf
 #' @importFrom dplyr left_join group_by summarize
 #' @importFrom rnaturalearth ne_states
-#' @importFrom tigris sf_use_s2
-#' @importFrom RColorBrewer
+#' @importFrom sf sf_use_s2
+#' @import RColorBrewer
 #' @import ggplot2
 #' @export
 
@@ -61,15 +61,12 @@ generate_acog_districts_sf <- function(filepath) {
 #' @param grid_size A numeric vector of length 2 specifying the grid size for the hexagon map (default is c(0.3, 0.3)).
 #' @param specific_district A string or NULL to specify a specific district for generating the map (default is NULL, which processes all districts).
 #' @return A ggplot object of the generated map for the specified or all districts.
-#' @importFrom sf st_transform st_sf
+#' @importFrom sf st_transform st_sf sf_use_s2
 #' @importFrom dplyr filter group_by summarize
 #' @importFrom rnaturalearth ne_countries
-#' @importFrom tigris sf_use_s2
 #' @importFrom ggplot2 ggplot geom_sf scale_fill_viridis_c theme_light theme labs ggsave
 #' @import RColorBrewer
-#' Generate Hexagon Maps by ACOG District
 #'
-#' This function generates hexagon maps for ACOG districts using physician and ACOG district data.
 #'
 #' @param physician_file A character string specifying the file path to the physician data in RDS format.
 #' @param acog_districts_file A character string specifying the file path to the ACOG districts data in CSV format.
@@ -80,10 +77,9 @@ generate_acog_districts_sf <- function(filepath) {
 #'
 #' @return A ggplot object of the generated map for the specified or all districts.
 #'
-#' @importFrom sf st_transform st_sf
+#' @importFrom sf st_transform st_sf sf_use_s2
 #' @importFrom dplyr filter group_by summarize
 #' @importFrom rnaturalearth ne_countries
-#' @importFrom tigris sf_use_s2
 #' @importFrom ggplot2 ggplot geom_sf scale_fill_viridis_c theme_light theme labs ggsave
 #' @import RColorBrewer
 #'

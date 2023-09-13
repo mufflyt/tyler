@@ -7,9 +7,9 @@
 #'
 #' @import arsenal
 #' @importFrom readr read_rds read_csv
-#' @importFrom ggplot2
-#' @importFrom gridExtra
-#' @importFrom tidyverse
+#' @import ggplot2
+#' @import gridExtra
+#' @import tidyverse
 #'
 #' @export
 #'
