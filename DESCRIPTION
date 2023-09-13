@@ -1,66 +1,11 @@
 Package: tyler
-Title: Common Functions For Mystery Caller Or Audit Studies Evaluating
-    Patient Access to Care.
+Title: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care
 Version: 0.1.0
 Authors@R: 
-    person("Tyler", "Muffly", email = "tyler.muffly@dhha.com", role = c("aut", "cre"))
-Description: The tyler package provides functions to perform mystery
-    caller studies. Part of these studies are search and process National
-    Provider Identifier (NPI) numbers. It includes a function to search
-    for NPI numbers based on first and last names and process the search
-    results. The package also offers functionality to generate tables
-    summarizing NPI search and demographic data. The package aims to
-    simplify the process of working with NPI data and generating
-    informative tables for analysis and reporting.
-License: MIT + file LICENSE
-Depends: 
-    R (>= 2.10)
-Imports:
-    arsenal,
-    dplyr,
-    exploratory,
-    humaniformat,
-    janitor,
-    knitr,
-    magrittr,
-    memoise,
-    npi,
-    readr,
-    readxl,
-    stringr,
-    tibble,
-    tidyverse
-Suggests:
-    ggplot2,
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
+    person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
+           comment = "ORCID: 0000-0002-2044-1693")
+Description: The 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting.
+License: What license is it under?
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Collate:
-    'generate_overall_table.R'
-    'search_and_process_npi.R'
-    'Splitting_dataframe_to_send_to_callers.R'
-    'clean_phase_1_results.R'
-    'arsenal_tables_write.R'
-    'calculate_proportion.R'
-    'MaxTable.R'
-    'MinTable.R'
-    'QualityCheck.R'
-    'tyler-package.R'
-    'utils-pipe.R'
-    'ACOG_Districts.R'
-    'acgme.R'
-    'taxonomy.R'
-    'land_area.R'
-    'geocode.R'
-    'load_matching_data.R'
-    'install_and_load_libraries.R'
-    'install_exploratory_packages.R'
-    'remove_constant_vars.R'
-    'remove_near_zero_var.R'
-    'run_create_base_map.R'
-    'create_base_map.R'
-URL: https://github.com/mufflyt/tyler
-BugReports: https://github.com/mufflyt/tyler/issues

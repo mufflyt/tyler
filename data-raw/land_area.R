@@ -9,6 +9,7 @@
 #' @param dataname The name of the data (taken from the data argument if not set)
 #'
 #' @return Saves to file or text output
+#'
 #' @export
 #'
 #' @examples
