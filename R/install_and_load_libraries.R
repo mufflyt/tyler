@@ -16,6 +16,7 @@
 #' install_and_load_libraries()
 #'
 #' @export
+
 install_and_load_libraries <- function() {
   library(devtools)
   library(rlang)
@@ -61,7 +62,7 @@ install_and_load_libraries <- function() {
     if (!requireNamespace(pkg, quietly = TRUE)) {
       cat(pkg, "missing, installing...\n")
       if (pkg %in% cran_pkgs) {
-        install.packages(pkg, dependencies = TRUE)
+        devtools::install.packages(pkg, dependencies = TRUE)
       } else if (pkg %in% githb_pkgs) {
         devtools::install_github(paste0("gmlang/", pkg))
       } else if (pkg %in% remotes_pkg) {

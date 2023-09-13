@@ -4,12 +4,12 @@
 \name{tyler-package}
 \alias{tyler}
 \alias{tyler-package}
-\title{tyler: Common Functions For Mystery Caller Or Audit Studies Evaluating Patient Access to Care.}
+\title{tyler: What the Package Does (One Line, Title Case)}
 \description{
-The tyler package provides functions to perform mystery caller studies. Part of these studies are search and process National Provider Identifier (NPI) numbers. It includes a function to search for NPI numbers based on first and last names and process the search results. The package also offers functionality to generate tables summarizing NPI search and demographic data. The package aims to simplify the process of working with NPI data and generating informative tables for analysis and reporting.
+What the package does (one paragraph).
 }
 \author{
-\strong{Maintainer}: Tyler Muffly \email{tyler.muffly@dhha.com}
+\strong{Maintainer}: Tyler Muffly \email{tyler.muffly@dhha.org} (\href{https://orcid.org/0000-0002-2044-1693}{ORCID})
 
 }
 \keyword{internal}
