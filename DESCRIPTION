@@ -5,7 +5,12 @@ Authors@R:
     person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
            comment = "ORCID: 0000-0002-2044-1693")
 Description: The 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting.
-License: What license is it under?
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Depends:
+    R (>= 3.5.0)
+License: GPL (>= 2)
+Date: 2023-09-11
+Keywords: healthcare, patient access, audit study, NPI
+Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
