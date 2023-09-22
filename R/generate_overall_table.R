@@ -19,15 +19,6 @@
 #' generate_overall_table("data/Table1.rds", "output_tables")
 #' }
 generate_overall_table <- function(input_file, output_dir) {
-  # Load necessary packages
-  install.packages("arsenal")
-  library(arsenal)
-  library(readr)
-  library(ggplot2)
-  library(gridExtra)
-  require(knitr)
-  library(tidyverse)
-
   # Log function start
   cat("Generating the overall table...\n")
 

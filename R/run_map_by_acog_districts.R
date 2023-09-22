@@ -13,8 +13,8 @@ cat("\033[34mInstructions:\n",
 
 # all_map <-
 #   tyler::generate_maps(
-#     physician_file = "data/Physicians.rds",
-#     acog_districts_file = "data/ACOG_Districts.csv",
+#     physician_file = "inst/extdata/Physicians.rds",
+#     acog_districts_file = "inst/extdata/ACOG_Districts.csv",
 #     trait_map = "all",
 #     honey_map = "all",
 #     grid_size = c(0.2, 0.2),

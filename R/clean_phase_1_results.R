@@ -25,12 +25,6 @@
 # This should take all included physicians from phase 1 calling and then remove missing NPI numbers, clean the column names, duplicate the columns and assign an insurance type to them.  Lastly it brings all this data together into one column that can be uploaded to redcap.  At this point the lab assistants can call and find the wait times as they have the doctor name, state, phone number, etc.  Plus there is the NPI number so I can join it back to any other demographics that I may have from NPPES or elsewhere.
 
 clean_phase_1_results <- function(file_path) {
-  library(dplyr)
-  library(readr)
-  library(readxl)
-  library(humaniformat)
-  library(janitor)
-  library(stringr)
 
   cat("Reading the .xls data file...\n")
 
