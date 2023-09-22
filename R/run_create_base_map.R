@@ -1,6 +1,5 @@
 # Load the function
 source("R/create_base_map.R")
-#devtools::load_all(path = ".")
 
 # Instructions for using the function
 cat("\033[34mInstructions:\033[0m\n")

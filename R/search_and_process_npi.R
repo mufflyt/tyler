@@ -34,14 +34,6 @@ search_and_process_npi <- function(input_file,
                                    country_code = "US",
                                    filter_credentials = c("MD", "DO")) {
 
-  # library(dplyr)
-  # library(stats)
-  # library(npi)
-  # library(tidyverse)
-  # library(memoise)
-  # library(humaniformat)
-  # library(progress)
-
   # For testing:
   # input_file <- "/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppes_search/Lo_R_Author.csv"
   # enumeration_type <- "ind"

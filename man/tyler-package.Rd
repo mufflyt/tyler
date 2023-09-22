@@ -8,6 +8,13 @@
 \description{
 The 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://your.package.url}
+}
+
+}
 \author{
 \strong{Maintainer}: Tyler Muffly \email{tyler.muffly@dhha.org} (ORCID: 0000-0002-2044-1693)
 

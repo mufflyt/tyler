@@ -12,42 +12,39 @@
 #' @import ggplot2
 #' @export
 
-# Define function to generate ACOG Districts sf object.  This allows for all the states in a district to be grouped together.
-generate_acog_districts_sf <- function(filepath) {
-  # Add error handling for file path
-  if(!file.exists(filepath)) {
-    stop("File not found: ", filepath)
-  }
-
+generate_acog_districts_sf <- function() {
+  options(tigris_use_cache = TRUE)
   sf::sf_use_s2(FALSE)
-  library(sf)
-  library(dplyr)
-  library(ggplot2)
-  library(rnaturalearth)
-  library(tigris)
-  library(RColorBrewer)
 
-  # Read ACOG Districts data
-  ACOG_Districts <- read.csv(filepath)
+  cat("Using ACOG_Districts dataframe...\n")
+  # Use the ACOG_Districts dataframe from the tyler package
+  ACOG_Districts <- tyler::ACOG_Districts
 
+  cat("Getting the states shapefile...\n")
   # Get the states shapefile
   states <- rnaturalearth::ne_states(country = "United States of America", returnclass = "sf")
   states <- sf::st_transform(states, 4326)
 
+  cat("Joining ACOG Districts with states and transforming...\n")
   # Join ACOG Districts with states and transform
   states <- states %>%
     dplyr::left_join(ACOG_Districts, by = c("name" = "State")) %>%
-    dplyr::mutate(ACOG_District = if_else(name == "Alaska" & ACOG_District == "VIII", NA_character_, ACOG_District)) %>%
+    dplyr::mutate(ACOG_District = dplyr::if_else(name == "Alaska" & ACOG_District == "VIII", NA_character_, ACOG_District)) %>%
     sf::st_transform(4326)
 
+  cat("Grouping states by ACOG District and combining...\n")
   # Group states by ACOG District and combine them
   ACOG_Districts_sf <- states %>%
     dplyr::group_by(ACOG_District) %>%
-    dplyr::summarize(geometry = st_union(geometry), .groups = 'drop') %>%
+    dplyr::summarize(geometry = sf::st_union(geometry), .groups = 'drop') %>%
     sf::st_sf()
+
+  cat("ACOG Districts SF creation complete.  Creates a plottable sf file of ACOG districts.\n")
+  cat("Reference: https://www.acog.org/community/districts-and-sections.\n")
 
   return(ACOG_Districts_sf)
 }
+
 
 #####
 #' Generate Hexagon Maps by ACOG District
@@ -105,32 +102,19 @@ generate_acog_districts_sf <- function(filepath) {
 # Function to generate hexagon maps by ACOG district.
 generate_maps <- function(physician_file, acog_districts_file, trait_map = "all", honey_map = "all", grid_size = c(0.3, 0.3), specific_district = NULL) {
 
-  cat("Install all needed packages...\n")
-  library(sf)
-  library(dplyr)
-  library(ggplot2)
-  library(rnaturalearth)
-  library(tigris)
-  library(RColorBrewer)
-  library(ggspatial)
-  # library(extrafont)
-  # # Import fonts from your system (replace "YourFont" with the font you want to use)
-  # font_import(pattern = "Helvetica")
-  #
-  # # Register the fonts
-  # loadfonts()
+  options(tigris_use_cache = TRUE)
+  sf::sf_use_s2(FALSE)
 
   # Load physician data
-  cat("Loading physician data from RDS file...\n")
+  cat("Loading physician data from an RDS file...  Include columns named long and lat...\n")
   physicians <- readRDS(physician_file)
   physicians <- physicians[!is.na(physicians$long), ]
   physician_sf <- sf::st_as_sf(physicians, coords = c("long", "lat"), crs = 4326)
 
   # Load ACOG districts data
   cat("Loading ACOG districts data...\n")
-  acog_districts_sf <- tyler::generate_acog_districts_sf(acog_districts_file)
-
-  sf::sf_use_s2(FALSE)
+  #acog_districts_sf <- generate_acog_districts_sf(acog_districts_file)
+  acog_districts_sf <- generate_acog_districts_sf()
 
   cat("Starting generate_maps function...\n")
 
@@ -158,14 +142,14 @@ generate_maps <- function(physician_file, acog_districts_file, trait_map = "all"
     cat("Processing district:", district, "...\n")
     district_sf <- dplyr::filter(acog_districts_sf, ACOG_District == district)
 
+    #Not really working well for me 9/17/2023.  Can't see any lakes.
     # Get global rivers and lakes data
-    #rivers <- ne_download(scale = 10, type = 'rivers_lake_centerlines', category = 'physical', returnclass = "sf")
-    lakes <- rnaturalearth::ne_download(scale = 10, type = 'lakes', category = 'physical', returnclass = "sf") %>%
-      dplyr::filter(name %in% c("Lake Superior", "Lake Michigan", "Lake Huron", "Lake Erie", "Lake Ontario"))
-
+    #rivers <- rnaturalearth::ne_download(scale = 10, type = 'rivers_lake_centerlines', category = 'physical', returnclass = "sf")
+    #lakes <- rnaturalearth::ne_download(scale = 10, type = 'lakes', category = 'physical', returnclass = "sf") %>%
+      #dplyr::filter(name %in% c("Lake Superior", "Lake Michigan", "Lake Huron", "Lake Erie", "Lake Ontario"))
     # Clip the rivers and lakes data to the district boundaries
-    #rivers_in_district <- st_intersection(rivers, district_sf)
-    lakes_in_district <- sf::st_intersection(lakes, district_sf)
+    #rivers_in_district <- sf::st_intersection(rivers, district_sf)
+    #lakes_in_district <- sf::st_intersection(lakes, district_sf)
 
     # Create honeycomb grid and intersect with physician data
     honeycomb_grid_sf <- sf::st_make_grid(district_sf, grid_size, what = "polygons", square = FALSE) %>%
@@ -186,12 +170,12 @@ generate_maps <- function(physician_file, acog_districts_file, trait_map = "all"
     # Create the map with honeycomb and ACOG Districts
     cat("Creating the map for district", district, "...\n")
 
-    map_ggplot <- ggplot() +
+    map_ggplot <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = district_sf, fill = "#D3D3D3", color = "darkblue", size = 1.5) +
       ggplot2::geom_sf(data = honeycomb_grid_with_physicians, aes(fill = physician_count), color = NA) +
-      # Adding clipped rivers and lakes to your plot
-      #geom_sf(data = rivers_in_district, color = "blue", size = 0.5) +
-      ggplot2::geom_sf(data = lakes_in_district, fill = "blue", color = "blue") +
+      # # Adding clipped rivers and lakes to your plot
+      # #geom_sf(data = rivers_in_district, color = "blue", size = 0.5) +
+      # ggplot2::geom_sf(data = lakes_in_district, fill = "blue", color = "blue") +
       ggplot2::scale_fill_viridis_c(breaks = c(10, 20, 40, 60, 80, 100, 150),
                            name = "Obstetrics and Gynecology Faculty Subspecialists",
                            guide = guide_colorbar(direction = "horizontal",
@@ -203,15 +187,6 @@ generate_maps <- function(physician_file, acog_districts_file, trait_map = "all"
                                                   alpha = 0.7,
                                                   label.theme = element_text(size = 8, color = "black", hjust = 0.5))) +
       ggplot2::theme_minimal(base_size = 10) +
-      # ggplot2::theme(panel.background = element_rect(fill = "floralwhite", color = "darkblue", size = 1),
-      #       axis.text = element_text(size = 4, color = "darkgray", family = "Helvetica"),
-      #       axis.title = element_text(size = 12, face = "bold", family = "Helvetica"),
-      #       plot.title = element_text(size = 14, face = "bold", hjust = 0.5, family = "Helvetica"),
-      #       legend.position = "bottom",
-      #       legend.title = element_text(face = "bold", color = "darkblue", size = 10, family = "Helvetica"),
-      #       legend.text = element_text(size = 8, family = "Helvetica"),
-      #       legend.background = element_rect(fill = "aliceblue", color = "black", size = 0.5),
-      #       plot.margin = margin(10, 10, 10, 10)) +
       ggplot2::theme(
         panel.background = element_rect(
           fill = "floralwhite",
@@ -233,8 +208,8 @@ generate_maps <- function(physician_file, acog_districts_file, trait_map = "all"
         plot.margin = margin(10, 10, 10, 10),
         legend.key = element_rect(fill = "aliceblue", color = "black", size = 0.5)
       ) +
-      # Add other theme modifications here if needed
 
+      # Add other theme modifications here if needed
       ggplot2::labs(title = paste("American College of Obstetricians\n and Gynecologists", district)) +
       ggspatial::annotation_scale(location = "bl", width_hint = 0.5, bar_cols = c("black", "white")) +
       ggspatial::annotation_north_arrow(location = "tr", which_north = "true", style = north_arrow_fancy_orienteering()) +
@@ -246,17 +221,21 @@ generate_maps <- function(physician_file, acog_districts_file, trait_map = "all"
 
     # Save the map in various formats
     cat("Saving the map for district", district, "...\n")
-    ggplot2::ggsave(filename = paste0("figures/hexmap/hexmap_figures/", trait_map, "_", honey_map, "_district_", district, "_honey.png"), plot = map_ggplot, width = 10, height = 6, dpi = 800)
+    ggplot2::ggsave(filename = paste0("figures/hexmap/hexmap_figures/", trait_map, "_", "_district_", district, "_honey.tiff"), plot = map_ggplot, width = 10, height = 6, dpi = 800)
 
     return(map_ggplot)
   })
 }
 
 # Use case:
+#
+#generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
+# generate_acog_districts_sf()
+#
 # all_map <-
 #   tyler::generate_maps(
-#     physician_file = "data/Physicians.rds",
-#     acog_districts_file = "data/ACOG_Districts.csv",
+#     physician_file = "inst/extdata/Physicians.rds",
+#     acog_districts_file = "inst/extdata/ACOG_Districts.csv",
 #     trait_map = "all",
 #     honey_map = "all",
 #     grid_size = c(0.2, 0.2),

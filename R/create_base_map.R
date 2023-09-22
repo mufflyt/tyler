@@ -43,7 +43,7 @@ create_base_map <- function(title) {
   cat("                            fillOpacity = 0.8)\n\n\033[0m")
 
   # Create the Leaflet map
-  lf <- leaflet() %>%
+  lf <- leaflet::leaflet() %>%
     leaflet::setView(lat = 39.8282, lng = -98.5795, zoom = 4.5) %>%
     leaflet::clearMarkers() %>%
     leaflet::addControl(title, position = "topleft", className = "map-title") %>%
