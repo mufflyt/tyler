@@ -14,15 +14,6 @@
 #'
 #' @export
 load_matching_data <- function(location, year) {
-  # Load required libraries
-  library(exploratory)
-  library(dplyr)
-  library(janitor)
-  library(lubridate)
-  library(readr)
-  library(stringr)
-  library(tidyr)
-
   # Testing
   # location <- "Utah"
   # year <- 2016
@@ -64,9 +55,6 @@ load_matching_data <- function(location, year) {
       janitor::clean_names(case = "parsed") %>%
       # Add 'Date_of_Birth_year' column
       dplyr::mutate(Date_of_Birth_year = lubridate::year(Date_of_Birth)) %>%
-
-
-
       # Add 'Year_numeric' column and recode it
       dplyr::mutate(Year_numeric = as.numeric(Year)) %>%
       dplyr::mutate(Year_numeric = exploratory::recode(Year_numeric, `1` = 2017, `2` = 2018, `3` = 2019, `4` = 2020)) %>%
@@ -75,7 +63,7 @@ load_matching_data <- function(location, year) {
       # Add 'Location' column
       dplyr::mutate(Location = location) %>%
       # Convert selected columns to factors
-      dplyr::mutate(across(where(is.character), as.factor))
+      dplyr::mutate(dplyr::across(dplyr::where(is.character), as.factor))
 
     # Log successful data processing
     message("Function Load Matching Data: Data processed successfully")
