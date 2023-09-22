@@ -17,10 +17,6 @@
 # Split the final graph.
 # I have a dataframe of 1224 rows.  I want to keep the file in the order it is in now.   I need to split it eight ways and then send a CSV of each split to a person.  What do you recommend?
 split_and_save <- function(input_path, output_directory, lab_assistant_names) {
-  cat("Loading libraries and preparing to split data...\n")
-  library(tidyverse)
-  library(openxlsx)
-  library(janitor)
 
   # Check if the number of lab_assistant_names matches the required number of splits
   n_splits <- length(lab_assistant_names)

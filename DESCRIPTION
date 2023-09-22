@@ -8,20 +8,46 @@ Description: The 'tyler' package provides a collection of functions designed to 
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-License: GPL (>= 2)
+License: MIT + file LICENSE
+URL: https://your.package.url
 Date: 2023-09-11
 Keywords: healthcare, patient access, audit study, NPI
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:
-    R (>= 3.5.0),
-    sf,
+    R (>= 3.5.0)
+Imports:
     tidyverse,
+    sf,
     ggplot2,
     tigris,
     humaniformat,
     magrittr,
     arsenal,
-    tmap
-Imports:
-    tidyverse
+    tmap, 
+    RColorBrewer,
+    devtools, 
+    exploratory, 
+    gridExtra,
+    janitor, 
+    readxl, 
+    remotes, 
+    renv,
+    rnaturalearth, 
+    stringr, 
+    tibble,
+    dplyr, 
+    lubridate, 
+    readr,
+    AppliedPredictiveModeling,
+    caret,
+    ggmap,
+    ggspatial,
+    glue,
+    leaflet,
+    memoise,
+    npi,
+    openxlsx,
+    progress,
+    purrr,
+    tidyr
 LazyData: true

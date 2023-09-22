@@ -15,29 +15,23 @@
 #'
 #' @export
 remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
-  
-  # Load the necessary libraries
-  library(dplyr)
-  library(glue)
-  library(caret)
-  
   # Log: Starting the function
   message("Starting the function to remove near-zero variance variables.")
-  
+
   # Log: Checking if the data frame is empty
   if (nrow(data_frame) == 0 || ncol(data_frame) == 0) {
     message("The data frame is empty. Exiting function.")
     return(data_frame)
   }
-  
+
   # Identify near-zero variance variables
   message("Identifying near-zero variance variables...")
   remove_cols <- caret::nearZeroVar(data_frame, names = TRUE, freqCut = freqCut, uniqueCut = uniqueCut)
   remove_cols <- base::sort(remove_cols)
-  
+
   # Log: Number of near-zero variance variables found
   message(glue::glue("Found {length(remove_cols)} near-zero variance variables."))
-  
+
   # Remove near-zero variance variables if any
   if (length(remove_cols) > 0) {
     # Log: Removing near-zero variance variables
@@ -47,10 +41,10 @@ remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
     # Log: No near-zero variance variables to remove
     message("No near-zero variance variables to remove.")
   }
-  
+
   # Log: Function completed
   message("Function completed.")
-  
+
   return(data_frame)
 }
 
