@@ -24,5 +24,5 @@ The resulting table is saved as a CSV file.
 }
 \examples{
 df <- data.frame(npi = c(1, 2, 1, 2, 2), name = c("A", "B", "A", "B", "B"))
-saveQualityCheckTable(df)
+qualitycheck(df)
 }

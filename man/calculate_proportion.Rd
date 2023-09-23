@@ -12,7 +12,7 @@ calculate_proportion(df, variable_name)
 \item{variable_name}{The name of the categorical variable for which to calculate the proportion.}
 }
 \value{
-A list containing the calculated proportion and the tabulation result.
+A list containing the calculated most common value, proportion variable, and the tabulation result.
 }
 \description{
 This function calculates the proportion of each category in a specified variable
@@ -22,8 +22,10 @@ and generates a tabulation of the counts and proportions.
 \dontrun{
 library(tyler)
 df <- data.frame(gender = c("Male", "Female", "Male", "Male", "Female"))
-result <- calculate_proportion(df, gender)
-# print(result$proportion)
-# print(result$tabyl_result)
+result <- calculate_proportion(df, "gender")
+cat("Most Common Value: ", result$most_common, "\n")
+cat("Proportion Variable: ", result$proportion_variable, "\%\n")
+print(result$tabyl_result)
 }
+
 }
