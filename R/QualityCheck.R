@@ -9,7 +9,7 @@
 #' @return Prints a message to the console indicating that the CSV file has been saved successfully.
 #' @examples
 #' df <- data.frame(npi = c(1, 2, 1, 2, 2), name = c("A", "B", "A", "B", "B"))
-#' saveQualityCheckTable(df)
+#' qualitycheck(df)
 #' @export
 
 qualitycheck <- function(df, filepath = "obgyn/data/final_obgyn_results_of_Marcos_code/quality_check_table.csv") {

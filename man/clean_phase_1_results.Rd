@@ -4,10 +4,10 @@
 \alias{clean_phase_1_results}
 \title{Clean Phase 1 Results Data}
 \usage{
-clean_phase_1_results(file_path)
+clean_phase_1_results(df)
 }
 \arguments{
-\item{file_path}{The path to the Phase 1 results data file (XLS/XLSX format).}
+\item{df}{A data frame containing the Phase 1 results data.}
 }
 \value{
 None
@@ -20,6 +20,7 @@ and prepares the data for further analysis, including assigning lab assistants.
 \dontrun{
 library(tyler)
 file_path <- "/path/to/your/input/file.xls"
-clean_phase_1_results(file_path)
+df <- read_xls(file_path)
+clean_phase_1_results(df)
 }
 }
