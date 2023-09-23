@@ -3,14 +3,15 @@
 #' This function reads the Phase 1 results data file, performs various cleaning and transformation operations,
 #' and prepares the data for further analysis, including assigning lab assistants.
 #'
-#' @param file_path The path to the Phase 1 results data file (XLS/XLSX format).
+#' @param df A data frame containing the Phase 1 results data.
 #' @return None
 #'
 #' @examples
 #' \dontrun{
 #' library(tyler)
 #' file_path <- "/path/to/your/input/file.xls"
-#' clean_phase_1_results(file_path)
+#' df <- read_xls(file_path)
+#' clean_phase_1_results(df)
 #' }
 #' @import dplyr
 #' @import readr
@@ -21,16 +22,7 @@
 #' @import stringr
 #' @export
 #'
-
-# This should take all included physicians from phase 1 calling and then remove missing NPI numbers, clean the column names, duplicate the columns and assign an insurance type to them.  Lastly it brings all this data together into one column that can be uploaded to redcap.  At this point the lab assistants can call and find the wait times as they have the doctor name, state, phone number, etc.  Plus there is the NPI number so I can join it back to any other demographics that I may have from NPPES or elsewhere.
-
-clean_phase_1_results <- function(file_path) {
-
-  cat("Reading the .xls data file...\n")
-
-  # Read data from different file formats (CSV, XLS/XLSX, or RDS)
-  df <- read_xls(file_path)
-
+clean_phase_1_results <- function(df) {
 
   cat("Converting column types...\n")
   df <- df %>%
@@ -78,7 +70,6 @@ clean_phase_1_results <- function(file_path) {
     dplyr::mutate(academic = ifelse(stringr::str_detect(practice_name, stringr::str_c(c("Medical College", "University of", "University", "Univ", "Children's", "Infirmary", "Medical School", "Medical Center", "Medical Center", "Children", "Health System", "Foundation", "Sch of Med", "Dept of Oto", "Mayo", "UAB", "OTO Dept", "Cancer Ctr", "Penn", "College of Medicine", "Cancer", "Cleveland Clinic", "Henry Ford", "Yale", "Brigham", "Dept of OTO", "Health Sciences Center", "SUNY"), collapse = "|", sep = "\\b|\\b", fixed = TRUE)), "University", "Private Practice")) # Identify academic or private practice
 
   cat("Uniting columns for REDCap upload...\n")
-  # I included id twice because redcap requires the id at the start of the string but then does not show it.  Christ have mercy.
   df <- df %>%
     dplyr::mutate(for_redcap = paste(id, dr_name, insurance, phone_number, state_name, npi, academic, id_number, sep = ", ")) %>%
     dplyr::select(for_redcap, id, phone_number, academic, everything())
@@ -92,9 +83,3 @@ clean_phase_1_results <- function(file_path) {
 
   cat("You're awesome! Data is now ready for assigning lab assistants to each person!\n")
 }
-
-# # Provide the path to the CSV file.  This is the ifnal phase 1 data from Hannah.
-# file_path <- "/Users/tylermuffly/Dropbox (Personal)/Mystery shopper/mystery_shopper/obgyn/data/phase1_results/ACOG Calling List Phase 1 Final.xls"
-#
-# # Call the function and save the cleaned dataframe
-# clean_phase_1_results(file_path)
