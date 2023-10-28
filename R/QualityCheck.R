@@ -5,14 +5,11 @@
 #' The resulting table is saved as a CSV file.
 #'
 #' @param df A data frame containing the columns 'npi' and 'name'.
-#' @param filepath The path where the CSV file should be saved. Defaults to "obgyn/data/final_obgyn_results_of_Marcos_code/quality_check_table.csv".
+#' @param filepath The path where the CSV file should be saved.
 #' @return Prints a message to the console indicating that the CSV file has been saved successfully.
-#' @examples
-#' df <- data.frame(npi = c(1, 2, 1, 2, 2), name = c("A", "B", "A", "B", "B"))
-#' qualitycheck(df)
 #' @export
 
-qualitycheck <- function(df, filepath = "obgyn/data/final_obgyn_results_of_Marcos_code/quality_check_table.csv") {
+qualitycheck <- function(df, filepath) {
   temp <- df %>%
     dplyr::group_by(npi, name) %>% # Group the data by 'npi' and 'name'
     dplyr::summarise(N = n()) %>% # Calculate the count of observations within each group and create a column named 'N'
