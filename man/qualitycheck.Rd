@@ -4,15 +4,12 @@
 \alias{qualitycheck}
 \title{Save Quality Check Table}
 \usage{
-qualitycheck(
-  df,
-  filepath = "obgyn/data/final_obgyn_results_of_Marcos_code/quality_check_table.csv"
-)
+qualitycheck(df, filepath)
 }
 \arguments{
 \item{df}{A data frame containing the columns 'npi' and 'name'.}
 
-\item{filepath}{The path where the CSV file should be saved. Defaults to "obgyn/data/final_obgyn_results_of_Marcos_code/quality_check_table.csv".}
+\item{filepath}{The path where the CSV file should be saved.}
 }
 \value{
 Prints a message to the console indicating that the CSV file has been saved successfully.
@@ -21,8 +18,4 @@ Prints a message to the console indicating that the CSV file has been saved succ
 This function takes a data frame containing 'npi' and 'name' columns and creates a quality check table.
 The table includes the count of observations for each 'npi' and 'name' combination where the count is greater than 2.
 The resulting table is saved as a CSV file.
-}
-\examples{
-df <- data.frame(npi = c(1, 2, 1, 2, 2), name = c("A", "B", "A", "B", "B"))
-qualitycheck(df)
 }

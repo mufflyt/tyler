@@ -23,7 +23,7 @@ calculate_proportion <- function(df, variable_name) {
   cat("Calculating proportions and generating tabulation...\n")
 
   tabyl_result <- df %>%
-    dplyr::count({{ variable_name }}, name = "n") %>%
+    dplyr::count(variable_name, name = "n") %>%
     dplyr::mutate(percent = n / sum(n))
 
   most_common <- get_most_common(tabyl_result, variable_name)
@@ -47,7 +47,7 @@ get_most_common <- function(tabyl_result, variable_name) {
   cat("Calculating the most common value...\n")
   most_common <- tabyl_result %>%
     dplyr::filter(percent == max(percent)) %>%
-    dplyr::pull({{ variable_name }})
+    dplyr::pull(variable_name)
   cat("Most common value calculated.\n")
   return(most_common)
 }
