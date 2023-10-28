@@ -1,6 +1,6 @@
 Package: tyler
 Title: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care
-Version: 0.1.0
+Version: 1.1.0
 Authors@R: 
     person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
            comment = "ORCID: 0000-0002-2044-1693")
@@ -38,7 +38,6 @@ Imports:
     dplyr, 
     lubridate, 
     readr,
-    AppliedPredictiveModeling,
     caret,
     ggmap,
     ggspatial,
@@ -51,3 +50,4 @@ Imports:
     purrr,
     tidyr
 LazyData: true
+Files: R/
