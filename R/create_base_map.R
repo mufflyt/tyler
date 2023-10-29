@@ -49,9 +49,9 @@ create_base_map <- function(title) {
     leaflet::addControl(title, position = "topleft", className = "map-title") %>%
     leaflet::addScaleBar(position = "bottomleft") %>%
     leaflet::addTiles(options = leaflet::tileOptions(useCache = TRUE, crossOrigin = TRUE)) %>%
-    leaflet::addProviderTiles(providers$CartoDB.Positron) %>%
+    leaflet::addProviderTiles(providers$CartoDB.Positron)# %>%
     # leaflet::addLayersControl(baseGroups = c("Positron", "OpenStreetMap", "Toner Map", "Satellite Map"), options = leaflet::layersControlOptions(collapsed = FALSE)) %>% #Does not work when used as a function
-    leaflet::mapOptions(zoomToLimits = "first")
+    #leaflet::mapOptions(zoomToLimits = "first")
 
   cat("Setting up the base map...\n")
   cat("Adding map title...\n")
