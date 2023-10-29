@@ -45,7 +45,6 @@ generate_acog_districts_sf <- function() {
   return(ACOG_Districts_sf)
 }
 
-
 #####
 #' Generate Hexagon Maps by ACOG District
 #'
