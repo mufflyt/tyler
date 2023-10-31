@@ -10,18 +10,15 @@ The goal of the 'tyler' package provides a collection of functions designed to f
 ## Installation
 
 You can install the development version of tyler from [GitHub](https://github.com/) with:
-
 ``` r
 # install.packages("devtools")
 devtools::install_github("mufflyt/tyler")
 ```
 
-## Data of Interest
-
-This is a basic example which shows you how to solve a common problem:
-
-First 'tyler' is a data package:
-'tyler::acgme' - This is a dataframe of every OBGYN residency from the ACGME web site.  This data can be used to map the obgyn residencies, etc.  It references this web site: https://apps.acgme-i.org/ads/Public/Reports/Report/1. 
+# Data: Workforce
+### Data: `tyler::acgme`
+Dataframe of the OBGYN residency programs scraped from https://apps.acgme.org/ads/Public/Programs/Search.  Name, city, state, accreditation date, program director name, website, rotations, and affiliated hospitals are included.  
+'tyler::acgme' - This is a dataframe of every OBGYN residency from the ACGME web site.  This data can be used to map the obgyn residencies, etc.  
 ```r
 obgyn_residencies <- tyler::acgme
 
@@ -33,9 +30,11 @@ obgyn_residencies <- tyler::acgme
  3 University of Ari… "Banne… 85006 Phoe… Ariz… 038179                 University of Arizona… (602… May 07, 1951   
 ```
 
-'tyler::ACOG_Districts' - This is a dataframe of state names, ACOG Districts, US Census Bureau Subregions, and state abbreviations. 
+### Data: 'tyler::ACOG_Districts' 
+This is a dataframe of state names, ACOG Districts, US Census Bureau Subregions, and state abbreviations. 
 ```r
 acog_districts <- tyler::ACOG_Districts
+tyler::ACOG_Districts
 
 # A tibble: 52 × 4
    State                ACOG_District Subregion     State_Abbreviations
@@ -52,7 +51,8 @@ acog_districts <- tyler::ACOG_Districts
 10 Florida              District XII  District XII  FL 
 ```
 
-'tyler::taxonomy' - This is a dataframe of NUCC taxonomy codes used in the NPPES data files.  Of note the OBGYN taxonomy codes are: Version 23.1 from 7/1/2023.  https://nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40/csv-mainmenu-57.  For example: 
+### Data: 'tyler::taxonomy' 
+This is a dataframe of NUCC taxonomy codes used in the NPPES data files.  Of note the OBGYN taxonomy codes are: Version 23.1 from 7/1/2023.  https://nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40/csv-mainmenu-57.  For example: 
 ```r
 obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed("GYN", ignore_case = TRUE))) %>% select (Code, Specialization)
 
@@ -70,11 +70,75 @@ obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed(
 10 207VX0000X Obstetrics                                       
 11 207VE0102X Reproductive Endocrinology 
 ```
-
-'tyler::physicians' is the names and coordinates for subspecialists in OBGYN.  
-
+### Data: 'tyler::physicians' 
+Internal package dataframe with the names and coordinates for subspecialists in OBGYN.  The source file `Physicians.rds` is found at `tyler/inst/extdata`
 ``` r
 library(tyler)
-## basic example code
+tyler::physicians
 ```
 
+# MAKING MAPS
+### `tyler::geocode_unique_addresses`
+Takes a csv file of addresses and prints out the lat and long as separate columns.  
+```r
+output_data <- 
+    geocode_unique_addresses(file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/address_for_geocoding.csv", 
+    google_maps_api_key = "????", 
+    output_file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/geocoded_unique_addresses.csv")
+```
+
+### `tyler::create_basemap`
+This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  
+```r
+# Create a base map with a custom title
+my_map <- create_base_map("TITLE")
+
+# Display the map and add circle markers
+my_map <- my_map %>%
+  leaflet::addCircleMarkers(lng = ~longitude,
+                           lat = ~latitude,
+                           data = data_points,
+                           popup = ~popup_text,
+                           radius = ~radius,
+                           color = ~color,
+                           fill = TRUE,
+                           stroke = FALSE,
+                           fillOpacity = 0.8)
+```
+
+### `tyler::create_isochrones`
+A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  
+
+### `tyler::create_isochrones_for_dataframe`
+A function that iterates the `tyler::create_isochrones` over an entire dataframe.  The only input is a dataframe and the breaks for the number of minutes for each isochrones.  
+```r
+isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
+```
+
+# DEMOGRAPHICS
+```r
+ # "B01001_026E  Estimate _Total _Female                      \n",
+ #       "B01001_027E  Estimate_Total_Female_Under 5 years       \n",
+ #       "B01001_028E  Estimate_Total_Female_5 to 9 years        \n",
+ #       "B01001_029E  Estimate_Total_Female_10 to 14 years      \n",
+ #       "B01001_030E  Estimate_Total_Female_15 to 17 years      \n",
+ #       "B01001_031E  Estimate_Total_Female_18 and 19 years     \n",
+ #       "B01001_032E  Estimate_Total_Female_20 years            \n",
+ #       "B01001_033E  Estimate_Total_Female_21 years            \n",
+ #       "B01001_034E  Estimate_Total_Female_22 to 24 years      \n",
+ #       "B01001_035E  Estimate_Total_Female_25 to 29 years      \n",
+ #       "B01001_036E  Estimate_Total_Female_30 to 34 years      \n",
+ #       "B01001_037E  Estimate_Total_Female_35 to 39 years      \n",
+ #       "B01001_038E  Estimate_Total_Female_40 to 44 years      \n",
+ #       "B01001_039E  Estimate_Total_Female_45 to 49 years      \n",
+ #       "B01001_040E  Estimate_Total_Female_50 to 54 years      \n",
+ #       "B01001_041E  Estimate_Total_Female_55 to 59 years      \n",
+ #       "B01001_042E  Estimate_Total_Female_60 and 61 years     \n",
+ #       "B01001_043E  Estimate_Total_Female_62 to 64 years      \n",
+ #       "B01001_044E  Estimate_Total_Female_65 and 66 years     \n",
+ #       "B01001_045E  Estimate_Total_Female_67 to 69 years      \n",
+ #       "B01001_046E  Estimate_Total_Female_70 to 74 years      \n",
+ #       "B01001_047E  Estimate_Total_Female_75 to 79 years      \n",
+ #       "B01001_048E  Estimate_Total_Female_80 to 84 years      \n",
+ #       "B01001_049E  Estimate_Total_Female_85 years and over   \n",
+```
