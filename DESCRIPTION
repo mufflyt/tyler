@@ -48,6 +48,9 @@ Imports:
     openxlsx,
     progress,
     purrr,
-    tidyr
+    tidyr, 
+    htmlwidgets, 
+    leafletExtras, 
+    webshot
 LazyData: true
 Files: R/
