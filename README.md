@@ -78,6 +78,15 @@ tyler::physicians
 ```
 
 # MAKING MAPS
+### `tyler::geocode_unique_addresses`
+Takes a csv file of addresses and prints out the lat and long as separate columns.  
+```r
+output_data <- 
+    geocode_unique_addresses(file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/address_for_geocoding.csv", 
+    google_maps_api_key = "????", 
+    output_file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/geocoded_unique_addresses.csv")
+```
+
 ### `tyler::create_basemap`
 This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  
 ```r
