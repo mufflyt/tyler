@@ -10,18 +10,15 @@ The goal of the 'tyler' package provides a collection of functions designed to f
 ## Installation
 
 You can install the development version of tyler from [GitHub](https://github.com/) with:
-
 ``` r
 # install.packages("devtools")
 devtools::install_github("mufflyt/tyler")
 ```
 
-## Data of Interest
-
-This is a basic example which shows you how to solve a common problem:
-
-First 'tyler' is a data package:
-'tyler::acgme' - This is a dataframe of every OBGYN residency from the ACGME web site.  This data can be used to map the obgyn residencies, etc.  It references this web site: https://apps.acgme-i.org/ads/Public/Reports/Report/1. 
+# Data: Workforce
+### Data: `tyler::acgme`
+Dataframe of the OBGYN residency programs scraped from https://apps.acgme.org/ads/Public/Programs/Search.  Name, city, state, accreditation date, program director name, website, rotations, and affiliated hospitals are included.  
+'tyler::acgme' - This is a dataframe of every OBGYN residency from the ACGME web site.  This data can be used to map the obgyn residencies, etc.  
 ```r
 obgyn_residencies <- tyler::acgme
 
@@ -33,9 +30,11 @@ obgyn_residencies <- tyler::acgme
  3 University of Ari… "Banne… 85006 Phoe… Ariz… 038179                 University of Arizona… (602… May 07, 1951   
 ```
 
-'tyler::ACOG_Districts' - This is a dataframe of state names, ACOG Districts, US Census Bureau Subregions, and state abbreviations. 
+### Data: 'tyler::ACOG_Districts' 
+This is a dataframe of state names, ACOG Districts, US Census Bureau Subregions, and state abbreviations. 
 ```r
 acog_districts <- tyler::ACOG_Districts
+tyler::ACOG_Districts
 
 # A tibble: 52 × 4
    State                ACOG_District Subregion     State_Abbreviations
@@ -52,7 +51,8 @@ acog_districts <- tyler::ACOG_Districts
 10 Florida              District XII  District XII  FL 
 ```
 
-'tyler::taxonomy' - This is a dataframe of NUCC taxonomy codes used in the NPPES data files.  Of note the OBGYN taxonomy codes are: Version 23.1 from 7/1/2023.  https://nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40/csv-mainmenu-57.  For example: 
+### Data: 'tyler::taxonomy' 
+This is a dataframe of NUCC taxonomy codes used in the NPPES data files.  Of note the OBGYN taxonomy codes are: Version 23.1 from 7/1/2023.  https://nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40/csv-mainmenu-57.  For example: 
 ```r
 obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed("GYN", ignore_case = TRUE))) %>% select (Code, Specialization)
 
@@ -70,11 +70,14 @@ obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed(
 10 207VX0000X Obstetrics                                       
 11 207VE0102X Reproductive Endocrinology 
 ```
-
-'tyler::physicians' is the names and coordinates for subspecialists in OBGYN.  
-
+### Data: 'tyler::physicians' 
+Internal package dataframe with the names and coordinates for subspecialists in OBGYN.  The source file `Physicians.rds` is found at `tyler/inst/extdata`
 ``` r
 library(tyler)
-## basic example code
+tyler::physicians
 ```
+
+# Making Maps
+### `tyler::create_basemap`
+This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  
 
