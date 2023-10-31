@@ -77,7 +77,7 @@ library(tyler)
 tyler::physicians
 ```
 
-# Making Maps
+# MAKING MAPS
 ### `tyler::create_basemap`
 This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  
 ```r
@@ -104,4 +104,32 @@ A function that interfaces with HERE API to gather the geometry for the isochron
 A function that iterates the `tyler::create_isochrones` over an entire dataframe.  The only input is a dataframe and the breaks for the number of minutes for each isochrones.  
 ```r
 isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
+```
+
+# DEMOGRAPHICS
+```r
+ # "B01001_026E  Estimate!!Total!!Female                      \n",
+ #       "B01001_027E  Estimate!!Total!!Female!!Under 5 years       \n",
+ #       "B01001_028E  Estimate!!Total!!Female!!5 to 9 years        \n",
+ #       "B01001_029E  Estimate!!Total!!Female!!10 to 14 years      \n",
+ #       "B01001_030E  Estimate!!Total!!Female!!15 to 17 years      \n",
+ #       "B01001_031E  Estimate!!Total!!Female!!18 and 19 years     \n",
+ #       "B01001_032E  Estimate!!Total!!Female!!20 years            \n",
+ #       "B01001_033E  Estimate!!Total!!Female!!21 years            \n",
+ #       "B01001_034E  Estimate!!Total!!Female!!22 to 24 years      \n",
+ #       "B01001_035E  Estimate!!Total!!Female!!25 to 29 years      \n",
+ #       "B01001_036E  Estimate!!Total!!Female!!30 to 34 years      \n",
+ #       "B01001_037E  Estimate!!Total!!Female!!35 to 39 years      \n",
+ #       "B01001_038E  Estimate!!Total!!Female!!40 to 44 years      \n",
+ #       "B01001_039E  Estimate!!Total!!Female!!45 to 49 years      \n",
+ #       "B01001_040E  Estimate!!Total!!Female!!50 to 54 years      \n",
+ #       "B01001_041E  Estimate!!Total!!Female!!55 to 59 years      \n",
+ #       "B01001_042E  Estimate!!Total!!Female!!60 and 61 years     \n",
+ #       "B01001_043E  Estimate!!Total!!Female!!62 to 64 years      \n",
+ #       "B01001_044E  Estimate!!Total!!Female!!65 and 66 years     \n",
+ #       "B01001_045E  Estimate!!Total!!Female!!67 to 69 years      \n",
+ #       "B01001_046E  Estimate!!Total!!Female!!70 to 74 years      \n",
+ #       "B01001_047E  Estimate!!Total!!Female!!75 to 79 years      \n",
+ #       "B01001_048E  Estimate!!Total!!Female!!80 to 84 years      \n",
+ #       "B01001_049E  Estimate!!Total!!Female!!85 years and over   \n",
 ```
