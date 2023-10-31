@@ -80,4 +80,28 @@ tyler::physicians
 # Making Maps
 ### `tyler::create_basemap`
 This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  
+```r
+# Create a base map with a custom title
+my_map <- create_base_map("TITLE")
 
+# Display the map and add circle markers
+my_map <- my_map %>%
+  leaflet::addCircleMarkers(lng = ~longitude,
+                           lat = ~latitude,
+                           data = data_points,
+                           popup = ~popup_text,
+                           radius = ~radius,
+                           color = ~color,
+                           fill = TRUE,
+                           stroke = FALSE,
+                           fillOpacity = 0.8)
+```
+
+### `tyler::create_isochrones`
+A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  
+
+### `tyler::create_isochrones_for_dataframe`
+A function that iterates the `tyler::create_isochrones` over an entire dataframe.  The only input is a dataframe and the breaks for the number of minutes for each isochrones.  
+```r
+isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
+```
