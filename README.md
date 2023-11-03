@@ -144,7 +144,18 @@ Function to create individual plots and shapefiles for specified drive times.
 drive_times <- unique(isochrones$drive_time)
 create_individual_isochrone_plots(isochrones, drive_times)
 ```
+#### 30-minute isochrones
 <img src="https://github.com/mufflyt/tyler/assets/44621942/2daffc4f-e5d7-4f35-9b0e-054b979cdd7f" width="25%">
+
+#### 60-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/3643c555-628b-409c-bbfd-718f7b5c9663" width="25%">
+
+#### 120-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/8ad18c72-5467-419b-92c1-4b863192a711" width="25%">
+
+#### 180-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/49000172-e535-41c9-bdff-d1b262334195" width="25%">
+
 
 # DEMOGRAPHICS
 ```r
