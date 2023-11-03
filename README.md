@@ -117,35 +117,50 @@ isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60
 
 # DEMOGRAPHICS
 ```r
- # "B01001_026E  Estimate _Total _Female                      \n",
+ #       *"B01001_026E  Estimate _Total _Female                      \n",
  #       "B01001_027E  Estimate_Total_Female_Under 5 years       \n",
  #       "B01001_028E  Estimate_Total_Female_5 to 9 years        \n",
  #       "B01001_029E  Estimate_Total_Female_10 to 14 years      \n",
  #       "B01001_030E  Estimate_Total_Female_15 to 17 years      \n",
  #       "B01001_031E  Estimate_Total_Female_18 and 19 years     \n",
  #       "B01001_032E  Estimate_Total_Female_20 years            \n",
- #       "B01001_033E  Estimate_Total_Female_21 years            \n",
- #       "B01001_034E  Estimate_Total_Female_22 to 24 years      \n",
- #       "B01001_035E  Estimate_Total_Female_25 to 29 years      \n",
- #       "B01001_036E  Estimate_Total_Female_30 to 34 years      \n",
- #       "B01001_037E  Estimate_Total_Female_35 to 39 years      \n",
- #       "B01001_038E  Estimate_Total_Female_40 to 44 years      \n",
- #       "B01001_039E  Estimate_Total_Female_45 to 49 years      \n",
- #       "B01001_040E  Estimate_Total_Female_50 to 54 years      \n",
- #       "B01001_041E  Estimate_Total_Female_55 to 59 years      \n",
- #       "B01001_042E  Estimate_Total_Female_60 and 61 years     \n",
- #       "B01001_043E  Estimate_Total_Female_62 to 64 years      \n",
- #       "B01001_044E  Estimate_Total_Female_65 and 66 years     \n",
- #       "B01001_045E  Estimate_Total_Female_67 to 69 years      \n",
- #       "B01001_046E  Estimate_Total_Female_70 to 74 years      \n",
- #       "B01001_047E  Estimate_Total_Female_75 to 79 years      \n",
- #       "B01001_048E  Estimate_Total_Female_80 to 84 years      \n",
- #       "B01001_049E  Estimate_Total_Female_85 years and over   \n",
+ #       *"B01001_033E  Estimate_Total_Female_21 years            \n",
+ #       *"B01001_034E  Estimate_Total_Female_22 to 24 years      \n",
+ #       *"B01001_035E  Estimate_Total_Female_25 to 29 years      \n",
+ #       *"B01001_036E  Estimate_Total_Female_30 to 34 years      \n",
+ #       *"B01001_037E  Estimate_Total_Female_35 to 39 years      \n",
+ #       *"B01001_038E  Estimate_Total_Female_40 to 44 years      \n",
+ #       *"B01001_039E  Estimate_Total_Female_45 to 49 years      \n",
+ #       *"B01001_040E  Estimate_Total_Female_50 to 54 years      \n",
+ #       *"B01001_041E  Estimate_Total_Female_55 to 59 years      \n",
+ #       *"B01001_042E  Estimate_Total_Female_60 and 61 years     \n",
+ #       *"B01001_043E  Estimate_Total_Female_62 to 64 years      \n",
+ #       *"B01001_044E  Estimate_Total_Female_65 and 66 years     \n",
+ #       *"B01001_045E  Estimate_Total_Female_67 to 69 years      \n",
+ #       *"B01001_046E  Estimate_Total_Female_70 to 74 years      \n",
+ #       *"B01001_047E  Estimate_Total_Female_75 to 79 years      \n",
+ #       *"B01001_048E  Estimate_Total_Female_80 to 84 years      \n",
+ #       *"B01001_049E  Estimate_Total_Female_85 years and over   \n",
 ```
 
 ### `tyler::get_census_data`
-This function retrieves Census data using `censusapi` for all states' block groups by looping over the specified list of state FIPS codes.
+This function retrieves Census data using `censusapi` for all states' block groups by looping over the specified list of state FIPS codes.  This only brings back data on females from "B01001_01, 26, 33:49E".
 
 ```r
-all_census_data <- get_census_data(us_fips_list, "your_census_api_key_here", vintage=2019)
+all_census_data <- get_census_data(us_fips_list, "your_censusapi_key_here", vintage=2019)
 ```
+
+# NPI Search
+Search first names, last names, only individuals `enumeration_type = "ind"`, and only physicians `("MD", "DO")` in the United States from the [NPPES]([https://github.com/](https://npiregistry.cms.hhs.gov/search)).  
+
+```r
+search_and_process_npi <- function(input_file,
+                                   enumeration_type = "ind",
+                                   limit = 5L,
+                                   country_code = "US",
+                                   filter_credentials = c("MD", "DO"))
+
+input_file <- "/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppes_search/Lo_R_Author.csv"
+output_result <- search_and_process_npi(input_file)
+```
+
