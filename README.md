@@ -192,6 +192,30 @@ This function retrieves Census data using `censusapi` for all states' block grou
 all_census_data <- get_census_data(us_fips_list, "your_censusapi_key_here", vintage=2019)
 ```
 
+### `tyler::create_block_group_overlap_map`
+Function Parameters:
+* bg_data: A SpatialPolygonsDataFrame representing block group data.
+* isochrones_data: A SpatialPolygonsDataFrame representing isochrone data.
+* output_html: File path for exporting the map as an HTML file.
+* output_png: File path for exporting the map as a PNG image.
+```r
+# Define output file paths for HTML and PNG
+output_html <- "figures/overlap_bg_map.html"
+output_png <- "figures/overlap_bg_map.png"
+
+# Create and export the map
+create_block_group_overlap_map(block_groups, isochrones_joined_map, output_html, output_png)
+
+# Call the create_block_group_overlap_map function with your data
+create_block_group_overlap_map(
+  bg_data = your_block_group_data,
+  isochrones_data = your_isochrones_data,
+  output_html = "your_output_html_file.html",
+  output_png = "your_output_png_file.png"
+)
+```
+<img src="https://github.com/mufflyt/tyler/assets/44621942/713a0397-30fc-4a5a-972b-5feb691a1922" width="75%">
+
 # NPI Search
 Search first names, last names, only individuals `enumeration_type = "ind"`, and only physicians `("MD", "DO")` in the United States from the [NPPES]([https://github.com/](https://npiregistry.cms.hhs.gov/search)).  
 
