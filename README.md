@@ -134,7 +134,17 @@ all_map <-
   ))
 ```
 <img src="https://github.com/mufflyt/tyler/assets/44621942/2511d71c-f5c3-48be-ac5f-f439a67bf89a" width="50%">
-<img src="https://github.com/mufflyt/tyler/assets/44621942/58553c2b-f7c7-4f86-be35-c650e54dd2c3" width="50%")
+<img src="https://github.com/mufflyt/tyler/assets/44621942/58553c2b-f7c7-4f86-be35-c650e54dd2c3" width="50%">
+
+### `tyler::create_individual_isochrone_plots.R`
+Function to create individual plots and shapefiles for specified drive times.  
+```r
+# Usage example:
+# List of unique drive times for which you want to create plots and shapefiles
+drive_times <- unique(isochrones$drive_time)
+create_individual_isochrone_plots(isochrones, drive_times)
+```
+<img src="https://github.com/mufflyt/tyler/assets/44621942/2daffc4f-e5d7-4f35-9b0e-054b979cdd7f" width="25%">
 
 # DEMOGRAPHICS
 ```r
