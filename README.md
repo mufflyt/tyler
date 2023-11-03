@@ -142,3 +142,10 @@ isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60
  #       "B01001_048E  Estimate_Total_Female_80 to 84 years      \n",
  #       "B01001_049E  Estimate_Total_Female_85 years and over   \n",
 ```
+
+### `tyler::get_census_data`
+This function retrieves Census data using `censusapi` for all states' block groups by looping over the specified list of state FIPS codes.
+
+```r
+all_census_data <- get_census_data(us_fips_list, "your_census_api_key_here", vintage=2019)
+```
