@@ -105,6 +105,7 @@ my_map <- my_map %>%
                            stroke = FALSE,
                            fillOpacity = 0.8)
 ```
+![Screenshot 2023-11-02 at 9 30 28 PM](https://github.com/mufflyt/tyler/assets/44621942/87a04a9d-7ddd-46b6-8917-947530983088)
 
 ### `tyler::create_isochrones`
 A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  
@@ -114,6 +115,27 @@ A function that iterates the `tyler::create_isochrones` over an entire dataframe
 ```r
 isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
 ```
+
+### `tyler::map_by_acog_districts.R`
+Leaflet dot map of physicians on colored ACOG Districts.  Loops through each ACOG district to generate hex maps individually.  
+```r
+#Use case:
+generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
+generate_acog_districts_sf()
+
+all_map <-
+  tyler::generate_maps(
+    physician_file = "inst/extdata/Physicians.rds",
+    acog_districts_file = "inst/extdata/ACOG_Districts.csv",
+    trait_map = "all",
+    honey_map = "all",
+    grid_size = c(0.2, 0.2),
+    specific_district = "District V"
+  ))
+```
+![Screenshot 2023-11-02 at 9 44 14 PM](https://github.com/mufflyt/tyler/assets/44621942/58553c2b-f7c7-4f86-be35-c650e54dd2c3)
+
+![Screenshot 2023-11-02 at 9 32 58 PM](https://github.com/mufflyt/tyler/assets/44621942/2511d71c-f5c3-48be-ac5f-f439a67bf89a)
 
 # DEMOGRAPHICS
 ```r
