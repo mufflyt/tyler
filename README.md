@@ -6,6 +6,8 @@
 
 The goal of the 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting.
 
+The second goal is to assist with workforce distribution research for OBGYNs.  
+
 
 ## Installation
 
