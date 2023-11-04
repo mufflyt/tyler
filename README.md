@@ -116,8 +116,13 @@ A function that iterates the `tyler::create_isochrones` over an entire dataframe
 isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
 ```
 
-### `tyler::map_by_acog_districts.R`
+
+
+### `create_and_save_physician_dot_map.R`
 Leaflet dot map of physicians on colored ACOG Districts.  Loops through each ACOG district to generate hex maps individually.  
+<img src="https://github.com/mufflyt/tyler/assets/44621942/2511d71c-f5c3-48be-ac5f-f439a67bf89a" width="50%">
+
+### `tyler::map_by_acog_districts.R`
 ```r
 #Use case:
 generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
@@ -133,7 +138,6 @@ all_map <-
     specific_district = "District V"
   ))
 ```
-<img src="https://github.com/mufflyt/tyler/assets/44621942/2511d71c-f5c3-48be-ac5f-f439a67bf89a" width="50%">
 <img src="https://github.com/mufflyt/tyler/assets/44621942/58553c2b-f7c7-4f86-be35-c650e54dd2c3" width="50%">
 
 ### `tyler::create_individual_isochrone_plots.R`
