@@ -121,7 +121,7 @@ Leaflet dot map of physicians on colored ACOG Districts.
 ```r
 tyler::create_and_save_physician_dot_map(physician_data = gyn_onc, jitter_range = 0.05, color_palette = "magma", popup_var = "name")
 ```
-<img src="https://github.com/mufflyt/tyler/assets/44621942/60ccd69c-64e9-4a87-a0ab-ced91a5111d7" width="50%">
+<img src="https://github.com/mufflyt/tyler/assets/44621942/43227656-cd1c-4242-a2db-cdf1ebce20e8" width="50%">
 
 <img src="https://github.com/mufflyt/tyler/assets/44621942/2511d71c-f5c3-48be-ac5f-f439a67bf89a" width="50%">
 
