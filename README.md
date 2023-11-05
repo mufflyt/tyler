@@ -6,6 +6,8 @@
 
 The goal of the 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting.
 
+The second goal is to assist with workforce distribution research for OBGYNs.  
+
 
 ## Installation
 
@@ -105,6 +107,7 @@ my_map <- my_map %>%
                            stroke = FALSE,
                            fillOpacity = 0.8)
 ```
+<img src="https://github.com/mufflyt/tyler/assets/44621942/87a04a9d-7ddd-46b6-8917-947530983088" width="50%">
 
 ### `tyler::create_isochrones`
 A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  
@@ -115,30 +118,125 @@ A function that iterates the `tyler::create_isochrones` over an entire dataframe
 isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
 ```
 
+### `create_and_save_physician_dot_map.R`
+Leaflet dot map of physicians on colored ACOG Districts.  
+```r
+tyler::create_and_save_physician_dot_map(physician_data = gyn_onc, jitter_range = 0.05, color_palette = "magma", popup_var = "name")
+```
+<img src="https://github.com/mufflyt/tyler/assets/44621942/43227656-cd1c-4242-a2db-cdf1ebce20e8" width="50%">
+
+<img src="https://github.com/mufflyt/tyler/assets/44621942/2511d71c-f5c3-48be-ac5f-f439a67bf89a" width="50%">
+
+### `tyler::honeycomb_generate_maps_by_acog_districts.R`
+Loops through each ACOG district to generate hex maps individually.  
+```r
+#Use case:
+generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
+generate_acog_districts_sf()
+
+all_map <-
+  tyler::generate_maps(
+    physician_file = "inst/extdata/Physicians.rds",
+    acog_districts_file = "inst/extdata/ACOG_Districts.csv",
+    trait_map = "all",
+    honey_map = "all",
+    grid_size = c(0.2, 0.2),
+    specific_district = "District V"
+  ))
+```
+<img src="https://github.com/mufflyt/tyler/assets/44621942/58553c2b-f7c7-4f86-be35-c650e54dd2c3" width="50%">
+
+### `tyler::create_individual_isochrone_plots.R`
+Function to create individual plots and shapefiles for specified drive times.  
+```r
+# Usage example:
+# List of unique drive times for which you want to create plots and shapefiles
+drive_times <- unique(isochrones$drive_time)
+create_individual_isochrone_plots(isochrones, drive_times)
+```
+#### 30-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/2daffc4f-e5d7-4f35-9b0e-054b979cdd7f" width="25%">
+
+#### 60-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/3643c555-628b-409c-bbfd-718f7b5c9663" width="25%">
+
+#### 120-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/8ad18c72-5467-419b-92c1-4b863192a711" width="25%">
+
+#### 180-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/49000172-e535-41c9-bdff-d1b262334195" width="25%">
+
+
 # DEMOGRAPHICS
 ```r
- # "B01001_026E  Estimate _Total _Female                      \n",
+ #       *"B01001_026E  Estimate _Total _Female                      \n",
  #       "B01001_027E  Estimate_Total_Female_Under 5 years       \n",
  #       "B01001_028E  Estimate_Total_Female_5 to 9 years        \n",
  #       "B01001_029E  Estimate_Total_Female_10 to 14 years      \n",
  #       "B01001_030E  Estimate_Total_Female_15 to 17 years      \n",
  #       "B01001_031E  Estimate_Total_Female_18 and 19 years     \n",
  #       "B01001_032E  Estimate_Total_Female_20 years            \n",
- #       "B01001_033E  Estimate_Total_Female_21 years            \n",
- #       "B01001_034E  Estimate_Total_Female_22 to 24 years      \n",
- #       "B01001_035E  Estimate_Total_Female_25 to 29 years      \n",
- #       "B01001_036E  Estimate_Total_Female_30 to 34 years      \n",
- #       "B01001_037E  Estimate_Total_Female_35 to 39 years      \n",
- #       "B01001_038E  Estimate_Total_Female_40 to 44 years      \n",
- #       "B01001_039E  Estimate_Total_Female_45 to 49 years      \n",
- #       "B01001_040E  Estimate_Total_Female_50 to 54 years      \n",
- #       "B01001_041E  Estimate_Total_Female_55 to 59 years      \n",
- #       "B01001_042E  Estimate_Total_Female_60 and 61 years     \n",
- #       "B01001_043E  Estimate_Total_Female_62 to 64 years      \n",
- #       "B01001_044E  Estimate_Total_Female_65 and 66 years     \n",
- #       "B01001_045E  Estimate_Total_Female_67 to 69 years      \n",
- #       "B01001_046E  Estimate_Total_Female_70 to 74 years      \n",
- #       "B01001_047E  Estimate_Total_Female_75 to 79 years      \n",
- #       "B01001_048E  Estimate_Total_Female_80 to 84 years      \n",
- #       "B01001_049E  Estimate_Total_Female_85 years and over   \n",
+ #       *"B01001_033E  Estimate_Total_Female_21 years            \n",
+ #       *"B01001_034E  Estimate_Total_Female_22 to 24 years      \n",
+ #       *"B01001_035E  Estimate_Total_Female_25 to 29 years      \n",
+ #       *"B01001_036E  Estimate_Total_Female_30 to 34 years      \n",
+ #       *"B01001_037E  Estimate_Total_Female_35 to 39 years      \n",
+ #       *"B01001_038E  Estimate_Total_Female_40 to 44 years      \n",
+ #       *"B01001_039E  Estimate_Total_Female_45 to 49 years      \n",
+ #       *"B01001_040E  Estimate_Total_Female_50 to 54 years      \n",
+ #       *"B01001_041E  Estimate_Total_Female_55 to 59 years      \n",
+ #       *"B01001_042E  Estimate_Total_Female_60 and 61 years     \n",
+ #       *"B01001_043E  Estimate_Total_Female_62 to 64 years      \n",
+ #       *"B01001_044E  Estimate_Total_Female_65 and 66 years     \n",
+ #       *"B01001_045E  Estimate_Total_Female_67 to 69 years      \n",
+ #       *"B01001_046E  Estimate_Total_Female_70 to 74 years      \n",
+ #       *"B01001_047E  Estimate_Total_Female_75 to 79 years      \n",
+ #       *"B01001_048E  Estimate_Total_Female_80 to 84 years      \n",
+ #       *"B01001_049E  Estimate_Total_Female_85 years and over   \n",
 ```
+
+### `tyler::get_census_data`
+This function retrieves Census data using `censusapi` for all states' block groups by looping over the specified list of state FIPS codes.  This only brings back data on females from "B01001_01, 26, 33:49E".
+
+```r
+all_census_data <- get_census_data(us_fips_list, "your_censusapi_key_here", vintage=2019)
+```
+
+### `tyler::create_block_group_overlap_map`
+Function Parameters:
+* bg_data: A SpatialPolygonsDataFrame representing block group data.
+* isochrones_data: A SpatialPolygonsDataFrame representing isochrone data.
+* output_html: File path for exporting the map as an HTML file.
+* output_png: File path for exporting the map as a PNG image.
+```r
+# Define output file paths for HTML and PNG
+output_html <- "figures/overlap_bg_map.html"
+output_png <- "figures/overlap_bg_map.png"
+
+# Create and export the map
+create_block_group_overlap_map(block_groups, isochrones_joined_map, output_html, output_png)
+
+# Call the create_block_group_overlap_map function with your data
+create_block_group_overlap_map(
+  bg_data = your_block_group_data,
+  isochrones_data = your_isochrones_data,
+  output_html = "your_output_html_file.html",
+  output_png = "your_output_png_file.png"
+)
+```
+<img src="https://github.com/mufflyt/tyler/assets/44621942/713a0397-30fc-4a5a-972b-5feb691a1922" width="75%">
+
+# NPI Search
+Search first names, last names, only individuals `enumeration_type = "ind"`, and only physicians `("MD", "DO")` in the United States from the [NPPES]([https://github.com/](https://npiregistry.cms.hhs.gov/search)).  
+
+```r
+search_and_process_npi <- function(input_file,
+                                   enumeration_type = "ind",
+                                   limit = 5L,
+                                   country_code = "US",
+                                   filter_credentials = c("MD", "DO"))
+
+input_file <- "/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppes_search/Lo_R_Author.csv"
+output_result <- search_and_process_npi(input_file)
+```
+
