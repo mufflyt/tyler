@@ -26,8 +26,7 @@
 #'   file_name = html_file_name)
 #' }
 #'
-#' @importFrom leaflet leaflet addProviderTiles setView addPolygons addLegend
-#' @importFrom leafletExtras colorNumeric
+#' @importFrom leaflet leaflet addProviderTiles setView addPolygons addLegend colorNumeric
 #' @import webshot
 #' @importFrom htmlwidgets saveWidget
 #'

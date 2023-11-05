@@ -32,5 +32,4 @@ my_map <- my_map \%>\%
                            stroke = FALSE,
                            fillOpacity = 0.8)
 }
-
 }

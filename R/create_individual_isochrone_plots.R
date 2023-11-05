@@ -7,6 +7,13 @@
 #' @param drive_times A vector of unique drive times (in minutes) for which maps and shapefiles will be created.
 #' @return None. The function creates and saves individual maps and shapefiles.
 #'
+#' @import sf
+#' @import leaflet
+#' @importFrom dplyr filter
+#' @importFrom leaflet addProviderTiles addPolygons
+#' @importFrom htmlwidgets saveWidget
+#' @importFrom grDevices rainbow
+#' @importFrom sf st_union st_sf st_transform st_write
 #' @examples
 #' \dontrun{
 #' # Load required libraries

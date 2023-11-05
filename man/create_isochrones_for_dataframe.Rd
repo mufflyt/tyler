@@ -9,9 +9,15 @@ create_isochrones_for_dataframe(dataframe, breaks = c(0, 30, 60, 120, 180))
 \arguments{
 \item{dataframe}{A dataframe containing the points for which isochrones are to be retrieved.}
 
-\item{breaks}{A vector of breaks for labeling the isochrones.}
+\item{breaks}{A numeric vector specifying the breaks for categorizing drive times (default is c(0, 30, 60, 120, 180)).}
 }
 \value{
+A dataframe containing the isochrones data with added 'name' column.
+Create Isochrones for Each Point in a Dataframe
+
+This function retrieves isochrones for each point in a given dataframe by looping
+over the rows and calling the create_isochrones function for each point.
+
 A dataframe containing the isochrones data with added 'name' column.
 }
 \description{

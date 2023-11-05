@@ -103,7 +103,7 @@ search_and_process_npi <- function(input_file,
 
   date_time <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
 
-  filename <- paste("/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppes_search/results_of_search_and_process_npi", date_time, ".rds", sep = "_")
+  filename <- paste("results_of_search_and_process_npi", date_time, ".rds", sep = "_")
 
   saveRDS(result, file = filename)
 

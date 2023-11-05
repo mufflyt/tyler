@@ -9,4 +9,4 @@
 library(testthat)
 library(tyler)
 
-test_check("tyler")
+test_check(package = "tyler")
