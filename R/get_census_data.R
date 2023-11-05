@@ -7,6 +7,11 @@
 #' @param census_key The API key for the getCensus function.
 #' @param vintage The vintage year for Census data (default is 2019).
 #' @return A dataframe containing Census data for all states' block groups.
+#'
+#' @import tigris
+#' @import dplyr
+#' @import censusapi
+#'
 #' @export
 us_fips_list <- tigris::fips_codes %>%
   dplyr::select(state_code, state_name) %>%

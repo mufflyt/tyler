@@ -1,5 +1,5 @@
 # Load the function
-source(file = "R/map_by_acog_districts.R", echo = FALSE)
+source(file = "R/honeycomb_map_by_acog_districts.R", echo = FALSE)
 
 # Instructions for using the function
 cat("\033[How to create ACOG District Maps that can have hexagons too:\033[0m\n")

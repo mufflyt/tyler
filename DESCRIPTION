@@ -9,7 +9,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 License: MIT + file LICENSE
-URL: https://your.package.url
+URL: https://your.package.url, https://mufflyt.github.io/tyler/
 Date: 2023-09-11
 Keywords: healthcare, patient access, audit study, NPI
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
@@ -23,20 +23,20 @@ Imports:
     humaniformat,
     magrittr,
     arsenal,
-    tmap, 
+    tmap,
     RColorBrewer,
-    devtools, 
-    exploratory, 
+    devtools,
+    exploratory,
     gridExtra,
-    janitor, 
-    readxl, 
-    remotes, 
+    janitor,
+    readxl,
+    remotes,
     renv,
-    rnaturalearth, 
-    stringr, 
+    rnaturalearth,
+    stringr,
     tibble,
-    dplyr, 
-    lubridate, 
+    dplyr,
+    lubridate,
     readr,
     caret,
     ggmap,
@@ -48,9 +48,17 @@ Imports:
     openxlsx,
     progress,
     purrr,
-    tidyr, 
-    htmlwidgets, 
-    leafletExtras, 
-    webshot
+    tidyr,
+    htmlwidgets,
+    leaflet.extras,
+    webshot,
+    cat,
+    hereR,
+    censusapi,
+    imager,
+    rainbow,
+    scales,
+    testthat,
+    viridis
 LazyData: true
 Files: R/

@@ -25,13 +25,17 @@
 #' }
 #'
 #' @export
+#' @import memoise
+#' @import hereR
+#' @importFrom hereR set_freemium set_key set_verbose isoline
+#' @importFrom leaflet colorNumeric
 create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S")) {
   cat("\033[Display setup instructions:\033[0m\n")
   cat("\033[34mTo create isochrones for a specific point(s) use the following code:\033[0m\n")
   cat("\033[34mtryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))\n")
 
   # Check if location is an sf object
-  if (!inherits(location, "sf")) {
+  if (!base::inherits(location, "sf")) {
     stop("Location must be an sf object.")
   }
 

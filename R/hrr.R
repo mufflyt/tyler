@@ -4,7 +4,8 @@
 #'
 #' @param remove_HI_AK Logical, should Hawaii and Alaska be removed?
 #' @return A SpatialPolygonsDataFrame containing the hospital referral region data.
-#'
+#' @import sf
+#' @import dplyr
 #'
 #' @export
 

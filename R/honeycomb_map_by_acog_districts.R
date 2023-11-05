@@ -39,7 +39,7 @@ generate_acog_districts_sf <- function() {
     dplyr::summarize(geometry = sf::st_union(geometry), .groups = 'drop') %>%
     sf::st_sf()
 
-  cat("ACOG Districts SF creation complete.  Creates a plottable sf file of ACOG districts.\n")
+  cat("ACOG Districts sf creation complete.  Creates a plottable sf file of ACOG districts.\n")
   cat("Reference: https://www.acog.org/community/districts-and-sections.\n")
 
   return(ACOG_Districts_sf)
@@ -82,7 +82,7 @@ generate_acog_districts_sf <- function() {
 #' @examples
 #' \dontrun{
 #' # Generate hexagon maps for a specific district (e.g., District V) using provided data paths
-#' all_map <- generate_maps(
+#' all_map <- honeycomb_generate_maps(
 #'   physician_file = "data/Physicians.rds",
 #'   acog_districts_file = "data/ACOG_Districts.csv",
 #'   trait_map = "all",
@@ -99,7 +99,7 @@ generate_acog_districts_sf <- function() {
 #'
 
 # Function to generate hexagon maps by ACOG district.
-generate_maps <- function(physician_file, acog_districts_file, trait_map = "all", honey_map = "all", grid_size = c(0.3, 0.3), specific_district = NULL) {
+honeycomb_generate_maps <- function(physician_file, acog_districts_file, trait_map = "all", honey_map = "all", grid_size = c(0.3, 0.3), specific_district = NULL) {
 
   options(tigris_use_cache = TRUE)
   sf::sf_use_s2(FALSE)
@@ -169,7 +169,7 @@ generate_maps <- function(physician_file, acog_districts_file, trait_map = "all"
     # Create the map with honeycomb and ACOG Districts
     cat("Creating the map for district", district, "...\n")
 
-    map_ggplot <- ggplot2::ggplot() +
+      map_ggplot <- ggplot2::ggplot() +
       ggplot2::geom_sf(data = district_sf, fill = "#D3D3D3", color = "darkblue", size = 1.5) +
       ggplot2::geom_sf(data = honeycomb_grid_with_physicians, aes(fill = physician_count), color = NA) +
       # # Adding clipped rivers and lakes to your plot
@@ -228,11 +228,11 @@ generate_maps <- function(physician_file, acog_districts_file, trait_map = "all"
 
 # Use case:
 #
-#generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
+# generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
 # generate_acog_districts_sf()
 #
 # all_map <-
-#   tyler::generate_maps(
+#   tyler::honeycomb_generate_maps(
 #     physician_file = "inst/extdata/Physicians.rds",
 #     acog_districts_file = "inst/extdata/ACOG_Districts.csv",
 #     trait_map = "all",
