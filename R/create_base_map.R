@@ -23,7 +23,10 @@
 #'                            stroke = FALSE,
 #'                            fillOpacity = 0.8)
 #' }
-#'
+#' @import ggmap
+#' @import dplyr
+#' @import tidyr
+#' @import readr
 #' @export
 create_base_map <- function(title) {
   # Display setup instructions
