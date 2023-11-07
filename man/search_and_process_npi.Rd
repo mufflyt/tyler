@@ -2,7 +2,7 @@
 % Please edit documentation in R/search_and_process_npi.R
 \name{search_and_process_npi}
 \alias{search_and_process_npi}
-\title{A function to search and process NPI numbers.}
+\title{Search and Process NPI Numbers}
 \usage{
 search_and_process_npi(
   input_file,

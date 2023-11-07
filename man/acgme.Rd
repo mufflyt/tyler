@@ -5,22 +5,32 @@
 \alias{acgme}
 \title{ACGME OBGYN Residency Data}
 \format{
-Data frame with columns
+A data frame with the following columns:
 \describe{
-\item{ACGME data}{OBGYN Residency.}{Program directors.}
-\item{name}
+\item{Program directors}{The names of program directors for OBGYN residency programs.}
+\item{name}{The names of OBGYN residency programs.}
 }
 }
 \source{
-\url{https://apps.acgme.org/ads/Public/Programs/Search}
+Data was obtained from the ACGME website: \url{https://apps.acgme.org/ads/Public/Programs/Search}
 }
 \usage{
 acgme
 }
 \description{
-This data set contains information about Obstetricians and Gynecologists residencies.
+This dataset provides information about Obstetricians and Gynecologists (OBGYN) residency programs accredited by the Accreditation Council for Graduate Medical Education (ACGME).
 }
 \examples{
-  acgme
+# Load the ACGME OBGYN Residency Data
+data(acgme)
+
+# View the first few rows of the dataset
+head(acgme)
+
+# Get a summary of the dataset
+summary(acgme)
+
+# Perform data analysis and exploration
+
 }
-\keyword{datasets}
+\keyword{dataset}

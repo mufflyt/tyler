@@ -7,8 +7,7 @@
 create_block_group_overlap_map(
   bg_data,
   isochrones_data,
-  output_html,
-  output_png
+  output_dir = "figures/"
 )
 }
 \arguments{
@@ -16,9 +15,7 @@ create_block_group_overlap_map(
 
 \item{isochrones_data}{A SpatialPolygonsDataFrame representing isochrone data.}
 
-\item{output_html}{File path for exporting the map as an HTML file.}
-
-\item{output_png}{File path for exporting the map as a PNG image.}
+\item{output_dir}{Directory path for exporting the map files. Default is "figures/".}
 }
 \value{
 None
@@ -28,18 +25,11 @@ This function creates a map that displays block groups and their overlap with is
 }
 \examples{
 \dontrun{
-# Define output file paths
-output_html <- "figures/overlap_bg_map.html"
-output_png <- "figures/overlap_bg_map.png"
+# Create and export the map with the default output directory
+create_block_group_overlap_map(block_groups, isochrones_joined_map)
 
-# Create and export the map
-create_block_group_overlap_map(block_groups, isochrones_joined_map, output_html, output_png)
-
-# Call the create_block_group_overlap_map function with your data
-create_block_group_overlap_map(
-  gyn_onc_physicians_df = centers_ms,
-  isochrones_sf = isochrones_combined,
-  file_name = html_file_name)
+# Create and export the map with a custom output directory
+create_block_group_overlap_map(block_groups, isochrones_joined_map, "custom_output/")
 }
 
 }

@@ -23,44 +23,23 @@
 #'                            stroke = FALSE,
 #'                            fillOpacity = 0.8)
 #' }
-#' @import ggmap
-#' @import dplyr
-#' @import tidyr
-#' @import readr
+#'
+#' @importFrom leaflet leaflet setView clearMarkers addControl addScaleBar addTiles addProviderTiles
 #' @export
 create_base_map <- function(title) {
-  # Display setup instructions
-  cat("\033[34mInstructions:\033[0m\n")
-  cat("\033[34mTo create a base map, use the following code:\033[0m\n")
-  cat("\033[34mmy_map <- create_base_map(\"<h1>Custom Map Title</h1>\")\n")
-  cat("\033[34mTo display the map and add circle markers, use the following code:\033[0m\n")
-  cat("\033[34mmy_map <- my_map %>%\n")
-  cat("  leaflet::addCircleMarkers(lng = ~longitude,\n")
-  cat("                            lat = ~latitude,\n")
-  cat("                            data = data_points,\n")
-  cat("                            popup = ~popup_text,\n")
-  cat("                            radius = ~radius,\n")
-  cat("                            color = ~color,\n")
-  cat("                            fill = TRUE,\n")
-  cat("                            stroke = FALSE,\n")
-  cat("                            fillOpacity = 0.8)\n\n\033[0m")
-
   # Create the Leaflet map
   lf <- leaflet::leaflet() %>%
-    leaflet::setView(lat = 39.8282, lng = -98.5795, zoom = 4.5) %>%
+    addProviderTiles("CartoDB.PositronNoLabels") %>%
+    leaflet::setView(lat = 39.8282, lng = -98.5795, zoom = 3) %>%
     leaflet::clearMarkers() %>%
     leaflet::addControl(title, position = "topleft", className = "map-title") %>%
-    leaflet::addScaleBar(position = "bottomleft") %>%
-    leaflet::addTiles(options = leaflet::tileOptions(useCache = TRUE, crossOrigin = TRUE)) %>%
-    leaflet::addProviderTiles(providers$CartoDB.Positron)# %>%
-    # leaflet::addLayersControl(baseGroups = c("Positron", "OpenStreetMap", "Toner Map", "Satellite Map"), options = leaflet::layersControlOptions(collapsed = FALSE)) %>% #Does not work when used as a function
-    #leaflet::mapOptions(zoomToLimits = "first")
+    addScaleBar(position = "bottomleft", options = scaleBarOptions(metric = FALSE, maxWidth = 200)) %>%
+    leaflet::addTiles(options = leaflet::tileOptions(useCache = TRUE, crossOrigin = TRUE))
 
   cat("Setting up the base map...\n")
   cat("Adding map title...\n")
   cat("Adding scale bar...\n")
   cat("Adding base map tiles...\n")
-  cat("Adding layer control...\n")
 
   cat("\nMap setup complete.\n")
 

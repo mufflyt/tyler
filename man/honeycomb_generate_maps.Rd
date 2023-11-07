@@ -5,8 +5,8 @@
 \title{Generate Hexagon Maps by ACOG District}
 \usage{
 honeycomb_generate_maps(
-  physician_file,
-  acog_districts_file,
+  physician_sf,
+  acog_districts_sf,
   trait_map = "all",
   honey_map = "all",
   grid_size = c(0.3, 0.3),
@@ -14,9 +14,9 @@ honeycomb_generate_maps(
 )
 }
 \arguments{
-\item{physician_file}{A character string specifying the file path to the physician data in RDS format.}
+\item{physician_sf}{A sf object containing physician data with coordinates.}
 
-\item{acog_districts_file}{A character string specifying the file path to the ACOG districts data in CSV format.}
+\item{acog_districts_sf}{A sf object containing the grouped ACOG districts.}
 
 \item{trait_map}{A string specifying the trait map (default is "all").}
 
@@ -25,33 +25,10 @@ honeycomb_generate_maps(
 \item{grid_size}{A numeric vector of length 2 specifying the grid size for the hexagon map (default is c(0.3, 0.3)).}
 
 \item{specific_district}{A string or NULL to specify a specific district for generating the map (default is NULL, which processes all districts).}
-
-\item{physician_sf}{A sf object containing physician data with coordinates.}
-
-\item{acog_districts_sf}{A sf object containing the grouped ACOG districts.}
 }
 \value{
-A ggplot object of the generated map for the specified or all districts.
-
 A ggplot object of the generated map for the specified or all districts.
 }
 \description{
 This function generates hexagon maps for ACOG districts.
-}
-\examples{
-\dontrun{
-# Generate hexagon maps for a specific district (e.g., District V) using provided data paths
-all_map <- honeycomb_generate_maps(
-  physician_file = "data/Physicians.rds",
-  acog_districts_file = "data/ACOG_Districts.csv",
-  trait_map = "all",
-  honey_map = "all",
-  grid_size = c(0.2, 0.2),
-  specific_district = "District V"
-)
-
-# Save the generated map
-ggsave("all_map.png", all_map, width = 10, height = 6, dpi = 800)
-}
-
 }

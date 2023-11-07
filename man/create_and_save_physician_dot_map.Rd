@@ -13,6 +13,12 @@ create_and_save_physician_dot_map(
 }
 \arguments{
 \item{physician_data}{An sf object containing physician data with "long" and "lat" columns.}
+
+\item{jitter_range}{The range for adding jitter to latitude and longitude coordinates.}
+
+\item{color_palette}{The color palette for ACOG district colors.}
+
+\item{popup_var}{The variable to use for popup text.}
 }
 \value{
 A Leaflet map object.

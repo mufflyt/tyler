@@ -4,10 +4,7 @@
 \alias{generate_acog_districts_sf}
 \title{Generate ACOG Districts sf Object}
 \usage{
-generate_acog_districts_sf()
-}
-\arguments{
-\item{filepath}{The path to the CSV file containing ACOG Districts data.}
+generate_acog_districts_sf(filepath = NULL)
 }
 \value{
 An sf object containing grouped ACOG districts.
