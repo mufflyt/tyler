@@ -82,18 +82,22 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
       leaflet::addPolygons(
         data = isochrones_sf,
         fillColor = colors[index],
-        fillOpacity = 0.5,
+        fillOpacity = 1,
         weight = 0.5,
         smoothFactor = 0.2,
         stroke = TRUE,
         color = "black"
       )
 
+    message(paste(" Leaflet map of isochrones for", time, "minutes..."))
+    return(isochrone_map)
+
     # Save the plot to an HTML file
     output_file <- paste0("figures/isochrone_maps/isochrone_map_", time, "_minutes.html")
     htmlwidgets::saveWidget(isochrone_map, file = output_file)
 
     message(paste("Saved isochrone map for", time, "minutes as:", output_file))
+    return(isochrone_map)
 
     # Write the shapefile for the current drive time
     output_shapefile <- paste0("data/shp/isochrone_files/isochrones_", time, "_minutes.shp")

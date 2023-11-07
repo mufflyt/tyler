@@ -1,12 +1,20 @@
-#' ACGME OBGYN Residency Data
+#' Taxonomy Codes for Obstetricians and Gynecologists
 #'
-#' This data set contains taxonomy codes for Obstetricians and Gynecologists among others.
+#' This dataset contains taxonomy codes for Obstetricians and Gynecologists among other healthcare providers.
 #' @source <https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf>
-#' @format Data frame with columns
-#' \describe{
-#' \item{NUCC data}{taxonomy.}{taxonomy codes.}
-#' \item{name}
-#' }
+#' @format A data frame with two columns:
+#'   \describe{
+#'     \item{NUCC Code}{NUCC (National Uniform Claim Committee) code for healthcare providers.}
+#'     \item{Provider Type}{The type of healthcare provider corresponding to the NUCC code.}
+#'   }
+#'
 #' @examples
-#'   taxonomy
-"taxonomy"
+#' \dontrun{
+#' # Load the taxonomy dataset
+#' data(taxonomy)
+#'
+#' # Explore the dataset
+#' head(taxonomy)
+#' }
+#' @export
+data("taxonomy")
