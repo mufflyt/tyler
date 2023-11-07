@@ -1,4 +1,4 @@
-#' A function to search and process NPI numbers.
+#' Search and Process NPI Numbers
 #'
 #' This function takes an input file in RDS, CSV, or XLS/XLSX format, reads the data,
 #' performs NPI search and processing, and returns the results along with the percentage
@@ -10,11 +10,10 @@
 #'   Default is "ind".
 #' @param limit The maximum number of search results to request for each name pair.
 #'   Default is 10.
+#' @param country_code Filter for only the "US".
 #' @param filter_credentials A character vector containing the credentials to filter the
 #'   NPI results. Default is c("MD", "DO").
-#' @param country_code Filter for only the "US".
 #' @return A list containing the processed result data frame and the percentage of "NO MATCH FOUND".
-#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -27,7 +26,13 @@
 #' no_match_percentage <- output$no_match_percentage
 #' no_match_percentage
 #' }
-# Create a function to search and process NPI numbers
+#' @importFrom dplyr distinct filter
+#' @importFrom memoise memoise
+#' @importFrom readr read_csv
+#' @importFrom readxl read_xlsx
+#' @importFrom npi npi_flatten
+#'
+#' @export
 search_and_process_npi <- function(input_file,
                                    enumeration_type = "ind",
                                    limit = 5L,
