@@ -36,7 +36,11 @@ readRenviron("~/.Renviron")
 location <- sf::st_point(c(-73.987, 40.757))
 
 # Calculate isolines for the location with a 30-minute, 60-minute, 120-minute, and 180-minute range
-isolines <- tryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))
+isolines <- create_isochrones(location = location, range = c(1800, 3600, 7200, 10800))
+
+# Print the isolines
+print(isolines)
+
 }
 
 }

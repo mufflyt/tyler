@@ -4,12 +4,10 @@
 \alias{get_census_data}
 \title{Get Census data for all states' block groups}
 \usage{
-get_census_data(us_fips, census_key, vintage = 2019)
+get_census_data(us_fips)
 }
 \arguments{
 \item{us_fips}{A vector of state FIPS codes.}
-
-\item{census_key}{The API key for the Census API.}
 
 \item{vintage}{The vintage year for Census data (default is 2019).}
 }
