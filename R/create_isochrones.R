@@ -1,4 +1,3 @@
-####
 #' Memoized function to try a location with isoline calculations
 #'
 #' This function calculates isolines for a given location using the hereR package.
@@ -8,6 +7,7 @@
 #' @param posix_time A POSIXct object representing the date and time of calculation. Default is "2023-10-20 08:00:00".
 #'
 #' @return A list of isolines for different time ranges, or an error message if the calculation fails.
+#'
 #' @examples
 #' \dontrun{
 #'
@@ -21,14 +21,17 @@
 #' location <- sf::st_point(c(-73.987, 40.757))
 #'
 #' # Calculate isolines for the location with a 30-minute, 60-minute, 120-minute, and 180-minute range
-#' isolines <- tryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))
+#' isolines <- create_isochrones(location = location, range = c(1800, 3600, 7200, 10800))
+#'
+#' # Print the isolines
+#' print(isolines)
+#'
 #' }
 #'
 #' @export
 #' @import memoise
 #' @import hereR
 #' @importFrom hereR set_freemium set_key set_verbose isoline
-#' @importFrom leaflet colorNumeric
 create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S")) {
   cat("\033[Display setup instructions:\033[0m\n")
   cat("\033[34mTo create isochrones for a specific point(s) use the following code:\033[0m\n")
