@@ -37,10 +37,10 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
   cat("\033[34mTo create isochrones for a specific point(s) use the following code:\033[0m\n")
   cat("\033[34mtryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))\n")
 
-  # Check if location is an sf object
-  if (!base::inherits(location, "sf")) {
-    stop("Location must be an sf object.")
-  }
+  # # Check if location is an sf object
+  # if (!base::inherits(location, "sf")) {
+  #   stop("Location must be an sf object.")
+  # }
 
   # Check if HERE_API_KEY is set in Renviron
   if (Sys.getenv("HERE_API_KEY") == "") {
