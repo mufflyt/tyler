@@ -31,7 +31,7 @@ create_isochrones_for_dataframe <- function(dataframe, breaks = c(0, 30, 60, 120
 
     # Get isochrones for that point
     Sys.sleep(0.4)
-    isochrones_temp <- hereR::create_isochrones(point_temp)
+    isochrones_temp <- create_isochrones(point_temp)
 
     # If the point errored out, skip it
     if (!is.null(isochrones_temp)) {
