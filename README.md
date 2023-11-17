@@ -1,6 +1,8 @@
 
 # tyler
 
+# We need to get a function that runs genderize.  
+
 <!-- badges: start -->
 <!-- badges: end -->
 
