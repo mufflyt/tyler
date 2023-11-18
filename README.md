@@ -77,6 +77,13 @@ library(tyler)
 tyler::physicians
 ```
 
+### Searching for Data: `tyler::search_by_taxonomy`
+This function searches the NPI Database for healthcare providers based on a taxonomy description.  This helps confirm outside data about subspecialist provider counts and fill in the gaps for providers who are not board-certified but are practicing (board-eligible).  
+```r
+# Example usage with multiple taxonomy descriptions:
+data <- search_by_taxonomy(c("Gynecologic Oncology", "Female Pelvic Medicine and Reconstructive Surgery", "Reproductive Endocrinology", "Maternal & Fetal Medicine"))
+```
+
 ### Searching for Data: `tyler::search_and_process_npi`
 National Provider Identifier Search: Search first names, last names, only individuals `enumeration_type = "ind"`, and only physicians `("MD", "DO")` in the United States from the [NPPES]([https://github.com/](https://npiregistry.cms.hhs.gov/search)).  NPI numbers provide a standardized way to identify and track healthcare providers, including physicians, across the United States. Government agencies, such as the Centers for Medicare & Medicaid Services (CMS), use NPI-based data to plan and allocate healthcare resources, including provider reimbursements, medical services, and workforce distribution.
 
@@ -93,7 +100,6 @@ output_result <- search_and_process_npi(input_file)
 
 ### Searching for Data: `tyler::genderize_physicians`
 This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  
-
 ```r
 genderize_physicians <- function(input_csv) 
 ```
