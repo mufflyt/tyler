@@ -78,10 +78,13 @@ tyler::physicians
 ```
 
 ### Searching for Data: `tyler::search_by_taxonomy`
-This function searches the NPI Database for healthcare providers based on a taxonomy description.  This helps confirm outside data about subspecialist provider counts and fill in the gaps for providers who are not board-certified but are practicing (board-eligible).  
+This function searches the NPI Database for healthcare providers based on a taxonomy description.  This helps confirm outside data about subspecialist provider counts and fill in the gaps for providers who are not board-certified but are practicing (board-eligible).  This data can be matched to other databases.  Please see `Exploratory/workforce/subspecialists_only` for more code on how to do this.  The nice thing is that all these search results will come with an NPI.  
 ```r
 # Example usage with multiple taxonomy descriptions:
-data <- search_by_taxonomy(c("Gynecologic Oncology", "Female Pelvic Medicine and Reconstructive Surgery", "Reproductive Endocrinology", "Maternal & Fetal Medicine"))
+data <- search_by_taxonomy(c("Gynecologic Oncology",
+            "Female Pelvic Medicine and Reconstructive Surgery",
+            "Reproductive Endocrinology",
+            "Maternal & Fetal Medicine"))
 ```
 
 ### Searching for Data: `tyler::search_and_process_npi`
@@ -99,7 +102,7 @@ output_result <- search_and_process_npi(input_file)
 ```
 
 ### Searching for Data: `tyler::genderize_physicians`
-This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  
+This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  A lot of gender data was found via Physician Compare in the past.  Physician Compare has sunset as of December 1, 2020.
 ```r
 genderize_physicians <- function(input_csv) 
 ```
