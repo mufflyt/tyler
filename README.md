@@ -1,15 +1,11 @@
 
 # tyler
 
-# We need to get a function that runs genderize.  
-
 <!-- badges: start -->
+<img src="https://github.com/mufflyt/tyler/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57" width="20%">
 <!-- badges: end -->
 
-The goal of the 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting.
-
-The second goal is to assist with workforce distribution research for OBGYNs.  
-
+The goal of the 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting. The second goal is to assist with workforce distribution research for OBGYNs.  
 
 ## Installation
 
@@ -21,7 +17,7 @@ devtools::install_github("mufflyt/tyler")
 
 # Data: Workforce
 ### Data: `tyler::acgme`
-Dataframe of the OBGYN residency programs scraped from https://apps.acgme.org/ads/Public/Programs/Search.  Name, city, state, accreditation date, program director name, website, rotations, and affiliated hospitals are included.  
+The ACGME (Accreditation Council for Graduate Medical Education) is a prominent organization in the United States responsible for accrediting and overseeing graduate medical education programs, including residency and fellowship programs. Residency programs are a crucial component of medical education in the United States. They provide specialized training to medical school graduates, allowing them to become competent and independent physicians in a specific medical specialty. Dataframe of the OBGYN residency programs scraped from https://apps.acgme.org/ads/Public/Programs/Search.  Name, city, state, accreditation date, program director name, website, rotations, and affiliated hospitals are included.  
 'tyler::acgme' - This is a dataframe of every OBGYN residency from the ACGME web site.  This data can be used to map the obgyn residencies, etc.  
 ```r
 obgyn_residencies <- tyler::acgme
@@ -35,7 +31,7 @@ obgyn_residencies <- tyler::acgme
 ```
 
 ### Data: 'tyler::ACOG_Districts' 
-This is a dataframe of state names, ACOG Districts, US Census Bureau Subregions, and state abbreviations. 
+The American College of Obstetricians and Gynecologists (ACOG) is a professional organization representing obstetricians and gynecologists in the United States. ACOG divides its membership into various geographical regions known as "ACOG Districts."  Because there are single-state ACOG Districts (e.g., California, Texas, Florida) we also need to use US Census Bureau subdivisions.  Subdivisions are important for census and statistical purposes because they help organize and categorize population data at the local level. This is a dataframe of state names, ACOG Districts, US Census Bureau Subregions, and state abbreviations. 
 ```r
 acog_districts <- tyler::ACOG_Districts
 tyler::ACOG_Districts
@@ -56,7 +52,7 @@ tyler::ACOG_Districts
 ```
 
 ### Data: 'tyler::taxonomy' 
-This is a dataframe of NUCC taxonomy codes used in the NPPES data files.  Of note the OBGYN taxonomy codes are: Version 23.1 from 7/1/2023.  https://nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40/csv-mainmenu-57.  For example: 
+Physician Taxonomy Codes and the NPPES (National Plan and Provider Enumeration System) database are both essential components of the healthcare system in the United States. They play a crucial role in identifying and categorizing healthcare providers for various purposes, including billing, insurance, and regulatory compliance. This is a dataframe of NUCC taxonomy codes used in the NPPES data files.  Each Taxonomy Code consists of a unique ten-character identifier that helps identify the type of healthcare provider and their area of expertise. Of note the OBGYN taxonomy codes are: Version 23.1 from 7/1/2023.  https://nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40/csv-mainmenu-57.  For example: 
 ```r
 obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed("GYN", ignore_case = TRUE))) %>% select (Code, Specialization)
 
@@ -83,7 +79,7 @@ tyler::physicians
 
 # MAKING MAPS
 ### `tyler::geocode_unique_addresses`
-Takes a csv file of addresses and prints out the lat and long as separate columns.  
+Takes a csv file of addresses and prints out the lat and long as separate columns.  You will need a google_maps_api_key.  Geocoding is the process of converting human-readable addresses or place names into geographic coordinates (latitude and longitude) that can be used to locate places on a map. The Google Geocoding API is a service provided by Google that allows developers to perform geocoding and reverse geocoding, which is the process of converting coordinates back into human-readable addresses. 
 ```r
 output_data <- 
     geocode_unique_addresses(file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/address_for_geocoding.csv", 
@@ -92,7 +88,7 @@ output_data <-
 ```
 
 ### `tyler::create_basemap`
-This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  
+This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  Leaflet provides a user-friendly and intuitive interface for interacting with maps. It supports features like zooming, panning, and click events, making it easy for users to explore and interact with geographic data.
 ```r
 # Create a base map with a custom title
 my_map <- create_base_map("TITLE")
@@ -112,16 +108,16 @@ my_map <- my_map %>%
 <img src="https://github.com/mufflyt/tyler/assets/44621942/87a04a9d-7ddd-46b6-8917-947530983088" width="50%">
 
 ### `tyler::create_isochrones`
-A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  
+A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  We use the HERE API to calculate optimal routes and directions for various modes of transportation, including driving, walking, cycling, and public transit. It provides detailed turn-by-turn instructions, estimated travel times, and route alternatives.  This is simpler than using a OSRM server running the the AWS cloud and the cost is minimal.  
 
 ### `tyler::create_isochrones_for_dataframe`
-A function that iterates the `tyler::create_isochrones` over an entire dataframe.  The only input is a dataframe and the breaks for the number of minutes for each isochrones.  
+A function that iterates the `tyler::create_isochrones` over an entire dataframe.  The only input is a dataframe and the breaks for the number of minutes for each drive-time isochrone.  Drive time isochrones take into account road networks, traffic conditions, and other factors that influence actual travel time. Geodesic distances, on the other hand, represent straight-line distances "as the crow flies" and do not consider road networks. For real-world navigation or route planning, drive time isochrones provide more accurate estimates of travel time.  While drive time isochrones have these advantages, geodesic distances are still valuable in scenarios where the focus is solely on measuring straight-line distances or when road network information is not available or necessary. 
 ```r
 isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
 ```
 
 ### `create_and_save_physician_dot_map.R`
-Leaflet dot map of physicians on colored ACOG Districts.  
+Leaflet dot map of physicians on colored ACOG Districts.  We introduce some jitter for people who work at the same location.  Dot maps allow viewers to identify patterns and trends in the data distribution. 
 ```r
 tyler::create_and_save_physician_dot_map(physician_data = gyn_onc, jitter_range = 0.05, color_palette = "magma", popup_var = "name")
 ```
@@ -130,7 +126,7 @@ tyler::create_and_save_physician_dot_map(physician_data = gyn_onc, jitter_range 
 <img src="https://github.com/mufflyt/tyler/assets/44621942/2511d71c-f5c3-48be-ac5f-f439a67bf89a" width="50%">
 
 ### `tyler::honeycomb_generate_maps_by_acog_districts.R`
-Loops through each ACOG district to generate hex maps individually.  
+Loops through each ACOG district to generate hex maps individually.  Hexagon grids provide a uniform and regular tessellation of geographic space. Unlike traditional square grids or irregular polygons, hexagons have consistent shapes and sizes. This uniformity makes it easier to analyze and interpret the distribution of data.
 ```r
 #Use case:
 generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
@@ -149,7 +145,7 @@ all_map <-
 <img src="https://github.com/mufflyt/tyler/assets/44621942/58553c2b-f7c7-4f86-be35-c650e54dd2c3" width="50%">
 
 ### `tyler::create_individual_isochrone_plots.R`
-Function to create individual plots and shapefiles for specified drive times.  
+Function to create individual plots and shapefiles for specified drive times.  It generates individual plots for each drive time, providing a visual representation of the accessible areas on a map. The function shapefiles, which are geospatial data files used for storing geographic information, including the boundaries of the reachable areas.
 ```r
 # Usage example:
 # List of unique drive times for which you want to create plots and shapefiles
@@ -198,7 +194,7 @@ create_individual_isochrone_plots(isochrones, drive_times)
 ```
 
 ### `tyler::get_census_data`
-This function retrieves Census data using `censusapi` for all states' block groups by looping over the specified list of state FIPS codes.  This only brings back data on females from "B01001_01, 26, 33:49E".
+This function retrieves Census data using `censusapi` for all states' block groups by looping over the specified list of state FIPS codes.  This only brings back data on females from "B01001_01, 26, 33:49E".  FIPS codes, or Federal Information Processing Standards codes, are a standardized set of codes used to uniquely identify geographic areas in the United States. These codes are assigned to various administrative and geographical entities, such as states, counties, cities, and more. We used block groups for the analysis.  In the United States Census Bureau's geographic hierarchy, a "block group" is a smaller and more detailed geographic unit used for collecting and reporting demographic and statistical data. Block groups are subdivisions of census tracts and are typically designed to contain between 600 and 3,000 people, although this can vary depending on the population density of the area. Block groups are used as the primary units for collecting detailed demographic and socioeconomic data during the decennial census and the American Community Survey (ACS). Census enumerators visit households within each block group to collect information on population, housing, employment, income, education, and more. In a densely populated urban area, a block group might represent a city block or a small neighborhood within a larger city. For example, a block group could cover a few city blocks in downtown Manhattan, New York City.
 
 ```r
 all_census_data <- get_census_data(us_fips_list, "your_censusapi_key_here", vintage=2019)
