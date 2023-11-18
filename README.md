@@ -77,6 +77,27 @@ library(tyler)
 tyler::physicians
 ```
 
+### Searching for Data: `tyler::search_and_process_npi`
+National Provider Identifier Search: Search first names, last names, only individuals `enumeration_type = "ind"`, and only physicians `("MD", "DO")` in the United States from the [NPPES]([https://github.com/](https://npiregistry.cms.hhs.gov/search)).  NPI numbers provide a standardized way to identify and track healthcare providers, including physicians, across the United States. Government agencies, such as the Centers for Medicare & Medicaid Services (CMS), use NPI-based data to plan and allocate healthcare resources, including provider reimbursements, medical services, and workforce distribution.
+
+```r
+search_and_process_npi <- function(input_file,
+                                   enumeration_type = "ind",
+                                   limit = 5L,
+                                   country_code = "US",
+                                   filter_credentials = c("MD", "DO"))
+
+input_file <- "/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppes_search/Lo_R_Author.csv"
+output_result <- search_and_process_npi(input_file)
+```
+
+### Searching for Data: `tyler::genderize_physicians`
+This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  
+
+```r
+genderize_physicians <- function(input_csv) 
+```
+
 # MAKING MAPS
 ### `tyler::geocode_unique_addresses`
 Takes a csv file of addresses and prints out the lat and long as separate columns.  You will need a google_maps_api_key.  Geocoding is the process of converting human-readable addresses or place names into geographic coordinates (latitude and longitude) that can be used to locate places on a map. The Google Geocoding API is a service provided by Google that allows developers to perform geocoding and reverse geocoding, which is the process of converting coordinates back into human-readable addresses. 
@@ -224,17 +245,9 @@ create_block_group_overlap_map(
 ```
 <img src="https://github.com/mufflyt/tyler/assets/44621942/713a0397-30fc-4a5a-972b-5feb691a1922" width="75%">
 
-# NPI Search
-Search first names, last names, only individuals `enumeration_type = "ind"`, and only physicians `("MD", "DO")` in the United States from the [NPPES]([https://github.com/](https://npiregistry.cms.hhs.gov/search)).  
+# `tyler:hrr`
+This function loads the hospital referral region shapefile and optionally removes Hawaii and Alaska.  Then it creates a ggplot map of all HRR regions: 
 
 ```r
-search_and_process_npi <- function(input_file,
-                                   enumeration_type = "ind",
-                                   limit = 5L,
-                                   country_code = "US",
-                                   filter_credentials = c("MD", "DO"))
-
-input_file <- "/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppes_search/Lo_R_Author.csv"
-output_result <- search_and_process_npi(input_file)
+hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all", breaks = c(1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200), map_title = "OBGYN Residency\n Faculty Subspecialists") 
 ```
-
