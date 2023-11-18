@@ -15,6 +15,20 @@ You can install the development version of tyler from [GitHub](https://github.co
 devtools::install_github("mufflyt/tyler")
 ```
 
+# Workflow
+1) Gather all the physician data that is needed:
+     * Search by subspecialty taxonomy: `tyler::search_and_process_npi`
+     * Search by physician name: `tyler::search_and_process_npi`
+     * Merge these two physician data sources together.  `exploratory/Workforce/subspecialists_only`
+     * Complete the gender for all physicians: `tyler::genderize_physicians`
+     * Add in the physician age from healthgrades.com: ??????
+     * 
+3) By state name determine the ACOG District.
+      * left_join with 'tyler::ACOG_Districts' 
+5) Geocode the addresses to latitude and longitude for mapping.
+      * `tyler::geocode_unique_addresses`
+7) 
+
 # Data: Workforce
 ### Data: `tyler::acgme`
 The ACGME (Accreditation Council for Graduate Medical Education) is a prominent organization in the United States responsible for accrediting and overseeing graduate medical education programs, including residency and fellowship programs. Residency programs are a crucial component of medical education in the United States. They provide specialized training to medical school graduates, allowing them to become competent and independent physicians in a specific medical specialty. Dataframe of the OBGYN residency programs scraped from https://apps.acgme.org/ads/Public/Programs/Search.  Name, city, state, accreditation date, program director name, website, rotations, and affiliated hospitals are included.  
@@ -259,4 +273,22 @@ This function loads the hospital referral region shapefile and optionally remove
 
 ```r
 hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all", breaks = c(1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200), map_title = "OBGYN Residency\n Faculty Subspecialists") 
+```
+
+
+# Installing Selenium with R
+I am running Firefox version 117.0.  This is compatible with geckodriver 0.33.0 (https://github.com/mozilla/geckodriver/releases).  
+
+```r
+# Specify the geckodriver version
+geckodriver_version <- "0.33.0"
+
+
+# Start the RSelenium driver
+rD <- RSelenium::rsDriver(
+  browser = 'firefox',
+  geckover = geckodriver_version,
+  port = 4456L,
+  verbose = TRUE)
+
 ```
