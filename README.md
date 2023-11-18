@@ -19,7 +19,7 @@ devtools::install_github("mufflyt/tyler")
 1) Gather all the physician data that is needed:
      * Search by subspecialty taxonomy: `tyler::search_and_process_npi`
      * Search by physician name: `tyler::search_and_process_npi`
-     * Merge these two physician data sources together.  `exploratory/Workforce/subspecialists_only`
+     * Merge these two physician data sources together.  See the code at: `exploratory/Workforce/subspecialists_only`
      * Complete the gender for all physicians: `tyler::genderize_physicians`
      * Add in the physician age from healthgrades.com: ??????
      * 
@@ -27,7 +27,16 @@ devtools::install_github("mufflyt/tyler")
       * left_join with 'tyler::ACOG_Districts' 
 5) Geocode the addresses to latitude and longitude for mapping.
       * `tyler::geocode_unique_addresses`
-7) 
+6)Get the US Census Bureau data associated with the block groups:
+   * `tyler::get_census_data`
+7) Create the isochrones based on drive times:
+   * `tyler::create_isochrones`
+   * `tyler::create_isochrones_for_dataframe`
+   * All this is heavily borrowed from "https://github.com/khnews/2021-delta-appalachia-stroke-access"
+8) Create overlap maps of isochrones and block groups
+   * `tyler::calculate_intersection_overlap_and_save`- THIS NEEDS WORK
+   * `tyler::create_block_group_overlap_map`
+   * 
 
 # Data: Workforce
 ### Data: `tyler::acgme`
@@ -152,13 +161,33 @@ my_map <- my_map %>%
 <img src="https://github.com/mufflyt/tyler/assets/44621942/87a04a9d-7ddd-46b6-8917-947530983088" width="50%">
 
 ### `tyler::create_isochrones`
-A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  We use the HERE API to calculate optimal routes and directions for various modes of transportation, including driving, walking, cycling, and public transit. It provides detailed turn-by-turn instructions, estimated travel times, and route alternatives.  This is simpler than using a OSRM server running the the AWS cloud and the cost is minimal.  
+A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  We use the HERE API to calculate optimal routes and directions for various modes of transportation, including driving, walking, cycling, and public transit. It provides detailed turn-by-turn instructions, estimated travel times, and route alternatives.  This is simpler than using an OSRM server running the AWS cloud, and the cost is minimal.  
 
 ### `tyler::create_isochrones_for_dataframe`
 A function that iterates the `tyler::create_isochrones` over an entire dataframe.  The only input is a dataframe and the breaks for the number of minutes for each drive-time isochrone.  Drive time isochrones take into account road networks, traffic conditions, and other factors that influence actual travel time. Geodesic distances, on the other hand, represent straight-line distances "as the crow flies" and do not consider road networks. For real-world navigation or route planning, drive time isochrones provide more accurate estimates of travel time.  While drive time isochrones have these advantages, geodesic distances are still valuable in scenarios where the focus is solely on measuring straight-line distances or when road network information is not available or necessary. 
 ```r
 isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
 ```
+### `tyler::create_individual_isochrone_plots.R`
+Function to create individual plots and shapefiles for specified drive times.  It generates individual plots for each drive time, providing a visual representation of the accessible areas on a map. The function shapefiles, which are geospatial data files used for storing geographic information, including the boundaries of the reachable areas.
+```r
+# Usage example:
+# List of unique drive times for which you want to create plots and shapefiles
+drive_times <- unique(isochrones$drive_time)
+create_individual_isochrone_plots(isochrones, drive_times)
+```
+#### 30-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/2daffc4f-e5d7-4f35-9b0e-054b979cdd7f" width="25%">
+
+#### 60-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/3643c555-628b-409c-bbfd-718f7b5c9663" width="25%">
+
+#### 120-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/8ad18c72-5467-419b-92c1-4b863192a711" width="25%">
+
+#### 180-minute isochrones
+<img src="https://github.com/mufflyt/tyler/assets/44621942/49000172-e535-41c9-bdff-d1b262334195" width="25%">
+
 
 ### `create_and_save_physician_dot_map.R`
 Leaflet dot map of physicians on colored ACOG Districts.  We introduce some jitter for people who work at the same location.  Dot maps allow viewers to identify patterns and trends in the data distribution. 
@@ -187,27 +216,6 @@ all_map <-
   ))
 ```
 <img src="https://github.com/mufflyt/tyler/assets/44621942/58553c2b-f7c7-4f86-be35-c650e54dd2c3" width="50%">
-
-### `tyler::create_individual_isochrone_plots.R`
-Function to create individual plots and shapefiles for specified drive times.  It generates individual plots for each drive time, providing a visual representation of the accessible areas on a map. The function shapefiles, which are geospatial data files used for storing geographic information, including the boundaries of the reachable areas.
-```r
-# Usage example:
-# List of unique drive times for which you want to create plots and shapefiles
-drive_times <- unique(isochrones$drive_time)
-create_individual_isochrone_plots(isochrones, drive_times)
-```
-#### 30-minute isochrones
-<img src="https://github.com/mufflyt/tyler/assets/44621942/2daffc4f-e5d7-4f35-9b0e-054b979cdd7f" width="25%">
-
-#### 60-minute isochrones
-<img src="https://github.com/mufflyt/tyler/assets/44621942/3643c555-628b-409c-bbfd-718f7b5c9663" width="25%">
-
-#### 120-minute isochrones
-<img src="https://github.com/mufflyt/tyler/assets/44621942/8ad18c72-5467-419b-92c1-4b863192a711" width="25%">
-
-#### 180-minute isochrones
-<img src="https://github.com/mufflyt/tyler/assets/44621942/49000172-e535-41c9-bdff-d1b262334195" width="25%">
-
 
 # DEMOGRAPHICS
 ```r
@@ -290,5 +298,4 @@ rD <- RSelenium::rsDriver(
   geckover = geckodriver_version,
   port = 4456L,
   verbose = TRUE)
-
 ```
