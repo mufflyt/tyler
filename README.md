@@ -22,12 +22,12 @@ devtools::install_github("mufflyt/tyler")
      * Merge these two physician data sources together.  See the code at: `exploratory/Workforce/subspecialists_only`
      * Complete the gender for all physicians: `tyler::genderize_physicians`
      * Add in the physician age from healthgrades.com: ??????
-     * 
+       
 3) By state name determine the ACOG District.
       * left_join with 'tyler::ACOG_Districts' 
 5) Geocode the addresses to latitude and longitude for mapping.
       * `tyler::geocode_unique_addresses`
-6)Get the US Census Bureau data associated with the block groups:
+6) Get the US Census Bureau data associated with the block groups:
    * `tyler::get_census_data`
 7) Create the isochrones based on drive times:
    * `tyler::create_isochrones`
@@ -124,14 +124,21 @@ input_file <- "/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppe
 output_result <- search_and_process_npi(input_file)
 ```
 
+### Searching for Data: `tyler::retrieve_clinician_data`
+Physician Compare has sunset as of December 1, 2020 and has been replaced by: https://www.medicare.gov/care-compare/?redirect=true&providerType=Physician.  The entire data set is at https://data.cms.gov/provider-data/dataset/mj5m-pzi6.  The very very cool library called `provider` was super helpful with accessing this.  
+```r
+# Call the retrieve_clinician_data function with an NPI value
+input_csv_path <- ("~/Dropbox (Personal)/workforce/subspecialists_only.csv")
+clinician_data <- retrieve_clinician_data(input_csv_path)
+```
+
 ### Searching for Data: `tyler::genderize_physicians`
-This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  A lot of gender data was found via Physician Compare in the past.  Physician Compare has sunset as of December 1, 2020.
+This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  A lot of gender data was found via Physician Compare in the past.  
 ```r
 genderize_physicians <- function(input_csv) 
 ```
 
-# MAKING MAPS
-### `tyler::geocode_unique_addresses`
+### Searching for Data: `tyler::geocode_unique_addresses`
 Takes a csv file of addresses and prints out the lat and long as separate columns.  You will need a google_maps_api_key.  Geocoding is the process of converting human-readable addresses or place names into geographic coordinates (latitude and longitude) that can be used to locate places on a map. The Google Geocoding API is a service provided by Google that allows developers to perform geocoding and reverse geocoding, which is the process of converting coordinates back into human-readable addresses. 
 ```r
 output_data <- 
@@ -139,27 +146,7 @@ output_data <-
     google_maps_api_key = "????", 
     output_file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/geocoded_unique_addresses.csv")
 ```
-
-### `tyler::create_basemap`
-This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  Leaflet provides a user-friendly and intuitive interface for interacting with maps. It supports features like zooming, panning, and click events, making it easy for users to explore and interact with geographic data.
-```r
-# Create a base map with a custom title
-my_map <- create_base_map("TITLE")
-
-# Display the map and add circle markers
-my_map <- my_map %>%
-  leaflet::addCircleMarkers(lng = ~longitude,
-                           lat = ~latitude,
-                           data = data_points,
-                           popup = ~popup_text,
-                           radius = ~radius,
-                           color = ~color,
-                           fill = TRUE,
-                           stroke = FALSE,
-                           fillOpacity = 0.8)
-```
-<img src="https://github.com/mufflyt/tyler/assets/44621942/87a04a9d-7ddd-46b6-8917-947530983088" width="50%">
-
+# GET ISOCHRONES
 ### `tyler::create_isochrones`
 A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  We use the HERE API to calculate optimal routes and directions for various modes of transportation, including driving, walking, cycling, and public transit. It provides detailed turn-by-turn instructions, estimated travel times, and route alternatives.  This is simpler than using an OSRM server running the AWS cloud, and the cost is minimal.  
 
@@ -187,35 +174,6 @@ create_individual_isochrone_plots(isochrones, drive_times)
 
 #### 180-minute isochrones
 <img src="https://github.com/mufflyt/tyler/assets/44621942/49000172-e535-41c9-bdff-d1b262334195" width="25%">
-
-
-### `create_and_save_physician_dot_map.R`
-Leaflet dot map of physicians on colored ACOG Districts.  We introduce some jitter for people who work at the same location.  Dot maps allow viewers to identify patterns and trends in the data distribution. 
-```r
-tyler::create_and_save_physician_dot_map(physician_data = gyn_onc, jitter_range = 0.05, color_palette = "magma", popup_var = "name")
-```
-<img src="https://github.com/mufflyt/tyler/assets/44621942/43227656-cd1c-4242-a2db-cdf1ebce20e8" width="50%">
-
-<img src="https://github.com/mufflyt/tyler/assets/44621942/2511d71c-f5c3-48be-ac5f-f439a67bf89a" width="50%">
-
-### `tyler::honeycomb_generate_maps_by_acog_districts.R`
-Loops through each ACOG district to generate hex maps individually.  Hexagon grids provide a uniform and regular tessellation of geographic space. Unlike traditional square grids or irregular polygons, hexagons have consistent shapes and sizes. This uniformity makes it easier to analyze and interpret the distribution of data.
-```r
-#Use case:
-generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
-generate_acog_districts_sf()
-
-all_map <-
-  tyler::generate_maps(
-    physician_file = "inst/extdata/Physicians.rds",
-    acog_districts_file = "inst/extdata/ACOG_Districts.csv",
-    trait_map = "all",
-    honey_map = "all",
-    grid_size = c(0.2, 0.2),
-    specific_district = "District V"
-  ))
-```
-<img src="https://github.com/mufflyt/tyler/assets/44621942/58553c2b-f7c7-4f86-be35-c650e54dd2c3" width="50%">
 
 # DEMOGRAPHICS
 ```r
@@ -282,6 +240,55 @@ This function loads the hospital referral region shapefile and optionally remove
 ```r
 hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all", breaks = c(1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200), map_title = "OBGYN Residency\n Faculty Subspecialists") 
 ```
+# MAKING MAPS
+### `tyler::create_basemap`
+This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  Leaflet provides a user-friendly and intuitive interface for interacting with maps. It supports features like zooming, panning, and click events, making it easy for users to explore and interact with geographic data.
+```r
+# Create a base map with a custom title
+my_map <- create_base_map("TITLE")
+
+# Display the map and add circle markers
+my_map <- my_map %>%
+  leaflet::addCircleMarkers(lng = ~longitude,
+                           lat = ~latitude,
+                           data = data_points,
+                           popup = ~popup_text,
+                           radius = ~radius,
+                           color = ~color,
+                           fill = TRUE,
+                           stroke = FALSE,
+                           fillOpacity = 0.8)
+```
+<img src="https://github.com/mufflyt/tyler/assets/44621942/87a04a9d-7ddd-46b6-8917-947530983088" width="50%">
+
+### `create_and_save_physician_dot_map.R`
+Leaflet dot map of physicians on colored ACOG Districts.  We introduce some jitter for people who work at the same location.  Dot maps allow viewers to identify patterns and trends in the data distribution. 
+```r
+tyler::create_and_save_physician_dot_map(physician_data = gyn_onc, jitter_range = 0.05, color_palette = "magma", popup_var = "name")
+```
+<img src="https://github.com/mufflyt/tyler/assets/44621942/43227656-cd1c-4242-a2db-cdf1ebce20e8" width="50%">
+
+<img src="https://github.com/mufflyt/tyler/assets/44621942/2511d71c-f5c3-48be-ac5f-f439a67bf89a" width="50%">
+
+### `tyler::honeycomb_generate_maps_by_acog_districts.R`
+Loops through each ACOG district to generate hex maps individually.  Hexagon grids provide a uniform and regular tessellation of geographic space. Unlike traditional square grids or irregular polygons, hexagons have consistent shapes and sizes. This uniformity makes it easier to analyze and interpret the distribution of data.
+```r
+#Use case:
+generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
+generate_acog_districts_sf()
+
+all_map <-
+  tyler::generate_maps(
+    physician_file = "inst/extdata/Physicians.rds",
+    acog_districts_file = "inst/extdata/ACOG_Districts.csv",
+    trait_map = "all",
+    honey_map = "all",
+    grid_size = c(0.2, 0.2),
+    specific_district = "District V"
+  ))
+```
+<img src="https://github.com/mufflyt/tyler/assets/44621942/58553c2b-f7c7-4f86-be35-c650e54dd2c3" width="50%">
+
 
 
 # Installing Selenium with R
