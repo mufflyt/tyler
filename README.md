@@ -15,6 +15,8 @@ You can install the development version of tyler from [GitHub](https://github.co
 devtools::install_github("mufflyt/tyler")
 ```
 
+# Add in hospital information data.  
+
 # Workflow
 1) Gather all the physician data that is needed:
      * Search by subspecialty taxonomy: `tyler::searcy_by_taxonomy`
@@ -125,7 +127,7 @@ data <- tyler::search_by_taxonomy(c("Gynecologic Oncology",
 National Provider Identifier Search: Search first names, last names, only individuals `enumeration_type = "ind"`, and only physicians `("MD", "DO")` in the United States from the [NPPES]([https://github.com/](https://npiregistry.cms.hhs.gov/search)).  NPI numbers provide a standardized way to identify and track healthcare providers, including physicians, across the United States. Government agencies, such as the Centers for Medicare & Medicaid Services (CMS), use NPI-based data to plan and allocate healthcare resources, including provider reimbursements, medical services, and workforce distribution.
 
 ```r
-tyler::search_and_process_npi <- function(input_file,
+search_and_process_npi <- function(input_file,
                                    enumeration_type = "ind",
                                    limit = 5L,
                                    country_code = "US",
@@ -141,6 +143,16 @@ Physician Compare has sunset as of December 1, 2020 and has been replaced by: ht
 # Call the retrieve_clinician_data function with an NPI value
 input_csv_path <- ("~/Dropbox (Personal)/workforce/subspecialists_only.csv")
 clinician_data <- tyler::retrieve_clinician_data(input_csv_path)
+
+✖ No results for npi = 1093151441
+NULL
+# A tibble: 3 × 17
+  npi     pac   enid  first last  gender school grad_year specialty facility_name pac_org members_org address_org city_org
+  <chr>   <chr> <chr> <chr> <chr> <fct>  <chr>      <int> <chr>     <chr>         <chr>         <int> <chr>       <chr>   
+1 119406… 3476… I202… JACL… DENE… Female NEW Y…      2013 OBSTETRI… SPECTRUM HEA… 458756…        1551 25 MICHIGA… GRAND R…
+2 119406… 3476… I202… JACL… DENE… Female NEW Y…      2013 OBSTETRI… SPECTRUM HEA… 458756…        1551 4444 KALAM… KENTWOOD
+3 119406… 3476… I202… JACL… DENE… Female NEW Y…      2013 OBSTETRI… SPECTRUM HEA… 458756…        1551 4069 LAKE … GRAND R…
+# ℹ 3 more variables: state_org <ord>, zip_org <chr>, phone_org <chr>
 ```
 
 ### Searching for Data: `tyler::genderize_physicians`
