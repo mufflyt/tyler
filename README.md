@@ -17,14 +17,15 @@ devtools::install_github("mufflyt/tyler")
 
 # Workflow
 1) Gather all the physician data that is needed:
-     * Search by subspecialty taxonomy: `tyler::search_and_process_npi`
+     * Search by subspecialty taxonomy: `tyler::searcy_by_taxonomy`
      * Search by physician name: `tyler::search_and_process_npi`
      * Merge these two physician data sources together.  See the code at: `exploratory/Workforce/subspecialists_only`
-     * Complete the gender for all physicians: `tyler::genderize_physicians`
      * Add in the physician age from healthgrades.com: ??????
+     * Get Physician Compare physician demographics: `tyler::retrieve_clinician_data`
+     * Complete the gender for all physicians: `tyler::genderize_physicians`
        
 3) By state name determine the ACOG District.
-      * left_join with 'tyler::ACOG_Districts' 
+      * dplyr::left_join with 'tyler::ACOG_Districts' 
 5) Geocode the addresses to latitude and longitude for mapping.
       * `tyler::geocode_unique_addresses`
 6) Get the US Census Bureau data associated with the block groups:
@@ -96,25 +97,35 @@ obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed(
 ### Data: 'tyler::physicians' 
 Internal package dataframe with the names and coordinates for subspecialists in OBGYN.  The source file `Physicians.rds` is found at `tyler/inst/extdata`
 ``` r
-library(tyler)
 tyler::physicians
+
+# A tibble: 4,659 × 5
+          NPI name                        subspecialty                                        lat   long
+        <dbl> <chr>                       <chr>                                             <dbl>  <dbl>
+ 1 1922051358 Katherine Boyd              Female Pelvic Medicine and Reconstructive Surgery  42.6  -82.9
+ 2 1750344388 Thomas Byrne                Maternal-Fetal Medicine                            35.2 -102. 
+ 3 1548520133 Bobby Garcia                Female Pelvic Medicine and Reconstructive Surgery  40.8  -73.9
 ```
 
 ### Searching for Data: `tyler::search_by_taxonomy`
 This function searches the NPI Database for healthcare providers based on a taxonomy description.  This helps confirm outside data about subspecialist provider counts and fill in the gaps for providers who are not board-certified but are practicing (board-eligible).  This data can be matched to other databases.  Please see `Exploratory/workforce/subspecialists_only` for more code on how to do this.  The nice thing is that all these search results will come with an NPI.  
 ```r
 # Example usage with multiple taxonomy descriptions:
-data <- search_by_taxonomy(c("Gynecologic Oncology",
+data <- tyler::search_by_taxonomy(c("Gynecologic Oncology",
             "Female Pelvic Medicine and Reconstructive Surgery",
             "Reproductive Endocrinology",
             "Maternal & Fetal Medicine"))
+
+# 1200 records requested
+# Requesting records 0-200...
+# Requesting records 200-400...
 ```
 
 ### Searching for Data: `tyler::search_and_process_npi`
 National Provider Identifier Search: Search first names, last names, only individuals `enumeration_type = "ind"`, and only physicians `("MD", "DO")` in the United States from the [NPPES]([https://github.com/](https://npiregistry.cms.hhs.gov/search)).  NPI numbers provide a standardized way to identify and track healthcare providers, including physicians, across the United States. Government agencies, such as the Centers for Medicare & Medicaid Services (CMS), use NPI-based data to plan and allocate healthcare resources, including provider reimbursements, medical services, and workforce distribution.
 
 ```r
-search_and_process_npi <- function(input_file,
+tyler::search_and_process_npi <- function(input_file,
                                    enumeration_type = "ind",
                                    limit = 5L,
                                    country_code = "US",
@@ -129,20 +140,20 @@ Physician Compare has sunset as of December 1, 2020 and has been replaced by: ht
 ```r
 # Call the retrieve_clinician_data function with an NPI value
 input_csv_path <- ("~/Dropbox (Personal)/workforce/subspecialists_only.csv")
-clinician_data <- retrieve_clinician_data(input_csv_path)
+clinician_data <- tyler::retrieve_clinician_data(input_csv_path)
 ```
 
 ### Searching for Data: `tyler::genderize_physicians`
 This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  A lot of gender data was found via Physician Compare in the past.  
 ```r
-genderize_physicians <- function(input_csv) 
+tyler::genderize_physicians <- function(input_csv) 
 ```
 
 ### Searching for Data: `tyler::geocode_unique_addresses`
 Takes a csv file of addresses and prints out the lat and long as separate columns.  You will need a google_maps_api_key.  Geocoding is the process of converting human-readable addresses or place names into geographic coordinates (latitude and longitude) that can be used to locate places on a map. The Google Geocoding API is a service provided by Google that allows developers to perform geocoding and reverse geocoding, which is the process of converting coordinates back into human-readable addresses. 
 ```r
 output_data <- 
-    geocode_unique_addresses(file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/address_for_geocoding.csv", 
+    tyler::geocode_unique_addresses(file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/address_for_geocoding.csv", 
     google_maps_api_key = "????", 
     output_file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/geocoded_unique_addresses.csv")
 ```
@@ -153,7 +164,7 @@ A function that interfaces with HERE API to gather the geometry for the isochron
 ### `tyler::create_isochrones_for_dataframe`
 A function that iterates the `tyler::create_isochrones` over an entire dataframe.  The only input is a dataframe and the breaks for the number of minutes for each drive-time isochrone.  Drive time isochrones take into account road networks, traffic conditions, and other factors that influence actual travel time. Geodesic distances, on the other hand, represent straight-line distances "as the crow flies" and do not consider road networks. For real-world navigation or route planning, drive time isochrones provide more accurate estimates of travel time.  While drive time isochrones have these advantages, geodesic distances are still valuable in scenarios where the focus is solely on measuring straight-line distances or when road network information is not available or necessary. 
 ```r
-isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
+isochrones_data <- tyler::create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
 ```
 ### `tyler::create_individual_isochrone_plots.R`
 Function to create individual plots and shapefiles for specified drive times.  It generates individual plots for each drive time, providing a visual representation of the accessible areas on a map. The function shapefiles, which are geospatial data files used for storing geographic information, including the boundaries of the reachable areas.
@@ -161,7 +172,7 @@ Function to create individual plots and shapefiles for specified drive times.  I
 # Usage example:
 # List of unique drive times for which you want to create plots and shapefiles
 drive_times <- unique(isochrones$drive_time)
-create_individual_isochrone_plots(isochrones, drive_times)
+tyler::create_individual_isochrone_plots(isochrones, drive_times)
 ```
 #### 30-minute isochrones
 <img src="https://github.com/mufflyt/tyler/assets/44621942/2daffc4f-e5d7-4f35-9b0e-054b979cdd7f" width="25%">
@@ -207,7 +218,7 @@ create_individual_isochrone_plots(isochrones, drive_times)
 This function retrieves Census data using `censusapi` for all states' block groups by looping over the specified list of state FIPS codes.  This only brings back data on females from "B01001_01, 26, 33:49E".  FIPS codes, or Federal Information Processing Standards codes, are a standardized set of codes used to uniquely identify geographic areas in the United States. These codes are assigned to various administrative and geographical entities, such as states, counties, cities, and more. We used block groups for the analysis.  In the United States Census Bureau's geographic hierarchy, a "block group" is a smaller and more detailed geographic unit used for collecting and reporting demographic and statistical data. Block groups are subdivisions of census tracts and are typically designed to contain between 600 and 3,000 people, although this can vary depending on the population density of the area. Block groups are used as the primary units for collecting detailed demographic and socioeconomic data during the decennial census and the American Community Survey (ACS). Census enumerators visit households within each block group to collect information on population, housing, employment, income, education, and more. In a densely populated urban area, a block group might represent a city block or a small neighborhood within a larger city. For example, a block group could cover a few city blocks in downtown Manhattan, New York City.
 
 ```r
-all_census_data <- get_census_data(us_fips_list, "your_censusapi_key_here", vintage=2019)
+all_census_data <- tyler::get_census_data(us_fips_list, "your_censusapi_key_here", vintage=2019)
 ```
 
 ### `tyler::create_block_group_overlap_map`
@@ -222,10 +233,10 @@ output_html <- "figures/overlap_bg_map.html"
 output_png <- "figures/overlap_bg_map.png"
 
 # Create and export the map
-create_block_group_overlap_map(block_groups, isochrones_joined_map, output_html, output_png)
+tyler::create_block_group_overlap_map(block_groups, isochrones_joined_map, output_html, output_png)
 
 # Call the create_block_group_overlap_map function with your data
-create_block_group_overlap_map(
+tyler::create_block_group_overlap_map(
   bg_data = your_block_group_data,
   isochrones_data = your_isochrones_data,
   output_html = "your_output_html_file.html",
@@ -238,14 +249,14 @@ create_block_group_overlap_map(
 This function loads the hospital referral region shapefile and optionally removes Hawaii and Alaska.  Then it creates a ggplot map of all HRR regions: 
 
 ```r
-hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all", breaks = c(1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200), map_title = "OBGYN Residency\n Faculty Subspecialists") 
+tyler::hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all", breaks = c(1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200), map_title = "OBGYN Residency\n Faculty Subspecialists") 
 ```
 # MAKING MAPS
 ### `tyler::create_basemap`
 This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  Leaflet provides a user-friendly and intuitive interface for interacting with maps. It supports features like zooming, panning, and click events, making it easy for users to explore and interact with geographic data.
 ```r
 # Create a base map with a custom title
-my_map <- create_base_map("TITLE")
+my_map <- tyler::create_base_map("TITLE")
 
 # Display the map and add circle markers
 my_map <- my_map %>%
@@ -274,8 +285,8 @@ tyler::create_and_save_physician_dot_map(physician_data = gyn_onc, jitter_range 
 Loops through each ACOG district to generate hex maps individually.  Hexagon grids provide a uniform and regular tessellation of geographic space. Unlike traditional square grids or irregular polygons, hexagons have consistent shapes and sizes. This uniformity makes it easier to analyze and interpret the distribution of data.
 ```r
 #Use case:
-generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
-generate_acog_districts_sf()
+tyler::generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
+tyler::generate_acog_districts_sf()
 
 all_map <-
   tyler::generate_maps(
