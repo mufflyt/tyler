@@ -25,9 +25,10 @@ devtools::install_github("mufflyt/tyler")
      * Add in the physician age from healthgrades.com: ??????
      * Get Physician Compare physician demographics: `tyler::retrieve_clinician_data`
      * Complete the gender for all physicians: `tyler::genderize_physicians`
+     * Check with secondary sources: `tyler::scrape_physicians_data_with_tor`
        
 3) By state name determine the ACOG District.
-      * dplyr::left_join with 'tyler::ACOG_Districts' 
+      * dplyr::left_join with `tyler::ACOG_Districts`
 5) Geocode the addresses to latitude and longitude for mapping.
       * `tyler::geocode_unique_addresses`
 6) Get the US Census Bureau data associated with the block groups:
@@ -169,6 +170,13 @@ output_data <-
     google_maps_api_key = "????", 
     output_file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/geocoded_unique_addresses.csv")
 ```
+### Searching for Data: `tyler::scrape_physicians_data_with_tor`
+The `scrape_physicians_data_with_tor` function scrapes physicians' data from a web API. It iterates through a range of IDs, checks if each ID is valid and not in a list of wrong IDs, sends HTTP requests through Tor to retrieve data, and appends valid data to a data frame. It also handles error responses, sleeps briefly between requests to prevent server overload, and saves the results as CSV files.
+
+```r
+scrape_physicians_data_with_tor(startID = 1, endID = 2, torPort = 9150)
+```
+
 # GET ISOCHRONES
 ### `tyler::create_isochrones`
 A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  We use the HERE API to calculate optimal routes and directions for various modes of transportation, including driving, walking, cycling, and public transit. It provides detailed turn-by-turn instructions, estimated travel times, and route alternatives.  This is simpler than using an OSRM server running the AWS cloud, and the cost is minimal.  
