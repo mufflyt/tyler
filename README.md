@@ -138,6 +138,18 @@ input_file <- "/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppe
 output_result <- search_and_process_npi(input_file)
 ```
 
+### Searching for Data: `tyler::validate_and_remove_invalid_npi`
+This cleans the NPI numbers before it goes into `tyler::retrieve_clinician_data` because if one incorrect NPI number is inserted then it screws up the entire search.  Saves each find as csv file.  
+```r
+input_csv_path <- "~/Dropbox (Personal)/workforce/subspecialists_only.csv"  # Replace with the path to your CSV file
+valid_df <- validate_and_remove_invalid_npi(input_csv_path)
+
+Search result saved as: data/search_results_1053601807_20231119192903.csv                                
+Search result saved as: data/search_results_1528351640_20231119192911.csv                                
+✖ No results for npi = 1063703494
+No results for NPI: 1063703494 
+```
+
 ### Searching for Data: `tyler::retrieve_clinician_data`
 Physician Compare has sunset as of December 1, 2020 and has been replaced by: https://www.medicare.gov/care-compare/?redirect=true&providerType=Physician.  The entire data set is at https://data.cms.gov/provider-data/dataset/mj5m-pzi6.  The very very cool library called `provider` was super helpful with accessing this.  
 ```r
