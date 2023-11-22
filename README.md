@@ -210,12 +210,13 @@ Most of the difference in travel distance between methods is associated with the
 
 * ESRI methodology:  https://doc.arcgis.com/en/arcgis-online/analyze/create-drive-time-areas.htm  Limitations: "You must be granted the network analysis privilege to use Create Drive-Time Areas.", "Travel times cannot exceed 9 hours (540 minutes) when walking or 5 hours (300 minutes) for all other travel times.", "Travel distances cannot exceed 27 miles (43.45 kilometers) when walking or 300 miles (482.8 kilometers) for all other travel distances."
 * Veteran's Administration: They use drive time.  https://www.federalregister.gov/documents/2020/07/15/2020-14341/update-to-access-standards-drive-time-calculations
+* ![Screenshot 2023-11-21 at 9 17 29 PM](https://github.com/mufflyt/tyler/assets/44621942/316ab22f-2348-4a07-97c0-0c835356b168)
+  
 * Department of Transportation: https://www.transportation.gov/priorities/equity/justice40/etc-explorer
 
 * Potential reference:  Lidsky ME, Sun Z, Nussbaum DP, Adam MA, Speicher PJ, Blazer DG. Going the extra mile: improved survival for pancreatic cancer patients traveling to high-volume centers. Annals of Surgery. 2017;266(2):333–8.
 * Bliss RL, Katz JN, Wright EA, Losina E. Estimating proximity to care: are straight line and zipcode centroid distances acceptable measures? Medical Care. 2012;50(1):99–106.
-* 
-![Screenshot 2023-11-21 at 9 17 29 PM](https://github.com/mufflyt/tyler/assets/44621942/316ab22f-2348-4a07-97c0-0c835356b168)
+
 
 ### `tyler::create_isochrones`
 A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  We use the HERE API to calculate optimal routes and directions for various modes of transportation, including driving, walking, cycling, and public transit. It provides detailed turn-by-turn instructions, estimated travel times, and route alternatives.  This is simpler than using an OSRM server running the AWS cloud, and the cost is minimal.  
