@@ -15,7 +15,7 @@ You can install the development version of tyler from [GitHub](https://github.co
 devtools::install_github("mufflyt/tyler")
 ```
 
-# Add in hospital information data.  
+### Add in hospital information data from the AHA scraper!!!!
 
 # Workflow
 1) Gather all the physician data that is needed:
@@ -182,14 +182,29 @@ output_data <-
     google_maps_api_key = "????", 
     output_file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/geocoded_unique_addresses.csv")
 ```
-### Searching for Data: `tyler::scrape_physicians_data_with_tor`
-The `scrape_physicians_data_with_tor` function scrapes physicians' data from a web API. It iterates through a range of IDs, checks if each ID is valid and not in a list of wrong IDs, sends HTTP requests through Tor to retrieve data, and appends valid data to a data frame. It also handles error responses, sleeps briefly between requests to prevent server overload, and saves the results as CSV files.
-
-```r
-scrape_physicians_data_with_tor(startID = 1, endID = 2, torPort = 9150)
-```
 
 # GET ISOCHRONES
+The methods for calculating patient travel distance to hospitals varies widely.
+* AHRQ uses the patient location as the geographic centroid of the patient's zip code.  https://hcup-us.ahrq.gov/reports/methods/MS2021-02-Distance-to-Hospital.jsp
+* AHRQ: To measure the distance between the patient location and the point of care (hospital or emergency department), the shortest or "straight-line" distance (i.e., the geodetic or great circle distance) is commonly used because it can be readily calculated (e.g., through statistical software programs such as SAS®).
+* AHRQ: An alternative distance metric that has been used is the driving distance or driving times that can be obtained from various mapping software such as Google Maps, 16,17,18 MapQuest,19 OpenStreetMaps,20 and ArcGIS Network Analyst.21
+* AHRQ: Uses `ggmap` to geocode the addresses of hospitals.
+* AHRQ: There is an equation to change straight-line distance to drive time:
+```r
+`Di=αBi+Ciβ+ LiΥ + εi`
+  Where:
+
+- i indexes patients
+- Di : driving distance
+- Bi : baseline distance
+- Ci : vector of census division dummy variables
+- Li : vector of urban/rural location dummy variables
+- α : coefficient for baseline distance
+- β : vector of coefficients for census division dummy variables
+- Υ : vector of coefficients for urban/rural location dummy variables
+- εi : mean-zero error term
+```
+
 ### `tyler::create_isochrones`
 A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  We use the HERE API to calculate optimal routes and directions for various modes of transportation, including driving, walking, cycling, and public transit. It provides detailed turn-by-turn instructions, estimated travel times, and route alternatives.  This is simpler than using an OSRM server running the AWS cloud, and the cost is minimal.  
 
