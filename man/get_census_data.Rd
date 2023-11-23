@@ -20,3 +20,15 @@ A dataframe containing Census data for all states' block groups.
 This function retrieves Census data for all states' block groups by looping
 over the specified list of state FIPS codes.
 }
+\examples{
+\dontrun{
+  # Usage:
+  # all_census_data <- get_census_data(us_fips_list, "your_census_api_key_here")
+}
+
+Get Census data for all states' block groups
+
+This function retrieves Census data for all states' block groups by looping
+over the specified list of state FIPS codes.
+
+}
