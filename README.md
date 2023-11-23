@@ -79,6 +79,19 @@ tyler::ACOG_Districts
 10 Florida              District XII  District XII  FL 
 ```
 
+### Data: 'tyler::physicians' 
+Internal package dataframe with the names and coordinates for subspecialists in OBGYN.  The source file `Physicians.rds` is found at `tyler/inst/extdata`
+``` r
+tyler::physicians
+
+# A tibble: 4,659 × 5
+          NPI name                        subspecialty                                        lat   long
+        <dbl> <chr>                       <chr>                                             <dbl>  <dbl>
+ 1 1922051358 Katherine Boyd              Female Pelvic Medicine and Reconstructive Surgery  42.6  -82.9
+ 2 1750344388 Thomas Byrne                Maternal-Fetal Medicine                            35.2 -102. 
+ 3 1548520133 Bobby Garcia                Female Pelvic Medicine and Reconstructive Surgery  40.8  -73.9
+```
+
 ### Data: 'tyler::taxonomy' 
 Physician Taxonomy Codes and the NPPES (National Plan and Provider Enumeration System) database are both essential components of the healthcare system in the United States. They play a crucial role in identifying and categorizing healthcare providers for various purposes, including billing, insurance, and regulatory compliance. This is a dataframe of NUCC taxonomy codes used in the NPPES data files.  Each Taxonomy Code consists of a unique ten-character identifier that helps identify the type of healthcare provider and their area of expertise. Of note the OBGYN taxonomy codes are: Version 23.1 from 7/1/2023.  https://nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40/csv-mainmenu-57.  For example: 
 ```r
@@ -97,18 +110,6 @@ obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed(
  9 207VB0002X Obesity Medicine                                 
 10 207VX0000X Obstetrics                                       
 11 207VE0102X Reproductive Endocrinology 
-```
-### Data: 'tyler::physicians' 
-Internal package dataframe with the names and coordinates for subspecialists in OBGYN.  The source file `Physicians.rds` is found at `tyler/inst/extdata`
-``` r
-tyler::physicians
-
-# A tibble: 4,659 × 5
-          NPI name                        subspecialty                                        lat   long
-        <dbl> <chr>                       <chr>                                             <dbl>  <dbl>
- 1 1922051358 Katherine Boyd              Female Pelvic Medicine and Reconstructive Surgery  42.6  -82.9
- 2 1750344388 Thomas Byrne                Maternal-Fetal Medicine                            35.2 -102. 
- 3 1548520133 Bobby Garcia                Female Pelvic Medicine and Reconstructive Surgery  40.8  -73.9
 ```
 
 ### Searching for Data: `tyler::search_by_taxonomy`
