@@ -18,9 +18,9 @@ devtools::install_github("mufflyt/tyler")
 
 ### Add in hospital information data from the AHA scraper!!!!
 
-# Workflow
+# Workflow 👨‍🦲
 1) Gather all the physician data that is needed:
-     * Search by subspecialty taxonomy: `tyler::search_by_taxonomy`
+     * Search by subspecialty taxonomy: `tyler::taxonomy` and `tyler::search_by_taxonomy` 
      * Search by physician name: `tyler::search_and_process_npi`
      * Merge these two physician data sources together.  See the code at: `exploratory/Workforce/subspecialists_only`
      * Add in the physician age from healthgrades.com: ??????
