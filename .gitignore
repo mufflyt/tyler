@@ -6,3 +6,4 @@
 R/geocode.R
 scripts/R/geocode.R
 docs
+inst/doc
