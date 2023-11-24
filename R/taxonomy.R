@@ -17,4 +17,5 @@
 #' head(taxonomy)
 #' }
 #' @export
+#' @name taxonomy
 data("taxonomy")
