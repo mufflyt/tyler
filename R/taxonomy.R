@@ -16,6 +16,5 @@
 #' # Explore the dataset
 #' head(taxonomy)
 #' }
-#' @export
 #' @name taxonomy
-data("taxonomy")
+"taxonomy"
