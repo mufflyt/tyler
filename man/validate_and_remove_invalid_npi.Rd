@@ -4,7 +4,7 @@
 \alias{validate_and_remove_invalid_npi}
 \title{Validate and Remove Invalid NPI Numbers}
 \usage{
-validate_and_remove_invalid_npi(input_csv_path)
+validate_and_remove_invalid_npi(input_data)
 }
 \arguments{
 \item{input_csv_path}{Path to the CSV file containing NPI numbers.}
@@ -17,7 +17,7 @@ This function reads a CSV file containing NPI numbers, validates their
 format using the npi package, and removes rows with missing or invalid NPIs.
 }
 \examples{
-input_csv_path <- "~/Dropbox (Personal)/workforce/subspecialists_only.csv"
+input_data <- "~/Dropbox (Personal)/workforce/subspecialists_only.csv"
 valid_df <- validate_and_remove_invalid_npi(input_csv_path)
 
 }
