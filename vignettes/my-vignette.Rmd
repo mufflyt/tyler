@@ -1,0 +1,165 @@
+---
+title: "Searching the NPI Database Starting with Taxonomy Codes"
+author: 
+  - Tyler Muffly, MD
+output: 
+  rmarkdown::html_vignette:
+    df_print: kable
+pkgdown:
+  as_is: true
+description: >
+  A comprehensive guide with examples on searching the NPI Database using taxonomy codes.
+vignette: >
+  %\VignetteIndexEntry{Searching the NPI Database Starting with Taxonomy Codes}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>")
+```
+
+# Overview
+The `tyler::taxonomy` data and `tyler::search_by_taxonomy` function in the R package offers a convenient and efficient way to query the NPI Database for healthcare providers based on their taxonomy descriptions. This vignette provides a comprehensive guide on how to effectively utilize this function, explores its various capabilities, and offers illustrative use cases.
+
+## Installation
+
+Before you can harness the power of the `search_by_taxonomy` function, it is essential to ensure that you have the `tyler` package installed. You can effortlessly install it using the following command:
+
+```{r setup, include = FALSE}
+library(tyler)
+```
+
+# Example Usage
+## Understanding Taxonomy Descriptions
+Taxonomy descriptions, derived from the National Physician Taxonomy Codes and the NPPES (National Plan and Provider Enumeration System) database, are fundamental components of the United States healthcare system. They play a pivotal role in the identification and categorization of healthcare providers for various purposes, including billing, insurance, and regulatory compliance.
+
+In particular, the `tyler::taxonomy` data frame contains NUCC taxonomy codes utilized in NPPES data files. Each Taxonomy Code comprises a unique ten-character identifier that aids in the identification of healthcare provider types and their areas of expertise. Notably, the OBGYN taxonomy codes are sourced from Version 23.1 dated July 1, 2023.
+
+Taxonomy codes can be obtained from the National Uniform Claim Committee (NUCC) website here. You can employ these codes to pinpoint specific taxonomy descriptions for your search. For instance, if you are interested in finding taxonomy codes that include the string `"GYN"` you can use this code to facilitate your search in the search_by_taxonomy function.
+
+```{r, include = FALSE}
+# Load required packages
+library(tyler)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(npi)
+library(stringr)
+```
+
+```{r}
+obgyn_taxonomy <- tyler::taxonomy %>% 
+  dplyr::filter(str_detect(`Classification`, fixed("GYN", ignore_case = TRUE))) %>% 
+  dplyr::select(Code, Specialization)
+```
+
+```r
+Code       Specialization                                   
+   <chr>      <chr>                                            
+ 1 207V00000X NA                                               
+ 2 207VC0300X Complex Family Planning                          
+ 3 207VC0200X Critical Care Medicine                           
+ 4 207VF0040X Female Pelvic Medicine and Reconstructive Surgery
+ 5 207VX0201X Gynecologic Oncology                             
+ 6 207VG0400X Gynecology                                       
+ 7 207VH0002X Hospice and Palliative Medicine                  
+ 8 207VM0101X Maternal & Fetal Medicine                        
+ 9 207VB0002X Obesity Medicine                                 
+10 207VX0000X Obstetrics                                       
+11 207VE0102X Reproductive Endocrinology 
+```
+
+## Search by Taxonomy Description
+The `search_by_taxonomy` function excels at searching the NPI Database for healthcare providers based on taxonomy descriptions. This functionality proves invaluable when verifying external data regarding subspecialist provider counts and filling in gaps for providers who may not be board-certified but are actively practicing (board-eligible). This data can be seamlessly integrated with other databases, enhancing its utility. For internal use, you can refer to `"Exploratory/Workforce/subspecialists_only"`.  One significant advantage is that all search results include a National Provider Identifier (NPI).
+
+```{r, include=FALSE, echo=FALSE}
+search_by_taxonomy <- function(taxonomy_to_search) {
+  # Create an empty data frame to store search results
+  data <- data.frame()
+  # Loop over each taxonomy description
+  for (taxonomy in taxonomy_to_search) {
+    tryCatch({
+      # Perform the search for the current taxonomy
+      result <- npi::npi_search(
+        taxonomy_description = taxonomy,
+        country_code = "US",
+        enumeration_type = "ind",
+        limit = 1200
+      )
+      
+      if (!is.null(result)) {
+        # Process and filter the data for the current taxonomy
+        data_taxonomy <- npi::npi_flatten(result) %>%
+          dplyr::distinct(npi, .keep_all = TRUE) %>%
+          dplyr::mutate(search_term = taxonomy) %>%
+          dplyr::filter(addresses_country_name == "United States") %>%
+          dplyr::mutate(basic_credential = stringr::str_remove_all(basic_credential, "[[\\p{P}][\\p{S}]]")) %>%
+          dplyr::filter(stringr::str_to_lower(basic_credential) %in% stringr::str_to_lower(c("MD", "DO"))) %>%
+          dplyr::arrange(basic_last_name) %>%
+          dplyr::filter(stringr::str_detect(taxonomies_desc, taxonomy)) %>%
+          dplyr::select(-basic_credential, -basic_last_updated, -basic_status, -basic_name_prefix, -basic_name_suffix, -basic_certification_date, -other_names_type, -other_names_code, -other_names_credential, -other_names_first_name, -other_names_last_name, -other_names_prefix, -other_names_suffix, -other_names_middle_name, -identifiers_code, -identifiers_desc, -identifiers_identifier, -identifiers_state, -identifiers_issuer, -taxonomies_code, -taxonomies_taxonomy_group, -taxonomies_state, -taxonomies_license, -addresses_country_code, -addresses_country_name, -addresses_address_purpose, -addresses_address_type, -addresses_address_2, -addresses_fax_number, -endpoints_endpointType, -endpoints_endpointTypeDescription, -endpoints_endpoint, -endpoints_affiliation, -endpoints_useDescription, -endpoints_contentTypeDescription, -endpoints_country_code, -endpoints_country_name, -endpoints_address_type, -endpoints_address_1, -endpoints_city, -endpoints_state, -endpoints_postal_code, -endpoints_use, -endpoints_endpointDescription, -endpoints_affiliationName, -endpoints_contentType, -endpoints_contentOtherDescription, -endpoints_address_2, -endpoints_useOtherDescription) %>%
+          dplyr::distinct(npi, .keep_all = TRUE) %>%
+          dplyr::distinct(basic_first_name, basic_last_name, basic_middle_name, basic_sole_proprietor, basic_gender, basic_enumeration_date, addresses_state, .keep_all = TRUE) %>%
+          dplyr::mutate(full_name = paste(
+            stringr::str_to_lower(basic_first_name),
+            stringr::str_to_lower(basic_last_name)
+          ))
+
+        # Append the data for the current taxonomy to the main data frame
+        data <- dplyr::bind_rows(data, data_taxonomy)
+      }
+    }, error = function(e) {
+      message(sprintf("Error in search for %s:\n%s", taxonomy, e$message))
+    })
+  }
+
+  # # Write the combined data frame to an RDS file
+  # filename <- paste("data/search_taxonomy", format(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"), ".rds", sep = "_")
+  # readr::write_rds(data, filename)
+
+  return(data)
+}
+```
+
+## Example Usage
+In this illustrative example, we employ the `search_by_taxonomy` function to identify healthcare providers specializing in "Hospice and Palliative Medicine" based on taxonomy descriptions. The resulting output is a dataframe containing information about physicians with either an MD or DO qualification, practicing in the United States as individuals, and self-identifying with a taxonomy of "Hospice and Palliative Medicine." 
+
+```{r, include=TRUE, message=TRUE, warning=TRUE, echo=TRUE}
+# Search for providers based on taxonomy descriptions
+taxonomy_descriptions <- c("Hospice and Palliative Medicine")
+
+data <- search_by_taxonomy(taxonomy_to_search = taxonomy_descriptions)
+```
+
+```
+> data
+          npi basic_first_name basic_last_name basic_sole_proprietor basic_gender basic_enumeration_date
+1  1437277092         MARIETTA   ABALOS-GALITO                   YES            F             2007-03-26
+2  1629034905          ANTHONY        ABBRUZZI                    NO            M             2006-04-25
+3  1093806697            AYMAN     ABDEL HALIM                    NO            M             2006-09-27
+```
+
+You can easily view the resulting data frame in a user-friendly format.
+```{r, include=TRUE}
+# View the resulting data frame
+head(data)
+```
+
+## Function Details
+### Parameters
+`taxonomy_to_search`: A character vector that should contain the desired taxonomy description(s) to be used as search criteria.
+
+### Output
+The function returns a data frame that has been filtered to include NPI data matching the specified taxonomy description(s).
+
+# Conclusion
+The `search_by_taxonomy` function stands as a wrapper for exploring the NPI Database through taxonomy descriptions. It empowers users to identify healthcare providers with precise specializations, rendering it a resource for healthcare-related research and in-depth analysis.
+
+# Features and bugs
+If you have ideas for other features that would make name handling easier, or find a bug, the best approach is to either report it or add it!
