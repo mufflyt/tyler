@@ -84,5 +84,98 @@ The function will validate the NPIs in your data. It performs the following chec
 ## Step 4: Get the Valid Data
 The function will return a dataframe containing only the valid NPI numbers.
 
+
+## Step 5:  Validating NPI numbers is needed before searching by NPI number in the CMS databases.
+An error can break your results and error handling is beyond my knowledge base now.  
+
+In this use case we use `validate_and_remove_invalid_npi` function before searching physician demographics (medical school, etc) in the National Downloadable File from CMS (https://data.cms.gov/provider-data/dataset/mj5m-pzi6).  The database is update monthly so we know that this data is fresh and then `validate_and_remove_invalid_npi` makes it clean.  Fresh and clean!
+
+```r
+df_updated <- NULL
+
+retrieve_clinician_data <- function(input_data) {
+  library(provider)
+  library(dplyr)
+  library(purrr)
+  library(readr)
+  library(tidyr)
+  library(lubridate)
+  library(memoise)
+  library(zipcodeR)
+
+  # Load libraries
+  #remotes::install_github("andrewallenbruce/provider")
+
+  if (is.data.frame(input_data)) {
+    # Input is a dataframe
+    df <- input_data
+  } else if (is.character(input_data)) {
+    # Input is a file path to a CSV
+    df <- readr::read_csv(input_data)
+  } else {
+    stop("Input must be a dataframe or a file path to a CSV.")
+  }
+
+  # Clean the NPI numbers
+  df <- validate_and_remove_invalid_npi(df)
+```
+After this step we can confidently feed in all the NPI numbers to the `provider::clinicians` function without fear of NPI number error.  
+
+```r
+  # Function to retrieve clinician data for a single NPI
+  get_clinician_data <- function(npi) {
+    if (!is.numeric(npi) || nchar(npi) != 10) {
+      cat("Invalid NPI:", npi, "\n")
+      return(NULL)  # Skip this NPI
+    }
+
+    clinician_info <- provider::clinicians(npi = npi)
+    if (is.null(clinician_info)) {
+      cat("No results for NPI:", npi, "\n")
+    } else {
+      return(clinician_info)
+    }
+    Sys.sleep(1)
+  }
+
+  #df <- df %>% head(5) #test
+
+  # Loop through the "npi" column and get clinician data
+  df_updated <- df %>%
+    dplyr::mutate(row_number = row_number()) %>%
+    dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data)) %>%
+    tidyr::unnest(clinician_data, names_sep = "_") %>%
+    dplyr::distinct(npi, .keep_all = TRUE)
+
+  return(df_updated)
+}
+```
+
+Specifically this was our use case.  We see the CSV get read in then the `provider::clinicians` searched.  The output is only the people who had no results but it skips the people who did have results.  
+```r
+# Call the retrieve_clinician_data function with an NPI value
+input_data <- ("~/Dropbox (Personal)/workforce/subspecialists_only.csv")
+clinician_data <- retrieve_clinician_data(input_data)
+
+Rows: 7498 Columns: 9                                                                                                                                        
+── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (8): sub1, first_name, last_name, state, name.x, city, GenderPhysicianCompare, Zip CodePhysicianCompare
+dbl (1): npi
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+✖ No results for npi = 1063703494
+No results for NPI: 1063703494 
+✖ No results for npi = 1104052125
+No results for NPI: 1104052125 
+✖ No results for npi = 1972745586
+No results for NPI: 1972745586 
+✖ No results for npi = 1427386804
+No results for NPI: 1427386804 
+✖ No results for npi = 1942586581
+No results for NPI: 1942586581 
+```
+
 # Conclusion
 The validate_and_remove_invalid_npi function is a handy tool for cleaning and validating datasets with NPI numbers. By following the steps outlined in this vignette, you can ensure that your data contains only valid NPIs for further analysis and processing.
