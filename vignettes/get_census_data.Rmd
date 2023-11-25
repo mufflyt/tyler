@@ -121,28 +121,66 @@ library(tyler)
 library(tyler)
 ```
 
+These lists contain metadata about general variables and the variables related to race and ethnicity.
+```
+acs_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
+      vintage = 2019, group = "B01001") %>% 
+      readr::write_csv("data/acs_vars.csv")
+```
+      
+```  
+acs_race_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
+      vintage = 2019, group = "B02001") %>%
+      readr::write_csv("data/acs_race_vars.csv")
+
+#output:
+> acs_race_vars
+# A tibble: 40 × 7
+   name         label                                                      concept predicateType group limit predicateOnly
+   <chr>        <chr>                                                      <chr>   <chr>         <chr> <dbl> <lgl>        
+ 1 B02001_010EA Annotation of Estimate!!Total:!!Two or more races:!!Two r… RACE    string        B020…     0 TRUE         
+ 2 B02001_010MA Annotation of Margin of Error!!Total:!!Two or more races:… RACE    string        B020…     0 TRUE         
+ 3 B02001_001EA Annotation of Estimate!!Total:                             RACE    string        B020…     0 TRUE         
+ 4 B02001_001MA Annotation of Margin of Error!!Total:                      RACE    string        B020…     0 TRUE         
+ 5 B02001_004EA Annotation of Estimate!!Total:!!American Indian and Alask… RACE    string        B020…     0 TRUE         
+ 6 B02001_004MA Annotation of Margin of Error!!Total:!!American Indian an… RACE    string        B020…     0 TRUE         
+ 7 B02001_005EA Annotation of Estimate!!Total:!!Asian alone                RACE    string        B020…     0 TRUE         
+ 8 B02001_005MA Annotation of Margin of Error!!Total:!!Asian alone         RACE    string        B020…     0 TRUE         
+ 9 B02001_002EA Annotation of Estimate!!Total:!!White alone                RACE    string        B020…     0 TRUE         
+10 B02001_002MA Annotation of Margin of Error!!Total:!!White alone         RACE    string        B020…     0 TRUE  
+```
+  
+acs_raceeth_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
+      vintage = 2019, group = "B03002") %>%
+      readr::write_csv("data/acs_raceeth_vars.csv")
+```
 
 ## Step 2: Prepare Your Data
 Define a vector of state FIPS codes. For example, you can use the tigris package to obtain FIPS codes for all U.S. states:
 
 ```
-us_fips <- tigris::fips_codes %>%
+us_fips_list <- tigris::fips_codes %>%
     dplyr::select(state_code, state_name) %>%
     dplyr::distinct(state_code, .keep_all = TRUE) %>%
     filter(state_code < 56) %>%                         #state_codes over 56 are territories
     dplyr::select(state_code) %>%
     pull()                                              
-    
-us_fips <- c("01", "02", "04", "05", "06", "08", "09", "10", "11", "12", "13", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "44", "45", "46", "47", "48", "49", "50", "51", "53", "54", "55")
+
+# All US State FIPS Codes
+us_fips_list <- c("01", "02", "04", "05", "06", "08", "09", "10", "11", "12", "13", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "44", "45", "46", "47", "48", "49", "50", "51", "53", "54", "55")
 
 ```
 
 ## Step 3: Gather the Data from the US Census Bureau API
-Call the `get_census_data` function with the `us_fips` vector. For example:
+Call the `get_census_data` function with the `us_fips_list` vector. For example:
 
 ```
-all_census_data <- get_census_data(us_fips = fips)
+all_census_data <- get_census_data(us_fips = us_fips_list)
 
+##########################################################################
+# Get Census data by block group in relevant states
+# Construct: for=block group:*&in=state:01&in=county:*&in=tract:*
+###########################################################################
 
 #output GOES HERE!!!!
 ```
@@ -222,6 +260,7 @@ readr::write_rds(demographics_bg, "data/acs-block-group-demographics.rds")
 ```
 
 ## Step 5: Join the Data to the Block Groups
+The code starts by loading a block group shapefile using the `sf::st_read()` function. The shapefile path should be replaced with the actual file path.  A left join is performed between the "demographics_bg" dataset and the "bg_shape" dataset using `dplyr::left_join()`. The join is based on matching the "`fips_block_group`" column from "`demographics_bg`" and the "`GEOID`" column from "`bg_shape`".
 
 ```
 # Load the block group shapefile using sf::st_read() function
@@ -259,6 +298,10 @@ geometry <- dplyr::left_join(x = demographics_bg,
 # This will create a CSV file containing demographic data and geometry information
 readr::write_csv(geometry, "block_groups_with_geometry.csv")
 ```
+
+## Step 6: Get Data regarding Race and Ethnicity
+
+
 
 # Usage Tips
 
