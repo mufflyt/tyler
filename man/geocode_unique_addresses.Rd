@@ -2,28 +2,40 @@
 % Please edit documentation in R/geocode.R
 \name{geocode_unique_addresses}
 \alias{geocode_unique_addresses}
-\title{Geocode Unique Addresses from a CSV File}
+\title{Geocode Unique Addresses}
 \usage{
-geocode_unique_addresses(file_path, google_maps_api_key, output_file_path)
+geocode_unique_addresses(
+  file_path,
+  google_maps_api_key,
+  output_file_path = NULL
+)
 }
 \arguments{
-\item{file_path}{The path to the CSV file containing the addresses. The file should have a column named "address".}
+\item{file_path}{Path to the input file (CSV, RDS, or XLSX) containing address data.}
 
-\item{google_maps_api_key}{Your Google Maps API key for geocoding.}
+\item{google_maps_api_key}{Your Google Maps API key.}
 
-\item{output_file_path}{The path where the output CSV file with geocoded data will be saved.}
+\item{output_file_path}{Path to the output CSV file where the geocoded data will be saved. (Optional)}
 }
 \value{
-A data frame containing the original data along with latitude and longitude for each unique address.
+A dataframe containing geocoded address data with latitude and longitude.
 }
 \description{
-This function reads a CSV file containing addresses, geocodes unique addresses using Google Maps API,
-and writes the geocoded data back to a CSV file.
+This function geocodes unique addresses using the Google Maps API and appends the
+latitude and longitude to the original dataset. Please ensure that every data set
+must have a column named 'address'.
 }
 \examples{
 \dontrun{
-google_maps_api_key <- "your_google_maps_api_key"
-output_data <- geocode_unique_addresses("path/to/your/input/file.csv", google_maps_api_key, "path/to/your/output/file.csv")
+# Define the input file path, Google Maps API key, and output file path (optional)
+file_path <- "input_data.csv"
+google_maps_api_key <- "your_api_key"
+output_file_path <- "output_data.csv"  # Optional
+
+# Call the geocode_unique_addresses function with or without specifying output_file_path
+geocoded_data <- geocode_unique_addresses(file_path, google_maps_api_key)
+# or
+geocoded_data <- geocode_unique_addresses(file_path, google_maps_api_key, output_file_path)
 }
 
 }
