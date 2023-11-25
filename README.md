@@ -276,6 +276,9 @@ tyler::create_individual_isochrone_plots(isochrones, drive_times)
 ```
 
 ### `tyler::get_census_data`
+![Screenshot 2023-11-25 at 12 47 18 PM](https://github.com/mufflyt/tyler/assets/44621942/e20b6b4e-89a5-4cd0-a0b4-df7bea4a8c40)
+Source: (https://www2.census.gov/about/training-workshops/2020/2020-09-09-ced-presentation.pdf)
+
 This function retrieves Census data using `censusapi` for all states' block groups by looping over the specified list of state FIPS codes.  This only brings back data on females from "B01001_01, 26, 33:49E".  FIPS codes, or Federal Information Processing Standards codes, are a standardized set of codes used to uniquely identify geographic areas in the United States. These codes are assigned to various administrative and geographical entities, such as states, counties, cities, and more. We used block groups for the analysis.  In the United States Census Bureau's geographic hierarchy, a "block group" is a smaller and more detailed geographic unit used for collecting and reporting demographic and statistical data. Block groups are subdivisions of census tracts and are typically designed to contain between 600 and 3,000 people, although this can vary depending on the population density of the area. Block groups are used as the primary units for collecting detailed demographic and socioeconomic data during the decennial census and the American Community Survey (ACS). Census enumerators visit households within each block group to collect information on population, housing, employment, income, education, and more. In a densely populated urban area, a block group might represent a city block or a small neighborhood within a larger city. For example, a block group could cover a few city blocks in downtown Manhattan, New York City.
 
 ```r
