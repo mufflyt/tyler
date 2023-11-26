@@ -11,11 +11,8 @@
 #' @import readr
 #' @import dplyr
 #'
-#' @examples
-#' input_data <- "~/Dropbox (Personal)/workforce/subspecialists_only.csv"
-#' valid_df <- validate_and_remove_invalid_npi(input_csv_path)
-#'
 #' @export
+
 validate_and_remove_invalid_npi <- function(input_data) {
   library(dplyr)
   library(npi)  # Load the npi package

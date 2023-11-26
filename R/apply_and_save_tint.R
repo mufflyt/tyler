@@ -14,7 +14,7 @@
 #' @return Saves tinted images in the specified directory.
 #' @import imager
 #' @import grDevices
-#' @importFrom scales viridis_pal
+#' @import scales
 #' @export
 #'
 #' @examples
