@@ -6,6 +6,10 @@
 #' @return A SpatialPolygonsDataFrame containing the hospital referral region data.
 #' @import sf
 #' @import dplyr
+#' @import readr
+#' @import rnaturalearth
+#' @import ggplot2
+#' @import ggspatial
 #'
 #' @export
 
@@ -48,7 +52,7 @@ hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all"
 
   # Load physician data
   cat("Loading physician data from an RDS file...  Include columns named long and lat...\n")
-  physicians <- readRDS("data/Physicians.rds")
+  physicians <- readr::read_rds("data/Physicians.rds")
   physicians <- physicians[!is.na(physicians$long), ]
   physician_sf <- sf::st_as_sf(physicians, coords = c("long", "lat"), crs = 4326)
 
@@ -188,7 +192,7 @@ hsa <- function(remove_HI_AK = TRUE) {
 
     # Load physician data
     cat("Loading physician data from an RDS file...  Include columns named long and lat...\n")
-    physicians <- readRDS("data/Physicians.rds")
+    physicians <- readr::read_rds("data/Physicians.rds")
     physicians <- physicians[!is.na(physicians$long), ]
     physician_sf <- sf::st_as_sf(physicians, coords = c("long", "lat"), crs = 4326)
 
