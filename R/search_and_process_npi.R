@@ -26,11 +26,11 @@
 #' no_match_percentage <- output$no_match_percentage
 #' no_match_percentage
 #' }
-#' @importFrom dplyr distinct filter
-#' @importFrom memoise memoise
-#' @importFrom readr read_csv
-#' @importFrom readxl read_xlsx
-#' @importFrom npi npi_flatten
+#' @import dplyr
+#' @import memoise
+#' @import readr
+#' @import readxl
+#' @import npi
 #'
 #' @export
 search_and_process_npi <- function(input_file,
@@ -56,7 +56,7 @@ search_and_process_npi <- function(input_file,
   file_extension <- tools::file_ext(input_file)
 
   if (file_extension == "rds") {
-    data <- readRDS(input_file)
+    data <- readr::read_rds(input_file)
   } else if (file_extension %in% c("csv", "xls", "xlsx")) {
     if (file_extension %in% c("xls", "xlsx")) {
       data <- readxl::read_xlsx(input_file)
@@ -67,8 +67,10 @@ search_and_process_npi <- function(input_file,
     stop("Unsupported file format. Please provide an RDS, CSV, or XLS/XLSX file.")
   }
 
-  fc <- cache_filesystem(file.path(".cache"))
-  npi_search_memo <- memoise::memoise(npi_search, cache = fc)
+  #fc <- cache_filesystem(file.path(".cache"))
+  #npi_search_memo <- memoise::memoise(npi_search, cache = fc)
+
+  data <- data %>% tail(10)
 
   first_names <- data$first
   last_names <- data$last
@@ -76,7 +78,7 @@ search_and_process_npi <- function(input_file,
   search_npi <- function(first_name, last_name) {
     tryCatch(
       {
-        npi_search_memo(
+        npi::npi_search(
           first_name = first_name,
           last_name = last_name,
           enumeration_type = enumeration_type,
@@ -91,11 +93,8 @@ search_and_process_npi <- function(input_file,
   }
 
   out <- list()
-  total_names <- length(first_names)
-  pb <- progress::progress_bar$new(total = total_names)
 
   out <- purrr::map2(first_names, last_names, function(first_name, last_name) {
-    pb$tick()
     search_npi(first_name, last_name)
   })
 
@@ -110,12 +109,16 @@ search_and_process_npi <- function(input_file,
 
   filename <- paste("results_of_search_and_process_npi", date_time, ".rds", sep = "_")
 
-  saveRDS(result, file = filename)
+  readr::write_rds(result, file = filename)
 
   # Return the result data frame
   return(result)
 }
 
-
-#input_file <- "/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppes_search/Lo_R_Author.csv"
-#output_result <- search_and_process_npi(input_file)
+#
+# input_file <- "/Users/tylermuffly/Dropbox (Personal)/Nomogram/nomogram/data/nppes_search/Lo_R_Author.csv"
+# output_result <- search_and_process_npi(input_file,
+#                                         enumeration_type = "ind",
+#                                         limit = 5L,
+#                                         country_code = "US",
+#                                         filter_credentials = c("MD", "DO"))

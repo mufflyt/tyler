@@ -14,6 +14,8 @@
 #' )
 #' arsenal_tables_write2pdf(overall, "arsenal_overall_table_one")
 #' }
+#' @import dplyr
+#' @import arsenal
 #' @export
 arsenal_tables_write2pdf <- function(object, filename) {
   # Check if the "tables" directory exists; if not, create it
@@ -51,6 +53,8 @@ arsenal_tables_write2pdf <- function(object, filename) {
 #' )
 #' arsenal_tables_write2word(overall, "arsenal_overall_table_one")
 #' }
+#' @import dplyr
+#' @import arsenal
 #' @export
 arsenal_tables_write2word <- function(object, filename) {
   # Check if the "tables" directory exists; if not, create it

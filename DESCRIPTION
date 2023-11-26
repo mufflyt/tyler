@@ -59,8 +59,7 @@ Imports:
     rainbow,
     scales,
     testthat,
-    viridis,
-    provider (>= 0.0.0.9012)
+    viridis
 Remotes: andrewallenbruce/provider
 LazyData: true
 Files: R/
