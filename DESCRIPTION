@@ -60,7 +60,8 @@ Imports:
     testthat,
     viridis, 
     gender, 
-    easyr
+    easyr,
+    tools
 Remotes: andrewallenbruce/provider, lmullen/genderdata, asgr/imager
 LazyData: true
 Files: R/
