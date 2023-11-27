@@ -1,0 +1,126 @@
+---
+title: "Gathering Drive Time Isochrones"
+author: 
+  - Tyler Muffly, MD
+output: 
+  rmarkdown::html_vignette:
+    df_print: kable
+description: >
+  A wrapper on the amazing hereR package to get drive time isochrones.
+vignette: >
+  %\VignetteIndexEntry{Gathering Drive Time Isochrones}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+The `create_isochrones_for_dataframe` function is a powerful tool that allows you to calculate isochrones for a given location using the `hereR` package. Isochrones represent areas that can be reached from a specific point within a certain travel time or distance. These visual representations are valuable for various applications, such as location analysis, logistics, and transportation planning. In this guide, we will walk you through how to use the `create_isochrones` function. 
+
+# Geodesic versus Drive-Time
+The methods for calculating patient travel distance to hospitals can vary significantly. This paper aims to provide an overview of different methods and their characteristics. The primary factor influencing travel distance calculations is the choice of distance measure, specifically, whether it's driving distance or straight-line distance. This distinction has a significant impact on the results.
+
+### Straight-Line Distance 
+A common practice in AHRQ is to calculate the shortest or "straight-line" distance (geodetic or great circle distance) between the patient location and the point of care (e.g., hospital or emergency department). This method is favored because it can be easily computed using statistical software like SAS®.
+
+- **Agency for Healthcare Research and Quality (AHRQ):** AHRQ employs an equation to convert straight-line distance to drive time. The equation includes various parameters like baseline distance, census division dummy variables, urban/rural location dummy variables, and error terms. AHRQ utilizes the `ggmap` package to geocode the addresses of hospitals. AHRQ also considers an alternative metric, which is the driving distance or driving times. These can be obtained from various mapping software such as Google Maps, MapQuest, OpenStreetMaps, and ArcGIS Network Analyst. AHRQ uses the patient location as the geographic centroid of the patient's zip code. (https://hcup-us.ahrq.gov/reports/methods/MS2021-02-Distance-to-Hospital.jsp)
+
+```r
+`Di=αBi+Ciβ+ LiΥ + εi`
+  Where:
+
+- i indexes patients
+- Di : driving distance
+- Bi : baseline distance
+- Ci : vector of census division dummy variables
+- Li : vector of urban/rural location dummy variables
+- α : coefficient for baseline distance
+- β : vector of coefficients for census division dummy variables
+- Υ : vector of coefficients for urban/rural location dummy variables
+- εi : mean-zero error term
+```
+
+- **March of Dimes Maternity Care Deserts:** This organization also uses drive time as a metric for calculating travel distance. [Reference](https://github.com/mufflyt/tyler/files/13433413/MaternityCareDesertsReport-TechnicalNotes.pdf)
+
+- **ESRI Methodology:** ESRI has its methodology for creating drive-time areas, with certain limitations on travel times and distances. [Reference](https://doc.arcgis.com/en/arcgis-online/analyze/create-drive-time-areas.htm).  Limitations: 
+* "You must be granted the network analysis privilege to use Create Drive-Time Areas.", 
+* "Travel times cannot exceed 9 hours (540 minutes) when walking or 5 hours (300 minutes) for all other travel times.", * "Travel distances cannot exceed 27 miles (43.45 kilometers) when walking or 300 miles (482.8 kilometers) for all other travel distances."
+
+- **Veteran's Administration:** The Veteran's Administration utilizes drive time in its calculations. [Reference](https://www.federalregister.gov/documents/2020/07/15/2020-14341/update-to-access-standards-drive-time-calculations)
+
+- **Department of Transportation:** The Department of Transportation provides tools for distance calculations. [Reference](https://www.transportation.gov/priorities/equity/justice40/etc-explorer)
+
+# Potential References comparing Drive Time vs. Geodesic
+
+- Lidsky ME, Sun Z, Nussbaum DP, Adam MA, Speicher PJ, Blazer DG. "Going the extra mile: improved survival for pancreatic cancer patients traveling to high-volume centers." Annals of Surgery. 2017;266(2):333–8.
+
+- Bliss RL, Katz JN, Wright EA, Losina E. "Estimating proximity to care: are straight line and zipcode centroid distances acceptable measures?" Medical Care. 2012;50(1):99–106.
+
+- - [isprs-archives-XLVIII-4-W7-2023-53-2023.pdf](https://github.com/mufflyt/tyler/files/13433577/isprs-archives-XLVIII-4-W7-2023-53-2023.pdf)
+
+This comprehensive overview highlights the diversity in methods used to calculate patient travel distance to hospitals and the potential impact on healthcare outcomes.
+
+
+## Prerequisites
+Before you start using the `create_isochrones` function, make sure you have completed the following steps:
+
+1. **HERE API Key**: You need to have a HERE API key. If you don't have one, you can obtain it from the HERE Developer Portal.
+
+2. **Environment Variable**: Set your HERE API key as an environment variable named `HERE_API_KEY`. This is essential for secure access to HERE services.
+
+3. **Load the `tyler` package**: Ensure that you load the `tyler` package, which contains the `create_isochrones` function.
+
+```{r}
+library(tyler)
+```
+
+## Usage
+Now that you have the prerequisites in place, let's explore how to use the `create_isochrones_for_dataframe` function.  We use the HERE API to calculate optimal routes and directions for various modes of transportation, including driving, walking, cycling, and public transit. It provides detailed turn-by-turn instructions, estimated travel times, and route alternatives.  This is simpler than using an OSRM server running the AWS cloud, and the cost is minimal.  
+
+### Input Parameters
+The `create_isochrones` function accepts the following parameters:
+* `location`: An `sf` object representing the location for which isolines will be calculated.
+* `range`: A numeric vector of time ranges in seconds. These time ranges determine the extent of the isolines.
+* `posix_time`: A `POSIXct` object representing the date and time of calculation. The default is set to "2023-10-20 08:00:00".  We chose this date because it is during Influenza season when most people see their physicians for a first appointment of the day at 0800.  
+
+### Example
+I added in the code needed to read in RDS, xlsx, xls, and csv files.  It can also read in sf files.  They needed to have columns called .  Here's an example of how to use the `create_isochrones_for_dataframe` function:
+```
+isochrones_data <- create_isochrones_for_dataframe(df, breaks = c(1800, 3600, 7200, 10800))
+
+> isochrones_data
+[1] 1
+splay setup instructions:
+To create isochrones for a specific point(s) use the following code:
+tryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))
+Setting up the hereR access...
+Sending 1 request(s) with unlimited RPS to: 'https://isoline.router.hereapi.com/v8/isolines?...'
+Received 1 response(s) with total size: 2.8 Kb
+Isoline successfully produced for range: 1800 seconds
+Sending 1 request(s) with unlimited RPS to: 'https://isoline.router.hereapi.com/v8/isolines?...'
+Received 1 response(s) with total size: 3.1 Kb
+Isoline successfully produced for range: 3600 seconds
+Sending 1 request(s) with unlimited RPS to: 'https://isoline.router.hereapi.com/v8/isolines?...'
+Received 1 response(s) with total size: 4.8 Kb
+Isoline successfully produced for range: 7200 seconds
+Sending 1 request(s) with unlimited RPS to: 'https://isoline.router.hereapi.com/v8/isolines?...'
+Received 1 response(s) with total size: 6.9 Kb
+Isoline successfully produced for range: 10800 seconds
+```
+
+### Output
+
+The function returns a list of isolines for different time ranges. Each isoline is represented as an `sf` object, making it easy to visualize and analyze.
+
+## Conclusion
+
+The `create_isochrones` function simplifies the process of calculating isolines for location-based analysis. Whether you're exploring accessibility, optimizing routes, or conducting spatial analysis, isochrones provide valuable insights into travel times and distances. With the `tyler` package and the `create_isochrones` function, you can streamline your location-based workflows and make informed decisions.
+
+# Features and bugs
+If you have ideas for other features that would make name handling easier, or find a bug, the best approach is to either report it or add it!

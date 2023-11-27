@@ -1,0 +1,215 @@
+---
+title: "Search and Process NPI Numbers"
+author: 
+  - Tyler Muffly, MD
+output: 
+  rmarkdown::html_vignette:
+    df_print: kable
+description: >
+  A function to search and process National Provider Identifier (NPI) numbers from first and last name.
+vignette: >
+  %\VignetteIndexEntry{Search and Process NPI Numbers}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+# Overview
+
+The `search_and_process_npi` function is a tool for working with datasets containing National Provider Identifier (NPI) numbers. `search_and_process_npi` is a wrapper on the fantastic `npi` package. Thank you to the authors and maintainers of the `npi` package. NPI numbers provide a standardized way to identify and track healthcare providers, including physicians, across the United States. Government agencies, such as the Centers for Medicare & Medicaid Services (CMS), use NPI-based data to plan and allocate healthcare resources, including provider reimbursements, medical services, and workforce distribution.
+
+`search_and_process_npi` allows you to search for NPIs based on the first and last names of clinicians which is the start for many mystery caller projects after getting the names from a patient-facing directory of physicians.  Getting the NPI number will unlock multiple demographics for the physicians (gender, medical school type, address) with a function like `retrieve_clinician_data``.  
+
+## Why use APIs for healthcare data?
+Accessing APIs to retrieve healthcare data can offer several advantages over downloading and joining data from multiple sources:
+
+* 1. Real-Time Data: APIs often provide access to real-time or near-real-time data. Downloading static data files may result in using outdated information, while APIs can provide the latest data as it becomes available.
+
+* 2. Data Integrity: APIs typically offer structured and validated data. When you access data via an API, you can be more confident in its quality and consistency. In contrast, downloading and joining data from various sources may introduce data integrity issues, such as missing or mismatched records.
+
+* 3. Efficiency: APIs allow you to request specific subsets of data, reducing the amount of data transferred and processed. This can improve efficiency and reduce the processing time, especially when dealing with large datasets. Downloading and joining entire datasets can be time-consuming and resource-intensive.
+
+* 4. Reduced Storage Requirements: Storing large datasets locally can be costly in terms of storage space. Accessing data through APIs means you don't need to maintain a local copy of the entire dataset, saving storage costs and reducing the risk of data redundancy.
+
+* 5. Scalability: APIs are designed to handle a high volume of requests. 
+
+* 6. Security and Privacy: Healthcare data often contains sensitive information, and APIs can provide better control over data access and authentication. 
+
+* 7. Data Source Aggregation: APIs can provide a centralized point of access to data from multiple sources.
+
+* 8. Data Governance: APIs often come with documentation and usage policies, which can help ensure compliance with data governance and privacy regulations. It provides transparency in data usage, making it easier to adhere to legal and ethical standards.
+
+* 9. Version Control: APIs are versioned, allowing users to specify the version of the API they want to use. This ensures backward compatibility and provides a level of stability in accessing data. When downloading and joining data files, version control can be more challenging.
+
+* 10. Reduced Maintenance: APIs are maintained and updated by data providers. When using APIs, you rely on the provider to manage data updates, ensuring that you always have access to the latest information. 
+
+# Installation
+
+Before you can use the `search_and_process_npi` function, make sure you have the `tyler` package installed. You can install it using the following command:
+
+```r
+# install.packages("tyler")
+library(tyler)
+```
+
+# Example Usage
+National Provider Identifier Search defaults to find individual people (individuals enumeration_type = "ind"),  physicians ("MD", "DO") in the United States listed in the NPPES. 
+
+## Step 1: Load Your Data
+
+You can provide your data as either a dataframe or specify the path to a CSV, XLS, or XLSX file containing your data.  The dataframe must have a column named `first` and another named `last` for surname.  `acog_presidents` is an example data set that you can use for this case.    
+```r
+# Toy example using a dataframe
+data_df <- data.frame(
+  first = c("John", "Jane", "Bob"),
+  last = c("Doe", "Smith", "Johnson")
+)
+
+# Example using a CSV file
+input_file <- "acog_presidents.csv"
+
+# Note the file must have a column named "first" and a column named "last".  
+```
+
+## Step 2: Call the `search_and_process_npi` Function
+
+Now, let's use the `search_and_process_npi` function to search for NPI numbers based on the first and last names in your data.  This will cast a WIDE net with matches in ***all specialties***.  
+
+```r
+# Example using a CSV file
+output_result <- search_and_process_npi(input_file = input_file)
+```
+
+## Step 3: Customize Your Search
+
+You can customize your NPI search by specifying parameters such as `enumeration_type`, `limit`, `country_code`, and `filter_credentials`. No Magic numbers :)  This will take a long time to run.  Best to run it overnight for over 2,000 searches.  For the `acog_president` dataframe it will take about 10 minutes.  Here's how you can do it:
+
+```r
+# Example with custom search parameters
+result_df <- search_and_process_npi(
+  input_data = input_file,
+  enumeration_type = "ind",               # Search for individual NPIs
+  limit = 10,                             # Set the search limit to 10 results per name pair
+  country_code = "US",                    # Filter for NPIs in the United States
+  filter_credentials = c("MD", "DO")      # Filter for specific credentials
+)
+```
+
+## Step 4: Access the Results
+The function will return a data frame containing the processed NPI search results. You can access this data frame for further analysis.There are going to be a ***lot*** of duplicates so you will need to clean this thoughtfully.    
+
+```r
+# Access the result data frame
+result_df
+
+> output_result
+              npi basic_first_name basic_last_name basic_middle_name basic_credential basic_sole_proprietor basic_gender
+    1: 1053601807             RYAN       SCHLUETER            JEWELL               DO                   YES            M
+    2: 1184186256            LAURA          MARTIN         ELIZABETH               DO                    NO            F
+    3: 1063703494           LAUREN          BISHOP            ALICIA             M.D.                    NO            F
+    4: 1740800705           LAUREN          BISHOP         ELISABETH             M.D.                    NO            F
+    
+       basic_enumeration_date basic_last_updated basic_certification_date basic_status taxonomies_code
+    1:             2011-04-13         2021-09-30               2021-09-30            A      207VM0101X
+    2:             2019-04-05         2023-03-16               2023-03-16            A      207P00000X
+    3:             2011-04-19         2023-03-16               2023-03-16            A      207VE0102X
+    4:             2020-04-20         2023-07-03               2023-07-03            A      207Q00000X
+    
+                     taxonomies_taxonomy_group                                     taxonomies_desc taxonomies_state
+    1: 193400000X - Single Specialty Group  Obstetrics & Gynecology, Maternal & Fetal Medicine               GA
+    2:                                                                      Emergency Medicine               MS
+    3:                                     Obstetrics & Gynecology, Reproductive Endocrinology               NY
+    4:                                                                         Family Medicine               TX
+    
+           taxonomies_license taxonomies_primary basic_name_prefix basic_name_suffix
+    1:              80379               TRUE              <NA>              <NA>
+    2:              29372               TRUE               Dr.              <NA>
+    3:          302927-01               TRUE               Dr.              <NA>
+    4:              U5076               TRUE              <NA>              <NA>
+```
+
+## Step 5: Analyze the Results
+
+You can now analyze the NPI search results as needed for your specific use case. The `result_df` data frame contains information about NPIs that match your search criteria.  Because these NPI numbers are directly from NPPES we do not need to run `validate_and_remove_invalid_npi`.  
+
+
+```
+# Remove selected columns from the 'output_result' dataframe
+processed_result <- output_result %>%
+  dplyr::select(
+    -basic_middle_name, 
+    -basic_certification_date, 
+    -basic_name_prefix, 
+    -basic_name_suffix, 
+    -taxonomies_taxonomy_group, 
+    -taxonomies_license, 
+    -taxonomies_primary
+  )
+
+# Remove punctuation and special characters from the 'basic_credential' column to clean "M.D., MD, M D"
+processed_result <- processed_result %>%
+  dplyr::mutate(basic_credential = stringr::str_remove_all(basic_credential, "[[\\p{P}][\\p{S}]]"))
+
+# Convert 'basic_credential' to uppercase
+processed_result <- processed_result %>%
+  dplyr::mutate(basic_credential = stringr::str_to_upper(basic_credential))
+
+# Remove whitespace characters from the 'basic_credential' column
+processed_result <- processed_result %>%
+  dplyr::mutate(basic_credential = stringr::str_remove_all(basic_credential, "[:blank:]"))
+
+# Recode values in the 'basic_credential' column, mapping "DOMPH" to "DO" and defaulting to "MD"
+processed_result <- processed_result %>%
+  dplyr::mutate(basic_credential = dplyr::recode(basic_credential, "DOMPH" = "DO", "DO" = "DO", .default = "MD"))
+
+# Filter out rows where 'taxonomies_state' is NA (missing)
+processed_result <- processed_result %>%
+  dplyr::filter(!is.na(taxonomies_state))
+
+# Filter out rows where 'taxonomies_desc' contains the substring "Gyn" (case-insensitive).  This can be changed for different applications: "Ortho", "Rheum", "Otolary", "Heme", "Anesthesi".  
+processed_result <- processed_result %>%
+  dplyr::filter(stringr::str_detect(taxonomies_desc, fixed("Gyn", ignore_case = TRUE)))
+
+# Keep only distinct rows based on the 'npi' column, retaining the first occurrence
+processed_result <- processed_result %>%
+  dplyr::distinct(npi, .keep_all = TRUE)
+
+> processed_result %>% head(5)
+          npi basic_first_name basic_last_name basic_credential basic_sole_proprietor basic_gender basic_enumeration_date
+1: 1053601807             RYAN       SCHLUETER               DO                   YES            M             2011-04-13
+2: 1063703494           LAUREN          BISHOP               MD                    NO            F             2011-04-19
+3: 1376862383            JAMIE     SZCZEPANSKI               MD                    NO            F             2010-06-01
+4: 1457676405          JESSICA         SHIELDS               DO                    NO            F             2010-04-01
+5: 1366752107         CAROLINA          SUELDO               MD                    NO            F             2010-10-14
+   basic_last_updated basic_status taxonomies_code                                     taxonomies_desc taxonomies_state
+1:         2021-09-30            A      207VM0101X  Obstetrics & Gynecology, Maternal & Fetal Medicine               GA
+2:         2023-03-16            A      207VE0102X Obstetrics & Gynecology, Reproductive Endocrinology               NY
+3:         2020-07-23            A      207V00000X                             Obstetrics & Gynecology               NY
+4:         2019-07-18            A      207V00000X                             Obstetrics & Gynecology               MA
+5:         2019-02-25            A      207V00000X                             Obstetrics & Gynecology               FL
+```
+
+One key step in cleaning the data is filtering the taxonomies.  This can be changed for different applications in various subspecialties.  Note some people are  tricky and list their taxonomy specialty as "Specialist" or something else super vague.  We did create a code fix for this as well, shown below.  
+
+```
+# Filter out rows where 'taxonomies_desc' contains the substring "Gyn" (case-insensitive).  This can be changed for different applications: "Ortho", "Rheum", "Otolary", "Heme", "Anesthesi".  
+
+processed_result <- processed_result %>%
+  dplyr::filter(stringr::str_detect(taxonomies_desc, fixed("gyn", ignore_case = TRUE)) |
+  stringr::str_detect(taxonomies_desc, fixed("specialist", ignore_case = TRUE)))
+```
+
+Finally it would be helpful to join the results called `processed_result` with the input_file called `acog_presidents` and this code can be used to do so.  
+```
+combined_acog_presidents <- 
+  acog_presidents %>%
+  dplyr::left_join(`processed_result`, by = c("first" = "basic_first_name", 
+                                              "last" = "basic_last_name", 
+                                              "honorrific" = "basic_credential"), 
+                                              ignorecase=TRUE)
+```
+
+# Conclusion
+The `search_and_process_npi` function simplifies the task of searching for and processing NPI numbers in healthcare datasets. 
+
+# Features and bugs
+If you have ideas for other features that would make name handling easier, or find a bug, the best approach is to either report it or add it!
