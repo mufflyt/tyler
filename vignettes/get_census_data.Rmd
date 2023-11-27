@@ -5,12 +5,10 @@ author:
 output: 
   rmarkdown::html_vignette:
     df_print: kable
-pkgdown:
-  as_is: true
 description: >
   A wrapper on the amazing censusapi package to get US Census Bureau data for women only.
 vignette: >
-  %\VignetteIndexEntry{Retrieving US Census Bureau Data Underlying Isochrones}
+  %\VignetteIndexEntry{Getting Data from the US Census Bureau for Isochrones}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -126,6 +124,8 @@ These lists contain metadata about general variables and the variables related t
 acs_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
       vintage = 2019, group = "B01001") %>% 
       readr::write_csv("data/acs_vars.csv")
+      
+
 ```
       
 ```  
@@ -149,7 +149,8 @@ acs_race_vars <- censusapi::listCensusMetadata(name = "acs/acs5",
  9 B02001_002EA Annotation of Estimate!!Total:!!White alone                RACE    string        B020…     0 TRUE         
 10 B02001_002MA Annotation of Margin of Error!!Total:!!White alone         RACE    string        B020…     0 TRUE  
 ```
-  
+
+```  
 acs_raceeth_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
       vintage = 2019, group = "B03002") %>%
       readr::write_csv("data/acs_raceeth_vars.csv")
@@ -289,11 +290,13 @@ demographics_bg$fips_block_group <- as.character(demographics_bg$fips_block_grou
 # Perform a left join between the demographics dataset and the block group shapefile
 # Join the datasets using the "fips_block_group" column from demographics_bg
 # and the "GEOID" column from bg_shape
+
 geometry <- dplyr::left_join(x = demographics_bg, 
           y = bg_shape, 
           by = c("fips_block_group" = "GEOID"))
+```
 
-
+```
 # Write the resulting dataset with geometry information to a CSV file
 # This will create a CSV file containing demographic data and geometry information
 readr::write_csv(geometry, "block_groups_with_geometry.csv")
@@ -312,3 +315,6 @@ readr::write_csv(geometry, "block_groups_with_geometry.csv")
 # Conclusion
 
 The `get_census_data` function simplifies the process of obtaining Census data for all states' block groups. 
+
+# Features and bugs
+If you have ideas for other features that would make name handling easier, or find a bug, the best approach is to either report it or add it!

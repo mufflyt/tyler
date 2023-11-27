@@ -1,26 +1,22 @@
 ---
-title: "Validating Unique National Provider Identification numbers"
+title: "Gather Physician Data Starting With Taxonomy"
 author: 
   - Tyler Muffly, MD
 output: 
   rmarkdown::html_vignette:
     df_print: kable
-pkgdown:
-  as_is: true
 description: >
-  A wrapper to check the quality of NPI numbers.
+  A function to search names from National Provider Identifier (NPI) numbers.
 vignette: >
-  %\VignetteIndexEntry{Validating NPI numbers}
+  %\VignetteIndexEntry{Gather Physician Data Starting With Taxonomy}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
 ---
 # Overview
 The `validate_and_remove_invalid_npi` function is designed to help you process datasets containing National Provider Identifier (NPI) numbers. It validates the format of NPIs using the npi package and removes rows with missing or invalid NPIs. This vignette will guide you through its usage.
 
-# Step 1
-## Installation
+## Step 1
+### Installation
 Before you can harness the power of the `search_by_taxonomy` function, it is essential to ensure that you have the `tyler` package installed. You can effortlessly install it using the following command:
 
 ```{r setup, include = FALSE}
@@ -179,3 +175,6 @@ No results for NPI: 1942586581
 
 # Conclusion
 The validate_and_remove_invalid_npi function is a handy tool for cleaning and validating datasets with NPI numbers. By following the steps outlined in this vignette, you can ensure that your data contains only valid NPIs for further analysis and processing.
+
+# Features and bugs
+If you have ideas for other features that would make name handling easier, or find a bug, the best approach is to either report it or add it!
