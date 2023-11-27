@@ -20,14 +20,11 @@
 #' @import easyr
 #' @export
 create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800)) {
-  # input_file <- "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/references/_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
-
 
   Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
   readRenviron("~/.Renviron")
   hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
 
-  # breaks <- c(1800, 3600, 7200, 10800)
   library(tidyverse)
   library(sf)
   library(easyr)
@@ -41,6 +38,7 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
 
   # Convert dataframe to sf object
   dataframe_sf <- dataframe %>%
+    janitor::clean_names()%>%
     sf::st_as_sf(coords = c("long", "lat"), crs = 4326)
 
   # Ensure it's an sf object
@@ -52,7 +50,8 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   dataframe <- dataframe_sf %>% head(10)
 
   # Initialize isochrones as an empty data frame
-  isochrones <- data.frame()
+  isochrones <- list()
+  isochrones_temp <- list()
 
   # Loop over the rows in the dataframe
   for (i in 1:nrow(dataframe)) {
@@ -63,41 +62,24 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
 
     # Get isochrones for that point
     Sys.sleep(0.4)
-    isochrones_temp <- create_isochrones(location = point_temp, range = breaks)
-
-    # If the point errored out, skip it
-    if (!is.null(isochrones_temp)) {
+    isochrones_temp[[i]] <- create_isochrones(location = point_temp, range = breaks)
+    if (!is.null(isochrones_temp[[i]])) {
       # Flatten the list of isolines
-      isochrones_temp <- purrr::flatten_df(isochrones_temp)
+      isochrones_temp[[i]] <- dplyr::bind_rows(isochrones_temp[[i]], .id = "column_label")
 
       # Create the 'name' column with descriptive labels
-      isochrones_temp$name <- cut(
-        isochrones_temp$range / 60,
+      isochrones_temp[[i]]$name <- cut(
+        isochrones_temp[[i]]$range / 60,
         breaks = breaks,
         labels = paste0(head(breaks, -1), "-", tail(breaks, -1) - 1, " minutes")
       )
 
-      # Combine the list of isolines into the main data frame
-      isochrones <- dplyr::bind_rows(isochrones, isochrones_temp)
+
     }
+
   }
-
-  # Save the isochrones data to an RDS file
-  # readr::write_rds(isochrones, paste("data/isochrones_raw_output_from_here_api_", format(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"), ".rds", sep = ""))
-
+  isochrones <- data.table::rbindlist(isochrones_temp)
   return(isochrones)
 }
-
 # Usage example:
-# isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(1800, 3600, 7200, 10800))
-
-# gyn_onc <- "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/references/_Recent_Grads_GOBA_NPI_2022a.rds"
-# gyn_onc <- readr::read_rds("/Users/tylermuffly/Dropbox (Personal)/Tannous/data/references/_Recent_Grads_GOBA_NPI_2022a.rds") %>%
-#   dplyr::filter(sub1=="ONC") %>%
-#   dplyr::rename(name = name.x) %>%
-#   #sf::st_as_sf(coords = c("long", "lat")) %>%
-#   #sf::st_set_crs(4326) %>%
-#   dplyr::mutate(unique_id = dplyr::row_number())
-#
-# gyn_onc_sf <- gyn_onc %>%
-#   sf::st_as_sf(coords = c("long", "lat"), crs = 4326)
+#isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(1800, 3600, 7200, 10800))
