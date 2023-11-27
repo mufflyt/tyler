@@ -16,6 +16,11 @@ You can install the development version of tyler from [GitHub](https://github.co
 devtools::install_github("mufflyt/tyler")
 ```
 
+See the package vignette for a fuller introduction and suggestions on how to use the `tyler()` function efficiently.
+
+vignette(topic = "????", package = "tyler")
+
+
 ### Add in hospital information data from the AHA scraper!!!!
 
 # Workflow 👨‍🦲
