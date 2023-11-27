@@ -59,7 +59,9 @@ Imports:
     rainbow,
     scales,
     testthat,
-    viridis
+    viridis, 
+    gender, 
+    easyr
 Remotes: andrewallenbruce/provider, lmullen/genderdata
 LazyData: true
 Files: R/
