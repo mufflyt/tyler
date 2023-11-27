@@ -94,8 +94,13 @@ result_df <- search_and_process_npi(
 )
 ```
 
+Do not be worried by this message during the API is accessed.  It just means that there was ***no match*** for the NAMES.  
+```
+ERROR : `df` must be an npi_results S3 object, not tbl_df. 
+```
+
 ## Step 4: Access the Results
-The function will return a data frame containing the processed NPI search results. You can access this data frame for further analysis.There are going to be a ***lot*** of duplicates so you will need to clean this thoughtfully.    
+The function will return a data frame containing the processed NPI search results. You can access this data frame for further analysis.There are going to be a ***lot*** of duplicates so you will need to clean this thoughtfully.   
 
 ```r
 # Access the result data frame
