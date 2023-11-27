@@ -27,8 +27,6 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   readRenviron("~/.Renviron")
   hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
 
-
-
   # breaks <- c(1800, 3600, 7200, 10800)
   library(tidyverse)
   library(sf)
