@@ -21,7 +21,14 @@
 #' @export
 create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800)) {
   # input_file <- "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/references/_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
-  # Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+
+
+  Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+  readRenviron("~/.Renviron")
+  hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+
+
+
   # breaks <- c(1800, 3600, 7200, 10800)
   library(tidyverse)
   library(sf)
@@ -84,7 +91,7 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
 }
 
 # Usage example:
-# isochrones_data <- create_isochrones_for_dataframe(gyn_onc, breaks = c(1800, 3600, 7200, 10800))
+# isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(1800, 3600, 7200, 10800))
 
 # gyn_onc <- "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/references/_Recent_Grads_GOBA_NPI_2022a.rds"
 # gyn_onc <- readr::read_rds("/Users/tylermuffly/Dropbox (Personal)/Tannous/data/references/_Recent_Grads_GOBA_NPI_2022a.rds") %>%
