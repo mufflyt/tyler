@@ -61,4 +61,4 @@ search_by_taxonomy <- function(taxonomy_to_search) {
   return(data)
 }
 # # Example usage of the function with dynamic taxonomy_to_search variable:
-# # data <- search_taxonomy("Gynecologic Oncology")
+# # data <- search_by_taxonomy("Gynecologic Oncology")

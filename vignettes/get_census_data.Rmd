@@ -100,7 +100,7 @@ The get_census_data function retrieves Census data for all states' block groups.
 The resulting data is combined into a single dataframe for analysis.
 
 ## Step 1
-## Installation
+### Installation
 
 Before using the `tyler::get_census_data` function, you need to install and load the required packages. You can do this by running the following code:
 
@@ -120,14 +120,39 @@ library(tyler)
 ```
 
 These lists contain metadata about general variables and the variables related to race and ethnicity.
+
+#### All Variables
 ```
 acs_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
       vintage = 2019, group = "B01001") %>% 
       readr::write_csv("data/acs_vars.csv")
       
-
+# This code cleans it up a bit
+acs_vars <- acs_vars %>%
+  dplyr::select(-predicateType, -group, -limit, -predicateOnly) %>%
+  dplyr::filter(!stringr::str_detect(label, fixed("!!Male:!!", ignore_case = TRUE))) %>%
+  dplyr::filter(!stringr::str_detect(label, fixed("Annotation of Margin of Error", ignore_case = TRUE))) %>%
+  dplyr::mutate(label = stringr::str_remove(label, regex("^Annotation of Estimate!!Total:!!Female:!!", ignore_case = TRUE))) %>%
+  dplyr::filter(!stringr::str_detect(label, fixed("Margin of Error!!", ignore_case = TRUE))) %>%
+  dplyr::mutate(label = stringr::str_remove(label, regex("^Annotation of Estimate!!Total:!!Female:!!", ignore_case = TRUE))) %>%
+  dplyr::mutate(label = stringr::str_remove(label, regex("^Estimate!!Total:!!Female:!!", ignore_case = TRUE))) %>%
+  dplyr::filter(!stringr::str_detect(name, fixed("EA")) & !str_detect(label, fixed("!!Male:"))) %>%
+  dplyr::mutate(numbers = purrr::map_chr(str_extract_all(label, "^[:digit:]+"), ~ ifelse(length(.) == 0, NA_character_, paste(.x, collapse = "")))) %>%
+  dplyr::mutate(numbers = as.numeric(numbers)) %>%
+  dplyr::mutate(numbers = tidyr::replace_na(numbers, 0)) %>%
+  dplyr::mutate(numbers = as.numeric(numbers)) %>%
+  dplyr::arrange(numbers)
+  
+> acs_vars
+          name                     label    concept numbers
+1  B01001_026E Estimate!!Total:!!Female: SEX BY AGE       0
+2  B01001_027E             Under 5 years SEX BY AGE       0
+3  B01001_001E          Estimate!!Total: SEX BY AGE       0
+4  B01001_028E              5 to 9 years SEX BY AGE       5
+5  B01001_029E            10 to 14 years SEX BY AGE      10
 ```
-      
+
+#### Race Variables
 ```  
 acs_race_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
       vintage = 2019, group = "B02001") %>%
@@ -150,6 +175,7 @@ acs_race_vars <- censusapi::listCensusMetadata(name = "acs/acs5",
 10 B02001_002MA Annotation of Margin of Error!!Total:!!White alone         RACE    string        B020…     0 TRUE  
 ```
 
+#### Race and Ethnicity Variables
 ```  
 acs_raceeth_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
       vintage = 2019, group = "B03002") %>%
