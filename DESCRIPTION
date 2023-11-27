@@ -60,8 +60,7 @@ Imports:
     scales,
     testthat,
     viridis
-Remotes: andrewallenbruce/provider
-         lmullen/genderdata
+Remotes: andrewallenbruce/provider, lmullen/genderdata
 LazyData: true
 Files: R/
 Suggests: 
