@@ -27,12 +27,12 @@ Default is 10.}
 NPI results. Default is c("MD", "DO").}
 }
 \value{
-A list containing the processed result data frame and the percentage of "NO MATCH FOUND".
+A list containing the processed result data frame.
 }
 \description{
 This function takes an input file in RDS, CSV, or XLS/XLSX format, reads the data,
-performs NPI search and processing, and returns the results along with the percentage
-of "NO MATCH FOUND". The function also provides customization options for the user
+performs NPI search and processing, and returns the results.
+The function also provides customization options for the user
 to specify the enumeration type, search limit, and filtering criteria for NPI results.
 }
 \examples{
@@ -41,9 +41,5 @@ to specify the enumeration type, search limit, and filtering criteria for NPI re
 input_file <- "data/Sent_to_npi_search.xlsx"
 output <- search_and_process_npi(input_file)
 
-# Access the result and the percentage of "NO MATCH FOUND" from the function's output
-result_df <- output$result
-no_match_percentage <- output$no_match_percentage
-no_match_percentage
 }
 }
