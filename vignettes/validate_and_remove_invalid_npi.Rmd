@@ -1,5 +1,5 @@
 ---
-title: "Gather Physician Data Starting With Taxonomy"
+title: "Gather Physician Data Starting With NPI Numbers"
 author: 
   - Tyler Muffly, MD
 output: 
@@ -8,12 +8,12 @@ output:
 description: >
   A function to search names from National Provider Identifier (NPI) numbers.
 vignette: >
-  %\VignetteIndexEntry{Gather Physician Data Starting With Taxonomy}
+  %\VignetteIndexEntry{Gather Physician Data Starting With NPI Numbers}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 # Overview
-The `validate_and_remove_invalid_npi` function is designed to help you process datasets containing National Provider Identifier (NPI) numbers. It validates the format of NPIs using the npi package and removes rows with missing or invalid NPIs. This vignette will guide you through its usage.
+The `validate_and_remove_invalid_npi` function is designed to help you process datasets containing National Provider Identifier (NPI) numbers with `search_by_taxonomy`. It validates the format of NPIs using the npi package and removes rows with missing or invalid NPIs. This vignette will guide you through its usage.
 
 ## Step 1
 ### Installation
