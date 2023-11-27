@@ -55,14 +55,13 @@ Imports:
     cat,
     hereR,
     censusapi,
-    imager,
     rainbow,
     scales,
     testthat,
     viridis, 
     gender, 
     easyr
-Remotes: andrewallenbruce/provider, lmullen/genderdata
+Remotes: andrewallenbruce/provider, lmullen/genderdata, asgr/imager
 LazyData: true
 Files: R/
 Suggests: 
