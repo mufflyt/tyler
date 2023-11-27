@@ -61,6 +61,7 @@ Imports:
     testthat,
     viridis
 Remotes: andrewallenbruce/provider
+         lmullen/genderdata
 LazyData: true
 Files: R/
 Suggests: 
