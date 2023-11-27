@@ -1,14 +1,14 @@
 #' Search and Process NPI Numbers
 #'
-#' This function takes an input file in RDS, CSV, or XLS/XLSX format, reads the data,
+#' This function takes an input file in RDS, CSV, or XLS/XLSX format, reads the NAMES you are trying to search,
 #' performs NPI search and processing, and returns the results.
 #' The function also provides customization options for the user
 #' to specify the enumeration type, search limit, and filtering criteria for NPI results.
 #'
-#' @param input_file The path to the input file (RDS, CSV, or XLS/XLSX) containing the data.
+#' @param input_file The path to the input file (RDS, CSV, or XLS/XLSX) containing the NAME data.
 #' @param enumeration_type The enumeration type for NPI search (e.g., "ind", "org", "all").
 #'   Default is "ind".
-#' @param limit The maximum number of search results to request for each name pair.
+#' @param limit The maximum number of search results to request for each NAME pair.
 #'   Default is 10.
 #' @param country_code Filter for only the "US".
 #' @param filter_credentials A character vector containing the credentials to filter the
@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Call the function with the input file name
+#' # Call the function with the input file name that has NAMES in it.
 #' input_file <- "data/Sent_to_npi_search.xlsx"
 #' output <- search_and_process_npi(input_file)
 #'
@@ -52,7 +52,7 @@ search_and_process_npi <- function(input_file,
   # Check if the input file exists
   if (!file.exists(input_file)) {
     stop(
-      "The specified file '", input_file, "' does not exist.\n",
+      "The specified file with the NAMES to search'", input_file, "' does not exist.\n",
       "Please provide the full path to the file."
     )
   }
@@ -69,7 +69,7 @@ search_and_process_npi <- function(input_file,
       data <- readr::read_csv(input_file)
     }
   } else {
-    stop("Unsupported file format. Please provide an RDS, CSV, or XLS/XLSX file.")
+    stop("Unsupported file format. Please provide an RDS, CSV, or XLS/XLSX file of NAMES to search.")
   }
 
   first_names <- data$first

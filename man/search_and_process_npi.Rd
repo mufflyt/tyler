@@ -13,12 +13,12 @@ search_and_process_npi(
 )
 }
 \arguments{
-\item{input_file}{The path to the input file (RDS, CSV, or XLS/XLSX) containing the data.}
+\item{input_file}{The path to the input file (RDS, CSV, or XLS/XLSX) containing the NAME data.}
 
 \item{enumeration_type}{The enumeration type for NPI search (e.g., "ind", "org", "all").
 Default is "ind".}
 
-\item{limit}{The maximum number of search results to request for each name pair.
+\item{limit}{The maximum number of search results to request for each NAME pair.
 Default is 10.}
 
 \item{country_code}{Filter for only the "US".}
@@ -30,14 +30,14 @@ NPI results. Default is c("MD", "DO").}
 A list containing the processed result data frame.
 }
 \description{
-This function takes an input file in RDS, CSV, or XLS/XLSX format, reads the data,
+This function takes an input file in RDS, CSV, or XLS/XLSX format, reads the NAMES you are trying to search,
 performs NPI search and processing, and returns the results.
 The function also provides customization options for the user
 to specify the enumeration type, search limit, and filtering criteria for NPI results.
 }
 \examples{
 \dontrun{
-# Call the function with the input file name
+# Call the function with the input file name that has NAMES in it.
 input_file <- "data/Sent_to_npi_search.xlsx"
 output <- search_and_process_npi(input_file)
 
