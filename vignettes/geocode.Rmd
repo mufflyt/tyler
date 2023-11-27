@@ -1,0 +1,84 @@
+---
+title: "Geocoding"
+author: 
+  - Tyler Muffly, MD
+output: 
+  rmarkdown::html_vignette:
+    df_print: kable
+description: >
+  A function to geocode addresses.
+vignette: >
+  %\VignetteIndexEntry{Geocoding}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+# Overview
+The `geocode` function is designed to help you geocode datasets containing addresses and change them to lattitude and longitude.  
+
+## Step 1
+### Installation
+Before you can harness the power of the `search_by_taxonomy` function, it is essential to ensure that you have the `tyler` package installed. You can effortlessly install it using the following command:
+
+```{r setup, include = FALSE}
+library(tyler)
+```
+```r
+library(tyler)
+```
+
+# Example Usage
+## Understanding Geocoding
+Certainly! Geocoding, the process of converting addresses or place names into geographic coordinates (latitude and longitude), has its advantages and disadvantages. Here's an overview of the pluses and minuses of geocoding:
+
+**Pluses of Geocoding:**
+
+* 1. **Location Accuracy:** Geocoding provides precise location information, allowing you to pinpoint addresses or places on a map with high accuracy. This is crucial for various applications such as mapping, navigation, and location-based services.
+
+* 2. **Spatial Analysis:** Geocoded data enables spatial analysis, allowing you to perform tasks like proximity analysis, spatial clustering, and spatial interpolation. It's invaluable for geographic information systems (GIS) and geographic research.
+
+* 3. **Geographic Visualization:** Geocoded data can be visualized on maps, making it easier to understand and communicate spatial patterns and trends. This is particularly useful for data presentation and decision-making.
+
+* 4. **Routing and Navigation:** Geocoding is essential for navigation systems, delivery route optimization, and location-based apps that provide directions and estimated travel times.
+
+**Minuses of Geocoding:**
+
+* 1. **Data Quality Issues:** Geocoding accuracy heavily relies on the quality of the underlying address data. Inaccurate or outdated address information can lead to geocoding errors.
+
+* 2. **Costs:** Geocoding services or software often come with associated costs, particularly for large-scale geocoding operations. These costs can include data licensing fees and usage charges.
+
+* 3. **Complexity:** Advanced geocoding tasks, such as reverse geocoding (converting coordinates to addresses) and batch geocoding, can be technically complex and may require expertise or specialized tools.
+
+In summary, geocoding offers numerous benefits in terms of location accuracy, spatial analysis, visualization, and navigation. However, it also comes with challenges related to data quality, costs, and complexity. Careful consideration of these factors is essential when using geocoding in various applications.
+
+**Do not geocode from Zip codes**
+There are several issues and limitations associated with geocoding solely based on zip codes:
+
+* Lack of Precision: Zip codes are designed to cover a group of addresses or an area, not specific points. Therefore, geocoding based solely on a zip code provides only an approximation of the location, often at the center or centroid of the zip code area. This lack of precision can be problematic for applications that require accurate coordinates.
+
+* Zip Code Boundaries: Zip code boundaries can be irregular and may not align with natural or administrative boundaries. This means that geocoding based on zip codes can result in coordinates that do not reflect the actual geography of the area, leading to inaccuracies.
+
+* Zip Code Changes: Zip code boundaries and assignments can change over time due to population growth, urban development, or administrative reasons. Geocoding based on outdated zip code data can lead to incorrect locations.
+
+* Large Zip Codes: Some zip codes cover vast geographic areas, especially in rural regions. Geocoding to the center of such large zip code areas can be highly inaccurate for specific locations within that area.
+
+* Overlapping Zip Codes: In some cases, zip codes may overlap with one another. Geocoding based solely on a zip code may not distinguish between the overlapping areas, leading to ambiguity.
+
+* Urban Density: In densely populated urban areas, zip codes can be small and densely packed with addresses. Geocoding solely by zip code may still result in a lack of precision when trying to identify a particular location within a zip code.
+
+## Step 2: Prepare Your Data
+You can provide your data as either a dataframe or a CSV file in the argument `input_data`.  Under the hood `ggmap::geocode` is accessing a Google API.  `ggmap::geocode` is the program AHRQ uses.  
+
+* If your data is in a CSV file, pass the file path as the input_data parameter.
+
+```r
+output_data <- geocode_unique_addresses(
+    file_path ="address_for_geocoding.csv",
+    google_maps_api_key = "123",
+    output_file_path = "data/geocoded_unique_addresses.csv")
+```
+
+# Conclusion
+The validate_and_remove_invalid_npi function is a handy tool for cleaning and validating datasets with NPI numbers. By following the steps outlined in this vignette, you can ensure that your data contains only valid NPIs for further analysis and processing.
+
+# Features and bugs
+If you have ideas for other features that would make name handling easier, or find a bug, the best approach is to either report it or add it!

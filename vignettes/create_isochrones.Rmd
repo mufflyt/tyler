@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The `create_isochrones_for_dataframe` function is a powerful tool that allows you to calculate isochrones for a given location using the `hereR` package. Isochrones represent areas that can be reached from a specific point within a certain travel time or distance. These visual representations are valuable for various applications, such as location analysis, logistics, and transportation planning. In this guide, we will walk you through how to use the `create_isochrones` function. 
 
-# Geodesic versus Drive-Time
+# Geodesic versus Drive-Time for Patient Travel
 The methods for calculating patient travel distance to hospitals can vary significantly. This paper aims to provide an overview of different methods and their characteristics. The primary factor influencing travel distance calculations is the choice of distance measure, specifically, whether it's driving distance or straight-line distance. This distinction has a significant impact on the results.
 
 ### Straight-Line Distance 
@@ -90,7 +90,7 @@ The `create_isochrones` function accepts the following parameters:
 * `posix_time`: A `POSIXct` object representing the date and time of calculation. The default is set to "2023-10-20 08:00:00".  We chose this date because it is during Influenza season when most people see their physicians for a first appointment of the day at 0800.  
 
 ### Example
-I added in the code needed to read in RDS, xlsx, xls, and csv files.  It can also read in sf files.  They needed to have columns called .  Here's an example of how to use the `create_isochrones_for_dataframe` function:
+I added in the code needed to read in RDS, xlsx, xls, and csv files.  It can also read in sf files.  They needed to have columns called ??????????.  Here's an example of how to use the `create_isochrones_for_dataframe` function:
 ```
 isochrones_data <- create_isochrones_for_dataframe(df, breaks = c(1800, 3600, 7200, 10800))
 
@@ -116,7 +116,7 @@ Isoline successfully produced for range: 10800 seconds
 
 ### Output
 
-The function returns a list of isolines for different time ranges. Each isoline is represented as an `sf` object, making it easy to visualize and analyze.
+The function returns a list of isolines for different time ranges. Each isoline is represented as an `sf` object, making it easy to visualize and analyze. The `create_isochrones` function is wrapped with `memoise` so it does a nice job caching the data.  
 
 ## Conclusion
 
