@@ -47,7 +47,7 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   }
 
   class(dataframe_sf) #for testing
-  dataframe <- dataframe_sf %>% head(10)
+  dataframe <- dataframe_sf
 
   # Initialize isochrones as an empty data frame
   isochrones <- list()
