@@ -32,8 +32,3 @@ Saves tinted images in the specified directory.
 This function applies a tint to an image and saves the tinted image.
 The tints are determined from a given color palette.
 }
-\examples{
-\dontrun{
-apply_and_save_tint("path/to/image.jpg", alpha = 0.5, palette_name = "viridis", save_dir = "path/to/save", n_colors = 5)
-}
-}

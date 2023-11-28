@@ -16,12 +16,9 @@
 #' @import jsonlite
 #' @import dplyr
 #' @import memoise
+#' @import readr
 # Function to scrape physicians' data using Tor
 scrape_physicians_data_with_tor <- function(startID, endID, torPort) {
-  require(httr)
-  require(jsonlite)
-  require(dplyr)
-  require(memoise)
 
   # Create a sequence of IDs from startID to endID
   id_list <- seq(startID, endID)

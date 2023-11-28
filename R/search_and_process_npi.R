@@ -27,6 +27,12 @@
 #' @import readr
 #' @import readxl
 #' @import npi
+#' @import progress
+#' @import stats
+#' @import tidyverse
+#' @import humaniformat
+#' @import purrr
+#' @import data.table
 #'
 #' @export
 search_and_process_npi <- function(input_file,
@@ -41,13 +47,6 @@ search_and_process_npi <- function(input_file,
   # limit<-5L
   # country_code<- "US"
   # filter_credentials <- c("MD", "DO")
-  library(dplyr)
-  library(stats)
-  library(npi)
-  library(tidyverse)
-  library(memoise)
-  library(humaniformat)
-  library(progress)
 
   # Check if the input file exists
   if (!file.exists(input_file)) {

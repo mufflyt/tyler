@@ -25,11 +25,6 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   readRenviron("~/.Renviron")
   hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
 
-  library(tidyverse)
-  library(sf)
-  library(easyr)
-  library(dplyr)
-
   dataframe <- easyr::read.any(input_file) %>%
     filter(!is.na(lat) | !is.na(long))
 

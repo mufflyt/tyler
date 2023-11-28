@@ -9,7 +9,7 @@
 #'
 #' @import sf
 #' @import leaflet
-#' @importF dplyr
+#' @import dplyr
 #' @import leaflet
 #' @import htmlwidgets
 #' @import grDevices

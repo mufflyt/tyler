@@ -14,9 +14,6 @@
 #' @export
 
 validate_and_remove_invalid_npi <- function(input_data) {
-  library(dplyr)
-  library(npi)  # Load the npi package
-  library(readr)
 
   if (is.data.frame(input_data)) {
     # Input is a dataframe

@@ -62,7 +62,7 @@ generate_acog_districts_sf <- function(filepath = NULL) {
 #' @import sf
 #' @import dplyr
 #' @import rnaturalearth
-#' @importFrom ggplot2
+#' @import ggplot2
 #' @import RColorBrewer
 #'
 #' @export

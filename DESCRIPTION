@@ -67,7 +67,8 @@ Imports:
     jsonlite,
     zipcodeR,
     data.table,
-    provider
+    provider,
+    here
 Remotes: andrewallenbruce/provider, lmullen/genderdata, asgr/imager
 LazyData: true
 Files: R/
