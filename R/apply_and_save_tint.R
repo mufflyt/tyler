@@ -16,14 +16,6 @@
 #' @import grDevices
 #' @import scales
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' apply_and_save_tint("path/to/image.jpg", alpha = 0.5, palette_name = "viridis", save_dir = "path/to/save", n_colors = 5)
-#' }
-# library(imager)
-# library(viridis)
-
 apply_and_save_tint <- function(image_path, alpha = 0.5, palette_name = "viridis", save_dir = ".", n_colors = 5) {
   message("Loading original image...")
   original_image <- imager::load.image(image_path)
@@ -39,7 +31,7 @@ apply_and_save_tint <- function(image_path, alpha = 0.5, palette_name = "viridis
     color_name <- colors_to_use[i]
     message(sprintf("Applying %s tint...", color_name))
 
-    color_vector <- col2rgb(color_name) / 255
+    color_vector <- grDevices::col2rgb(color_name) / 255
     color_image <- imager::imfill(height, width, val = color_vector)
 
     tinted_image <- (1 - alpha) * original_image + alpha * color_image
