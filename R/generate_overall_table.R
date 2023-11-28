@@ -6,7 +6,7 @@
 #' @param output_dir The directory where the output table file will be saved.
 #'
 #' @import arsenal
-#' @importFrom readr
+#' @import readr
 #' @import ggplot2
 #' @import gridExtra
 #' @import tidyverse
