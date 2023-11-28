@@ -58,10 +58,16 @@ Imports:
     rainbow,
     scales,
     testthat,
-    viridis, 
-    gender, 
+    viridis,
+    gender,
     easyr,
-    tools
+    tools,
+    httr,
+    imager,
+    jsonlite,
+    zipcodeR,
+    data.table,
+    provider
 Remotes: andrewallenbruce/provider, lmullen/genderdata, asgr/imager
 LazyData: true
 Files: R/
@@ -70,4 +76,3 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
-

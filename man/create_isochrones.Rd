@@ -42,5 +42,4 @@ isolines <- create_isochrones(location = location, range = c(1800, 3600, 7200, 1
 print(isolines)
 
 }
-
 }
