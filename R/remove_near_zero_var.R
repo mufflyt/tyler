@@ -13,6 +13,10 @@
 #' new_data <- remove_near_zero_var(data_frame)
 #' }
 #'
+#'@import caret
+#'@import glue
+#'@import dplyr
+#'
 #' @export
 remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
   # Log: Starting the function

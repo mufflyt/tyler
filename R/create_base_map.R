@@ -24,7 +24,7 @@
 #'                            fillOpacity = 0.8)
 #' }
 #'
-#' @importFrom leaflet leaflet setView clearMarkers addControl addScaleBar addTiles addProviderTiles
+#' @import leaflet
 #' @export
 create_base_map <- function(title) {
   # Create the Leaflet map

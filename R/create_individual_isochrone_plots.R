@@ -9,11 +9,12 @@
 #'
 #' @import sf
 #' @import leaflet
-#' @importFrom dplyr filter
-#' @importFrom leaflet addProviderTiles addPolygons
-#' @importFrom htmlwidgets saveWidget
-#' @importFrom grDevices rainbow
-#' @importFrom sf st_union st_sf st_transform st_write
+#' @importF dplyr
+#' @import leaflet
+#' @import htmlwidgets
+#' @import grDevices
+#' @import sf
+#'
 #' @examples
 #' \dontrun{
 #' # Load required libraries
@@ -66,7 +67,7 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
     isochrones_sf <- sf::st_transform(isochrones_sf, crs = 4326)
 
     # Define unique colors for each drive time
-    colors <- rainbow(length(drive_times))
+    colors <- grDevices::rainbow(length(drive_times))
 
     # Get the index of the current drive time
     index <- which(drive_times == time)

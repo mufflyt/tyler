@@ -11,9 +11,10 @@
 #' @return A Leaflet map object.
 #'
 #' @import viridis
-#' @importFrom leaflet addCircleMarkers addPolygons addLegend
-#' @importFrom webshot webshot
-#' @importFrom htmlwidgets saveWidget
+#' @import leaflet
+#' @import webshot
+#' @import htmlwidgets
+#' @import dplyr
 #'
 #' @examples
 #' \dontrun{
@@ -46,7 +47,7 @@
 create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
   # Add jitter to latitude and longitude coordinates
   jittered_physician_data <- physician_data %>%
-    mutate(
+    dplyr::mutate(
       lat = lat + runif(n()) * jitter_range,
       long = long + runif(n()) * jitter_range
     )
@@ -64,7 +65,7 @@ create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.0
   num_acog_districts <- 11
 
   # Create a custom color palette using viridis
-  district_colors <- viridis(num_acog_districts, option = color_palette)
+  district_colors <- viridis::viridis(num_acog_districts, option = color_palette)
 
   # Reorder factor levels
   jittered_physician_data$ACOG_District <- factor(
@@ -116,7 +117,7 @@ create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.0
   cat("Leaflet map saved as HTML:", html_file, "\n")
 
   # Capture and save a screenshot as PNG
-  webshot(html_file, file = png_file)
+  webshot::webshot(html_file, file = png_file)
   cat("Screenshot saved as PNG:", png_file, "\n")
 
   # Return the Leaflet map
