@@ -18,10 +18,6 @@
 #'
 #' @export
 genderize_physicians <- function(input_csv) {
-  library(gender)
-  library(dplyr)
-  library(readr)
-
   # Read the data
   gender_Physicians <- readr::read_csv(input_csv)
 

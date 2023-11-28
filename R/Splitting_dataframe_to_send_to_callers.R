@@ -6,6 +6,10 @@
 #' @return None
 #' @export
 #'
+#' @import dplyr
+#' @import readr
+#' @import openxlsx
+#'
 #' @examples
 #' \dontrun{
 #' library(tyler)
