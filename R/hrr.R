@@ -107,22 +107,6 @@ hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all"
     ggplot2::geom_sf(data = honeycomb_grid_with_physicians, aes(fill = physician_count), color = NA) +
     ggplot2::scale_fill_continuous(name = "Physician Count", trans = "log10") +  # Apply the log scale
     ggplot2::theme_minimal(base_size = 10) +
-    # ggplot() +
-    # geom_sf(data = hrr_map, fill = "#D3D3D3", color = "darkblue", size = 1.5) +
-    # geom_sf(data = honeycomb_grid_with_physicians, aes(fill = physician_count), color = NA) +
-    # scale_fill_viridis_c(
-    #   breaks = c(1, 5, 10, 20, 30, 40, 60, 80, 100, 150),
-    #   name = "Obstetrics and Gynecology Faculty Subspecialists",
-    #   guide = ggplot2::guide_colorbar(
-    #     direction = "horizontal",
-    #     title.position = "top",
-    #     title.hjust = 0.5,
-    #     label.hjust = 0.5,
-    #     barwidth = 10,
-    #     barheight = 1,
-    #     alpha = 0.7,
-    #     label.theme = element_text(size = 8, color = "black", hjust = 0.5)
-    #   )) +
   ggplot2::theme_minimal(base_size = 10) +
   ggplot2::theme(
       panel.background = element_rect(

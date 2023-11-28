@@ -29,6 +29,7 @@
 #' }
 #' @import memoise
 #' @import hereR
+#' @import dplyr
 #'
 #' @export
 

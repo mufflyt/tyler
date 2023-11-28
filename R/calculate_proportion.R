@@ -7,6 +7,9 @@
 #' @param variable_name The name of the categorical variable for which to calculate the proportion.
 #' @return A list containing the calculated most common value, proportion variable, and the tabulation result.
 #'
+#'@import dplyr
+#'@import janitor
+#'
 #' @examples
 #' \dontrun{
 #' library(tyler)

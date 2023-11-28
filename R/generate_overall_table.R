@@ -6,7 +6,7 @@
 #' @param output_dir The directory where the output table file will be saved.
 #'
 #' @import arsenal
-#' @importFrom readr read_rds read_csv
+#' @importFrom readr
 #' @import ggplot2
 #' @import gridExtra
 #' @import tidyverse
@@ -18,6 +18,16 @@
 #' # Generate the overall table
 #' generate_overall_table("data/Table1.rds", "output_tables")
 #' }
+tm_write2pdf <-
+  function(object, filename) {
+    #pass filename and title with quotations, do not add .pdf
+    print("Function Sanity Check: Creating Arsenal Table as a PDF")
+    arsenal::write2pdf(object, (here::here("results", (paste0(filename, ".pdf")))),
+                       #puts the file into a subdirectory called results
+                       keep.md = TRUE,
+                       quiet = TRUE) # passed to rmarkdown::render
+  }
+
 generate_overall_table <- function(input_file, output_dir) {
   # Log function start
   cat("Generating the overall table...\n")
