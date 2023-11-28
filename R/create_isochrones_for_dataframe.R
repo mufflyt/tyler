@@ -29,7 +29,9 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   library(sf)
   library(easyr)
 
-  dataframe <- easyr::read.any(input_file)
+  dataframe <- easyr::read.any(input_file) %>%
+    filter(!is.na(lat) | !is.na(long))
+
 
   # Check if "lat" and "long" columns exist
   if (!all(c("lat", "long") %in% colnames(dataframe))) {
