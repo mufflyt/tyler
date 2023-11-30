@@ -5,7 +5,6 @@
 #' https://cran.r-project.org/web/packages/devtools/vignettes/dependencies.html
 #' https://r-pkgs.org/dependencies-in-practice.html#depending-on-the-development-version-of-a-package
 #'
-#'
 #' @param input_csv_path Path to the input CSV file containing NPIs.
 #'
 #' @return A tibble with clinician data for the provided NPIs.
@@ -20,9 +19,6 @@
 #' @import npi
 #'
 #' @export
-
-# fc <- cache_filesystem(file.path(".cache"))
-# gc()
 
 #Function 1: validate_and_remove_invalid_npi
 validate_and_remove_invalid_npi <- function(input_data) {
@@ -65,15 +61,6 @@ validate_and_remove_invalid_npi <- function(input_data) {
 df_updated <- NULL
 
 retrieve_clinician_data <- function(input_data) {
-  library(provider)
-  library(dplyr)
-  library(purrr)
-  library(readr)
-  library(tidyr)
-  library(lubridate)
-  library(memoise)
-  library(zipcodeR)
-
   # Load libraries
   #remotes::install_github("andrewallenbruce/provider")
 
