@@ -386,6 +386,109 @@ rD <- RSelenium::rsDriver(
   port = 4456L,
   verbose = TRUE)
 ```
+
+# Read in the National Downloadable File (DAC)
+I utilized Postico and a postgres SQL database because the files are huge and I don't have enough RAM to hold the data in memory.  2022_National_Downloadable_File.csv and 2021_National_Downloadable_File.csv both had errors with importing the data.  So I had to read in the data to exploratory and clean the text using Work with Text Data >> Clean up Tex.  
+```
+library(dbplyr)
+library(dplyr)
+library(DBI)  # This is required for connecting to the database
+library(RPostgres)  # If using PostgreSQL
+library(tidyr)
+library(stringr)
+library(tidyverse)
+
+# Define your database connection details
+db_host <- "localhost"
+db_port <- 5433  # Default PostgreSQL port
+db_name <- "template1"
+db_user <- "postgres"
+db_password <- "fatbastard"
+
+# Create a database connection
+db_connection <- dbConnect(
+  RPostgres::Postgres(),
+  dbname = db_name,
+  host = db_host,
+  port = db_port,
+  user = db_user,
+  password = db_password
+)
+
+####################
+read_and_clean_tables <- function(db_connection, years) {
+  # Initialize an empty list to store the data frames
+  cleaned_tables <- list()
+  
+  # Loop through the specified years
+  for (year in years) {
+    # Extract the year from the table name
+    year_num <- as.numeric(str_extract(year, "\\d+"))
+    
+    # Create the table name
+    table_name <- paste0(year)
+    
+    # Read the table from the database
+    table_data <- dplyr::tbl(db_connection, table_name)
+    
+    # Perform cleaning operations
+    cleaned_data <- table_data %>%
+      filter(`Primary Specialty` %in% c("OBSTETRICS/GYNECOLOGY", "GYNECOLOGICAL ONCOLOGY")) %>%
+      mutate(`Zip Code` = str_sub(`Zip Code`, 1, 5)) %>%
+      distinct(NPI, .keep_all = TRUE) %>%
+      mutate(Year = as.character(year_num))
+    
+    # Ensure NPI is of integer type
+    cleaned_data$NPI <- as.integer(dplyr::pull(cleaned_data, NPI))
+    
+    # Store the cleaned data frame in the list
+    cleaned_tables[[year]] <- cleaned_data
+  }
+  
+  # Return a named list of cleaned data frames
+  names(cleaned_tables) <- years
+  return(cleaned_tables)
+}
+
+# Usage example: Read and clean tables for multiple years
+years_to_process <- c("2016", "2017", "2018", "2019", "2020") #, "2021", "2022")
+cleaned_tables <- read_and_clean_tables(db_connection, years_to_process)
+
+#########################################
+full_join_cleaned_tables <- function(cleaned_tables) {
+  # Initialize the result data frame with the first cleaned table
+  result_data <- cleaned_tables[[1]]
+  
+  # Loop through the remaining cleaned tables and perform full joins
+  for (i in 2:length(cleaned_tables)) {
+    year <- names(cleaned_tables)[i]
+    
+    # Perform a full join with a suffix of the year
+    result_data <- full_join(result_data, cleaned_tables[[i]], by = "NPI", suffix = c("", paste0(".", year)))
+  }
+  
+  # Return the result data frame
+  return(result_data)
+}
+
+# Usage example: Read and clean tables for multiple years
+years_to_process <- c("2016", "2017", "2018", "2019", "2020", "2021", "2022")
+cleaned_tables <- read_and_clean_tables(db_connection, years_to_process)
+
+# Perform a full join with suffixes
+result_full_join <- full_join_cleaned_tables(cleaned_tables)
+
+# Print the resulting data frame
+print(result_full_join)
+
+collect_result_full_join <- collect(result_full_join)
+
+readr::write_rds(collect_result_full_join, "Desktop/collect_result_full_join.rds")
+
+dbDisconnect(db_connection)
+```
+
+
 # Citation
 If you use this package, I would appreciate a citation.
 ```
