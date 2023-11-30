@@ -119,12 +119,23 @@ obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed(
 
 ### Searching for Data: `tyler::search_by_taxonomy`
 This function searches the NPI Database for healthcare providers based on a taxonomy description.  The `search_by_taxonomy` function is a wrapper on the `npi::npi_search` accessing the registry's Version 2.1 API.  Many thanks to the author and maintainers of the `npi` package for their amazing work.This helps confirm outside data about subspecialist provider counts and fill in the gaps for providers who are not board-certified but are practicing (board-eligible).  This data can be matched to other databases.  Please see `Exploratory/workforce/subspecialists_only` for more code on how to do this.  The nice thing is that all these search results will come with an NPI.  
-```r
-# Example usage with multiple taxonomy descriptions:
-data <- tyler::search_by_taxonomy(c("Gynecologic Oncology",
-            "Female Pelvic Medicine and Reconstructive Surgery",
-            "Reproductive Endocrinology",
-            "Maternal & Fetal Medicine"))
+```
+# This will allow us to get subspecialty names and NPI numbers
+go_data <- search_by_taxonomy("Gynecologic Oncology")
+fpmrs_data <- search_by_taxonomy("Female Pelvic Medicine and Reconstructive Surgery")
+rei_data <- search_by_taxonomy("Reproductive Endocrinology")
+mfm_data <- search_by_taxonomy("Maternal & Fetal Medicine")
+
+# Merge all data frames into one
+      all_taxonomy_search_data <- bind_rows(
+        go_data,
+        fpmrs_data,
+        rei_data,
+        mfm_data) %>%
+        dplyr::distinct(npi, .keep_all = TRUE)
+
+      dim(all_taxonomy_search_data)
+      glimpse(all_taxonomy_search_data)
 
 # 1200 records requested
 # Requesting records 0-200...
