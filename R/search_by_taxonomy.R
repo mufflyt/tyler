@@ -6,7 +6,10 @@
 #' @return A data frame with filtered NPI data based on the specified taxonomy description.
 #' @examples
 #' # Example usage with multiple taxonomy descriptions:
-#' data <- search_by_taxonomy(c("Gynecologic Oncology", "Female Pelvic Medicine and Reconstructive Surgery", "Reproductive Endocrinology", "Maternal & Fetal Medicine"))
+#' go_data <- search_by_taxonomy("Gynecologic Oncology")
+#' fpmrs_data <- search_by_taxonomy("Female Pelvic Medicine and Reconstructive Surgery")
+#' rei_data <- search_by_taxonomy("Reproductive Endocrinology")
+#' mfm_data <- search_by_taxonomy("Maternal & Fetal Medicine")
 #'
 #' @import npi
 #' @import dplyr

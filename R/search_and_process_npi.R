@@ -116,13 +116,13 @@ search_and_process_npi <- function(input_file,
 
   #SECOND LOOP
   # Create a list with two elements, first_name and last_name, where each element is a vector of names.
-  arg_list <- list(first_name = first_names, last_name = last_names)
+  #arg_list <- list(first_name = first_names, last_name = last_names)
 
   # Apply the search_npi function to each combination of first_name and last_name in arg_list.
-  npi_data <- purrr::pmap(arg_list, search_npi)
+  #npi_data <- purrr::pmap(arg_list, search_npi)
 
   # Filter npi_data to keep only elements that are data frames.
-  npi_data  <- Filter(is.data.frame, npi_data)
+  npi_data  <- Filter(is.data.frame, out)
 
   # Combine multiple data frames into a single data frame using data.table::rbindlist().  This is a function from the data.table package that is used to concatenate (bind) a list of data frames into one data frame.
   result <- data.table::rbindlist(npi_data, fill = TRUE)
