@@ -26,7 +26,7 @@ vignette(topic = "????", package = "tyler")
 # Workflow 👨‍🦲
 1) Gather all the physician data that is needed:
      * Search by subspecialty taxonomy: `tyler::taxonomy` and `tyler::search_by_taxonomy` 👨‍🦲
-     * Search by physician name: `tyler::search_and_process_npi` 👨‍🦲
+     * Search by physician name in `goba`: `tyler::search_and_process_npi` 👨‍🦲
      * Merge these two physician data sources together.  See the code at: `exploratory/Workforce/subspecialists_only`  👨‍🦲
      * Add in the physician age from healthgrades.com: ??????
      * Get Physician Compare physician demographics: `tyler::retrieve_clinician_data`  
