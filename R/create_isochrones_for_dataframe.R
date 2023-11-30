@@ -19,7 +19,7 @@
 #' @import easyr
 #' @import hereR
 #' @export
-create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800)) {
+create_isochrones_for_dataframe <- function(input_file, breaks = c(30*60, 60*60, 120*60, 180*60)) {
 
   Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
   readRenviron("~/.Renviron")
