@@ -388,7 +388,8 @@ rD <- RSelenium::rsDriver(
 ```
 
 # Read in the National Downloadable File (DAC)
-I utilized Postico and a postgres SQL database because the files are huge and I don't have enough RAM to hold the data in memory.  2022_National_Downloadable_File.csv and 2021_National_Downloadable_File.csv both had errors with importing the data.  So I had to read in the data to exploratory and clean the text using Work with Text Data >> Clean up Tex.  
+I utilized Postico and a postgres SQL database because the files are huge and I don't have enough RAM to hold the data in memory.  2022_National_Downloadable_File.csv and 2021_National_Downloadable_File.csv both had errors with importing the data.  So I had to read in the data to exploratory and clean the text using Work with Text Data >> Clean up Tex. 
+ We got most of the data from CMS but the 2015 Physician Compare Downloadable File is available at https://data.nber.org/compare/physician/2015/1.    
 ```
 library(dbplyr)
 library(dplyr)
