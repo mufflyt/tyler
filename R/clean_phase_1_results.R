@@ -22,6 +22,8 @@
 #' @import stringr
 #' @export
 #'
+
+
 clean_phase_1_results <- function(df) {
 
   cat("Converting column types...\n")
@@ -30,7 +32,7 @@ clean_phase_1_results <- function(df) {
 
   cat("Filtering out rows with missing 'npi'...\n")
   df <- df %>%
-    dplyr::filter(!is.na(npi)) # Remove rows with missing 'npi'
+    dplyr::filter(!is.na(df$npi)) # Remove rows with missing 'npi'
 
   cat("Cleaning column names...\n")
   df <- df %>%
@@ -48,7 +50,7 @@ clean_phase_1_results <- function(df) {
 
   cat("Arranging rows by 'names'...\n")
   df <- df %>%
-    dplyr::arrange(names) # Arrange rows by 'names'
+    dplyr::arrange(df$names) # Arrange rows by 'names'
 
   cat("Adding insurance and duplicating rows...\n")
   df <- df %>%
@@ -61,18 +63,18 @@ clean_phase_1_results <- function(df) {
   cat("Extracting last name and creating 'dr_name'...\n")
   df <- df %>%
     dplyr::mutate(
-      last_name = humaniformat::last_name(names),
-      dr_name = paste("Dr.", last_name)
+      last_name = humaniformat::last_name(df$names),
+      dr_name = paste("Dr.", df$last_name)
     ) # Extract last name and create 'dr_name'
 
   cat("Identifying academic or private practice...\n")
   df <- df %>%
-    dplyr::mutate(academic = ifelse(stringr::str_detect(practice_name, stringr::str_c(c("Medical College", "University of", "University", "Univ", "Children's", "Infirmary", "Medical School", "Medical Center", "Medical Center", "Children", "Health System", "Foundation", "Sch of Med", "Dept of Oto", "Mayo", "UAB", "OTO Dept", "Cancer Ctr", "Penn", "College of Medicine", "Cancer", "Cleveland Clinic", "Henry Ford", "Yale", "Brigham", "Dept of OTO", "Health Sciences Center", "SUNY"), collapse = "|", sep = "\\b|\\b", fixed = TRUE)), "University", "Private Practice")) # Identify academic or private practice
+    dplyr::mutate(academic = ifelse(stringr::str_detect(df$practice_name, stringr::str_c(c("Medical College", "University of", "University", "Univ", "Children's", "Infirmary", "Medical School", "Medical Center", "Medical Center", "Children", "Health System", "Foundation", "Sch of Med", "Dept of Oto", "Mayo", "UAB", "OTO Dept", "Cancer Ctr", "Penn", "College of Medicine", "Cancer", "Cleveland Clinic", "Henry Ford", "Yale", "Brigham", "Dept of OTO", "Health Sciences Center", "SUNY"), collapse = "|", sep = "\\b|\\b", fixed = TRUE)), "University", "Private Practice")) # Identify academic or private practice
 
   cat("Uniting columns for REDCap upload...\n")
   df <- df %>%
-    dplyr::mutate(for_redcap = paste(id, dr_name, insurance, phone_number, state_name, npi, academic, id_number, sep = ", ")) %>%
-    dplyr::select(for_redcap, id, phone_number, academic, everything())
+    dplyr::mutate(for_redcap = paste(df$id, df$dr_name, df$insurance, df$phone_number, df$state_name, df$npi, df$academic, df$id_number, sep = ", ")) %>%
+    dplyr::select(for_redcap, df$id, df$phone_number, df$academic, everything())
   # unite(for_redcap, dr_name, insurance, phone_number, state_name, npi, academic, sep = ", ", remove = FALSE, na.rm = FALSE)  # Unite columns for REDCap upload
 
   # Save the dataframe to a CSV file with date and time in the filename
