@@ -6,7 +6,7 @@
 \usage{
 create_isochrones_for_dataframe(
   input_file,
-  breaks = c(1800, 3600, 7200, 10800)
+  breaks = c(30 * 60, 60 * 60, 120 * 60, 180 * 60)
 )
 }
 \arguments{
