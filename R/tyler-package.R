@@ -1,7 +1,6 @@
-#' @keywords internal
+#' @keywords NPPES NPI healthcare
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom tibble tibble
 ## usethis namespace: end
 NULL

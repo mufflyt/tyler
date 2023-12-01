@@ -20,4 +20,6 @@ Useful links:
 \strong{Maintainer}: Tyler Muffly \email{tyler.muffly@dhha.org} (ORCID: 0000-0002-2044-1693)
 
 }
-\keyword{internal}
+\keyword{NPI}
+\keyword{NPPES}
+\keyword{healthcare}
