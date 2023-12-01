@@ -136,7 +136,6 @@ result_df
 
 You can now analyze the NPI search results as needed for your specific use case. The `result_df` data frame contains information about NPIs that match your search criteria.  Because these NPI numbers are directly from NPPES we do not need to run `validate_and_remove_invalid_npi`.  
 
-
 ```
 # Remove selected columns from the 'output_result' dataframe
 processed_result <- output_result %>%
@@ -148,35 +147,16 @@ processed_result <- output_result %>%
     -taxonomies_taxonomy_group, 
     -taxonomies_license, 
     -taxonomies_primary
-  )
+  ) %>%
 
-# Remove punctuation and special characters from the 'basic_credential' column to clean "M.D., MD, M D"
-processed_result <- processed_result %>%
-  dplyr::mutate(basic_credential = stringr::str_remove_all(basic_credential, "[[\\p{P}][\\p{S}]]"))
-
-# Convert 'basic_credential' to uppercase
-processed_result <- processed_result %>%
-  dplyr::mutate(basic_credential = stringr::str_to_upper(basic_credential))
-
-# Remove whitespace characters from the 'basic_credential' column
-processed_result <- processed_result %>%
-  dplyr::mutate(basic_credential = stringr::str_remove_all(basic_credential, "[:blank:]"))
-
-# Recode values in the 'basic_credential' column, mapping "DOMPH" to "DO" and defaulting to "MD"
-processed_result <- processed_result %>%
-  dplyr::mutate(basic_credential = dplyr::recode(basic_credential, "DOMPH" = "DO", "DO" = "DO", .default = "MD"))
-
-# Filter out rows where 'taxonomies_state' is NA (missing)
-processed_result <- processed_result %>%
-  dplyr::filter(!is.na(taxonomies_state))
-
-# Filter out rows where 'taxonomies_desc' contains the substring "Gyn" (case-insensitive).  This can be changed for different applications: "Ortho", "Rheum", "Otolary", "Heme", "Anesthesi".  
-processed_result <- processed_result %>%
-  dplyr::filter(stringr::str_detect(taxonomies_desc, fixed("Gyn", ignore_case = TRUE)))
-
-# Keep only distinct rows based on the 'npi' column, retaining the first occurrence
-processed_result <- processed_result %>%
-  dplyr::distinct(npi, .keep_all = TRUE)
+  mutate(across(c(basic_first_name, basic_last_name, basic_credential), 
+      .fns = ~str_remove_all(., "[[\\p{P}][\\p{S}]]"))) %>%
+  mutate(basic_credential = str_to_upper(basic_credential)) %>%
+  filter(str_detect(basic_credential, "MD|DO")) %>%
+  mutate(basic_credential = str_sub(basic_credential,1 ,2)) %>%
+  filter(basic_credential %in% c("DO", "MD")) %>%
+  filter(str_detect(taxonomies_desc, fixed("Gyn", ignore_case=TRUE))) %>%
+  distinct(npi, .keep_all = TRUE)
 
 > processed_result %>% head(5)
           npi basic_first_name basic_last_name basic_credential basic_sole_proprietor basic_gender basic_enumeration_date
@@ -210,7 +190,7 @@ combined_acog_presidents <-
   dplyr::left_join(`processed_result`, by = c("first" = "basic_first_name", 
                                               "last" = "basic_last_name", 
                                               "honorrific" = "basic_credential"), 
-                                              ignorecase=TRUE)
+                                              ignore.case=TRUE)
 ```
 
 # Conclusion
