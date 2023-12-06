@@ -9,6 +9,7 @@
 #' @import dplyr
 #' @import readr
 #' @import openxlsx
+#' @import easyr
 #'
 #' @examples
 #' \dontrun{
@@ -19,7 +20,7 @@
 #' split_and_save(input_path, output_directory, lab_assistant_names)
 #' }
 # Split the final graph.
-# I have a dataframe of 1224 rows.  I want to keep the file in the order it is in now.   I need to split it eight ways and then send a CSV of each split to a person.  What do you recommend?
+# I have a dataframe of 1224 rows.  I want to keep the file in the order it is in now.   I need to split it eight ways and then send a CSV of each split to a person.
 split_and_save <- function(input_path, output_directory, lab_assistant_names) {
 
   # Check if the number of lab_assistant_names matches the required number of splits
@@ -28,30 +29,7 @@ split_and_save <- function(input_path, output_directory, lab_assistant_names) {
     stop("Please provide at least two lab_assistant_names for the splits.")
   }
 
-  # Error handling for input file existence
-  if (!file.exists(input_path)) {
-    stop(
-      "The specified file '", input_path, "' does not exist.\n",
-      "Please provide the full path to the file."
-    )
-  }
-
-  cat("Reading data from different file formats...\n")
-
-  # Read data from different file formats (RDS, CSV, or XLS/XLSX)
-  file_extension <- tools::file_ext(input_path)
-
-  if (file_extension == "rds") {
-    sample_data <- readr::read_rds(input_path)
-  } else if (file_extension %in% c("csv", "xls", "xlsx")) {
-    if (file_extension %in% c("xls", "xlsx")) {
-      sample_data <- readxl::read_xlsx(input_path)
-    } else {
-      sample_data <- readr::read_csv(input_path)
-    }
-  } else {
-    stop("Unsupported file format. Please provide an RDS, CSV, or XLS/XLSX file.")
-  }
+  sample_data <- easyr::read.any(input_path)
 
   cat("Checking for 'id' column...\n")
 
@@ -59,6 +37,13 @@ split_and_save <- function(input_path, output_directory, lab_assistant_names) {
   if (!"id" %in% names(sample_data)) {
     stop("The input data does not contain a column named 'id'. Please make sure the column exists.")
   }
+
+  cat("Randomizing the data by 'id' column...\n")
+
+  # Randomize the data by 'id' column
+  set.seed(1978) #in case we have to resplit and send out results again.
+  sample_data <- sample_data %>%
+    dplyr::arrange(sample(id))  # Shuffle the data
 
   cat("Adding 'lab_assistant_assigned_to_call' column...\n")
 
@@ -85,12 +70,9 @@ split_and_save <- function(input_path, output_directory, lab_assistant_names) {
     # Extract data for the current lab assistant
     lab_assistant_data <- splits[[lab_assistant_name]]
 
-    # Get the ID of the first and last row in the lab assistant's data
-    first_row_id <- lab_assistant_data$id[1]
-    last_row_id <- lab_assistant_data$id[nrow(lab_assistant_data)]
-
     # Create a filename for the output Excel file
-    output_file <- paste0(output_directory, "/", lab_assistant_name, "_", current_datetime, "_", nrow(lab_assistant_data), "_rows_", first_row_id, "_to_", last_row_id, ".xlsx")
+    output_file <- paste0(output_directory, "/", lab_assistant_name, "_", current_datetime, "_", nrow(lab_assistant_data)
+                          , ".xlsx")
 
     # Write the lab assistant's data to the output Excel file
     openxlsx::write.xlsx(lab_assistant_data, output_file)
@@ -99,4 +81,3 @@ split_and_save <- function(input_path, output_directory, lab_assistant_names) {
   cat("Each of the lab assistant's split files have been saved successfully!\n")
   cat("Output directory:", output_directory, "\n")
 }
-

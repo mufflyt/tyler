@@ -20,6 +20,6 @@ acog_presidents <- exploratory::scrape_html_table("https://www.acog.org/about/le
   dplyr::arrange(desc(Presidency)) %>%
   dplyr::mutate(first = str_remove_all(first, "[[\\p{P}][\\p{S}]]"))
 
-#readr::write_csv(acog_presidents, "acog_presidents.csv")
+readr::write_csv(acog_presidents, "data-raw/acog_presidents.csv")
 
 usethis::use_data(acog_presidents, overwrite = TRUE)

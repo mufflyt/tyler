@@ -39,7 +39,6 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
   readRenviron("~/.Renviron")
   hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
 
-
   cat("\033[Display setup instructions:\033[0m\n")
   cat("\033[34mTo create isochrones for a specific point(s) use the following code:\033[0m\n")
   cat("\033[34mtryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))\n")
@@ -69,6 +68,9 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
 
   # Initialize a list to store the isolines
   isolines_list <- list()
+
+  location <- location %>%
+    dplyr::distinct(location)
 
   # Try to calculate isolines for the given location
   out <- tryCatch({
