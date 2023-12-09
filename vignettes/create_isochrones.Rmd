@@ -98,17 +98,30 @@ geocoded_data1 <- geocoded_data %>%
 readr::write_csv(geocoded_data1, "/NPPES_November_filtered_data_for_geocoding_geocoded_addresses_not_sf.csv")
 ```
 
+
+We do a join between the postmastr file `postmastr_clinician_data.csv` and the geocoded results file `geocoded_data_to_match_house_number`.  This is because the HERE API does not allow you to pass a master ID number into the API and all the data is washed out during geocoding.  The `postmastr` package allows you to parse the addresses on the `clinician_data` so that we can match the addresses together based on: state, house number, and zip code.  
+
+This was all done in exploratory.io and then read back into `Gathering data.R`.  
 ```
-# Then run the function
-input_file <- ("NPPES_November_filtered_data_for_geocoding_geocoded_addresses_not_sf.csv")
-isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(30*60, 60*60, 120*60, 180*60)) 
-readr::write_csv(isochrones_data, isochrones_data_subspecialists.csv")
+inner_join(`geocoded_data_to_match_house_number`, by = join_by(
+  `postmastr.pm.state` == `here.state_code`, 
+  `postmastr.pm.zip` == `here.postal_code`, 
+  `postmastr.pm.house` == `here.house_number`))
+```
+
+```
+inner_join_postmastr_clinician_data <- readr::read_csv("data/inner_join_postmastr_clinician_data.csv")  %>%
+  st_as_sf(coords = c("long", "lat"), crs = 4326) %>%
+  dplyr::mutate(geometry = location)
+  
+create_isochrones_for_dataframe(inner_join_postmastr_clinician_data_sf, range = c(30*60, 60*60, 120*60, 180*60))
 ```
 
 ### Example
-I added in the code needed to read in RDS, xlsx, xls, and csv files.  It can also read in sf files.  They needed to have columns called ??????????.  Here's an example of how to use the `create_isochrones_for_dataframe` function:
+I added in the code needed to read in RDS, xlsx, xls, and csv files.  It can also read in sf files.  They needed to have a column called 'location' and another called `geometry`.  Here's an example of how to use the `create_isochrones_for_dataframe` function:
 ```
-isochrones_data <- create_isochrones_for_dataframe(df, breaks = c(30*60, 60*60, 120*60, 180*60))
+input_file <- "data/inner_join_postmastr_clinician_data.csv"
+isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(30*60, 60*60, 120*60, 180*60))
 
 > isochrones_data
 [1] 1
@@ -132,7 +145,7 @@ Isoline successfully produced for range: 10800 seconds
 
 ### Output
 
-The function returns a list of isolines for different time ranges. Each isoline is represented as an `sf` object, making it easy to visualize and analyze. The `create_isochrones` function is wrapped with `memoise` so it does a nice job caching the data.  
+The function returns a list of isolines for different time ranges. Each isoline is represented as an `sf` object, making it easy to visualize and analyze. The `create_isochrones` function is wrapped with `memoise` so it does a nice job caching the data.  Of note, none of the columns that you feed into the function will come out the other side after going to the HERE API.  Therefore, we are hoping there is a 1:1 relationship in rows to isochrones.  If not we may need to mark each column with a different time that we feed to the HERE API as a pseudo-identifier.  
 
 ## Conclusion
 
