@@ -29,19 +29,19 @@ vignette(topic = "????", package = "tyler")
      * Search by physician name in `goba`: `tyler::search_and_process_npi` 👨‍🦲
      * Merge these two physician data sources together.  See the code at: `exploratory/Workforce/subspecialists_only`  👨‍🦲
      * Add in the physician age from healthgrades.com: ??????
-     * Get Physician Compare physician demographics: `tyler::retrieve_clinician_data`  
-     * Complete the gender for all physicians: `tyler::genderize_physicians`
+     * Get Physician Compare physician demographics: `tyler::retrieve_clinician_data`  👨‍🦲
+     * Complete the gender for all physicians: `tyler::genderize_physicians` 
      * Check with secondary sources...
        
 3) By state name determine the ACOG District.
       * dplyr::left_join with `tyler::ACOG_Districts`
-5) Geocode the addresses to latitude and longitude for mapping.
+5) Geocode the addresses to latitude and longitude for mapping. 👨‍🦲
       * `tyler::geocode_unique_addresses`
 6) Get the US Census Bureau data associated with the block groups:
    * `tyler::get_census_data`
-7) Create the isochrones based on drive times:
-   * `tyler::create_isochrones`
-   * `tyler::create_isochrones_for_dataframe`
+7) Create the isochrones based on drive times: 
+   * `tyler::create_isochrones` 👨‍🦲
+   * `tyler::create_isochrones_for_dataframe` 👨‍🦲
    * All this is heavily borrowed from "https://github.com/khnews/2021-delta-appalachia-stroke-access"
 8) Create overlap maps of isochrones and block groups
    * `tyler::calculate_intersection_overlap_and_save`- THIS NEEDS WORK
