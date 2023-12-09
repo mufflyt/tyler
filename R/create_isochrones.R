@@ -27,17 +27,17 @@
 #' print(isolines)
 #'
 #' }
-#' @import memoise
-#' @import hereR
-#' @import dplyr
 #'
 #' @export
-
+#' @import memoise
+#' @import hereR
+#' @importFrom hereR set_freemium set_key set_verbose isoline
 create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S")) {
 
   Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
   readRenviron("~/.Renviron")
   hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+
 
   cat("\033[Display setup instructions:\033[0m\n")
   cat("\033[34mTo create isochrones for a specific point(s) use the following code:\033[0m\n")
@@ -68,9 +68,6 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
 
   # Initialize a list to store the isolines
   isolines_list <- list()
-
-  location <- location %>%
-    dplyr::distinct(location)
 
   # Try to calculate isolines for the given location
   out <- tryCatch({

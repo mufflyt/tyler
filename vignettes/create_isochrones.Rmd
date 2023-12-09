@@ -85,14 +85,30 @@ Now that you have the prerequisites in place, let's explore how to use the `crea
 
 ### Input Parameters
 The `create_isochrones` function accepts the following parameters:
-* `location`: An `sf` object representing the location for which isolines will be calculated.
+* `location`: An `sf` object representing the location for which isolines will be calculated.  Need separate `lat` and `long` columns.  
 * `range`: A numeric vector of time ranges in seconds. These time ranges determine the extent of the isolines.
 * `posix_time`: A `POSIXct` object representing the date and time of calculation. The default is set to "2023-10-20 08:00:00".  We chose this date because it is during Influenza season when most people see their physicians for a first appointment of the day at 0800.  
+
+You may need to split the geometry column into separate `lat` and `long` columns using this code:  
+```
+geocoded_data1 <- geocoded_data %>%
+        dplyr::mutate(lat = sf::st_coordinates(.)[, "Y"],
+               long = sf::st_coordinates(.)[, "X"])
+
+readr::write_csv(geocoded_data1, "/NPPES_November_filtered_data_for_geocoding_geocoded_addresses_not_sf.csv")
+```
+
+```
+# Then run the function
+input_file <- ("NPPES_November_filtered_data_for_geocoding_geocoded_addresses_not_sf.csv")
+isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(30*60, 60*60, 120*60, 180*60)) 
+readr::write_csv(isochrones_data, isochrones_data_subspecialists.csv")
+```
 
 ### Example
 I added in the code needed to read in RDS, xlsx, xls, and csv files.  It can also read in sf files.  They needed to have columns called ??????????.  Here's an example of how to use the `create_isochrones_for_dataframe` function:
 ```
-isochrones_data <- create_isochrones_for_dataframe(df, breaks = c(1800, 3600, 7200, 10800))
+isochrones_data <- create_isochrones_for_dataframe(df, breaks = c(30*60, 60*60, 120*60, 180*60))
 
 > isochrones_data
 [1] 1

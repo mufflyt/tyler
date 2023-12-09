@@ -77,6 +77,52 @@ output_data <- geocode_unique_addresses(
     output_file_path = "data/geocoded_unique_addresses.csv")
 ```
 
+* Sometimes the data needs to have separate `lat` and `long` columns.  This code can do that:
+```
+geocoded_data1 <- geocoded_data %>%
+        dplyr::mutate(lat = sf::st_coordinates(.)[, "Y"],
+               long = sf::st_coordinates(.)[, "X"])
+```
+
+* How do you match the `geocoded_data` with the orginal dataframe?  You can use the `postmastr` package that allows the addresses in both dataframes to be parsed into house number, street, state, etc.  Once in their individual parts you can do a join together.  This seems janky af.  
+
+* postmast’s functionality rests on an order of operations that must be followed to ensure correct parsing:
+
+* prep
+* postal code
+* state
+* city
+* unit
+* house number
+* ranged house number
+* fractional house number
+* house suffix
+* street directionals
+* street suffix
+* street name
+* reconstruct
+```
+# install.packages("remotes")
+      # remotes::install_github("slu-openGIS/postmastr")
+      library(postmastr)
+      abc <- read_csv(csv_file)
+      abc %>% pm_identify(var = "address") -> sushi2
+      sushi2_min <- pm_prep(sushi2, var = "address", type = "street")
+      pm_postal_all(sushi2_min)
+      sushi2_min <- pm_postal_parse(sushi2_min)
+      moDict <- pm_dictionary(locale = "us", type = "state", case = c("title", "upper"))
+      moDict
+      pm_state_all(sushi2_min, dictionary = moDict) #Checks to make sure that all states have matches
+      sushi2_min <- pm_state_parse(sushi2_min, dictionary = moDict)
+      pm_house_all(sushi2_min)
+      sushi2_min <- pm_house_parse(sushi2_min)
+      sushi2_min <- pm_streetDir_parse(sushi2_min)
+      sushi2_min <- pm_streetSuf_parse(sushi2_min)
+      sushi2_min <- pm_street_parse(sushi2_min, ordinal = TRUE, drop = TRUE)
+      sushi2_parsed <- pm_replace(sushi2_min, source = sushi2)
+      readr::write_csv(sushi2_parsed, "~/Dropbox (Personal)/workforce/Master_References/NPPES/NPPES_November_filtered_data_address_parsed.csv")
+```
+
 # Conclusion
 The validate_and_remove_invalid_npi function is a handy tool for cleaning and validating datasets with NPI numbers. By following the steps outlined in this vignette, you can ensure that your data contains only valid NPIs for further analysis and processing.
 
