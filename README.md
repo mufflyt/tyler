@@ -38,7 +38,7 @@ vignette(topic = "????", package = "tyler")
 5) Geocode the addresses to latitude and longitude for mapping. 👨‍🦲
       * `tyler::geocode_unique_addresses`
 6) Get the US Census Bureau data associated with the block groups:
-   * `tyler::get_census_data`
+   * `tyler::get_census_data` 👨‍🦲
 7) Create the isochrones based on drive times: 
    * `tyler::create_isochrones` 👨‍🦲
    * `tyler::create_isochrones_for_dataframe` 👨‍🦲
