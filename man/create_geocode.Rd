@@ -4,7 +4,7 @@
 \alias{create_geocode}
 \title{Geocode Unique Addresses}
 \usage{
-create_geocode(csv_file, output_file)
+create_geocode(csv_file)
 }
 \arguments{
 \item{file_path}{Path to the input file (CSV, RDS, or XLSX) containing address data.}
