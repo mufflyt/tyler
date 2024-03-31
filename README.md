@@ -104,7 +104,7 @@ obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed(
 
    Code       Specialization                                   
    <chr>      <chr>                                            
- 1 207V00000X NA                                               
+ 1 207V00000X Obstetrics & Gynecology                                               
  2 207VC0300X Complex Family Planning                          
  3 207VC0200X Critical Care Medicine                           
  4 207VF0040X Female Pelvic Medicine and Reconstructive Surgery
