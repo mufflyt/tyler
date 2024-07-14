@@ -1,83 +1,147 @@
-#' This function takes an input data file, splits it into multiple parts, and saves each part as a separate Excel file.
+#' Split data into multiple parts and save each part as separate Excel files.
 #'
-#' @param input_path The path to the input data file (RDS, CSV, or XLS/XLSX).
-#' @param output_directory The directory where the output Excel files will be saved.
-#' @param lab_assistant_names A vector of lab_assistant_names to name the output files.
+#' @param data_or_path Either a dataframe containing the input data or a path to the input data file (RDS, CSV, or XLS/XLSX).
+#' @param output_directory Directory where output Excel files will be saved.
+#' @param lab_assistant_names Vector of lab assistant names to name the output files.
+#' @param seed Seed value for randomization (default is 1978).
+#' @param complete_file_prefix Prefix for the complete output file name (default is "complete_non_split_version_").
+#' @param split_file_prefix Prefix for each split output file name (default is empty).
+#' @param recursive_create Logical indicating if directories should be created recursively (default is TRUE).
 #' @return None
 #' @export
 #'
-#' @import dplyr
-#' @import readr
-#' @import openxlsx
-#' @import easyr
+#' @importFrom easyr read_any
+#' @importFrom dplyr arrange mutate select sample_n
+#' @importFrom openxlsx write.xlsx
+#' @importFrom tools file_path_as_absolute 
+#' @importFrom fs dir_create dir_exists
 #'
 #' @examples
 #' \dontrun{
 #' library(tyler)
-#' input_path <- "/path/to/your/input/file.rds"
+#' input_data <- readr::read_csv("/path/to/your/input/file.csv")
 #' output_directory <- "/path/to/your/output/directory"
 #' lab_assistant_names <- c("Label1", "Label2", "Label3")
-#' split_and_save(input_path, output_directory, lab_assistant_names)
+#' split_and_save(data_or_path = input_data, output_directory, lab_assistant_names)
 #' }
-# Split the final graph.
-# I have a dataframe of 1224 rows.  I want to keep the file in the order it is in now.   I need to split it eight ways and then send a CSV of each split to a person.
-split_and_save <- function(input_path, output_directory, lab_assistant_names) {
 
+library(tidyverse)
+library(easyr)
+library(tools)
+library(fs)
+library(openxlsx)
+
+split_and_save <- function(data_or_path, output_directory, lab_assistant_names,
+                           seed = 1978,
+                           complete_file_prefix = "complete_non_split_version_",
+                           split_file_prefix = "",
+                           recursive_create = TRUE) {
+  
+  #data_or_path <- readr::read_csv("/Users/tylermuffly/Dropbox (Personal)/Mystery shopper/mystery_shopper/Melanie/data/Phase_2/Phase I completed.csv")
+  
+  # Check if data_or_path is a dataframe or a path
+  if (is.data.frame(data_or_path)) {
+    data <- data_or_path
+  } else {
+    # Read the data from file
+    tryCatch({
+      data <- easyr::read_any(data_or_path)
+    }, error = function(e) {
+      stop("Error reading the input file. Check if the file path and format are correct.")
+    })
+  }
+  
   # Check if the number of lab_assistant_names matches the required number of splits
-  n_splits <- length(lab_assistant_names)
-  if (n_splits <= 1) {
-    stop("Please provide at least two lab_assistant_names for the splits.")
+  if (length(lab_assistant_names) <= 1) {
+    stop("Please provide at least two lab assistant names for the splits.")
   }
-
-  sample_data <- easyr::read.any(input_path)
-
-  cat("Checking for 'id' column...\n")
-
-  # Check if the data contains a column named "id"
-  if (!"id" %in% names(sample_data)) {
-    stop("The input data does not contain a column named 'id'. Please make sure the column exists.")
+  
+  # Check required columns exist
+  required_columns <- c("for_redcap", "id")
+  missing_columns <- required_columns[!required_columns %in% names(data)]
+  if (length(missing_columns) > 0) {
+    stop(paste("The input data is missing the following columns:", paste(missing_columns, collapse = ", ")))
   }
-
-  cat("Randomizing the data by 'id' column...\n")
-
+  
   # Randomize the data by 'id' column
-  set.seed(1978) #in case we have to resplit and send out results again.
-  sample_data <- sample_data %>%
-    dplyr::arrange(sample(id))  # Shuffle the data
-
-  cat("Adding 'lab_assistant_assigned_to_call' column...\n")
-
-  # Add the 'lab_assistant_assigned_to_call' column based on the lab_assistant_names
-  sample_data <- sample_data %>%
-    dplyr::mutate(lab_assistant_assigned_to_call = rep(lab_assistant_names, length.out = nrow(sample_data))) %>%
-    dplyr::select(for_redcap, lab_assistant_assigned_to_call, everything())
-
-  cat("Saving the complete file before splitting...\n")
-
+  set.seed(seed)
+  data <- dplyr::arrange(data, dplyr::sample_n(data, size = nrow(data)))
+  
+  # Add lab assistant assignment column
+  data <- dplyr::mutate(data,
+                        lab_assistant_assigned = rep(lab_assistant_names, length.out = nrow(data))) %>%
+    dplyr::select(for_redcap, lab_assistant_assigned, everything())
+  
+  # Create output directory if it doesn't exist
+  if (!fs::dir_exists(output_directory)) {
+    tryCatch({
+      fs::dir_create(output_directory, recursive = recursive_create)
+    }, error = function(e) {
+      stop("Failed to create output directory. Check directory permissions and try again.")
+    })
+  }
+  
   # Save the complete data to a separate Excel file
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
-  complete_output_file <- paste0(output_directory, "/complete_non_split_version_", current_datetime, ".xlsx")
-  openxlsx::write.xlsx(sample_data, complete_output_file)
-  cat("Saved unsplit and complete data to", complete_output_file, "\n")
-
-  cat("Splitting data and saving to separate Excel files...\n")
-
-  # Split the data into n_splits parts based on lab assistants
-  splits <- split(x = sample_data, f = sample_data$lab_assistant_assigned_to_call)
-
+  complete_output_file <- file.path(output_directory, paste0(complete_file_prefix, current_datetime, ".xlsx"))
+  
+  
+  tryCatch({
+    if (file.exists(complete_output_file)) {
+      warning("Output file already exists. Skipping save to prevent overwrite.")
+    } else {
+      openxlsx::write.xlsx(data, complete_output_file)
+      message("Saved unsplit and complete data to: ", complete_output_file)
+    }
+  }, error = function(e) {
+    stop("Error saving the complete file. Check if the output directory is writable.")
+  })
+  
+  # Split the data into parts based on lab assistants
+  splits <- base::split(data, data$lab_assistant_assigned)
+  
   # Save each split to a separate Excel file
-  for (lab_assistant_name in names(splits)) {
-    # Extract data for the current lab assistant
+  for (lab_assistant_name in base::names(splits)) {
     lab_assistant_data <- splits[[lab_assistant_name]]
-
-    # Create a filename for the output Excel file
-    output_file <- paste0(output_directory, "/", lab_assistant_name, "_", current_datetime, "_", nrow(lab_assistant_data)
-                          , ".xlsx")
-
-    # Write the lab assistant's data to the output Excel file
-    openxlsx::write.xlsx(lab_assistant_data, output_file)
+    
+    output_file <- file.path(output_directory,
+                             paste0(split_file_prefix, lab_assistant_name, "_", current_datetime, "_", nrow(lab_assistant_data), ".xlsx"))
+    
+    
+    tryCatch({
+      if (file.exists(output_file)) {
+        warning(paste("Output file", output_file, "already exists. Skipping save to prevent overwrite."))
+      } else {
+        openxlsx::write.xlsx(lab_assistant_data, output_file)
+        message("Saved split data for", lab_assistant_name, "to:", output_file)
+      }
+    }, error = function(e) {
+      warning(paste("Error saving split data for", lab_assistant_name, ". Continuing with other splits."))
+    })
   }
-
-  cat("Each of the lab assistant's split files have been saved successfully!\n")
-  cat("Output directory:", output_directory, "\n")
+  
+  message("Each of the lab assistant's split files have been saved successfully!")
+  message("Output directory:", output_directory)
 }
+
+
+# data_or_path <- readr::read_csv("Melanie/data/Phase_2/Phase I completed.csv")
+# output_directory <- "Melanie/data/Phase_2"
+# lab_assistant_names <- c(
+#   "Brisa_Avila",
+#   "Kori_Baker",
+#   "Kimmie_Christnacht",
+#   "Bek_Coelho",
+#   "Tomara_Corley",
+#   "Douglas_Fritz",
+#   "Kristina_Johnson",
+#   "Madeliene_Mason",
+#   "Payton_Moody",
+#   "manavaln"
+# )
+# 
+# split_and_save(
+#   data_or_path,
+#   output_directory,
+#   lab_assistant_names
+# )
