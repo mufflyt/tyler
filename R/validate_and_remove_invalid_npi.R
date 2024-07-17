@@ -3,16 +3,20 @@
 #' This function reads a CSV file containing NPI numbers, validates their
 #' format using the npi package, and removes rows with missing or invalid NPIs.
 #'
-#' @param input_csv_path Path to the CSV file containing NPI numbers.
+#' @param input_data Either a dataframe containing NPI numbers or a path to a CSV file.
 #'
 #' @return A dataframe containing valid NPI numbers.
 #'
-#' @import npi
-#' @import readr
-#' @import dplyr
+#' @importFrom npi npi_is_valid
+#' @importFrom readr read_csv
+#' @importFrom dplyr filter mutate
+#'
+#' @examples
+#' # Example usage:
+#' # input_data <- "~/path/to/your/NPI/file.csv"
+#' # valid_df <- validate_and_remove_invalid_npi(input_data)
 #'
 #' @export
-
 validate_and_remove_invalid_npi <- function(input_data) {
 
   if (is.data.frame(input_data)) {
@@ -27,7 +31,6 @@ validate_and_remove_invalid_npi <- function(input_data) {
 
   # Remove rows with missing or empty NPIs
   df <- df %>%
-    #head(5) %>%. #for testing only
     dplyr::filter(!is.na(npi) & npi != "")
 
   # Add a new column "npi_is_valid" to indicate NPI validity
@@ -44,6 +47,7 @@ validate_and_remove_invalid_npi <- function(input_data) {
   # Return the valid dataframe with the "npi_is_valid" column
   return(df)
 }
+
 # Example usage:
-#input_data <- "~/Dropbox (Personal)/workforce/subspecialists_only.csv"  # Replace with the path to your CSV file
-#valid_df <- validate_and_remove_invalid_npi(input_csv_path)
+# input_data <- "~/path/to/your/NPI/file.csv"
+# valid_df <- validate_and_remove_invalid_npi(input_data)

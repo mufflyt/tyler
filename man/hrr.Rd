@@ -7,10 +7,10 @@
 hrr(remove_HI_AK = TRUE)
 }
 \arguments{
-\item{remove_HI_AK}{Logical, should Hawaii and Alaska be removed?}
+\item{remove_HI_AK}{Logical, should Hawaii and Alaska be removed? Default is TRUE.}
 }
 \value{
-A SpatialPolygonsDataFrame containing the hospital referral region data.
+An sf object containing the hospital referral region data.
 }
 \description{
 This function loads the hospital referral region shapefile and optionally removes Hawaii and Alaska.

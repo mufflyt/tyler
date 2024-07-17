@@ -7,20 +7,20 @@
 #' @param df A data frame containing the columns 'npi' and 'name'.
 #' @param filepath The path where the CSV file should be saved.
 #' @return Prints a message to the console indicating that the CSV file has been saved successfully.
-#' @import dplyr
-#' @import utils
+#' @importFrom dplyr group_by summarise arrange filter
 #' @export
 
-qualitycheck <- function(df, filepath) {
-  temp <- df %>%
-    dplyr::group_by(npi, name) %>% # Group the data by 'npi' and 'name'
-    dplyr::summarise(N = n()) %>% # Calculate the count of observations within each group and create a column named 'N'
-    dplyr::arrange(desc(N)) %>% # Arrange the data in descending order based on the 'N' column
-    dplyr::filter(N > 2) # Keep only the rows where the count 'N' is greater than 2
+save_quality_check_table <- function(df, filepath) {
+  # Group by 'npi' and 'name', calculate counts, filter where count > 2, and arrange by count descending
+  filtered_data <- df %>%
+    dplyr::group_by(npi, name) %>%
+    dplyr::summarise(count = n()) %>%
+    dplyr::filter(count > 2) %>%
+    dplyr::arrange(desc(count))
 
-  # Save the original temp data frame to a CSV file
-  write.csv(temp, file = filepath, row.names = FALSE)
+  # Save the filtered data to a CSV file
+  write.csv(filtered_data, file = filepath, row.names = FALSE)
 
-  # If you want to inform the user that the file has been saved
-  cat("CSV file saved successfully!")
+  # Print a message indicating successful file save
+  cat("CSV file saved successfully!\n")
 }

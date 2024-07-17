@@ -15,10 +15,10 @@
 #'          these errors. The function is designed to be used with input data that meets
 #'          specific requirements, including valid latitude and longitude values.
 #'
-#' @import tidyverse
-#' @import hereR
-#' @import sf
-#' @import easyr
+#' @importFrom dplyr mutate filter row_number
+#' @importFrom sf st_as_sf
+#' @importFrom hereR isoline set_key
+#' @importFrom base tryCatch message
 #'
 #' @examples
 #' # Validate the file of geocoded data.
@@ -29,17 +29,14 @@
 #' test_and_process_isochrones(input_file = input_file)
 #'
 #' # Filter out the rows that are going to error out after using the test_and_process_isochrones function.
-#' error_rows <- c(265, 431, 816, 922, 1605, 2049, 2212, 2284, 2308, 2409, 2482, 2735, 2875, 2880, 3150, 3552, 3718)
-#'
-#'
-#' input_file_no_error_rows <- input_file %>%
-#'      dplyr::filter(!id %in% error_rows)
+#' # error_rows <- c(265, 431, 816, 922, 1605, 2049, 2212, 2284, 2308, 2409, 2482, 2735, 2875, 2880, 3150, 3552, 3718)
+#' # input_file_no_error_rows <- input_file %>%
+#' #   dplyr::filter(!id %in% error_rows)
 #'
 
 test_and_process_isochrones <- function(input_file) {
   # Parameter validation
   stopifnot(is.data.frame(input_file), all(c("lat", "long") %in% colnames(input_file)))
-
 
   Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
   readRenviron("~/.Renviron")
@@ -53,7 +50,7 @@ test_and_process_isochrones <- function(input_file) {
   input_file$long <- as.numeric(input_file$long)
 
   input_file_sf <- input_file %>%
-    st_as_sf(coords = c("long", "lat"), crs = 4326)
+    sf::st_as_sf(coords = c("long", "lat"), crs = 4326)
 
   posix_time <- as.POSIXct("2023-10-20 09:00:00", format = "%Y-%m-%d %H:%M:%S")
 
@@ -98,12 +95,6 @@ test_and_process_isochrones <- function(input_file) {
   }
 }
 
-# Filter out the rows that are going to error out after using the test_and_process_isochrones function.
-# error_rows <- c(265, 431, 816, 922, 1605, 2049, 2212, 2284, 2308, 2409, 2482, 2735, 2875, 2880, 3150, 3552, 3718)
-
-# input_file_no_error_rows <- input_file %>%
-#  dplyr::filter(!id %in% error_rows)
-
 #' Process and Save Isochrones
 #'
 #' This function takes an input file of locations, retrieves isochrones for each location,
@@ -122,10 +113,9 @@ test_and_process_isochrones <- function(input_file) {
 #'          the input file, processes the data in chunks to minimize the risk of data loss
 #'          in case of errors, and saves the isochrones as shapefiles for further analysis.
 #'
-#' @import tidyverse
-#' @import hereR
-#' @import sf
-#' @import easyr
+#' @importFrom dplyr mutate filter row_number
+#' @importFrom sf st_as_sf st_write
+#' @importFrom hereR isoline set_key
 #'
 #' @examples
 #' # Load the input file (e.g., from a CSV)
@@ -138,6 +128,7 @@ test_and_process_isochrones <- function(input_file) {
 #' sf::st_write(isochrones_data, dsn = "data/isochrones/isochrones_all_combined",
 #'              layer = "isochrones", driver = "ESRI Shapefile", quiet = FALSE)
 #'
+
 process_and_save_isochrones <- function(input_file, chunk_size = 25) {
   # Parameter validation
   stopifnot(is.data.frame(input_file), all(c("lat", "long") %in% colnames(input_file)),
@@ -191,8 +182,7 @@ process_and_save_isochrones <- function(input_file, chunk_size = 25) {
     if (!is.null(isochrones)) {
       # Create the file name with the current date and time
       current_datetime <- format(Sys.time(), "%Y%m%d%H%M%S")
-
-      file_name <- paste("data/isochrones/isochrones_", current_datetime, "_chunk_", min(chunk_data$id), "_to_", max(chunk_data$id))
+      file_name <- paste("data/isochrones/isochrones_", current_datetime, "_chunk_", i)
 
       # Assuming "arrival" field is originally in character format with both date and time
       # Convert it to a DateTime object
@@ -217,10 +207,3 @@ process_and_save_isochrones <- function(input_file, chunk_size = 25) {
 
   return(isochrones_data)
 }
-
-# sf::st_write(
-#   isochrones_sf,
-#   dsn = "data/isochrones/isochrones_all_combined",
-#   layer = "isochrones",
-#   driver = "ESRI Shapefile",
-#   quiet = FALSE)

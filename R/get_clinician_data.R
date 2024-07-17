@@ -1,26 +1,16 @@
-#' Retrieve Clinician Data for NPIs
+#' Validate and Remove Invalid NPI Numbers
 #'
-#' This function reads a CSV file containing National Provider Identifiers (NPIs) or a dataframe,
-#' retrieves clinician data for each valid NPI using the provider package.
-#' https://cran.r-project.org/web/packages/devtools/vignettes/dependencies.html
-#' https://r-pkgs.org/dependencies-in-practice.html#depending-on-the-development-version-of-a-package
+#' This function reads a CSV file containing NPI numbers, validates their
+#' format using the npi package, and removes rows with missing or invalid NPIs.
 #'
-#' @param input_csv_path Path to the input CSV file containing NPIs.
+#' @param input_data Either a dataframe containing NPI numbers or a path to a CSV file.
 #'
-#' @return A tibble with clinician data for the provided NPIs.
-#'
-#' @import dplyr
-#' @import purrr
-#' @import readr
-#' @import tidyr
-#' @import lubridate
-#' @import memoise
-#' @import zipcodeR
-#' @import npi
-#'
+#' @return A dataframe containing valid NPI numbers.
+#' @importFrom npi npi_is_valid
+#' @importFrom readr read_csv
+#' @importFrom dplyr filter mutate
 #' @export
-
-#Function 1: validate_and_remove_invalid_npi
+#'
 validate_and_remove_invalid_npi <- function(input_data) {
 
   if (is.data.frame(input_data)) {
@@ -35,7 +25,6 @@ validate_and_remove_invalid_npi <- function(input_data) {
 
   # Remove rows with missing or empty NPIs
   df <- df %>%
-    #head(5) %>%. #for testing only
     dplyr::filter(!is.na(npi) & npi != "")
 
   # Add a new column "npi_is_valid" to indicate NPI validity
@@ -53,16 +42,21 @@ validate_and_remove_invalid_npi <- function(input_data) {
   return(df)
 }
 
-
-
-#####################
-#Function 2: retrieve_clinician_data
-## Output
-df_updated <- NULL
-
+#' Retrieve Clinician Data
+#'
+#' This function retrieves clinician data for each valid NPI in the input dataframe.
+#'
+#' @param input_data Either a dataframe containing NPI numbers or a path to a CSV file.
+#'
+#' @return A tibble with clinician data for the provided NPIs.
+#' @importFrom purrr map
+#' @importFrom readr read_csv
+#' @importFrom tidyr unnest_wider
+#' @importFrom provider clinicians
+#' @importFrom dplyr mutate
+#'
+#' @export
 retrieve_clinician_data <- function(input_data) {
-  # Load libraries
-  #remotes::install_github("andrewallenbruce/provider")
 
   if (is.data.frame(input_data)) {
     # Input is a dataframe
@@ -73,9 +67,6 @@ retrieve_clinician_data <- function(input_data) {
   } else {
     stop("Input must be a dataframe or a file path to a CSV.")
   }
-
-  # Clean the NPI numbers
-  df <- validate_and_remove_invalid_npi(df)
 
   # Function to retrieve clinician data for a single NPI
   get_clinician_data <- function(npi) {
@@ -88,24 +79,21 @@ retrieve_clinician_data <- function(input_data) {
     if (is.null(clinician_info)) {
       cat("No results for NPI:", npi, "\n")
     } else {
-      return(clinician_info)  # Print the clinician data as it comes out
+      return(clinician_info)  # Return the clinician data
     }
-    Sys.sleep(1)
+    sleep(1)  # Sleep for a while to prevent overloading the server
   }
 
-  #df <- df %>% head(5) #test
-
-  # Loop through the "npi" column and get clinician data
-  df_updated <- df %>%
-    dplyr::mutate(row_number = row_number()) %>%
+  # Clean the NPI numbers and retrieve clinician data
+  df_updated <- input_data %>%
+    validate_and_remove_invalid_npi() %>%
     dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data)) %>%
-    tidyr::unnest(clinician_data, names_sep = "_") %>%
-    dplyr::distinct(npi, .keep_all = TRUE)
+    tidyr::unnest_wider(clinician_data)
 
   return(df_updated)
 }
-# #Use Case
-# #
-# # Call the retrieve_clinician_data function with an NPI value
-# input_data <- ("subspecialists_only.csv")
-# clinician_data <- retrieve_clinician_data(input_data)
+
+# Use case
+# validate_and_remove_invalid_npi <- validate_and_remove_invalid_npi
+# retrieve_clinician_data <- retrieve_clinician_data
+#

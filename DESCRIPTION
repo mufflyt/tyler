@@ -7,7 +7,7 @@ Authors@R:
 Description: The 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 License: MIT + file LICENSE
 URL: https://your.package.url, https://mufflyt.github.io/tyler/
 Date: 2023-09-11
@@ -68,12 +68,14 @@ Imports:
     zipcodeR,
     data.table,
     provider,
-    here
+    here,
+    easyr
 Remotes: andrewallenbruce/provider, lmullen/genderdata, asgr/imager
 LazyData: true
 Files: R/
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    stats
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown

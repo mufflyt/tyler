@@ -6,10 +6,13 @@
 #' @param input_file A path to the input file containing points for which isochrones are to be retrieved.
 #' @param breaks A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).
 #' @return A dataframe containing the isochrones data with added 'name' column.
-#' @import dplyr
-#' @import readr
-#' @import sf
-#' @import easyr
+#' @importFrom dplyr bind_rows
+#' @importFrom readr write_rds
+#' @importFrom sf st_as_sf
+#' @importFrom easyr read.any
+#' @importFrom hereR set_key
+#' @importFrom janitor clean_names
+#' @importFrom data.table rbindlist
 #' @export
 create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800)) {
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;

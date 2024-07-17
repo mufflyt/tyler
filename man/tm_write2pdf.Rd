@@ -7,9 +7,9 @@
 tm_write2pdf(object, filename)
 }
 \arguments{
-\item{input_file}{The path to the data file (in RDS, CSV, or XLS format).}
+\item{input_file_path}{The path to the data file (in RDS, CSV, or XLS format).}
 
-\item{output_dir}{The directory where the output table file will be saved.}
+\item{output_directory}{The directory where the output table file will be saved.}
 }
 \description{
 Generate an overall table summarizing the demographics of the Table 1.
