@@ -32,78 +32,152 @@
 #' @import memoise
 #' @import hereR
 #' @importFrom hereR set_freemium set_key set_verbose isoline
-create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S")) {
+# create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S")) {
+#
+#   Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+#   readRenviron("~/.Renviron")
+#   hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+#
+#
+#   cat("\033[Display setup instructions:\033[0m\n")
+#   cat("\033[34mTo create isochrones for a specific point(s) use the following code:\033[0m\n")
+#   cat("\033[34mtryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))\n")
+#
+#   # # Check if location is an sf object
+#   # if (!base::inherits(location, "sf")) {
+#   #   stop("Location must be an sf object.")
+#   # }
+#
+#   # Check if HERE_API_KEY is set in Renviron
+#   if (Sys.getenv("HERE_API_KEY") == "") {
+#     cat("Please set your HERE API key in your Renviron file using the following steps:\n")
+#     cat("1. Add key to .Renviron\n")
+#     cat("Sys.setenv(HERE_API_KEY = \"your_api_key_here\")\n")
+#     cat("2. Reload .Renviron\n")
+#     cat("readRenviron(\"~/.Renviron\")\n")
+#     stop("HERE_API_KEY environment variable is not set. Please set it to your HERE API key.")
+#   }
+#
+#   # Initialize HERE API securely using an environment variable for the API key
+#   cat("Setting up the hereR access...\n")
+#   api_key <- Sys.getenv("HERE_API_KEY")
+#
+#   hereR::set_freemium(ans = FALSE)
+#   hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+#   hereR::set_verbose(TRUE)
+#
+#   # Initialize a list to store the isolines
+#   isolines_list <- list()
+#
+#   # Try to calculate isolines for the given location
+#   out <- tryCatch({
+#     for (r in range) {
+#       # Calculate isolines using hereR::isoline function
+#       temp <- hereR::isoline(
+#         poi = location, #sf object
+#         datetime = posix_time, #POSIXct object, datetime for the departure
+#         routing_mode = "fast", #Try to route fastest route or "short"est route.
+#         range = r,  # Time range in seconds
+#         range_type = "time", # character of the isolines: "distance" or "time"
+#         transport_mode = "car", #specified for "car" transport instead of "truck" or "pedestrian"
+#         url_only = FALSE,
+#         optimize = "balanced",
+#         traffic = TRUE, # Includes real-time traffic
+#         aggregate = FALSE
+#       )
+#
+#       # Log the successful calculation
+#       cat("Isoline successfully produced for range:", r, "seconds\n")
+#
+#       # Add a unique identifier to each row in isochrones_temp
+#       temp <- temp %>%
+#         mutate(unique_id = row_number())
+#
+#       # Store the isoline in the list
+#       isolines_list[[as.character(r)]] <- temp
+#     }
+#
+#     # Return the list of isolines
+#     return(isolines_list)
+#   }, error = function(e) {
+#     # Handle any errors that occur during the calculation
+#     cat("Error in tryLocationMemo:", e$message, "\n")
+#
+#     # Return an error message as a list
+#     return(list(error = e$message))
+#   })
+#
+#   # Return the result, whether it's isolines or an error message
+#   return(out)
+#   cat("\tryLocation complete.\n")
+# })
 
-  Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
-  readRenviron("~/.Renviron")
-  hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
 
+process_and_save_isochrones <- function(input_file, chunk_size = 25) {
 
-  cat("\033[Display setup instructions:\033[0m\n")
-  cat("\033[34mTo create isochrones for a specific point(s) use the following code:\033[0m\n")
-  cat("\033[34mtryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))\n")
+  input_file$lat <- as.numeric(input_file$lat)
+  input_file$long <- as.numeric(input_file$long)
 
-  # # Check if location is an sf object
-  # if (!base::inherits(location, "sf")) {
-  #   stop("Location must be an sf object.")
-  # }
+  input_file_sf <- input_file %>%
+    sf::st_as_sf(coords = c("long", "lat"), crs = 4326)
 
-  # Check if HERE_API_KEY is set in Renviron
-  if (Sys.getenv("HERE_API_KEY") == "") {
-    cat("Please set your HERE API key in your Renviron file using the following steps:\n")
-    cat("1. Add key to .Renviron\n")
-    cat("Sys.setenv(HERE_API_KEY = \"your_api_key_here\")\n")
-    cat("2. Reload .Renviron\n")
-    cat("readRenviron(\"~/.Renviron\")\n")
-    stop("HERE_API_KEY environment variable is not set. Please set it to your HERE API key.")
-  }
+  posix_time <- as.POSIXct("2023-10-20 09:00:00", format = "%Y-%m-%d %H:%M:%S")
 
-  # Initialize HERE API securely using an environment variable for the API key
-  cat("Setting up the hereR access...\n")
-  api_key <- Sys.getenv("HERE_API_KEY")
+  num_chunks <- ceiling(nrow(input_file_sf) / chunk_size)
+  isochrones_list <- list()
 
-  hereR::set_freemium(ans = FALSE)
-  hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
-  hereR::set_verbose(TRUE)
+  for (i in 1:num_chunks) {
+    start_idx <- (i - 1) * chunk_size + 1
+    end_idx <- min(i * chunk_size, nrow(input_file_sf))
+    chunk_data <- input_file_sf[start_idx:end_idx, ]
 
-  # Initialize a list to store the isolines
-  isolines_list <- list()
+    isochrones <- tryCatch(
+      {
+        hereR::isoline(
+          poi = chunk_data,
+          range = c(1800, 3600, 7200, 10800),
+          datetime = posix_time,
+          routing_mode = "fast",
+          range_type = "time",
+          transport_mode = "car",
+          url_only = FALSE,
+          optimize = "balanced",
+          traffic = TRUE,
+          aggregate = FALSE
+        )
+      },
+      error = function(e) {
+        message("Error processing chunk ", i, ": ", e$message)
+        return(NULL)
+      }
+    )
 
-  # Try to calculate isolines for the given location
-  out <- tryCatch({
-    for (r in range) {
-      # Calculate isolines using hereR::isoline function
-      temp <- hereR::isoline(
-        poi = location, #sf object
-        datetime = posix_time, #POSIXct object, datetime for the departure
-        routing_mode = "fast", #Try to route fastest route or "short"est route.
-        range = r,  # Time range in seconds
-        range_type = "time", # character of the isolines: "distance" or "time"
-        transport_mode = "car", #specified for "car" transport instead of "truck" or "pedestrian"
-        url_only = FALSE,
-        optimize = "balanced",
-        traffic = TRUE, # Includes real-time traffic
-        aggregate = FALSE
+    if (!is.null(isochrones)) {
+      # Create the file name with the current date and time
+      current_datetime <- format(Sys.time(), "%Y%m%d%H%M%S")
+
+      file_name <- paste("data/06-isochrones/isochrones_", current_datetime, "_chunk_", min(chunk_data$id), "_to_", max(chunk_data$id))
+
+      # Assuming "arrival" field is originally in character format with both date and time
+      # Convert it to a DateTime object
+      isochrones$arrival <- as.POSIXct(isochrones$arrival, format = "%Y-%m-%d %H:%M:%S")
+
+      # Save the data as a shapefile with the layer name "isochrones"
+      sf::st_write(
+        isochrones,
+        dsn = file_name,
+        layer = "isochrones",
+        driver = "ESRI Shapefile",
+        quiet = FALSE
       )
 
-      # Log the successful calculation
-      cat("Isoline successfully produced for range:", r, "seconds\n")
-
-      # Store the isoline in the list
-      isolines_list[[as.character(r)]] <- temp
+      # Store the isochrones in the list
+      isochrones_list[[i]] <- isochrones
     }
+  }
 
-    # Return the list of isolines
-    return(isolines_list)
-  }, error = function(e) {
-    # Handle any errors that occur during the calculation
-    cat("Error in tryLocationMemo:", e$message, "\n")
+  # Combine all isochrones from the list into one data frame
+  isochrones_data <- do.call(rbind, isochrones_list)
 
-    # Return an error message as a list
-    return(list(error = e$message))
-  })
-
-  # Return the result, whether it's isolines or an error message
-  return(out)
-  cat("\tryLocation complete.\n")
-})
+  return(isochrones_data)
+}

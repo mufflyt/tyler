@@ -37,10 +37,11 @@ apply_and_save_tint <- function(image_path, alpha = 0.5, palette_name = "viridis
     tinted_image <- (1 - alpha) * original_image + alpha * color_image
 
     message("Displaying tinted image...")
-    plot(tinted_image)
+    imager::plot(tinted_image)
 
     save_path <- file.path(save_dir, sprintf("dollar_bill_tint_%d_%s.jpg", i, color_name))
     message(sprintf("Tint %d (%s) image saved at %s", i, color_name, save_path))
     imager::save.image(tinted_image, save_path)
   }
 }
+
