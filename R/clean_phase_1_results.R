@@ -13,73 +13,78 @@
 #' df <- read_xls(file_path)
 #' clean_phase_1_results(df)
 #' }
-#' @import dplyr
-#' @import readr
-#' @import readxl
-#' @import exploratory
-#' @import humaniformat
-#' @import janitor
-#' @import stringr
+#' @importFrom dplyr arrange count filter mutate select
+#' @importFrom exploratory bind_rows
+#' @importFrom janitor clean_names
+#' @importFrom readr type_convert write_csv
+#' @importFrom stringr str_detect
+#' @importFrom humaniformat last_name
 #' @export
 #'
 
-
 clean_phase_1_results <- function(df) {
 
+  if (!requireNamespace("dplyr", quietly = TRUE) ||
+      !requireNamespace("exploratory", quietly = TRUE) ||
+      !requireNamespace("janitor", quietly = TRUE) ||
+      !requireNamespace("readr", quietly = TRUE) ||
+      !requireNamespace("stringr", quietly = TRUE) ||
+      !requireNamespace("humaniformat", quietly = TRUE)) {
+    stop("Required packages are not installed. Please install them using install.packages().")
+  }
+
   cat("Converting column types...\n")
-  df <- df %>%
-    readr::type_convert() # Convert column types
+  df <- readr::type_convert(df) # Convert column types
 
   cat("Filtering out rows with missing 'npi'...\n")
-  df <- df %>%
-    dplyr::filter(!is.na(df$npi)) # Remove rows with missing 'npi'
+  df <- dplyr::filter(df, !is.na(npi)) # Remove rows with missing 'npi'
 
   cat("Cleaning column names...\n")
-  df <- df %>%
-    janitor::clean_names(case = "snake") # Clean column names
+  df <- janitor::clean_names(df, case = "snake") # Clean column names
 
   cat("Checking required columns...\n")
-
   required_columns <- c("names", "practice_name", "phone_number", "state_name")
   if (!all(required_columns %in% names(df))) {
     stop("The following required columns are missing: ", paste(setdiff(required_columns, names(df)), collapse = ", "))
   }
+
   cat("Duplicating rows...\n")
-  df <- df %>%
-    exploratory::bind_rows(., .) # Duplicate rows
+  df <- exploratory::bind_rows(df, df) # Duplicate rows
 
   cat("Arranging rows by 'names'...\n")
-  df <- df %>%
-    dplyr::arrange(df$names) # Arrange rows by 'names'
+  df <- dplyr::arrange(df, names) # Arrange rows by 'names'
 
   cat("Adding insurance and duplicating rows...\n")
-  df <- df %>%
-    dplyr::mutate(insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(.))) # Add insurance and duplicate rows
+  df <- dplyr::mutate(df, insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(df))) # Add insurance and duplicate rows
 
   cat("Adding a numbered 'id' column...\n")
-  df <- df %>% dplyr::mutate(id = 1:n())
-  df <- df %>% dplyr::mutate(id_number = paste0("id:", id)) # Add a numbered 'id' column
+  df <- dplyr::mutate(df, id = 1:n())
+  df <- dplyr::mutate(df, id_number = paste0("id:", id)) # Add a numbered 'id' column
 
   cat("Extracting last name and creating 'dr_name'...\n")
-  df <- df %>%
-    dplyr::mutate(
-      last_name = humaniformat::last_name(df$names),
-      dr_name = paste("Dr.", df$last_name)
-    ) # Extract last name and create 'dr_name'
+  df <- dplyr::mutate(df,
+                      last_name = humaniformat::last_name(names),
+                      dr_name = paste("Dr.", last_name)) # Extract last name and create 'dr_name'
 
   cat("Identifying academic or private practice...\n")
-  df <- df %>%
-    dplyr::mutate(academic = ifelse(stringr::str_detect(df$practice_name, stringr::str_c(c("Medical College", "University of", "University", "Univ", "Children's", "Infirmary", "Medical School", "Medical Center", "Medical Center", "Children", "Health System", "Foundation", "Sch of Med", "Dept of Oto", "Mayo", "UAB", "OTO Dept", "Cancer Ctr", "Penn", "College of Medicine", "Cancer", "Cleveland Clinic", "Henry Ford", "Yale", "Brigham", "Dept of OTO", "Health Sciences Center", "SUNY"), collapse = "|", sep = "\\b|\\b", fixed = TRUE)), "University", "Private Practice")) # Identify academic or private practice
+  academic_keywords <- c("Medical College", "University of", "University", "Univ", "Children's", "Infirmary",
+                         "Medical School", "Medical Center", "Children", "Health System", "Foundation",
+                         "Sch of Med", "Dept of Oto", "Mayo", "UAB", "OTO Dept", "Cancer Ctr", "Penn",
+                         "College of Medicine", "Cancer", "Cleveland Clinic", "Henry Ford", "Yale",
+                         "Brigham", "Dept of OTO", "Health Sciences Center", "SUNY")
+  df <- dplyr::mutate(df,
+                      academic = ifelse(stringr::str_detect(practice_name, stringr::str_c(academic_keywords, collapse = "|", sep = "\\b|\\b", fixed = TRUE)),
+                                        "University", "Private Practice")) # Identify academic or private practice
 
   cat("Uniting columns for REDCap upload...\n")
-  df <- df %>%
-    dplyr::mutate(for_redcap = paste(df$id, df$dr_name, df$insurance, df$phone_number, df$state_name, df$npi, df$academic, df$id_number, sep = ", ")) %>%
-    dplyr::select(for_redcap, df$id, df$phone_number, df$academic, everything())
-  # unite(for_redcap, dr_name, insurance, phone_number, state_name, npi, academic, sep = ", ", remove = FALSE, na.rm = FALSE)  # Unite columns for REDCap upload
+  df <- dplyr::mutate(df,
+                      for_redcap = paste(id, dr_name, insurance, phone_number, state_name, npi, academic, id_number, sep = ", ")) %>%
+    dplyr::select(for_redcap, id, phone_number, academic, everything()) # Unite columns for REDCap upload
 
   # Save the dataframe to a CSV file with date and time in the filename
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
-  output_file <- paste0("/Users/tylermuffly/Dropbox (Personal)/Mystery shopper/mystery_shopper/obgyn/data/phase2/clean_phase_1_results_", current_datetime, ".csv")
+  output_file <- file.path("/Users/tylermuffly/Dropbox (Personal)/Mystery shopper/mystery_shopper/obgyn/data/phase2",
+                           paste0("clean_phase_1_results_", current_datetime, ".csv"))
   readr::write_csv(df, output_file)
   cat("Saved cleaned Phase 1 results dataframe to", output_file, "\n")
 

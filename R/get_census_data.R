@@ -17,7 +17,7 @@
 #'
 #' @return A dataframe containing Census data all state block groups.
 #' @export
-get_census_data <- function(us_fips_list, vintage = 2019) {
+get_census_data <- function(us_fips_list, vintage = 2022) {
 
   # Initialize an empty list to store state data
   state_data <- list()
