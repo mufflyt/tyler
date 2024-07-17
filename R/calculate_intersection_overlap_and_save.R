@@ -13,7 +13,7 @@
 #' calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")
 #'
 #' @importFrom sf st_intersection st_write st_area
-#' @import dplyr
+#' @importFrom dplyr mutate select left_join
 #'
 #' @export
 #'

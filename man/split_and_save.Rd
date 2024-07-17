@@ -2,29 +2,42 @@
 % Please edit documentation in R/Splitting_dataframe_to_send_to_callers.R
 \name{split_and_save}
 \alias{split_and_save}
-\title{This function takes an input data file, splits it into multiple parts, and saves each part as a separate Excel file.}
+\title{Split data into multiple parts and save each part as separate Excel files.}
 \usage{
-split_and_save(input_path, output_directory, lab_assistant_names)
+split_and_save(
+  data_or_path,
+  output_directory,
+  lab_assistant_names,
+  seed = 1978,
+  complete_file_prefix = "complete_non_split_version_",
+  split_file_prefix = "",
+  recursive_create = TRUE
+)
 }
 \arguments{
-\item{input_path}{The path to the input data file (RDS, CSV, or XLS/XLSX).}
+\item{data_or_path}{Either a dataframe containing the input data or a path to the input data file (RDS, CSV, or XLS/XLSX).}
 
-\item{output_directory}{The directory where the output Excel files will be saved.}
+\item{output_directory}{Directory where output Excel files will be saved.}
 
-\item{lab_assistant_names}{A vector of lab_assistant_names to name the output files.}
-}
-\value{
-None
+\item{lab_assistant_names}{Vector of lab assistant names to name the output files.}
+
+\item{seed}{Seed value for randomization (default is 1978).}
+
+\item{complete_file_prefix}{Prefix for the complete output file name (default is "complete_non_split_version_").}
+
+\item{split_file_prefix}{Prefix for each split output file name (default is empty).}
+
+\item{recursive_create}{Logical indicating if directories should be created recursively (default is TRUE).}
 }
 \description{
-This function takes an input data file, splits it into multiple parts, and saves each part as a separate Excel file.
+Split data into multiple parts and save each part as separate Excel files.
 }
 \examples{
 \dontrun{
 library(tyler)
-input_path <- "/path/to/your/input/file.rds"
+input_data <- readr::read_csv("/path/to/your/input/file.csv")
 output_directory <- "/path/to/your/output/directory"
 lab_assistant_names <- c("Label1", "Label2", "Label3")
-split_and_save(input_path, output_directory, lab_assistant_names)
+split_and_save(data_or_path = input_data, output_directory, lab_assistant_names)
 }
 }

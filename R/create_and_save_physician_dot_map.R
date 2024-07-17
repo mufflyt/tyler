@@ -10,11 +10,11 @@
 #' @param popup_var The variable to use for popup text.
 #' @return A Leaflet map object.
 #'
-#' @import viridis
-#' @import leaflet
-#' @import webshot
-#' @import htmlwidgets
-#' @import dplyr
+#' @importFrom viridis viridis_pal
+#' @importFrom leaflet addCircleMarkers addPolygons addLegend
+#' @importFrom webshot webshot
+#' @importFrom htmlwidgets saveWidget
+#' @importFrom dplyr mutate
 #'
 #' @examples
 #' \dontrun{

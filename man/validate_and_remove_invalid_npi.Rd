@@ -3,26 +3,30 @@
 %   R/validate_and_remove_invalid_npi.R
 \name{validate_and_remove_invalid_npi}
 \alias{validate_and_remove_invalid_npi}
-\title{Retrieve Clinician Data for NPIs}
+\title{Validate and Remove Invalid NPI Numbers}
 \usage{
 validate_and_remove_invalid_npi(input_data)
 
 validate_and_remove_invalid_npi(input_data)
 }
 \arguments{
-\item{input_csv_path}{Path to the CSV file containing NPI numbers.}
+\item{input_data}{Either a dataframe containing NPI numbers or a path to a CSV file.}
 }
 \value{
-A tibble with clinician data for the provided NPIs.
+A dataframe containing valid NPI numbers.
 
 A dataframe containing valid NPI numbers.
 }
 \description{
-This function reads a CSV file containing National Provider Identifiers (NPIs) or a dataframe,
-retrieves clinician data for each valid NPI using the provider package.
-https://cran.r-project.org/web/packages/devtools/vignettes/dependencies.html
-https://r-pkgs.org/dependencies-in-practice.html#depending-on-the-development-version-of-a-package
+This function reads a CSV file containing NPI numbers, validates their
+format using the npi package, and removes rows with missing or invalid NPIs.
 
 This function reads a CSV file containing NPI numbers, validates their
 format using the npi package, and removes rows with missing or invalid NPIs.
+}
+\examples{
+# Example usage:
+# input_data <- "~/path/to/your/NPI/file.csv"
+# valid_df <- validate_and_remove_invalid_npi(input_data)
+
 }

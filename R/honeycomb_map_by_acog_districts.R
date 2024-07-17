@@ -3,11 +3,11 @@
 #' This function generates an sf object representing the ACOG districts by grouping all the states in a particular district together.
 #'
 #' @return An sf object containing grouped ACOG districts.
-#' @import sf
-#' @import dplyr
-#' @import rnaturalearth
-#' @import sf
-#' @import RColorBrewer
+#'
+#' @importFrom dplyr left_join mutate group_by summarize filter if_else
+#' @importFrom rnaturalearth ne_states
+#' @importFrom sf st_transform st_union st_sf
+#'
 #' @export
 generate_acog_districts_sf <- function(filepath = NULL) {
   if (is.null(filepath)) {
@@ -16,7 +16,7 @@ generate_acog_districts_sf <- function(filepath = NULL) {
   }
 
   options(tigris_use_cache = TRUE)
-  sf::sf_use_s2(FALSE)
+  sf::st_use_s2(FALSE)
 
   cat("Using ACOG_Districts dataframe...\n")
   # Use the ACOG_Districts dataframe from the tyler package
@@ -59,11 +59,12 @@ generate_acog_districts_sf <- function(filepath = NULL) {
 #' @param specific_district A string or NULL to specify a specific district for generating the map (default is NULL, which processes all districts).
 #'
 #' @return A ggplot object of the generated map for the specified or all districts.
-#' @import sf
-#' @import dplyr
-#' @import rnaturalearth
-#' @import ggplot2
-#' @import RColorBrewer
+#'
+#' @importFrom dplyr filter mutate group_by summarize
+#' @importFrom rnaturalearth ne_countries
+#' @importFrom ggplot2 ggplot geom_sf scale_fill_viridis_c theme_minimal theme labs ggsave
+#' @importFrom ggspatial annotation_scale annotation_north_arrow
+#' @importFrom sf st_transform st_make_grid st_intersection
 #'
 #' @export
 honeycomb_generate_maps <- function(
@@ -75,7 +76,7 @@ honeycomb_generate_maps <- function(
     specific_district = NULL
 ) {
   options(tigris_use_cache = TRUE)
-  sf::sf_use_s2(FALSE)
+  sf::st_use_s2(FALSE)
 
   # Load USA shapefile
   cat("Loading USA shapefile...\n")

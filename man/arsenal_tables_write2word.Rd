@@ -2,26 +2,23 @@
 % Please edit documentation in R/arsenal_tables_write.R
 \name{arsenal_tables_write2word}
 \alias{arsenal_tables_write2word}
-\title{Save Arsenal Table as Word Document}
+\title{Writes an Arsenal table object to a Word document.}
 \usage{
 arsenal_tables_write2word(object, filename)
 }
 \arguments{
-\item{object}{An Arsenal Table object.}
+\item{object}{An object to be written to Word, typically an Arsenal table.}
 
-\item{filename}{A string representing the desired filename without extension.}
+\item{filename}{The filename (without extension) for the Word document.}
+}
+\value{
+None
 }
 \description{
-This function takes an Arsenal Table object and saves it as a Word document in the "tables" directory.
+Writes an Arsenal table object to a Word document.
 }
 \examples{
 \dontrun{
-overall <- summary(
-  overall_arsenal_table,
-  text = T,
-  title = "Table: Characteristics of Obstetrics and Gynecology Subspecialists Practicing at Obstetrics and Gynecology Residency Programs",
-  pfootnote = FALSE
-)
-arsenal_tables_write2word(overall, "arsenal_overall_table_one")
+arsenal_tables_write2word(my_table, "output_table")
 }
 }

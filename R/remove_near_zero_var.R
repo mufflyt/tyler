@@ -31,7 +31,7 @@ remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
   # Identify near-zero variance variables
   message("Identifying near-zero variance variables...")
   remove_cols <- caret::nearZeroVar(data_frame, names = TRUE, freqCut = freqCut, uniqueCut = uniqueCut)
-  remove_cols <- base::sort(remove_cols)
+  remove_cols <- sort(remove_cols)
 
   # Log: Number of near-zero variance variables found
   message(glue::glue("Found {length(remove_cols)} near-zero variance variables."))

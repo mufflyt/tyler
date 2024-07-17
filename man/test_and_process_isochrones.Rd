@@ -34,10 +34,8 @@ input_file <- readr::read_csv("data/isochrones/inner_join_postmastr_clinician_da
 test_and_process_isochrones(input_file = input_file)
 
 # Filter out the rows that are going to error out after using the test_and_process_isochrones function.
-error_rows <- c(265, 431, 816, 922, 1605, 2049, 2212, 2284, 2308, 2409, 2482, 2735, 2875, 2880, 3150, 3552, 3718)
-
-
-input_file_no_error_rows <- input_file \%>\%
-     dplyr::filter(!id \%in\% error_rows)
+# error_rows <- c(265, 431, 816, 922, 1605, 2049, 2212, 2284, 2308, 2409, 2482, 2735, 2875, 2880, 3150, 3552, 3718)
+# input_file_no_error_rows <- input_file \%>\%
+#   dplyr::filter(!id \%in\% error_rows)
 
 }

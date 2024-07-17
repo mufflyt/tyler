@@ -7,12 +7,11 @@
 #' @param drive_times A vector of unique drive times (in minutes) for which maps and shapefiles will be created.
 #' @return None. The function creates and saves individual maps and shapefiles.
 #'
-#' @import sf
-#' @import leaflet
-#' @import dplyr
-#' @import grDevices
-#' @import htmlwidgets
-#' @import tyler
+#' @importFrom sf st_union st_sf st_transform st_write
+#' @importFrom leaflet addProviderTiles addPolygons
+#' @importFrom dplyr filter tibble
+#' @importFrom grDevices rainbow
+#' @importFrom htmlwidgets saveWidget
 #'
 #' @examples
 #' \dontrun{
@@ -54,7 +53,7 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
     # Filter isochrones for the specified drive time
     isochrones_filtered <- dplyr::filter(isochrones, drive_time == time)
 
-    # Combine isochrones using st_union
+    # Combine fuck isochrones using st_union
     isochrones_combined <- sf::st_union(isochrones_filtered)
 
     # Create an sf object with the combined isochrones
