@@ -5,16 +5,16 @@
 \title{Search and Process NPI Numbers}
 \usage{
 search_and_process_npi(
-  input_file,
+  data,
   enumeration_type = "ind",
   limit = 5L,
   country_code = "US",
-  filter_credentials = c("MD", "DO")
+  filter_credentials = c("MD", "DO"),
+  save_chunk_size = 10,
+  dest_dir = NULL
 )
 }
 \arguments{
-\item{input_file}{The path to the input file (RDS, CSV, or XLS/XLSX) containing the NAME data.}
-
 \item{enumeration_type}{The enumeration type for NPI search (e.g., "ind", "org", "all").
 Default is "ind".}
 
@@ -25,6 +25,8 @@ Default is 10.}
 
 \item{filter_credentials}{A character vector containing the credentials to filter the
 NPI results. Default is c("MD", "DO").}
+
+\item{input_file}{The path to the input file (RDS, CSV, or XLS/XLSX) containing the NAME data.}
 }
 \value{
 A list containing the processed result data frame.
