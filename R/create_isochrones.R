@@ -28,8 +28,7 @@
 #' }
 #'
 #' @export
-#' @import memoise
-#' @import hereR
+#' @importFrom memoise memoise
 #' @importFrom hereR set_freemium set_key set_verbose isoline
 create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S")) {
 

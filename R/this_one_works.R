@@ -1,23 +1,23 @@
-#' Scrape Physicians' Data
+#' Scrape Physicians' Data with Tor
 #'
 #' This function scrapes data for physicians within a specified ID range, excluding wrong IDs.
 #'
 #' @param startID The starting ID for scraping.
 #' @param endID The ending ID for scraping.
+#' @param torPort The port number for Tor SOCKS proxy.
 #'
 #' @return A dataframe containing scraped physicians' data.
 #'
+#' @importFrom httr GET content
+#' @importFrom jsonlite fromJSON
+#' @importFrom dplyr bind_rows
+#' @importFrom readr read_csv write_csv
 #'
 #' @examples
 #' # Call the function
-#' scrape_result <- scrape_physicians_data(startID = 9045999, endID = 9046000)
+#' scrape_result <- scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 9150)
 #'
-#' @import httr
-#' @import jsonlite
-#' @import dplyr
-#' @import memoise
-#' @import readr
-# Function to scrape physicians' data using Tor
+
 scrape_physicians_data_with_tor <- function(startID, endID, torPort) {
 
   # Create a sequence of IDs from startID to endID

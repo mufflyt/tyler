@@ -5,7 +5,7 @@
 #' @return None
 #' @export
 #'
-#' @import arsenal
+#' @importFrom arsenal write2word
 #'
 #' @examples
 #' \dontrun{

@@ -18,10 +18,10 @@
 #' create_block_group_overlap_map(block_groups, isochrones_joined_map, "custom_output/")
 #' }
 #'
-#' @import leaflet
-#' @import webshot
-#' @import htmlwidgets
-#' @import sf
+#' @importFrom leaflet addPolygons addLegend colorNumeric
+#' @importFrom webshot webshot
+#' @importFrom htmlwidgets saveWidget
+#' @importFrom sf st_transform
 #'
 #' @export
 create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir = "figures/") {
@@ -29,7 +29,7 @@ create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir 
   pal <- leaflet::colorNumeric("Purples", domain = bg_data$overlap)
 
   # Create the base map
-  base_map <- leaflet::createBaseMap("<h1>Block Group Overlap Map</h1>")
+  base_map <- tyler::createBaseMap("<h1>Block Group Overlap Map</h1>")
 
   # Create the map
   map <- base_map %>%

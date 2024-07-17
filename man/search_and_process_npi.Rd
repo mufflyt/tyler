@@ -15,33 +15,25 @@ search_and_process_npi(
 )
 }
 \arguments{
-\item{enumeration_type}{The enumeration type for NPI search (e.g., "ind", "org", "all").
-Default is "ind".}
+\item{data}{A data frame with columns 'first' and 'last' containing the names to search.}
 
-\item{limit}{The maximum number of search results to request for each NAME pair.
-Default is 10.}
+\item{enumeration_type}{The enumeration type for NPI search (e.g., "ind", "org", "all"). Default is "ind".}
+
+\item{limit}{The maximum number of search results to request for each name pair. Default is 5.}
 
 \item{country_code}{Filter for only the "US".}
 
-\item{filter_credentials}{A character vector containing the credentials to filter the
-NPI results. Default is c("MD", "DO").}
+\item{filter_credentials}{A character vector containing the credentials to filter the NPI results. Default is c("MD", "DO").}
 
-\item{input_file}{The path to the input file (RDS, CSV, or XLS/XLSX) containing the NAME data.}
+\item{save_chunk_size}{The number of results to save per chunk. Default is 10.}
+
+\item{dest_dir}{Destination directory to save chunked results. Default is NULL (current working directory).}
 }
 \value{
-A list containing the processed result data frame.
+A data frame containing the processed NPI search results.
 }
 \description{
-This function takes an input file in RDS, CSV, or XLS/XLSX format, reads the NAMES you are trying to search,
-performs NPI search and processing, and returns the results.
-The function also provides customization options for the user
-to specify the enumeration type, search limit, and filtering criteria for NPI results.
-}
-\examples{
-\dontrun{
-# Call the function with the input file name that has NAMES in it.
-input_file <- "data/Sent_to_npi_search.xlsx"
-output <- search_and_process_npi(input_file)
-
-}
+This function takes an input data frame containing first and last names, performs NPI search and processing,
+and filters results based on specified taxonomies. It supports customization for enumeration type, search limit,
+and filtering credentials.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/this_one_works.R
 \name{scrape_physicians_data_with_tor}
 \alias{scrape_physicians_data_with_tor}
-\title{Scrape Physicians' Data}
+\title{Scrape Physicians' Data with Tor}
 \usage{
 scrape_physicians_data_with_tor(startID, endID, torPort)
 }
@@ -10,6 +10,8 @@ scrape_physicians_data_with_tor(startID, endID, torPort)
 \item{startID}{The starting ID for scraping.}
 
 \item{endID}{The ending ID for scraping.}
+
+\item{torPort}{The port number for Tor SOCKS proxy.}
 }
 \value{
 A dataframe containing scraped physicians' data.
@@ -19,6 +21,6 @@ This function scrapes data for physicians within a specified ID range, excluding
 }
 \examples{
 # Call the function
-scrape_result <- scrape_physicians_data(startID = 9045999, endID = 9046000)
+scrape_result <- scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 9150)
 
 }

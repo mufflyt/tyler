@@ -7,7 +7,7 @@
 #' @param variable_name The name of the categorical variable for which to calculate the proportion.
 #' @return A list containing the calculated most common value, proportion variable, and the tabulation result.
 #'
-#' @importFrom dplyr count mutate
+#' @importFrom dplyr count mutate filter pull
 #' @importFrom janitor tabyl
 #'
 #' @examples
@@ -43,7 +43,7 @@ calculate_proportion <- function(df, variable_name) {
 #' @param tabyl_result The tabulation result data frame.
 #' @param variable_name The name of the categorical variable.
 #' @return The most common value.
-#'
+#' @importFrom dplyr filter pull
 #'
 get_most_common <- function(tabyl_result, variable_name) {
   cat("Calculating the most common value...\n")

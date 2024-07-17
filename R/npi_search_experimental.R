@@ -48,11 +48,13 @@ search_npi <- function(input_data) {
   first_name <- df$first
   last_name <- df$last
 
-  # NPI search logic remains the same
+  # NPI search logic
   npi <- npi::npi_search(first_name = first_name, last_name = last_name)
   t <- npi::npi_flatten(npi, cols = c("basic", "taxonomies"))
-  t <- subset(t, t$taxonomies_desc %in% vc | t$taxonomies_desc %in% bc)
 
-  return(t)
+  # Filter results based on specified taxonomies
+  t_filtered <- t %>%
+    filter(taxonomies_desc %in% vc | taxonomies_desc %in% bc)
+
+  return(t_filtered)
 }
-

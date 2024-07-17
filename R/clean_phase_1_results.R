@@ -13,12 +13,11 @@
 #' df <- read_xls(file_path)
 #' clean_phase_1_results(df)
 #' }
-#' @importFrom dplyr arrange count filter mutate select
-#' @importFrom exploratory bind_rows
+#' @importFrom dplyr arrange pull filter mutate select bind_rows
 #' @importFrom janitor clean_names
 #' @importFrom readr type_convert write_csv
 #' @importFrom stringr str_detect
-#' @importFrom humaniformat last_name
+#' @importFrom humaniformat last_name first_name
 #' @export
 #'
 
@@ -49,7 +48,7 @@ clean_phase_1_results <- function(df) {
   }
 
   cat("Duplicating rows...\n")
-  df <- exploratory::bind_rows(df, df) # Duplicate rows
+  df <- dplyr::bind_rows(df, df) # Duplicate rows
 
   cat("Arranging rows by 'names'...\n")
   df <- dplyr::arrange(df, names) # Arrange rows by 'names'

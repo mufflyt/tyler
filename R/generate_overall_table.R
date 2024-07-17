@@ -5,12 +5,9 @@
 #' @param input_file_path The path to the data file (in RDS, CSV, or XLS format).
 #' @param output_directory The directory where the output table file will be saved.
 #'
-#' @import arsenal
-#' @import readr
-#' @import ggplot2
-#' @import gridExtra
-#' @import tidyverse
-#' @import easyr
+#' @importFrom arsenal write2pdf tableby
+#' @importFrom readr read_rds
+#' @importFrom easyr read.any
 #'
 #' @export
 #'
@@ -113,44 +110,3 @@ generate_overall_table <- function(input_file_path, output_directory, title = "O
   # Log function end
   cat("Overall table generation completed.\n")
 }
-
-# # Specify the path to the input RDS file and the output directory for the PDF
-# input_file_path <- "/Users/tylermuffly/Dropbox (Personal)/Altschuler/data/ClimbingComplete.rds"
-# output_directory <- "tables"
-# names(read_rds(input_file_path))
-#
-#
-# # Example 2: Generate table using selected columns from the data
-# selected_columns <- c("What is your age?",
-#                       "Are you of Hispanic, Latino, or Spanish origin?",
-#                       #"How do you identify?",
-#                       "Which of the following best describes your race?",
-#                       "How many times have you been pregnant (including live births, stillbirths, miscarriages, abortions, and tubal pregnancies)?",
-#                       "How many of these pregnancies were miscarriages, abortions, or tubal pregnancies?",
-#                       "Have you ever been pregnant?",
-#                       "Have you ever delivered a baby?",
-#                       "BMI",
-#                       "Do you now smoke cigarettes?",
-#                       "ACOG_District",
-#                       "Are you having sexual relations at this time in your life?"
-# )# Replace with your selected column names
-#
-# # Example label translations
-# label_translations <- list(`What is your age?` = "Age, years",
-#                            `How many times have you been pregnant (including live births, stillbirths, miscarriages, abortions, and tubal pregnancies)?` = "Gravidity",
-#                            `How many of these pregnancies were miscarriages, abortions, or tubal pregnancies?` = "Abortions",
-#                            `Have you ever been pregnant?` = "Has been pregnant",
-#                            `Have you ever delivered a baby?` = "Parity, delivered a baby",
-#                            `Are you of Hispanic, Latino, or Spanish origin?` = "Ethnicity",
-#                            `How do you identify?` = "Self-Identifies",
-#                            `Which of the following best describes your race?` = "Race",
-#                            `BMI` = "Body Mass Index (kg/m^2)",
-#                            `Do you now smoke cigarettes?` = "Smoking Status",
-#                            `ACOG_District` = "Respondent Location",
-#                            `Are you having sexual relations at this time in your life?` = "Sexually active")
-#
-# generate_overall_table(input_file_path = input_file_path,
-#                        output_directory = output_directory,
-#                        selected_columns = selected_columns,
-#                        title = "Respondent Demographics",
-#                        label_translations = label_translations)

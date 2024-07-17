@@ -7,9 +7,9 @@
 #' @param input_csv The path to the input CSV file containing physician data.
 #' @return A data frame with genderized information joined to the original data.
 #'
-#' @import gender
-#' @import dplyr
-#' @import readr
+#' @importFrom gender gender
+#' @importFrom dplyr select filter rename distinct left_join
+#' @importFrom readr read_csv write_csv
 #'
 #' @examples
 #' \dontrun{
