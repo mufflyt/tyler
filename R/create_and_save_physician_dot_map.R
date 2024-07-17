@@ -35,22 +35,11 @@
 #' }
 #'
 #' @export
-
-# Here's a summary of what the function does:
-# Sets up the base map and generates ACOG district boundaries.
-# Creates a Leaflet map with physician markers that have a black outline.
-# Adds a timestamp to the file names for HTML and PNG files.
-# Saves the Leaflet map as an HTML file with a timestamp in the file name.
-# Captures and saves a screenshot as a PNG file with a timestamp in the file name.
-# Returns the Leaflet map.
-
 create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
   # Add jitter to latitude and longitude coordinates
-  jittered_physician_data <- physician_data %>%
-    dplyr::mutate(
-      lat = lat + runif(n()) * jitter_range,
-      long = long + runif(n()) * jitter_range
-    )
+  jittered_physician_data <- dplyr::mutate(physician_data,
+                                           lat = lat + runif(n()) * jitter_range,
+                                           long = long + runif(n()) * jitter_range)
 
   # Create a base map using tyler::create_base_map()
   cat("Setting up the base map...\n")
@@ -58,8 +47,9 @@ create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.0
   cat("Map setup complete.\n")
 
   # Generate ACOG districts using tyler::generate_acog_districts_sf()
-  cat("Generating the ACOG district boundaries from tyler::generate_acog_districts_sf...\n")
+  cat("Generating the ACOG district boundaries...\n")
   acog_districts <- tyler::generate_acog_districts_sf()
+  cat("ACOG district boundaries generated.\n")
 
   # Define the number of ACOG districts
   num_acog_districts <- 11
@@ -68,42 +58,33 @@ create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.0
   district_colors <- viridis::viridis(num_acog_districts, option = color_palette)
 
   # Reorder factor levels
-  jittered_physician_data$ACOG_District <- factor(
-    jittered_physician_data$ACOG_District,
-    levels = c("District I", "District II", "District III", "District IV", "District V",
-               "District VI", "District VII", "District VIII", "District IX",
-               "District XI", "District XII"))
+  jittered_physician_data <- dplyr::mutate(jittered_physician_data,
+                                           ACOG_District = factor(ACOG_District,
+                                                                  levels = c("District I", "District II", "District III", "District IV", "District V",
+                                                                             "District VI", "District VII", "District VIII", "District IX",
+                                                                             "District XI", "District XII")))
 
   # Create a Leaflet map
-  dot_map <- base_map %>%
-    # Add physician markers
-    leaflet::addCircleMarkers(
-      data = jittered_physician_data,
-      lng = ~long,
-      lat = ~lat,
-      radius = 3,         # Adjust the radius as needed
-      stroke = TRUE,      # Add a stroke (outline)
-      weight = 1,         # Adjust the outline weight as needed
-      color = district_colors[as.numeric(physician_data$ACOG_District)],   # Set the outline color to black
-      fillOpacity = 0.8,  # Fill opacity
-      popup = as.formula(paste0("~", popup_var))  # Popup text based on popup_var argument
-    ) %>%
-    # Add ACOG district boundaries
-    leaflet::addPolygons(
-      data = acog_districts,
-      color = "red",      # Boundary color
-      weight = 2,         # Boundary weight
-      fill = FALSE,       # No fill
-      opacity = 0.8,      # Boundary opacity
-      popup = ~ACOG_District   # Popup text
-    ) %>%
-    # Add a legend
-    leaflet::addLegend(
-      position = "bottomright",   # Position of the legend on the map
-      colors = district_colors,   # Colors for the legend
-      labels = levels(physician_data$ACOG_District),   # Labels for legend items
-      title = "ACOG Districts"   # Title for the legend
-    )
+  dot_map <- leaflet::addCircleMarkers(base_map,
+                                       data = jittered_physician_data,
+                                       lng = ~long,
+                                       lat = ~lat,
+                                       radius = 3,
+                                       stroke = TRUE,
+                                       weight = 1,
+                                       color = district_colors[as.numeric(physician_data$ACOG_District)],
+                                       fillOpacity = 0.8,
+                                       popup = as.formula(paste0("~", popup_var))) %>%
+    leaflet::addPolygons(data = acog_districts,
+                         color = "red",
+                         weight = 2,
+                         fill = FALSE,
+                         opacity = 0.8,
+                         popup = ~ACOG_District) %>%
+    leaflet::addLegend(position = "bottomright",
+                       colors = district_colors,
+                       labels = levels(physician_data$ACOG_District),
+                       title = "ACOG Districts")
 
   # Generate a timestamp
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")

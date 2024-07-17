@@ -3,16 +3,8 @@
 #' This function retrieves isochrones for each point in a given dataframe by looping
 #' over the rows and calling the create_isochrones function for each point.
 #'
-#' @param dataframe A dataframe containing the points for which isochrones are to be retrieved.
-#' @param breaks A vector of breaks for labeling the isochrones.
-#' @return A dataframe containing the isochrones data with added 'name' column.
-#' Create Isochrones for Each Point in a Dataframe
-#'
-#' This function retrieves isochrones for each point in a given dataframe by looping
-#' over the rows and calling the create_isochrones function for each point.
-#'
-#' @param dataframe A dataframe containing the points for which isochrones are to be retrieved.
-#' @param breaks A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).  This allows for 30 minutes, 60 minutes, 120 minutes, and 180 minutes.
+#' @param input_file A path to the input file containing points for which isochrones are to be retrieved.
+#' @param breaks A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).
 #' @return A dataframe containing the isochrones data with added 'name' column.
 #' @import dplyr
 #' @import readr
@@ -75,15 +67,14 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
         breaks = breaks,
         labels = paste0(head(breaks, -1), "-", tail(breaks, -1) - 1, " minutes")
       )
-
-
     }
-
   }
+
   # Save the isochrones data to an RDS file
   readr::write_rds(isochrones, paste("data/isochrones_raw_output_from_here_api_", format(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"), ".rds", sep = ""))
   isochrones <- data.table::rbindlist(isochrones_temp)
   return(isochrones)
 }
+
 # Usage example:
 #isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(1800, 3600, 7200, 10800))

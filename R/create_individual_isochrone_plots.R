@@ -10,10 +10,9 @@
 #' @import sf
 #' @import leaflet
 #' @import dplyr
-#' @import leaflet
-#' @import htmlwidgets
 #' @import grDevices
-#' @import sf
+#' @import htmlwidgets
+#' @import tyler
 #'
 #' @examples
 #' \dontrun{
@@ -33,7 +32,6 @@
 #' }
 #'
 #' @export
-
 create_individual_isochrone_plots <- function(isochrones, drive_times) {
   # Display setup instructions
   cat("\033[34mInstructions:\033[0m\n")
@@ -90,15 +88,11 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
         color = "black"
       )
 
-    message(paste(" Leaflet map of isochrones for", time, "minutes..."))
-    return(isochrone_map)
-
     # Save the plot to an HTML file
     output_file <- paste0("figures/isochrone_maps/isochrone_map_", time, "_minutes.html")
     htmlwidgets::saveWidget(isochrone_map, file = output_file)
 
     message(paste("Saved isochrone map for", time, "minutes as:", output_file))
-    return(isochrone_map)
 
     # Write the shapefile for the current drive time
     output_shapefile <- paste0("data/shp/isochrone_files/isochrones_", time, "_minutes.shp")
@@ -111,8 +105,3 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
 
   message("Individual isochrone plots and shapefiles creation completed.")
 }
-
-# Usage example:
-# List of unique drive times for which you want to create plots and shapefiles
-# drive_times <- unique(isochrones$drive_time)
-# create_individual_isochrone_plots(isochrones, drive_times)

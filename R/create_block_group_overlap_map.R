@@ -25,11 +25,11 @@
 #'
 #' @export
 create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir = "figures/") {
-  bg_data <- bg_data %>% sf::st_transform(4326)
+  bg_data <- sf::st_transform(bg_data, 4326)
   pal <- leaflet::colorNumeric("Purples", domain = bg_data$overlap)
 
   # Create the base map
-  base_map <- create_base_map("<h1>Block Group Overlap Map</h1>")
+  base_map <- leaflet::createBaseMap("<h1>Block Group Overlap Map</h1>")
 
   # Create the map
   map <- base_map %>%
@@ -68,12 +68,10 @@ create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir 
   png_file <- paste0(output_dir, "overlap_bg_map_", timestamp, ".png")
 
   # Export the map to HTML
-  htmlwidgets::saveWidget(map, file = html_file, selfcontained = FALSE)
-
+  htmlwidgets::saveWidget(widget = map, file = html_file, selfcontained = FALSE)
   cat("Map saved as HTML:", html_file, "\n")
 
   # Export the map as a PNG image
   webshot::webshot(html_file, file = png_file)
-
   cat("Map saved as PNG:", png_file, "\n")
 }
