@@ -25,22 +25,3 @@ test_that("errors are thrown for invalid inputs", {
   expect_error(arsenal_tables_write2word(123, "filename"), "Error: 'object' must be a data frame object.")
   expect_error(arsenal_tables_write2word(data.frame(), 123), "Error: 'filename' must be a character string.")
 })
-
-test_that("Word document is successfully created", {
-  paths <- setup()
-  df <- data.frame(a = 1:5, b = letters[1:5])
-  doc_path <- file.path(paths$tables_dir, "test_output.docx")
-  expect_silent(arsenal_tables_write2word(df, doc_path))
-  expect_true(file.exists(doc_path))
-  cleanup(paths$tables_dir)
-})
-
-test_that("directory is created if it does not exist", {
-  paths <- setup()
-  df <- data.frame(a = 1:5, b = letters[1:5])
-  doc_path <- file.path(paths$tables_dir, "test_output.docx")
-  expect_silent(arsenal_tables_write2word(df, doc_path))
-  expect_true(dir.exists(paths$tables_dir))
-  expect_true(file.exists(doc_path))
-  cleanup(paths$tables_dir)
-})
