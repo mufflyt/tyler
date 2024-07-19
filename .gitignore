@@ -3,6 +3,7 @@
 .Rdata
 .httr-oauth
 .DS_Store
+.cache/
 R/geocode.R
 scripts/R/geocode.R
 docs
