@@ -4,7 +4,7 @@
 #' default view settings, and layers control.
 #'
 #' @return A Leaflet map object.
-#' @import leaflet
+#' @importFrom leaflet leaflet addProviderTiles clearBounds clearMarkers addScaleBar setView addLayersControl addTiles
 #' @export
 #' @examples
 #' map <- generate_leaflet_base_map()

@@ -18,7 +18,6 @@
 #' @importFrom dplyr mutate filter row_number
 #' @importFrom sf st_as_sf
 #' @importFrom hereR isoline set_key
-#' @importFrom base tryCatch message
 #'
 #' @examples
 #' # Validate the file of geocoded data.

@@ -11,24 +11,18 @@
 #'
 #' @param us_fips A vector of state FIPS codes which Census data is to be retrieved.
 #'
-#' @import tigris
-#' @import dplyr
-#' @import censusapi
-#' @import tidyr
-#'
 #' @param us_fips_list A vector of FIPS codes.  For example Colorado == 08.
 #' @param vintage The vintage year is Census data (default is 2019).
 #'
 #' @return A dataframe containing Census data all state block groups.
-#' @export
 #'
 #' @param us_fips_list A vector of state FIPS codes for which Census data is to be retrieved.
 #' @param vintage The vintage year of Census data (default is 2022).
 #'
 #' @return A dataframe containing Census data for all state block groups.
-#' @export
 #' @importFrom dplyr bind_rows
 #' @importFrom censusapi getCensus
+#' @export
 get_census_data <- function(us_fips_list, vintage = 2022) {
 
   library(dplyr)
