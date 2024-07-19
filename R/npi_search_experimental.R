@@ -11,9 +11,9 @@
 #' @return A dataframe containing NPI numbers for the provided names that match
 #'         the specified taxonomies.
 #'
-#' @import npi
-#' @import readr
-#' @import dplyr
+#' @importFrom npi npi_search npi_flatten
+#' @importFrom readr read_csv
+#' @importFrom dplyr filter
 #'
 #' @examples
 #' # Input as a dataframe
@@ -54,7 +54,7 @@ search_npi <- function(input_data) {
 
   # Filter results based on specified taxonomies
   t_filtered <- t %>%
-    filter(taxonomies_desc %in% vc | taxonomies_desc %in% bc)
+    dplyr::filter(taxonomies_desc %in% vc | taxonomies_desc %in% bc)
 
   return(t_filtered)
 }

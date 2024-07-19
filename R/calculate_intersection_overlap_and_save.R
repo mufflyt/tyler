@@ -14,6 +14,7 @@
 #'
 #' @importFrom sf st_intersection st_write st_area
 #' @importFrom dplyr mutate select left_join
+#' @importFrom stats quantile
 #'
 #' @export
 #'
