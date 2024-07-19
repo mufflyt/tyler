@@ -13,6 +13,9 @@
 #' @export
 
 MaxTable <- function(InVec, mult = FALSE) {
+  if (length(InVec) == 0) {
+    return(character(0))
+  }
   if (!is.factor(InVec)) {
     InVec <- factor(InVec)
   }
