@@ -13,23 +13,21 @@
 #' @param dest_dir Destination directory to save chunked results. Default is NULL (current working directory).
 #' @return A data frame containing the processed NPI search results.
 #'
-#' @import dplyr
+#' @importFrom dplyr filter
 #' @importFrom npi npi_search npi_flatten
 #' @importFrom progress progress_bar
-#' @importFrom purrr map2
+#' @importFrom purrr map2 keep
 #' @importFrom data.table rbindlist
 #' @importFrom readr write_csv
-#' @importFrom readxl read_xlsx
-#' @importFrom data.table rbindlist
+#' @importFrom memoise memoise
 #' @export
-search_and_process_npi <- memoise(function(data,
+search_and_process_npi <- memoise::memoise(function(data,
                                                     enumeration_type = "ind",
                                                     limit = 5L,
                                                     country_code = "US",
                                                     filter_credentials = c("MD", "DO"),
                                                     save_chunk_size = 10,
                                                     dest_dir = NULL) {
-
   cat("Starting search_and_process_npi...\n")
 
   # Check if 'data' is a data frame
@@ -58,7 +56,7 @@ search_and_process_npi <- memoise(function(data,
         t <- npi::npi_flatten(npi_obj, cols = c("basic", "taxonomies"))
 
         # Subset results with taxonomy that matches taxonomies in the lists
-        t <- t %>% dplyr::filter(taxonomies_desc %in% vc | taxonomies_desc %in% bc)
+        t <- dplyr::filter(t, taxonomies_desc %in% vc | taxonomies_desc %in% bc)
       },
       error = function(e) {
         cat("ERROR:", conditionMessage(e), "\n")
@@ -103,7 +101,7 @@ search_and_process_npi <- memoise(function(data,
   })
 
   # Filter npi_data to keep only elements that are data frames
-  npi_data <- purrr::Filter(is.data.frame, out)
+  npi_data <- purrr::keep(out, is.data.frame)
 
   # Combine multiple data frames into a single data frame
   result <- data.table::rbindlist(npi_data, fill = TRUE)

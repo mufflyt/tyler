@@ -69,8 +69,10 @@ Imports:
     data.table,
     provider,
     here,
-    easyr
-Remotes: andrewallenbruce/provider, lmullen/genderdata, asgr/imager
+    easyr,
+    imager,
+    fs
+Remotes: andrewallenbruce/provider, lmullen/genderdata
 LazyData: true
 Files: R/
 Suggests: 
@@ -79,3 +81,4 @@ Suggests:
     stats
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
+Config/testthat/edition: 3
