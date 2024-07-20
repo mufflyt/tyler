@@ -105,3 +105,4 @@ test_that("Handles label translations correctly", {
 
   expect_output(generate_overall_table(temp_rds, output_dir, label_translations = label_translations))
 })
+
