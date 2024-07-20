@@ -22,9 +22,7 @@
 #'
 
 clean_phase_1_results <- function(df) {
-
   if (!requireNamespace("dplyr", quietly = TRUE) ||
-      !requireNamespace("exploratory", quietly = TRUE) ||
       !requireNamespace("janitor", quietly = TRUE) ||
       !requireNamespace("readr", quietly = TRUE) ||
       !requireNamespace("stringr", quietly = TRUE) ||
@@ -47,38 +45,42 @@ clean_phase_1_results <- function(df) {
     stop("The following required columns are missing: ", paste(setdiff(required_columns, names(df)), collapse = ", "))
   }
 
-  cat("Duplicating rows...\n")
-  df <- dplyr::bind_rows(df, df) # Duplicate rows
+  if (nrow(df) > 0) {
+    cat("Duplicating rows...\n")
+    df <- dplyr::bind_rows(df, df) # Duplicate rows
 
-  cat("Arranging rows by 'names'...\n")
-  df <- dplyr::arrange(df, names) # Arrange rows by 'names'
+    cat("Arranging rows by 'names'...\n")
+    df <- dplyr::arrange(df, names) # Arrange rows by 'names'
 
-  cat("Adding insurance and duplicating rows...\n")
-  df <- dplyr::mutate(df, insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(df))) # Add insurance and duplicate rows
+    cat("Adding insurance and duplicating rows...\n")
+    df <- dplyr::mutate(df, insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(df))) # Add insurance and duplicate rows
 
-  cat("Adding a numbered 'id' column...\n")
-  df <- dplyr::mutate(df, id = 1:n())
-  df <- dplyr::mutate(df, id_number = paste0("id:", id)) # Add a numbered 'id' column
+    cat("Adding a numbered 'id' column...\n")
+    df <- dplyr::mutate(df, id = 1:nrow(df))
+    df <- dplyr::mutate(df, id_number = paste0("id:", id)) # Add a numbered 'id' column
 
-  cat("Extracting last name and creating 'dr_name'...\n")
-  df <- dplyr::mutate(df,
-                      last_name = humaniformat::last_name(names),
-                      dr_name = paste("Dr.", last_name)) # Extract last name and create 'dr_name'
+    cat("Extracting last name and creating 'dr_name'...\n")
+    df <- dplyr::mutate(df,
+                        last_name = humaniformat::last_name(names),
+                        dr_name = paste("Dr.", last_name)) # Extract last name and create 'dr_name'
 
-  cat("Identifying academic or private practice...\n")
-  academic_keywords <- c("Medical College", "University of", "University", "Univ", "Children's", "Infirmary",
-                         "Medical School", "Medical Center", "Children", "Health System", "Foundation",
-                         "Sch of Med", "Dept of Oto", "Mayo", "UAB", "OTO Dept", "Cancer Ctr", "Penn",
-                         "College of Medicine", "Cancer", "Cleveland Clinic", "Henry Ford", "Yale",
-                         "Brigham", "Dept of OTO", "Health Sciences Center", "SUNY")
-  df <- dplyr::mutate(df,
-                      academic = ifelse(stringr::str_detect(practice_name, stringr::str_c(academic_keywords, collapse = "|", sep = "\\b|\\b", fixed = TRUE)),
-                                        "University", "Private Practice")) # Identify academic or private practice
+    cat("Identifying academic or private practice...\n")
+    academic_keywords <- c("Medical College", "University of", "University", "Univ", "Children's", "Infirmary",
+                           "Medical School", "Medical Center", "Children", "Health System", "Foundation",
+                           "Sch of Med", "Dept of Oto", "Mayo", "UAB", "OTO Dept", "Cancer Ctr", "Penn",
+                           "College of Medicine", "Cancer", "Cleveland Clinic", "Henry Ford", "Yale",
+                           "Brigham", "Dept of OTO", "Health Sciences Center", "SUNY")
+    df <- dplyr::mutate(df,
+                        academic = ifelse(stringr::str_detect(practice_name, stringr::str_c(academic_keywords, collapse = "|", sep = "\\b|\\b", fixed = TRUE)),
+                                          "University", "Private Practice")) # Identify academic or private practice
 
-  cat("Uniting columns for REDCap upload...\n")
-  df <- dplyr::mutate(df,
-                      for_redcap = paste(id, dr_name, insurance, phone_number, state_name, npi, academic, id_number, sep = ", ")) %>%
-    dplyr::select(for_redcap, id, phone_number, academic, everything()) # Unite columns for REDCap upload
+    cat("Uniting columns for REDCap upload...\n")
+    df <- dplyr::mutate(df,
+                        for_redcap = paste(id, dr_name, insurance, phone_number, state_name, npi, academic, id_number, sep = ", ")) %>%
+      dplyr::select(for_redcap, id, phone_number, academic, everything()) # Unite columns for REDCap upload
+  } else {
+    cat("No data to process.\n")
+  }
 
   # Save the dataframe to a CSV file with date and time in the filename
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
