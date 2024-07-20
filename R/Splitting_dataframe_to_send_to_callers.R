@@ -23,10 +23,10 @@
 #' }
 
 split_and_save <- function(data_or_path, output_directory, lab_assistant_names,
-                                    seed = 1978,
-                                    complete_file_prefix = "complete_non_split_version_",
-                                    split_file_prefix = "",
-                                    recursive_create = TRUE) {
+                           seed = 1978,
+                           complete_file_prefix = "complete_non_split_version_",
+                           split_file_prefix = "",
+                           recursive_create = TRUE) {
 
   # Read the data from file if path provided
   if (is.data.frame(data_or_path)) {
