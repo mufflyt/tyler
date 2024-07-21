@@ -13,34 +13,44 @@
 #'
 validate_and_remove_invalid_npi <- function(input_data) {
 
+  cat("Starting validate_and_remove_invalid_npi...\n")
+
   if (is.data.frame(input_data)) {
-    # Input is a dataframe
+    cat("Input is a data frame.\n")
     df <- input_data
   } else if (is.character(input_data)) {
-    # Input is a file path to a CSV
-    df <- readr::read_csv(input_data)
+    cat("Input is a file path to a CSV.\n")
+    df <- readr::read_csv(input_data, col_types = readr::cols(npi = readr::col_character()))
   } else {
     stop("Input must be a dataframe or a file path to a CSV.")
   }
 
-  # Remove rows with missing or empty NPIs
+  cat("Initial dataframe:\n")
+  print(df)
+
   df <- df %>%
     dplyr::filter(!is.na(npi) & npi != "")
 
-  # Add a new column "npi_is_valid" to indicate NPI validity
+  cat("After filtering missing or empty NPIs:\n")
+  print(df)
+
   df <- df %>%
     dplyr::mutate(npi_is_valid = sapply(npi, function(x) {
-      if (is.numeric(x) && nchar(x) == 10) {
-        npi::npi_is_valid(as.character(x))
+      if (nchar(x) == 10) {
+        npi::npi_is_valid(x)
       } else {
         FALSE
       }
     })) %>%
     dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
 
-  # Return the valid dataframe with the "npi_is_valid" column
+  cat("After filtering invalid NPIs:\n")
+  print(df)
+  cat("validate_and_remove_invalid_npi completed.\n")
+
   return(df)
 }
+
 
 #' Retrieve Clinician Data
 #'
@@ -81,19 +91,12 @@ retrieve_clinician_data <- function(input_data) {
     } else {
       return(clinician_info)  # Return the clinician data
     }
-    sleep(1)  # Sleep for a while to prevent overloading the server
   }
 
   # Clean the NPI numbers and retrieve clinician data
-  df_updated <- input_data %>%
-    validate_and_remove_invalid_npi() %>%
+  df_updated <- validate_and_remove_invalid_npi(df) %>%
     dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data)) %>%
     tidyr::unnest_wider(clinician_data)
 
   return(df_updated)
 }
-
-# Use case
-# validate_and_remove_invalid_npi <- validate_and_remove_invalid_npi
-# retrieve_clinician_data <- retrieve_clinician_data
-#
