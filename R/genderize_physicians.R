@@ -5,6 +5,7 @@
 #' result to a new CSV file with a timestamp.
 #'
 #' @param input_csv The path to the input CSV file containing physician data.
+#' @param output_dir The directory where the output CSV file will be saved. Default is the current working directory.
 #' @return A data frame with genderized information joined to the original data.
 #'
 #' @importFrom gender gender
@@ -17,9 +18,9 @@
 #' }
 #'
 #' @export
-genderize_physicians <- function(input_csv) {
+genderize_physicians <- function(input_csv, output_dir = getwd()) {
   # Read the data
-  gender_Physicians <- readr::read_csv(input_csv)
+  gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE)
 
   # Get first names
   first_names <- gender_Physicians$first_name
@@ -45,26 +46,18 @@ genderize_physicians <- function(input_csv) {
   timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
 
   # Create the output CSV filename with timestamp
-  output_csv <- paste0("genderized_", timestamp, "_", basename(input_csv))
-
-  # Get the full path and filename of the output CSV
-  output_path <- file.path(getwd(), output_csv)
+  output_csv <- file.path(output_dir, paste0("genderized_", timestamp, "_", basename(input_csv)))
 
   # Write the result to a CSV file
-  readr::write_csv(y, output_path)
+  readr::write_csv(y, output_csv)
 
   # Print the number of missing genders in both datasets
   cat("Missing genders in original data:", sum(is.na(x$gender)), "\n")
   cat("Missing genders in joined data:", missing_genders_joined, "\n")
 
   # Print the path and filename of the new CSV
-  cat("Result saved to:", output_path, "\n")
+  cat("Result saved to:", output_csv, "\n")
 
   # Return the result
-  #return(y)
+  return(y)
 }
-
-# Usage example:
-# result <- genderize_physicians("sample.csv")
-
-#readr::read_csv(("/Users/tylermuffly/Dropbox (Personal)/Indian_dev/Akapo_Muffly_Coelho/data/gender_Physicians_2021_join_24.csv")) %>% head(10)
