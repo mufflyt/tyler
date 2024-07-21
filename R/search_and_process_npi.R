@@ -92,14 +92,14 @@ search_and_process_npi <- function(data,
     result <- search_npi(first_name, last_name)
 
     # Increment chunk count and save results if save_chunk_size is reached
-    if (length(result) > 0) {
-      if (length(result) > save_chunk_size) {
+    if (!is.null(result) && nrow(result) > 0) {
+      if (nrow(result) > save_chunk_size) {
         chunk_count <<- chunk_count + 1
         save_results(result, "results_of_search_and_process_npi", dest_dir)
       }
     }
 
-    cat("Result for", first_name, last_name, ":", result, "\n")
+    cat("Result for", first_name, last_name, ":\n", ifelse(is.null(result), "NULL", paste(capture.output(print(result)), collapse = "\n")), "\n")
     return(result)
   })
 
