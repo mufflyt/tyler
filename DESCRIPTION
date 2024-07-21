@@ -71,12 +71,14 @@ Imports:
     here,
     easyr,
     imager,
-    fs
+    fs,
+    lifecycle
 Remotes: andrewallenbruce/provider, lmullen/genderdata
 LazyData: true
 Files: R/
 Suggests: 
     knitr,
+    pkgdown,
     rmarkdown,
     stats
 VignetteBuilder: knitr
