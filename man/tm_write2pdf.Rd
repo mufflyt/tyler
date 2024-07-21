@@ -10,6 +10,12 @@ tm_write2pdf(object, filename)
 \item{input_file_path}{The path to the data file (in RDS, CSV, or XLS format).}
 
 \item{output_directory}{The directory where the output table file will be saved.}
+
+\item{title}{The title for the overall table summary (default is "Overall Table Summary").}
+
+\item{selected_columns}{Optional vector of selected columns to include in the table.}
+
+\item{label_translations}{Optional named list for label translations.}
 }
 \description{
 Generate an overall table summarizing the demographics of the Table 1.

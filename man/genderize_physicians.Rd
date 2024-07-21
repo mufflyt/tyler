@@ -4,10 +4,12 @@
 \alias{genderize_physicians}
 \title{Genderize Physicians Data}
 \usage{
-genderize_physicians(input_csv)
+genderize_physicians(input_csv, output_dir = getwd())
 }
 \arguments{
 \item{input_csv}{The path to the input CSV file containing physician data.}
+
+\item{output_dir}{The directory where the output CSV file will be saved. Default is the current working directory.}
 }
 \value{
 A data frame with genderized information joined to the original data.
