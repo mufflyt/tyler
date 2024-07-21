@@ -7,25 +7,14 @@
 get_census_data(us_fips_list, vintage = 2022)
 }
 \arguments{
-\item{us_fips_list}{A vector of state FIPS codes for which Census data is to be retrieved.}
+\item{us_fips_list}{A vector of state FIPS codes which Census data is to be retrieved.}
 
-\item{vintage}{The vintage year of Census data (default is 2022).}
-
-\item{us_fips}{A vector of state FIPS codes which Census data is to be retrieved.}
+\item{vintage}{The vintage year is Census data (default is 2022).}
 }
 \value{
 A dataframe containing Census data all state block groups.
-
-A dataframe containing Census data for all state block groups.
 }
 \description{
-This retrieves Census data of all state block groups by looping
-over the specified list of state FIPS codes.
-This retrieves Census data of all state block groups by looping
-over the specified list of FIPS codes.
-Get Census data of all state block groups
-}
-\details{
 This function retrieves Census data of all state block groups by looping
 over the specified list of state FIPS codes.
 }
