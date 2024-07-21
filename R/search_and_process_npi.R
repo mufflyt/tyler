@@ -19,15 +19,14 @@
 #' @importFrom purrr map2 keep
 #' @importFrom data.table rbindlist
 #' @importFrom readr write_csv
-#' @importFrom memoise memoise
 #' @export
-search_and_process_npi <- memoise::memoise(function(data,
-                                                    enumeration_type = "ind",
-                                                    limit = 5L,
-                                                    country_code = "US",
-                                                    filter_credentials = c("MD", "DO"),
-                                                    save_chunk_size = 10,
-                                                    dest_dir = NULL) {
+search_and_process_npi <- function(data,
+                                   enumeration_type = "ind",
+                                   limit = 5L,
+                                   country_code = "US",
+                                   filter_credentials = c("MD", "DO"),
+                                   save_chunk_size = 10,
+                                   dest_dir = NULL) {
   cat("Starting search_and_process_npi...\n")
 
   # Check if 'data' is a data frame
@@ -51,15 +50,18 @@ search_and_process_npi <- memoise::memoise(function(data,
       {
         # NPI search object
         npi_obj <- npi::npi_search(first_name = first_name, last_name = last_name)
+        cat("NPI search object retrieved for:", first_name, last_name, "\n")
 
         # Retrieve basic and taxonomy data from npi objects
         t <- npi::npi_flatten(npi_obj, cols = c("basic", "taxonomies"))
+        cat("NPI data flattened for:", first_name, last_name, "\n")
 
         # Subset results with taxonomy that matches taxonomies in the lists
         t <- dplyr::filter(t, taxonomies_desc %in% vc | taxonomies_desc %in% bc)
+        cat("NPI data filtered for:", first_name, last_name, "\n")
       },
       error = function(e) {
-        cat("ERROR:", conditionMessage(e), "\n")
+        cat("ERROR for", first_name, last_name, ":", conditionMessage(e), "\n")
         return(NULL)  # Return NULL for error cases
       }
     )
@@ -77,7 +79,7 @@ search_and_process_npi <- memoise::memoise(function(data,
   save_results <- function(result, file_prefix, directory) {
     timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
     file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, ".csv"))
-    readr::write_csv(result, file_name, row.names = FALSE)
+    readr::write_csv(result, file_name)
     cat("Saved chunk results to:", file_name, "\n")
   }
 
@@ -97,20 +99,18 @@ search_and_process_npi <- memoise::memoise(function(data,
       }
     }
 
+    cat("Result for", first_name, last_name, ":", result, "\n")
     return(result)
   })
 
   # Filter npi_data to keep only elements that are data frames
   npi_data <- purrr::keep(out, is.data.frame)
+  cat("Filtered npi_data to keep only data frames. Length:", length(npi_data), "\n")
 
   # Combine multiple data frames into a single data frame
   result <- data.table::rbindlist(npi_data, fill = TRUE)
+  cat("Combined data frame. Number of rows:", nrow(result), "\n")
 
   # Return the result data frame
   return(result)
-})
-
-# Example usage:
-# input_file <- "data-raw/acog_presidents.csv"
-# output_result <- search_and_process_npi(input_file)
-# readr::write_csv(output_result, "results_of_search_and_process_npi.csv")
+}
