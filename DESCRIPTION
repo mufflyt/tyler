@@ -73,7 +73,8 @@ Imports:
     easyr,
     imager,
     fs,
-    lifecycle
+    lifecycle,
+    emmeans
 Remotes: andrewallenbruce/provider, lmullen/genderdata
 LazyData: true
 Files: R/
