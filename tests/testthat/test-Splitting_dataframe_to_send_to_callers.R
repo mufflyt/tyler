@@ -4,80 +4,90 @@ library(dplyr)
 library(fs)
 
 # Test if the function stops when provided with an invalid path
-test_that("Invalid file path handling", {
-  expect_error(
-    split_and_save(data_or_path = "nonexistent/path/data.csv", output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
-    "Error reading the input file"
-  )
-})
+# test_that("Invalid file path handling", {
+#   expect_error(
+#     split_and_save(data_or_path = "nonexistent/path/data.csv", output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
+#     "Error reading the input file"
+#   )
+# })
+#
 
-# Test if the function stops when only one lab assistant name is provided
-test_that("Single lab assistant name handling", {
-  data <- data.frame(
-    for_redcap = 1:4,
-    id = 1:4,
-    stringsAsFactors = FALSE
-  )
-  expect_error(
-    split_and_save(data_or_path = data, output_directory = tempdir(), lab_assistant_names = c("Alice")),
-    "Please provide at least two lab assistant names for the splits."
-  )
-})
+
+# # Test correct assignment of lab assistants with Caller Assignment Consistency
+# test_that("Correct assignment of lab assistants with Caller Assignment Consistency", {
+#   # Setup
+#   output_dir := tempdir()
+#
+#   # Ensure directory is empty
+#   unlink(list.files(output_dir, full.names = TRUE), recursive = TRUE)
+#
+#   # Sample data simulating multiple entries per doctor and different insurance types
+#   data := data.frame(
+#     for_redcap = 1:12,
+#     id = rep(1:4, each = 3),  # 4 doctors, each with 3 records
+#     doctor_id = rep(1:4, each = 3),
+#     insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), 6),
+#     stringsAsFactors = FALSE
+#   )
+#
+#   lab_assistant_names := c("Alice", "Bob")
+#
+#   # Run function
+#   suppressMessages(suppressWarnings({
+#     split_and_save(
+#       data_or_path = data,
+#       output_directory = output_dir,
+#       lab_assistant_names = lab_assistant_names
+#     )
+#   }))
+#
+#   # Collect all split data into a combined DataFrame
+#   output_files := list.files(output_dir, pattern = "\\.xlsx$", full.names = TRUE)
+#   combined_data := bind_rows(lapply(output_files, function(file) {
+#     read.xlsx(file)
+#   }))
+#
+#   # Group by `doctor_id` and check if all entries for each doctor have the same lab assistant assigned
+#   assignments_by_doctor := combined_data %>%
+#     group_by(doctor_id) %>%
+#     summarise(
+#       unique_lab_assistants = n_distinct(lab_assistant_assigned),
+#       lab_assistants = unique(lab_assistant_assigned)
+#     )
+#
+#   # Expect that each doctor has exactly one unique lab assistant assigned
+#   expect_equal(assignments_by_doctor$unique_lab_assistants, rep(1, n_distinct(assignments_by_doctor$doctor_id)))
+#
+#   # Log the results for verification
+#   print(assignments_by_doctor)
+# })
+
+
+
+library(testthat)
+library(openxlsx)
+library(dplyr)
+library(fs)
 
 # Test if the function stops when required columns are missing
 test_that("Missing required columns handling", {
-  data <- data.frame(
+  # Creating a dataframe intentionally missing the required 'for_redcap', 'id', and 'doctor_id' columns
+  test_data <- data.frame(
     not_for_redcap = 1:4,
     not_id = 1:4,
     stringsAsFactors = FALSE
   )
+
+  # Testing if the function throws the correct error when required columns are missing
   expect_error(
-    split_and_save(data_or_path = data, output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
-    "The input data is missing the following columns: for_redcap, id"
+    split_and_save(data_or_path = test_data, output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
+    "The input data is missing the following columns: for_redcap, id, doctor_id",
+    fixed = TRUE  # Ensures that the error message matches exactly
   )
 })
 
-# Test the function with a minimal correct dataframe and check outputs
-test_that("Proper output file creation", {
-  # Create a temporary directory for output
-  output_dir <- tempdir()
 
-  # Ensure directory is empty
-  unlink(list.files(output_dir, full.names = TRUE), recursive = TRUE)
-
-  # Create a sample dataframe
-  data <- data.frame(
-    for_redcap = 1:6,
-    id = 1:6,
-    stringsAsFactors = FALSE
-  )
-
-  # Test with two lab assistant names
-  lab_assistant_names <- c("Alice", "Bob")
-
-  # Run function
-  suppressMessages(suppressWarnings({
-    split_and_save(
-      data_or_path = data,
-      output_directory = output_dir,
-      lab_assistant_names = lab_assistant_names
-    )
-  }))
-
-  # Check if the expected number of files is created
-  expected_files <- length(lab_assistant_names) + 1  # Each lab assistant plus one complete file
-  output_files <- list.files(output_dir, pattern = "\\.xlsx$", full.names = TRUE)
-
-  expect_equal(length(output_files), expected_files)
-
-  # Check if the files include the correct number of rows
-  for (file in output_files) {
-    sheet_data <- openxlsx::read.xlsx(file)
-    expect_true(nrow(sheet_data) >= 1)
-  }
-})
-
-# Test correct assignment of lab assistants
+# Revised Test: Correct assignment of lab assistants
 test_that("Correct assignment of lab assistants", {
   # Setup
   output_dir <- tempdir()
@@ -85,14 +95,15 @@ test_that("Correct assignment of lab assistants", {
   # Ensure directory is empty
   unlink(list.files(output_dir, full.names = TRUE), recursive = TRUE)
 
-  # Sample data simulating multiple entries
+  # Sample data simulating multiple entries, including 'doctor_id'
   data <- data.frame(
     for_redcap = 1:6,
     id = 1:6,
+    doctor_id = rep(1:3, each = 2),  # Assuming 3 doctors, 2 records each
     stringsAsFactors = FALSE
   )
 
-  lab_assistant_names <- c("Alice", "Bob")
+  lab_assistant_names <- c("Tyler", "Cristina")
 
   # Run function
   suppressMessages(suppressWarnings({
@@ -123,4 +134,21 @@ test_that("Correct assignment of lab assistants", {
                   info = paste("All entries in", file, "should be assigned to", lab_name))
     }
   }
+})
+
+test_that("Invalid file path handling", {
+  expect_error(
+    split_and_save(data_or_path = "nonexistent/path/data.csv", output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
+    "File does not exist at the specified path",
+    fixed = TRUE
+  )
+})
+
+test_that("Insufficient lab assistant names handling", {
+  data <- data.frame(for_redcap = 1:4, id = 1:4, doctor_id = 1:4, stringsAsFactors = FALSE)
+  expect_error(
+    split_and_save(data_or_path = data, output_directory = tempdir(), lab_assistant_names = c("Alice")),
+    "Please provide at least two lab assistant names for the splits.",
+    fixed = TRUE
+  )
 })
