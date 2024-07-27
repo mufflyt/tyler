@@ -2,7 +2,7 @@
 % Please edit documentation in R/Splitting_dataframe_to_send_to_callers.R
 \name{split_and_save}
 \alias{split_and_save}
-\title{Split data into multiple parts and save each part as separate Excel files.}
+\title{Split data into multiple parts and save each part as separate Excel files}
 \usage{
 split_and_save(
   data_or_path,
@@ -11,7 +11,8 @@ split_and_save(
   seed = 1978,
   complete_file_prefix = "complete_non_split_version_",
   split_file_prefix = "",
-  recursive_create = TRUE
+  recursive_create = TRUE,
+  insurance_order = c("Medicaid", "Blue Cross/Blue Shield")
 )
 }
 \arguments{
@@ -28,9 +29,12 @@ split_and_save(
 \item{split_file_prefix}{Prefix for each split output file name (default is empty).}
 
 \item{recursive_create}{Logical indicating if directories should be created recursively (default is TRUE).}
+
+\item{insurance_order}{Vector of insurance types ordered by priority for call scheduling (default is c("Medicaid", "Blue Cross/Blue Shield")).}
 }
 \description{
-Split data into multiple parts and save each part as separate Excel files.
+This function splits the data based on provided lab assistant names and saves each part as a separate Excel file.
+It allows the arrangement of calls by insurance type to prioritize Medicaid in the first two days and Blue Cross/Blue Shield in the last two days.
 }
 \examples{
 \dontrun{
@@ -38,6 +42,7 @@ library(tyler)
 input_data <- readr::read_csv("/path/to/your/input/file.csv")
 output_directory <- "/path/to/your/output/directory"
 lab_assistant_names <- c("Label1", "Label2", "Label3")
-split_and_save(data_or_path = input_data, output_directory, lab_assistant_names)
+insurance_order <- c("Medicaid", "Blue Cross/Blue Shield")
+split_and_save(data_or_path = input_data, output_directory, lab_assistant_names, insurance_order = insurance_order)
 }
 }

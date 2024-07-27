@@ -1,5 +1,8 @@
-#' Split data into multiple parts and save each part as separate Excel files.
+#' Split data into multiple parts and save each part as separate Excel files
 #'
+#' This function splits the data based on provided lab assistant names and saves each part as a separate Excel file.
+#' It allows the arrangement of calls by insurance type to prioritize Medicaid in the first two days and Blue Cross/Blue Shield in the last two days.
+#' @name split_and_save
 #' @param data_or_path Either a dataframe containing the input data or a path to the input data file (RDS, CSV, or XLS/XLSX).
 #' @param output_directory Directory where output Excel files will be saved.
 #' @param lab_assistant_names Vector of lab assistant names to name the output files.
@@ -7,10 +10,12 @@
 #' @param complete_file_prefix Prefix for the complete output file name (default is "complete_non_split_version_").
 #' @param split_file_prefix Prefix for each split output file name (default is empty).
 #' @param recursive_create Logical indicating if directories should be created recursively (default is TRUE).
+#' @param insurance_order Vector of insurance types ordered by priority for call scheduling (default is c("Medicaid", "Blue Cross/Blue Shield")).
 #'
 #' @importFrom dplyr arrange sample_n mutate select
 #' @importFrom openxlsx write.xlsx
 #' @importFrom fs dir_create dir_exists
+#' @importFrom readr read_csv
 #' @export
 #'
 #' @examples
@@ -19,54 +24,59 @@
 #' input_data <- readr::read_csv("/path/to/your/input/file.csv")
 #' output_directory <- "/path/to/your/output/directory"
 #' lab_assistant_names <- c("Label1", "Label2", "Label3")
-#' split_and_save(data_or_path = input_data, output_directory, lab_assistant_names)
+#' insurance_order <- c("Medicaid", "Blue Cross/Blue Shield")
+#' split_and_save(data_or_path = input_data, output_directory, lab_assistant_names, insurance_order = insurance_order)
 #' }
-library(dplyr)
-library(openxlsx)
-library(fs)
 
 split_and_save <- function(data_or_path, output_directory, lab_assistant_names, seed = 1978,
                            complete_file_prefix = "complete_non_split_version_", split_file_prefix = "",
-                           recursive_create = TRUE) {
+                           recursive_create = TRUE, insurance_order = c("Medicaid", "Blue Cross/Blue Shield")) {
   # Validate input data or read from file path
   if (is.character(data_or_path)) {
-    # Assuming the path is to a CSV file for simplicity
-    if (!file.exists(data_or_path)) {
+    if (!base::file.exists(data_or_path)) {
       stop("File does not exist at the specified path: ", data_or_path)
     }
-    data <- read.csv(data_or_path)  # Update with appropriate file reading logic
+    data <- readr::read_csv(data_or_path)  # Assuming CSV for simplicity
   } else if (is.data.frame(data_or_path)) {
     data <- data_or_path
   } else {
     stop("Data input must be either a dataframe or a valid file path.")
   }
 
-  # Check for the presence of necessary columns
-  required_columns <- c("for_redcap", "id", "doctor_id")
-  missing_columns <- setdiff(required_columns, names(data))
+  # Check for the presence of necessary columns including 'insurance'
+  required_columns <- c("for_redcap", "id", "doctor_id", "insurance")
+  missing_columns <- base::setdiff(required_columns, base::names(data))
   if (length(missing_columns) > 0) {
-    stop("The input data is missing the following columns: ", paste(missing_columns, collapse = ", "))
+    stop("The input data is missing the following columns: ", base::paste(missing_columns, collapse = ", "))
   }
+
+  # Ensure that specified insurance types are valid
+  if (!all(insurance_order %in% unique(data$insurance))) {
+    stop("Specified insurance_order contains values not present in the data.")
+  }
+
+  # Create a ranking based on the insurance order for sorting
+  insurance_rank <- setNames(seq_along(insurance_order), insurance_order)
+  data <- data %>%
+    mutate(insurance_rank = insurance_rank[insurance]) %>%
+    arrange(insurance_rank, doctor_id)  # Sort by insurance rank, then by doctor_id if necessary
 
   # Check if lab_assistant_names is provided and has at least two names
   if (length(lab_assistant_names) < 2) {
     stop("Please provide at least two lab assistant names for the splits.")
   }
 
-  # Randomize the data by 'doctor_id' column
+  # Randomize the data within each insurance group
   set.seed(seed)
   data <- data %>%
-    arrange(sample_n(., size = n()))
-
-  # Assign lab assistants to each doctor
-  lab_assignments <- data %>%
-    group_by(doctor_id) %>%
-    mutate(lab_assistant_assigned = sample(lab_assistant_names, 1))
+    group_by(insurance_rank) %>%
+    mutate(lab_assistant_assigned = sample(lab_assistant_names, n(), replace = TRUE)) %>%
+    ungroup()
 
   # Create output directory if it doesn't exist
-  if (!dir_exists(output_directory)) {
+  if (!fs::dir_exists(output_directory)) {
     tryCatch({
-      dir_create(output_directory, recursive = recursive_create)
+      fs::dir_create(output_directory, recursive = recursive_create)
     }, error = function(e) {
       stop("Failed to create output directory. Check directory permissions and try again.")
     })
@@ -77,19 +87,19 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
   complete_output_file <- file.path(output_directory, paste0(complete_file_prefix, current_datetime, ".xlsx"))
 
   tryCatch({
-    write.xlsx(lab_assignments, complete_output_file)
+    openxlsx::write.xlsx(data, complete_output_file)
     message("Saved unsplit and complete data to: ", complete_output_file)
   }, error = function(e) {
     stop("Error saving the complete file. Check if the output directory is writable.")
   })
 
   # Split the data into parts based on lab assistants and save each part
-  splits <- split(lab_assignments, lab_assignments$lab_assistant_assigned)
+  splits <- base::split(data, data$lab_assistant_assigned)
   for (lab_assistant_name in names(splits)) {
     output_file <- file.path(output_directory,
                              paste0(split_file_prefix, lab_assistant_name, "_", current_datetime, ".xlsx"))
     tryCatch({
-      write.xlsx(splits[[lab_assistant_name]], output_file)
+      openxlsx::write.xlsx(splits[[lab_assistant_name]], output_file)
       message("Saved split data for ", lab_assistant_name, " to: ", output_file)
     }, error = function(e) {
       stop("Error saving split data for ", lab_assistant_name, ". Check if the output directory is writable.")
