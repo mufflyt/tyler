@@ -7,20 +7,27 @@
 clean_phase_1_results(df)
 }
 \arguments{
-\item{df}{A data frame containing the Phase 1 results data.}
+\item{df}{A data frame containing the Phase 1 results data. Ensure that it
+includes columns like 'for_redcap', 'id', 'names', 'practice_name', 'phone_number',
+'state_name', and optionally 'npi'. If 'npi' is missing or any of its values are NA,
+a \code{random_id} is generated as a fallback.}
 }
 \value{
-None
+Invisible NULL; the function is used for its side effects of cleaning data
+and outputting a CSV file with cleaned data.
 }
 \description{
-This function reads the Phase 1 results data file, performs various cleaning and transformation operations,
-and prepares the data for further analysis, including assigning lab assistants.
+This function reads the Phase 1 results data file, performs various cleaning
+and transformation operations, and prepares the data for further analysis.
+It ensures all required fields are present and formats column names. Missing
+NPI numbers are handled by generating a unique \code{random_id}.
 }
 \examples{
 \dontrun{
 library(tyler)
 file_path <- "/path/to/your/input/file.xls"
-df <- read_xls(file_path)
+df <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
 clean_phase_1_results(df)
 }
+
 }
