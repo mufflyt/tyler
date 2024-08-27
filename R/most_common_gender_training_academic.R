@@ -1,5 +1,46 @@
-library(dplyr)
-
+#' Generate a Summary Sentence for the Most Common Gender, Specialty, Training, and Academic Affiliation
+#'
+#' This function calculates and returns a sentence that describes the most common gender, specialty, training, and academic affiliation in the provided dataset.
+#'
+#' @param df A data frame containing the columns `gender`, `specialty`, `Provider.Credential.Text`, and `academic_affiliation`.
+#'
+#' @return A character string summarizing the most common gender, specialty, training, and academic affiliation along with their respective proportions.
+#'
+#' @details The function filters out missing values in each column before determining the most common value. It then calculates the proportion of this most common value relative to the total non-missing values in that column.
+#'
+#' @examples
+#' # Example 1: Basic usage with a small dataset
+#' df <- data.frame(
+#'   gender = c("Male", "Female", "Female", "Male", "Male"),
+#'   specialty = c("Cardiology", "Cardiology", "Neurology", "Cardiology", "Neurology"),
+#'   Provider.Credential.Text = c("MD", "MD", "DO", "MD", "DO"),
+#'   academic_affiliation = c("Yes", "No", "Yes", "No", "Yes")
+#' )
+#' result <- most_common_gender_training_academic(df)
+#' print(result)
+#'
+#' # Example 2: Handling missing data
+#' df_with_na <- data.frame(
+#'   gender = c("Male", NA, "Female", "Male", "Male"),
+#'   specialty = c("Cardiology", "Cardiology", "Neurology", NA, "Neurology"),
+#'   Provider.Credential.Text = c("MD", "MD", "DO", "MD", "DO"),
+#'   academic_affiliation = c("Yes", "No", "Yes", "No", NA)
+#' )
+#' result <- most_common_gender_training_academic(df_with_na)
+#' print(result)
+#'
+#' # Example 3: Different proportions with a larger dataset
+#' df_large <- data.frame(
+#'   gender = c(rep("Male", 70), rep("Female", 30)),
+#'   specialty = c(rep("Cardiology", 50), rep("Neurology", 30), rep("Orthopedics", 20)),
+#'   Provider.Credential.Text = c(rep("MD", 60), rep("DO", 40)),
+#'   academic_affiliation = c(rep("Yes", 40), rep("No", 60))
+#' )
+#' result <- most_common_gender_training_academic(df_large)
+#' print(result)
+#'
+#' @import dplyr
+#' @export
 most_common_gender_training_academic <- function(df) {
   # Helper function to get the most common value and proportion
   calculate_proportion <- function(df, column) {
@@ -47,13 +88,3 @@ most_common_gender_training_academic <- function(df) {
 
   return(sentence)
 }
-
-# Example usage
-# df <- data.frame(
-#   gender = c("Male", "Female", "Female", "Male", "Male"),
-#   specialty = c("Cardiology", "Cardiology", "Neurology", "Cardiology", "Neurology"),
-#   Provider.Credential.Text = c("MD", "MD", "DO", "MD", "DO"),
-#   academic_affiliation = c("Yes", "No", "Yes", "No", "Yes")
-# )
-# result <- most_common_gender_training_academic(df)
-# print(result)
