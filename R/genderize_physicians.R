@@ -19,6 +19,9 @@
 #'
 #' @export
 genderize_physicians <- function(input_csv, output_dir = getwd()) {
+  if (!requireNamespace("genderdata", quietly = TRUE)) {
+    remotes::install_github("lmullen/genderdata")
+  }
   # Read the data
   gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE)
 
