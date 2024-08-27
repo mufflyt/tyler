@@ -9,3 +9,5 @@ scripts/R/geocode.R
 docs
 inst/doc
 /Meta/
+^\\.secrets$
+^\\.cache$

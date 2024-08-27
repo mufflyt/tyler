@@ -14,10 +14,10 @@ Date: 2023-09-11
 Keywords: healthcare, patient access, audit study, NPI
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:
-    mockery,
     R (>= 3.5.0)
 Imports:
     tidyverse,
+    mockery,
     sf,
     ggplot2,
     tigris,
@@ -31,6 +31,10 @@ Imports:
     gridExtra,
     janitor,
     readxl,
+    rlang,
+    lme4,
+    easyr,
+    imager,
     remotes,
     renv,
     rnaturalearth,
@@ -74,7 +78,8 @@ Imports:
     imager,
     fs,
     lifecycle,
-    emmeans
+    emmeans,
+    effects
 Remotes: andrewallenbruce/provider, lmullen/genderdata
 LazyData: true
 Files: R/
@@ -82,7 +87,8 @@ Suggests:
     knitr,
     pkgdown,
     rmarkdown,
-    stats
+    stats,
+    genderdata
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
 Config/testthat/edition: 3
