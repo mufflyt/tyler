@@ -79,7 +79,8 @@ Imports:
     fs,
     lifecycle,
     emmeans,
-    effects
+    effects,
+    broom
 Remotes: andrewallenbruce/provider, lmullen/genderdata
 LazyData: true
 Files: R/
