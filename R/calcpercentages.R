@@ -7,7 +7,10 @@
 #'
 #' @return A data frame containing the most common value and its count, along with the percentage of the total count that it represents.
 #'
-#' @details The function converts the specified variable to character type if it's a factor, then counts the occurrences of each unique value. It identifies the most common value and returns the count and percentage.
+#' @details The function converts the variable name to a character string, then counts
+#'   the occurrences of each unique value in the specified column. It calculates the
+#'   percentage each value represents of the total and returns the most common value
+#'   with its count and percentage.
 #'
 #' @examples
 #' # Example 1: Basic usage with a simple dataset
@@ -26,12 +29,15 @@
 #' print(result)
 #'
 #' @import dplyr
+#' @importFrom rlang sym
 #' @export
 calcpercentages <- function(df, variable) {
-  variable <- as.character(variable)  # Convert factor to character
+  variable <- as.character(variable)  # Ensure the variable name is a string
 
-  x <- count(data.frame(variable)) %>%
-    slice_max(n, n = 1)
+  result <- df %>%
+    dplyr::count(!!rlang::sym(variable), name = "n") %>%
+    dplyr::mutate(percent = 100 * n / sum(n)) %>%
+    dplyr::slice_max(n, n = 1)
 
-  return(x)
+  return(result)
 }
