@@ -9,7 +9,8 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 License: MIT + file LICENSE
-URL: https://your.package.url, https://mufflyt.github.io/tyler/
+URL: https://github.com/mufflyt/tyler, https://mufflyt.github.io/tyler/
+BugReports: https://github.com/mufflyt/tyler/issues
 Date: 2023-09-11
 Keywords: healthcare, patient access, audit study, NPI
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
