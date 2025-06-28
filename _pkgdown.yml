@@ -1,4 +1,29 @@
 url: https://mufflyt.github.io/tyler/
 template:
   bootstrap: 5
-
+navbar:
+  structure:
+    left:
+      - home
+      - reference
+      - articles
+      - news
+    right:
+      - github
+reference:
+  - title: "Main Functions"
+    contents:
+      - starts_with("create_")
+      - starts_with("get_")
+  - title: "NPI Utilities"
+    contents:
+      - contains("npi")
+articles:
+  - title: "Vignettes"
+    contents:
+      - create_isochrones
+      - get_census_data
+      - geocode
+      - search_and_process_npi
+      - validate_and_remove_invalid_npi
+      - aggregating_provider_data
