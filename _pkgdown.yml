@@ -1,6 +1,9 @@
 url: https://mufflyt.github.io/tyler/
+destination: docs  # 👈 Needed for correct site deployment
+
 template:
   bootstrap: 5
+
 navbar:
   structure:
     left:
@@ -10,20 +13,30 @@ navbar:
       - news
     right:
       - github
+
 reference:
   - title: "Main Functions"
     contents:
       - starts_with("create_")
       - starts_with("get_")
+
   - title: "NPI Utilities"
     contents:
       - contains("npi")
+
 articles:
   - title: "Vignettes"
+    navbar: true
     contents:
-      - create_isochrones
-      - get_census_data
-      - geocode
-      - search_and_process_npi
-      - validate_and_remove_invalid_npi
-      - aggregating_provider_data
+      - title: "Create Isochrones"
+        file: create_isochrones
+      - title: "Get Census Data"
+        file: get_census_data
+      - title: "Geocoding Overview"
+        file: geocode
+      - title: "Search & Process NPI"
+        file: search_and_process_npi
+      - title: "Validate & Remove Invalid NPI"
+        file: validate_and_remove_invalid_npi
+      - title: "Aggregating Provider Data"
+        file: aggregating_provider_data
