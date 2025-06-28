@@ -39,7 +39,6 @@ vignette(topic = "????", package = "tyler")
 3) By state name determine the ACOG District.
       * dplyr::left_join with `tyler::ACOG_Districts`
 5) Geocode the addresses to latitude and longitude for mapping. 👨‍🦲
-      * `tyler::geocode_unique_addresses`
 6) Get the US Census Bureau data associated with the block groups:
    * `tyler::get_census_data` 👨‍🦲
 7) Create the isochrones based on drive times: 
@@ -193,15 +192,6 @@ NULL
 This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  A lot of gender data was found via Physician Compare in the past.  
 ```r
 tyler::genderize_physicians <- function(input_csv) 
-```
-
-### Searching for Data: `tyler::geocode_unique_addresses`
-Takes a csv file of addresses and prints out the lat and long as separate columns.  You will need a google_maps_api_key.  Geocoding is the process of converting human-readable addresses or place names into geographic coordinates (latitude and longitude) that can be used to locate places on a map. The Google Geocoding API is a service provided by Google that allows developers to perform geocoding and reverse geocoding, which is the process of converting coordinates back into human-readable addresses. 
-```r
-output_data <- 
-    tyler::geocode_unique_addresses(file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/address_for_geocoding.csv", 
-    google_maps_api_key = "????", 
-    output_file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/geocoded_unique_addresses.csv")
 ```
 
 # GET ISOCHRONES

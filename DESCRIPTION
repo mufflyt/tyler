@@ -10,7 +10,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 License: MIT + file LICENSE
 URL: https://github.com/mufflyt/tyler, https://mufflyt.github.io/tyler/
-Date: 2025-06-28
+Date: 2024-06-28
 Keywords: healthcare, patient access, audit study, NPI
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:
@@ -20,7 +20,6 @@ Imports:
     arsenal,
     broom,
     caret,
-    cat,
     censusapi,
     data.table,
     devtools,

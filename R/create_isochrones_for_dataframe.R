@@ -15,18 +15,16 @@
 #' @importFrom data.table rbindlist
 #' @family mapping
 #' @export
-create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800)) {
+create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800), api_key = Sys.getenv("HERE_API_KEY"), output_dir = "data") {
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 
-  Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
-  readRenviron("~/.Renviron")
-  hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
 
-  library(tidyverse)
   library(sf)
   library(easyr)
+  if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.")
 
+  hereR::set_key(api_key)
   dataframe <- easyr::read.any(input_file)
 
   # Check if "lat" and "long" columns exist
@@ -75,10 +73,7 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   }
 
   # Save the isochrones data to an RDS file
-  readr::write_rds(isochrones, paste("data/isochrones_raw_output_from_here_api_", format(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"), ".rds", sep = ""))
-  isochrones <- data.table::rbindlist(isochrones_temp)
-  return(isochrones)
-}
+  readr::write_rds(isochrones, file.path(output_dir, paste0("isochrones_raw_output_from_here_api_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds")))
 
 # Usage example:
 #isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(1800, 3600, 7200, 10800))

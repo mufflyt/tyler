@@ -4,16 +4,16 @@
 #' The table includes the count of observations for each 'npi' and 'name' combination where the count is greater than 2.
 #' The resulting table is saved as a CSV file.
 #'
-#' @param df A data frame containing the columns 'npi' and 'name'.
+#' @param data A data frame containing the columns 'npi' and 'name'.
 #' @param filepath The path where the CSV file should be saved.
 #' @return Prints a message to the console indicating that the CSV file has been saved successfully.
 #' @importFrom dplyr group_by summarise arrange filter
 #' @family utilities
 #' @export
 
-save_quality_check_table <- function(df, filepath) {
+save_quality_check_table <- function(data, filepath) {
   # Group by 'npi' and 'name', calculate counts, filter where count > 2, and arrange by count descending
-  filtered_data <- df %>%
+  filtered_data <- data %>%
     dplyr::group_by(npi, name) %>%
     dplyr::summarise(count = n(), .groups = 'drop') %>%
     dplyr::filter(count > 2) %>%

@@ -5,7 +5,7 @@
 #' @param startID The starting ID for scraping.
 #' @param endID The ending ID for scraping.
 #' @param torPort The port number for Tor SOCKS proxy.
-#'
+#' @param wrong_ids_path Optional path to a CSV of IDs to skip.
 #' @return A dataframe containing scraped physicians' data.
 #'
 #' @importFrom httr GET content
@@ -17,7 +17,7 @@
 #' # Call the function
 #' scrape_result <- scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 9150)
 #'
-scrape_physicians_data_with_tor <- function(startID, endID, torPort) {
+scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_path = NULL) {
   cat("Starting scrape_physicians_data_with_tor...\n")
   cat("Parameters - startID:", startID, "endID:", endID, "torPort:", torPort, "\n")
 
@@ -26,7 +26,7 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort) {
   cat("ID list:", paste(id_list, collapse = ", "), "\n")
 
   # Load the list of wrong IDs to exclude from scraping
-  wrongs1 <- readr::read_csv("~/Desktop/MASTER_all_wrongs.csv")
+  wrongs1 <- if (!is.null(wrong_ids_path)) readr::read_csv(wrong_ids_path) else data.frame(WrongIDs = integer())
   wrong_ids <- wrongs1$WrongIDs
   cat("Wrong IDs loaded:", paste(wrong_ids, collapse = ", "), "\n")
 

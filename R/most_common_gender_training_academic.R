@@ -2,7 +2,7 @@
 #'
 #' This function calculates and returns a sentence that describes the most common gender, specialty, training, and academic affiliation in the provided dataset.
 #'
-#' @param df A data frame containing the columns `gender`, `specialty`, `Provider.Credential.Text`, and `academic_affiliation`.
+#' @param data A data frame containing the columns `gender`, `specialty`, `Provider.Credential.Text`, and `academic_affiliation`.
 #'
 #' @return A character string summarizing the most common gender, specialty, training, and academic affiliation along with their respective proportions.
 #'
@@ -10,13 +10,13 @@
 #'
 #' @examples
 #' # Example 1: Basic usage with a small dataset
-#' df <- data.frame(
+#' data <- data.frame(
 #'   gender = c("Male", "Female", "Female", "Male", "Male"),
 #'   specialty = c("Cardiology", "Cardiology", "Neurology", "Cardiology", "Neurology"),
 #'   Provider.Credential.Text = c("MD", "MD", "DO", "MD", "DO"),
 #'   academic_affiliation = c("Yes", "No", "Yes", "No", "Yes")
 #' )
-#' result <- most_common_gender_training_academic(df)
+#' result <- most_common_gender_training_academic(data)
 #' print(result)
 #'
 #' # Example 2: Handling missing data
@@ -41,15 +41,15 @@
 #'
 #' @import dplyr
 #' @export
-most_common_gender_training_academic <- function(df) {
+most_common_gender_training_academic <- function(data) {
   # Helper function to get the most common value and proportion
-  calculate_proportion <- function(df, column) {
-    df <- df %>% filter(!is.na(!!sym(column)))
-    total_count <- nrow(df)
+  calculate_proportion <- function(input_data, column) {
+    input_data <- input_data %>% filter(!is.na(!!sym(column)))
+    total_count <- nrow(input_data)
     if (total_count == 0) {
       return(list(value = "", proportion = NaN))
     }
-    most_common <- df %>%
+    most_common <- input_data %>%
       dplyr::count(!!sym(column), sort = TRUE) %>%
       dplyr::arrange(desc(n), !!sym(column)) %>%
       dplyr::slice(1)  # Select the first row after sorting by count and column
@@ -58,22 +58,22 @@ most_common_gender_training_academic <- function(df) {
   }
 
   # Most common gender
-  gender_info <- calculate_proportion(df, "gender")
+  gender_info <- calculate_proportion(data, "gender")
   most_gender <- tolower(gender_info$value)
   proportion_gender <- gender_info$proportion
 
   # Most common specialty
-  specialty_info <- calculate_proportion(df, "specialty")
+  specialty_info <- calculate_proportion(data, "specialty")
   most_specialty <- specialty_info$value
   proportion_specialty <- specialty_info$proportion
 
   # Most common training
-  training_info <- calculate_proportion(df, "Provider.Credential.Text")
+  training_info <- calculate_proportion(data, "Provider.Credential.Text")
   most_training <- training_info$value
   proportion_training <- training_info$proportion
 
   # Most common academic affiliation
-  academic_info <- calculate_proportion(df, "academic_affiliation")
+  academic_info <- calculate_proportion(data, "academic_affiliation")
   most_academic <- tolower(academic_info$value)
   proportion_academic <- academic_info$proportion
 

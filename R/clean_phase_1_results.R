@@ -5,7 +5,7 @@
 #' It ensures all required fields are present and formats column names. Missing
 #' NPI numbers are handled by generating a unique `random_id`.
 #'
-#' @param df A data frame containing the Phase 1 results data. Ensure that it
+#' @param phase1_data A data frame containing the Phase 1 results data. Ensure that it
 #' includes columns like 'for_redcap', 'id', 'names', 'practice_name', 'phone_number',
 #' 'state_name', and optionally 'npi'. If 'npi' is missing or any of its values are NA,
 #' a `random_id` is generated as a fallback.
@@ -17,8 +17,8 @@
 #' \dontrun{
 #' library(tyler)
 #' file_path <- "/path/to/your/input/file.xls"
-#' df <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
-#' clean_phase_1_results(df)
+#' phase1_data <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
+#' clean_phase_1_results(phase1_data)
 #' }
 #'
 #' @importFrom dplyr arrange mutate select filter bind_rows
@@ -38,7 +38,7 @@
 # library(openxlsx)
 # library(fs)
 
-clean_phase_1_results <- function(df) {
+clean_phase_1_results <- function(phase1_data) {
   if (!requireNamespace("dplyr", quietly = TRUE) ||
       !requireNamespace("janitor", quietly = TRUE) ||
       !requireNamespace("readr", quietly = TRUE) ||
@@ -48,52 +48,52 @@ clean_phase_1_results <- function(df) {
   }
 
   cat("Converting column types...\n")
-  df <- readr::type_convert(df)  # Convert column types
+  phase1_data <- readr::type_convert(phase1_data)  # Convert column types
 
   cat("Cleaning column names...\n")
-  df <- janitor::clean_names(df, case = "snake")  # Clean column names
+  phase1_data <- janitor::clean_names(phase1_data, case = "snake")  # Clean column names
 
   cat("Checking required columns...\n")
   required_columns <- c("names", "practice_name", "phone_number", "state_name")
-  if (!all(required_columns %in% names(df))) {
-    stop("The following required columns are missing: ", paste(setdiff(required_columns, names(df)), collapse = ", "))
+  if (!all(required_columns %in% names(phase1_data))) {
+    stop("The following required columns are missing: ", paste(setdiff(required_columns, names(phase1_data)), collapse = ", "))
   }
 
   cat("Handling missing NPI numbers...\n")
   # Check if NPI column exists and handle missing values
-  if ("npi" %in% names(df)) {
-    df <- df %>%
+  if ("npi" %in% names(phase1_data)) {
+    phase1_data <- phase1_data %>%
       mutate(random_id = ifelse(is.na(npi), base::sample(1:9999999999, size = n(), replace = TRUE), npi))
   } else {
-    df <- mutate(df, random_id = base::sample(1000000000:9999999999, size = n(), replace = TRUE))
+    phase1_data <- mutate(phase1_data, random_id = base::sample(1000000000:9999999999, size = n(), replace = TRUE))
   }
 
-  if (nrow(df) > 0) {
+  if (nrow(phase1_data) > 0) {
     cat("Duplicating rows...\n")
-    df <- bind_rows(df, df)  # Duplicate rows
+    phase1_data <- bind_rows(phase1_data, phase1_data)  # Duplicate rows
 
     cat("Arranging rows by 'names'...\n")
-    df <- arrange(df, names)  # Arrange rows by 'names'
+    phase1_data <- arrange(phase1_data, names)  # Arrange rows by 'names'
 
     cat("Adding insurance and duplicating rows...\n")
-    df <- mutate(df, insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(df)))  # Add insurance and duplicate rows
+    phase1_data <- mutate(phase1_data, insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(phase1_data)))  # Add insurance and duplicate rows
 
     cat("Adding a numbered 'id' column...\n")
-    df <- mutate(df, id = row_number(),  # Ensures unique ID for each row
+    phase1_data <- mutate(phase1_data, id = row_number(),  # Ensures unique ID for each row
                  id_number = paste0("id:", id))  # Add a numbered 'id' column
 
     cat("Extracting last name and creating 'dr_name'...\n")
-    df <- mutate(df,
+    phase1_data <- mutate(phase1_data,
                  last_name = humaniformat::last_name(names),
                  dr_name = paste("Dr.", last_name))  # Extract last name and create 'dr_name'
 
     cat("Identifying academic or private practice...\n")
-    df <- mutate(df,
+    phase1_data <- mutate(phase1_data,
                  academic = ifelse(str_detect(practice_name, str_c(c("University", "Medical College"), collapse = "|")),
                                    "University", "Private Practice"))  # Identify academic or private practice
 
     cat("Uniting columns for REDCap upload...\n")
-    df <- select(df, for_redcap = paste(id, dr_name, insurance, phone_number, state_name, random_id, academic, id_number, sep = ", "),
+    phase1_data <- select(phase1_data, for_redcap = paste(id, dr_name, insurance, phone_number, state_name, random_id, academic, id_number, sep = ", "),
                  everything())  # Unite columns for REDCap upload
   } else {
     cat("No data to process.\n")
@@ -102,10 +102,10 @@ clean_phase_1_results <- function(df) {
   # Save the dataframe to a CSV file with date and time in the filename
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
   output_file <- file.path("/path/to/output/directory", paste0("clean_phase_1_results_", current_datetime, ".csv"))
-  write_csv(df, output_file)
+  write_csv(phase1_data, output_file)
   cat("Saved cleaned Phase 1 results dataframe to", output_file, "\n")
 }
 
 # file_path <- "ortho_sports_med/data/phase1/Late_Phase_1_Mystery caller - Sports med Only.xlsx"
-# df <- read_xls(file_path)
-# clean_phase_1_results(df)
+# phase1_data <- read_xls(file_path)
+# clean_phase_1_results(phase1_data)

@@ -2,8 +2,8 @@
 #'
 #' This function calculates the median age, as well as the 25th and 75th percentiles (Interquartile Range, IQR) of a specified age column in a data frame. It returns a sentence summarizing these statistics.
 #'
-#' @param df A data frame containing the age data.
-#' @param age_column A character string representing the name of the column in `df` that contains the age data.
+#' @param data A data frame containing the age data.
+#' @param age_column A character string representing the name of the column in `data` that contains the age data.
 #'
 #' @return A character string summarizing the median age and IQR of the specified age column in the dataset.
 #'
@@ -11,8 +11,8 @@
 #'
 #' @examples
 #' # Example 1: Basic usage with a small dataset
-#' df <- data.frame(age = c(30, 40, 50, 60, 35, 45, 55, 65))
-#' summary_sentence <- physician_age(df, "age")
+#' data <- data.frame(age = c(30, 40, 50, 60, 35, 45, 55, 65))
+#' summary_sentence <- physician_age(data, "age")
 #' print(summary_sentence)
 #'
 #' # Example 2: Handling missing data
@@ -27,13 +27,13 @@
 #'
 #' @import dplyr
 #' @export
-physician_age <- function(df, age_column) {
+physician_age <- function(data, age_column) {
   # Calculate the median age
-  median_age <- round(median(df[[age_column]], na.rm = TRUE), 2)
+  median_age <- round(median(data[[age_column]], na.rm = TRUE), 2)
 
   # Calculate the 25th and 75th percentiles
-  q25 <- quantile(df[[age_column]], probs = 0.25, na.rm = TRUE)
-  q75 <- quantile(df[[age_column]], probs = 0.75, na.rm = TRUE)
+  q25 <- quantile(data[[age_column]], probs = 0.25, na.rm = TRUE)
+  q75 <- quantile(data[[age_column]], probs = 0.75, na.rm = TRUE)
 
   # Round the percentiles to one decimal place
   q25 <- round(q25, 1)

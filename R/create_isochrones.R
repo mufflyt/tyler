@@ -12,10 +12,8 @@
 #' \dontrun{
 #' # Set your HERE API key in your Renviron file using the following steps:
 #' # 1. Add key to .Renviron
-#' Sys.setenv(HERE_API_KEY = "your_api_key_here")
-#' # 2. Reload .Renviron
-#' readRenviron("~/.Renviron")
-#'
+#' #' # 2. Reload .Renviron
+#' #'
 #' # Define a sf object for the location
 #' location <- sf::st_point(c(-73.987, 40.757))
 #'
@@ -31,11 +29,8 @@
 #' @export
 #' @importFrom memoise memoise
 #' @importFrom hereR set_freemium set_key set_verbose isoline
-create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S")) {
+create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S"), api_key = Sys.getenv("HERE_API_KEY")) {
 
-  Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
-  readRenviron("~/.Renviron")
-  hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
 
 
   cat("\033[Display setup instructions:\033[0m\n")
@@ -47,23 +42,14 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
   #   stop("Location must be an sf object.")
   # }
 
-  # Check if HERE_API_KEY is set in Renviron
-  if (Sys.getenv("HERE_API_KEY") == "") {
-    cat("Please set your HERE API key in your Renviron file using the following steps:\n")
-    cat("1. Add key to .Renviron\n")
-    cat("Sys.setenv(HERE_API_KEY = \"your_api_key_here\")\n")
-    cat("2. Reload .Renviron\n")
-    cat("readRenviron(\"~/.Renviron\")\n")
-    stop("HERE_API_KEY environment variable is not set. Please set it to your HERE API key.")
+  if (api_key == "") {
+    stop("HERE API key is required via argument or HERE_API_KEY env var.")
   }
 
-  # Initialize HERE API securely using an environment variable for the API key
-  cat("Setting up the hereR access...\n")
-  api_key <- Sys.getenv("HERE_API_KEY")
-
   hereR::set_freemium(ans = FALSE)
-  hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+  hereR::set_key(api_key)
   hereR::set_verbose(TRUE)
+
 
   # Initialize a list to store the isolines
   isolines_list <- list()
