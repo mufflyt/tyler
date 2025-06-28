@@ -1,4 +1,50 @@
 url: https://mufflyt.github.io/tyler/
+destination: docs
 template:
   bootstrap: 5
-
+home:
+  title: "tyler"
+  description: >
+    Tools for mystery caller studies and healthcare provider workforce research.
+  links:
+    - text: GitHub
+      href: https://github.com/mufflyt/tyler
+navbar:
+  structure:
+    left:
+      - home
+      - reference
+      - articles
+      - news
+    right:
+      - github
+  components:
+    github:
+      icon: fa-github
+      href: https://github.com/mufflyt/tyler
+reference:
+  - title: "Core functionality"
+    desc: |
+      Main functions for processing NPIs and generating reports.
+    contents:
+      - search_and_process_npi
+      - validate_and_remove_invalid_npi
+      - create_isochrones
+      - get_census_data
+      - geocode
+      - genderize_physicians
+      - generate_overall_table
+      - split_and_save
+articles:
+  - title: "Getting started"
+    contents:
+      - my-vignette
+      - search_and_process_npi
+  - title: "Isochrones and maps"
+    contents:
+      - create_isochrones
+      - geocode
+      - get_census_data
+  - title: "Validating NPIs"
+    contents:
+      - validate_and_remove_invalid_npi
