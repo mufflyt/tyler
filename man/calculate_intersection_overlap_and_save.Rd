@@ -24,7 +24,7 @@ calculate_intersection_overlap_and_save(
 None. The function saves the intersection shapefile and provides logging.
 }
 \description{
-This function calculates the intersection between block groups and isochrones for a specific drive time and saves the results to a shapefile.
+This function calculates the intersection between block groups and isochrones for a specific drive time and saves the results to a shapefile.  Areas are measured after reprojecting both datasets to an equal-area coordinate reference system for accuracy.
 }
 \examples{
 calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")

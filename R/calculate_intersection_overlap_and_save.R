@@ -1,6 +1,8 @@
 #' Calculate intersection overlap and save results to shapefiles.
 #'
-#' This function calculates the intersection between block groups and isochrones for a specific drive time and saves the results to a shapefile.
+#' This function calculates the intersection between block groups and isochrones for a specific drive time and saves the results to a shapefile.  To
+#' ensure accurate area-based calculations, both datasets are temporarily
+#' projected to an equal-area CRS before measuring.
 #'
 #' @param block_groups An sf object representing block groups.
 #' @param isochrones_joined An sf object representing isochrones.
@@ -12,7 +14,7 @@
 #' @examples
 #' calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")
 #'
-#' @importFrom sf st_intersection st_write st_area
+#' @importFrom sf st_intersection st_write st_area st_transform
 #' @importFrom dplyr mutate select left_join
 #' @importFrom stats quantile
 #'
@@ -37,12 +39,22 @@ calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joi
   library(sf)
   library(dplyr)
 
+  # Use an equal-area projection for accurate area calculations
+  area_crs <- 5070 # NAD83 / Conus Albers
+
   # Filter isochrones for the specified drive time
   isochrones_filtered <- sf::filter(isochrones_joined, drive_time == drive_time)
 
-  # Calculate intersection
-  intersect <- sf::st_intersection(block_groups, isochrones_filtered) %>%
-    dplyr::mutate(intersect_area = sf::st_area(.)) %>%
+  # Project to an equal-area CRS for area calculations
+  block_groups_proj <- sf::st_transform(block_groups, area_crs)
+  isochrones_proj <- sf::st_transform(isochrones_filtered, area_crs)
+
+  # Calculate intersection in projected CRS
+  intersect <- sf::st_intersection(block_groups_proj, isochrones_proj) %>%
+    dplyr::mutate(intersect_area = sf::st_area(.))
+
+  # Data frame version for joins
+  intersect_df <- intersect %>%
     dplyr::select(GEOID, intersect_area) %>%
     sf::st_drop_geometry()
 
@@ -53,25 +65,25 @@ calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joi
     {
       # Write the intersection shapefile
       output_shapefile <- file.path(output_dir, paste0("intersect_", drive_time, "_minutes.shp"))
-      sf::st_write(intersect, output_shapefile, append = FALSE)
+      sf::st_write(sf::st_transform(intersect, 4326), output_shapefile, append = FALSE)
       message("Intersection calculated and saved successfully.")
 
-      # Merge intersection area by GEOID
-      block_groups <- dplyr::left_join(block_groups, intersect, by = "GEOID")
+      # Merge intersection area by GEOID on projected data
+      block_groups_proj <- dplyr::left_join(block_groups_proj, intersect_df, by = "GEOID")
 
-      # Calculate area in all block groups
-      block_groups <- block_groups %>%
-        dplyr::mutate(bg_area = sf::st_area(block_groups))
+      # Calculate area in all block groups (projected CRS)
+      block_groups_proj <- block_groups_proj %>%
+        dplyr::mutate(bg_area = sf::st_area(block_groups_proj))
 
       # Calculate overlap percent between block groups and isochrones
-      block_groups <- block_groups %>%
+      block_groups_proj <- block_groups_proj %>%
         dplyr::mutate(
           intersect_area = ifelse(is.na(intersect_area), 0, intersect_area),
           overlap = as.numeric(intersect_area / bg_area)
         )
 
       # Filter out missing overlap values for quantile calculation
-      non_missing_overlap <- block_groups$overlap
+      non_missing_overlap <- block_groups_proj$overlap
 
       # Summary of the overlap percentiles
       summary_bg <- summary(non_missing_overlap)
