@@ -23,6 +23,42 @@ See the package vignette for a fuller introduction and suggestions on how to use
 
 vignette(topic = "????", package = "tyler")
 
+## Quick start
+
+The following example illustrates a minimal workflow using the sample
+datasets included with the package.  It searches for providers,
+validates their NPIs, retrieves additional information, geocodes
+addresses and generates drive‐time isochrones.
+
+```r
+library(tyler)
+
+# Built in physician data
+phys <- tyler::physicians
+
+# Search the NPI registry for gynecologic oncologists
+go_data <- search_by_taxonomy("Gynecologic Oncology")
+
+# Combine with existing data and keep unique NPIs
+all_docs <- dplyr::bind_rows(phys, go_data) %>%
+  dplyr::distinct(npi, .keep_all = TRUE)
+
+# Retrieve clinician demographics and geocode their locations
+clinicians <- retrieve_clinician_data(all_docs)
+geocoded <- geocode_unique_addresses(clinicians,
+  google_maps_api_key = "<YOUR_KEY>")
+
+# Build 30 and 60 minute drive‐time isochrones for a subset
+iso <- create_isochrones_for_dataframe(geocoded[1:10, ],
+  breaks = c(0, 30, 60))
+
+# Plot the individual drive time areas
+create_individual_isochrone_plots(iso, unique(iso$drive_time))
+```
+
+These steps provide a high level overview.  See the workflow section
+below for more detail on each function and dataset.
+
 
 ### Add in hospital information data from the AHA scraper!!!!
 
