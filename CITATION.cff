@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care"
+version: "1.2.0"
+date-released: "2023-09-11"
+authors:
+  - family-names: "Muffly"
+    given-names: "Tyler"
+    email: "tyler.muffly@dhha.org"
+    orcid: "https://orcid.org/0000-0002-2044-1693"
+license: "MIT"
+repository-code: "https://github.com/mufflyt/tyler"
+url: "https://mufflyt.github.io/tyler/"
+keywords:
+  - R
+  - healthcare
+  - audit study
+  - NPI
+  - mystery caller
+description: |
+  The 'tyler' package provides a collection of functions designed to facilitate mystery caller
+  studies and other audit-style evaluations of patient access to healthcare. It streamlines
+  retrieval and analysis of National Provider Identifier (NPI) data and includes utilities for
+  generating tables and visualizations to aid in workforce research.
