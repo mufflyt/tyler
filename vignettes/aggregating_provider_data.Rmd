@@ -1,0 +1,64 @@
+---
+title: "Aggregating Provider Data for Analysis"
+author:
+  - Tyler Muffly, MD
+output:
+  rmarkdown::html_vignette:
+    df_print: kable
+description: >
+  A skeleton vignette describing how to aggregate provider data from multiple sources.
+vignette: >
+  %\VignetteIndexEntry{Aggregating Provider Data for Analysis}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  chunk_output_type: console
+---
+
+# Objectives
+
+- Demonstrate a workflow for combining provider datasets.
+- Show how to clean and standardize fields prior to merging.
+- Provide a starting point for further analysis.
+
+# Required Packages
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# library(tyler)
+```
+
+# Inputs
+
+Describe the input files such as NPI exports, Census data, and geocoded locations.
+
+```{r}
+# Example placeholder for reading data
+# npi_data <- readr::read_csv("npi.csv")
+# census_data <- readr::read_csv("census.csv")
+```
+
+# Processing Steps
+
+Outline the steps needed to clean names, join datasets, and summarize counts.
+
+```{r}
+# Example data manipulation steps
+# combined <- dplyr::left_join(npi_data, census_data, by = "fips")
+```
+
+# Output Examples
+
+Show an example of the aggregated output such as counts by county.
+
+```{r}
+# aggregated <- combined %>% dplyr::count(county)
+# aggregated
+```
+
+# Conclusions
+
+Summarize the results and next steps for analysis.
+
+# Features and bugs
+If you have ideas for other features that would make data aggregation easier, or find a bug, the best approach is to either report it or add it!
