@@ -13,6 +13,7 @@
 #' @importFrom hereR set_key
 #' @importFrom janitor clean_names
 #' @importFrom data.table rbindlist
+#' @family mapping
 #' @export
 create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800)) {
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;

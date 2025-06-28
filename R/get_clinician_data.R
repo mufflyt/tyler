@@ -9,6 +9,7 @@
 #' @importFrom npi npi_is_valid
 #' @importFrom readr read_csv
 #' @importFrom dplyr filter mutate
+#' @family npi
 #' @export
 #'
 validate_and_remove_invalid_npi <- function(input_data) {
@@ -65,6 +66,7 @@ validate_and_remove_invalid_npi <- function(input_data) {
 #' @importFrom provider clinicians
 #' @importFrom dplyr mutate
 #'
+#' @family npi
 #' @export
 retrieve_clinician_data <- function(input_data) {
 

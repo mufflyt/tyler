@@ -20,6 +20,7 @@
 #' @importFrom ggplot2 ggplot geom_point geom_line stat_summary ylab theme_minimal element_rect element_blank ggsave
 #' @importFrom viridis viridis_pal
 #' @importFrom rlang sym .data
+#' @family mapping
 #' @export
 #' @examples
 #' # Example 1: Basic plot with log transformation

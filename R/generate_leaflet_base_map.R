@@ -5,6 +5,7 @@
 #'
 #' @return A Leaflet map object.
 #' @importFrom leaflet leaflet addProviderTiles clearBounds clearMarkers addScaleBar setView addLayersControl addTiles
+#' @family mapping
 #' @export
 #' @examples
 #' map <- generate_leaflet_base_map()

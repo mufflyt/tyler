@@ -19,6 +19,7 @@
 #' @importFrom purrr map2 keep
 #' @importFrom data.table rbindlist
 #' @importFrom readr write_csv
+#' @family npi
 #' @export
 search_and_process_npi <- function(data,
                                    enumeration_type = "ind",

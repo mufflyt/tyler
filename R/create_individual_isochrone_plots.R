@@ -30,6 +30,7 @@
 #' create_individual_isochrone_plots(isochrones, drive_times)
 #' }
 #'
+#' @family mapping
 #' @export
 create_individual_isochrone_plots <- function(isochrones, drive_times) {
   # Display setup instructions

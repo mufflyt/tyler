@@ -13,6 +13,7 @@
 #' @importFrom easyr read.any
 #' @importFrom fs dir_create dir_exists
 #' @importFrom here here
+#' @family table
 #' @export
 #'
 #' @examples

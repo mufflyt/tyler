@@ -34,6 +34,7 @@
 #' create_and_save_physician_dot_map(physician_data)
 #' }
 #'
+#' @family mapping
 #' @export
 create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
   # Add jitter to latitude and longitude coordinates

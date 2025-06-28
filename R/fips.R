@@ -6,4 +6,5 @@
 #' \describe{
 #' }
 #' @source \url{https://github.com/kjhealy/fips-codes/blob/master/state_and_county_fips_master.csv}
+#' @family datasets
 "fips"

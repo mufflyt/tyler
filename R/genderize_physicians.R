@@ -17,6 +17,7 @@
 #' result <- genderize_physicians("sample.csv")
 #' }
 #'
+#' @family gender
 #' @export
 genderize_physicians <- function(input_csv, output_dir = getwd()) {
   if (!requireNamespace("genderdata", quietly = TRUE)) {
