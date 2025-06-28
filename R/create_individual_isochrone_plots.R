@@ -53,7 +53,7 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
     # Filter isochrones for the specified drive time
     isochrones_filtered <- dplyr::filter(isochrones, drive_time == time)
 
-    # Combine fuck isochrones using st_union
+    # Combine isochrones using st_union
     isochrones_combined <- sf::st_union(isochrones_filtered)
 
     # Create an sf object with the combined isochrones

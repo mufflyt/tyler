@@ -4,7 +4,7 @@
 #'
 #' @param block_groups An sf object representing block groups.
 #' @param isochrones_joined An sf object representing isochrones.
-#' @param drive_time The drive time value for which to calculate the intersection.
+#' @param drive_time_value The drive time value for which to calculate the intersection.
 #' @param output_dir The directory where the intersection shapefile will be saved.
 #'
 #' @return None. The function saves the intersection shapefile and provides logging.
@@ -18,7 +18,7 @@
 #'
 #' @export
 #'
-calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joined, drive_time, output_dir) {
+calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joined, drive_time_value, output_dir) {
   # Parameter validation
   if (!inherits(block_groups, "sf")) {
     stop("Error: 'block_groups' must be an sf object.")
@@ -26,7 +26,7 @@ calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joi
   if (!inherits(isochrones_joined, "sf")) {
     stop("Error: 'isochrones_joined' must be an sf object.")
   }
-  if (!is.numeric(drive_time) || drive_time < 0) {
+  if (!is.numeric(drive_time_value) || drive_time_value < 0) {
     stop("Error: 'drive_time' must be a non-negative numeric value.")
   }
   if (!is.character(output_dir)) {
@@ -38,7 +38,7 @@ calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joi
   library(dplyr)
 
   # Filter isochrones for the specified drive time
-  isochrones_filtered <- sf::filter(isochrones_joined, drive_time == drive_time)
+  isochrones_filtered <- dplyr::filter(isochrones_joined, drive_time == drive_time_value)
 
   # Calculate intersection
   intersect <- sf::st_intersection(block_groups, isochrones_filtered) %>%
@@ -47,12 +47,12 @@ calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joi
     sf::st_drop_geometry()
 
   # Log the progress
-  message(paste("Calculating intersection for", drive_time, "minutes..."))
+  message(paste("Calculating intersection for", drive_time_value, "minutes..."))
 
   tryCatch(
     {
       # Write the intersection shapefile
-      output_shapefile <- file.path(output_dir, paste0("intersect_", drive_time, "_minutes.shp"))
+      output_shapefile <- file.path(output_dir, paste0("intersect_", drive_time_value, "_minutes.shp"))
       sf::st_write(intersect, output_shapefile, append = FALSE)
       message("Intersection calculated and saved successfully.")
 
@@ -71,22 +71,22 @@ calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joi
         )
 
       # Filter out missing overlap values for quantile calculation
-      non_missing_overlap <- block_groups$overlap
+      non_missing_overlap <- block_groups$overlap[!is.na(block_groups$overlap)]
 
       # Summary of the overlap percentiles
       summary_bg <- summary(non_missing_overlap)
 
       # Print the summary
-      message("Summary of Overlap Percentages for", drive_time, "minutes:")
+      message("Summary of Overlap Percentages for", drive_time_value, "minutes:")
       cat(summary_bg)
 
       # Calculate and print the 50th percentile of overlap percentages
-      median <- round(quantile(non_missing_overlap, probs = 0.5), 4) * 100
+      median <- round(quantile(non_missing_overlap, probs = 0.5, na.rm = TRUE), 4) * 100
       message("50th Percentile of Overlap Percentages:", median, "%")
 
       # Calculate and print the 75th percentile of overlap percentages
-      mean <- round(mean(non_missing_overlap), 4) * 100
-      message("75th Percentile of Overlap Percentages:", mean, "%")
+      perc75 <- round(quantile(non_missing_overlap, probs = 0.75, na.rm = TRUE), 4) * 100
+      message("75th Percentile of Overlap Percentages:", perc75, "%")
 
     },
     error = function(e) {

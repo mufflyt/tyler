@@ -26,12 +26,17 @@
 #' print(result)
 #'
 #' @import dplyr
+#' @importFrom rlang ensym
 #' @export
 calcpercentages <- function(df, variable) {
-  variable <- as.character(variable)  # Convert factor to character
+  var_sym <- rlang::ensym(variable)
 
-  x <- count(data.frame(variable)) %>%
-    slice_max(n, n = 1)
+  counts <- df %>%
+    dplyr::count(!!var_sym, name = "n")
 
-  return(x)
+  top <- counts %>%
+    dplyr::slice_max(n, n = 1) %>%
+    dplyr::mutate(percent = n / sum(counts$n) * 100)
+
+  return(top)
 }
