@@ -4,7 +4,15 @@ Version: 1.2.0
 Authors@R: 
     person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
            comment = "ORCID: 0000-0002-2044-1693")
-Description: The 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting.
+Description: The 'tyler' package provides tools to support mystery caller studies
+    assessing patient access to care. Core functions retrieve and clean National
+    Provider Identifier information, geocode addresses, build isochrone maps, and
+    summarize provider demographics. Utility wrappers fetch US Census data,
+    assemble tables, and generate exploratory plots. Example datasets like
+    residency program listings and taxonomy codes showcase package workflows.
+    Additional sample data includes physician location records.
+    Functions like `split_and_save` help organize caller assignments, while `validate_and_remove_invalid_npi` cleans data prior to CMS lookups.
+    HERE API integration enables batch drive-time isochrone creation, and vignettes walk through census data retrieval and NPI workflows in detail.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
