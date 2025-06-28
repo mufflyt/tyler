@@ -36,8 +36,6 @@ calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joi
   }
 
   # Load necessary packages and functions
-  library(sf)
-  library(dplyr)
 
   # Use an equal-area projection for accurate area calculations
   area_crs <- 5070 # NAD83 / Conus Albers

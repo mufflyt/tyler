@@ -13,9 +13,6 @@
 #' @export
 get_census_data <- function(us_fips_list, vintage = 2022) {
 
-  library(dplyr)
-  library(censusapi)
-
   # Initialize an empty list to store state data
   state_data <- list()
 

@@ -1,6 +1,5 @@
 
 # tyler
-# Warning!!! This project is under active development, wait for the release of version 2.0.0 if you want to use it in production. Please help to improve this package by submitting issues and pull requests.
 
 <!-- badges: start -->
 <img src="https://github.com/mufflyt/tyler/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57" width="20%">
@@ -13,25 +12,27 @@ The goal of the 'tyler' package provides a collection of functions designed to f
 
 ## Installation
 
-You can install the development version of tyler from [GitHub](https://github.com/) with:
+Install the stable release from CRAN with:
+``` r
+install.packages("tyler")
+```
+
+To install the development version from GitHub:
 ``` r
 # install.packages("devtools")
 devtools::install_github("mufflyt/tyler")
 ```
 
-See the package vignette for a fuller introduction and suggestions on how to use the `tyler()` function efficiently.
+See the package vignette for an introduction and usage examples:
 
-vignette(topic = "????", package = "tyler")
-
-
-### Add in hospital information data from the AHA scraper!!!!
+vignette("introduction", package = "tyler")
 
 # Workflow 👨‍🦲
 1) Gather all the physician data that is needed:
      * Search by subspecialty taxonomy: `tyler::taxonomy` and `tyler::search_by_taxonomy` 👨‍🦲
      * Search by physician name in `goba`: `tyler::search_and_process_npi` 👨‍🦲
      * Merge these two physician data sources together.  See the code at: `exploratory/Workforce/subspecialists_only`  👨‍🦲
-     * Add in the physician age from healthgrades.com: ??????
+     * Add physician age data from healthgrades.com.
      * Get Physician Compare physician demographics: `tyler::retrieve_clinician_data`  👨‍🦲
      * Complete the gender for all physicians: `tyler::genderize_physicians` 
      * Check with secondary sources...
@@ -200,7 +201,7 @@ Takes a csv file of addresses and prints out the lat and long as separate column
 ```r
 output_data <- 
     tyler::geocode_unique_addresses(file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/address_for_geocoding.csv", 
-    google_maps_api_key = "????", 
+    google_maps_api_key = "YOUR_KEY",
     output_file_path = "/Users/tylermuffly/Dropbox (Personal)/Tannous/data/geocoded_unique_addresses.csv")
 ```
 

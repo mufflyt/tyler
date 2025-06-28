@@ -1,5 +1,5 @@
 Package: tyler
-Title: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care
+Title: Tools for Mystery Caller and Audit Studies
 Version: 1.2.1
 Authors@R: 
     person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
@@ -10,7 +10,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 License: MIT + file LICENSE
 URL: https://github.com/mufflyt/tyler, https://mufflyt.github.io/tyler/
-Date: 2025-06-28
+BugReports: https://github.com/mufflyt/tyler/issues
 Keywords: healthcare, patient access, audit study, NPI
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:
@@ -20,71 +20,54 @@ Imports:
     arsenal,
     broom,
     caret,
-    cat,
     censusapi,
     data.table,
-    devtools,
     dplyr,
     easyr,
-    effects,
     emmeans,
-    exploratory,
     fs,
     gender,
     ggmap,
     ggplot2,
     ggspatial,
     glue,
-    gridExtra,
     here,
     hereR,
     htmlwidgets,
     httr,
     humaniformat,
-    imager,
     janitor,
     jsonlite,
     leaflet,
-    leaflet.extras,
     lifecycle,
     lme4,
-    lubridate,
     magrittr,
     memoise,
-    mockery,
     npi,
     openxlsx,
     progress,
     provider,
     purrr,
-    rainbow,
     readr,
     readxl,
-    remotes,
-    renv,
     rlang,
     rnaturalearth,
-    scales,
     sf,
     stringr,
-    testthat,
-    tibble,
     tidyr,
-    tidyverse,
-    tigris,
-    tmap,
-    tools,
     viridis,
-    webshot,
-    zipcodeR
+    webshot
 Remotes: andrewallenbruce/provider, lmullen/genderdata
 LazyData: true
 Files: R/
-Suggests: 
+Suggests:
+    devtools,
     knitr,
+    mockery,
     pkgdown,
+    remotes,
     rmarkdown,
-    stats,
+    testthat,
     genderdata
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
