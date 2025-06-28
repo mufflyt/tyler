@@ -29,6 +29,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::roxygen2
+          cache: true
           needs: pr-document
 
       - name: Document
