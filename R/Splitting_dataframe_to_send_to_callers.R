@@ -16,6 +16,7 @@
 #' @importFrom openxlsx write.xlsx
 #' @importFrom fs dir_create dir_exists
 #' @importFrom readr read_csv
+#' @return Invisible list of file paths to the created Excel files
 #' @export
 #'
 #' @examples

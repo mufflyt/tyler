@@ -3,7 +3,7 @@
 #' This function calculates the proportion of each level in a specified categorical variable within a data frame.
 #' It returns a data frame with the counts and percentages of each level.
 #'
-#' @param df A data frame containing the categorical variable.
+#' @param data A data frame containing the categorical variable.
 #' @param variable_name The name of the categorical variable for which proportions are calculated, passed as an unquoted expression.
 #'
 #' @return A data frame with two columns: `n` (the count of each level) and `percent` (the percentage of the total count represented by each level).
@@ -13,8 +13,8 @@
 #'
 #' @examples
 #' # Example 1: Basic usage with a simple dataset
-#' df <- data.frame(gender = c("Male", "Female", "Female", "Male", "Male", "Female"))
-#' result <- calculate_proportion(df, gender)
+#' data <- data.frame(gender = c("Male", "Female", "Female", "Male", "Male", "Female"))
+#' result <- calculate_proportion(data, gender)
 #' print(result)
 #'
 #' # Example 2: Handling a dataset with missing values
@@ -29,8 +29,8 @@
 #'
 #' @import dplyr
 #' @export
-calculate_proportion <- function(df, variable_name) {
-  tabyl_result <- df %>%
+calculate_proportion <- function(data, variable_name) {
+  tabyl_result <- data %>%
     count({{ variable_name }}, name = "n") %>%
     mutate(percent = n / sum(n) * 100)
 

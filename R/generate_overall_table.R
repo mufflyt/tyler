@@ -7,6 +7,7 @@
 #' @param title The title for the overall table summary (default is "Overall Table Summary").
 #' @param selected_columns Optional vector of selected columns to include in the table.
 #' @param label_translations Optional named list for label translations.
+#' @return Path to the generated PDF file
 #'
 #' @importFrom arsenal write2pdf tableby
 #' @importFrom readr read_rds

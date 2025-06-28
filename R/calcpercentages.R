@@ -2,8 +2,8 @@
 #'
 #' This function calculates the percentage of the most common value in a specified categorical variable from a data frame.
 #'
-#' @param df A data frame containing the categorical variable.
-#' @param variable A character string representing the name of the categorical variable within `df`.
+#' @param data_frame A data frame containing the categorical variable.
+#' @param variable A character string representing the name of the categorical variable within `data_frame`.
 #'
 #' @return A data frame containing the most common value and its count, along with the percentage of the total count that it represents.
 #'
@@ -14,8 +14,8 @@
 #'
 #' @examples
 #' # Example 1: Basic usage with a simple dataset
-#' df <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
-#' result <- calcpercentages(df, "category")
+#' data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
+#' result <- calcpercentages(data_frame, "category")
 #' print(result)
 #'
 #' # Example 2: Using a dataset with multiple most common values
@@ -31,10 +31,10 @@
 #' @import dplyr
 #' @importFrom rlang sym
 #' @export
-calcpercentages <- function(df, variable) {
+calcpercentages <- function(data_frame, variable) {
   variable <- as.character(variable)  # Ensure the variable name is a string
 
-  result <- df %>%
+  result <- data_frame %>%
     dplyr::count(!!rlang::sym(variable), name = "n") %>%
     dplyr::mutate(percent = 100 * n / sum(n)) %>%
     dplyr::slice_max(n, n = 1)
