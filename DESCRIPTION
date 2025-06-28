@@ -87,4 +87,5 @@ Suggests:
     genderdata
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
+Config/pkgdown/doc_url: https://mufflyt.github.io/tyler/
 Config/testthat/edition: 3
