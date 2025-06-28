@@ -23,4 +23,5 @@
 #' # Perform data analysis and exploration
 #'
 #' @keywords dataset
+#' @family datasets
 "ACOG_Districts"

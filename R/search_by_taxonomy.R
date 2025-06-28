@@ -16,6 +16,7 @@
 #' @importFrom dplyr bind_rows arrange filter select distinct mutate
 #' @importFrom stringr str_remove_all str_to_lower str_detect
 #' @importFrom readr write_rds
+#' @family npi
 #' @export
 search_by_taxonomy <- function(taxonomy_to_search) {
   # Create an empty data frame to store search results

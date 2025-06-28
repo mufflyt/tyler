@@ -16,5 +16,6 @@
 #' # Explore the dataset
 #' head(taxonomy)
 #' }
+#' @family datasets
 #' @name taxonomy
 "taxonomy"

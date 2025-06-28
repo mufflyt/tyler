@@ -8,6 +8,7 @@
 #' @param filepath The path where the CSV file should be saved.
 #' @return Prints a message to the console indicating that the CSV file has been saved successfully.
 #' @importFrom dplyr group_by summarise arrange filter
+#' @family utilities
 #' @export
 
 save_quality_check_table <- function(df, filepath) {

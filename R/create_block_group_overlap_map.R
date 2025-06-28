@@ -23,6 +23,7 @@
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom sf st_transform
 #'
+#' @family mapping
 #' @export
 create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir = "figures/") {
   bg_data <- sf::st_transform(bg_data, 4326)

@@ -19,6 +19,7 @@
 #' @importFrom ggplot2 ggplot geom_density scale_x_log10 scale_x_sqrt labs theme_light theme ggsave
 #' @importFrom viridis viridis_pal
 #' @importFrom rlang sym .data
+#' @family mapping
 #' @export
 #' @examples
 #' # Example 1: Basic density plot with log transformation

@@ -27,6 +27,7 @@
 #'
 #' }
 #'
+#' @family mapping
 #' @export
 #' @importFrom memoise memoise
 #' @importFrom hereR set_freemium set_key set_verbose isoline

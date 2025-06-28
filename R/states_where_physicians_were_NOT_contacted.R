@@ -8,6 +8,7 @@
 #' If not provided, a default set of states will be used.
 #'
 #' @return A character string summarizing the inclusion and exclusion of states.
+#' @family summary
 #' @export
 #'
 #' @importFrom dplyr distinct

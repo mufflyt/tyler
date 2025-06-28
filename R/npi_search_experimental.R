@@ -27,6 +27,7 @@
 #' input_csv <- "path/to/input.csv"
 #' npi_results <- search_npi(input_csv)
 #'
+#' @family npi
 #' @export
 search_npi <- function(input_data) {
 

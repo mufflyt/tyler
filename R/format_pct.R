@@ -24,6 +24,7 @@
 #' no_decimal <- format_pct(0.5, my_digits = 0)
 #' print(no_decimal)  # Output: "50%"
 #'
+#' @family utilities
 #' @export
 format_pct <- function(x, my_digits = 1) {
   format(x, digits = my_digits, nsmall = my_digits)

@@ -9,6 +9,7 @@
 #' @return A dataframe containing Census data all state block groups.
 #' @importFrom dplyr bind_rows
 #' @importFrom censusapi getCensus
+#' @family census
 #' @export
 get_census_data <- function(us_fips_list, vintage = 2022) {
 
