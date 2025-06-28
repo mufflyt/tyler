@@ -63,6 +63,7 @@
 #'     plot_title = "Density Plot Without Transformation"
 #' )
 
+#' @seealso tyler
 create_density_plot <- function(data,
                                 x_var,
                                 fill_var,

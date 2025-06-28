@@ -12,6 +12,7 @@
 #' MinTable(vec, mult = TRUE) # Returns "C"
 #' @export
 
+#' @seealso tyler
 MinTable <- function(InVec, mult = FALSE) {
   if (!is.factor(InVec) || length(InVec) == 0) {
     return(character(0))

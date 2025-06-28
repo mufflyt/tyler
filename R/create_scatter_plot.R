@@ -69,6 +69,7 @@
 #'     plot_title = "Scatter Plot Without Transformation"
 #' )
 
+#' @seealso tyler
 create_scatter_plot <- function(data,
                                 x_var,
                                 y_var,

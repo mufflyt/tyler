@@ -35,6 +35,8 @@
 #' }
 #'
 #' @export
+#' @seealso tyler
+#' @seealso tyler
 create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
   # Add jitter to latitude and longitude coordinates
   jittered_physician_data <- dplyr::mutate(physician_data,

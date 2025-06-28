@@ -33,6 +33,7 @@
 #' filtered_data <- data.frame(state = c("California", "New York", "Texas", "Nevada"))
 #' states_where_physicians_were_NOT_contacted(filtered_data)
 #'
+#' @seealso tyler
 states_where_physicians_were_NOT_contacted <- function(filtered_data, all_states = NULL) {
 
   # Default list of all states including Washington, DC

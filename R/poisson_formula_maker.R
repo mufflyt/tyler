@@ -19,6 +19,7 @@
 #' formula
 #'
 #' @export
+#' @seealso tyler
 create_formula <- function(data, response_var, random_effect = NULL) {
   cat("Creating formula with response variable:", response_var, "\n")
 

@@ -10,6 +10,7 @@
 #' @importFrom dplyr bind_rows
 #' @importFrom censusapi getCensus
 #' @export
+#' @seealso tyler
 get_census_data <- function(us_fips_list, vintage = 2022) {
 
   library(dplyr)

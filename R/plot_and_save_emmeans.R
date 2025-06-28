@@ -60,6 +60,7 @@
 #' }
 #'
 #' @export
+#' @seealso tyler
 plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, color_by, output_dir = "Ari/Figures") {
   # Load necessary packages
   if (!requireNamespace("emmeans", quietly = TRUE)) {

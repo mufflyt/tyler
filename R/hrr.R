@@ -8,6 +8,7 @@
 #' @importFrom dplyr filter
 #'
 #' @export
+#' @seealso tyler
 hrr <- function(remove_HI_AK = TRUE) {
   cat("Loading necessary packages...\n")
 
@@ -45,6 +46,7 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @importFrom rnaturalearth ne_countries
 #'
 #' @export
+#' @seealso tyler
 hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all") {
   sf::sf_use_s2(FALSE)
 

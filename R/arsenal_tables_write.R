@@ -11,6 +11,7 @@
 #' \dontrun{
 #' arsenal_tables_write2word(my_table, "output_table")
 #' }
+#' @seealso tyler
 arsenal_tables_write2word <- function(object, filename) {
   # Validate input parameters
   if (!is.data.frame(object)) {

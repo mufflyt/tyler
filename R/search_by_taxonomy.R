@@ -17,6 +17,7 @@
 #' @importFrom stringr str_remove_all str_to_lower str_detect
 #' @importFrom readr write_rds
 #' @export
+#' @seealso tyler
 search_by_taxonomy <- function(taxonomy_to_search) {
   # Create an empty data frame to store search results
   data <- data.frame()

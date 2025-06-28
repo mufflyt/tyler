@@ -12,6 +12,7 @@
 #' MaxTable(vec, mult = TRUE) # Returns c("A", "B")
 #' @export
 
+#' @seealso tyler
 MaxTable <- function(InVec, mult = FALSE) {
   if (length(InVec) == 0) {
     return(character(0))
