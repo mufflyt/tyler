@@ -11,6 +11,7 @@
 #' @importFrom dplyr filter mutate
 #' @export
 #'
+#' @seealso tyler
 validate_and_remove_invalid_npi <- function(input_data) {
 
   cat("Starting validate_and_remove_invalid_npi...\n")
@@ -66,6 +67,7 @@ validate_and_remove_invalid_npi <- function(input_data) {
 #' @importFrom dplyr mutate
 #'
 #' @export
+#' @seealso tyler
 retrieve_clinician_data <- function(input_data) {
 
   if (is.data.frame(input_data)) {
@@ -79,6 +81,7 @@ retrieve_clinician_data <- function(input_data) {
   }
 
   # Function to retrieve clinician data for a single NPI
+#' @seealso tyler
   get_clinician_data <- function(npi) {
     if (!is.numeric(npi) || nchar(npi) != 10) {
       cat("Invalid NPI:", npi, "\n")

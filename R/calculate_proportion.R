@@ -29,6 +29,7 @@
 #'
 #' @import dplyr
 #' @export
+#' @seealso tyler
 calculate_proportion <- function(df, variable_name) {
   tabyl_result <- df %>%
     count({{ variable_name }}, name = "n") %>%

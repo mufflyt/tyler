@@ -15,6 +15,7 @@
 #' }
 #'
 #' @export
+#' @seealso tyler
 remove_constant_vars <- function(data_frame) {
 
   # Log: Starting the function

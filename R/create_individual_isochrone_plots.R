@@ -31,6 +31,7 @@
 #' }
 #'
 #' @export
+#' @seealso tyler
 create_individual_isochrone_plots <- function(isochrones, drive_times) {
   # Display setup instructions
   cat("\033[34mInstructions:\033[0m\n")

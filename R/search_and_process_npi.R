@@ -20,6 +20,7 @@
 #' @importFrom data.table rbindlist
 #' @importFrom readr write_csv
 #' @export
+#' @seealso tyler
 search_and_process_npi <- function(data,
                                    enumeration_type = "ind",
                                    limit = 5L,
@@ -44,6 +45,7 @@ search_and_process_npi <- function(data,
   bc <- c("Pathology", "Pediatrics", "Physical Medicine & Rehabilitation", "Plastic Surgery", "Preventive Medicine")
 
   # Function to search NPI based on first and last names
+#' @seealso tyler
   search_npi <- function(first_name, last_name) {
     cat("Searching NPI for:", first_name, last_name, "\n")
     tryCatch(
@@ -76,6 +78,7 @@ search_and_process_npi <- function(data,
   pb <- progress::progress_bar$new(total = total_names)
 
   # Function to save results to file
+#' @seealso tyler
   save_results <- function(result, file_prefix, directory) {
     timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
     file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, ".csv"))

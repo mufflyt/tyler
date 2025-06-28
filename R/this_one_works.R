@@ -17,6 +17,7 @@
 #' # Call the function
 #' scrape_result <- scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 9150)
 #'
+#' @seealso tyler
 scrape_physicians_data_with_tor <- function(startID, endID, torPort) {
   cat("Starting scrape_physicians_data_with_tor...\n")
   cat("Parameters - startID:", startID, "endID:", endID, "torPort:", torPort, "\n")

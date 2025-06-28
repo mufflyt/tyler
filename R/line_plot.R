@@ -57,6 +57,7 @@
 #'     file_prefix = "ortho_sports_vs_insurance_none"
 #' )
 
+#' @seealso tyler
 create_line_plot <- function(data,
                              x_var,
                              y_var,

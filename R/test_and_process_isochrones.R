@@ -33,6 +33,7 @@
 #' #   dplyr::filter(!id %in% error_rows)
 #'
 
+#' @seealso tyler
 test_and_process_isochrones <- function(input_file) {
   # Parameter validation
   stopifnot(is.data.frame(input_file), all(c("lat", "long") %in% colnames(input_file)))
@@ -128,6 +129,7 @@ test_and_process_isochrones <- function(input_file) {
 #'              layer = "isochrones", driver = "ESRI Shapefile", quiet = FALSE)
 #'
 
+#' @seealso tyler
 process_and_save_isochrones <- function(input_file, chunk_size = 25) {
   # Parameter validation
   stopifnot(is.data.frame(input_file), all(c("lat", "long") %in% colnames(input_file)),

@@ -32,6 +32,7 @@
 #'                                   target_strings = c("doc_information", "doctor_notes"),
 #'                                   new_names = c("doctor_info", "notes"))
 #' print(df)
+#' @seealso tyler
 rename_columns_by_substring <- function(data, target_strings, new_names) {
   # Initial checks and setup
   if (length(target_strings) != length(new_names)) {
@@ -92,6 +93,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' standard_names <- c("doctor_info", "patient_contact_info")
 #' cleaned_df <- clean_phase_2_data(df, required_strings, standard_names)
 #' print(cleaned_df)
+#' @seealso tyler
 clean_phase_2_data <- function(data_or_path, required_strings, standard_names) {
   # Data loading and initial checks
   if (is.character(data_or_path)) {

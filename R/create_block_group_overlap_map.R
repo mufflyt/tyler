@@ -24,6 +24,7 @@
 #' @importFrom sf st_transform
 #'
 #' @export
+#' @seealso tyler
 create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir = "figures/") {
   bg_data <- sf::st_transform(bg_data, 4326)
   pal <- leaflet::colorNumeric("Purples", domain = bg_data$overlap)

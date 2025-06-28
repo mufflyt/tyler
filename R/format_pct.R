@@ -25,6 +25,7 @@
 #' print(no_decimal)  # Output: "50%"
 #'
 #' @export
+#' @seealso tyler
 format_pct <- function(x, my_digits = 1) {
   format(x, digits = my_digits, nsmall = my_digits)
 }

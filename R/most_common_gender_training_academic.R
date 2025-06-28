@@ -41,8 +41,10 @@
 #'
 #' @import dplyr
 #' @export
+#' @seealso tyler
 most_common_gender_training_academic <- function(df) {
   # Helper function to get the most common value and proportion
+#' @seealso tyler
   calculate_proportion <- function(df, column) {
     df <- df %>% filter(!is.na(!!sym(column)))
     total_count <- nrow(df)

@@ -27,6 +27,7 @@
 #'
 #' @import dplyr
 #' @export
+#' @seealso tyler
 physician_age <- function(df, age_column) {
   # Calculate the median age
   median_age <- round(median(df[[age_column]], na.rm = TRUE), 2)

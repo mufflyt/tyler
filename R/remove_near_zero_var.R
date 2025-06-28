@@ -18,6 +18,7 @@
 #'@importFrom dplyr select
 #'
 #' @export
+#' @seealso tyler
 remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
   # Log: Starting the function
   message("Starting the function to remove near-zero variance variables.")

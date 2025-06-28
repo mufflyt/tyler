@@ -27,6 +27,7 @@
 #'
 #' @import dplyr
 #' @export
+#' @seealso tyler
 calcpercentages <- function(df, variable) {
   variable <- as.character(variable)  # Convert factor to character
 

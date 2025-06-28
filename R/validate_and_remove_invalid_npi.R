@@ -17,6 +17,7 @@
 #' # valid_df <- validate_and_remove_invalid_npi(input_data)
 #'
 #' @export
+#' @seealso tyler
 validate_and_remove_invalid_npi <- function(input_data) {
 
   if (is.data.frame(input_data)) {

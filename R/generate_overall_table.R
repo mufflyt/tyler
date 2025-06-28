@@ -21,11 +21,13 @@
 #' generate_overall_table("data/Table1.rds", "output_tables")
 #' }
 
+#' @seealso tyler
 tm_write2pdf <- function(object, filename) {
   print("Function Sanity Check: Creating Arsenal Table as a PDF")
   arsenal::write2pdf(object, filename, keep.md = TRUE, quiet = TRUE)
 }
 
+#' @seealso tyler
 generate_overall_table <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
   cat("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.\n")
   # Log function start
