@@ -1,0 +1,25 @@
+PKG <- "tyler"
+
+citHeader(paste("To cite the R package", PKG, "in publications use:"))
+
+if(!exists("meta") || is.null(meta)) meta <- packageDescription(PKG)
+stopifnot(meta$Package == PKG)
+
+year <- sub(".*(2[[:digit:]]{3}).*", "\\1", meta$Date)
+vers <- paste("R package version", meta$Version)
+url <- "https://mufflyt.github.io/tyler/"
+
+bibentry(bibtype = "Manual",
+         title  = meta$Title,
+         author = person("Tyler", "Muffly",
+                        email = "tyler.muffly@dhha.org",
+                        role = c("aut", "cre"),
+                        comment = c(ORCID = "0000-0002-2044-1693")),
+         year   = year,
+         note   = vers,
+         url    = url,
+         textVersion = paste("Tyler Muffly (", year, ").",
+                            meta$Title, ".", vers, ".",
+                            "Available at", url))
+
+citFooter("Please see the package website for more details and updates.")
