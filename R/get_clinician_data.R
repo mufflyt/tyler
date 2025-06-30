@@ -69,6 +69,13 @@ validate_and_remove_invalid_npi <- function(input_data) {
 #' @family npi
 #' @export
 retrieve_clinician_data <- function(input_data) {
+  if (!requireNamespace("provider", quietly = TRUE)) {
+    stop(
+      "Package 'provider' is required for this function. " ,
+      "Install it from GitHub with remotes::install_github('andrewallenbruce/provider').",
+      call. = FALSE
+    )
+  }
 
   if (is.data.frame(input_data)) {
     # Input is a dataframe

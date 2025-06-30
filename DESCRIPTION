@@ -54,7 +54,6 @@ Imports:
     npi,
     openxlsx,
     progress,
-    provider,
     purrr,
     rainbow,
     readr,
@@ -76,7 +75,6 @@ Imports:
     viridis,
     webshot,
     zipcodeR
-Remotes: andrewallenbruce/provider, lmullen/genderdata
 LazyData: true
 Files: R/
 Suggests: 
@@ -84,6 +82,7 @@ Suggests:
     pkgdown,
     rmarkdown,
     stats,
+    provider,
     genderdata
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
