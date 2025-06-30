@@ -25,3 +25,5 @@
 # Ignore data files
 .*\.rds$
 .*\.csv$
+^To_amany\.R$
+^install_log\.txt$
