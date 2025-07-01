@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this package, please cite it as below."
+title: "tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care"
+version: "1.2.1"
+date-released: 2024-06-28
+authors:
+  - family-names: Muffly
+    given-names: Tyler
+    orcid: https://orcid.org/0000-0002-2044-1693
+license: MIT
+repository-code: https://github.com/mufflyt/tyler
+url: https://github.com/mufflyt/tyler
+type: software
