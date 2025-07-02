@@ -23,6 +23,17 @@ See the package vignette for a fuller introduction and suggestions on how to use
 
 vignette(topic = "????", package = "tyler")
 
+## Use Cases
+
+The package vignettes highlight practical workflows for working with provider data:
+
+- [Create Isochrones](https://mufflyt.github.io/tyler/articles/create_isochrones.html) – generate drive-time polygons for access analyses.
+- [Get Census Data](https://mufflyt.github.io/tyler/articles/get_census_data.html) – retrieve demographic information from the U.S. Census.
+- [Geocoding Overview](https://mufflyt.github.io/tyler/articles/geocode.html) – convert addresses to latitude and longitude for mapping.
+- [Search & Process NPI](https://mufflyt.github.io/tyler/articles/search_and_process_npi.html) – identify providers by name and fetch NPI details.
+- [Validate & Remove Invalid NPI](https://mufflyt.github.io/tyler/articles/validate_and_remove_invalid_npi.html) – clean NPI lists using CMS data.
+- [Aggregating Provider Data](https://mufflyt.github.io/tyler/articles/aggregating_provider_data.html) – combine multiple data sources into a single dataset.
+
 
 ### Add in hospital information data from the AHA scraper!!!!
 
