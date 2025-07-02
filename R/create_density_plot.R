@@ -14,7 +14,7 @@
 #' @param plot_title A string specifying the title of the plot. Default is `NULL` (no title).
 #' @param verbose A boolean indicating whether to print messages about the saved plot locations. Default is TRUE.
 #'
-#' @return This function displays the plot and saves it to the specified directory.
+#' @return Invisibly returns the generated ggplot object.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_density scale_x_log10 scale_x_sqrt labs theme_light theme ggsave
 #' @importFrom viridis viridis_pal
@@ -118,4 +118,6 @@ create_density_plot <- function(data,
   if (verbose) {
     cat("Plots saved to:", tiff_filename, "and", png_filename, "\n")
   }
+
+  invisible(density_plot)
 }

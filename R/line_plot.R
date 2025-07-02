@@ -15,7 +15,7 @@
 #' @param line_color A string specifying the color of the summary line (median). Default is "red".
 #' @param verbose A boolean indicating whether to print messages about the saved plot locations. Default is TRUE.
 #'
-#' @return This function saves the plot to the specified directory and returns no value.
+#' @return Invisibly returns the generated ggplot object.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_point geom_line stat_summary ylab theme_minimal element_rect element_blank ggsave
 #' @importFrom viridis viridis_pal
@@ -115,4 +115,6 @@ create_line_plot <- function(plot_data,
   if (verbose) {
     cat("Plots saved to:", tiff_filename, "and", png_filename, "\n")
   }
+
+  invisible(line_plot)
 }
