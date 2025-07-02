@@ -35,6 +35,9 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_p
   WrongIDs <- c()
   cat("Initialized empty data frames for Physicians and WrongIDs.\n")
 
+  # Temporary directory for output files
+  temp_dir <- tempdir()
+
   # API Inputs
   base <- "https://api.abog.org/"
   endpoint <- "diplomate/"

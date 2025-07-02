@@ -1,5 +1,5 @@
 url: https://mufflyt.github.io/tyler/
-destination: docs  # 👈 Needed for correct site deployment
+destination: docs  # Needed for correct site deployment
 
 template:
   bootstrap: 5

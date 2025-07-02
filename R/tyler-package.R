@@ -1,4 +1,4 @@
-#' @keywords NPPES NPI healthcare
+#' @keywords NPPES NPI healthcare internal
 "_PACKAGE"
 
 ## usethis namespace: start
