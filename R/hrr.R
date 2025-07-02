@@ -8,6 +8,8 @@
 #' @importFrom dplyr filter
 #'
 #' @export
+#' @examples
+#' hrr()
 hrr <- function(remove_HI_AK = TRUE) {
   cat("Loading necessary packages...\n")
 
@@ -45,6 +47,10 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @importFrom rnaturalearth ne_countries
 #'
 #' @export
+#' @examples
+#' \dontrun{
+#' hrr_generate_maps(physician_sf)
+#' }
 hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all") {
   sf::sf_use_s2(FALSE)
 

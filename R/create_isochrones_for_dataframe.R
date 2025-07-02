@@ -15,6 +15,10 @@
 #' @importFrom data.table rbindlist
 #' @family mapping
 #' @export
+#' @examples
+#' \dontrun{
+#' isochrones_data <- create_isochrones_for_dataframe("points.csv")
+#' }
 create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800), api_key = Sys.getenv("HERE_API_KEY"), output_dir = "data") {
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"

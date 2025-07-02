@@ -23,6 +23,21 @@
 #' generate_overall_table("data/Table1.rds", "output_tables")
 #' }
 
+#' Write an Arsenal table to a PDF file
+#'
+#' Utility wrapper around `arsenal::write2pdf` to save a table object
+#' as a PDF document.
+#'
+#' @param object An `arsenal` table object to write.
+#' @param filename Path to the output PDF file.
+#'
+#' @return Invisibly returns the file path.
+#'
+#' @examples
+#' \dontrun{
+#' tm_write2pdf(overall_summary, "table.pdf")
+#' }
+#' @export
 tm_write2pdf <- function(object, filename) {
   print("Function Sanity Check: Creating Arsenal Table as a PDF")
   arsenal::write2pdf(object, filename, keep.md = TRUE, quiet = TRUE)

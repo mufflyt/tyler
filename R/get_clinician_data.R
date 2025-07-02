@@ -68,6 +68,10 @@ validate_and_remove_invalid_npi <- function(input_data) {
 #'
 #' @family npi
 #' @export
+#' @examples
+#' \dontrun{
+#' clinician_df <- retrieve_clinician_data("clinicians.csv")
+#' }
 retrieve_clinician_data <- function(input_data) {
   if (!requireNamespace("provider", quietly = TRUE)) {
     stop(
