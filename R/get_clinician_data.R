@@ -63,7 +63,6 @@ validate_and_remove_invalid_npi <- function(input_data) {
 #' @importFrom purrr map
 #' @importFrom readr read_csv
 #' @importFrom tidyr unnest_wider
-#' @importFrom provider clinicians
 #' @importFrom dplyr mutate
 #'
 #' @family npi
