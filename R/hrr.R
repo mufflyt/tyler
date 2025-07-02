@@ -15,7 +15,12 @@ hrr <- function(remove_HI_AK = TRUE) {
 
   # Load the hospital referral region shapefile
   cat("Getting the hospital referral region shapefile...\n")
-  hrr <- sf::read_sf("data/hrr-shapefile/Hrr98Bdry_AK_HI_unmodified.shp")
+  hrr_path <- system.file(
+    "extdata",
+    "hrr-shapefile/Hrr98Bdry_AK_HI_unmodified.shp",
+    package = "tyler"
+  )
+  hrr <- sf::read_sf(hrr_path)
   hrr <- sf::st_transform(hrr, 4326)
 
   # Optionally remove Hawaii and Alaska
