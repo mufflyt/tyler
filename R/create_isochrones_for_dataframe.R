@@ -74,6 +74,7 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
 
   # Save the isochrones data to an RDS file
   readr::write_rds(isochrones, file.path(output_dir, paste0("isochrones_raw_output_from_here_api_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds")))
+  beepr::beep(2)
 
 # Usage example:
 #isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(1800, 3600, 7200, 10800))

@@ -105,6 +105,7 @@ calculate_intersection_overlap_and_save <- function(block_groups, isochrones_joi
       message("Error: ", e)
     }
   )
+  beepr::beep(2)
 }
 
 
