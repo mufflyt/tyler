@@ -79,6 +79,9 @@ Imports:
     viridis,
     webshot,
     zipcodeR
+Remotes:
+    lmullen/genderdata,
+    andrewwallenbruce/provider
 LazyData: true
 Files: R/
 Suggests:
