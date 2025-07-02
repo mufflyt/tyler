@@ -1,6 +1,6 @@
 
 # tyler
-# Warning!!! This project is under active development, wait for the release of version 2.0.0 if you want to use it in production. Please help to improve this package by submitting issues and pull requests.
+# This package is under active development. [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 
 <!-- badges: start -->
 <img src="https://github.com/mufflyt/tyler/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57" width="20%">
@@ -99,6 +99,7 @@ tyler::ACOG_Districts
 
 ### Data: 'tyler::physicians' 
 Internal package dataframe with the names and coordinates for subspecialists in OBGYN.  The source file `Physicians.rds` is found at `tyler/inst/extdata`
+Shapefiles used for mapping are stored in `inst/extdata` and currently add about 20 MB to the package size. For rOpenSci review, these may be hosted externally and downloaded on demand.
 ``` r
 tyler::physicians
 

@@ -12,6 +12,7 @@ RoxygenNote: 7.3.2
 License: MIT + file LICENSE
 URL: https://github.com/mufflyt/tyler, https://mufflyt.github.io/tyler/
 Date: 2024-06-28
+Lifecycle: experimental
 Keywords: healthcare, patient access, audit study, NPI
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:
