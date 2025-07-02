@@ -63,21 +63,21 @@ check_normality <- function(data, variable) {
     # Data is approximately normal
     mean_value <- mean(data_var, na.rm = TRUE)
     sd_value <- sd(data_var, na.rm = TRUE)
-    result <- list(mean = mean_value, sd = sd_value)
+    summary_stats <- list(mean = mean_value, sd = sd_value)
     message("Data is approximately normal. Mean: ", mean_value, ", SD: ", sd_value)
   } else {
     # Data is not normal
     median_value <- stats::median(data_var, na.rm = TRUE)
     iqr_value <- stats::IQR(data_var, na.rm = TRUE)
-    result <- list(median = median_value, iqr = iqr_value)
+    summary_stats <- list(median = median_value, iqr = iqr_value)
     message("Data is NOT normally distributed. Use non-parametric measures like median: ", median_value, ", IQR: ", iqr_value)
   }
 
   # Output results
-  print(result)
+  print(summary_stats)
   message("Summary calculation completed for variable: ", variable)
 
-  return(result)
+  return(summary_stats)
 }
 
 # Example usage with your dataframe and outcome variable

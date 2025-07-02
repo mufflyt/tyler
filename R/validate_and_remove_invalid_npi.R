@@ -21,31 +21,31 @@ validate_and_remove_invalid_npi <- function(input_data) {
 
   if (is.data.frame(input_data)) {
     # Input is a dataframe
-    df <- input_data
+    npi_df <- input_data
   } else if (is.character(input_data)) {
     # Input is a file path to a CSV
-    df <- readr::read_csv(input_data)
+    npi_df <- readr::read_csv(input_data)
   } else {
     stop("Input must be a dataframe or a file path to a CSV.")
   }
 
   # Remove rows with missing or empty NPIs
-  df <- df %>%
+  npi_df <- npi_df %>%
     dplyr::filter(!is.na(npi) & npi != "")
 
   # Add a new column "npi_is_valid" to indicate NPI validity
-  df <- df %>%
+  npi_df <- npi_df %>%
     dplyr::mutate(npi_is_valid = sapply(npi, function(x) {
       if (is.numeric(x) && nchar(x) == 10) {
         npi::npi_is_valid(as.character(x))
       } else {
         FALSE
       }
-    })) %>%
+      })) %>%
     dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
 
   # Return the valid dataframe with the "npi_is_valid" column
-  return(df)
+  return(npi_df)
 }
 
 # Example usage:

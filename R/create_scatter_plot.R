@@ -2,7 +2,7 @@
 #'
 #' This function generates a scatter plot designed for mystery caller studies, allowing for the visualization of waiting times or similar outcomes across different categories, such as insurance types. The function supports transformations on the y-axis, custom jitter, and colors each category in the x-axis using the `viridis` color palette. The plot is automatically displayed and saved with a specified resolution.
 #'
-#' @param data A dataframe containing the data to be plotted. Must contain the variables specified in `x_var` and `y_var`.
+#' @param plot_data A dataframe containing the data to be plotted. Must contain the variables specified in `x_var` and `y_var`.
 #' @param x_var A string representing the column name for the x-axis variable. This should be a categorical or factor variable (e.g., insurance type).
 #' @param y_var A string representing the column name for the y-axis variable. This should be a numeric variable (e.g., waiting time in days).
 #' @param y_transform A string specifying the transformation for the y-axis: "log" for log transformation (log1p), "sqrt" for square root transformation, or "none" for no transformation. Default is "none".
@@ -27,7 +27,7 @@
 #' @examples
 #' # Example 1: Basic scatter plot with log transformation
 #' create_scatter_plot(
-#'     data = df3,
+#'     plot_data = df3,
 #'     x_var = "insurance",
 #'     y_var = "business_days_until_appointment",
 #'     y_transform = "log",  # Log transformation
@@ -41,7 +41,7 @@
 #'
 #' # Example 2: Scatter plot with square root transformation and custom jitter
 #' create_scatter_plot(
-#'     data = df3,
+#'     plot_data = df3,
 #'     x_var = "insurance",
 #'     y_var = "business_days_until_appointment",
 #'     y_transform = "sqrt",  # Square root transformation
@@ -57,7 +57,7 @@
 #'
 #' # Example 3: Scatter plot without any transformation and increased transparency
 #' create_scatter_plot(
-#'     data = df3,
+#'     plot_data = df3,
 #'     x_var = "insurance",
 #'     y_var = "business_days_until_appointment",
 #'     y_transform = "none",  # No transformation
@@ -70,7 +70,7 @@
 #'     plot_title = "Scatter Plot Without Transformation"
 #' )
 
-create_scatter_plot <- function(data,
+create_scatter_plot <- function(plot_data,
                                 x_var,
                                 y_var,
                                 y_transform = "none",
@@ -86,21 +86,21 @@ create_scatter_plot <- function(data,
                                 verbose = TRUE) {
 
   # Filter out zero or negative values and NAs from the y_var column
-  data <- dplyr::filter(data, .data[[y_var]] > 0, !is.na(.data[[y_var]]))
+  plot_data <- dplyr::filter(plot_data, .data[[y_var]] > 0, !is.na(.data[[y_var]]))
 
   # Handle transformations
   if (y_transform == "log") {
-    data <- dplyr::mutate(data, !!y_var := log1p(.data[[y_var]]))
+    plot_data <- dplyr::mutate(plot_data, !!y_var := log1p(.data[[y_var]]))
     y_label <- if (is.null(y_label)) paste("Log (", y_var, ")", sep = "") else y_label
   } else if (y_transform == "sqrt") {
-    data <- dplyr::mutate(data, !!y_var := sqrt(.data[[y_var]]))
+    plot_data <- dplyr::mutate(plot_data, !!y_var := sqrt(.data[[y_var]]))
     y_label <- if (is.null(y_label)) paste("Sqrt (", y_var, ")", sep = "") else y_label
   } else {
     y_label <- if (is.null(y_label)) y_var else y_label
   }
 
   # Create the scatter plot with colored points by x_var
-  scatter_plot <- ggplot2::ggplot(data, ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var), color = !!rlang::sym(x_var))) +
+  scatter_plot <- ggplot2::ggplot(plot_data, ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var), color = !!rlang::sym(x_var))) +
     ggplot2::geom_jitter(width = jitter_width, height = jitter_height, alpha = point_alpha) +
     ggplot2::labs(
       x = if (is.null(x_label)) x_var else x_label,

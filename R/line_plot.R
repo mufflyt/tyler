@@ -2,7 +2,7 @@
 #'
 #' This function creates a line plot using ggplot2 with options for transforming the y-axis, grouping lines, and saving the plot with a specified resolution. The plot can be saved in both TIFF and PNG formats with automatic filename generation.
 #'
-#' @param data A dataframe containing the data to be plotted. Must contain the variables specified in `x_var` and `y_var`.
+#' @param plot_data A dataframe containing the data to be plotted. Must contain the variables specified in `x_var` and `y_var`.
 #' @param x_var A string representing the column name for the x-axis variable. This should be a categorical or factor variable.
 #' @param y_var A string representing the column name for the y-axis variable. This should be a numeric variable.
 #' @param y_transform A string specifying the transformation for the y-axis: "log" for log transformation (log1p), "sqrt" for square root transformation, or "none" for no transformation. Default is "none".
@@ -25,7 +25,7 @@
 #' @examples
 #' # Example 1: Basic plot with log transformation
 #' create_line_plot(
-#'     data = df3,
+#'     plot_data = df3,
 #'     x_var = "insurance",
 #'     y_var = "business_days_until_appointment",
 #'     y_transform = "log",  # Log transformation
@@ -36,7 +36,7 @@
 #'
 #' # Example 2: Plot with square root transformation and lines grouped by 'last'
 #' create_line_plot(
-#'     data = df3,
+#'     plot_data = df3,
 #'     x_var = "insurance",
 #'     y_var = "business_days_until_appointment",
 #'     y_transform = "sqrt",  # Square root transformation
@@ -49,7 +49,7 @@
 #'
 #' # Example 3: Plot without any transformation and without lines
 #' create_line_plot(
-#'     data = df3,
+#'     plot_data = df3,
 #'     x_var = "insurance",
 #'     y_var = "business_days_until_appointment",
 #'     y_transform = "none",  # No transformation
@@ -58,7 +58,7 @@
 #'     file_prefix = "ortho_sports_vs_insurance_none"
 #' )
 
-create_line_plot <- function(data,
+create_line_plot <- function(plot_data,
                              x_var,
                              y_var,
                              y_transform = "none",
@@ -72,21 +72,21 @@ create_line_plot <- function(data,
                              verbose = TRUE) {
 
   # Remove NA values from the y_var column
-  data <- dplyr::filter(data, !is.na(rlang::sym(y_var)))
+  plot_data <- dplyr::filter(plot_data, !is.na(rlang::sym(y_var)))
 
   # Handle transformations
   if (y_transform == "log") {
-    data <- dplyr::mutate(data, !!y_var := log1p(.data[[y_var]]))
+    plot_data <- dplyr::mutate(plot_data, !!y_var := log1p(.data[[y_var]]))
     y_label <- paste("Log (", y_var, ")", sep = "")
   } else if (y_transform == "sqrt") {
-    data <- dplyr::mutate(data, !!y_var := sqrt(.data[[y_var]]))
+    plot_data <- dplyr::mutate(plot_data, !!y_var := sqrt(.data[[y_var]]))
     y_label <- paste("Sqrt (", y_var, ")", sep = "")
   } else {
     y_label <- y_var
   }
 
   # Create the plot
-  line_plot <- ggplot2::ggplot(data, ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var))) +
+  line_plot <- ggplot2::ggplot(plot_data, ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var))) +
     ggplot2::geom_point(color = ifelse(point_color == "viridis", viridis::viridis_pal()(1), point_color))
 
   if (use_geom_line & !is.null(geom_line_group)) {

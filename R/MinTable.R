@@ -8,11 +8,11 @@
 #'         If \code{mult} is TRUE, returns a character vector containing all the levels with the minimum value.
 #' @examples
 #' vec <- factor(c("A", "B", "A", "C", "B", "B"))
-#' MinTable(vec) # Returns "C"
-#' MinTable(vec, mult = TRUE) # Returns "C"
+#' min_table(vec) # Returns "C"
+#' min_table(vec, mult = TRUE) # Returns "C"
 #' @export
 
-MinTable <- function(InVec, mult = FALSE) {
+min_table <- function(InVec, mult = FALSE) {
   if (!is.factor(InVec) || length(InVec) == 0) {
     return(character(0))
   }

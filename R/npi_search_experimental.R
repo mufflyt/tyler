@@ -37,25 +37,25 @@ search_npi <- function(input_data) {
 
   if (is.data.frame(input_data)) {
     # Input is a dataframe
-    df <- input_data
+    names_df <- input_data
   } else if (is.character(input_data)) {
     # Input is a file path to a CSV
-    df <- readr::read_csv(input_data)
+    names_df <- readr::read_csv(input_data)
   } else {
     stop("Input must be a dataframe or a file path to a CSV.")
   }
 
   # Extract first and last names
-  first_name <- df$first
-  last_name <- df$last
+  first_name <- names_df$first
+  last_name <- names_df$last
 
   # NPI search logic
   npi <- npi::npi_search(first_name = first_name, last_name = last_name)
-  t <- npi::npi_flatten(npi, cols = c("basic", "taxonomies"))
+  npi_df <- npi::npi_flatten(npi, cols = c("basic", "taxonomies"))
 
   # Filter results based on specified taxonomies
-  t_filtered <- t %>%
+  filtered_npi <- npi_df %>%
     dplyr::filter(taxonomies_desc %in% vc | taxonomies_desc %in% bc)
 
-  return(t_filtered)
+  return(filtered_npi)
 }
