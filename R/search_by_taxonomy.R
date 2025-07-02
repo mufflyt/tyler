@@ -20,7 +20,7 @@
 #' @export
 search_by_taxonomy <- function(taxonomy_to_search) {
   # Create an empty data frame to store search results
-  data <- data.frame()
+  npi_data <- data.frame()
   cat("Starting search_by_taxonomy\n")
 
   # Loop over each taxonomy description
@@ -28,7 +28,7 @@ search_by_taxonomy <- function(taxonomy_to_search) {
     cat("Searching for taxonomy:", taxonomy, "\n")
     tryCatch({
       # Perform the search for the current taxonomy
-      result <- npi::npi_search(
+      search_result <- npi::npi_search(
         taxonomy_description = taxonomy,
         country_code = "US",
         enumeration_type = "ind",
@@ -36,10 +36,10 @@ search_by_taxonomy <- function(taxonomy_to_search) {
       )
       cat("Search completed for taxonomy:", taxonomy, "\n")
 
-      if (!is.null(result)) {
+      if (!is.null(search_result)) {
         cat("Processing data for taxonomy:", taxonomy, "\n")
         # Process and filter the data for the current taxonomy
-        data_taxonomy <- npi::npi_flatten(result)
+        data_taxonomy <- npi::npi_flatten(search_result)
         # Follow-up data transformations and filters
         data_taxonomy <- dplyr::distinct(data_taxonomy, "npi", .keep_all = TRUE)
         data_taxonomy <- dplyr::mutate(data_taxonomy, search_term = taxonomy)
@@ -70,7 +70,7 @@ search_by_taxonomy <- function(taxonomy_to_search) {
         data_taxonomy <- dplyr::mutate(data_taxonomy, full_name = paste(stringr::str_to_lower(basic_first_name), stringr::str_to_lower(basic_last_name)))
 
         # Append the data for the current taxonomy to the main data frame
-        data <- dplyr::bind_rows(data, data_taxonomy)
+        npi_data <- dplyr::bind_rows(npi_data, data_taxonomy)
         cat("Data appended for taxonomy:", taxonomy, "\n")
       } else {
         cat("No data found for taxonomy:", taxonomy, "\n")
@@ -83,11 +83,11 @@ search_by_taxonomy <- function(taxonomy_to_search) {
   # Attempt to write the combined data frame to an RDS file
   tryCatch({
     filename <- paste("data/search_taxonomy", format(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"), ".rds", sep = "_")
-    readr::write_rds(data, filename)
+    readr::write_rds(npi_data, filename)
     cat("Data saved to file:", filename, "\n")
   }, error = function(e) {
     message("Error saving data to file:\n", e$message)
   })
 
-  return(data)
+    return(npi_data)
 }

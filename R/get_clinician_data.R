@@ -18,24 +18,24 @@ validate_and_remove_invalid_npi <- function(input_data) {
 
   if (is.data.frame(input_data)) {
     cat("Input is a data frame.\n")
-    df <- input_data
+    clinician_df <- input_data
   } else if (is.character(input_data)) {
     cat("Input is a file path to a CSV.\n")
-    df <- readr::read_csv(input_data, col_types = readr::cols(npi = readr::col_character()))
+    clinician_df <- readr::read_csv(input_data, col_types = readr::cols(npi = readr::col_character()))
   } else {
     stop("Input must be a dataframe or a file path to a CSV.")
   }
 
   cat("Initial dataframe:\n")
-  print(df)
+  print(clinician_df)
 
-  df <- df %>%
+  clinician_df <- clinician_df %>%
     dplyr::filter(!is.na(npi) & npi != "")
 
   cat("After filtering missing or empty NPIs:\n")
-  print(df)
+  print(clinician_df)
 
-  df <- df %>%
+  clinician_df <- clinician_df %>%
     dplyr::mutate(npi_is_valid = sapply(npi, function(x) {
       if (nchar(x) == 10) {
         npi::npi_is_valid(x)
@@ -46,10 +46,10 @@ validate_and_remove_invalid_npi <- function(input_data) {
     dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
 
   cat("After filtering invalid NPIs:\n")
-  print(df)
+  print(clinician_df)
   cat("validate_and_remove_invalid_npi completed.\n")
 
-  return(df)
+  return(clinician_df)
 }
 
 
@@ -79,10 +79,10 @@ retrieve_clinician_data <- function(input_data) {
 
   if (is.data.frame(input_data)) {
     # Input is a dataframe
-    df <- input_data
+    clinician_df <- input_data
   } else if (is.character(input_data)) {
     # Input is a file path to a CSV
-    df <- readr::read_csv(input_data)
+    clinician_df <- readr::read_csv(input_data)
   } else {
     stop("Input must be a dataframe or a file path to a CSV.")
   }
@@ -103,7 +103,7 @@ retrieve_clinician_data <- function(input_data) {
   }
 
   # Clean the NPI numbers and retrieve clinician data
-  df_updated <- validate_and_remove_invalid_npi(df) %>%
+  df_updated <- validate_and_remove_invalid_npi(clinician_df) %>%
     dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data)) %>%
     tidyr::unnest_wider(clinician_data)
 
