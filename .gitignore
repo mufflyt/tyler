@@ -7,8 +7,10 @@
 R/geocode.R
 scripts/R/geocode.R
 docs
+!docs/
 inst/doc
 /Meta/
 ^\\.secrets$
 ^\\.cache$
 ^docs$
+!docs/.nojekyll
