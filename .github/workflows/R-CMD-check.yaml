@@ -55,6 +55,12 @@ jobs:
           cache: true
           needs: check
 
+      - name: Install TinyTeX
+        run: |
+          install.packages("tinytex")
+          tinytex::install_tinytex()
+        shell: Rscript {0}
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
