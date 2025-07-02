@@ -41,15 +41,10 @@ articles:
   - title: "Vignettes"
     navbar: true
     contents:
-      - title: "Create Isochrones"
-        file: create_isochrones
-      - title: "Get Census Data"
-        file: get_census_data
-      - title: "Geocoding Overview"
-        file: geocode
-      - title: "Search & Process NPI"
-        file: search_and_process_npi
-      - title: "Validate & Remove Invalid NPI"
-        file: validate_and_remove_invalid_npi
-      - title: "Aggregating Provider Data"
-        file: aggregating_provider_data
+      - create_isochrones
+      - geocode
+      - get_census_data
+      - my-vignette
+      - search_and_process_npi
+      - validate_and_remove_invalid_npi
+
