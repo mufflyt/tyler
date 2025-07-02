@@ -85,6 +85,7 @@ Suggests:
     knitr,
     pkgdown,
     rmarkdown,
+    covr,
     stats
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
