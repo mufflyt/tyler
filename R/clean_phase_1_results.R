@@ -10,8 +10,10 @@
 #' 'state_name', and optionally 'npi'. If 'npi' is missing or any of its values are NA,
 #' a `random_id` is generated as a fallback.
 #'
-#' @return Invisible NULL; the function is used for its side effects of cleaning data
-#' and outputting a CSV file with cleaned data.
+#' @param output_dir Directory where the cleaned CSV will be saved. Defaults to
+#'   the current working directory.
+#' @return Invisible NULL; the function is used for its side effects of cleaning
+#'   data and outputting a CSV file with cleaned data.
 #'
 #' @examples
 #' \dontrun{
@@ -38,7 +40,7 @@
 # library(openxlsx)
 # library(fs)
 
-clean_phase_1_results <- function(phase1_data) {
+clean_phase_1_results <- function(phase1_data, output_dir = getwd()) {
   if (!requireNamespace("dplyr", quietly = TRUE) ||
       !requireNamespace("janitor", quietly = TRUE) ||
       !requireNamespace("readr", quietly = TRUE) ||
@@ -100,8 +102,11 @@ clean_phase_1_results <- function(phase1_data) {
   }
 
   # Save the dataframe to a CSV file with date and time in the filename
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  }
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
-  output_file <- file.path("/path/to/output/directory", paste0("clean_phase_1_results_", current_datetime, ".csv"))
+  output_file <- file.path(output_dir, paste0("clean_phase_1_results_", current_datetime, ".csv"))
   write_csv(phase1_data, output_file)
   cat("Saved cleaned Phase 1 results dataframe to", output_file, "\n")
 }

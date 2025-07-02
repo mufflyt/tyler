@@ -6,7 +6,9 @@
 #' @param specs A character string specifying the predictor variable(s) for which EMMs are to be computed. For example, this could be the treatment groups, scenarios, or demographic variables.
 #' @param variable_of_interest A character string specifying the variable to be plotted on the x-axis. Typically, this would be the same as the `specs`.
 #' @param color_by A character string specifying the variable used to color the points and error bars. This could be a categorical variable like gender, insurance type, or academic affiliation.
-#' @param output_dir A character string specifying the directory where the plot will be saved. Defaults to "Ari/Figures".
+#' @param output_dir A character string specifying the directory where the plot
+#'   will be saved. Defaults to a folder named "Ari/Figures" in the current
+#'   working directory.
 #'
 #' @return A list containing the estimated marginal means data (`data`) and the ggplot object (`plot`).
 #'
@@ -60,7 +62,9 @@
 #' }
 #'
 #' @export
-plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, color_by, output_dir = "Ari/Figures") {
+plot_and_save_emmeans <- function(model_object, specs, variable_of_interest,
+                                  color_by,
+                                  output_dir = file.path(getwd(), "Ari/Figures")) {
   # Load necessary packages
   if (!requireNamespace("emmeans", quietly = TRUE)) {
     stop("Package 'emmeans' is required but not installed.")
@@ -113,7 +117,9 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
   }
 
   # Save the plot with specific dimensions
-  file_name <- paste0(output_dir, "/interaction_", variable_of_interest, "_comparison_plot_", timestamp, ".png")
+  file_name <- file.path(output_dir,
+                         paste0("interaction_", variable_of_interest,
+                                "_comparison_plot_", timestamp, ".png"))
   cat("Saving plot to:", file_name, "\n")
   ggplot2::ggsave(filename = file_name, plot = p, width = 10, height = 6, bg = "white")
 

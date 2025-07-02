@@ -5,6 +5,10 @@
 #'
 #' @param isochrones An sf object containing isochrone data.
 #' @param drive_times A vector of unique drive times (in minutes) for which maps and shapefiles will be created.
+#' @param html_dir Directory where HTML maps will be saved. Defaults to
+#'   "figures/isochrone_maps" in the current working directory.
+#' @param shapefile_dir Directory where shapefiles will be saved. Defaults to
+#'   "data/shp/isochrone_files" in the current working directory.
 #' @return None. The function creates and saves individual maps and shapefiles.
 #'
 #' @importFrom sf st_union st_sf st_transform st_write
@@ -32,7 +36,9 @@
 #'
 #' @family mapping
 #' @export
-create_individual_isochrone_plots <- function(isochrones, drive_times) {
+create_individual_isochrone_plots <- function(isochrones, drive_times,
+                                              html_dir = file.path(getwd(), "figures/isochrone_maps"),
+                                              shapefile_dir = file.path(getwd(), "data/shp/isochrone_files")) {
   # Display setup instructions
   cat("\033[34mInstructions:\033[0m\n")
   cat("\033[34mTo use this function, follow the example code below:\033[0m\n")
@@ -88,14 +94,19 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
         color = "black"
       )
 
-    # Save the plot to an HTML file
-    output_file <- paste0("figures/isochrone_maps/isochrone_map_", time, "_minutes.html")
+    if (!dir.exists(html_dir)) {
+      dir.create(html_dir, recursive = TRUE)
+    }
+    output_file <- file.path(html_dir, paste0("isochrone_map_", time, "_minutes.html"))
     htmlwidgets::saveWidget(isochrone_map, file = output_file)
 
     message(paste("Saved isochrone map for", time, "minutes as:", output_file))
 
     # Write the shapefile for the current drive time
-    output_shapefile <- paste0("data/shp/isochrone_files/isochrones_", time, "_minutes.shp")
+    if (!dir.exists(shapefile_dir)) {
+      dir.create(shapefile_dir, recursive = TRUE)
+    }
+    output_shapefile <- file.path(shapefile_dir, paste0("isochrones_", time, "_minutes.shp"))
     sf::st_write(isochrones_sf, output_shapefile, append = FALSE)
 
     message(paste("Saved shapefile for", time, "minutes as:", output_shapefile))

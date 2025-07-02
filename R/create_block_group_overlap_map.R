@@ -5,7 +5,8 @@
 #
 #' @param bg_data A SpatialPolygonsDataFrame representing block group data.
 #' @param isochrones_data A SpatialPolygonsDataFrame representing isochrone data.
-#' @param output_dir Directory path for exporting the map files. Default is "figures/".
+#' @param output_dir Directory path for exporting the map files. Default is a
+#'   folder named "figures" in the current working directory.
 #'
 #' @return None
 #'
@@ -25,7 +26,8 @@
 #'
 #' @family mapping
 #' @export
-create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir = "figures/") {
+create_block_group_overlap_map <- function(bg_data, isochrones_data,
+                                           output_dir = file.path(getwd(), "figures")) {
   bg_data <- sf::st_transform(bg_data, 4326)
   pal <- leaflet::colorNumeric("Purples", domain = bg_data$overlap)
 
@@ -65,8 +67,11 @@ create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir 
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
 
   # Define file names with timestamps
-  html_file <- paste0(output_dir, "overlap_bg_map_", timestamp, ".html")
-  png_file <- paste0(output_dir, "overlap_bg_map_", timestamp, ".png")
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  }
+  html_file <- file.path(output_dir, paste0("overlap_bg_map_", timestamp, ".html"))
+  png_file <- file.path(output_dir, paste0("overlap_bg_map_", timestamp, ".png"))
 
   # Export the map to HTML
   htmlwidgets::saveWidget(widget = map, file = html_file, selfcontained = FALSE)

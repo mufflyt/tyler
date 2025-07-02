@@ -7,7 +7,8 @@
 #' @param y_var A string representing the column name for the y-axis variable. This should be a numeric variable (e.g., waiting time in days).
 #' @param y_transform A string specifying the transformation for the y-axis: "log" for log transformation (log1p), "sqrt" for square root transformation, or "none" for no transformation. Default is "none".
 #' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 100.
-#' @param output_dir A string representing the directory where the plot files will be saved. Default is "output".
+#' @param output_dir A string representing the directory where the plot files
+#'   will be saved. Defaults to the current working directory.
 #' @param file_prefix A string used as the prefix for the generated plot filenames. The filenames will have a timestamp appended to ensure uniqueness. Default is "scatter_plot".
 #' @param jitter_width A numeric value specifying the width of the jitter along the x-axis. Default is 0.2.
 #' @param jitter_height A numeric value specifying the height of the jitter along the y-axis. Default is 0.
@@ -75,7 +76,7 @@ create_scatter_plot <- function(data,
                                 y_var,
                                 y_transform = "none",
                                 dpi = 100,
-                                output_dir = "output",
+                                output_dir = getwd(),
                                 file_prefix = "scatter_plot",
                                 jitter_width = 0.2,
                                 jitter_height = 0,
@@ -120,6 +121,9 @@ create_scatter_plot <- function(data,
 
   # Automatic Filename Generation
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  }
   tiff_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".tiff"))
   png_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".png"))
 

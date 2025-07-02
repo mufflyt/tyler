@@ -13,7 +13,8 @@ hrr <- function(remove_HI_AK = TRUE) {
 
   # Load the hospital referral region shapefile
   cat("Getting the hospital referral region shapefile...\n")
-  hrr <- sf::read_sf("data/hrr-shapefile/Hrr98Bdry_AK_HI_unmodified.shp")
+  shp_path <- system.file("extdata", "hrr-shapefile/Hrr98Bdry_AK_HI_unmodified.shp", package = "tyler")
+  hrr <- sf::read_sf(shp_path)
   hrr <- sf::st_transform(hrr, 4326)
 
   # Optionally remove Hawaii and Alaska
@@ -37,6 +38,8 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @param physician_sf An sf object containing physician data with coordinates.
 #' @param trait_map A string specifying the trait map (default is "all").
 #' @param honey_map A string specifying the honey map (default is "all").
+#' @param output_dir Directory where the generated map will be saved. Defaults to
+#'   "figures/hexmap/hexmap_figures" in the current working directory.
 #' @return A ggplot object of the generated map.
 #' @importFrom sf sf_use_s2 st_transform st_make_grid st_sf st_intersection st_join
 #' @importFrom dplyr mutate group_by summarize filter
@@ -45,7 +48,8 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @importFrom rnaturalearth ne_countries
 #'
 #' @export
-hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all") {
+hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all",
+                             output_dir = file.path(getwd(), "figures/hexmap/hexmap_figures")) {
   sf::sf_use_s2(FALSE)
 
   # Load USA shapefile
@@ -125,7 +129,11 @@ hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all"
 
   # Save the map in various formats
   cat("Saving the map...\n")
-  ggplot2::ggsave(filename = paste0("figures/hexmap/hexmap_figures/", trait_map, "_", honey_map, "_honey.tiff"), plot = map_ggplot, width = 10, height = 6, dpi = 800)
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  }
+  output_file <- file.path(output_dir, paste0(trait_map, "_", honey_map, "_honey.tiff"))
+  ggplot2::ggsave(filename = output_file, plot = map_ggplot, width = 10, height = 6, dpi = 800)
 
   return(map_ggplot)
 }

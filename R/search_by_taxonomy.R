@@ -4,6 +4,8 @@
 #'
 #' @param taxonomy_to_search A character vector containing the taxonomy description(s) to search for.
 #' @return A data frame with filtered NPI data based on the specified taxonomy description.
+#' @param output_dir Directory where the results will be saved. Defaults to a
+#'   folder named "data" in the current working directory.
 #'
 #' @examples
 #' # Example usage with multiple taxonomy descriptions:
@@ -18,7 +20,8 @@
 #' @importFrom readr write_rds
 #' @family npi
 #' @export
-search_by_taxonomy <- function(taxonomy_to_search) {
+search_by_taxonomy <- function(taxonomy_to_search,
+                              output_dir = file.path(getwd(), "data")) {
   # Create an empty data frame to store search results
   data <- data.frame()
   cat("Starting search_by_taxonomy\n")
@@ -82,7 +85,11 @@ search_by_taxonomy <- function(taxonomy_to_search) {
 
   # Attempt to write the combined data frame to an RDS file
   tryCatch({
-    filename <- paste("data/search_taxonomy", format(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"), ".rds", sep = "_")
+    if (!dir.exists(output_dir)) {
+      dir.create(output_dir, recursive = TRUE)
+    }
+    filename <- file.path(output_dir,
+                          paste0("search_taxonomy_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds"))
     readr::write_rds(data, filename)
     cat("Data saved to file:", filename, "\n")
   }, error = function(e) {

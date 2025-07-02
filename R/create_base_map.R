@@ -8,6 +8,8 @@
 #' @param jitter_range The range for adding jitter to latitude and longitude coordinates.
 #' @param color_palette The color palette for ACOG district colors.
 #' @param popup_var The variable to use for popup text.
+#' @param output_dir Directory where the HTML and PNG files will be saved.
+#'   Defaults to a folder named "figures" in the current working directory.
 #' @return A Leaflet map object.
 #'
 #' @importFrom viridis viridis
@@ -36,7 +38,11 @@
 #'
 #' @family mapping
 #' @export
-create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
+create_and_save_physician_dot_map <- function(physician_data,
+                                              jitter_range = 0.05,
+                                              color_palette = "magma",
+                                              popup_var = "name",
+                                              output_dir = file.path(getwd(), "figures")) {
   # Add jitter to latitude and longitude coordinates
   jittered_physician_data <- dplyr::mutate(physician_data,
                                            lat = lat + runif(n()) * jitter_range,
@@ -91,8 +97,11 @@ create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.0
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
 
   # Define file names with timestamps
-  html_file <- paste0("figures/dot_map_", timestamp, ".html")
-  png_file <- paste0("figures/dot_map_", timestamp, ".png")
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  }
+  html_file <- file.path(output_dir, paste0("dot_map_", timestamp, ".html"))
+  png_file <- file.path(output_dir, paste0("dot_map_", timestamp, ".png"))
 
   # Save the Leaflet map as an HTML file
   htmlwidgets::saveWidget(widget = dot_map, file = html_file, selfcontained = TRUE)
