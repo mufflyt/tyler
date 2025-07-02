@@ -10,9 +10,14 @@ navbar:
       - home
       - reference
       - articles
+      - datasets
       - news
     right:
       - github
+  components:
+    datasets:
+      text: Datasets
+      href: reference/index.html#datasets
 
 reference:
   - title: "Main Functions"
@@ -23,6 +28,14 @@ reference:
   - title: "NPI Utilities"
     contents:
       - contains("npi")
+
+  - title: "Datasets"
+    desc: "Key built-in datasets"
+    contents:
+      - ACOG_Districts
+      - acgme
+      - fips
+      - taxonomy
 
 articles:
   - title: "Vignettes"
