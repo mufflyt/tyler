@@ -3,7 +3,7 @@
 #' This function creates a Leaflet BASE map with specific configurations, including the base tile layer, scale bar,
 #' default view settings, and layers control.
 #'
-#' @return A Leaflet map object.
+#' @return Invisibly returns the Leaflet map object.
 #' @importFrom leaflet leaflet addProviderTiles clearBounds clearMarkers addScaleBar setView addLayersControl addTiles
 #' @family mapping
 #' @export
@@ -34,5 +34,5 @@ generate_leaflet_base_map <- function() {
     # Add default map tiles with caching and cross-origin support
     leaflet::addTiles(options = leaflet::tileOptions(useCache = TRUE, crossOrigin = TRUE))
 
-  return(map)
+  invisible(map)
 }

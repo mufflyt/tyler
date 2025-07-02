@@ -37,7 +37,7 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @param physician_sf An sf object containing physician data with coordinates.
 #' @param trait_map A string specifying the trait map (default is "all").
 #' @param honey_map A string specifying the honey map (default is "all").
-#' @return A ggplot object of the generated map.
+#' @return Invisibly returns the ggplot object of the generated map.
 #' @importFrom sf sf_use_s2 st_transform st_make_grid st_sf st_intersection st_join
 #' @importFrom dplyr mutate group_by summarize filter
 #' @importFrom ggplot2 geom_sf scale_fill_viridis_c guide_colorbar element_text theme_minimal theme
@@ -127,5 +127,5 @@ hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all"
   cat("Saving the map...\n")
   ggplot2::ggsave(filename = paste0("figures/hexmap/hexmap_figures/", trait_map, "_", honey_map, "_honey.tiff"), plot = map_ggplot, width = 10, height = 6, dpi = 800)
 
-  return(map_ggplot)
+  invisible(map_ggplot)
 }

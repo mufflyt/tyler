@@ -17,7 +17,7 @@
 #' @param plot_title A string specifying the title of the plot. Default is `NULL` (no title).
 #' @param verbose A boolean indicating whether to print messages about the saved plot locations. Default is TRUE.
 #'
-#' @return This function displays the plot and saves it to the specified directory.
+#' @return Invisibly returns the generated ggplot object.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_jitter scale_y_log10 scale_y_sqrt labs theme_minimal element_rect element_blank ggsave
 #' @importFrom viridis viridis_pal
@@ -129,4 +129,6 @@ create_scatter_plot <- function(plot_data,
   if (verbose) {
     cat("Plots saved to:", tiff_filename, "and", png_filename, "\n")
   }
+
+  invisible(scatter_plot)
 }

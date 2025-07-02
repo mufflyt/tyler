@@ -8,7 +8,7 @@
 #' @param color_by A character string specifying the variable used to color the points and error bars. This could be a categorical variable like gender, insurance type, or academic affiliation.
 #' @param output_dir A character string specifying the directory where the plot will be saved. Defaults to "Ari/Figures".
 #'
-#' @return A list containing the estimated marginal means data (`data`) and the ggplot object (`plot`).
+#' @return Invisibly returns a list containing the estimated marginal means data (`data`) and the ggplot object (`plot`).
 #'
 #' @details The function computes EMMs using the `emmeans` package, which provides adjusted means (or other summary statistics) for the levels of factors, corrected for the influence of other predictors in the model. This is particularly useful in the context of mystery caller studies, where you might want to compare outcomes such as appointment wait times between different insurance types, scenarios, or demographic groups, while controlling for potential confounders.
 #'
@@ -119,6 +119,6 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
 
   cat("Plot saved successfully.\n")
 
-  # Return the data and plot
-  return(list(data = edata, plot = p))
+  # Return the data and plot invisibly
+  invisible(list(data = edata, plot = p))
 }

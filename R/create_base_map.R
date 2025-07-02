@@ -8,7 +8,7 @@
 #' @param jitter_range The range for adding jitter to latitude and longitude coordinates.
 #' @param color_palette The color palette for ACOG district colors.
 #' @param popup_var The variable to use for popup text.
-#' @return A Leaflet map object.
+#' @return Invisibly returns the Leaflet map object.
 #'
 #' @importFrom viridis viridis
 #' @importFrom leaflet addCircleMarkers addPolygons addLegend
@@ -102,6 +102,6 @@ create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.0
   webshot::webshot(html_file, file = png_file)
   cat("Screenshot saved as PNG:", png_file, "\n")
 
-  # Return the Leaflet map
-  return(dot_map)
+  # Return the Leaflet map invisibly
+  invisible(dot_map)
 }
