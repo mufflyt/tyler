@@ -83,8 +83,7 @@ Suggests:
     knitr,
     pkgdown,
     rmarkdown,
-    stats,
-    provider
+    stats
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
 Config/pkgdown/doc_url: https://mufflyt.github.io/tyler/
