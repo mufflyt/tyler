@@ -100,8 +100,9 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
 
     message(paste("Saved shapefile for", time, "minutes as:", output_shapefile))
 
-    message(paste("Processed isochrones for", time, "minutes."))
+  message(paste("Processed isochrones for", time, "minutes."))
   }
 
   message("Individual isochrone plots and shapefiles creation completed.")
+  beepr::beep(2)
 }

@@ -18,6 +18,7 @@ Depends:
     R (>= 3.5.0)
 Imports:
     RColorBrewer,
+    beepr,
     arsenal,
     broom,
     caret,

@@ -42,6 +42,7 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
   acs_raw <- dplyr::bind_rows(state_data)
 
   Sys.sleep(1)
+  beepr::beep(2)
   return(acs_raw)
 }
 

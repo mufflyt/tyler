@@ -122,4 +122,5 @@ generate_overall_table <- function(input_file_path, output_directory, title = "O
 
   # Log function end
   cat("Overall table generation completed.\n")
+  beepr::beep(2)
 }

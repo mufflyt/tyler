@@ -89,5 +89,6 @@ search_by_taxonomy <- function(taxonomy_to_search) {
     message("Error saving data to file:\n", e$message)
   })
 
-    return(npi_data)
+  beepr::beep(2)
+  return(npi_data)
 }

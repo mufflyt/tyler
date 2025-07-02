@@ -107,5 +107,6 @@ retrieve_clinician_data <- function(input_data) {
     dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data)) %>%
     tidyr::unnest_wider(clinician_data)
 
+  beepr::beep(2)
   return(df_updated)
 }

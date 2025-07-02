@@ -101,6 +101,7 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_p
 
   cat("Finished scrape_physicians_data_with_tor.\n")
 
+  beepr::beep(2)
   return(Physicians)
 }
 

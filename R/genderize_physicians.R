@@ -67,5 +67,6 @@ genderize_physicians <- function(input_csv, output_dir = getwd()) {
   cat("Result saved to:", output_csv, "\n")
 
   # Return the result
+  beepr::beep(2)
   return(y)
 }

@@ -112,6 +112,8 @@ search_and_process_npi <- function(data,
   result <- data.table::rbindlist(npi_data, fill = TRUE)
   cat("Combined data frame. Number of rows:", nrow(result), "\n")
 
+  beepr::beep(2)
+
   # Return the result data frame
   return(result)
 }
