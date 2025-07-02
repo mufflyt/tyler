@@ -4,6 +4,9 @@
 #' ensure accurate area-based calculations, both datasets are temporarily
 #' projected to an equal-area CRS before measuring.
 #'
+#' @section Lifecycle:
+#' \lifecycle{experimental}
+#' 
 #' @param block_groups An sf object representing block groups.
 #' @param isochrones_joined An sf object representing isochrones.
 #' @param drive_time The drive time value for which to calculate the intersection.
