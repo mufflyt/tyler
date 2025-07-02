@@ -26,6 +26,13 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev \
+            libgit2-dev libgdal-dev libgeos-dev libproj-dev libudunits2-dev \
+            libfftw3-dev libtiff5-dev libjpeg-dev libpng-dev
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::roxygen2
