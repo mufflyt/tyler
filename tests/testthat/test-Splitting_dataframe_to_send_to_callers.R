@@ -100,6 +100,7 @@ test_that("Correct assignment of lab assistants", {
     for_redcap = 1:6,
     id = 1:6,
     doctor_id = rep(1:3, each = 2),  # Assuming 3 doctors, 2 records each
+    insurance = rep(c("Medicaid", "Blue Cross/Blue Shield"), length.out = 6),
     stringsAsFactors = FALSE
   )
 

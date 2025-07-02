@@ -8,13 +8,12 @@ library(readr)
 # Corrected mock functions
 mock_get <- function(url, ...) {
   cat("Mock GET request to URL:", url, "\n")
-  if (grepl("verify", url)) {
-    response <- list(status_code = 200, content = function(...) '{"name":"Dr. John Doe"}')
-  } else {
-    response <- list(status_code = 404, content = function(...) '')
-  }
-  class(response) <- "response"
-  return(response)
+  list(status_code = if (grepl("verify", url)) 200 else 404)
+}
+
+mock_content <- function(...) {
+  cat("Mock content called\n")
+  '{"name":"Dr. John Doe"}'
 }
 
 mock_fromJSON <- function(text, ...) {
@@ -31,6 +30,7 @@ mock_read_csv <- function(...) {
 test_that("Handles wrong IDs correctly", {
   cat("Running test: Handles wrong IDs correctly\n")
   stub(scrape_physicians_data_with_tor, 'httr::GET', mock_get)
+  stub(scrape_physicians_data_with_tor, 'httr::content', mock_content)
   stub(scrape_physicians_data_with_tor, 'jsonlite::fromJSON', mock_fromJSON)
   stub(scrape_physicians_data_with_tor, 'readr::read_csv', mock_read_csv)
 
