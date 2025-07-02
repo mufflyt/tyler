@@ -27,3 +27,4 @@
 .*\.csv$
 ^To_amany\.R$
 ^install_log\.txt$
+^codemeta\.json$
