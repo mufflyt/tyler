@@ -21,6 +21,11 @@
 #' @importFrom readr write_csv
 #' @family npi
 #' @export
+#' @examples
+#' \dontrun{
+#' df <- data.frame(first = "John", last = "Doe")
+#' results <- search_and_process_npi(df)
+#' }
 search_and_process_npi <- function(data,
                                    enumeration_type = "ind",
                                    limit = 5L,

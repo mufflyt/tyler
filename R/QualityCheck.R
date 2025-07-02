@@ -10,6 +10,10 @@
 #' @importFrom dplyr group_by summarise arrange filter
 #' @family utilities
 #' @export
+#' @examples
+#' \dontrun{
+#' save_quality_check_table(my_data, "qc.csv")
+#' }
 
 save_quality_check_table <- function(data, filepath) {
   # Group by 'npi' and 'name', calculate counts, filter where count > 2, and arrange by count descending
