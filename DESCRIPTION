@@ -79,13 +79,11 @@ Imports:
     zipcodeR
 LazyData: true
 Files: R/
-Suggests: 
+Suggests:
     knitr,
     pkgdown,
     rmarkdown,
-    stats,
-    provider,
-    genderdata
+    stats
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
 Config/pkgdown/doc_url: https://mufflyt.github.io/tyler/
