@@ -28,3 +28,5 @@
 ^To_amany\.R$
 ^install_log\.txt$
 ^codemeta\.json$
+^CONTRIBUTING\.md$
+^CODE_OF_CONDUCT\.md$

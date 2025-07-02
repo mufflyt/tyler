@@ -1,0 +1,14 @@
+# CITATION file for the tyler package
+
+citHeader("To cite the tyler package in publications use:")
+
+entry <- bibentry(
+  bibtype = "Manual",
+  title = "tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care",
+  author = person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2044-1693")),
+  year = "2024",
+  note = "R package version 1.2.1",
+  url = "https://github.com/mufflyt/tyler"
+)
+
+citFooter("Please use 'citation(\"tyler\")' to generate the BibTeX entry for LaTeX users.")
