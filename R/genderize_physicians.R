@@ -4,6 +4,10 @@
 #' and joins the gender information back to the original data. It then saves the
 #' result to a new CSV file with a timestamp.
 #'
+#' This function requires the **genderdata** package, which is only available on
+#' GitHub. Install it with `remotes::install_github("lmullen/genderdata")` if
+#' you encounter an error about a missing package.
+#'
 #' @param input_csv The path to the input CSV file containing physician data.
 #' @param output_dir The directory where the output CSV file will be saved. Default is the current working directory.
 #' @return A data frame with genderized information joined to the original data.
