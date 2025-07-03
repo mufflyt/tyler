@@ -201,7 +201,18 @@ NULL
 ```
 
 ### Searching for Data: `tyler::genderize_physicians`
-This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  A lot of gender data was found via Physician Compare in the past.  
+This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  A lot of gender data was found via Physician Compare in the past.
+
+`genderize_physicians()` also requires the **genderdata** package, which is only
+available on GitHub. If you encounter an error stating that `genderdata` is
+missing, install it with:
+
+```r
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+remotes::install_github("lmullen/genderdata")
+```
 ```r
 tyler::genderize_physicians <- function(input_csv) 
 ```
