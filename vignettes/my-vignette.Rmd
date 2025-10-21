@@ -19,9 +19,12 @@ editor_options:
 
 
 ```{r, include = FALSE}
+eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>")
+  comment = "#>",
+  eval = eval_vignettes
+)
 ```
 
 # Overview
@@ -32,7 +35,9 @@ The `tyler::taxonomy` data and `tyler::search_by_taxonomy` function in the R pac
 Before you can harness the power of the `search_by_taxonomy` function, it is essential to ensure that you have the `tyler` package installed. You can effortlessly install it using the following command:
 
 ```{r setup, include = FALSE}
-library(tyler)
+if (eval_vignettes) {
+  library(tyler)
+}
 ```
 
 # Example Usage
@@ -44,13 +49,15 @@ In particular, the `tyler::taxonomy` data frame contains NUCC taxonomy codes uti
 Taxonomy codes can be obtained from the National Uniform Claim Committee (NUCC) website here. You can employ these codes to pinpoint specific taxonomy descriptions for your search. For instance, if you are interested in finding taxonomy codes that include the string `"GYN"` you can use this code to facilitate your search in the search_by_taxonomy function.
 
 ```{r, include = FALSE}
-# Load required packages
-library(tyler)
-library(dplyr)
-library(tidyr)
-library(readr)
-library(npi)
-library(stringr)
+# Load required packages when evaluating examples
+if (eval_vignettes) {
+  library(tyler)
+  library(dplyr)
+  library(tidyr)
+  library(readr)
+  library(npi)
+  library(stringr)
+}
 ```
 
 ```{r}

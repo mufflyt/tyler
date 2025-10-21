@@ -1,8 +1,8 @@
 ---
 title: "Gather Physician Data Starting With NPI Numbers"
-author: 
+author:
   - Tyler Muffly, MD
-output: 
+output:
   rmarkdown::html_vignette:
     df_print: kable
 description: >
@@ -12,6 +12,19 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
+```{r setup, include = FALSE}
+eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+knitr::opts_chunk$set(
+  echo = TRUE,
+  comment = "#>",
+  collapse = TRUE,
+  eval = eval_vignettes
+)
+
+if (eval_vignettes) {
+  library(tyler)
+}
+```
 # Overview
 The `validate_and_remove_invalid_npi` function is designed to help you process datasets containing National Provider Identifier (NPI) numbers with `search_by_taxonomy`. It validates the format of NPIs using the npi package and removes rows with missing or invalid NPIs. This vignette will guide you through its usage.
 
@@ -23,7 +36,9 @@ Before you can harness the power of the `search_by_taxonomy` function, it is ess
 # install.packages("dplyr")
 # install.packages("npi")
 # install.packages("readr")
-library(tyler)
+if (eval_vignettes) {
+  library(tyler)
+}
 ```
 ```r
 library(tyler)

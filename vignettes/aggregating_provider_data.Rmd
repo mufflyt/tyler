@@ -24,8 +24,17 @@ editor_options:
 # Required Packages
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-# library(tyler)
+eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+knitr::opts_chunk$set(
+  echo = TRUE,
+  comment = "#>",
+  collapse = TRUE,
+  eval = eval_vignettes
+)
+
+if (eval_vignettes) {
+  library(tyler)
+}
 ```
 
 # Inputs
