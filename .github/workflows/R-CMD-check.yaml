@@ -69,7 +69,7 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
-          args: 'c("--no-manual", "--as-cran", "--run-donttest")'
+          args: 'c("--no-manual", "--as-cran")'
           error-on: '"warning"'
 
   pkgdown:
