@@ -137,18 +137,15 @@ taxonomy_descriptions <- c("Hospice and Palliative Medicine")
 data <- search_by_taxonomy(taxonomy_to_search = taxonomy_descriptions)
 ```
 
-```
-> data
-          npi basic_first_name basic_last_name basic_sole_proprietor basic_gender basic_enumeration_date
-1  1437277092         MARIETTA   ABALOS-GALITO                   YES            F             2007-03-26
-2  1629034905          ANTHONY        ABBRUZZI                    NO            M             2006-04-25
-3  1093806697            AYMAN     ABDEL HALIM                    NO            M             2006-09-27
+```{r, include=TRUE, message=FALSE, warning=FALSE}
+dplyr::count(data, basic_gender, basic_credential)
 ```
 
-You can easily view the resulting data frame in a user-friendly format.
+You can easily summarise the resulting data frame in a user-friendly format.
 ```{r, include=TRUE}
-# View the resulting data frame
-head(data)
+# Summarise the resulting data frame by state
+data %>%
+  dplyr::count(addresses_state)
 ```
 
 We will often need to merge the rows from the `search_taxonomy` data and the `get_clinicians` data.  These are the steps needed to make the structure and names similar to the `get_clinicians` data.  

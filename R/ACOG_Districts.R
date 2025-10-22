@@ -14,8 +14,8 @@
 #' # Load the ACOG Districts Data
 #' data(ACOG_Districts)
 #'
-#' # View the first few rows of the dataset
-#' head(ACOG_Districts)
+#' # Inspect the dataset
+#' print(ACOG_Districts)
 #'
 #' # Get a summary of the dataset
 #' summary(ACOG_Districts)

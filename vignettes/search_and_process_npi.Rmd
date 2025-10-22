@@ -136,41 +136,29 @@ result_df
 
 You can now analyze the NPI search results as needed for your specific use case. The `result_df` data frame contains information about NPIs that match your search criteria.  Because these NPI numbers are directly from NPPES we do not need to run `validate_and_remove_invalid_npi`.  
 
-```
+```{r}
 # Remove selected columns from the 'output_result' dataframe
 processed_result <- output_result %>%
   dplyr::select(
-    -basic_middle_name, 
-    -basic_certification_date, 
-    -basic_name_prefix, 
-    -basic_name_suffix, 
-    -taxonomies_taxonomy_group, 
-    -taxonomies_license, 
+    -basic_middle_name,
+    -basic_certification_date,
+    -basic_name_prefix,
+    -basic_name_suffix,
+    -taxonomies_taxonomy_group,
+    -taxonomies_license,
     -taxonomies_primary
   ) %>%
+  dplyr::mutate(across(c(basic_first_name, basic_last_name, basic_credential),
+                       .fns = ~stringr::str_remove_all(., "[[\\p{P}][\\p{S}]]"))) %>%
+  dplyr::mutate(basic_credential = stringr::str_to_upper(basic_credential)) %>%
+  dplyr::filter(stringr::str_detect(basic_credential, "MD|DO")) %>%
+  dplyr::mutate(basic_credential = stringr::str_sub(basic_credential, 1, 2)) %>%
+  dplyr::filter(basic_credential %in% c("DO", "MD")) %>%
+  dplyr::filter(stringr::str_detect(taxonomies_desc, stringr::fixed("Gyn", ignore_case = TRUE))) %>%
+  dplyr::distinct(npi, .keep_all = TRUE)
 
-  mutate(across(c(basic_first_name, basic_last_name, basic_credential), 
-      .fns = ~str_remove_all(., "[[\\p{P}][\\p{S}]]"))) %>%
-  mutate(basic_credential = str_to_upper(basic_credential)) %>%
-  filter(str_detect(basic_credential, "MD|DO")) %>%
-  mutate(basic_credential = str_sub(basic_credential,1 ,2)) %>%
-  filter(basic_credential %in% c("DO", "MD")) %>%
-  filter(str_detect(taxonomies_desc, fixed("Gyn", ignore_case=TRUE))) %>%
-  distinct(npi, .keep_all = TRUE)
-
-> processed_result %>% head(5)
-          npi basic_first_name basic_last_name basic_credential basic_sole_proprietor basic_gender basic_enumeration_date
-1: 1053601807             RYAN       SCHLUETER               DO                   YES            M             2011-04-13
-2: 1063703494           LAUREN          BISHOP               MD                    NO            F             2011-04-19
-3: 1376862383            JAMIE     SZCZEPANSKI               MD                    NO            F             2010-06-01
-4: 1457676405          JESSICA         SHIELDS               DO                    NO            F             2010-04-01
-5: 1366752107         CAROLINA          SUELDO               MD                    NO            F             2010-10-14
-   basic_last_updated basic_status taxonomies_code                                     taxonomies_desc taxonomies_state
-1:         2021-09-30            A      207VM0101X  Obstetrics & Gynecology, Maternal & Fetal Medicine               GA
-2:         2023-03-16            A      207VE0102X Obstetrics & Gynecology, Reproductive Endocrinology               NY
-3:         2020-07-23            A      207V00000X                             Obstetrics & Gynecology               NY
-4:         2019-07-18            A      207V00000X                             Obstetrics & Gynecology               MA
-5:         2019-02-25            A      207V00000X                             Obstetrics & Gynecology               FL
+processed_result %>%
+  dplyr::count(basic_gender, basic_credential)
 ```
 
 One key step in cleaning the data is filtering the taxonomies.  This can be changed for different applications in various subspecialties.  Note some people are  tricky and list their taxonomy specialty as "Specialist" or something else super vague.  We did create a code fix for this as well, shown below.  
