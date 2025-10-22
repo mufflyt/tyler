@@ -1,58 +1,3 @@
-#' Validate and Remove Invalid NPI Numbers
-#'
-#' This function reads a CSV file containing NPI numbers, validates their
-#' format using the npi package, and removes rows with missing or invalid NPIs.
-#'
-#' @param input_data Either a dataframe containing NPI numbers or a path to a CSV file.
-#'
-#' @return A dataframe containing valid NPI numbers.
-#' @importFrom npi npi_is_valid
-#' @importFrom readr read_csv
-#' @importFrom dplyr filter mutate
-#' @family npi
-#' @export
-#'
-validate_and_remove_invalid_npi <- function(input_data) {
-
-  cat("Starting validate_and_remove_invalid_npi...\n")
-
-  if (is.data.frame(input_data)) {
-    cat("Input is a data frame.\n")
-    clinician_df <- input_data
-  } else if (is.character(input_data)) {
-    cat("Input is a file path to a CSV.\n")
-    clinician_df <- readr::read_csv(input_data, col_types = readr::cols(npi = readr::col_character()))
-  } else {
-    stop("Input must be a dataframe or a file path to a CSV.")
-  }
-
-  cat("Initial dataframe:\n")
-  print(clinician_df)
-
-  clinician_df <- clinician_df %>%
-    dplyr::filter(!is.na(npi) & npi != "")
-
-  cat("After filtering missing or empty NPIs:\n")
-  print(clinician_df)
-
-  clinician_df <- clinician_df %>%
-    dplyr::mutate(npi_is_valid = sapply(npi, function(x) {
-      if (nchar(x) == 10) {
-        npi::npi_is_valid(x)
-      } else {
-        FALSE
-      }
-    })) %>%
-    dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
-
-  cat("After filtering invalid NPIs:\n")
-  print(clinician_df)
-  cat("validate_and_remove_invalid_npi completed.\n")
-
-  return(clinician_df)
-}
-
-
 #' Retrieve Clinician Data
 #'
 #' This function retrieves clinician data for each valid NPI in the input dataframe.
@@ -61,10 +6,8 @@ validate_and_remove_invalid_npi <- function(input_data) {
 #'
 #' @return A tibble with clinician data for the provided NPIs.
 #' @importFrom purrr map
-#' @importFrom readr read_csv
-#' @importFrom tidyr unnest_wider
-#' @importFrom dplyr mutate
-#'
+#' @importFrom readr read_csv cols col_character col_guess
+#' @importFrom dplyr mutate bind_rows
 #' @family npi
 #' @export
 #' @examples
@@ -74,42 +17,75 @@ validate_and_remove_invalid_npi <- function(input_data) {
 retrieve_clinician_data <- function(input_data) {
   if (!requireNamespace("provider", quietly = TRUE)) {
     stop(
-      "Package 'provider' is required for this function. " ,
+      "Package 'provider' is required for this function. ",
       "Install it from GitHub with remotes::install_github('andrewallenbruce/provider').",
       call. = FALSE
     )
   }
 
   if (is.data.frame(input_data)) {
-    # Input is a dataframe
     clinician_df <- input_data
-  } else if (is.character(input_data)) {
-    # Input is a file path to a CSV
-    clinician_df <- readr::read_csv(input_data)
+  } else if (is.character(input_data) && length(input_data) == 1) {
+    clinician_df <- readr::read_csv(
+      input_data,
+      col_types = readr::cols(.default = readr::col_guess(), npi = readr::col_character())
+    )
   } else {
     stop("Input must be a dataframe or a file path to a CSV.")
   }
 
-  # Function to retrieve clinician data for a single NPI
+  if (!"npi" %in% names(clinician_df)) {
+    stop("Input data must contain an 'npi' column.")
+  }
+
+  cleaned_df <- validate_and_remove_invalid_npi(clinician_df)
+  if (!nrow(cleaned_df)) {
+    cleaned_df$npi_is_valid <- logical()
+    return(cleaned_df)
+  }
+
   get_clinician_data <- function(npi) {
-    if (!is.numeric(npi) || nchar(npi) != 10) {
-      cat("Invalid NPI:", npi, "\n")
-      return(NULL)  # Skip this NPI
+    npi <- as.character(npi)
+    if (nchar(npi) != 10 || grepl("\\D", npi)) {
+      return(NULL)
     }
 
     clinician_info <- provider::clinicians(npi = npi)
-    if (is.null(clinician_info)) {
-      cat("No results for NPI:", npi, "\n")
-    } else {
-      return(clinician_info)  # Return the clinician data
+    if (is.null(clinician_info) || !nrow(clinician_info)) {
+      return(NULL)
     }
+    as.data.frame(clinician_info, stringsAsFactors = FALSE)
   }
 
-  # Clean the NPI numbers and retrieve clinician data
-  df_updated <- validate_and_remove_invalid_npi(clinician_df) %>%
-    dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data)) %>%
-    tidyr::unnest_wider(clinician_data)
+  cleaned_df <- cleaned_df %>%
+    dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data))
 
-  beepr::beep(2)
-  return(df_updated)
+  has_results <- vapply(cleaned_df$clinician_data, function(x) {
+    !is.null(x) && nrow(x) > 0
+  }, logical(1))
+
+  base_cols <- setdiff(names(cleaned_df), "clinician_data")
+
+  if (!any(has_results)) {
+    return(cleaned_df[FALSE, base_cols, drop = FALSE])
+  }
+
+  rows_with_results <- cleaned_df[has_results, , drop = FALSE]
+  expanded <- purrr::map(seq_len(nrow(rows_with_results)), function(idx) {
+    base_row <- rows_with_results[idx, base_cols, drop = FALSE]
+    clinician_rows <- rows_with_results$clinician_data[[idx]]
+    clinician_rows <- as.data.frame(clinician_rows, stringsAsFactors = FALSE)
+
+    base_expanded <- base_row[rep(1, nrow(clinician_rows)), , drop = FALSE]
+    combined <- cbind(base_expanded, clinician_rows)
+    as.data.frame(combined, stringsAsFactors = FALSE)
+  })
+
+  result <- dplyr::bind_rows(expanded)
+
+  if (requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
+
+  result
 }
