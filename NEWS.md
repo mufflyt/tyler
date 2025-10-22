@@ -1,6 +1,7 @@
 # tyler 0.0.0.9000
 
 * Added a `NEWS.md` file to track changes to the package.
+* Verified GitHub Actions workflows are properly configured.
 * Ensured the optional `provider` package is listed under Suggests and no longer
   imported in the namespace.
 * Updated CRAN compliance:
