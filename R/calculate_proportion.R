@@ -35,7 +35,7 @@ calculate_proportion <- function(data, variable_name) {
     mutate(percent = n / sum(n) * 100)
 
   tabyl_result <- tabyl_result %>%
-    mutate(across(where(is.numeric), round, 2))
+    mutate(across(where(is.numeric), \(x) round(x, 2)))
 
   return(tabyl_result)
 }
