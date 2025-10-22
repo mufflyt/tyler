@@ -6,7 +6,7 @@ output:
   rmarkdown::html_vignette:
     df_print: kable
 description: >
-  A skeleton vignette describing how to aggregate provider data from multiple sources.
+  Walk through a reproducible workflow for combining provider rosters with reference tables and demographic context.
 vignette: >
   %\VignetteIndexEntry{Aggregating Provider Data for Analysis}
   %\VignetteEncoding{UTF-8}
@@ -15,50 +15,137 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Objectives
+# Overview
 
-- Demonstrate a workflow for combining provider datasets.
-- Show how to clean and standardize fields prior to merging.
-- Provide a starting point for further analysis.
+Mystery caller and workforce studies often start with multiple rosters that were
+assembled for different purposes. This vignette demonstrates how to tidy those
+inputs and merge them into a single analytic table that contains provider,
+regional, and demographic attributes.
 
-# Required Packages
+The example uses small, reproducible data frames so you can adapt the code to
+your environment. Replace the simulated inputs with your own CSV exports when
+you are ready to run the workflow at scale.
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-# library(tyler)
+# Required packages
+
+```{r setup, message=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+
+library(dplyr)
+library(readr)
+library(stringr)
+library(tidyr)
+library(tyler)
 ```
 
-# Inputs
+# 1. Start from your rosters
 
-Describe the input files such as NPI exports, Census data, and geocoded locations.
+In practice you might have one list from a specialty society and another from
+your hospital credentialing team. The code below simulates the structure of two
+CSV extracts. Replace the data frames with `readr::read_csv()` calls to use your
+real files.
 
 ```{r}
-# Example placeholder for reading data
-# npi_data <- readr::read_csv("npi.csv")
-# census_data <- readr::read_csv("census.csv")
+subspecialist_directory <- tibble::tribble(
+  ~npi,        ~first_name, ~last_name,   ~state, ~subspecialty,
+  "1194062499", "Jaclyn",    "Denetclaw", "MI",   "Obstetrics & Gynecology",
+  "1710392194", "Geeta",     "Swamy",     "NC",   "Maternal & Fetal Medicine",
+  "1922051358", "Katherine", "Boyd",      "MI",   "Female Pelvic Medicine"
+)
+
+credentialing_extract <- tibble::tribble(
+  ~npi,        ~preferred_name, ~facility,                   ~latitude, ~longitude,
+  "1194062499", "Jaclyn Denetclaw", "Spectrum Health Medical Group", 42.930,  -85.610,
+  "1750344388", "Thomas Byrne",      "Covenant Medical Center",      43.420,  -83.950,
+  "1922051358", "Katherine Boyd",    "Beaumont Hospital",            42.600,  -82.910
+)
 ```
 
-# Processing Steps
+# 2. Standardise shared fields
 
-Outline the steps needed to clean names, join datasets, and summarize counts.
+Clean simple columns before joining so that joins succeed deterministically.
+Here we harmonise the name fields and make sure the state code is uppercase.
 
 ```{r}
-# Example data manipulation steps
-# combined <- dplyr::left_join(npi_data, census_data, by = "fips")
+clean_directory <- subspecialist_directory %>%
+  mutate(
+    first_name = str_to_title(first_name),
+    last_name = str_to_title(last_name),
+    state = str_to_upper(state)
+  )
 ```
 
-# Output Examples
+# 3. Join rosters and fill gaps
 
-Show an example of the aggregated output such as counts by county.
+Use a full join on the NPI so you preserve every record. When multiple sources
+provide the same attribute, coalesce them to pick the first non-missing value.
 
 ```{r}
-# aggregated <- combined %>% dplyr::count(county)
-# aggregated
+combined_roster <- clean_directory %>%
+  full_join(credentialing_extract, by = "npi") %>%
+  mutate(
+    provider_name = coalesce(preferred_name, paste(first_name, last_name)),
+    subspecialty = coalesce(subspecialty, "Unknown"),
+    latitude = as.numeric(latitude),
+    longitude = as.numeric(longitude)
+  )
+
+combined_roster
 ```
 
-# Conclusions
+# 4. Enrich with reference data
 
-Summarize the results and next steps for analysis.
+`tyler` ships with helper tables, including `tyler::ACOG_Districts`, that you can
+use to assign geographic regions. Joining on the state abbreviation adds the
+appropriate district label.
 
-# Features and bugs
-If you have ideas for other features that would make data aggregation easier, or find a bug, the best approach is to either report it or add it!
+```{r}
+roster_with_districts <- combined_roster %>%
+  left_join(tyler::ACOG_Districts %>% select(State_Abbreviations, ACOG_District),
+            by = c(state = "State_Abbreviations"))
+
+roster_with_districts
+```
+
+# 5. Summarise for reporting
+
+Once the roster has consistent identifiers and regional tags, it becomes easy to
+produce summaries. The example below counts providers by district and
+subspecialty, then calculates the share each subspecialty represents within its
+district.
+
+```{r}
+district_summary <- roster_with_districts %>%
+  count(ACOG_District, subspecialty, name = "provider_count") %>%
+  group_by(ACOG_District) %>%
+  mutate(share = provider_count / sum(provider_count)) %>%
+  arrange(ACOG_District, desc(provider_count))
+
+district_summary
+```
+
+# 6. Save intermediate results
+
+Use `readr::write_csv()` to capture interim tables for auditing or to feed other
+systems (e.g., mapping workflows or gender inference with
+`tyler::genderize_physicians()`).
+
+```{r, eval=FALSE}
+readr::write_csv(roster_with_districts, "data/combined_roster.csv")
+readr::write_csv(district_summary, "data/district_summary.csv")
+```
+
+# Next steps
+
+From here you can:
+
+- Pass the roster to `tyler::retrieve_clinician_data()` to append CMS provider
+  demographics.
+- Validate NPIs with `tyler::validate_and_remove_invalid_npi()` before running
+  downstream analyses.
+- Create drive-time polygons using `tyler::create_isochrones_for_dataframe()` to
+  quantify geographic access.
+
+Adapt the pattern shown above to suit the specific files and lookup tables
+available in your project. Keeping joins explicit and saving intermediate outputs
+makes collaborative provider aggregation projects easier to audit and repeat.

@@ -9,7 +9,7 @@
 [![R-CMD-check](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of the 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting. The second goal is to assist with workforce distribution research for OBGYNs.  
+The 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting. The second goal is to assist with workforce distribution research for OBGYNs.  
 
 ## Installation
 
@@ -19,9 +19,11 @@ You can install the development version of tyler from [GitHub](https://github.co
 devtools::install_github("mufflyt/tyler")
 ```
 
-See the package vignette for a fuller introduction and suggestions on how to use the `tyler()` function efficiently.
+See the package vignettes for a fuller introduction. You can review them in R with:
 
-vignette(topic = "????", package = "tyler")
+```r
+browseVignettes("tyler")
+```
 
 ## Use Cases
 
@@ -35,31 +37,17 @@ The package vignettes highlight practical workflows for working with provider da
 - [Aggregating Provider Data](https://mufflyt.github.io/tyler/articles/aggregating_provider_data.html) – combine multiple data sources into a single dataset.
 
 
-### Add in hospital information data from the AHA scraper!!!!
+## Workflow overview
 
-# Workflow 👨‍🦲
-1) Gather all the physician data that is needed:
-     * Search by subspecialty taxonomy: `tyler::taxonomy` and `tyler::search_by_taxonomy` 👨‍🦲
-     * Search by physician name in `goba`: `tyler::search_and_process_npi` 👨‍🦲
-     * Merge these two physician data sources together.  See the code at: `exploratory/Workforce/subspecialists_only`  👨‍🦲
-     * Add in the physician age from healthgrades.com: ??????
-     * Get Physician Compare physician demographics: `tyler::retrieve_clinician_data`  👨‍🦲
-     * Complete the gender for all physicians: `tyler::genderize_physicians` 
-     * Check with secondary sources...
-       
-3) By state name determine the ACOG District.
-      * dplyr::left_join with `tyler::ACOG_Districts`
-5) Geocode the addresses to latitude and longitude for mapping. 👨‍🦲
-6) Get the US Census Bureau data associated with the block groups:
-   * `tyler::get_census_data` 👨‍🦲
-7) Create the isochrones based on drive times: 
-   * `tyler::create_isochrones` 👨‍🦲
-   * `tyler::create_isochrones_for_dataframe` 👨‍🦲
-   * All this is heavily borrowed from "https://github.com/khnews/2021-delta-appalachia-stroke-access"
-8) Create overlap maps of isochrones and block groups
-   * `tyler::calculate_intersection_overlap_and_save`- THIS NEEDS WORK
-   * `tyler::create_block_group_overlap_map`
-   * 
+The package functions are designed to be composed into repeatable workflows for workforce and access studies. A typical project might:
+
+1. **Assemble a physician roster.** Use `tyler::taxonomy` with `tyler::search_by_taxonomy()` to download specialty-specific NPI records and `tyler::search_and_process_npi()` to resolve NPIs for locally curated name lists. Combine the results with institutional rosters (examples live in `exploratory/Workforce/subspecialists_only`).
+2. **Enrich demographic fields.** Call `tyler::retrieve_clinician_data()` to pull CMS demographics, apply `tyler::genderize_physicians()` to infer gender (writing the result to an output directory), and cross-check values against secondary sources before finalizing the dataset.
+3. **Map providers to regions.** Join the roster to `tyler::ACOG_Districts` or other lookup tables to assign territories, and geocode any missing coordinates with `tyler::search_and_process_npi()` outputs or your preferred geocoder.
+4. **Add environmental context.** Retrieve Census indicators with `tyler::get_census_data()` and other data products (e.g., hospital directories) to support downstream analyses.
+5. **Model travel access.** Generate drive-time polygons with `tyler::create_isochrones()` or `tyler::create_isochrones_for_dataframe()`, then intersect them with census geographies using helpers such as `tyler::calculate_intersection_overlap_and_save()` and `tyler::create_block_group_overlap_map()`.
+
+Each vignette linked below walks through one part of this workflow in more detail.
 
 # Data: Workforce
 ### Data: `tyler::acgme`
@@ -214,7 +202,7 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 remotes::install_github("lmullen/genderdata")
 ```
 ```r
-tyler::genderize_physicians <- function(input_csv) 
+tyler::genderize_physicians <- function(input_csv, output_dir = getwd()) 
 ```
 
 # GET ISOCHRONES
@@ -259,7 +247,7 @@ A function that iterates the `tyler::create_isochrones` over an entire dataframe
 ```r
 isochrones_data <- tyler::create_isochrones_for_dataframe(gyn_onc, breaks = c(0, 30, 60, 120, 180))
 ```
-### `tyler::create_individual_isochrone_plots.R`
+### `tyler::create_individual_isochrone_plots`
 Function to create individual plots and shapefiles for specified drive times.  It generates individual plots for each drive time, providing a visual representation of the accessible areas on a map. The function shapefiles, which are geospatial data files used for storing geographic information, including the boundaries of the reachable areas.
 ```r
 # Usage example:
