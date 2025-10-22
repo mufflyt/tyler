@@ -201,20 +201,14 @@ NULL
 ```
 
 ### Searching for Data: `tyler::genderize_physicians`
-This is a wrapper around the `gender` package to help fill in the gender of physician names.  It requires a csv with a column called `first_name`.  A lot of gender data was found via Physician Compare in the past.
-
-`genderize_physicians()` also requires the **genderdata** package, which is only
-available on GitHub. If you encounter an error stating that `genderdata` is
-missing, install it with:
-
+This helper contacts the [Genderize.io](https://genderize.io) web service to
+estimate the gender of physician first names found in a CSV column called
+`first_name`. Names are deduplicated before requesting predictions to limit API
+usage, and the returned probability and count columns are appended to the
+original data prior to saving a timestamped CSV output. An active internet
+connection is required when running this function.
 ```r
-if (!requireNamespace("remotes", quietly = TRUE)) {
-  install.packages("remotes")
-}
-remotes::install_github("lmullen/genderdata")
-```
-```r
-tyler::genderize_physicians <- function(input_csv) 
+tyler::genderize_physicians <- function(input_csv)
 ```
 
 # GET ISOCHRONES

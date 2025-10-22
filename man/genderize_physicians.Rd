@@ -17,9 +17,10 @@ A data frame with genderized information joined to the original data.
 \description{
 This function reads a CSV file containing physician data, genderizes the first names,
 and joins the gender information back to the original data. It then saves the
-result to a new CSV file with a timestamp.
-This function requires the \code{genderdata} package. If it is not installed,
-run \code{remotes::install_github("lmullen/genderdata")}. 
+result to a new CSV file with a timestamp. The function calls the
+\href{https://genderize.io}{Genderize.io} API to obtain gender predictions for
+deduplicated first names, adds the returned probability and count information,
+and requires an active internet connection.
 }
 \examples{
 \dontrun{

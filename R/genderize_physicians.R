@@ -4,17 +4,18 @@
 #' and joins the gender information back to the original data. It then saves the
 #' result to a new CSV file with a timestamp.
 #'
-#' This function requires the **genderdata** package, which is only available on
-#' GitHub. Install it with `remotes::install_github("lmullen/genderdata")` if
-#' you encounter an error about a missing package.
-#'
 #' @param input_csv The path to the input CSV file containing physician data.
 #' @param output_dir The directory where the output CSV file will be saved. Default is the current working directory.
 #' @return A data frame with genderized information joined to the original data.
 #'
-#' @importFrom gender gender
-#' @importFrom dplyr select filter rename distinct left_join
+#' The function queries the [Genderize.io](https://genderize.io) API for first
+#' name gender predictions. First names are deduplicated before querying the
+#' service to minimise repeated requests.
+#'
+#' @importFrom dplyr bind_rows distinct left_join mutate
 #' @importFrom readr read_csv write_csv
+#' @importFrom httr GET content http_error status_code timeout
+#' @importFrom tibble tibble
 #'
 #' @examples
 #' \dontrun{
@@ -24,29 +25,17 @@
 #' @family gender
 #' @export
 genderize_physicians <- function(input_csv, output_dir = getwd()) {
-  if (!requireNamespace("genderdata", quietly = TRUE)) {
-    stop(
-      "Package 'genderdata' is required for this function. " ,
-      "Install it from GitHub with remotes::install_github('lmullen/genderdata').",
-      call. = FALSE
-    )
-  }
   # Read the data
-  gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE)
+  gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE) %>%
+    dplyr::mutate(first_name = trimws(first_name))
 
   # Get first names
   first_names <- gender_Physicians$first_name
 
-  # Genderize the names
-  x <- gender::gender(
-    names = first_names,
-    years = c(1932, 2012),
-    method = c("ssa", "ipums", "napp", "kantrowitz", "genderize", "demo"),
-    countries = "United States"
-  ) %>%
-    dplyr::rename(first_name = name) %>%
-    dplyr::distinct(first_name, .keep_all = TRUE) %>%
-    dplyr::select(-c(year_min, year_max, proportion_female, proportion_male))
+  resolved_genders <- genderize_fetch(first_names)
+
+  x <- resolved_genders %>%
+    dplyr::distinct(first_name, .keep_all = TRUE)
 
   # Rejoin with the original database
   y <- dplyr::left_join(gender_Physicians, x, by = "first_name")
@@ -73,4 +62,65 @@ genderize_physicians <- function(input_csv, output_dir = getwd()) {
   # Return the result
   beepr::beep(2)
   return(y)
+}
+
+genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api.genderize.io/") {
+  if (is.null(first_names) || length(first_names) == 0) {
+    return(tibble::tibble(
+      first_name = character(),
+      gender = character(),
+      probability = numeric(),
+      count = integer()
+    ))
+  }
+
+  clean_names <- unique(stats::na.omit(trimws(first_names)))
+  if (length(clean_names) == 0) {
+    return(tibble::tibble(
+      first_name = character(),
+      gender = character(),
+      probability = numeric(),
+      count = integer()
+    ))
+  }
+
+  batches <- split(clean_names, ceiling(seq_along(clean_names) / batch_size))
+
+  results <- lapply(batches, function(name_batch) {
+    query <- stats::setNames(as.list(name_batch), paste0("name[", seq_along(name_batch) - 1, "]"))
+    response <- httr::GET(api_url, query = query, httr::timeout(10))
+
+    if (httr::http_error(response)) {
+      stop("Genderize.io request failed with status ", httr::status_code(response), call. = FALSE)
+    }
+
+    parsed <- httr::content(response, as = "parsed", type = "application/json", encoding = "UTF-8")
+
+    if (is.null(parsed)) {
+      stop("Genderize.io returned an empty response.", call. = FALSE)
+    }
+
+    if (!is.null(parsed$error)) {
+      stop("Genderize.io error: ", parsed$error, call. = FALSE)
+    }
+
+    entries <- if (!is.null(parsed$name)) list(parsed) else parsed
+
+    tibble::tibble(
+      first_name = vapply(entries, function(x) {
+        if (is.null(x$name)) NA_character_ else x$name
+      }, character(1), USE.NAMES = FALSE),
+      gender = vapply(entries, function(x) {
+        if (is.null(x$gender)) NA_character_ else x$gender
+      }, character(1), USE.NAMES = FALSE),
+      probability = vapply(entries, function(x) {
+        if (is.null(x$probability)) NA_real_ else as.numeric(x$probability)
+      }, numeric(1), USE.NAMES = FALSE),
+      count = vapply(entries, function(x) {
+        if (is.null(x$count)) NA_integer_ else as.integer(x$count)
+      }, integer(1), USE.NAMES = FALSE)
+    )
+  })
+
+  dplyr::bind_rows(results)
 }
