@@ -49,7 +49,7 @@ jobs:
             libgit2-dev libgdal-dev libgeos-dev libproj-dev libudunits2-dev \
             libfftw3-dev libtiff5-dev libjpeg-dev libpng-dev
 
-       - name: Install qpdf (Linux)
+      - name: Install qpdf (Linux)
         if: runner.os == 'Linux'
         run: sudo apt-get install -y qpdf
 
