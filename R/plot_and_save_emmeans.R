@@ -86,7 +86,7 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
 
   # Log the retrieved data
   cat("Estimated data:\n")
-  print(head(edata))
+  print(edata)
 
   # Check the range of the estimated data
   rate_range <- range(c(edata$asymp.LCL, edata$asymp.UCL), na.rm = TRUE)

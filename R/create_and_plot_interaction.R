@@ -96,9 +96,11 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
   # Remove any rows with NA values
   data <- na.omit(data)
 
-  # Log the first few rows of data to check formats
-  cat("Data preview after renaming and type conversion:\n")
-  print(head(data))
+  # Log a data summary without truncating rows
+  cat("Data summary after renaming and type conversion:\n")
+  cat("Rows:", nrow(data), "Columns:", ncol(data), "\n")
+  cat("Column classes:\n")
+  print(vapply(data, function(x) paste(class(x), collapse = ", "), character(1)))
   cat("\n\n")
 
   # Construct the model formula

@@ -14,8 +14,8 @@
 #' # Load the ACGME OBGYN Residency Data
 #' data(acgme)
 #'
-#' # View the first few rows of the dataset
-#' head(acgme)
+#' # Inspect the dataset
+#' print(acgme)
 #'
 #' # Get a summary of the dataset
 #' summary(acgme)

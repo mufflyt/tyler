@@ -149,7 +149,6 @@ After this step we can confidently feed in all the NPI numbers to the `provider:
     Sys.sleep(1)
   }
 
-  #df <- df %>% head(5) #test
 
   # Loop through the "npi" column and get clinician data
   df_updated <- df %>%

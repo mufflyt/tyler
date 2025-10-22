@@ -14,7 +14,7 @@
 #' data(taxonomy)
 #'
 #' # Explore the dataset
-#' head(taxonomy)
+#' print(taxonomy)
 #' }
 #' @family datasets
 #' @name taxonomy

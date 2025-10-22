@@ -216,7 +216,7 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(30*60, 60*60,
       isochrones_temp[[i]]$name <- cut(
         isochrones_temp[[i]]$range / 60,
         breaks = breaks,
-        labels = paste0(head(breaks, -1), "-", tail(breaks, -1) - 1, " minutes")
+        labels = paste0(breaks[-length(breaks)], "-", breaks[-1] - 1, " minutes")
       )
 
 
