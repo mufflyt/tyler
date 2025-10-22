@@ -11,7 +11,6 @@
 #'
 #' @importFrom arsenal write2pdf tableby
 #' @importFrom readr read_rds
-#' @importFrom easyr read.any
 #' @importFrom fs dir_create dir_exists
 #' @importFrom here here
 #' @family table
@@ -137,5 +136,5 @@ generate_overall_table <- function(input_file_path, output_directory, title = "O
 
   # Log function end
   cat("Overall table generation completed.\n")
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
 }

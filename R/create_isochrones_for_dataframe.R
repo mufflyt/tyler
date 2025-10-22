@@ -7,12 +7,12 @@
 #' @param breaks A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).
 #' @return A dataframe containing the isochrones data with added 'name' column.
 #' @importFrom dplyr bind_rows
-#' @importFrom readr write_rds
+#' @importFrom readr write_rds read_rds read_csv
 #' @importFrom sf st_as_sf
-#' @importFrom easyr read.any
 #' @importFrom hereR set_key
 #' @importFrom janitor clean_names
 #' @importFrom data.table rbindlist
+#' @importFrom tools file_ext
 #' @family mapping
 #' @export
 #' @examples
@@ -24,12 +24,17 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 
 
-  library(sf)
-  library(easyr)
   if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.")
 
   hereR::set_key(api_key)
-  dataframe <- easyr::read.any(input_file)
+
+  # Read the input file based on extension
+  file_extension <- tolower(tools::file_ext(input_file))
+  dataframe <- switch(file_extension,
+    "rds" = readr::read_rds(input_file),
+    "csv" = readr::read_csv(input_file, show_col_types = FALSE),
+    stop("Unsupported file format. Please use .rds or .csv files.")
+  )
 
   # Check if "lat" and "long" columns exist
   if (!all(c("lat", "long") %in% colnames(dataframe))) {
@@ -88,7 +93,11 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
       )
     )
   )
-  beepr::beep(2)
+
+  # Optional audio notification
+  if (requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
 
   # Collapse the list of results into a single data frame
   isochrones <- data.table::rbindlist(isochrones_temp, fill = TRUE)

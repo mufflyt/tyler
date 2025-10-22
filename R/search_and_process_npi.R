@@ -162,7 +162,7 @@ search_and_process_npi <- function(data,
   result <- dplyr::bind_rows(npi_data)
 
   if (requireNamespace("beepr", quietly = TRUE)) {
-    beepr::beep(2)
+    if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   }
 
   result

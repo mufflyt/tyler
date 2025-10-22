@@ -20,18 +20,14 @@ Depends:
     R (>= 3.5.0)
 Imports:
     RColorBrewer,
-    beepr,
     arsenal,
     broom,
     caret,
     censusapi,
     data.table,
-    devtools,
     dplyr,
-    easyr,
     effects,
     emmeans,
-    exploratory,
     fs,
     ggmap,
     ggplot2,
@@ -43,7 +39,6 @@ Imports:
     htmlwidgets,
     httr,
     humaniformat,
-    imager,
     janitor,
     jsonlite,
     leaflet,
@@ -53,41 +48,44 @@ Imports:
     lubridate,
     magrittr,
     memoise,
-    mockery,
     npi,
     openxlsx,
     progress,
     purrr,
-    rainbow,
     readr,
     readxl,
-    remotes,
-    renv,
     rlang,
     rnaturalearth,
     scales,
     sf,
     stringr,
-    testthat,
     tibble,
     tidyr,
-    tidyverse,
     tigris,
     tmap,
     tools,
     viridis,
-    webshot,
     zipcodeR
 Remotes:
     andrewwallenbruce/provider
 LazyData: true
-Files: R/
 Suggests:
-    knitr,
-    pkgdown,
-    rmarkdown,
+    beepr,
     covr,
-    stats
+    devtools,
+    easyr,
+    imager,
+    knitr,
+    mockery,
+    pkgdown,
+    provider,
+    rainbow,
+    remotes,
+    renv,
+    rmarkdown,
+    stats,
+    testthat (>= 3.0.0),
+    webshot
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
 Config/pkgdown/doc_url: https://mufflyt.github.io/tyler/

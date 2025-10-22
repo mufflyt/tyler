@@ -57,6 +57,6 @@ search_npi <- function(input_data) {
   filtered_npi <- npi_df %>%
     dplyr::filter(taxonomies_desc %in% vc | taxonomies_desc %in% bc)
 
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   return(filtered_npi)
 }

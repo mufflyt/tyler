@@ -53,6 +53,6 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
     readr::write_csv(data, output_file_path)
   }
 
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   data
 }

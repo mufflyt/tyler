@@ -84,7 +84,7 @@ retrieve_clinician_data <- function(input_data) {
   result <- dplyr::bind_rows(expanded)
 
   if (requireNamespace("beepr", quietly = TRUE)) {
-    beepr::beep(2)
+    if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   }
 
   result

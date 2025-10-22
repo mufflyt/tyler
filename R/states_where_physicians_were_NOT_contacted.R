@@ -83,7 +83,7 @@ states_where_physicians_were_NOT_contacted <- function(filtered_data, all_states
     "."
   )
 
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   return(output_string)
 }
 

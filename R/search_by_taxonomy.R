@@ -108,7 +108,7 @@ search_by_taxonomy <- function(taxonomy_to_search) {
   })
 
   if (requireNamespace("beepr", quietly = TRUE)) {
-    beepr::beep(2)
+    if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   }
 
   npi_data

@@ -108,7 +108,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   message("75th Percentile of Overlap Percentages: ", p75, "%")
 
   if (requireNamespace("beepr", quietly = TRUE)) {
-    beepr::beep(2)
+    if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   }
 }
 

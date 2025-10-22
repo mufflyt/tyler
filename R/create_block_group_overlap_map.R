@@ -19,7 +19,6 @@
 #' }
 #'
 #' @importFrom leaflet addPolygons addLegend colorNumeric
-#' @importFrom webshot webshot
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom sf st_transform
 #'
@@ -73,6 +72,10 @@ create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir 
   cat("Map saved as HTML:", html_file, "\n")
 
   # Export the map as a PNG image
-  webshot::webshot(html_file, file = png_file)
-  cat("Map saved as PNG:", png_file, "\n")
+  if (requireNamespace("webshot", quietly = TRUE)) {
+    webshot::webshot(html_file, file = png_file)
+    cat("Map saved as PNG:", png_file, "\n")
+  } else {
+    message("webshot package not available. Skipping PNG export. Install with install.packages('webshot')")
+  }
 }

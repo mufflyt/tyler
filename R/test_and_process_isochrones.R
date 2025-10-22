@@ -92,7 +92,7 @@ test_and_process_isochrones <- function(input_file) {
   } else {
     message("No errors found.")
   }
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
 }
 
 #' Process and Save Isochrones
@@ -205,6 +205,6 @@ process_and_save_isochrones <- function(input_file, chunk_size = 25) {
   # Combine all isochrones from the list into one data frame
   isochrones_data <- do.call(rbind, isochrones_list)
 
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   return(isochrones_data)
 }

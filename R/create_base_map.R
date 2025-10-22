@@ -12,7 +12,6 @@
 #'
 #' @importFrom viridis viridis
 #' @importFrom leaflet addCircleMarkers addPolygons addLegend
-#' @importFrom webshot webshot
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom dplyr mutate
 #'
@@ -99,8 +98,12 @@ create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.0
   cat("Leaflet map saved as HTML:", html_file, "\n")
 
   # Capture and save a screenshot as PNG
-  webshot::webshot(html_file, file = png_file)
-  cat("Screenshot saved as PNG:", png_file, "\n")
+  if (requireNamespace("webshot", quietly = TRUE)) {
+    webshot::webshot(html_file, file = png_file)
+    cat("Screenshot saved as PNG:", png_file, "\n")
+  } else {
+    message("webshot package not available. Skipping PNG screenshot. Install with install.packages('webshot')")
+  }
 
   # Return the Leaflet map invisibly
   invisible(dot_map)

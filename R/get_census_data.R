@@ -59,7 +59,7 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
   acs_raw <- dplyr::bind_rows(state_data)
 
   if (requireNamespace("beepr", quietly = TRUE)) {
-    beepr::beep(2)
+    if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   }
 
   acs_raw

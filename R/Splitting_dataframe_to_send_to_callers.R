@@ -106,5 +106,5 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
       stop("Error saving split data for ", lab_assistant_name, ". Check if the output directory is writable.")
     })
   }
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
 }
