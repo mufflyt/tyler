@@ -33,15 +33,23 @@ validate_and_remove_invalid_npi <- function(input_data) {
   npi_df <- npi_df %>%
     dplyr::filter(!is.na(npi) & npi != "")
 
+  # If no rows remain after filtering, return empty dataframe
+  if (nrow(npi_df) == 0) {
+    return(npi_df)
+  }
+
   # Add a new column "npi_is_valid" to indicate NPI validity
   npi_df <- npi_df %>%
-    dplyr::mutate(npi_is_valid = sapply(npi, function(x) {
-      if (is.numeric(x) && nchar(x) == 10) {
-        npi::npi_is_valid(as.character(x))
+    dplyr::mutate(npi_is_valid = as.logical(sapply(npi, function(x) {
+      # Convert to character for consistent checking
+      x_char <- as.character(x)
+      # Check if it's exactly 10 characters and all digits
+      if (nchar(x_char) == 10 && grepl("^[0-9]+$", x_char)) {
+        npi::npi_is_valid(x_char)
       } else {
         FALSE
       }
-      })) %>%
+      }))) %>%
     dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
 
   # Return the valid dataframe with the "npi_is_valid" column

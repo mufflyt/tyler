@@ -146,7 +146,13 @@ test_that("Invalid file path handling", {
 })
 
 test_that("Insufficient lab assistant names handling", {
-  data <- data.frame(for_redcap = 1:4, id = 1:4, doctor_id = 1:4, stringsAsFactors = FALSE)
+  data <- data.frame(
+    for_redcap = 1:4,
+    id = 1:4,
+    doctor_id = 1:4,
+    insurance = rep("Medicaid", 4),
+    stringsAsFactors = FALSE
+  )
   expect_error(
     split_and_save(data_or_path = data, output_directory = tempdir(), lab_assistant_names = c("Alice")),
     "Please provide at least two lab assistant names for the splits.",

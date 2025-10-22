@@ -47,6 +47,12 @@ clean_phase_1_results <- function(phase1_data) {
     stop("Required packages are not installed. Please install them using install.packages().")
   }
 
+  # Check if dataframe is empty first
+  if (nrow(phase1_data) == 0 || ncol(phase1_data) == 0) {
+    message("The data frame is empty. Exiting function.")
+    return(invisible(NULL))
+  }
+
   cat("Converting column types...\n")
   phase1_data <- readr::type_convert(phase1_data)  # Convert column types
 

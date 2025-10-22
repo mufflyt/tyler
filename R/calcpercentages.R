@@ -37,7 +37,7 @@ calcpercentages <- function(data_frame, variable) {
   summary_df <- data_frame %>%
     dplyr::count(!!rlang::sym(variable), name = "n") %>%
     dplyr::mutate(percent = 100 * n / sum(n)) %>%
-    dplyr::slice_max(n, n = 1)
+    dplyr::slice_max(n, n = 1, with_ties = FALSE)
 
   return(summary_df)
 }

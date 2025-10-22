@@ -29,8 +29,28 @@ check_normality <- function(data, variable) {
     stop("Sample size must be at least 3 for the Shapiro-Wilk test.")
   }
 
+  # Check for constant values (all identical)
+  if (length(unique(data_var)) == 1) {
+    message("All values are identical. Skipping normality test.")
+    # For constant data, return the constant value
+    constant_value <- unique(data_var)[1]
+    summary_stats <- list(mean = constant_value, sd = 0)
+    print(summary_stats)
+    message("Summary calculation completed for variable: ", variable)
+    return(summary_stats)
+  }
+
+  # Check for large datasets (Shapiro-Wilk limit is 5000)
+  if (length(data_var) > 5000) {
+    message("Sample size exceeds 5000. Using a random sample for Shapiro-Wilk test.")
+    set.seed(123)  # For reproducibility
+    data_var_sample <- sample(data_var, 5000)
+  } else {
+    data_var_sample <- data_var
+  }
+
   # Check normality using Shapiro-Wilk test
-  normality_test <- stats::shapiro.test(data_var)
+  normality_test <- stats::shapiro.test(data_var_sample)
   p_value <- normality_test$p.value
   message("Shapiro-Wilk normality test completed with p-value: ", p_value)
 
