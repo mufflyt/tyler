@@ -27,7 +27,6 @@ Imports:
     caret,
     censusapi,
     data.table,
-    devtools,
     dplyr,
     easyr,
     effects,
@@ -55,7 +54,6 @@ Imports:
     lubridate,
     magrittr,
     memoise,
-    mockery,
     npi,
     openxlsx,
     progress,
@@ -63,17 +61,14 @@ Imports:
     rainbow,
     readr,
     readxl,
-    remotes,
-    renv,
     rlang,
     rnaturalearth,
     scales,
     sf,
+    stats,
     stringr,
-    testthat,
     tibble,
     tidyr,
-    tidyverse,
     tigris,
     tmap,
     tools,
@@ -90,7 +85,11 @@ Suggests:
     pkgdown,
     rmarkdown,
     covr,
-    stats
+    mockery,
+    testthat,
+    devtools,
+    remotes,
+    renv
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
 Config/pkgdown/doc_url: https://mufflyt.github.io/tyler/
