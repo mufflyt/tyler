@@ -1,3 +1,23 @@
+#' Write an Arsenal table to a PDF file
+#'
+#' Utility wrapper around `arsenal::write2pdf` to save a table object
+#' as a PDF document.
+#'
+#' @param object An `arsenal` table object to write.
+#' @param filename Path to the output PDF file.
+#'
+#' @return Invisibly returns the file path.
+#'
+#' @examples
+#' \dontrun{
+#' tm_write2pdf(overall_summary, "table.pdf")
+#' }
+#' @export
+tm_write2pdf <- function(object, filename) {
+  print("Function Sanity Check: Creating Arsenal Table as a PDF")
+  arsenal::write2pdf(object, filename, keep.md = TRUE, quiet = TRUE)
+}
+
 #' Generate overall table
 #'
 #' Generate an overall table summarizing the demographics of the Table 1.
@@ -22,27 +42,6 @@
 #' # Generate the overall table
 #' generate_overall_table("data/Table1.rds", "output_tables")
 #' }
-
-#' Write an Arsenal table to a PDF file
-#'
-#' Utility wrapper around `arsenal::write2pdf` to save a table object
-#' as a PDF document.
-#'
-#' @param object An `arsenal` table object to write.
-#' @param filename Path to the output PDF file.
-#'
-#' @return Invisibly returns the file path.
-#'
-#' @examples
-#' \dontrun{
-#' tm_write2pdf(overall_summary, "table.pdf")
-#' }
-#' @export
-tm_write2pdf <- function(object, filename) {
-  print("Function Sanity Check: Creating Arsenal Table as a PDF")
-  arsenal::write2pdf(object, filename, keep.md = TRUE, quiet = TRUE)
-}
-
 generate_overall_table <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
   cat("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.\n")
   # Log function start
