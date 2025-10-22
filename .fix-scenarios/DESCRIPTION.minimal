@@ -1,0 +1,96 @@
+Package: tyler
+Title: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care
+Version: 1.2.1
+Author: Tyler Muffly [aut, cre]
+Authors@R:
+    person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
+           comment = "ORCID: 0000-0002-2044-1693")
+Description: Provides utilities for mystery caller and audit studies evaluating patient access to healthcare. Functions help search and process National Provider Identifier (NPI) records, summarize provider demographics, and generate tables and maps for analysis and reporting.
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+License: MIT + file LICENSE
+URL: https://github.com/mufflyt/tyler, https://mufflyt.github.io/tyler/
+BugReports: https://github.com/mufflyt/tyler/issues
+Remotes: lmullen/genderdata
+Date: 2024-06-28
+Lifecycle: experimental
+Keywords: healthcare, patient access, audit study, NPI
+Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
+Depends:
+    R (>= 3.5.0)
+Imports:
+    arsenal,
+    broom,
+    caret,
+    censusapi,
+    data.table,
+    dplyr,
+    gender,
+    ggplot2,
+    glue,
+    httr,
+    janitor,
+    jsonlite,
+    lubridate,
+    magrittr,
+    memoise,
+    npi,
+    openxlsx,
+    progress,
+    purrr,
+    readr,
+    readxl,
+    rlang,
+    stats,
+    stringr,
+    tibble,
+    tidyr,
+    tools,
+    viridis
+Suggests:
+    knitr,
+    pkgdown,
+    rmarkdown,
+    covr,
+    mockery,
+    testthat,
+    devtools,
+    remotes,
+    renv,
+    RColorBrewer,
+    beepr,
+    easyr,
+    effects,
+    emmeans,
+    exploratory,
+    fs,
+    ggmap,
+    ggspatial,
+    gridExtra,
+    here,
+    hereR,
+    htmlwidgets,
+    humaniformat,
+    imager,
+    leaflet,
+    leaflet.extras,
+    lifecycle,
+    lme4,
+    rainbow,
+    rnaturalearth,
+    scales,
+    sf,
+    tigris,
+    tmap,
+    webshot,
+    zipcodeR
+Remotes:
+    lmullen/genderdata,
+    andrewwallenbruce/provider
+LazyData: true
+Files: R/
+VignetteBuilder: knitr
+VignetteEngine: knitr::rmarkdown
+Config/pkgdown/doc_url: https://mufflyt.github.io/tyler/
+Config/testthat/edition: 3
