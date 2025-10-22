@@ -2,27 +2,24 @@
 % Please edit documentation in R/generate_overall_table.R
 \name{tm_write2pdf}
 \alias{tm_write2pdf}
-\title{Generate overall table}
+\title{Write an Arsenal table to a PDF file}
 \usage{
 tm_write2pdf(object, filename)
 }
 \arguments{
-\item{input_file_path}{The path to the data file (in RDS, CSV, or XLS format).}
+\item{object}{An \code{arsenal} table object to write.}
 
-\item{output_directory}{The directory where the output table file will be saved.}
-
-\item{title}{The title for the overall table summary (default is "Overall Table Summary").}
-
-\item{selected_columns}{Optional vector of selected columns to include in the table.}
-
-\item{label_translations}{Optional named list for label translations.}
+\item{filename}{Path to the output PDF file.}
+}
+\value{
+Invisibly returns the file path.
 }
 \description{
-Generate an overall table summarizing the demographics of the Table 1.
+Utility wrapper around \code{arsenal::write2pdf} to save a table object
+as a PDF document.
 }
 \examples{
 \dontrun{
-# Generate the overall table
-generate_overall_table("data/Table1.rds", "output_tables")
+tm_write2pdf(overall_summary, "table.pdf")
 }
 }
