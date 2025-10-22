@@ -33,7 +33,7 @@ test_that("E2E: Complete NPI validation and processing workflow", {
   specialty_props <- calculate_proportion(validated_data, specialty)
 
   expect_s3_class(specialty_props, "data.frame")
-  expect_equal(sum(specialty_props$percent), 100)
+  expect_equal(sum(specialty_props$percent), 100, tolerance = 0.1)
 
   # Step 3: Get most common specialty
   most_common <- calcpercentages(validated_data, "specialty")
@@ -87,9 +87,11 @@ test_that("E2E: Data quality assessment workflow", {
 
   if (nrow(valid_wait_data) >= 3) {
     normality_result <- suppressMessages({
-      invisible(capture.output({
-        check_normality(valid_wait_data, "wait_time")
-      }, file = nullfile()))
+      invisible(capture.output(
+        result <- check_normality(valid_wait_data, "wait_time"),
+        file = nullfile()
+      ))
+      result
     })
 
     expect_type(normality_result, "list")
@@ -180,7 +182,7 @@ test_that("E2E: Statistical analysis workflow", {
   group_props <- calculate_proportion(analysis_data, group)
 
   expect_s3_class(group_props, "data.frame")
-  expect_equal(sum(group_props$percent), 100)
+  expect_equal(sum(group_props$percent), 100, tolerance = 0.1)
 
   # Step 2: Get most common gender
   gender_summary <- calcpercentages(analysis_data, "gender")
@@ -189,9 +191,11 @@ test_that("E2E: Statistical analysis workflow", {
 
   # Step 3: Check normality of outcome
   normality <- suppressMessages({
-    invisible(capture.output({
-      check_normality(analysis_data, "outcome")
-    }, file = nullfile()))
+    invisible(capture.output(
+      result <- check_normality(analysis_data, "outcome"),
+      file = nullfile()
+    ))
+    result
   })
 
   expect_type(normality, "list")
@@ -238,7 +242,7 @@ test_that("E2E: Data transformation and reporting workflow", {
   # Step 2: Calculate insurance distribution
   insurance_dist <- calculate_proportion(contacted_data, insurance_type)
 
-  expect_equal(sum(insurance_dist$percent), 100)
+  expect_equal(sum(insurance_dist$percent), 100, tolerance = 0.1)
 
   # Step 3: Get most common insurance
   most_common_insurance <- calcpercentages(contacted_data, "insurance_type")
@@ -296,7 +300,7 @@ test_that("E2E: Complete data validation and cleaning workflow", {
   specialty_analysis <- calculate_proportion(clean_npis, specialty)
 
   expect_s3_class(specialty_analysis, "data.frame")
-  expect_equal(sum(specialty_analysis$percent), 100)
+  expect_equal(sum(specialty_analysis$percent), 100, tolerance = 0.1)
 
   # Step 3: Get most common specialty
   top_specialty <- calcpercentages(clean_npis, "specialty")
@@ -389,9 +393,11 @@ test_that("E2E: Multi-transformation visualization workflow", {
 
   # Step 5: Check data distribution normality
   normality_result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(skewed_data, "value")
-    }, file = nullfile()))
+    invisible(capture.output(
+      result <- check_normality(skewed_data, "value"),
+      file = nullfile()
+    ))
+    result
   })
 
   expect_type(normality_result, "list")

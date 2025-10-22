@@ -47,6 +47,9 @@ mock_validate_and_remove_invalid_npi <- function(df) {
   return(df)
 }
 
+# Skip all tests if provider package is not available
+skip_if_not_installed("provider")
+
 # Tests
 test_that("Retrieves clinician data for valid NPIs", {
   temp_csv <- create_temp_csv(sample_data_valid)

@@ -9,16 +9,12 @@ test_that("check_normality detects normally distributed data", {
   normal_data <- data.frame(values = rnorm(100, mean = 50, sd = 10))
 
   # Suppress all output (plots and messages)
-  result <- suppressMessages(capture.output({
-    res <- check_normality(normal_data, "values")
-    res
-  }, file = nullfile()))
-
-  # Result is captured as the last value
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(normal_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(normal_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -38,9 +34,11 @@ test_that("check_normality detects non-normal data", {
   skewed_data <- data.frame(values = rexp(100, rate = 0.5))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(skewed_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(skewed_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -54,9 +52,11 @@ test_that("check_normality handles uniform distribution", {
   uniform_data <- data.frame(values = runif(100, min = 0, max = 100))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(uniform_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(uniform_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -76,9 +76,11 @@ test_that("check_normality handles minimum sample size", {
   min_data <- data.frame(values = c(1, 2, 3))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(min_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(min_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -90,9 +92,11 @@ test_that("check_normality returns correct structure for normal data", {
   normal_data <- data.frame(values = rnorm(1000, mean = 100, sd = 15))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(normal_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(normal_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -107,9 +111,11 @@ test_that("check_normality handles data with outliers", {
   outlier_data <- data.frame(values = c(rnorm(97, mean = 50, sd = 10), 1000, 2000, 3000))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(outlier_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(outlier_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -121,9 +127,11 @@ test_that("check_normality handles single value repeated", {
   constant_data <- data.frame(values = rep(5, 100))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(constant_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(constant_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -141,9 +149,11 @@ test_that("check_normality handles negative values", {
   negative_data <- data.frame(values = rnorm(100, mean = -50, sd = 10))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(negative_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(negative_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -157,9 +167,11 @@ test_that("check_normality handles mixed positive and negative values", {
   mixed_data <- data.frame(values = rnorm(100, mean = 0, sd = 50))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(mixed_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(mixed_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -171,9 +183,11 @@ test_that("check_normality handles large dataset", {
   large_data <- data.frame(values = rnorm(10000, mean = 75, sd = 20))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(large_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(large_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -187,9 +201,11 @@ test_that("check_normality returns numeric summary statistics", {
   data <- data.frame(values = rnorm(100, mean = 50, sd = 10))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   # All returned values should be numeric
@@ -200,9 +216,11 @@ test_that("check_normality handles integer values", {
   integer_data <- data.frame(values = sample(1:100, 100, replace = TRUE))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(integer_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(integer_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")
@@ -216,9 +234,11 @@ test_that("check_normality handles bimodal distribution", {
                                         rnorm(50, mean = 80, sd = 5)))
 
   result <- suppressMessages({
-    invisible(capture.output({
-      check_normality(bimodal_data, "values")
-    }, file = nullfile()))
+    invisible(capture.output(
+      res <- check_normality(bimodal_data, "values"),
+      file = nullfile()
+    ))
+    res
   })
 
   expect_type(result, "list")

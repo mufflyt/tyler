@@ -27,5 +27,7 @@
 #' @family utilities
 #' @export
 format_pct <- function(x, my_digits = 1) {
+  # Clamp my_digits to valid range (1-20) for format() function
+  my_digits <- max(1, min(20, my_digits))
   format(x, digits = my_digits, nsmall = my_digits)
 }

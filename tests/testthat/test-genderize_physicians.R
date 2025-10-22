@@ -19,6 +19,9 @@ sample_data <- data.frame(
   stringsAsFactors = FALSE
 )
 
+# Skip all tests if genderdata package is not available
+skip_if_not_installed("genderdata")
+
 # Test if the function reads the input file correctly
 test_that("Reads input file correctly", {
   temp_csv <- create_temp_csv(sample_data)
