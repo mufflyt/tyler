@@ -20,37 +20,18 @@ Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:
     R (>= 3.5.0)
 Imports:
-    RColorBrewer,
-    beepr,
     arsenal,
     broom,
     caret,
     censusapi,
     data.table,
     dplyr,
-    easyr,
-    effects,
-    emmeans,
-    exploratory,
-    fs,
     gender,
-    ggmap,
     ggplot2,
-    ggspatial,
     glue,
-    gridExtra,
-    here,
-    hereR,
-    htmlwidgets,
     httr,
-    humaniformat,
-    imager,
     janitor,
     jsonlite,
-    leaflet,
-    leaflet.extras,
-    lifecycle,
-    lme4,
     lubridate,
     magrittr,
     memoise,
@@ -58,28 +39,15 @@ Imports:
     openxlsx,
     progress,
     purrr,
-    rainbow,
     readr,
     readxl,
     rlang,
-    rnaturalearth,
-    scales,
-    sf,
     stats,
     stringr,
     tibble,
     tidyr,
-    tigris,
-    tmap,
     tools,
-    viridis,
-    webshot,
-    zipcodeR
-Remotes:
-    lmullen/genderdata,
-    andrewwallenbruce/provider
-LazyData: true
-Files: R/
+    viridis
 Suggests:
     knitr,
     pkgdown,
@@ -89,7 +57,39 @@ Suggests:
     testthat,
     devtools,
     remotes,
-    renv
+    renv,
+    RColorBrewer,
+    beepr,
+    easyr,
+    effects,
+    emmeans,
+    exploratory,
+    fs,
+    ggmap,
+    ggspatial,
+    gridExtra,
+    here,
+    hereR,
+    htmlwidgets,
+    humaniformat,
+    imager,
+    leaflet,
+    leaflet.extras,
+    lifecycle,
+    lme4,
+    rainbow,
+    rnaturalearth,
+    scales,
+    sf,
+    tigris,
+    tmap,
+    webshot,
+    zipcodeR
+Remotes:
+    lmullen/genderdata,
+    andrewwallenbruce/provider
+LazyData: true
+Files: R/
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
 Config/pkgdown/doc_url: https://mufflyt.github.io/tyler/
