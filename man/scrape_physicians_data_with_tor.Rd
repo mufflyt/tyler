@@ -4,23 +4,26 @@
 \alias{scrape_physicians_data_with_tor}
 \title{Scrape Physicians' Data with Tor}
 \usage{
-scrape_physicians_data_with_tor(startID, endID, torPort)
+scrape_physicians_data_with_tor(startID, endID, torPort, wrong_ids_path = NULL)
 }
 \arguments{
-\item{startID}{The starting ID for scraping.}
+\item{startID}{Ignored. Retained for backwards compatibility.}
 
-\item{endID}{The ending ID for scraping.}
+\item{endID}{Ignored. Retained for backwards compatibility.}
 
-\item{torPort}{The port number for Tor SOCKS proxy.}
+\item{torPort}{Ignored. Retained for backwards compatibility.}
+
+\item{wrong_ids_path}{Ignored. Retained for backwards compatibility.}
 }
 \value{
-A dataframe containing scraped physicians' data.
+A zero-row tibble.
 }
 \description{
-This function scrapes data for physicians within a specified ID range, excluding wrong IDs.
+\strong{Deprecated}. This helper previously proxied requests through Tor for
+interactive debugging. The implementation has been retired and the function now
+only emits a lifecycle deprecation warning while returning an empty tibble.
 }
 \examples{
-# Call the function
-scrape_result <- scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 9150)
-
+result <- suppressWarnings(scrape_physicians_data_with_tor(9045999, 9046000, 9150))
+nrow(result)
 }

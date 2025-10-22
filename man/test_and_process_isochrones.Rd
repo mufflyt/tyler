@@ -7,35 +7,15 @@
 test_and_process_isochrones(input_file)
 }
 \arguments{
-\item{input_file}{A data frame containing location data with columns "lat" and "long."
-The input file should represent geographic coordinates for which
-isochrones will be calculated.}
+\item{input_file}{Ignored. Retained for backwards compatibility.}
 }
 \value{
-Prints messages indicating errors, if any, during isochrone retrieval.
+Invisibly returns a zero-row tibble.
 }
 \description{
-This function tests and processes isochrones for each location in the input file. It
-identifies and reports any errors encountered during the isochrone retrieval process.
-}
-\details{
-This function uses the \code{hereR} package to calculate isochrones based on the
-provided geographic coordinates. It retrieves isochrones for each location in
-the input file, identifies any errors during the retrieval process, and reports
-these errors. The function is designed to be used with input data that meets
-specific requirements, including valid latitude and longitude values.
+\strong{Deprecated}. The helper previously orchestrated interactive HERE
+isoline debugging sessions. It now only signals deprecation.
 }
 \examples{
-# Validate the file of geocoded data.
-input_file <- readr::read_csv("data/isochrones/inner_join_postmastr_clinician_data.csv") \%>\%
-  dplyr::mutate(id = dplyr::row_number()) \%>\%
-  dplyr::filter(postmastr.name.x != "Hye In Park, MD")
-
-test_and_process_isochrones(input_file = input_file)
-
-# Filter out the rows that are going to error out after using the test_and_process_isochrones function.
-# error_rows <- c(265, 431, 816, 922, 1605, 2049, 2212, 2284, 2308, 2409, 2482, 2735, 2875, 2880, 3150, 3552, 3718)
-# input_file_no_error_rows <- input_file \%>\%
-#   dplyr::filter(!id \%in\% error_rows)
-
+suppressWarnings(test_and_process_isochrones(NULL))
 }

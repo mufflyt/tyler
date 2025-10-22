@@ -32,16 +32,21 @@ reference:
       - geocode_unique_addresses
       - hrr
       - hrr_generate_maps
-      - process_and_save_isochrones
       - remove_constant_vars
       - remove_near_zero_var
       - retrieve_clinician_data
       - save_quality_check_table
-      - scrape_physicians_data_with_tor
       - search_by_taxonomy
       - split_and_save
       - tm_write2pdf
       - tyler-package
+  - title: "Deprecated debugging helpers"
+    desc: "Legacy utilities kept only to preserve backwards compatibility."
+    contents:
+      - process_and_save_isochrones
+      - scrape_physicians_data_with_tor
+      - search_npi
+      - test_and_process_isochrones
 
 articles:
   - title: "Vignettes"
