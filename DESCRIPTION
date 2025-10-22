@@ -66,8 +66,6 @@ Imports:
     tools,
     viridis,
     zipcodeR
-Remotes:
-    andrewwallenbruce/provider
 LazyData: true
 Suggests:
     beepr,
@@ -78,7 +76,6 @@ Suggests:
     knitr,
     mockery,
     pkgdown,
-    provider,
     rainbow,
     remotes,
     renv,
