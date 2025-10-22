@@ -76,11 +76,6 @@
       "@type": "SoftwareApplication",
       "identifier": "provider",
       "name": "provider"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "genderdata",
-      "name": "genderdata"
     }
   ],
   "softwareRequirements": {
