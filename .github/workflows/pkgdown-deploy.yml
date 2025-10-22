@@ -3,7 +3,7 @@ name: pkgdown-deploy
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, claude/run-fithub-workflow-011CUNnXjhPFWyfk1Gi2tCNG]
   pull_request:
     branches: [main, master]
   release:
