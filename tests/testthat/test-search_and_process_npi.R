@@ -52,7 +52,11 @@ mock_npi_search <- function(first_name, last_name) {
 mock_npi_flatten <- function(npi_obj, cols) {
   cat("Mock flatten for NPI object\n")
   if (!is.null(npi_obj)) {
-    return(cbind(npi_obj$basic, npi_obj$taxonomies))
+    df <- cbind(npi_obj$basic, npi_obj$taxonomies)
+    names(df)[names(df) == "first_name"] <- "basic_first_name"
+    names(df)[names(df) == "last_name"] <- "basic_last_name"
+    df$basic_credential <- "MD"
+    return(df)
   } else {
     return(NULL)
   }
@@ -85,6 +89,10 @@ test_that("Handles empty input data frame", {
   result <- search_and_process_npi(empty_data)
 
   expect_equal(nrow(result), 0)
+})
+
+test_that("validates required columns", {
+  expect_error(search_and_process_npi(data.frame(first = "A")), "columns: last")
 })
 
 test_that("Handles invalid NPIs gracefully", {

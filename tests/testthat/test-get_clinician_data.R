@@ -42,8 +42,8 @@ mock_clinicians <- function(npi) {
 # Mock function to validate and remove invalid NPIs
 mock_validate_and_remove_invalid_npi <- function(df) {
   df <- df %>%
-    dplyr::filter(npi %in% c(1234567890, 3456789012)) %>%
-    dplyr::mutate(npi_is_valid = TRUE, npi = as.numeric(npi))
+    dplyr::filter(npi %in% c(1234567890, 3456789012, "1234567890", "3456789012")) %>%
+    dplyr::mutate(npi = as.character(npi), npi_is_valid = TRUE)
   return(df)
 }
 

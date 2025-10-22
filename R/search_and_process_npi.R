@@ -10,14 +10,13 @@
 #' @param country_code Filter for only the "US".
 #' @param filter_credentials A character vector containing the credentials to filter the NPI results. Default is c("MD", "DO").
 #' @param save_chunk_size The number of results to save per chunk. Default is 10.
-#' @param dest_dir Destination directory to save chunked results. Default is NULL (current working directory).
+#' @param dest_dir Destination directory to save chunked results. Default is NULL (no files written).
 #' @return A data frame containing the processed NPI search results.
 #'
-#' @importFrom dplyr filter
+#' @importFrom dplyr filter mutate select rename distinct arrange bind_rows tibble
 #' @importFrom npi npi_search npi_flatten
 #' @importFrom progress progress_bar
 #' @importFrom purrr map2 keep
-#' @importFrom data.table rbindlist
 #' @importFrom readr write_csv
 #' @family npi
 #' @export
@@ -33,92 +32,138 @@ search_and_process_npi <- function(data,
                                    filter_credentials = c("MD", "DO"),
                                    save_chunk_size = 10,
                                    dest_dir = NULL) {
-  cat("Starting search_and_process_npi...\n")
-
-  # Check if 'data' is a data frame
   if (!is.data.frame(data)) {
     stop("Input 'data' must be a data frame.")
   }
-  cat("Input data is a data frame.\n")
 
-  # Extract first and last names from the data frame
-  first_names <- data$first
-  last_names <- data$last
-
-  # Define taxonomies to filter
-  vc <- c("Allergy & Immunology", "Anesthesiology", "Dermatology", "Emergency Medicine", "Family Medicine", "Internal Medicine", "Obstetrics & Gynecology", "Ophthalmology", "Orthopaedic Surgery", "Pediatrics", "Psychiatry & Neurology", "Radiology", "Surgery", "Urology")
-  bc <- c("Pathology", "Pediatrics", "Physical Medicine & Rehabilitation", "Plastic Surgery", "Preventive Medicine")
-
-  # Function to search NPI based on first and last names
-  search_npi <- function(first_name, last_name) {
-    cat("Searching NPI for:", first_name, last_name, "\n")
-    tryCatch(
-      {
-        # NPI search object
-        npi_obj <- npi::npi_search(first_name = first_name, last_name = last_name)
-        cat("NPI search object retrieved for:", first_name, last_name, "\n")
-
-        # Retrieve basic and taxonomy data from npi objects
-        t <- npi::npi_flatten(npi_obj, cols = c("basic", "taxonomies"))
-        cat("NPI data flattened for:", first_name, last_name, "\n")
-
-        # Subset results with taxonomy that matches taxonomies in the lists
-        t <- dplyr::filter(t, taxonomies_desc %in% vc | taxonomies_desc %in% bc)
-        cat("NPI data filtered for:", first_name, last_name, "\n")
-      },
-      error = function(e) {
-        cat("ERROR for", first_name, last_name, ":", conditionMessage(e), "\n")
-        return(NULL)  # Return NULL for error cases
-      }
-    )
-    return(t)
+  required_cols <- c("first", "last")
+  missing_cols <- setdiff(required_cols, names(data))
+  if (length(missing_cols)) {
+    stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "))
   }
 
-  # Create an empty list to receive the data
-  out <- list()
+  if (!nrow(data)) {
+    return(dplyr::tibble())
+  }
 
-  # Initialize progress bar
-  total_names <- nrow(data)
-  pb <- progress::progress_bar$new(total = total_names)
+  first_names <- as.character(data$first)
+  last_names <- as.character(data$last)
 
-  # Function to save results to file
+  vc <- c(
+    "Allergy & Immunology", "Anesthesiology", "Dermatology", "Emergency Medicine",
+    "Family Medicine", "Internal Medicine", "Obstetrics & Gynecology", "Ophthalmology",
+    "Orthopaedic Surgery", "Pediatrics", "Psychiatry & Neurology", "Radiology", "Surgery", "Urology"
+  )
+  bc <- c("Pathology", "Pediatrics", "Physical Medicine & Rehabilitation", "Plastic Surgery", "Preventive Medicine")
+  credential_filter <- NULL
+  if (!is.null(filter_credentials)) {
+    credential_filter <- tolower(gsub("[^A-Za-z0-9]", "", filter_credentials))
+  }
+
+  total_names <- length(first_names)
+  pb <- NULL
+  if (total_names > 0) {
+    pb <- progress::progress_bar$new(total = total_names, clear = FALSE, show_after = 0)
+  }
+
   save_results <- function(result, file_prefix, directory) {
+    if (is.null(directory) || is.na(directory) || !nrow(result)) {
+      return(invisible(NULL))
+    }
+    dir.create(directory, showWarnings = FALSE, recursive = TRUE)
     timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
     file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, ".csv"))
     readr::write_csv(result, file_name)
-    cat("Saved chunk results to:", file_name, "\n")
   }
 
-  # Initialize counters for chunk saving
-  chunk_count <- 0
+  search_npi <- function(first_name, last_name) {
+    tryCatch({
+      npi_obj <- npi::npi_search(
+        first_name = first_name,
+        last_name = last_name,
+        enumeration_type = enumeration_type,
+        limit = limit,
+        country_code = country_code
+      )
 
-  # Search NPI for each name in the input data
+      if (is.null(npi_obj)) {
+        return(NULL)
+      }
+
+      flattened <- npi::npi_flatten(npi_obj, cols = c("basic", "taxonomies"))
+      if (is.null(flattened) || !nrow(flattened)) {
+        return(NULL)
+      }
+
+      filtered <- dplyr::filter(flattened, taxonomies_desc %in% vc | taxonomies_desc %in% bc)
+      if (!nrow(filtered)) {
+        return(NULL)
+      }
+
+      if (!"basic_credential" %in% names(filtered)) {
+        filtered$basic_credential <- NA_character_
+      }
+      if (!"basic_first_name" %in% names(filtered)) {
+        filtered$basic_first_name <- NA_character_
+      }
+      if (!"basic_last_name" %in% names(filtered)) {
+        filtered$basic_last_name <- NA_character_
+      }
+      if (!"basic_middle_name" %in% names(filtered)) {
+        filtered$basic_middle_name <- NA_character_
+      }
+
+      filtered <- dplyr::mutate(
+        filtered,
+        credential = basic_credential,
+        credential_clean = tolower(gsub("[^A-Za-z0-9]", "", credential))
+      )
+
+      if (!is.null(credential_filter)) {
+        filtered <- dplyr::filter(filtered, is.na(credential_clean) | credential_clean %in% credential_filter)
+      }
+
+      filtered <- dplyr::rename(
+        filtered,
+        first_name = basic_first_name,
+        last_name = basic_last_name,
+        middle_name = basic_middle_name
+      )
+
+      filtered <- dplyr::mutate(filtered, search_term = paste(first_name, last_name))
+      filtered <- dplyr::select(filtered, -credential_clean, -basic_credential)
+      filtered <- dplyr::distinct(filtered, npi, taxonomies_desc, .keep_all = TRUE)
+      filtered <- dplyr::arrange(filtered, last_name, first_name)
+      filtered
+    }, error = function(e) {
+      message(sprintf("Error searching %s %s: %s", first_name, last_name, e$message))
+      NULL
+    })
+  }
+
   out <- purrr::map2(first_names, last_names, function(first_name, last_name) {
-    pb$tick()
+    if (!is.null(pb)) {
+      pb$tick()
+    }
     result <- search_npi(first_name, last_name)
 
-    # Increment chunk count and save results if save_chunk_size is reached
-    if (!is.null(result) && nrow(result) > 0) {
-      if (nrow(result) > save_chunk_size) {
-        chunk_count <<- chunk_count + 1
-        save_results(result, "results_of_search_and_process_npi", dest_dir)
-      }
+    should_save <- !is.null(result) && nrow(result) && is.numeric(save_chunk_size) && !is.na(save_chunk_size) && save_chunk_size > 0 && nrow(result) >= save_chunk_size
+    if (should_save) {
+      save_results(result, "results_of_search_and_process_npi", dest_dir)
     }
-
-    cat("Result for", first_name, last_name, ":\n", ifelse(is.null(result), "NULL", paste(capture.output(print(result)), collapse = "\n")), "\n")
-    return(result)
+    result
   })
 
-  # Filter npi_data to keep only elements that are data frames
-  npi_data <- purrr::keep(out, is.data.frame)
-  cat("Filtered npi_data to keep only data frames. Length:", length(npi_data), "\n")
+  npi_data <- purrr::keep(out, function(x) is.data.frame(x) && nrow(x) > 0)
+  if (!length(npi_data)) {
+    return(dplyr::tibble())
+  }
 
-  # Combine multiple data frames into a single data frame
-  result <- data.table::rbindlist(npi_data, fill = TRUE)
-  cat("Combined data frame. Number of rows:", nrow(result), "\n")
+  result <- dplyr::bind_rows(npi_data)
 
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
 
-  # Return the result data frame
-  return(result)
+  result
 }
