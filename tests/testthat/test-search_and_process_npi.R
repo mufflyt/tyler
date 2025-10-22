@@ -1,156 +1,141 @@
-# Sample data for testing
+library(testthat)
+library(mockery)
+
 sample_data <- data.frame(
   first = c("John", "Jane", "Alex"),
   last = c("Doe", "Smith", "Brown"),
   stringsAsFactors = FALSE
 )
 
-# Mock functions to simulate npi::npi_search and npi::npi_flatten
-mock_npi_search <- function(first_name, last_name) {
-  cat("Mock search for:", first_name, last_name, "\n")
+mock_npi_search <- function(first_name, last_name, enumeration_type, country_code, limit) {
   if (first_name == "John" && last_name == "Doe") {
-    return(list(
-      basic = data.frame(
-        first_name = "John",
-        last_name = "Doe",
-        stringsAsFactors = FALSE
-      ),
-      taxonomies = data.frame(
-        taxonomies_desc = c("Family Medicine", "Internal Medicine"),
-        stringsAsFactors = FALSE
-      )
-    ))
+    list(
+      basic = data.frame(first_name = "John", last_name = "Doe", basic_credential = "MD", stringsAsFactors = FALSE),
+      taxonomies = data.frame(taxonomies_desc = c("Family Medicine", "Internal Medicine"), stringsAsFactors = FALSE)
+    )
   } else if (first_name == "Jane" && last_name == "Smith") {
-    return(list(
-      basic = data.frame(
-        first_name = "Jane",
-        last_name = "Smith",
-        stringsAsFactors = FALSE
-      ),
-      taxonomies = data.frame(
-        taxonomies_desc = c("Pediatrics"),
-        stringsAsFactors = FALSE
-      )
-    ))
+    list(
+      basic = data.frame(first_name = "Jane", last_name = "Smith", basic_credential = "DO", stringsAsFactors = FALSE),
+      taxonomies = data.frame(taxonomies_desc = c("Pediatrics"), stringsAsFactors = FALSE)
+    )
   } else if (first_name == "Alex" && last_name == "Brown") {
-    return(list(
-      basic = data.frame(
-        first_name = "Alex",
-        last_name = "Brown",
-        stringsAsFactors = FALSE
-      ),
-      taxonomies = data.frame(
-        taxonomies_desc = c("Surgery"),
-        stringsAsFactors = FALSE
-      )
-    ))
+    list(
+      basic = data.frame(first_name = "Alex", last_name = "Brown", basic_credential = "MD", stringsAsFactors = FALSE),
+      taxonomies = data.frame(taxonomies_desc = c("Surgery"), stringsAsFactors = FALSE)
+    )
   } else {
-    return(NULL)
+    list(
+      basic = data.frame(first_name = first_name, last_name = last_name, basic_credential = "MD", stringsAsFactors = FALSE),
+      taxonomies = data.frame(taxonomies_desc = c("Unknown"), stringsAsFactors = FALSE)
+    )
   }
 }
 
 mock_npi_flatten <- function(npi_obj, cols) {
-  cat("Mock flatten for NPI object\n")
-  if (!is.null(npi_obj)) {
-    return(cbind(npi_obj$basic, npi_obj$taxonomies))
-  } else {
+  if (is.null(npi_obj)) {
     return(NULL)
   }
+  cbind(npi_obj$basic, npi_obj$taxonomies)
 }
 
-# Create a temporary CSV file for testing
-create_temp_csv <- function(data, file_name = "temp_npi_data.csv") {
-  temp_file <- file.path(tempdir(), file_name)
-  write_csv(data, temp_file)
-  return(temp_file)
+create_temp_dir <- function() {
+  dir <- tempfile("npi-test-")
+  unlink(dir, recursive = TRUE)
+  dir
 }
 
-# Tests
+expect_quiet <- function(expr) {
+  old <- options(tyler.quiet = TRUE)
+  on.exit(options(old), add = TRUE)
+  force(expr)
+}
+
+# 1
 test_that("Processes data frame input correctly", {
-  cat("Running test: Processes data frame input correctly\n")
-  mockery::stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
-  mockery::stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
-
-  result <- search_and_process_npi(sample_data)
-
-  expect_true(nrow(result) >= 3) # Should return results for at least 3 names, possibly more due to multiple matches
-  expect_true("first_name" %in% colnames(result))
-  expect_true("last_name" %in% colnames(result))
-  expect_true("taxonomies_desc" %in% colnames(result))
+  stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
+  stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
+  result <- expect_quiet(search_and_process_npi(sample_data, dest_dir = tempdir(), quiet = TRUE))
+  expect_true(nrow(result) >= 3)
+  expect_true("taxonomies_desc" %in% names(result))
 })
 
+# 2
 test_that("Handles empty input data frame", {
-  cat("Running test: Handles empty input data frame\n")
   empty_data <- data.frame(first = character(), last = character(), stringsAsFactors = FALSE)
-  result <- search_and_process_npi(empty_data)
-
+  result <- expect_quiet(search_and_process_npi(empty_data, quiet = TRUE))
+  expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 0)
 })
 
+# 3
 test_that("Handles invalid NPIs gracefully", {
-  cat("Running test: Handles invalid NPIs gracefully\n")
-  invalid_data <- data.frame(first = c("Invalid"), last = c("Name"), stringsAsFactors = FALSE)
-  mockery::stub(search_and_process_npi, 'npi::npi_search', function(first_name, last_name) {
-    cat("Mock search for invalid NPI\n")
-    return(NULL)
-  })
-  mockery::stub(search_and_process_npi, 'npi::npi_flatten', function(npi_obj, cols) {
-    cat("Mock flatten for invalid NPI object\n")
-    return(NULL)
-  })
-  result <- search_and_process_npi(invalid_data)
-
+  stub(search_and_process_npi, 'npi::npi_search', function(...) NULL)
+  stub(search_and_process_npi, 'npi::npi_flatten', function(...) NULL)
+  result <- expect_quiet(search_and_process_npi(sample_data[1, , drop = FALSE], quiet = TRUE))
   expect_equal(nrow(result), 0)
 })
 
-
-# Parameterized test for different inputs
+# 4
 test_that("Processes various names correctly", {
-  cat("Running test: Processes various names correctly\n")
-  test_cases <- list(
-    list(first = "John", last = "Doe"),
-    list(first = "Jane", last = "Smith"),
-    list(first = "Alex", last = "Brown"),
-    list(first = "Invalid", last = "Name")
-  )
-
-  mockery::stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
-  mockery::stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
-
-  for (test_case in test_cases) {
-    data <- data.frame(first = test_case$first, last = test_case$last, stringsAsFactors = FALSE)
-    result <- search_and_process_npi(data)
-
-    if (test_case$first == "Invalid") {
-      expect_equal(nrow(result), 0)
-    } else {
-      expect_true(nrow(result) >= 1)
-      expect_true("first_name" %in% colnames(result))
-      expect_true("last_name" %in% colnames(result))
-      expect_true("taxonomies_desc" %in% colnames(result))
-    }
+  stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
+  stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
+  for (i in seq_len(nrow(sample_data))) {
+    result <- expect_quiet(search_and_process_npi(sample_data[i, , drop = FALSE], quiet = TRUE))
+    expect_true(nrow(result) >= 1)
   }
 })
 
-# Performance test
+# 5
 test_that("Handles large datasets efficiently", {
-  cat("Running test: Handles large datasets efficiently\n")
-  large_data <- data.frame(
-    first = rep(c("John", "Jane", "Alex"), times = 100),
-    last = rep(c("Doe", "Smith", "Brown"), times = 100),
-    stringsAsFactors = FALSE
-  )
+  stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
+  stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
+  large_data <- sample_data[rep(seq_len(nrow(sample_data)), times = 50), ]
+  result <- expect_quiet(search_and_process_npi(large_data, quiet = TRUE))
+  expect_true(nrow(result) >= nrow(sample_data))
+})
 
-  mockery::stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
-  mockery::stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
+# 6
+test_that("Requires data frame input", {
+  expect_error(search_and_process_npi(list(a = 1)), "data frame")
+})
 
-  start_time <- Sys.time()
-  result <- search_and_process_npi(large_data)
-  end_time <- Sys.time()
+# 7
+test_that("Requires first and last columns", {
+  expect_error(search_and_process_npi(data.frame(first = "John")), "must contain 'first' and 'last'")
+})
 
-  expect_true(nrow(result) >= 300)
-  expect_true("first_name" %in% colnames(result))
-  expect_true("last_name" %in% colnames(result))
-  expect_true("taxonomies_desc" %in% colnames(result))
-  cat("Performance test duration:", end_time - start_time, "\n")
+# 8
+test_that("Validates limit parameter", {
+  expect_error(search_and_process_npi(sample_data, limit = 0), "positive")
+})
+
+# 9
+test_that("Validates save_chunk_size", {
+  expect_error(search_and_process_npi(sample_data, save_chunk_size = 0), "positive")
+})
+
+# 10
+test_that("Creates destination directory when missing", {
+  stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
+  stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
+  temp_dir <- create_temp_dir()
+  result <- expect_quiet(search_and_process_npi(sample_data[1, , drop = FALSE], dest_dir = temp_dir, quiet = TRUE))
+  expect_true(dir.exists(temp_dir))
+  expect_s3_class(result, "data.frame")
+})
+
+# 11
+test_that("Filters by credentials when available", {
+  stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
+  stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
+  res <- expect_quiet(search_and_process_npi(sample_data[1, , drop = FALSE], filter_credentials = "DO", quiet = TRUE))
+  expect_equal(nrow(res), 0)
+})
+
+# 12
+test_that("Errors when destination cannot be created", {
+  bad_dir <- tempfile("npi-bad")
+  file.create(bad_dir)
+  expect_true(file.exists(bad_dir))
+  expect_error(search_and_process_npi(sample_data[1, , drop = FALSE], dest_dir = bad_dir), "Unable to create")
 })

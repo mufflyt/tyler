@@ -11,6 +11,8 @@
 #' @param filter_credentials A character vector containing the credentials to filter the NPI results. Default is c("MD", "DO").
 #' @param save_chunk_size The number of results to save per chunk. Default is 10.
 #' @param dest_dir Destination directory to save chunked results. Default is NULL (current working directory).
+#' @param quiet Should progress output be suppressed? Default is `FALSE`.
+#'
 #' @return A data frame containing the processed NPI search results.
 #'
 #' @importFrom dplyr filter
@@ -19,6 +21,8 @@
 #' @importFrom purrr map2 keep
 #' @importFrom data.table rbindlist
 #' @importFrom readr write_csv
+#' @importFrom rlang .data
+#' @importFrom tibble tibble
 #' @family npi
 #' @export
 #' @examples
@@ -32,93 +36,131 @@ search_and_process_npi <- function(data,
                                    country_code = "US",
                                    filter_credentials = c("MD", "DO"),
                                    save_chunk_size = 10,
-                                   dest_dir = NULL) {
-  cat("Starting search_and_process_npi...\n")
-
-  # Check if 'data' is a data frame
+                                   dest_dir = NULL,
+                                   quiet = getOption("tyler.quiet", FALSE)) {
   if (!is.data.frame(data)) {
     stop("Input 'data' must be a data frame.")
   }
-  cat("Input data is a data frame.\n")
 
-  # Extract first and last names from the data frame
-  first_names <- data$first
-  last_names <- data$last
-
-  # Define taxonomies to filter
-  vc <- c("Allergy & Immunology", "Anesthesiology", "Dermatology", "Emergency Medicine", "Family Medicine", "Internal Medicine", "Obstetrics & Gynecology", "Ophthalmology", "Orthopaedic Surgery", "Pediatrics", "Psychiatry & Neurology", "Radiology", "Surgery", "Urology")
-  bc <- c("Pathology", "Pediatrics", "Physical Medicine & Rehabilitation", "Plastic Surgery", "Preventive Medicine")
-
-  # Function to search NPI based on first and last names
-  search_npi <- function(first_name, last_name) {
-    cat("Searching NPI for:", first_name, last_name, "\n")
-    tryCatch(
-      {
-        # NPI search object
-        npi_obj <- npi::npi_search(first_name = first_name, last_name = last_name)
-        cat("NPI search object retrieved for:", first_name, last_name, "\n")
-
-        # Retrieve basic and taxonomy data from npi objects
-        t <- npi::npi_flatten(npi_obj, cols = c("basic", "taxonomies"))
-        cat("NPI data flattened for:", first_name, last_name, "\n")
-
-        # Subset results with taxonomy that matches taxonomies in the lists
-        t <- dplyr::filter(t, taxonomies_desc %in% vc | taxonomies_desc %in% bc)
-        cat("NPI data filtered for:", first_name, last_name, "\n")
-      },
-      error = function(e) {
-        cat("ERROR for", first_name, last_name, ":", conditionMessage(e), "\n")
-        return(NULL)  # Return NULL for error cases
-      }
-    )
-    return(t)
+  required_cols <- c("first", "last")
+  if (!all(required_cols %in% names(data))) {
+    stop("Input data frame must contain 'first' and 'last' columns.")
   }
 
-  # Create an empty list to receive the data
-  out <- list()
+  if (!is.character(enumeration_type) || length(enumeration_type) != 1 || enumeration_type == "") {
+    stop("`enumeration_type` must be a non-empty character string.")
+  }
 
-  # Initialize progress bar
+  if (length(limit) != 1 || is.na(limit) || limit <= 0) {
+    stop("`limit` must be a single positive number.")
+  }
+  limit <- as.integer(limit)
+
+  if (length(save_chunk_size) != 1 || is.na(save_chunk_size) || save_chunk_size <= 0) {
+    stop("`save_chunk_size` must be a single positive number.")
+  }
+  save_chunk_size <- as.integer(save_chunk_size)
+
+  if (is.null(dest_dir)) {
+    dest_dir <- getwd()
+  } else {
+    dest_dir <- path.expand(dest_dir)
+  }
+
+  if (!dir.exists(dest_dir)) {
+    dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
+  }
+
+  if (!dir.exists(dest_dir)) {
+    stop("Unable to create destination directory: ", dest_dir)
+  }
+
+  first_names <- as.character(data$first)
+  last_names <- as.character(data$last)
+
+  if (length(first_names) == 0) {
+    return(tibble::tibble())
+  }
+
+  vc <- c("Allergy & Immunology", "Anesthesiology", "Dermatology", "Emergency Medicine", "Family Medicine", "Internal Medicine",
+          "Obstetrics & Gynecology", "Ophthalmology", "Orthopaedic Surgery", "Pediatrics", "Psychiatry & Neurology", "Radiology", "Surgery", "Urology")
+  bc <- c("Pathology", "Pediatrics", "Physical Medicine & Rehabilitation", "Plastic Surgery", "Preventive Medicine")
+
+  search_npi <- function(first_name, last_name) {
+    if (!quiet) {
+      message("Searching NPI for: ", first_name, " ", last_name)
+    }
+    tryCatch({
+      npi_obj <- npi::npi_search(
+        first_name = first_name,
+        last_name = last_name,
+        enumeration_type = enumeration_type,
+        country_code = country_code,
+        limit = limit
+      )
+      if (!quiet) {
+        message("NPI search object retrieved for: ", first_name, " ", last_name)
+      }
+
+      t <- npi::npi_flatten(npi_obj, cols = c("basic", "taxonomies"))
+      if (!quiet) {
+        message("NPI data flattened for: ", first_name, " ", last_name)
+      }
+
+      t <- dplyr::filter(t, taxonomies_desc %in% vc | taxonomies_desc %in% bc)
+      if (!quiet) {
+        message("NPI data filtered for: ", first_name, " ", last_name)
+      }
+
+      credential_cols <- intersect(c("basic_credential", "basic.credential"), names(t))
+      if (length(credential_cols) > 0 && length(filter_credentials) > 0) {
+        t <- dplyr::filter(t, .data[[credential_cols[1]]] %in% filter_credentials)
+      }
+      t
+    }, error = function(e) {
+      if (!quiet) {
+        message("ERROR for ", first_name, " ", last_name, ": ", conditionMessage(e))
+      }
+      NULL
+    })
+  }
+
   total_names <- nrow(data)
-  pb <- progress::progress_bar$new(total = total_names)
+  pb <- if (total_names > 0 && !quiet) progress::progress_bar$new(total = total_names) else NULL
 
-  # Function to save results to file
   save_results <- function(result, file_prefix, directory) {
     timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
     file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, ".csv"))
     readr::write_csv(result, file_name)
-    cat("Saved chunk results to:", file_name, "\n")
+    if (!quiet) {
+      message("Saved chunk results to: ", file_name)
+    }
   }
 
-  # Initialize counters for chunk saving
   chunk_count <- 0
 
-  # Search NPI for each name in the input data
   out <- purrr::map2(first_names, last_names, function(first_name, last_name) {
-    pb$tick()
+    if (!is.null(pb)) pb$tick()
     result <- search_npi(first_name, last_name)
 
-    # Increment chunk count and save results if save_chunk_size is reached
-    if (!is.null(result) && nrow(result) > 0) {
-      if (nrow(result) > save_chunk_size) {
-        chunk_count <<- chunk_count + 1
-        save_results(result, "results_of_search_and_process_npi", dest_dir)
-      }
+    if (!is.null(result) && nrow(result) > save_chunk_size) {
+      chunk_count <<- chunk_count + 1
+      save_results(result, "results_of_search_and_process_npi", dest_dir)
     }
-
-    cat("Result for", first_name, last_name, ":\n", ifelse(is.null(result), "NULL", paste(capture.output(print(result)), collapse = "\n")), "\n")
-    return(result)
+    result
   })
 
-  # Filter npi_data to keep only elements that are data frames
   npi_data <- purrr::keep(out, is.data.frame)
-  cat("Filtered npi_data to keep only data frames. Length:", length(npi_data), "\n")
 
-  # Combine multiple data frames into a single data frame
-  result <- data.table::rbindlist(npi_data, fill = TRUE)
-  cat("Combined data frame. Number of rows:", nrow(result), "\n")
+  if (length(npi_data) == 0) {
+    result <- tibble::tibble()
+  } else {
+    result <- data.table::rbindlist(npi_data, fill = TRUE)
+  }
 
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE) && !quiet) {
+    beepr::beep(2)
+  }
 
-  # Return the result data frame
-  return(result)
+  result
 }
