@@ -11,6 +11,7 @@
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_density labs stat_qq stat_qq_line
 #' @importFrom dplyr %>%
 #' @importFrom stats shapiro.test IQR median
+#' @importFrom rlang sym
 #'
 #' @examples
 #' # Example usage with a dataframe 'df' and outcome variable 'business_days_until_appointment'

@@ -86,8 +86,10 @@ test_that("E2E: Data quality assessment workflow", {
     filter(!is.na(wait_time) & wait_time > 0)
 
   if (nrow(valid_wait_data) >= 3) {
-    suppressMessages({
-      normality_result <- check_normality(valid_wait_data, "wait_time")
+    normality_result <- suppressMessages({
+      invisible(capture.output({
+        check_normality(valid_wait_data, "wait_time")
+      }, file = nullfile()))
     })
 
     expect_type(normality_result, "list")
@@ -186,8 +188,10 @@ test_that("E2E: Statistical analysis workflow", {
   expect_s3_class(gender_summary, "data.frame")
 
   # Step 3: Check normality of outcome
-  suppressMessages({
-    normality <- check_normality(analysis_data, "outcome")
+  normality <- suppressMessages({
+    invisible(capture.output({
+      check_normality(analysis_data, "outcome")
+    }, file = nullfile()))
   })
 
   expect_type(normality, "list")
@@ -384,8 +388,10 @@ test_that("E2E: Multi-transformation visualization workflow", {
   expect_s3_class(density_log, "ggplot")
 
   # Step 5: Check data distribution normality
-  suppressMessages({
-    normality_result <- check_normality(skewed_data, "value")
+  normality_result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(skewed_data, "value")
+    }, file = nullfile()))
   })
 
   expect_type(normality_result, "list")

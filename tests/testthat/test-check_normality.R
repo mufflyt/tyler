@@ -8,9 +8,17 @@ test_that("check_normality detects normally distributed data", {
   # Generate normally distributed data
   normal_data <- data.frame(values = rnorm(100, mean = 50, sd = 10))
 
-  # Suppress plot output
-  suppressMessages({
-    result <- check_normality(normal_data, "values")
+  # Suppress all output (plots and messages)
+  result <- suppressMessages(capture.output({
+    res <- check_normality(normal_data, "values")
+    res
+  }, file = nullfile()))
+
+  # Result is captured as the last value
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(normal_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -29,8 +37,10 @@ test_that("check_normality detects non-normal data", {
   # Generate exponentially distributed data (non-normal)
   skewed_data <- data.frame(values = rexp(100, rate = 0.5))
 
-  suppressMessages({
-    result <- check_normality(skewed_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(skewed_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -43,8 +53,10 @@ test_that("check_normality handles uniform distribution", {
   set.seed(123)
   uniform_data <- data.frame(values = runif(100, min = 0, max = 100))
 
-  suppressMessages({
-    result <- check_normality(uniform_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(uniform_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -63,8 +75,10 @@ test_that("check_normality throws error for small sample size", {
 test_that("check_normality handles minimum sample size", {
   min_data <- data.frame(values = c(1, 2, 3))
 
-  suppressMessages({
-    result <- check_normality(min_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(min_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -75,8 +89,10 @@ test_that("check_normality returns correct structure for normal data", {
   set.seed(456)
   normal_data <- data.frame(values = rnorm(1000, mean = 100, sd = 15))
 
-  suppressMessages({
-    result <- check_normality(normal_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(normal_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -90,8 +106,10 @@ test_that("check_normality handles data with outliers", {
   set.seed(789)
   outlier_data <- data.frame(values = c(rnorm(97, mean = 50, sd = 10), 1000, 2000, 3000))
 
-  suppressMessages({
-    result <- check_normality(outlier_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(outlier_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -102,8 +120,10 @@ test_that("check_normality handles data with outliers", {
 test_that("check_normality handles single value repeated", {
   constant_data <- data.frame(values = rep(5, 100))
 
-  suppressMessages({
-    result <- check_normality(constant_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(constant_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -120,8 +140,10 @@ test_that("check_normality handles negative values", {
   set.seed(321)
   negative_data <- data.frame(values = rnorm(100, mean = -50, sd = 10))
 
-  suppressMessages({
-    result <- check_normality(negative_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(negative_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -134,8 +156,10 @@ test_that("check_normality handles mixed positive and negative values", {
   set.seed(654)
   mixed_data <- data.frame(values = rnorm(100, mean = 0, sd = 50))
 
-  suppressMessages({
-    result <- check_normality(mixed_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(mixed_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -146,8 +170,10 @@ test_that("check_normality handles large dataset", {
   set.seed(111)
   large_data <- data.frame(values = rnorm(10000, mean = 75, sd = 20))
 
-  suppressMessages({
-    result <- check_normality(large_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(large_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -160,8 +186,10 @@ test_that("check_normality returns numeric summary statistics", {
   set.seed(222)
   data <- data.frame(values = rnorm(100, mean = 50, sd = 10))
 
-  suppressMessages({
-    result <- check_normality(data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(data, "values")
+    }, file = nullfile()))
   })
 
   # All returned values should be numeric
@@ -171,8 +199,10 @@ test_that("check_normality returns numeric summary statistics", {
 test_that("check_normality handles integer values", {
   integer_data <- data.frame(values = sample(1:100, 100, replace = TRUE))
 
-  suppressMessages({
-    result <- check_normality(integer_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(integer_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
@@ -185,8 +215,10 @@ test_that("check_normality handles bimodal distribution", {
   bimodal_data <- data.frame(values = c(rnorm(50, mean = 20, sd = 5),
                                         rnorm(50, mean = 80, sd = 5)))
 
-  suppressMessages({
-    result <- check_normality(bimodal_data, "values")
+  result <- suppressMessages({
+    invisible(capture.output({
+      check_normality(bimodal_data, "values")
+    }, file = nullfile()))
   })
 
   expect_type(result, "list")
