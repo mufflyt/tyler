@@ -84,6 +84,54 @@ run_mystery_caller_workflow <- function(
   }
 
   announce("Starting mystery caller workflow")
+  if (isTRUE(verbose)) {
+    config_candidates <- list(npi_search_args$config_file, npi_search_args$config_path)
+    config_candidates <- config_candidates[!vapply(config_candidates, is.null, logical(1))]
+    config_candidates <- config_candidates[vapply(config_candidates, function(x) {
+      length(x) && all(!is.na(x)) && any(nzchar(as.character(x)))
+    }, logical(1))]
+    config_file <- if (length(config_candidates)) {
+      as.character(config_candidates[[1]])
+    } else {
+      "none provided"
+    }
+    year_candidates <- list(npi_search_args$years, npi_search_args$year)
+    year_candidates <- year_candidates[!vapply(year_candidates, is.null, logical(1))]
+    years <- if (length(year_candidates)) {
+      unlist(year_candidates, use.names = FALSE)
+    } else {
+      "unspecified"
+    }
+    taxonomy_sentence <- if (!is.null(taxonomy_terms) && length(taxonomy_terms)) {
+      sprintf("Taxonomy search will include %d term(s): %s.", length(taxonomy_terms), paste(taxonomy_terms, collapse = ", "))
+    } else {
+      "Taxonomy search is skipped."
+    }
+    name_sentence <- if (is.data.frame(name_data) && nrow(name_data)) {
+      sprintf("Name-based search will process %d row(s).", nrow(name_data))
+    } else if (is.null(name_data)) {
+      "Name-based search is skipped."
+    } else {
+      "Name-based search input provided but contains zero rows; treating as skipped."
+    }
+    validation_sentence <- if (isTRUE(npi_search_args$skip_validation)) {
+      "Roster validation is explicitly skipped."
+    } else {
+      "Roster validation will run when NPIs are available."
+    }
+    plan_sentences <- c(
+      sprintf("Resolved plan uses config file: %s.", config_file),
+      sprintf("Years parameter: %s.", paste(years, collapse = ", ")), 
+      taxonomy_sentence,
+      name_sentence,
+      validation_sentence,
+      sprintf("Caller workbooks will be written to %s.", output_directory),
+      sprintf("Cleaned Phase 1 results will be saved to %s.", phase1_output_directory),
+      sprintf("Phase 2 exports will be saved to %s.", phase2_output_directory),
+      sprintf("Quality check output will be written to %s.", quality_check_path)
+    )
+    message(paste(plan_sentences, collapse = " "))
+  }
   roster_taxonomy <- if (!is.null(taxonomy_terms) && length(taxonomy_terms)) {
     announce("Searching NPIs by taxonomy")
     search_by_taxonomy(taxonomy_terms)

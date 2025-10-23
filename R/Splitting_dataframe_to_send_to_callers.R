@@ -50,6 +50,13 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
   if (length(missing_columns) > 0) {
     stop("The input data is missing the following columns: ", base::paste(missing_columns, collapse = ", "))
   }
+  message(
+    sprintf(
+      "Validated %d required columns for splitting: %s.",
+      length(required_columns),
+      base::paste(required_columns, collapse = ", ")
+    )
+  )
 
   # Ensure that specified insurance types are valid
   if (!all(insurance_order %in% unique(data$insurance))) {
@@ -61,18 +68,38 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
   data <- data %>%
     mutate(insurance_rank = insurance_rank[insurance]) %>%
     arrange(insurance_rank, doctor_id)  # Sort by insurance rank, then by doctor_id if necessary
+  message(
+    sprintf(
+      "Arranged %d row(s) by insurance priority: %s.",
+      nrow(data),
+      paste(insurance_order, collapse = ", ")
+    )
+  )
 
   # Check if lab_assistant_names is provided and has at least two names
   if (length(lab_assistant_names) < 2) {
     stop("Please provide at least two lab assistant names for the splits.")
   }
+  message(
+    sprintf(
+      "Preparing to split workbooks across %d lab assistant(s): %s.",
+      length(lab_assistant_names),
+      paste(lab_assistant_names, collapse = ", ")
+    )
+  )
 
   # Randomize the data within each insurance group
   set.seed(seed)
-  data <- data %>%
-    group_by(insurance_rank) %>%
-    mutate(lab_assistant_assigned = sample(lab_assistant_names, n(), replace = TRUE)) %>%
-    ungroup()
+  if (nrow(data) == 0) {
+    message("Input contains zero rows; workbooks will be created without assignments.")
+    data <- data %>%
+      mutate(lab_assistant_assigned = character(dplyr::n()))
+  } else {
+    data <- data %>%
+      group_by(insurance_rank) %>%
+      mutate(lab_assistant_assigned = sample(lab_assistant_names, n(), replace = TRUE)) %>%
+      ungroup()
+  }
 
   # Create output directory if it doesn't exist
   if (!fs::dir_exists(output_directory)) {
@@ -89,7 +116,7 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
 
   tryCatch({
     openxlsx::write.xlsx(data, complete_output_file)
-    message("Saved unsplit and complete data to: ", complete_output_file)
+    message(sprintf("Saved unsplit roster (%d row(s)) to: %s", nrow(data), complete_output_file))
   }, error = function(e) {
     stop("Error saving the complete file. Check if the output directory is writable.")
   })
@@ -101,10 +128,16 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
                              paste0(split_file_prefix, lab_assistant_name, "_", current_datetime, ".xlsx"))
     tryCatch({
       openxlsx::write.xlsx(splits[[lab_assistant_name]], output_file)
-      message("Saved split data for ", lab_assistant_name, " to: ", output_file)
+      message(sprintf(
+        "Saved %d row(s) for %s to: %s",
+        nrow(splits[[lab_assistant_name]]),
+        lab_assistant_name,
+        output_file
+      ))
     }, error = function(e) {
       stop("Error saving split data for ", lab_assistant_name, ". Check if the output directory is writable.")
     })
   }
+  message(sprintf("Split run complete: generated %d workbook(s).", length(splits)))
   beepr::beep(2)
 }

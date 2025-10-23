@@ -36,8 +36,11 @@ validate_and_remove_invalid_npi <- function(input_data) {
     ) %>%
     dplyr::filter(!is.na(npi) & npi != "")
 
-  if (!nrow(npi_df)) {
+  total_candidates <- nrow(npi_df)
+
+  if (!total_candidates) {
     npi_df$npi_is_valid <- logical()
+    message("No NPI values remained after removing blanks; returning empty result.")
     return(npi_df[, unique(c("npi", "npi_is_valid", names(npi_df))), drop = FALSE])
   }
 
@@ -50,6 +53,12 @@ validate_and_remove_invalid_npi <- function(input_data) {
 
   npi_df <- npi_df %>%
     dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
+
+  message(sprintf(
+    "Validated %d candidate NPI(s); %d passed checksum and formatting rules.",
+    total_candidates,
+    nrow(npi_df)
+  ))
 
   npi_df
 }

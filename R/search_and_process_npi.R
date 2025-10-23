@@ -165,6 +165,15 @@ search_and_process_npi <- function(data,
 
   if (!nrow(data)) {
     final_result <- if (!is.null(existing_accumulated)) existing_accumulated else dplyr::tibble()
+    dispatch_progress(
+      event = if (!is.null(existing_accumulated)) "cached" else "skipped",
+      rows = nrow(final_result),
+      detail = if (!is.null(existing_accumulated)) {
+        "No new names provided; returning cached accumulation."
+      } else {
+        "No names provided; skipping search."
+      }
+    )
     if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
       beepr::beep(2)
     }

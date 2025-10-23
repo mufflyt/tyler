@@ -47,20 +47,35 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 
     # Detailed log of what matches were found
     if (any(matches)) {
-      cat(sprintf("Found %d columns matching '%s': %s\n", sum(matches), target_strings[i], paste(matched_cols, collapse = ", ")))
+      cat(sprintf(
+        "Matched %d column(s) containing '%s': %s\n",
+        sum(matches),
+        target_strings[i],
+        paste(matched_cols, collapse = ", ")
+      ))
       # Warn if more than one match is found
       if (length(matched_cols) > 1) {
-        warning(sprintf("Multiple columns match '%s'. Only the first (%s) will be renamed to '%s'.\n", target_strings[i], matched_cols[1], new_names[i]))
+        warning(sprintf("Multiple columns contained '%s'. Renaming only '%s' to '%s'.", target_strings[i], matched_cols[1], new_names[i]))
       }
       # Rename the first matching column
       names(data)[names(data) == matched_cols[1]] <- new_names[i]
+      cat(sprintf(
+        "Renamed '%s' to '%s'.\n",
+        matched_cols[1],
+        new_names[i]
+      ))
     } else {
-      warning(sprintf("No columns found containing '%s'.\n", target_strings[i]))
+      warning(sprintf("No columns contained '%s'; nothing was renamed for this pattern.", target_strings[i]))
     }
     cat("\n")  # Adding a blank line for better separation
   }
 
-  cat("\n--- Column renaming complete. Updated column names: ", paste(names(data), collapse = ", "), "---\n")
+  cat(
+    "\n--- Column renaming complete. Final column set: ",
+    paste(names(data), collapse = ", "),
+    " ---\n",
+    sep = ""
+  )
   return(data)
 }
 
@@ -106,20 +121,21 @@ clean_phase_2_data <- function(
       stop("File does not exist at the specified path: ", data_or_path)
     }
     data <- readr::read_csv(data_or_path, show_col_types = FALSE)
-    message("Data read from file at: ", data_or_path)
+    message(sprintf("Loaded Phase 2 data from %s with %d row(s) and %d column(s).", data_or_path, nrow(data), ncol(data)))
   } else if (is.data.frame(data_or_path)) {
     data <- data_or_path
-    message("Data loaded from provided dataframe.")
+    message(sprintf("Loaded Phase 2 data from provided data frame with %d row(s) and %d column(s).", nrow(data), ncol(data)))
   } else {
     stop("Data input must be either a dataframe or a valid file path.")
   }
 
   # Clean and standardize column names
   data <- janitor::clean_names(data)
-  message("Columns have been cleaned to snake case format.")
+  message("Converted column names to snake_case format.")
 
   # Apply the renaming function with detailed logging
   data <- rename_columns_by_substring(data, required_strings, standard_names)
+  message("Standardised Phase 2 column names based on required patterns.")
 
   # Additional data processing
   message("Proceeding with additional data processing steps...")
@@ -132,7 +148,7 @@ clean_phase_2_data <- function(
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
   output_file_path <- file.path(output_directory, paste0("cleaned_phase_2_data_", current_datetime, ".csv"))
   readr::write_csv(data, output_file_path)
-  message("Cleaned data successfully saved to: ", output_file_path)
+  message(sprintf("Cleaned Phase 2 data (%d row(s), %d column(s)) saved to: %s", nrow(data), ncol(data), output_file_path))
 
   return(data)
 }
