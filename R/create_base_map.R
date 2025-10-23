@@ -1,11 +1,60 @@
+#' Create a Configurable Leaflet Base Map
+#'
+#' Build a Leaflet base map with sensible defaults for the tyler mapping
+#' helpers. The map includes multiple tile providers, a scale bar, optional
+#' title control, and centres on the continental United States by default.
+#'
+#' @param title Optional HTML string used for a title control in the upper
+#'   left corner of the map. Supply `NULL` or an empty string to omit the
+#'   control.
+#' @param lat,lng Numeric latitude and longitude used to centre the initial
+#'   view. Defaults position the map over the continental United States.
+#' @param zoom Numeric zoom level passed to [leaflet::setView()].
+#'
+#' @return A [leaflet::leaflet()] map object pre-configured with controls and
+#'   basemap layers.
+#'
+#' @family mapping
+#' @export
+#' @examples
+#' create_base_map()
+#' create_base_map("<strong>Custom title</strong>")
+create_base_map <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
+  map <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = TRUE)) %>%
+    leaflet::addProviderTiles("CartoDB.Voyager", group = "CartoDB Voyager") %>%
+    leaflet::addProviderTiles("Stamen.TonerLite", group = "Toner by Stamen") %>%
+    leaflet::addScaleBar(position = "bottomleft") %>%
+    leaflet::addLayersControl(
+      baseGroups = c("CartoDB Voyager", "Toner by Stamen"),
+      options = leaflet::layersControlOptions(collapsed = FALSE)
+    ) %>%
+    leaflet::setView(lat = lat, lng = lng, zoom = zoom) %>%
+    leaflet::addTiles(options = leaflet::tileOptions(useCache = TRUE, crossOrigin = TRUE))
+
+  if (!is.null(title) && nzchar(title)) {
+    map <- leaflet::addControl(
+      map,
+      html = htmltools::tags$div(
+        class = "tyler-map-title",
+        htmltools::HTML(title)
+      ),
+      position = "topleft"
+    )
+  }
+
+  map
+}
+
 #' Create and Save a Leaflet Dot Map of Physicians
 #'
-#' This function creates a Leaflet dot map of physicians using their longitude and latitude
-#' coordinates. It also adds ACOG district boundaries to the map and saves it as an HTML file
-#' with an accompanying PNG screenshot.
+#' This function creates a Leaflet dot map of physicians using their longitude
+#' and latitude coordinates. It also adds ACOG district boundaries to the map
+#' and saves it as an HTML file with an accompanying PNG screenshot.
 #'
-#' @param physician_data An sf object containing physician data with "long" and "lat" columns.
-#' @param jitter_range The range for adding jitter to latitude and longitude coordinates.
+#' @param physician_data An sf object containing physician data with `"long"`
+#'   and `"lat"` columns.
+#' @param jitter_range The range for adding jitter to latitude and longitude
+#'   coordinates.
 #' @param color_palette The color palette for ACOG district colors.
 #' @param popup_var The variable to use for popup text.
 #' @return Invisibly returns the Leaflet map object.
@@ -37,71 +86,67 @@
 #' @family mapping
 #' @export
 create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
-  # Add jitter to latitude and longitude coordinates
-  jittered_physician_data <- dplyr::mutate(physician_data,
-                                           lat = lat + runif(n()) * jitter_range,
-                                           long = long + runif(n()) * jitter_range)
+  jittered_physician_data <- dplyr::mutate(
+    physician_data,
+    lat = lat + runif(n()) * jitter_range,
+    long = long + runif(n()) * jitter_range
+  )
 
-  # Create a base map using tyler::create_base_map()
   cat("Setting up the base map...\n")
-  base_map <- tyler::create_base_map("Physician Dot Map")
+  base_map <- create_base_map("Physician Dot Map")
   cat("Map setup complete.\n")
 
-  # Generate ACOG districts using tyler::generate_acog_districts_sf()
   cat("Generating the ACOG district boundaries...\n")
-  acog_districts <- tyler::generate_acog_districts_sf()
+  acog_districts <- generate_acog_districts_sf()
   cat("ACOG district boundaries generated.\n")
 
-  # Define the number of ACOG districts
-  num_acog_districts <- 11
-
-  # Create a custom color palette using viridis
+  num_acog_districts <- dplyr::n_distinct(acog_districts$ACOG_District)
   district_colors <- viridis::viridis(num_acog_districts, option = color_palette)
 
-  # Reorder factor levels
-  jittered_physician_data <- dplyr::mutate(jittered_physician_data,
-                                           ACOG_District = factor(ACOG_District,
-                                                                  levels = c("District I", "District II", "District III", "District IV", "District V",
-                                                                             "District VI", "District VII", "District VIII", "District IX",
-                                                                             "District XI", "District XII")))
+  jittered_physician_data <- dplyr::mutate(
+    jittered_physician_data,
+    ACOG_District = factor(
+      ACOG_District,
+      levels = sort(unique(acog_districts$ACOG_District))
+    )
+  )
 
-  # Create a Leaflet map
-  dot_map <- leaflet::addCircleMarkers(base_map,
-                                       data = jittered_physician_data,
-                                       lng = ~long,
-                                       lat = ~lat,
-                                       radius = 3,
-                                       stroke = TRUE,
-                                       weight = 1,
-                                       color = district_colors[as.numeric(physician_data$ACOG_District)],
-                                       fillOpacity = 0.8,
-                                       popup = as.formula(paste0("~", popup_var))) %>%
-    leaflet::addPolygons(data = acog_districts,
-                         color = "red",
-                         weight = 2,
-                         fill = FALSE,
-                         opacity = 0.8,
-                         popup = ~ACOG_District) %>%
-    leaflet::addLegend(position = "bottomright",
-                       colors = district_colors,
-                       labels = levels(physician_data$ACOG_District),
-                       title = "ACOG Districts")
+  dot_map <- leaflet::addCircleMarkers(
+    base_map,
+    data = jittered_physician_data,
+    lng = ~long,
+    lat = ~lat,
+    radius = 3,
+    stroke = TRUE,
+    weight = 1,
+    color = district_colors[as.numeric(jittered_physician_data$ACOG_District)],
+    fillOpacity = 0.8,
+    popup = as.formula(paste0("~", popup_var))
+  ) %>%
+    leaflet::addPolygons(
+      data = acog_districts,
+      color = "red",
+      weight = 2,
+      fill = FALSE,
+      opacity = 0.8,
+      popup = ~ACOG_District
+    ) %>%
+    leaflet::addLegend(
+      position = "bottomright",
+      colors = district_colors,
+      labels = levels(jittered_physician_data$ACOG_District),
+      title = "ACOG Districts"
+    )
 
-  # Generate a timestamp
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
-
-  # Define file names with timestamps
   html_file <- paste0("figures/dot_map_", timestamp, ".html")
   png_file <- paste0("figures/dot_map_", timestamp, ".png")
 
-  # Save the Leaflet map as an HTML file
   htmlwidgets::saveWidget(widget = dot_map, file = html_file, selfcontained = TRUE)
   cat("Leaflet map saved as HTML:", html_file, "\n")
 
-  # Capture and save a screenshot as PNG
   webshot::webshot(html_file, file = png_file)
   cat("Screenshot saved as PNG:", png_file, "\n")
 
-  # Return the Leaflet map invisibly
   invisible(dot_map)
 }
