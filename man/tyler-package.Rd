@@ -11,7 +11,7 @@ The 'tyler' package provides a collection of functions designed to facilitate my
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://your.package.url}
+  \item \url{https://github.com/mufflyt/tyler}
   \item \url{https://mufflyt.github.io/tyler/}
 }
 
