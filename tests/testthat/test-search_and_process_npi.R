@@ -3,7 +3,7 @@ testthat::skip_if_not_installed("mockery")
 testthat::skip_if_not_installed("readr")
 
 if (!exists("search_and_process_npi")) {
-  source(testthat::test_path("..", "..", "R", "search_and_process_npi.R"))
+  source(testthat::test_path("..", "..", "R", "name_search_and_process_npi.R"))
 }
 
 # Sample data for testing
