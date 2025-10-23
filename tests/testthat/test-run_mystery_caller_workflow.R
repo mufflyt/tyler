@@ -17,12 +17,7 @@ skip_if_not_installed("fs")
 test_that("run_mystery_caller_workflow orchestrates pipeline without mocks", {
   work_dir <- tempfile("tyler-e2e-")
   dir.create(work_dir, recursive = TRUE, showWarnings = FALSE)
-  old_wd <- getwd()
-  on.exit({
-    setwd(old_wd)
-    unlink(work_dir, recursive = TRUE)
-  }, add = TRUE)
-  setwd(work_dir)
+  on.exit(unlink(work_dir, recursive = TRUE), add = TRUE)
 
   phase1_out <- file.path(work_dir, "phase1")
   splits_dir <- file.path(work_dir, "splits")
@@ -63,6 +58,7 @@ test_that("run_mystery_caller_workflow orchestrates pipeline without mocks", {
     phase2_data = phase2_data,
     quality_check_path = qc_path,
     phase1_output_directory = phase1_out,
+    phase2_output_directory = work_dir,
     all_states = c("Colorado", "Wyoming")
   )
 

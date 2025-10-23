@@ -19,6 +19,8 @@
 #'   complete and per-caller workbooks.
 #' @param phase2_data Data frame or file path consumed by
 #'   [clean_phase_2_data()].
+#' @param phase2_output_directory Directory where Phase 2 exports should be
+#'   written. Defaults to `output_directory`.
 #' @param quality_check_path File path where [save_quality_check_table()] should
 #'   write the quality check CSV.
 #' @param phase1_output_directory Directory where [clean_phase_1_results()]
@@ -54,6 +56,7 @@ run_mystery_caller_workflow <- function(
   lab_assistant_names,
   output_directory,
   phase2_data,
+  phase2_output_directory = output_directory,
   quality_check_path,
   phase1_output_directory = output_directory,
   split_insurance_order = c("Medicaid", "Blue Cross/Blue Shield"),
@@ -182,7 +185,8 @@ run_mystery_caller_workflow <- function(
   cleaned_phase2 <- clean_phase_2_data(
     data_or_path = phase2_data,
     required_strings = phase2_required_strings,
-    standard_names = phase2_standard_names
+    standard_names = phase2_standard_names,
+    output_directory = phase2_output_directory
   )
 
   coverage_summary <- NULL

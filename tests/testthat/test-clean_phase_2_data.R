@@ -33,12 +33,7 @@ test_that("rename_columns_by_substring prioritises first match", {
 test_that("clean_phase_2_data standardises Phase 2 exports", {
   tmp_dir <- tempfile("phase2-regression-")
   dir.create(tmp_dir)
-  old_wd <- getwd()
-  on.exit({
-    setwd(old_wd)
-    unlink(tmp_dir, recursive = TRUE)
-  }, add = TRUE)
-  setwd(tmp_dir)
+  on.exit(unlink(tmp_dir, recursive = TRUE), add = TRUE)
 
   raw <- data.frame(
     PhysicianInformation = c("Jane Doe", "John Smith"),
@@ -94,14 +89,19 @@ test_that("clean_phase_2_data standardises Phase 2 exports", {
     stringsAsFactors = FALSE
   )
 
-  cleaned <- clean_phase_2_data(raw, required_strings, standard_names)
+  cleaned <- clean_phase_2_data(
+    raw,
+    required_strings,
+    standard_names,
+    output_directory = tmp_dir
+  )
 
   expect_equal(as.data.frame(cleaned), expected)
 
-  output_files <- list.files(pattern = "^cleaned_phase_2_data_.*\\\.csv$")
+  output_files <- list.files(tmp_dir, pattern = "^cleaned_phase_2_data_.*\\\.csv$")
   expect_length(output_files, 1L)
 
-  persisted <- readr::read_csv(output_files[[1]], show_col_types = FALSE)
+  persisted <- readr::read_csv(file.path(tmp_dir, output_files[[1]]), show_col_types = FALSE)
   expect_equal(as.data.frame(persisted), expected)
 })
 
@@ -109,12 +109,7 @@ test_that("clean_phase_2_data standardises Phase 2 exports", {
 test_that("clean_phase_2_data reads from file paths", {
   tmp_dir <- tempfile("phase2-regression-file-")
   dir.create(tmp_dir)
-  old_wd <- getwd()
-  on.exit({
-    setwd(old_wd)
-    unlink(tmp_dir, recursive = TRUE)
-  }, add = TRUE)
-  setwd(tmp_dir)
+  on.exit(unlink(tmp_dir, recursive = TRUE), add = TRUE)
 
   raw <- data.frame(
     PhysicianInformation = c("Alex Roe"),
@@ -159,12 +154,17 @@ test_that("clean_phase_2_data reads from file paths", {
   input_path <- file.path(tmp_dir, "phase2.csv")
   readr::write_csv(raw, input_path)
 
-  cleaned <- clean_phase_2_data(input_path, required_strings, standard_names)
+  cleaned <- clean_phase_2_data(
+    input_path,
+    required_strings,
+    standard_names,
+    output_directory = tmp_dir
+  )
 
   expect_s3_class(cleaned, "data.frame")
   expect_equal(names(cleaned), standard_names)
   expect_identical(cleaned$physician_info, raw$PhysicianInformation)
 
-  output_files <- list.files(pattern = "^cleaned_phase_2_data_.*\\\.csv$")
+  output_files <- list.files(tmp_dir, pattern = "^cleaned_phase_2_data_.*\\\.csv$")
   expect_true(any(output_files != "phase2.csv"))
 })
