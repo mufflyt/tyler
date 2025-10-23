@@ -206,10 +206,13 @@ us_fips_list <- c("01", "02", "04", "05", "06", "08", "09", "10", "11", "12", "1
 ```
 
 ## Step 3: Gather the Data from the US Census Bureau API
-Call the `get_census_data` function with the `us_fips_list` vector. For example:
+Call the `get_census_data` function with the `us_fips_list` vector. The helper
+adds 2020 Federal Information Processing Standard (FIPS) identifiers for every
+geography plus the Census vintage so you always know which release supplied the
+estimates. For example:
 
 ```
-all_census_data <- get_census_data(us_fips = us_fips_list)
+all_census_data <- get_census_data(us_fips_list = us_fips_list)
 
 ##########################################################################
 # Get Census data by block group in relevant states
@@ -224,7 +227,6 @@ all_census_data <- get_census_data(us_fips = us_fips_list)
 ```
 demographics_bg <- acs_block_group %>%
   rename(
-    name = NAME,
     total_females = B01001_026E,
     female_21_yo = B01001_033E,
     female_22_to_24_years = B01001_034E,
@@ -242,18 +244,7 @@ demographics_bg <- acs_block_group %>%
     female_70_to_74_years = B01001_046E,
     female_75_to_79_years = B01001_047E,
     female_80_to_84_years = B01001_048E,
-    female_85_years_and_older = B01001_049E,
-    fips_state = state
-  ) %>%
-  mutate(
-    fips_county = paste0(fips_state, county),
-    fips_tract = paste0(fips_state, county, tract),
-    fips_block_group = paste0(
-      fips_state,
-      county,
-      str_pad(tract, width = 6, pad = "0"),
-      block_group
-    )
+    female_85_years_and_older = B01001_049E
   ) %>%
   mutate(
     population = female_21_yo + female_22_to_24_years + female_25_to_29_years +
@@ -270,44 +261,37 @@ demographics_bg <- acs_block_group %>%
       female_80_to_84_years +
       female_85_years_and_older
   ) %>% #total of reproductive age women
-  arrange(fips_state) %>%
+  arrange(statefp, countyfp, tractce, block_group) %>%
   select(
-    fips_block_group,
-    fips_state,
-    fips_county,
-    fips_tract,
+    geoid,
+    statefp,
+    countyfp,
+    tractce,
+    block_group,
+    vintage,
     name,
     population,
     everything()
   ) %>%
-  select(-starts_with("B"),
-         -contains("universe"),
-         -county,
-         -tract,
-         -block_group)
+  select(-starts_with("B"), -contains("universe"))
 
 colnames(demographics_bg)
 
-demographics_bg <- demographics_bg %>% arrange(fips_block_group)
+demographics_bg <- demographics_bg %>% arrange(geoid)
 readr::write.csv(demographics_bg, "data/acs-block-group-demographics.csv", na = "", row.names = F)
 readr::write_rds(demographics_bg, "data/acs-block-group-demographics.rds")
 ```
 
 ## Step 5: Join the Data to the Block Groups
-The code starts by loading a block group shapefile using the `sf::st_read()` function. The shapefile path should be replaced with the actual file path.  A left join is performed between the "demographics_bg" dataset and the "bg_shape" dataset using `dplyr::left_join()`. The join is based on matching the "`fips_block_group`" column from "`demographics_bg`" and the "`GEOID`" column from "`bg_shape`".
+The code starts by loading a block group shapefile using the `sf::st_read()` function. The shapefile path should be replaced with the actual file path.  A left join is performed between the "demographics_bg" dataset and the "bg_shape" dataset using `dplyr::left_join()`. The join is based on matching the "`geoid`" column from "`demographics_bg`" and the "`GEOID`" column from "`bg_shape`". Always join on the GEOID rather than the human-readable name to avoid mismatches across vintages.
 
 ```
 # Load the block group shapefile using sf::st_read() function
 # Replace "/data/shp/block_group/" with the actual file path to the shapefile
 bg_shape <- sf::st_read(/data/shp/block_group/") %>%
-  
-  # Remove leading zeros from the GEOID column using stringr::str_remove()
-  # This is a common step to ensure GEOIDs are consistent
-  
-  dplyr::mutate(GEOID = stringr::str_remove(GEOID, regex("^0", ignore_case = TRUE))) %>%
-  
+
   # Select only the GEOID and geometry columns from the shapefile
-  dplyr::select(GEOID, geometry) 
+  dplyr::select(GEOID, geometry)
 
 # Write the block group shapefile with selected columns to a CSV file
 # This will create a CSV file with GEOID and geometry information
@@ -315,9 +299,8 @@ bg_shape %>%
   readr::write_csv("bg_shape_with_geometry.csv")
 
 
-# Convert the "fips_block_group" column in the "demographics_bg" dataset to character
-# This is done to ensure compatibility for joining with the GEOID column in the shapefile
-demographics_bg$fips_block_group <- as.character(demographics_bg$fips_block_group)
+# Ensure the GEOID columns are character for the join
+demographics_bg$geoid <- as.character(demographics_bg$geoid)
 
 
 # Perform a left join between the demographics dataset and the block group shapefile

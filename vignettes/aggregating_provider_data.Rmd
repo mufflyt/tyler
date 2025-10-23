@@ -53,7 +53,7 @@ Outline the steps needed to clean names, join datasets, and summarize counts.
 
 ```{r}
 # Example data manipulation steps
-# combined <- dplyr::left_join(npi_data, census_data, by = "fips")
+# combined <- dplyr::left_join(npi_data, census_data, by = "geoid")
 ```
 
 # Output Examples

@@ -4,15 +4,20 @@
 \alias{get_census_data}
 \title{Get Census data of all state block groups}
 \usage{
-get_census_data(us_fips_list, vintage = 2022)
+get_census_data(us_fips_list, vintage = 2022, api_key = Sys.getenv("CENSUS_API_KEY"))
 }
 \arguments{
 \item{us_fips_list}{A vector of state FIPS codes which Census data is to be retrieved.}
 
-\item{vintage}{The vintage year is Census data (default is 2022).}
+\item{vintage}{The vintage year of Census data (default is 2022).}
+
+\item{api_key}{Census API key to use for requests. Defaults to the `CENSUS_API_KEY` environment variable.}
 }
 \value{
-A dataframe containing Census data all state block groups.
+A tibble containing Census block group data for the requested
+states. The result includes padded 2020 FIPS columns (`statefp`,
+`countyfp`, `tractce`, `block_group`, `geoid`) and a `vintage` column
+indicating the Census vintage that supplied the estimates.
 }
 \description{
 This function retrieves Census data of all state block groups by looping
