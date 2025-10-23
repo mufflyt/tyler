@@ -13,6 +13,7 @@
 #' @importFrom hereR set_key
 #' @importFrom janitor clean_names
 #' @importFrom data.table rbindlist
+#' @importFrom progress progress_bar
 #' @family mapping
 #' @export
 #' @examples
@@ -53,9 +54,24 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   isochrones <- list()
   isochrones_temp <- list()
 
+  total_rows <- nrow(dataframe)
+  if (!total_rows) {
+    message("No rows found in input data. Nothing to process.")
+  }
+
+  pb <- NULL
+  if (total_rows > 0) {
+    message(sprintf("Retrieving isochrones for %d point%s...", total_rows, ifelse(total_rows == 1, "", "s")))
+    pb <- progress::progress_bar$new(
+      format = "  Processing [:bar] :percent | :current/:total | eta: :eta",
+      total = total_rows,
+      clear = FALSE,
+      show_after = 0
+    )
+  }
+
   # Loop over the rows in the dataframe
-  for (i in 1:nrow(dataframe)) {
-    print(i)
+  for (i in seq_len(total_rows)) {
 
     # Get the point for the current row
     point_temp <- dataframe[i, ]
@@ -73,6 +89,10 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
         breaks = breaks,
         labels = paste0(breaks[-length(breaks)], "-", breaks[-1] - 1, " minutes")
       )
+    }
+
+    if (!is.null(pb)) {
+      pb$tick()
     }
   }
 
