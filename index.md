@@ -10,6 +10,7 @@ The following articles provide in depth examples and workflows:
 
 - [Create Isochrones](articles/create_isochrones.html)
 - [Get Census Data](articles/get_census_data.html)
+- [Imotive News & Changelog](articles/imotive-news.html)
 - [Geocoding Overview](articles/geocode.html)
 - [Search & Process NPI](articles/search_and_process_npi.html)
 - [Validate & Remove Invalid NPI](articles/validate_and_remove_invalid_npi.html)

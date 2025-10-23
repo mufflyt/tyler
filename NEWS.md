@@ -1,3 +1,14 @@
+# tyler 0.0.0.9001
+
+* Introduced an **Imotive News & Changelog** vignette that centralises release
+  notes for the mystery caller workflow.
+* Documented how `run_mystery_caller_workflow()` coordinates roster creation,
+  validation, call preparation, and QA for Imotive projects.
+* Highlighted supporting helpers (`retrieve_clinician_data()`,
+  `genderize_physicians()`, `split_and_save()`, and
+  `states_where_physicians_were_NOT_contacted()`) inside the new vignette to
+  surface relevant improvements for field teams.
+
 # tyler 0.0.0.9000
 
 * Added a `NEWS.md` file to track changes to the package.
