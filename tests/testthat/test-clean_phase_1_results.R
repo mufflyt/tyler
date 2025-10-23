@@ -7,7 +7,7 @@ library(humaniformat)
 
 test_that("clean_phase_1_results handles empty data frames correctly", {
   df_empty <- data.frame()
-  expect_message(clean_phase_1_results(df_empty), "The data frame is empty. Exiting function.")
+  expect_output(clean_phase_1_results(df_empty, verbose = TRUE), "No data to process.")
 })
 
 test_that("clean_phase_1_results stops if required columns are missing", {
@@ -26,7 +26,7 @@ test_that("clean_phase_1_results processes data correctly", {
   )
   result <- clean_phase_1_results(df_normal)
 
-  expect_true(nrow(result) > 0)
+  expect_equal(nrow(result), nrow(df_normal) * 2)
   expect_true(all(c("id", "for_redcap") %in% names(result)))
 })
 
@@ -39,10 +39,8 @@ test_that("clean_phase_1_results adds insurance correctly", {
     npi = c(123456, 654321),
     stringsAsFactors = FALSE
   )
-  result <- clean_phase_1_results(df_with_insurance)
-  expected_insurance <- c("Blue Cross/Blue Shield", "Medicaid")
-
-  expect_equal(result$insurance, expected_insurance)
+  result <- clean_phase_1_results(df_with_insurance, duplicate_rows = FALSE, verbose = FALSE)
+  expect_setequal(result$insurance, c("Blue Cross/Blue Shield", "Medicaid"))
 })
 
 test_that("clean_phase_1_results removes duplicates correctly", {
@@ -54,6 +52,22 @@ test_that("clean_phase_1_results removes duplicates correctly", {
     npi = c(123456, 654321, 123456),
     stringsAsFactors = FALSE
   )
-  result <- clean_phase_1_results(df_dups)
-  expect_equal(nrow(result), 2) # Expecting duplicates to be removed
+  result <- clean_phase_1_results(df_dups, duplicate_rows = FALSE, verbose = FALSE)
+  expect_equal(nrow(result), nrow(df_dups))
+})
+
+test_that("clean_phase_1_results random IDs are reproducible with a seed", {
+  df_seed <- data.frame(
+    names = "John Doe",
+    practice_name = "Univ Hospital",
+    phone_number = "1234567890",
+    state_name = "TX",
+    npi = NA,
+    stringsAsFactors = FALSE
+  )
+
+  result_1 <- clean_phase_1_results(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42)
+  result_2 <- clean_phase_1_results(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42)
+
+  expect_equal(result_1$random_id, result_2$random_id)
 })

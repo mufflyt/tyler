@@ -18,7 +18,7 @@ test_that("Handles no matching data", {
     result
   })
 
-  result <- search_by_taxonomy(taxonomy)
+  result <- search_by_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
 
   expect_equal(nrow(result), 0)
 })
@@ -39,7 +39,7 @@ test_that("Filters and renames taxonomy results", {
     )
   })
 
-  result <- search_by_taxonomy(taxonomy)
+  result <- search_by_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
   expect_equal(nrow(result), 1)
   expect_true("first_name" %in% names(result))
   expect_equal(result$first_name, "Ada")

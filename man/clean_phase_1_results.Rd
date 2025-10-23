@@ -4,23 +4,43 @@
 \alias{clean_phase_1_results}
 \title{Clean Phase 1 Results Data}
 \usage{
-clean_phase_1_results(df)
+clean_phase_1_results(
+  phase1_data,
+  output_directory = tempdir(),
+  verbose = TRUE,
+  duplicate_rows = TRUE,
+  id_seed = NULL
+)
 }
 \arguments{
-\item{df}{A data frame containing the Phase 1 results data. Ensure that it
-includes columns like 'for_redcap', 'id', 'names', 'practice_name', 'phone_number',
-'state_name', and optionally 'npi'. If 'npi' is missing or any of its values are NA,
-a \code{random_id} is generated as a fallback.}
+\item{phase1_data}{A data frame containing the Phase 1 results data. Ensure that it
+includes columns like 'names', 'practice_name', 'phone_number', 'state_name', and
+optionally 'npi'. If 'npi' is missing or any of its values are NA, a \code{random_id}
+is generated as a fallback.}
+
+\item{output_directory}{Directory where the cleaned Phase 1 CSV should be written.
+Defaults to \code{tempdir()}.}
+
+\item{verbose}{Logical. If \code{TRUE}, progress messages are printed while cleaning.
+Defaults to \code{TRUE}.}
+
+\item{duplicate_rows}{Logical. If \code{TRUE}, each row in \code{phase1_data} is
+duplicated to match legacy workflows that expect paired insurance entries. Set to
+\code{FALSE} to keep the original number of rows.}
+
+\item{id_seed}{Optional integer seed used when generating fallback random IDs so runs
+can be reproduced without permanently mutating the global RNG state.}
 }
 \value{
-Invisible NULL; the function is used for its side effects of cleaning data
-and outputting a CSV file with cleaned data.
+Invisibly returns the cleaned data frame.
 }
 \description{
-This function reads the Phase 1 results data file, performs various cleaning
-and transformation operations, and prepares the data for further analysis.
-It ensures all required fields are present and formats column names. Missing
-NPI numbers are handled by generating a unique \code{random_id}.
+This function reads the Phase 1 results data file, performs various cleaning and
+transformation operations, and prepares the data for further analysis. It ensures all
+required fields are present and formats column names. Missing NPI numbers are handled
+by generating a unique \code{random_id}. Additional parameters let callers silence
+console output, retain the original row count, and make random ID generation
+reproducible.
 }
 \examples{
 \dontrun{

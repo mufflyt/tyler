@@ -11,13 +11,21 @@
 #' @param filter_credentials A character vector containing the credentials to filter the NPI results. Default is c("MD", "DO").
 #' @param save_chunk_size The number of results to save per chunk. Default is 10.
 #' @param dest_dir Destination directory to save chunked results. Default is NULL (no files written).
+#' @param accumulate_path Optional CSV path that accumulates every non-empty result.
+#'   When provided, results are appended after each successful lookup.
+#' @param resume Logical. If `TRUE` and `accumulate_path` already exists, names that
+#'   have been processed previously (based on the `search_term` column) are skipped.
+#' @param progress_log Optional file path used to log progress updates. The log file
+#'   is appended to and created automatically if it does not exist.
+#' @param notify Logical. If `TRUE`, play a notification sound when processing
+#'   completes (requires the optional `beepr` package). Defaults to `TRUE`.
 #' @return A data frame containing the processed NPI search results.
 #'
 #' @importFrom dplyr filter mutate select rename distinct arrange bind_rows tibble
 #' @importFrom npi npi_search npi_flatten
 #' @importFrom progress progress_bar
 #' @importFrom purrr map2 keep
-#' @importFrom readr write_csv
+#' @importFrom readr write_csv read_csv
 #' @family npi
 #' @export
 #' @examples
@@ -31,7 +39,11 @@ search_and_process_npi <- function(data,
                                    country_code = "US",
                                    filter_credentials = c("MD", "DO"),
                                    save_chunk_size = 10,
-                                   dest_dir = NULL) {
+                                   dest_dir = NULL,
+                                   accumulate_path = NULL,
+                                   resume = FALSE,
+                                   progress_log = NULL,
+                                   notify = TRUE) {
   if (!is.data.frame(data)) {
     stop("Input 'data' must be a data frame.")
   }
@@ -42,8 +54,42 @@ search_and_process_npi <- function(data,
     stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "))
   }
 
+  log_progress <- function(message) {
+    if (!is.null(progress_log)) {
+      dir.create(dirname(progress_log), showWarnings = FALSE, recursive = TRUE)
+      cat(sprintf("[%s] %s\n", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), message),
+          file = progress_log, append = TRUE)
+    }
+  }
+
+  read_existing_accumulation <- function() {
+    if (is.null(accumulate_path) || !file.exists(accumulate_path)) {
+      return(NULL)
+    }
+    tryCatch(
+      readr::read_csv(accumulate_path, show_col_types = FALSE),
+      error = function(e) {
+        log_progress(sprintf("Unable to read accumulation file '%s': %s", accumulate_path, e$message))
+        NULL
+      }
+    )
+  }
+
+  existing_accumulated <- NULL
+  processed_terms <- character(0)
+  if (isTRUE(resume)) {
+    existing_accumulated <- read_existing_accumulation()
+    if (!is.null(existing_accumulated) && "search_term" %in% names(existing_accumulated)) {
+      processed_terms <- unique(existing_accumulated$search_term[!is.na(existing_accumulated$search_term)])
+    }
+  }
+
   if (!nrow(data)) {
-    return(dplyr::tibble())
+    final_result <- if (!is.null(existing_accumulated)) existing_accumulated else dplyr::tibble()
+    if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
+      beepr::beep(2)
+    }
+    return(final_result)
   }
 
   first_names <- as.character(data$first)
@@ -74,6 +120,21 @@ search_and_process_npi <- function(data,
     timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
     file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, ".csv"))
     readr::write_csv(result, file_name)
+    log_progress(sprintf("Saved chunk '%s' with %d rows", basename(file_name), nrow(result)))
+  }
+
+  append_accumulated <- function(result) {
+    if (is.null(accumulate_path) || is.na(accumulate_path) || !nrow(result)) {
+      return(invisible(NULL))
+    }
+    dir.create(dirname(accumulate_path), showWarnings = FALSE, recursive = TRUE)
+    append_mode <- file.exists(accumulate_path)
+    tryCatch({
+      readr::write_csv(result, accumulate_path, append = append_mode, col_names = !append_mode)
+      log_progress(sprintf("Appended %d rows to '%s'", nrow(result), accumulate_path))
+    }, error = function(e) {
+      log_progress(sprintf("Unable to append to '%s': %s", accumulate_path, e$message))
+    })
   }
 
   search_npi <- function(first_name, last_name) {
@@ -145,25 +206,48 @@ search_and_process_npi <- function(data,
     if (!is.null(pb)) {
       pb$tick()
     }
+    search_term <- trimws(paste(first_name, last_name))
+    if (isTRUE(resume) && length(processed_terms) && search_term %in% processed_terms) {
+      log_progress(sprintf("Skipping %s (already present in accumulation)", search_term))
+      return(NULL)
+    }
+
     result <- search_npi(first_name, last_name)
 
-    should_save <- !is.null(result) && nrow(result) && is.numeric(save_chunk_size) && !is.na(save_chunk_size) && save_chunk_size > 0 && nrow(result) >= save_chunk_size
+    if (is.null(result) || !nrow(result)) {
+      log_progress(sprintf("No results for %s", search_term))
+      return(NULL)
+    }
+
+    should_save <- is.numeric(save_chunk_size) && !is.na(save_chunk_size) && save_chunk_size > 0 && nrow(result) >= save_chunk_size
     if (should_save) {
       save_results(result, "results_of_search_and_process_npi", dest_dir)
     }
+
+    append_accumulated(result)
+    log_progress(sprintf("Retrieved %d rows for %s", nrow(result), search_term))
+    
     result
   })
 
   npi_data <- purrr::keep(out, function(x) is.data.frame(x) && nrow(x) > 0)
   if (!length(npi_data)) {
-    return(dplyr::tibble())
+    final_result <- if (!is.null(existing_accumulated)) existing_accumulated else dplyr::tibble()
+  } else {
+    result <- dplyr::bind_rows(npi_data)
+    if (!is.null(existing_accumulated)) {
+      final_result <- dplyr::bind_rows(existing_accumulated, result)
+      final_result <- dplyr::distinct(final_result)
+    } else {
+      final_result <- result
+    }
   }
 
-  result <- dplyr::bind_rows(npi_data)
+  log_progress(sprintf("Completed processing. Returning %d rows.", nrow(final_result)))
 
-  if (requireNamespace("beepr", quietly = TRUE)) {
+  if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
 
-  result
+  final_result
 }
