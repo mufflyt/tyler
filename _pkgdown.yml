@@ -32,7 +32,6 @@ reference:
       - geocode_unique_addresses
       - hrr
       - hrr_generate_maps
-      - process_and_save_isochrones
       - remove_constant_vars
       - remove_near_zero_var
       - retrieve_clinician_data
@@ -42,6 +41,12 @@ reference:
       - split_and_save
       - tm_write2pdf
       - tyler-package
+
+  - title: "Deprecated"
+    contents:
+      - search_npi
+      - test_and_process_isochrones
+      - process_and_save_isochrones
 
 articles:
   - title: "Vignettes"

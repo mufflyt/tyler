@@ -8,6 +8,9 @@
   `genderize_physicians()`, `split_and_save()`, and
   `states_where_physicians_were_NOT_contacted()`) inside the new vignette to
   surface relevant improvements for field teams.
+* Deprecated legacy helpers (`search_npi()`, `test_and_process_isochrones()`,
+  and `process_and_save_isochrones()`) in favour of the consolidated
+  `search_and_process_npi()` and `create_isochrones_for_dataframe()` workflow.
 
 # tyler 0.0.0.9000
 
