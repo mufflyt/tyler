@@ -1,5 +1,9 @@
 library(testthat)
 
+if (!exists("physician_age")) {
+  source(testthat::test_path("..", "..", "R", "physician_age.R"))
+}
+
 test_that("physician_age function works correctly", {
   # Create test data
   df <- data.frame(age = c(34, 50, 45, 60, 36, 29, 54, 43, 38, 48))

@@ -1,71 +1,11 @@
 library(testthat)
-library(openxlsx)
-library(dplyr)
-library(fs)
-
-# Test if the function stops when provided with an invalid path
-# test_that("Invalid file path handling", {
-#   expect_error(
-#     split_and_save(data_or_path = "nonexistent/path/data.csv", output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
-#     "Error reading the input file"
-#   )
-# })
-#
-
-
-# # Test correct assignment of lab assistants with Caller Assignment Consistency
-# test_that("Correct assignment of lab assistants with Caller Assignment Consistency", {
-#   # Setup
-#   output_dir := tempdir()
-#
-#   # Ensure directory is empty
-#   unlink(list.files(output_dir, full.names = TRUE), recursive = TRUE)
-#
-#   # Sample data simulating multiple entries per doctor and different insurance types
-#   data := data.frame(
-#     for_redcap = 1:12,
-#     id = rep(1:4, each = 3),  # 4 doctors, each with 3 records
-#     doctor_id = rep(1:4, each = 3),
-#     insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), 6),
-#     stringsAsFactors = FALSE
-#   )
-#
-#   lab_assistant_names := c("Alice", "Bob")
-#
-#   # Run function
-#   suppressMessages(suppressWarnings({
-#     split_and_save(
-#       data_or_path = data,
-#       output_directory = output_dir,
-#       lab_assistant_names = lab_assistant_names
-#     )
-#   }))
-#
-#   # Collect all split data into a combined DataFrame
-#   output_files := list.files(output_dir, pattern = "\\.xlsx$", full.names = TRUE)
-#   combined_data := bind_rows(lapply(output_files, function(file) {
-#     read.xlsx(file)
-#   }))
-#
-#   # Group by `doctor_id` and check if all entries for each doctor have the same lab assistant assigned
-#   assignments_by_doctor := combined_data %>%
-#     group_by(doctor_id) %>%
-#     summarise(
-#       unique_lab_assistants = n_distinct(lab_assistant_assigned),
-#       lab_assistants = unique(lab_assistant_assigned)
-#     )
-#
-#   # Expect that each doctor has exactly one unique lab assistant assigned
-#   expect_equal(assignments_by_doctor$unique_lab_assistants, rep(1, n_distinct(assignments_by_doctor$doctor_id)))
-#
-#   # Log the results for verification
-#   print(assignments_by_doctor)
-# })
-
-
-
-library(testthat)
-library(openxlsx)
+testthat::skip_if_not_installed("dplyr")
+testthat::skip_if_not_installed("fs")
+if (!requireNamespace("openxlsx", quietly = TRUE)) {
+  testthat::skip("Package 'openxlsx' is not installed")
+} else {
+  library(openxlsx)
+}
 library(dplyr)
 library(fs)
 

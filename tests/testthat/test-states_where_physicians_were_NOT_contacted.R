@@ -1,4 +1,5 @@
 library(testthat)
+testthat::skip_if_not_installed("dplyr")
 library(dplyr)
 
 test_that("Function handles default all_states correctly", {

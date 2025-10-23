@@ -1,3 +1,11 @@
+library(testthat)
+testthat::skip_if_not_installed("mockery")
+testthat::skip_if_not_installed("readr")
+
+if (!exists("search_and_process_npi")) {
+  source(testthat::test_path("..", "..", "R", "search_and_process_npi.R"))
+}
+
 # Sample data for testing
 sample_data <- data.frame(
   first = c("John", "Jane", "Alex"),
@@ -65,7 +73,7 @@ mock_npi_flatten <- function(npi_obj, cols) {
 # Create a temporary CSV file for testing
 create_temp_csv <- function(data, file_name = "temp_npi_data.csv") {
   temp_file <- file.path(tempdir(), file_name)
-  write_csv(data, temp_file)
+  readr::write_csv(data, temp_file)
   return(temp_file)
 }
 

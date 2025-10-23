@@ -1,4 +1,8 @@
 library(testthat)
+
+if (!exists("max_table")) {
+  source(testthat::test_path("..", "..", "R", "MaxTable.R"))
+}
 # Assuming your package is loaded which contains the max_table function
 
 # Define necessary vectors

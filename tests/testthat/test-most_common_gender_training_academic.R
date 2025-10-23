@@ -1,4 +1,5 @@
 library(testthat)
+testthat::skip_if_not_installed("dplyr")
 library(dplyr)
 
 test_that("most_common_gender_training_academic handles empty dataframe correctly", {
