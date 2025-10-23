@@ -1,4 +1,7 @@
-# tyler 0.0.0.9001
+# tyler 1.2.1
+
+* Released on 2025-10-23 to align all metadata artifacts with the
+  package website and codemeta specification.
 
 * Introduced an **Imotive News & Changelog** vignette that centralises release
   notes for the mystery caller workflow.
