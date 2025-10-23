@@ -16,10 +16,11 @@ A data frame with filtered NPI data based on the specified taxonomy description.
 This function searches the NPI Database for healthcare providers based on a taxonomy description.
 }
 \examples{
+\dontrun{
 # Example usage with multiple taxonomy descriptions:
 go_data <- search_by_taxonomy("Gynecologic Oncology")
 fpmrs_data <- search_by_taxonomy("Female Pelvic Medicine and Reconstructive Surgery")
 rei_data <- search_by_taxonomy("Reproductive Endocrinology")
 mfm_data <- search_by_taxonomy("Maternal & Fetal Medicine")
-
+}
 }

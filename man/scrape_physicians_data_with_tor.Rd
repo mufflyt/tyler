@@ -20,7 +20,8 @@ A dataframe containing scraped physicians' data.
 This function scrapes data for physicians within a specified ID range, excluding wrong IDs.
 }
 \examples{
+\dontrun{
 # Call the function
 scrape_result <- scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 9150)
-
+}
 }
