@@ -8,6 +8,7 @@ clean_phase_1_results(
   phase1_data,
   output_directory = tempdir(),
   verbose = TRUE,
+  notify = TRUE,
   duplicate_rows = TRUE,
   id_seed = NULL
 )
@@ -23,6 +24,9 @@ Defaults to \code{tempdir()}.}
 
 \item{verbose}{Logical. If \code{TRUE}, progress messages are printed while cleaning.
 Defaults to \code{TRUE}.}
+
+\item{notify}{Logical. If \code{TRUE}, play a notification sound on completion when
+the optional \pkg{beepr} package is available. Defaults to \code{TRUE}.}
 
 \item{duplicate_rows}{Logical. If \code{TRUE}, each row in \code{phase1_data} is
 duplicated to match legacy workflows that expect paired insurance entries. Set to

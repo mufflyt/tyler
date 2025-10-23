@@ -7,8 +7,9 @@
 calculate_intersection_overlap_and_save(
   block_groups,
   isochrones_joined,
-  drive_time,
-  output_dir
+  drive_time_minutes,
+  output_dir,
+  notify = TRUE
 )
 }
 \arguments{
@@ -16,9 +17,13 @@ calculate_intersection_overlap_and_save(
 
 \item{isochrones_joined}{An sf object representing isochrones.}
 
-\item{drive_time}{The drive time value for which to calculate the intersection.}
+\item{drive_time_minutes}{The drive time value (in minutes) for which to calculate the
+intersection.}
 
 \item{output_dir}{The directory where the intersection shapefile will be saved.}
+
+\item{notify}{Logical. If \code{TRUE}, play a notification sound on completion when the optional \pkg{beepr}
+package is available. Defaults to \code{TRUE}.}
 }
 \value{
 None. The function saves the intersection shapefile and provides logging.
