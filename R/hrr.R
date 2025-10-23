@@ -1,6 +1,8 @@
 #' Get Hospital Referral Region Shapefile
 #'
 #' This function loads the hospital referral region shapefile and optionally removes Hawaii and Alaska.
+#' The shapefile (~8 MB) is downloaded from the Dartmouth Atlas website on first use and cached in the
+#' user's R cache directory for subsequent calls.
 #'
 #' @param remove_HI_AK Logical, should Hawaii and Alaska be removed? Default is TRUE.
 #' @return An sf object containing the hospital referral region data.
@@ -15,11 +17,7 @@ hrr <- function(remove_HI_AK = TRUE) {
 
   # Load the hospital referral region shapefile
   cat("Getting the hospital referral region shapefile...\n")
-  hrr_path <- system.file(
-    "extdata",
-    "hrr-shapefile/Hrr98Bdry_AK_HI_unmodified.shp",
-    package = "tyler"
-  )
+  hrr_path <- ensure_hrr_shapefile()
   hrr <- sf::read_sf(hrr_path)
   hrr <- sf::st_transform(hrr, 4326)
 
