@@ -8,7 +8,9 @@ test_that("Function handles default all_states correctly", {
 
   # Expected result
   expected <- paste0(
-    "A total of unique physicians were identified in the dataset and were successfully contacted (i.e., with a recorded wait time for an appointment) in ",
+    "A total of ",
+    3,
+    " unique physicians were identified in the dataset and were successfully contacted (i.e., with a recorded wait time for an appointment) in ",
     3,
     " states including the District of Columbia. The excluded states include ",
     paste(
@@ -32,7 +34,9 @@ test_that("Function handles no states correctly", {
 
   # Expected result
   expected <- paste0(
-    "A total of unique physicians were identified in the dataset and were successfully contacted (i.e., with a recorded wait time for an appointment) in ",
+    "A total of ",
+    0,
+    " unique physicians were identified in the dataset and were successfully contacted (i.e., with a recorded wait time for an appointment) in ",
     0,
     " states including the District of Columbia. The excluded states include ",
     paste(c("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
