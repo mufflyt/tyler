@@ -37,7 +37,6 @@ reference:
       - remove_near_zero_var
       - retrieve_clinician_data
       - save_quality_check_table
-      - scrape_physicians_data_with_tor
       - search_by_taxonomy
       - split_and_save
       - tm_write2pdf
