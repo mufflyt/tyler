@@ -30,7 +30,7 @@ create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir 
   pal <- leaflet::colorNumeric("Purples", domain = bg_data$overlap)
 
   # Create the base map
-  base_map <- tyler::createBaseMap("<h1>Block Group Overlap Map</h1>")
+  base_map <- create_base_map("<h1>Block Group Overlap Map</h1>")
 
   # Create the map
   map <- base_map %>%
