@@ -236,74 +236,126 @@ search_and_process_npi <- function(data,
     })
   }
 
-  search_npi <- function(first_name, last_name) {
-    tryCatch({
-      npi_obj <- npi::npi_search(
-        first_name = first_name,
-        last_name = last_name,
-        enumeration_type = enumeration_type,
-        limit = limit,
-        country_code = country_code
-      )
+  extract_status <- function(msg) {
+    code <- regmatches(msg, regexpr("\\b[0-9]{3}\\b", msg))
+    if (length(code) && nzchar(code)) {
+      return(paste("after", code))
+    }
+    msg_clean <- gsub("\\s+", " ", msg)
+    paste("due to", substr(msg_clean, 1, 120))
+  }
 
-      if (is.null(npi_obj)) {
-        return(NULL)
+  max_attempts <- 3L
+  base_delay <- 1
+
+  search_npi <- function(first_name, last_name, index) {
+    attempt <- 1L
+    search_term <- trimws(paste(first_name, last_name))
+
+    repeat {
+      result <- tryCatch({
+        npi_obj <- npi::npi_search(
+          first_name = first_name,
+          last_name = last_name,
+          enumeration_type = enumeration_type,
+          limit = limit,
+          country_code = country_code
+        )
+
+        if (is.null(npi_obj)) {
+          return(NULL)
+        }
+
+        flattened <- npi::npi_flatten(npi_obj, cols = c("basic", "taxonomies"))
+        if (is.null(flattened) || !nrow(flattened)) {
+          return(NULL)
+        }
+
+        filtered <- dplyr::filter(flattened, taxonomies_desc %in% vc | taxonomies_desc %in% bc)
+        if (!nrow(filtered)) {
+          return(NULL)
+        }
+
+        if (!"basic_credential" %in% names(filtered)) {
+          filtered$basic_credential <- NA_character_
+        }
+        if (!"basic_first_name" %in% names(filtered)) {
+          filtered$basic_first_name <- NA_character_
+        }
+        if (!"basic_last_name" %in% names(filtered)) {
+          filtered$basic_last_name <- NA_character_
+        }
+        if (!"basic_middle_name" %in% names(filtered)) {
+          filtered$basic_middle_name <- NA_character_
+        }
+
+        filtered <- dplyr::mutate(
+          filtered,
+          credential = basic_credential,
+          credential_clean = tolower(gsub("[^A-Za-z0-9]", "", credential))
+        )
+
+        if (!is.null(credential_filter)) {
+          filtered <- dplyr::filter(filtered, is.na(credential_clean) | credential_clean %in% credential_filter)
+        }
+
+        filtered <- dplyr::rename(
+          filtered,
+          first_name = basic_first_name,
+          last_name = basic_last_name,
+          middle_name = basic_middle_name
+        )
+
+        filtered <- dplyr::mutate(filtered, search_term = paste(first_name, last_name))
+        filtered <- dplyr::select(filtered, -credential_clean, -basic_credential)
+        filtered <- dplyr::distinct(filtered, npi, taxonomies_desc, .keep_all = TRUE)
+        filtered <- dplyr::arrange(filtered, last_name, first_name)
+        filtered
+      }, error = function(e) {
+        e
+      })
+
+      if (inherits(result, "error")) {
+        reason <- extract_status(result$message)
+        message(sprintf(
+          "Attempt %d/%d for %s failed %s.",
+          attempt,
+          max_attempts,
+          if (nzchar(search_term)) search_term else "NPI search",
+          reason
+        ))
+        dispatch_progress(
+          event = "retry",
+          search_term = search_term,
+          detail = sprintf("Attempt %d/%d %s", attempt, max_attempts, reason),
+          index = index
+        )
+
+        if (attempt >= max_attempts) {
+          message(sprintf(
+            "Giving up on %s after %d attempt%s.",
+            if (nzchar(search_term)) search_term else "NPI search",
+            max_attempts,
+            if (max_attempts == 1) "" else "s"
+          ))
+          dispatch_progress(
+            event = "search_error",
+            search_term = search_term,
+            detail = result$message,
+            index = index
+          )
+          return(NULL)
+        }
+
+        delay <- base_delay * 2^(attempt - 1)
+        message(sprintf("Retrying %s in %.1f seconds...", search_term, delay))
+        Sys.sleep(delay)
+        attempt <- attempt + 1L
+        next
       }
 
-      flattened <- npi::npi_flatten(npi_obj, cols = c("basic", "taxonomies"))
-      if (is.null(flattened) || !nrow(flattened)) {
-        return(NULL)
-      }
-
-      filtered <- dplyr::filter(flattened, taxonomies_desc %in% vc | taxonomies_desc %in% bc)
-      if (!nrow(filtered)) {
-        return(NULL)
-      }
-
-      if (!"basic_credential" %in% names(filtered)) {
-        filtered$basic_credential <- NA_character_
-      }
-      if (!"basic_first_name" %in% names(filtered)) {
-        filtered$basic_first_name <- NA_character_
-      }
-      if (!"basic_last_name" %in% names(filtered)) {
-        filtered$basic_last_name <- NA_character_
-      }
-      if (!"basic_middle_name" %in% names(filtered)) {
-        filtered$basic_middle_name <- NA_character_
-      }
-
-      filtered <- dplyr::mutate(
-        filtered,
-        credential = basic_credential,
-        credential_clean = tolower(gsub("[^A-Za-z0-9]", "", credential))
-      )
-
-      if (!is.null(credential_filter)) {
-        filtered <- dplyr::filter(filtered, is.na(credential_clean) | credential_clean %in% credential_filter)
-      }
-
-      filtered <- dplyr::rename(
-        filtered,
-        first_name = basic_first_name,
-        last_name = basic_last_name,
-        middle_name = basic_middle_name
-      )
-
-      filtered <- dplyr::mutate(filtered, search_term = paste(first_name, last_name))
-      filtered <- dplyr::select(filtered, -credential_clean, -basic_credential)
-      filtered <- dplyr::distinct(filtered, npi, taxonomies_desc, .keep_all = TRUE)
-      filtered <- dplyr::arrange(filtered, last_name, first_name)
-      filtered
-    }, error = function(e) {
-      message(sprintf("Error searching %s %s: %s", first_name, last_name, e$message))
-      dispatch_progress(
-        event = "search_error",
-        search_term = trimws(paste(first_name, last_name)),
-        detail = e$message
-      )
-      NULL
-    })
+      return(result)
+    }
   }
 
   out <- vector("list", length = total_names)
@@ -332,7 +384,7 @@ search_and_process_npi <- function(data,
       next
     }
 
-    result <- search_npi(first_name, last_name)
+    result <- search_npi(first_name, last_name, i)
 
     if (is.null(result) || !nrow(result)) {
       dispatch_progress(

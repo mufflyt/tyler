@@ -45,7 +45,49 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   ggmap::register_google(key = google_maps_api_key)
 
   unique_add <- dplyr::distinct(data, address)
-  coords <- ggmap::geocode(unique_add$address, key = google_maps_api_key)
+
+  extract_status <- function(msg) {
+    code <- regmatches(msg, regexpr("\\b[0-9]{3}\\b", msg))
+    if (length(code) && nzchar(code)) {
+      return(paste("after", code))
+    }
+    msg_clean <- gsub("\\s+", " ", msg)
+    paste("due to", substr(msg_clean, 1, 120))
+  }
+
+  max_attempts <- 3L
+  base_delay <- 1
+  coords <- NULL
+  first_address <- if (nrow(unique_add)) unique_add$address[[1]] else "address list"
+
+  for (attempt in seq_len(max_attempts)) {
+    attempt_result <- tryCatch({
+      ggmap::geocode(unique_add$address, key = google_maps_api_key)
+    }, error = function(e) e)
+
+    if (inherits(attempt_result, "error")) {
+      reason <- extract_status(attempt_result$message)
+      message(sprintf(
+        "Attempt %d/%d for address '%s' failed %s.",
+        attempt,
+        max_attempts,
+        first_address,
+        reason
+      ))
+
+      if (attempt == max_attempts) {
+        stop(sprintf("Geocoding failed after %d attempts: %s", max_attempts, attempt_result$message))
+      }
+
+      delay <- base_delay * 2^(attempt - 1)
+      message(sprintf("Retrying geocode request in %.1f seconds...", delay))
+      Sys.sleep(delay)
+    } else {
+      coords <- attempt_result
+      break
+    }
+  }
+
   unique_add <- dplyr::mutate(unique_add,
                               latitude = coords$lat,
                               longitude = coords$lon)
