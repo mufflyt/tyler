@@ -20,7 +20,8 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     concurrency:
-      group: pkgdown-${{ github.run_id }}
+      group: pkgdown-${{ github.event.workflow_run.head_branch || github.ref }}
+      cancel-in-progress: true
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -47,7 +48,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev \
             libgit2-dev libgdal-dev libgeos-dev libproj-dev libudunits2-dev \
-            libfftw3-dev libtiff5-dev libjpeg-dev libpng-dev
+            libfftw3-dev libtiff5-dev libjpeg-dev libpng-dev qpdf
 
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
@@ -66,5 +67,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
-          folder: docs  # ✅ CORRECTED from "docs."
+          folder: docs
           clean: true
