@@ -13,11 +13,14 @@ states_where_physicians_were_NOT_contacted(filtered_data, all_states = NULL)
 If not provided, a default set of states will be used.}
 }
 \value{
-A character string summarizing the inclusion and exclusion of states.
+A character string summarizing the inclusion and exclusion of states along with the
+count of unique physicians successfully contacted.
 }
 \description{
 This function summarizes the demographic details by identifying the states where physicians
-were not successfully contacted and those that were included.
+were not successfully contacted and those that were included. It also reports how many unique
+physicians were reached by filtering to rows with affirmative contact indicators (for example,
+\code{\"Yes\"} values in \code{contact_office} or \code{included_in_study}).
 }
 \examples{
 # Example with provided all_states

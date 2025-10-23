@@ -99,10 +99,11 @@ Standardises call outcome spreadsheets from callers.
 Summarises Phase 2 coverage gaps.
 
 - **Input:** Phase 2 tibble (needs a `state` column) and optional vector of all state abbreviations.
-- **Output:** Tibble listing states with zero completed contacts.
+- **Output:** Character summary stating how many unique physicians were successfully contacted and which states remain uncovered.
 - **When to run:** After cleaning Phase 2 data to guide reallocation decisions.
 - **Workflow tips:**
   - Pass the full list of expected states so the summary reports on missing data rather than just observed states.
+  - Rows are filtered to affirmative contact indicators (`contact_office`/`included_in_study`) before counts are generated.
 
 ### `save_quality_check_table()`
 (Defined within `QualityCheck.R`) generates a QA extract for manual review.
