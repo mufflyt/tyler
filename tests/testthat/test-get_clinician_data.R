@@ -49,6 +49,7 @@ mock_validate_and_remove_invalid_npi <- function(df) {
 
 # Tests
 test_that("Retrieves clinician data for valid NPIs", {
+  skip_if_not_installed("provider")
   temp_csv <- create_temp_csv(sample_data_valid)
   mockery::stub(retrieve_clinician_data, 'provider::clinicians', mock_clinicians)
   mockery::stub(retrieve_clinician_data, 'validate_and_remove_invalid_npi', mock_validate_and_remove_invalid_npi)
@@ -60,6 +61,7 @@ test_that("Retrieves clinician data for valid NPIs", {
 })
 
 test_that("Handles invalid NPIs", {
+  skip_if_not_installed("provider")
   temp_csv <- create_temp_csv(sample_data_invalid)
   mockery::stub(retrieve_clinician_data, 'provider::clinicians', mock_clinicians)
   mockery::stub(retrieve_clinician_data, 'validate_and_remove_invalid_npi', mock_validate_and_remove_invalid_npi)
@@ -68,6 +70,7 @@ test_that("Handles invalid NPIs", {
 })
 
 test_that("Handles mixed valid and invalid NPIs", {
+  skip_if_not_installed("provider")
   temp_csv <- create_temp_csv(sample_data_mixed)
   mockery::stub(retrieve_clinician_data, 'provider::clinicians', mock_clinicians)
   mockery::stub(retrieve_clinician_data, 'validate_and_remove_invalid_npi', mock_validate_and_remove_invalid_npi)
@@ -79,6 +82,7 @@ test_that("Handles mixed valid and invalid NPIs", {
 })
 
 test_that("Handles dataframe input correctly", {
+  skip_if_not_installed("provider")
   mockery::stub(retrieve_clinician_data, 'provider::clinicians', mock_clinicians)
   mockery::stub(retrieve_clinician_data, 'validate_and_remove_invalid_npi', mock_validate_and_remove_invalid_npi)
   result <- retrieve_clinician_data(sample_data_mixed)
