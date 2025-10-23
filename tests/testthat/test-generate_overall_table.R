@@ -11,6 +11,14 @@ create_temp_rds <- function(data, file_name = "temp_data.rds") {
   return(temp_file)
 }
 
+# Helper function to check if LaTeX is available
+has_latex <- function() {
+  if (!requireNamespace("tinytex", quietly = TRUE)) {
+    return(FALSE)
+  }
+  tinytex::check_installed(error = FALSE)
+}
+
 # Sample data for testing
 sample_data <- data.frame(
   age = c(25, 34, 28, 45, 52),
@@ -22,6 +30,7 @@ sample_data <- data.frame(
 
 # Test if the function reads the input file correctly and processes it without errors
 test_that("Reads input file correctly and processes data", {
+  skip_if_not(has_latex(), "LaTeX not available")
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- tempdir()
 
@@ -34,6 +43,7 @@ test_that("Reads input file correctly and processes data", {
 
 # Test if the function generates the overall table correctly
 test_that("Generates overall table correctly", {
+  skip_if_not(has_latex(), "LaTeX not available")
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- tempdir()
 
@@ -45,6 +55,7 @@ test_that("Generates overall table correctly", {
 
 # Test if the function saves the result to a new PDF file
 test_that("Saves result to new PDF file", {
+  skip_if_not(has_latex(), "LaTeX not available")
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- tempdir()
 
@@ -56,6 +67,7 @@ test_that("Saves result to new PDF file", {
 
 # Test if the function handles selected columns correctly
 test_that("Handles selected columns correctly", {
+  skip_if_not(has_latex(), "LaTeX not available")
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- tempdir()
 
@@ -68,6 +80,7 @@ test_that("Handles selected columns correctly", {
 
 # Test if the function handles missing label translations correctly
 test_that("Handles missing label translations correctly", {
+  skip_if_not(has_latex(), "LaTeX not available")
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- tempdir()
 
@@ -89,6 +102,7 @@ test_that("Handles empty dataset correctly", {
 
 # Test if the function handles the absence of output directory and creates it
 test_that("Creates output directory if it does not exist", {
+  skip_if_not(has_latex(), "LaTeX not available")
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- file.path(tempdir(), "new_output_dir")
 
@@ -99,6 +113,7 @@ test_that("Creates output directory if it does not exist", {
 
 # Test if the function handles label translations correctly
 test_that("Handles label translations correctly", {
+  skip_if_not(has_latex(), "LaTeX not available")
   temp_rds <- create_temp_rds(sample_data)
   output_dir <- tempdir()
   label_translations <- list(age = "Age in years", gender = "Gender (M/F)", height = "Height in cm", weight = "Weight in kg")
