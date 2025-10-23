@@ -8,7 +8,9 @@
 #' @family mapping
 #' @export
 #' @examples
+#' \dontrun{
 #' map <- generate_leaflet_base_map()
+#' }
 generate_leaflet_base_map <- function() {
   # Create a new Leaflet map object
   map <- leaflet::leaflet() %>%

@@ -14,9 +14,10 @@
 #' @importFrom readr read_csv write_csv
 #'
 #' @examples
+#' \dontrun{
 #' # Call the function
 #' scrape_result <- scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 9150)
-#'
+#' }
 scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_path = NULL) {
   cat("Starting scrape_physicians_data_with_tor...\n")
   cat("Parameters - startID:", startID, "endID:", endID, "torPort:", torPort, "\n")

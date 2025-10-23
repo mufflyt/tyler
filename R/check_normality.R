@@ -13,8 +13,10 @@
 #' @importFrom stats shapiro.test IQR median
 #'
 #' @examples
+#' \dontrun{
 #' # Example usage with a dataframe 'df' and outcome variable 'business_days_until_appointment'
 #' check_normality(df, "business_days_until_appointment")
+#' }
 check_normality <- function(data, variable) {
   # Start logging
   message("Starting normality check and summary calculation for variable: ", variable)

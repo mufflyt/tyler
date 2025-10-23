@@ -22,6 +22,7 @@
 #' @family mapping
 #' @export
 #' @examples
+#' \dontrun{
 #' # Example 1: Basic density plot with log transformation
 #' create_density_plot(
 #'     data = df3,
@@ -63,6 +64,7 @@
 #'     y_label = "Density",
 #'     plot_title = "Density Plot Without Transformation"
 #' )
+#' }
 
 create_density_plot <- function(data,
                                 x_var,

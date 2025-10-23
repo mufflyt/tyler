@@ -23,6 +23,7 @@
 #' @family mapping
 #' @export
 #' @examples
+#' \dontrun{
 #' # Example 1: Basic plot with log transformation
 #' create_line_plot(
 #'     plot_data = df3,
@@ -57,6 +58,7 @@
 #'     output_dir = "ortho_sports_med/Figures",
 #'     file_prefix = "ortho_sports_vs_insurance_none"
 #' )
+#' }
 
 create_line_plot <- function(plot_data,
                              x_var,

@@ -9,7 +9,9 @@
 #'
 #' @export
 #' @examples
+#' \dontrun{
 #' hrr()
+#' }
 hrr <- function(remove_HI_AK = TRUE) {
   cat("Loading necessary packages...\n")
 

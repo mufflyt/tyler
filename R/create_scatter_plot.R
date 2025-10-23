@@ -25,6 +25,7 @@
 #' @family mapping
 #' @export
 #' @examples
+#' \dontrun{
 #' # Example 1: Basic scatter plot with log transformation
 #' create_scatter_plot(
 #'     plot_data = df3,
@@ -69,6 +70,7 @@
 #'     y_label = "Waiting Times in Days",
 #'     plot_title = "Scatter Plot Without Transformation"
 #' )
+#' }
 
 create_scatter_plot <- function(plot_data,
                                 x_var,
