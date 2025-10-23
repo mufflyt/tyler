@@ -6,7 +6,7 @@
 #' @param x_var A string representing the column name for the x-axis variable. This should be a numeric variable (e.g., waiting time in days).
 #' @param fill_var A string representing the column name for the fill variable. This should be a categorical or factor variable (e.g., insurance type).
 #' @param x_transform A string specifying the transformation for the x-axis: "log" for log transformation (log1p), "sqrt" for square root transformation, or "none" for no transformation. Default is "none".
-#' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 100.
+#' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 600 for print-ready outputs.
 #' @param output_dir A string representing the directory where the plot files will be saved. Default is "output".
 #' @param file_prefix A string used as the prefix for the generated plot filenames. The filenames will have a timestamp appended to ensure uniqueness. Default is "density_plot".
 #' @param x_label A string specifying the label for the x-axis. Default is `NULL` (uses x_var).
@@ -68,7 +68,7 @@ create_density_plot <- function(data,
                                 x_var,
                                 fill_var,
                                 x_transform = "none",
-                                dpi = 100,
+                                dpi = 600,
                                 output_dir = "output",
                                 file_prefix = "density_plot",
                                 x_label = NULL,
@@ -92,16 +92,19 @@ create_density_plot <- function(data,
 
   # Create the density plot
   density_plot <- ggplot2::ggplot(data, ggplot2::aes(x = !!rlang::sym(x_var), fill = !!rlang::sym(fill_var))) +
-    ggplot2::geom_density(alpha = 0.5) +
+    ggplot2::geom_density(alpha = 0.7, linewidth = 0.3, colour = NA) +
     ggplot2::labs(
       x = x_label,
       y = y_label,
       title = plot_title
     ) +
-    ggplot2::scale_fill_viridis_d() +  # Use viridis color palette
-    ggplot2::theme_light() +
+    ggplot2::scale_fill_viridis_d(option = "viridis") +  # Use viridis color palette
+    ggplot2::theme_light(base_size = 12) +
     ggplot2::theme(
-      legend.position = "bottom"
+      legend.position = "bottom",
+      legend.title = ggplot2::element_text(face = "bold"),
+      axis.title = ggplot2::element_text(face = "bold"),
+      plot.title = ggplot2::element_text(face = "bold", hjust = 0.5)
     )
 
   # Display the plot
@@ -112,8 +115,8 @@ create_density_plot <- function(data,
   tiff_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".tiff"))
   png_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".png"))
 
-  ggplot2::ggsave(filename = tiff_filename, plot = density_plot, dpi = dpi, height = 8, width = 11)
-  ggplot2::ggsave(filename = png_filename, plot = density_plot, dpi = dpi, height = 8, width = 11)
+  ggplot2::ggsave(filename = tiff_filename, plot = density_plot, dpi = dpi, height = 5, width = 7, units = "in", compression = "lzw")
+  ggplot2::ggsave(filename = png_filename, plot = density_plot, dpi = dpi, height = 5, width = 7, units = "in")
 
   if (verbose) {
     cat("Plots saved to:", tiff_filename, "and", png_filename, "\n")

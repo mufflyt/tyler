@@ -44,19 +44,34 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @param physician_sf An sf object containing physician data with coordinates.
 #' @param trait_map A string specifying the trait map (default is "all").
 #' @param honey_map A string specifying the honey map (default is "all").
+#' @param dpi Resolution used when saving the final figure (default is 600).
+#' @param width Final figure width in inches for journal submission (default is 7).
+#' @param height Final figure height in inches for journal submission (default is 5).
 #' @return Invisibly returns the ggplot object of the generated map.
-#' @importFrom sf sf_use_s2 st_transform st_make_grid st_sf st_intersection st_join
+#' @importFrom sf sf_use_s2 st_transform st_make_grid st_sf st_intersection st_join st_filter
 #' @importFrom dplyr mutate group_by summarize filter
-#' @importFrom ggplot2 geom_sf scale_fill_viridis_c guide_colorbar element_text theme_minimal theme
+#' @importFrom ggplot2 geom_sf scale_fill_viridis_c guide_colorbar element_text theme_minimal theme labs
 #' @importFrom ggspatial annotation_scale annotation_north_arrow
 #' @importFrom rnaturalearth ne_countries
+#' @importFrom stringr str_detect
+#' @importFrom scales pretty_breaks label_number squish
+#' @importFrom gridExtra arrangeGrob
+#' @importFrom grid grid.newpage grid.draw
+#' @importFrom fs dir_create path
 #'
 #' @export
 #' @examples
 #' \dontrun{
 #' hrr_generate_maps(physician_sf)
 #' }
-hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all") {
+hrr_generate_maps <- function(
+    physician_sf,
+    trait_map = "all",
+    honey_map = "all",
+    dpi = 600,
+    width = 7,
+    height = 5
+) {
   sf::sf_use_s2(FALSE)
 
   # Load USA shapefile
@@ -64,14 +79,14 @@ hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all"
   usa <- rnaturalearth::ne_countries(country = "United States of America", returnclass = "sf")
   usa <- sf::st_transform(usa, 4326)
 
-  # Generate the HRR map
-  hrr_map <- hrr()
+  # Generate the HRR map (retain AK, HI, and PR for insets)
+  hrr_map <- hrr(remove_HI_AK = FALSE)
 
   # Intersect honeycomb grid with physician data to get physician counts
   cat("Intersecting honeycomb grid with physician data...\n")
   honeycomb_grid_sf <- sf::st_make_grid(usa, c(0.3, 0.3), what = "polygons", square = FALSE) %>%
     sf::st_sf() %>%
-    dplyr::mutate(grid_id = row_number()) %>%
+    dplyr::mutate(grid_id = dplyr::row_number()) %>%
     sf::st_intersection(sf::st_transform(usa, 4326))
 
   intersections <- sf::st_intersection(honeycomb_grid_sf, sf::st_transform(physician_sf, 4326)) %>%
@@ -86,57 +101,103 @@ hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all"
   honeycomb_grid_with_physicians <- sf::st_join(honeycomb_grid_sf, physician_count_per_honey) %>%
     dplyr::filter(!is.na(physician_count))
 
-  # Create the map with honeycomb and HRR map using ggplot2
-  cat("Creating the map...\n")
-  map_ggplot <- ggplot2::ggplot() +
-    ggplot2::geom_sf(data = hrr_map, fill = "#D3D3D3", color = "darkblue", size = 1.5) +
-    ggplot2::geom_sf(data = honeycomb_grid_with_physicians, aes(fill = physician_count), color = NA) +
-    ggplot2::scale_fill_viridis_c(
-      breaks = c(1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150),
-      name = "Physician Count",
-      guide = ggplot2::guide_colorbar(
-        direction = "horizontal",
-        title.position = "top",
-        title.hjust = 0.5,
-        label.hjust = 0.5,
-        barwidth = 10,
-        barheight = 1,
-        alpha = 0.7,
-        label.theme = ggplot2::element_text(size = 8, color = "black", hjust = 0.5)
-      )) +
-    ggplot2::theme_minimal(base_size = 10) +
+  fill_limits <- range(honeycomb_grid_with_physicians$physician_count, na.rm = TRUE)
+  if (any(is.infinite(fill_limits))) {
+    fill_limits <- c(0, 1)
+  }
+
+  pretty_breaks <- scales::pretty_breaks(n = 6)(fill_limits)
+
+  # Split data for contiguous US and insets
+  cat("Preparing contiguous and inset geographies...\n")
+  contiguous_hrr <- hrr_map %>%
+    dplyr::filter(!stringr::str_detect(hrrcity, "^(AK|HI|PR)-"))
+  alaska_hrr <- hrr_map %>% dplyr::filter(stringr::str_detect(hrrcity, "^AK-"))
+  hawaii_hrr <- hrr_map %>% dplyr::filter(stringr::str_detect(hrrcity, "^HI-"))
+  puerto_rico_hrr <- hrr_map %>% dplyr::filter(stringr::str_detect(hrrcity, "^PR-"))
+
+  contiguous_honey <- sf::st_filter(honeycomb_grid_with_physicians, contiguous_hrr)
+  alaska_honey <- sf::st_filter(honeycomb_grid_with_physicians, alaska_hrr)
+  hawaii_honey <- sf::st_filter(honeycomb_grid_with_physicians, hawaii_hrr)
+  puerto_rico_honey <- sf::st_filter(honeycomb_grid_with_physicians, puerto_rico_hrr)
+
+  map_theme <- ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
-      panel.background = ggplot2::element_rect(
-        fill = "floralwhite",
-        color = "darkblue",
-        size = 1,
-        linetype = "solid"
-      ),
-      axis.text = ggplot2::element_text(size = 4, color = "darkgray", family = "Helvetica"),
-      axis.title = ggplot2::element_text(size = 12, face = "bold", family = "Helvetica"),
-      plot.title = ggplot2::element_text(size = 14, face = "bold", hjust = 0.5, family = "Helvetica"),
+      panel.background = ggplot2::element_rect(fill = "white", colour = NA),
+      plot.title = ggplot2::element_text(face = "bold", hjust = 0.5),
+      axis.title = ggplot2::element_text(face = "bold"),
+      legend.title = ggplot2::element_text(face = "bold"),
       legend.position = "bottom",
-      legend.title = ggplot2::element_text(face = "bold", color = "darkblue", size = 10, family = "Helvetica"),
-      legend.text = ggplot2::element_text(size = 8, family = "Helvetica"),
-      legend.background = ggplot2::element_rect(
-        fill = "aliceblue",
-        color = "black",
-        size = 0.5
-      ),
-      plot.margin = ggplot2::margin(10, 10, 10, 10),
-      legend.key = ggplot2::element_rect(fill = "aliceblue", color = "black", size = 0.5)
+      legend.box = "horizontal",
+      legend.margin = ggplot2::margin(t = 6)
+    )
+
+  build_region_plot <- function(hrr_data, honey_data, region_title, show_legend = FALSE, base_size = 10) {
+    if (nrow(hrr_data) == 0) {
+      return(
+        ggplot2::ggplot() +
+          ggplot2::theme_void() +
+          ggplot2::annotate("text", x = 0.5, y = 0.5, label = paste("No data for", region_title), size = 3)
+      )
+    }
+
+    ggplot2::ggplot() +
+      ggplot2::geom_sf(data = hrr_data, fill = "#f5f5f5", colour = "#4a4a4a", linewidth = 0.2) +
+      ggplot2::geom_sf(
+        data = honey_data,
+        ggplot2::aes(fill = physician_count),
+        colour = NA,
+        alpha = 0.95
+      ) +
+      ggplot2::scale_fill_viridis_c(
+        option = "viridis",
+        limits = fill_limits,
+        oob = scales::squish,
+        breaks = pretty_breaks,
+        labels = scales::label_number(accuracy = 1),
+        name = "Physician count"
+      ) +
+      ggplot2::labs(title = region_title) +
+      ggplot2::theme_minimal(base_size = base_size) +
+      ggplot2::theme(
+        axis.title = ggplot2::element_blank(),
+        axis.text = ggplot2::element_blank(),
+        axis.ticks = ggplot2::element_blank(),
+        panel.grid = ggplot2::element_blank(),
+        legend.position = if (show_legend) "bottom" else "none",
+        plot.title = ggplot2::element_text(hjust = 0.5, face = "bold")
+      )
+  }
+
+  cat("Creating main map and insets...\n")
+  main_map <- build_region_plot(contiguous_hrr, contiguous_honey, "Hospital Referral Regions", show_legend = TRUE, base_size = 12) +
+    ggspatial::annotation_scale(location = "bl", width_hint = 0.25, bar_cols = c("black", "white")) +
+    ggspatial::annotation_north_arrow(
+      location = "br",
+      which_north = "true",
+      style = ggspatial::north_arrow_fancy_orienteering()
     ) +
-    ggspatial::annotation_scale(location = "bl", width_hint = 0.5, bar_cols = c("black", "white")) +
-    ggspatial::annotation_north_arrow(location = "br", which_north = "true", style = ggspatial::north_arrow_fancy_orienteering()) +
-    ggplot2::theme(panel.grid.major = ggplot2::element_line(color = "lightgray")) +
-    ggplot2::theme(panel.border = ggplot2::element_rect(color = "darkblue", fill = NA, size = 1.5))
+    map_theme
+
+  alaska_inset <- build_region_plot(alaska_hrr, alaska_honey, "Alaska")
+  hawaii_inset <- build_region_plot(hawaii_hrr, hawaii_honey, "Hawaii")
+  puerto_rico_inset <- build_region_plot(puerto_rico_hrr, puerto_rico_honey, "Puerto Rico")
+
+  combined_insets <- gridExtra::arrangeGrob(alaska_inset, hawaii_inset, puerto_rico_inset, ncol = 3)
+  combined_map <- gridExtra::arrangeGrob(main_map, combined_insets, heights = c(3, 1))
 
   # Print the plot
-  print(map_ggplot)
+  grid::grid.newpage()
+  grid::grid.draw(combined_map)
 
-  # Save the map in various formats
-  cat("Saving the map...\n")
-  ggplot2::ggsave(filename = paste0("figures/hexmap/hexmap_figures/", trait_map, "_", honey_map, "_honey.tiff"), plot = map_ggplot, width = 10, height = 6, dpi = 800)
+  # Ensure output directory exists
+  output_dir <- fs::path("figures", "hexmap", "hexmap_figures")
+  fs::dir_create(output_dir)
 
-  invisible(map_ggplot)
+  output_stub <- fs::path(output_dir, paste0(trait_map, "_", honey_map, "_honey"))
+  cat("Saving the map for Obstetrics & Gynecology submission...\n")
+  ggplot2::ggsave(paste0(output_stub, ".tiff"), plot = combined_map, width = width, height = height, dpi = dpi, units = "in", compression = "lzw")
+  ggplot2::ggsave(paste0(output_stub, ".png"), plot = combined_map, width = width, height = height, dpi = dpi, units = "in")
+
+  invisible(combined_map)
 }

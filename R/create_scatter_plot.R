@@ -6,7 +6,7 @@
 #' @param x_var A string representing the column name for the x-axis variable. This should be a categorical or factor variable (e.g., insurance type).
 #' @param y_var A string representing the column name for the y-axis variable. This should be a numeric variable (e.g., waiting time in days).
 #' @param y_transform A string specifying the transformation for the y-axis: "log" for log transformation (log1p), "sqrt" for square root transformation, or "none" for no transformation. Default is "none".
-#' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 100.
+#' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 600 for print-ready outputs.
 #' @param output_dir A string representing the directory where the plot files will be saved. Default is "output".
 #' @param file_prefix A string used as the prefix for the generated plot filenames. The filenames will have a timestamp appended to ensure uniqueness. Default is "scatter_plot".
 #' @param jitter_width A numeric value specifying the width of the jitter along the x-axis. Default is 0.2.
@@ -74,7 +74,7 @@ create_scatter_plot <- function(plot_data,
                                 x_var,
                                 y_var,
                                 y_transform = "none",
-                                dpi = 100,
+                                dpi = 600,
                                 output_dir = "output",
                                 file_prefix = "scatter_plot",
                                 jitter_width = 0.2,
@@ -101,18 +101,22 @@ create_scatter_plot <- function(plot_data,
 
   # Create the scatter plot with colored points by x_var
   scatter_plot <- ggplot2::ggplot(plot_data, ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var), color = !!rlang::sym(x_var))) +
-    ggplot2::geom_jitter(width = jitter_width, height = jitter_height, alpha = point_alpha) +
+    ggplot2::geom_jitter(width = jitter_width, height = jitter_height, alpha = point_alpha, size = 2.5) +
     ggplot2::labs(
       x = if (is.null(x_label)) x_var else x_label,
       y = y_label,
       title = plot_title
     ) +
-    ggplot2::scale_color_viridis_d() +  # Use viridis color palette
-    ggplot2::theme_minimal() +
+    ggplot2::scale_color_viridis_d(option = "viridis") +  # Use viridis color palette
+    ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
       panel.background = ggplot2::element_rect(fill = "white"),
       plot.background = ggplot2::element_rect(fill = "white"),
-      axis.title.x = ggplot2::element_blank()
+      axis.title.x = ggplot2::element_blank(),
+      legend.position = "bottom",
+      legend.title = ggplot2::element_text(face = "bold"),
+      axis.title = ggplot2::element_text(face = "bold"),
+      plot.title = ggplot2::element_text(face = "bold", hjust = 0.5)
     )
 
   # Display the plot
@@ -123,8 +127,8 @@ create_scatter_plot <- function(plot_data,
   tiff_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".tiff"))
   png_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".png"))
 
-  ggplot2::ggsave(filename = tiff_filename, plot = scatter_plot, dpi = dpi, height = 8, width = 11)
-  ggplot2::ggsave(filename = png_filename, plot = scatter_plot, dpi = dpi, height = 8, width = 11)
+  ggplot2::ggsave(filename = tiff_filename, plot = scatter_plot, dpi = dpi, height = 5, width = 7, units = "in", compression = "lzw")
+  ggplot2::ggsave(filename = png_filename, plot = scatter_plot, dpi = dpi, height = 5, width = 7, units = "in")
 
   if (verbose) {
     cat("Plots saved to:", tiff_filename, "and", png_filename, "\n")

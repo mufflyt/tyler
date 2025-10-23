@@ -6,13 +6,13 @@
 #' @param x_var A string representing the column name for the x-axis variable. This should be a categorical or factor variable.
 #' @param y_var A string representing the column name for the y-axis variable. This should be a numeric variable.
 #' @param y_transform A string specifying the transformation for the y-axis: "log" for log transformation (log1p), "sqrt" for square root transformation, or "none" for no transformation. Default is "none".
-#' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 100.
+#' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 600 for print-ready outputs.
 #' @param output_dir A string representing the directory where the plot files will be saved. Default is "output".
 #' @param file_prefix A string used as the prefix for the generated plot filenames. The filenames will have a timestamp appended to ensure uniqueness. Default is "line_plot".
 #' @param use_geom_line A boolean indicating whether to include lines connecting points for grouped data. Default is FALSE.
 #' @param geom_line_group A string representing the column name to group the lines by when `use_geom_line` is TRUE. This should be a categorical or factor variable.
 #' @param point_color A string specifying the color of the points. Default is "viridis", which uses the viridis color palette.
-#' @param line_color A string specifying the color of the summary line (median). Default is "red".
+#' @param line_color A string specifying the color of the summary line (median). Default is "viridis" to match the accessible palette.
 #' @param verbose A boolean indicating whether to print messages about the saved plot locations. Default is TRUE.
 #'
 #' @return Invisibly returns the generated ggplot object.
@@ -62,13 +62,13 @@ create_line_plot <- function(plot_data,
                              x_var,
                              y_var,
                              y_transform = "none",
-                             dpi = 100,
+                             dpi = 600,
                              output_dir = "output",
                              file_prefix = "line_plot",
                              use_geom_line = FALSE,
                              geom_line_group = NULL,
                              point_color = "viridis",
-                             line_color = "red",
+                             line_color = "viridis",
                              verbose = TRUE) {
 
   # Remove NA values from the y_var column
@@ -86,22 +86,27 @@ create_line_plot <- function(plot_data,
   }
 
   # Create the plot
+  resolved_point_color <- if (point_color == "viridis") viridis::viridis_pal(option = "viridis")(1) else point_color
+  resolved_line_color <- if (line_color == "viridis") viridis::viridis(1, option = "viridis") else line_color
+
   line_plot <- ggplot2::ggplot(plot_data, ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var))) +
-    ggplot2::geom_point(color = ifelse(point_color == "viridis", viridis::viridis_pal()(1), point_color))
+    ggplot2::geom_point(color = resolved_point_color, size = 2.5, alpha = 0.9)
 
   if (use_geom_line & !is.null(geom_line_group)) {
     line_plot <- line_plot +
-      ggplot2::geom_line(ggplot2::aes_string(group = geom_line_group), color = "gray80")
+      ggplot2::geom_line(ggplot2::aes_string(group = geom_line_group), color = "#9AA0A6", linewidth = 0.6)
   }
 
   line_plot <- line_plot +
-    ggplot2::stat_summary(fun = median, geom = "line", color = line_color, alpha = 0.7, size = 1, ggplot2::aes(group = 1)) +
+    ggplot2::stat_summary(fun = median, geom = "line", color = resolved_line_color, alpha = 0.9, linewidth = 1, ggplot2::aes(group = 1)) +
     ggplot2::ylab(y_label) +
-    ggplot2::theme_minimal() +
+    ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
       panel.background = ggplot2::element_rect(fill = "white"),
       plot.background = ggplot2::element_rect(fill = "white"),
-      axis.title.x = ggplot2::element_blank()
+      axis.title.x = ggplot2::element_blank(),
+      axis.title = ggplot2::element_text(face = "bold"),
+      plot.title = ggplot2::element_text(face = "bold", hjust = 0.5)
     )
 
   # Automatic Filename Generation
@@ -109,8 +114,8 @@ create_line_plot <- function(plot_data,
   tiff_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".tiff"))
   png_filename <- file.path(output_dir, paste0(file_prefix, "_", timestamp, ".png"))
 
-  ggplot2::ggsave(filename = tiff_filename, plot = line_plot, dpi = dpi, height = 8, width = 11)
-  ggplot2::ggsave(filename = png_filename, plot = line_plot, dpi = dpi, height = 8, width = 11)
+  ggplot2::ggsave(filename = tiff_filename, plot = line_plot, dpi = dpi, height = 5, width = 7, units = "in", compression = "lzw")
+  ggplot2::ggsave(filename = png_filename, plot = line_plot, dpi = dpi, height = 5, width = 7, units = "in")
 
   if (verbose) {
     cat("Plots saved to:", tiff_filename, "and", png_filename, "\n")
