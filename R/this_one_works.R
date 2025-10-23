@@ -8,14 +8,19 @@
 #' @param wrong_ids_path Optional path to a CSV of IDs to skip.
 #' @return A dataframe containing scraped physicians' data.
 #'
-#' @importFrom httr GET content
+#' @importFrom httr GET content use_proxy
 #' @importFrom jsonlite fromJSON
 #' @importFrom dplyr bind_rows
 #' @importFrom readr read_csv write_csv
 #'
-#' @examples
-#' # Call the function
-#' scrape_result <- scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 9150)
+#' @examplesIf interactive()
+#' # Running this helper requires a local Tor proxy and network access, so we
+#' # keep the example non-executing on automated checks.
+#' scrape_result <- scrape_physicians_data_with_tor(
+#'   startID = 9045999,
+#'   endID = 9046000,
+#'   torPort = 9150
+#' )
 #'
 scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_path = NULL) {
   cat("Starting scrape_physicians_data_with_tor...\n")
