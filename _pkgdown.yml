@@ -50,6 +50,7 @@ articles:
       - create_isochrones
       - geocode
       - get_census_data
+      - imotive-news
       - my-vignette
       - search_and_process_npi
       - validate_and_remove_invalid_npi
