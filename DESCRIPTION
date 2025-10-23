@@ -48,6 +48,7 @@ Imports:
     janitor,
     jsonlite,
     leaflet,
+    lwgeom,
     leaflet.extras,
     lifecycle,
     lme4,
