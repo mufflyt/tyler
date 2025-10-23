@@ -87,7 +87,9 @@ Suggests:
     pkgdown,
     rmarkdown,
     covr,
-    stats
+    stats,
+    postmastr,
+    provider
 VignetteBuilder: knitr
 VignetteEngine: knitr::rmarkdown
 Config/pkgdown/doc_url: https://mufflyt.github.io/tyler/
