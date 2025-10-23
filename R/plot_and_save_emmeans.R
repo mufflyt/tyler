@@ -7,6 +7,7 @@
 #' @param variable_of_interest A character string specifying the variable to be plotted on the x-axis. Typically, this would be the same as the `specs`.
 #' @param color_by A character string specifying the variable used to color the points and error bars. This could be a categorical variable like gender, insurance type, or academic affiliation.
 #' @param output_dir A character string specifying the directory where the plot will be saved. Defaults to "Ari/Figures".
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return Invisibly returns a list containing the estimated marginal means data (`data`) and the ggplot object (`plot`).
 #'
@@ -60,7 +61,7 @@
 #' }
 #'
 #' @export
-plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, color_by, output_dir = "Ari/Figures") {
+plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, color_by, output_dir = "Ari/Figures", verbose = FALSE) {
   # Load necessary packages
   if (!requireNamespace("emmeans", quietly = TRUE)) {
     stop("Package 'emmeans' is required but not installed.")
@@ -76,7 +77,9 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
 
   # Compute estimated marginal means
-  cat("Computing estimated marginal means...\n")
+  if (isTRUE(verbose)) {
+    message("Computing estimated marginal means...")
+  }
   edata <- tryCatch({
     emmeans::emmeans(object = model_object, specs = specs, type = "response") %>%
       as.data.frame()
@@ -85,15 +88,21 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
   })
 
   # Log the retrieved data
-  cat("Estimated data:\n")
-  print(edata)
+  if (isTRUE(verbose)) {
+    message("Estimated data:")
+    print(edata)
+  }
 
   # Check the range of the estimated data
   rate_range <- range(c(edata$asymp.LCL, edata$asymp.UCL), na.rm = TRUE)
-  cat("Range of estimated marginal means with CIs:", rate_range, "\n")
+  if (isTRUE(verbose)) {
+    message("Range of estimated marginal means with CIs: ", paste(rate_range, collapse = ", "))
+  }
 
   # Create the plot
-  cat("Creating the plot...\n")
+  if (isTRUE(verbose)) {
+    message("Creating the plot...")
+  }
   p <- ggplot2::ggplot(edata, ggplot2::aes_string(x = variable_of_interest, y = "rate")) +
     ggplot2::geom_point(ggplot2::aes_string(color = color_by), size = 2, stroke = 2,
                         position = ggplot2::position_dodge(width = 0.2)) +
@@ -114,10 +123,14 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
 
   # Save the plot with specific dimensions
   file_name <- paste0(output_dir, "/interaction_", variable_of_interest, "_comparison_plot_", timestamp, ".png")
-  cat("Saving plot to:", file_name, "\n")
+  if (isTRUE(verbose)) {
+    message("Saving plot to: ", file_name)
+  }
   ggplot2::ggsave(filename = file_name, plot = p, width = 10, height = 6, bg = "white")
 
-  cat("Plot saved successfully.\n")
+  if (isTRUE(verbose)) {
+    message("Plot saved successfully.")
+  }
 
   # Return the data and plot invisibly
   invisible(list(data = edata, plot = p))

@@ -6,6 +6,7 @@
 #' @param input_file A path to the input file containing points for which isochrones are to be retrieved.
 #' @param breaks A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).
 #' @return A dataframe containing the isochrones data with added 'name' column.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #' @importFrom dplyr bind_rows
 #' @importFrom readr write_rds
 #' @importFrom sf st_as_sf
@@ -19,7 +20,7 @@
 #' \dontrun{
 #' isochrones_data <- create_isochrones_for_dataframe("points.csv")
 #' }
-create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800), api_key = Sys.getenv("HERE_API_KEY"), output_dir = "data") {
+create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800), api_key = Sys.getenv("HERE_API_KEY"), output_dir = "data", verbose = FALSE) {
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 
@@ -29,6 +30,9 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.")
 
   hereR::set_key(api_key)
+  if (isTRUE(verbose)) {
+    message("Reading input file: ", input_file)
+  }
   dataframe <- easyr::read.any(input_file)
 
   # Check if "lat" and "long" columns exist
@@ -55,14 +59,16 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
 
   # Loop over the rows in the dataframe
   for (i in 1:nrow(dataframe)) {
-    print(i)
+    if (isTRUE(verbose)) {
+      message("Processing row ", i, " of ", nrow(dataframe))
+    }
 
     # Get the point for the current row
     point_temp <- dataframe[i, ]
 
     # Get isochrones for that point
     Sys.sleep(0.4)
-    isochrones_temp[[i]] <- create_isochrones(location = point_temp, range = breaks)
+    isochrones_temp[[i]] <- create_isochrones(location = point_temp, range = breaks, verbose = verbose)
     if (!is.null(isochrones_temp[[i]])) {
       # Flatten the list of isolines
       isochrones_temp[[i]] <- dplyr::bind_rows(isochrones_temp[[i]], .id = "column_label")

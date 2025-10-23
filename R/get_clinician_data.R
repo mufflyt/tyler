@@ -3,6 +3,7 @@
 #' This function retrieves clinician data for each valid NPI in the input dataframe.
 #'
 #' @param input_data Either a dataframe containing NPI numbers or a path to a CSV file.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A tibble with clinician data for the provided NPIs.
 #' @importFrom purrr map
@@ -14,7 +15,7 @@
 #' \dontrun{
 #' clinician_df <- retrieve_clinician_data("clinicians.csv")
 #' }
-retrieve_clinician_data <- function(input_data) {
+retrieve_clinician_data <- function(input_data, verbose = FALSE) {
   if (!requireNamespace("provider", quietly = TRUE)) {
     stop(
       "Package 'provider' is required for this function. ",
@@ -38,18 +39,21 @@ retrieve_clinician_data <- function(input_data) {
     stop("Input data must contain an 'npi' column.")
   }
 
-  cleaned_df <- validate_and_remove_invalid_npi(clinician_df)
+  cleaned_df <- validate_and_remove_invalid_npi(clinician_df, verbose = verbose)
   if (!nrow(cleaned_df)) {
     cleaned_df$npi_is_valid <- logical()
     return(cleaned_df)
   }
 
-  get_clinician_data <- function(npi) {
+  get_clinician_data <- function(npi, verbose = verbose) {
     npi <- as.character(npi)
     if (nchar(npi) != 10 || grepl("\\D", npi)) {
       return(NULL)
     }
 
+    if (isTRUE(verbose)) {
+      message("Retrieving clinician data for NPI ", npi)
+    }
     clinician_info <- provider::clinicians(npi = npi)
     if (is.null(clinician_info) || !nrow(clinician_info)) {
       return(NULL)
@@ -58,7 +62,7 @@ retrieve_clinician_data <- function(input_data) {
   }
 
   cleaned_df <- cleaned_df %>%
-    dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data))
+    dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data, verbose = verbose))
 
   has_results <- vapply(cleaned_df$clinician_data, function(x) {
     !is.null(x) && nrow(x) > 0

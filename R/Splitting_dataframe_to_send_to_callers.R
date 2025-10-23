@@ -11,6 +11,7 @@
 #' @param split_file_prefix Prefix for each split output file name (default is empty).
 #' @param recursive_create Logical indicating if directories should be created recursively (default is TRUE).
 #' @param insurance_order Vector of insurance types ordered by priority for call scheduling (default is c("Medicaid", "Blue Cross/Blue Shield")).
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @importFrom dplyr arrange sample_n mutate select
 #' @importFrom openxlsx write.xlsx
@@ -31,15 +32,22 @@
 
 split_and_save <- function(data_or_path, output_directory, lab_assistant_names, seed = 1978,
                            complete_file_prefix = "complete_non_split_version_", split_file_prefix = "",
-                           recursive_create = TRUE, insurance_order = c("Medicaid", "Blue Cross/Blue Shield")) {
+                           recursive_create = TRUE, insurance_order = c("Medicaid", "Blue Cross/Blue Shield"),
+                           verbose = FALSE) {
   # Validate input data or read from file path
   if (is.character(data_or_path)) {
     if (!base::file.exists(data_or_path)) {
       stop("File does not exist at the specified path: ", data_or_path)
     }
+    if (isTRUE(verbose)) {
+      message("Reading input data from file: ", data_or_path)
+    }
     data <- readr::read_csv(data_or_path)  # Assuming CSV for simplicity
   } else if (is.data.frame(data_or_path)) {
     data <- data_or_path
+    if (isTRUE(verbose)) {
+      message("Using provided dataframe with ", nrow(data), " rows")
+    }
   } else {
     stop("Data input must be either a dataframe or a valid file path.")
   }
@@ -89,7 +97,9 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
 
   tryCatch({
     openxlsx::write.xlsx(data, complete_output_file)
-    message("Saved unsplit and complete data to: ", complete_output_file)
+    if (isTRUE(verbose)) {
+      message("Saved unsplit and complete data to: ", complete_output_file)
+    }
   }, error = function(e) {
     stop("Error saving the complete file. Check if the output directory is writable.")
   })
@@ -101,7 +111,9 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
                              paste0(split_file_prefix, lab_assistant_name, "_", current_datetime, ".xlsx"))
     tryCatch({
       openxlsx::write.xlsx(splits[[lab_assistant_name]], output_file)
-      message("Saved split data for ", lab_assistant_name, " to: ", output_file)
+      if (isTRUE(verbose)) {
+        message("Saved split data for ", lab_assistant_name, " to: ", output_file)
+      }
     }, error = function(e) {
       stop("Error saving split data for ", lab_assistant_name, ". Check if the output directory is writable.")
     })

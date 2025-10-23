@@ -5,6 +5,7 @@
 #' @param location An sf object representing the location for which isolines will be calculated.
 #' @param range A numeric vector of time ranges in seconds.
 #' @param posix_time A POSIXct object representing the date and time of calculation. Default is "2023-10-20 08:00:00".
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A list of isolines for different time ranges, or an error message if the calculation fails.
 #'
@@ -29,13 +30,13 @@
 #' @export
 #' @importFrom memoise memoise
 #' @importFrom hereR set_freemium set_key set_verbose isoline
-create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S"), api_key = Sys.getenv("HERE_API_KEY")) {
+create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S"), api_key = Sys.getenv("HERE_API_KEY"), verbose = FALSE) {
 
-
-
-  cat("\033[Display setup instructions:\033[0m\n")
-  cat("\033[34mTo create isochrones for a specific point(s) use the following code:\033[0m\n")
-  cat("\033[34mtryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))\n")
+  if (isTRUE(verbose)) {
+    message("Display setup instructions:")
+    message("To create isochrones for a specific point(s) use the following code:")
+    message("tryLocationMemo(location = location, range = c(1800, 3600, 7200, 10800))")
+  }
 
   # # Check if location is an sf object
   # if (!base::inherits(location, "sf")) {
@@ -48,7 +49,7 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
 
   hereR::set_freemium(ans = FALSE)
   hereR::set_key(api_key)
-  hereR::set_verbose(TRUE)
+  hereR::set_verbose(isTRUE(verbose))
 
 
   # Initialize a list to store the isolines
@@ -72,7 +73,9 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
       )
 
       # Log the successful calculation
-      cat("Isoline successfully produced for range:", r, "seconds\n")
+      if (isTRUE(verbose)) {
+        message("Isoline successfully produced for range: ", r, " seconds")
+      }
 
       # Add a unique identifier to each row in isochrones_temp
       temp <- temp %>%
@@ -86,7 +89,9 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
     return(isolines_list)
   }, error = function(e) {
     # Handle any errors that occur during the calculation
-    cat("Error in tryLocationMemo:", e$message, "\n")
+    if (isTRUE(verbose)) {
+      message("Error in tryLocationMemo: ", e$message)
+    }
 
     # Return an error message as a list
     return(list(error = e$message))
@@ -94,5 +99,7 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
 
   # Return the result, whether it's isolines or an error message
   return(out)
-  cat("\tryLocation complete.\n")
+  if (isTRUE(verbose)) {
+    message("tryLocation complete.")
+  }
 })

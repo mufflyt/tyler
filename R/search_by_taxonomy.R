@@ -9,6 +9,7 @@
 #'   `write_snapshot` is `TRUE`. Defaults to `"data"`.
 #' @param notify Logical. If `TRUE`, play a notification sound when processing
 #'   completes (requires the optional `beepr` package). Defaults to `TRUE`.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #' @return A data frame with filtered NPI data based on the specified taxonomy description.
 #'
 #' @examples
@@ -28,7 +29,8 @@
 search_by_taxonomy <- function(taxonomy_to_search,
                                write_snapshot = TRUE,
                                snapshot_dir = "data",
-                               notify = TRUE) {
+                               notify = TRUE,
+                               verbose = FALSE) {
   if (missing(taxonomy_to_search) || is.null(taxonomy_to_search)) {
     return(dplyr::tibble())
   }
@@ -104,7 +106,9 @@ search_by_taxonomy <- function(taxonomy_to_search,
 
       npi_data <- dplyr::bind_rows(npi_data, data_taxonomy)
     }, error = function(e) {
-      message(sprintf("Error in search for %s:\n%s", taxonomy, e$message))
+      if (isTRUE(verbose)) {
+        message(sprintf("Error in search for %s:\n%s", taxonomy, e$message))
+      }
     })
   }
 
@@ -114,7 +118,9 @@ search_by_taxonomy <- function(taxonomy_to_search,
       filename <- file.path(snapshot_dir, paste0("search_taxonomy_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds"))
       readr::write_rds(npi_data, filename)
     }, error = function(e) {
-      message("Error saving data to file:\n", e$message)
+      if (isTRUE(verbose)) {
+        message("Error saving data to file:\n", e$message)
+      }
     })
   }
 

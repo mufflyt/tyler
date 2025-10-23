@@ -9,6 +9,7 @@
 #' @param drive_time_minutes The drive time value (in minutes) for which to calculate the
 #'   intersection.
 #' @param output_dir The directory where the intersection shapefile will be saved.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return None. The function saves the intersection shapefile and provides logging.
 #'
@@ -24,7 +25,8 @@
 calculate_intersection_overlap_and_save <- function(block_groups,
                                                     isochrones_joined,
                                                     drive_time_minutes,
-                                                    output_dir) {
+                                                    output_dir,
+                                                    verbose = FALSE) {
   # Parameter validation
   if (!inherits(block_groups, "sf")) {
     stop("Error: 'block_groups' must be an sf object.")
@@ -63,12 +65,16 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     sf::st_drop_geometry()
 
   # Log the progress
-  message(sprintf("Calculating intersection for %s minutes...", drive_time_minutes))
+  if (isTRUE(verbose)) {
+    message(sprintf("Calculating intersection for %s minutes...", drive_time_minutes))
+  }
 
   # Write the intersection shapefile
   output_shapefile <- file.path(output_dir, sprintf("intersect_%s_minutes.shp", drive_time_minutes))
   sf::st_write(sf::st_transform(intersect, 4326), output_shapefile, append = FALSE)
-  message("Intersection calculated and saved successfully.")
+  if (isTRUE(verbose)) {
+    message("Intersection calculated and saved successfully.")
+  }
 
   # Merge intersection area by GEOID on projected data
   block_groups_proj <- dplyr::left_join(block_groups_proj, intersect_df, by = "GEOID")
@@ -96,16 +102,22 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   summary_bg <- summary(non_missing_overlap)
 
   # Print the summary
-  message("Summary of Overlap Percentages for ", drive_time_minutes, " minutes:")
-  print(summary_bg)
+  if (isTRUE(verbose)) {
+    message("Summary of Overlap Percentages for ", drive_time_minutes, " minutes:")
+    print(summary_bg)
+  }
 
   # Calculate and print the 50th percentile of overlap percentages
   median <- round(stats::quantile(non_missing_overlap, probs = 0.5), 4) * 100
-  message("50th Percentile of Overlap Percentages: ", median, "%")
+  if (isTRUE(verbose)) {
+    message("50th Percentile of Overlap Percentages: ", median, "%")
+  }
 
   # Calculate and print the 75th percentile of overlap percentages
   p75 <- round(stats::quantile(non_missing_overlap, probs = 0.75), 4) * 100
-  message("75th Percentile of Overlap Percentages: ", p75, "%")
+  if (isTRUE(verbose)) {
+    message("75th Percentile of Overlap Percentages: ", p75, "%")
+  }
 
   if (requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)

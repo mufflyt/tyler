@@ -4,6 +4,7 @@
 #'
 #' @param data_frame A data frame containing the categorical variable.
 #' @param variable A character string representing the name of the categorical variable within `data_frame`.
+#' @param verbose Logical; if TRUE, prints status messages during calculation.
 #'
 #' @return A data frame containing the most common value and its count, along with the percentage of the total count that it represents.
 #'
@@ -31,7 +32,7 @@
 #' @import dplyr
 #' @importFrom rlang sym
 #' @export
-calcpercentages <- function(data_frame, variable) {
+calcpercentages <- function(data_frame, variable, verbose = FALSE) {
   variable <- as.character(variable)  # Ensure the variable name is a string
 
   summary_df <- data_frame %>%

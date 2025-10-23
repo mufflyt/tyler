@@ -3,6 +3,7 @@
 #' This function loads the hospital referral region shapefile and optionally removes Hawaii and Alaska.
 #'
 #' @param remove_HI_AK Logical, should Hawaii and Alaska be removed? Default is TRUE.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #' @return An sf object containing the hospital referral region data.
 #' @importFrom sf read_sf st_transform
 #' @importFrom dplyr filter
@@ -10,11 +11,15 @@
 #' @export
 #' @examples
 #' hrr()
-hrr <- function(remove_HI_AK = TRUE) {
-  cat("Loading necessary packages...\n")
+hrr <- function(remove_HI_AK = TRUE, verbose = FALSE) {
+  if (isTRUE(verbose)) {
+    message("Loading necessary packages...")
+  }
 
   # Load the hospital referral region shapefile
-  cat("Getting the hospital referral region shapefile...\n")
+  if (isTRUE(verbose)) {
+    message("Getting the hospital referral region shapefile...")
+  }
   hrr_path <- system.file(
     "extdata",
     "hrr-shapefile/Hrr98Bdry_AK_HI_unmodified.shp",
@@ -30,9 +35,11 @@ hrr <- function(remove_HI_AK = TRUE) {
   }
 
   # Provide information about the function's purpose
-  cat("Hospital Referral Region shapefile loaded.\n")
-  cat("This function creates an sf file of hospital referral regions.\n")
-  cat("For more information: https://data.dartmouthatlas.org/supplemental/...\n")
+  if (isTRUE(verbose)) {
+    message("Hospital Referral Region shapefile loaded.")
+    message("This function creates an sf file of hospital referral regions.")
+    message("For more information: https://data.dartmouthatlas.org/supplemental/...")
+  }
 
   return(hrr)
 }
@@ -44,6 +51,7 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @param physician_sf An sf object containing physician data with coordinates.
 #' @param trait_map A string specifying the trait map (default is "all").
 #' @param honey_map A string specifying the honey map (default is "all").
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #' @return Invisibly returns the ggplot object of the generated map.
 #' @importFrom sf sf_use_s2 st_transform st_make_grid st_sf st_intersection st_join
 #' @importFrom dplyr mutate group_by summarize filter
@@ -56,19 +64,23 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' \dontrun{
 #' hrr_generate_maps(physician_sf)
 #' }
-hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all") {
+hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all", verbose = FALSE) {
   sf::sf_use_s2(FALSE)
 
   # Load USA shapefile
-  cat("Loading USA shapefile...\n")
+  if (isTRUE(verbose)) {
+    message("Loading USA shapefile...")
+  }
   usa <- rnaturalearth::ne_countries(country = "United States of America", returnclass = "sf")
   usa <- sf::st_transform(usa, 4326)
 
   # Generate the HRR map
-  hrr_map <- hrr()
+  hrr_map <- hrr(verbose = verbose)
 
   # Intersect honeycomb grid with physician data to get physician counts
-  cat("Intersecting honeycomb grid with physician data...\n")
+  if (isTRUE(verbose)) {
+    message("Intersecting honeycomb grid with physician data...")
+  }
   honeycomb_grid_sf <- sf::st_make_grid(usa, c(0.3, 0.3), what = "polygons", square = FALSE) %>%
     sf::st_sf() %>%
     dplyr::mutate(grid_id = row_number()) %>%
@@ -87,7 +99,9 @@ hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all"
     dplyr::filter(!is.na(physician_count))
 
   # Create the map with honeycomb and HRR map using ggplot2
-  cat("Creating the map...\n")
+  if (isTRUE(verbose)) {
+    message("Creating the map...")
+  }
   map_ggplot <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = hrr_map, fill = "#D3D3D3", color = "darkblue", size = 1.5) +
     ggplot2::geom_sf(data = honeycomb_grid_with_physicians, aes(fill = physician_count), color = NA) +
@@ -132,10 +146,14 @@ hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all"
     ggplot2::theme(panel.border = ggplot2::element_rect(color = "darkblue", fill = NA, size = 1.5))
 
   # Print the plot
-  print(map_ggplot)
+  if (isTRUE(verbose)) {
+    print(map_ggplot)
+  }
 
   # Save the map in various formats
-  cat("Saving the map...\n")
+  if (isTRUE(verbose)) {
+    message("Saving the map...")
+  }
   ggplot2::ggsave(filename = paste0("figures/hexmap/hexmap_figures/", trait_map, "_", honey_map, "_honey.tiff"), plot = map_ggplot, width = 10, height = 6, dpi = 800)
 
   invisible(map_ggplot)

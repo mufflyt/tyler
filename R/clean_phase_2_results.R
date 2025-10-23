@@ -5,6 +5,7 @@
 #' @param data A data frame whose columns need renaming.
 #' @param target_strings A vector of substrings to search for within column names.
 #' @param new_names A vector of new names corresponding to the target strings.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #' @return A data frame with renamed columns.
 #' @export
 #' @import dplyr
@@ -32,13 +33,15 @@
 #'                                   target_strings = c("doc_information", "doctor_notes"),
 #'                                   new_names = c("doctor_info", "notes"))
 #' print(df)
-rename_columns_by_substring <- function(data, target_strings, new_names) {
+rename_columns_by_substring <- function(data, target_strings, new_names, verbose = FALSE) {
   # Initial checks and setup
   if (length(target_strings) != length(new_names)) {
     stop("target_strings and new_names must have the same length.")
   }
 
-  cat("\n--- Starting to search and rename columns based on target substrings ---\n")
+  if (isTRUE(verbose)) {
+    message("--- Starting to search and rename columns based on target substrings ---")
+  }
   # Loop over all target strings
   for (i in seq_along(target_strings)) {
     # Identify columns that contain the target string
@@ -47,7 +50,9 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 
     # Detailed log of what matches were found
     if (any(matches)) {
-      cat(sprintf("Found %d columns matching '%s': %s\n", sum(matches), target_strings[i], paste(matched_cols, collapse = ", ")))
+      if (isTRUE(verbose)) {
+        message(sprintf("Found %d columns matching '%s': %s", sum(matches), target_strings[i], paste(matched_cols, collapse = ", ")))
+      }
       # Warn if more than one match is found
       if (length(matched_cols) > 1) {
         warning(sprintf("Multiple columns match '%s'. Only the first (%s) will be renamed to '%s'.\n", target_strings[i], matched_cols[1], new_names[i]))
@@ -57,10 +62,14 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
     } else {
       warning(sprintf("No columns found containing '%s'.\n", target_strings[i]))
     }
-    cat("\n")  # Adding a blank line for better separation
+    if (isTRUE(verbose)) {
+      message(" ")  # separation
+    }
   }
 
-  cat("\n--- Column renaming complete. Updated column names: ", paste(names(data), collapse = ", "), "---\n")
+  if (isTRUE(verbose)) {
+    message("--- Column renaming complete. Updated column names: ", paste(names(data), collapse = ", "), " ---")
+  }
   return(data)
 }
 
@@ -72,6 +81,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' @param required_strings Vector of substrings for which to search in column names.
 #' @param standard_names Vector of new names to apply to the matched columns.
 #' @return A data frame with processed data.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #' @export
 #' @importFrom readr read_csv write_csv
 #' @importFrom dplyr filter mutate
@@ -92,36 +102,46 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' standard_names <- c("doctor_info", "patient_contact_info")
 #' cleaned_df <- clean_phase_2_data(df, required_strings, standard_names)
 #' print(cleaned_df)
-clean_phase_2_data <- function(data_or_path, required_strings, standard_names) {
+clean_phase_2_data <- function(data_or_path, required_strings, standard_names, verbose = FALSE) {
   # Data loading and initial checks
   if (is.character(data_or_path)) {
     if (!file.exists(data_or_path)) {
       stop("File does not exist at the specified path: ", data_or_path)
     }
     data <- readr::read_csv(data_or_path, show_col_types = FALSE)
-    message("Data read from file at: ", data_or_path)
+    if (isTRUE(verbose)) {
+      message("Data read from file at: ", data_or_path)
+    }
   } else if (is.data.frame(data_or_path)) {
     data <- data_or_path
-    message("Data loaded from provided dataframe.")
+    if (isTRUE(verbose)) {
+      message("Data loaded from provided dataframe.")
+    }
   } else {
     stop("Data input must be either a dataframe or a valid file path.")
   }
 
   # Clean and standardize column names
   data <- janitor::clean_names(data)
-  message("Columns have been cleaned to snake case format.")
+  if (isTRUE(verbose)) {
+    message("Columns have been cleaned to snake case format.")
+  }
 
   # Apply the renaming function with detailed logging
-  data <- rename_columns_by_substring(data, required_strings, standard_names)
+  data <- rename_columns_by_substring(data, required_strings, standard_names, verbose = verbose)
 
   # Additional data processing
-  message("Proceeding with additional data processing steps...")
+  if (isTRUE(verbose)) {
+    message("Proceeding with additional data processing steps...")
+  }
 
   # Saving the cleaned data
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
   output_file_path <- paste0("cleaned_phase_2_data_", current_datetime, ".csv")
   readr::write_csv(data, output_file_path)
-  message("Cleaned data successfully saved to: ", output_file_path)
+  if (isTRUE(verbose)) {
+    message("Cleaned data successfully saved to: ", output_file_path)
+  }
 
   return(data)
 }

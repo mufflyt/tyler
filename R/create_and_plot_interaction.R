@@ -9,6 +9,7 @@
 #' @param random_intercept A character string specifying the variable to be used as the random intercept in the model (e.g., "city").
 #' @param output_path A character string specifying the directory where the interaction plot will be saved.
 #' @param resolution An integer specifying the resolution (in DPI) for saving the plot. Defaults to 100.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A list containing the fitted GLMM (`model`) and the summarized data used for the effects plot (`effects_plot_data`).
 #'
@@ -59,7 +60,7 @@
 #'
 #' @import lme4 dplyr ggplot2
 #' @export
-create_and_plot_interaction <- function(data_path, response_variable, variable_of_interest, interaction_variable, random_intercept, output_path, resolution = 100) {
+create_and_plot_interaction <- function(data_path, response_variable, variable_of_interest, interaction_variable, random_intercept, output_path, resolution = 100, verbose = FALSE) {
   # Read the data
   data <- readRDS(data_path)
 
@@ -68,14 +69,15 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
     stop("Data must be a data.frame")
   }
 
-  # Log inputs
-  cat("Inputs:\n")
-  cat("response_variable:", response_variable, "\n")
-  cat("variable_of_interest:", variable_of_interest, "\n")
-  cat("interaction_variable:", interaction_variable, "\n")
-  cat("random_intercept:", random_intercept, "\n")
-  cat("output_path:", output_path, "\n")
-  cat("resolution:", resolution, "\n\n")
+  if (isTRUE(verbose)) {
+    message("Inputs:")
+    message("response_variable: ", response_variable)
+    message("variable_of_interest: ", variable_of_interest)
+    message("interaction_variable: ", interaction_variable)
+    message("random_intercept: ", random_intercept)
+    message("output_path: ", output_path)
+    message("resolution: ", resolution)
+  }
 
   # Rename the columns for simplicity
   data <- data %>%
@@ -96,36 +98,44 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
   # Remove any rows with NA values
   data <- na.omit(data)
 
-  # Log a data summary without truncating rows
-  cat("Data summary after renaming and type conversion:\n")
-  cat("Rows:", nrow(data), "Columns:", ncol(data), "\n")
-  cat("Column classes:\n")
-  print(vapply(data, function(x) paste(class(x), collapse = ", "), character(1)))
-  cat("\n\n")
+  if (isTRUE(verbose)) {
+    message("Data summary after renaming and type conversion:")
+    message("Rows: ", nrow(data), " Columns: ", ncol(data))
+    message("Column classes:")
+    print(vapply(data, function(x) paste(class(x), collapse = ", "), character(1)))
+  }
 
   # Construct the model formula
   interaction_term <- "int_var * var_interest"
   model_formula <- as.formula(paste("response_var ~", interaction_term, "+ (1 |", random_intercept, ")"))
 
-  # Log model formula
-  cat("Model formula:", deparse(model_formula), "\n\n")
+  if (isTRUE(verbose)) {
+    message("Model formula: ", deparse(model_formula))
+  }
 
   # Fit the model with interaction
-  cat("Fitting the model...\n")
+  if (isTRUE(verbose)) {
+    message("Fitting the model...")
+  }
   glmer_model <- lme4::glmer(model_formula,
                              data = data,
                              family = poisson(link = "log"),
                              nAGQ = 0,
                              verbose = 0L)
-  cat("Model fitted successfully.\n\n")
+  if (isTRUE(verbose)) {
+    message("Model fitted successfully.")
+  }
 
   # Log model summary
-  cat("Model summary:\n")
-  print(summary(glmer_model))
-  cat("\n\n")
+  if (isTRUE(verbose)) {
+    message("Model summary:")
+    print(summary(glmer_model))
+  }
 
   # Create the effects plot manually
-  cat("Creating effects plot...\n")
+  if (isTRUE(verbose)) {
+    message("Creating effects plot...")
+  }
   pred_data <- data %>%
     dplyr::mutate(pred = predict(glmer_model, type = "response"))
 
@@ -133,24 +143,34 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
     group_by(int_var, var_interest) %>%
     summarise(mean_pred = mean(pred), .groups = 'drop')
 
-  ggplot(plot_data, aes(x = int_var, y = mean_pred, color = var_interest)) +
+  plot_obj <- ggplot(plot_data, aes(x = int_var, y = mean_pred, color = var_interest)) +
     geom_point() +
     geom_line(aes(group = var_interest)) +
     labs(title = "Interaction Effect Plot", y = response_variable, x = interaction_variable) +
     theme_minimal()
 
+  if (isTRUE(verbose)) {
+    print(plot_obj)
+  }
+
   # Save the plot
   plot_filename <- file.path(output_path, paste0("interaction_", interaction_variable, "_", variable_of_interest, ".png"))
-  cat("Saving effects plot to:", plot_filename, "\n")
-  ggsave(plot_filename, width = 6, height = 4, dpi = resolution)
-  cat("Effects plot saved successfully.\n\n")
+  if (isTRUE(verbose)) {
+    message("Saving effects plot to: ", plot_filename)
+  }
+  ggsave(plot_filename, plot = plot_obj, width = 6, height = 4, dpi = resolution)
+  if (isTRUE(verbose)) {
+    message("Effects plot saved successfully.")
+  }
 
   # Log outputs
-  cat("Outputs:\n")
-  print(glmer_model)
-  print("Effects plot object:\n")
-  print(plot_data)
+  if (isTRUE(verbose)) {
+    message("Outputs:")
+    print(glmer_model)
+    message("Effects plot data:")
+    print(plot_data)
+  }
 
   # Return the model and effects plot data
-  return(list(model = glmer_model, effects_plot_data = plot_data))
+  return(list(model = glmer_model, effects_plot_data = plot_data, plot = plot_obj))
 }

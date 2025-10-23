@@ -6,6 +6,7 @@
 #' @param bg_data A SpatialPolygonsDataFrame representing block group data.
 #' @param isochrones_data A SpatialPolygonsDataFrame representing isochrone data.
 #' @param output_dir Directory path for exporting the map files. Default is "figures/".
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return None
 #'
@@ -25,7 +26,7 @@
 #'
 #' @family mapping
 #' @export
-create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir = "figures/") {
+create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir = "figures/", verbose = FALSE) {
   bg_data <- sf::st_transform(bg_data, 4326)
   pal <- leaflet::colorNumeric("Purples", domain = bg_data$overlap)
 
@@ -70,9 +71,13 @@ create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir 
 
   # Export the map to HTML
   htmlwidgets::saveWidget(widget = map, file = html_file, selfcontained = FALSE)
-  cat("Map saved as HTML:", html_file, "\n")
+  if (isTRUE(verbose)) {
+    message("Map saved as HTML: ", html_file)
+  }
 
   # Export the map as a PNG image
   webshot::webshot(html_file, file = png_file)
-  cat("Map saved as PNG:", png_file, "\n")
+  if (isTRUE(verbose)) {
+    message("Map saved as PNG: ", png_file)
+  }
 }

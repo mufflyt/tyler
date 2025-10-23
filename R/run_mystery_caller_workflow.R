@@ -33,6 +33,7 @@
 #'   [search_and_process_npi()].
 #' @param all_states Optional character vector of all states to supply to
 #'   [states_where_physicians_were_NOT_contacted()].
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A list containing intermediate artefacts from each workflow stage:
 #'   `roster`, `validated_roster`, `cleaned_phase1`, `cleaned_phase2`,
@@ -65,10 +66,18 @@ run_mystery_caller_workflow <- function(
     "state", "npi", "name"
   ),
   npi_search_args = list(),
-  all_states = NULL
+  all_states = NULL,
+  verbose = FALSE
 ) {
+  if (isTRUE(verbose)) {
+    message("Starting mystery caller workflow...")
+  }
+
   roster_taxonomy <- if (!is.null(taxonomy_terms) && length(taxonomy_terms)) {
-    search_by_taxonomy(taxonomy_terms)
+    if (isTRUE(verbose)) {
+      message("Searching providers by taxonomy...")
+    }
+    search_by_taxonomy(taxonomy_terms, verbose = verbose)
   } else {
     tibble::tibble()
   }
@@ -82,38 +91,52 @@ run_mystery_caller_workflow <- function(
       if (!all(c("first", "last") %in% names(name_data))) {
         stop("`name_data` must contain columns named `first` and `last`.")
       }
-      args <- utils::modifyList(list(data = name_data), npi_search_args)
+      args <- utils::modifyList(list(data = name_data, verbose = verbose), npi_search_args)
       roster_names <- do.call(search_and_process_npi, args)
     }
   }
 
   combined_roster <- dplyr::bind_rows(roster_taxonomy, roster_names)
+  if (isTRUE(verbose)) {
+    message("Combined roster contains ", nrow(combined_roster), " records")
+  }
   if ("npi" %in% names(combined_roster) && nrow(combined_roster)) {
     combined_roster <- dplyr::distinct(combined_roster, npi, .keep_all = TRUE)
   }
 
   validated_roster <- combined_roster
   if ("npi" %in% names(combined_roster) && nrow(combined_roster)) {
-    validated_roster <- validate_and_remove_invalid_npi(combined_roster)
+    if (isTRUE(verbose)) {
+      message("Validating roster NPIs...")
+    }
+    validated_roster <- validate_and_remove_invalid_npi(combined_roster, verbose = verbose)
   }
 
-  cleaned_phase1 <- clean_phase_1_results(phase1_data, output_directory = phase1_output_directory)
+  if (isTRUE(verbose)) {
+    message("Cleaning Phase 1 data...")
+  }
+  cleaned_phase1 <- clean_phase_1_results(phase1_data, output_directory = phase1_output_directory, verbose = verbose)
   split_and_save(
     cleaned_phase1,
     output_directory = output_directory,
     lab_assistant_names = lab_assistant_names,
-    insurance_order = split_insurance_order
+    insurance_order = split_insurance_order,
+    verbose = verbose
   )
 
+  if (isTRUE(verbose)) {
+    message("Cleaning Phase 2 data...")
+  }
   cleaned_phase2 <- clean_phase_2_data(
     data_or_path = phase2_data,
     required_strings = phase2_required_strings,
-    standard_names = phase2_standard_names
+    standard_names = phase2_standard_names,
+    verbose = verbose
   )
 
   coverage_summary <- NULL
   if ("state" %in% names(cleaned_phase2)) {
-    coverage_summary <- states_where_physicians_were_NOT_contacted(cleaned_phase2, all_states = all_states)
+    coverage_summary <- states_where_physicians_were_NOT_contacted(cleaned_phase2, all_states = all_states, verbose = verbose)
   }
 
   if (!dir.exists(dirname(quality_check_path))) {
@@ -122,7 +145,11 @@ run_mystery_caller_workflow <- function(
 
   quality_check_table <- NULL
   if (all(c("npi", "name") %in% names(cleaned_phase2))) {
-    quality_check_table <- save_quality_check_table(cleaned_phase2, quality_check_path)
+    quality_check_table <- save_quality_check_table(cleaned_phase2, quality_check_path, verbose = verbose)
+  }
+
+  if (isTRUE(verbose)) {
+    message("Mystery caller workflow completed.")
   }
 
   list(

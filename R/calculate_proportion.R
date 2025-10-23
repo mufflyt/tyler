@@ -5,6 +5,7 @@
 #'
 #' @param data A data frame containing the categorical variable.
 #' @param variable_name The name of the categorical variable for which proportions are calculated, passed as an unquoted expression.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A data frame with two columns: `n` (the count of each level) and `percent` (the percentage of the total count represented by each level).
 #'
@@ -28,14 +29,21 @@
 #' print(result)
 #'
 #' @import dplyr
+#' @importFrom rlang enquo as_label
 #' @export
-calculate_proportion <- function(data, variable_name) {
+calculate_proportion <- function(data, variable_name, verbose = FALSE) {
+  var_expr <- rlang::enquo(variable_name)
+
   tabyl_result <- data %>%
-    count({{ variable_name }}, name = "n") %>%
+    count(!!var_expr, name = "n") %>%
     mutate(percent = n / sum(n) * 100)
 
   tabyl_result <- tabyl_result %>%
     mutate(across(where(is.numeric), round, 2))
+
+  if (isTRUE(verbose)) {
+    message("Calculated proportions for variable: ", rlang::as_label(var_expr))
+  }
 
   return(tabyl_result)
 }

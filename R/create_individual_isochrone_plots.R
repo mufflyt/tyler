@@ -6,6 +6,7 @@
 #' @param isochrones An sf object containing isochrone data.
 #' @param drive_times A vector of unique drive times (in minutes) for which maps and shapefiles will be created.
 #' @return None. The function creates and saves individual maps and shapefiles.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @importFrom sf st_union st_sf st_transform st_write
 #' @importFrom leaflet addProviderTiles addPolygons
@@ -32,24 +33,23 @@
 #'
 #' @family mapping
 #' @export
-create_individual_isochrone_plots <- function(isochrones, drive_times) {
-  # Display setup instructions
-  cat("\033[34mInstructions:\033[0m\n")
-  cat("\033[34mTo use this function, follow the example code below:\033[0m\n")
-  cat("\n")
-  cat("\033[34m# Load isochrone data:\033[0m\n")
-  cat("\033[34misochrones <- readRDS(\"path_to_isochrones.rds\")\n")
-  cat("\n")
-  cat("\033[34m# List of unique drive times for which you want to create plots and shapefiles:\033[0m\n")
-  cat("\033[34mdrive_times <- unique(isochrones$drive_time)\n")
-  cat("\n")
-  cat("\033[34m# Create individual isochrone maps and shapefiles:\033[0m\n")
-  cat("\033[34mcreate_individual_isochrone_plots(isochrones, drive_times)\n")
-
-  message("Creating individual isochrone plots and shapefiles...")
+create_individual_isochrone_plots <- function(isochrones, drive_times, verbose = FALSE) {
+  if (isTRUE(verbose)) {
+    message("Instructions:")
+    message("To use this function, follow the example code below:")
+    message("# Load isochrone data:")
+    message('isochrones <- readRDS("path_to_isochrones.rds")')
+    message("# List of unique drive times for which you want to create plots and shapefiles:")
+    message("drive_times <- unique(isochrones$drive_time)")
+    message("# Create individual isochrone maps and shapefiles:")
+    message("create_individual_isochrone_plots(isochrones, drive_times)")
+    message("Creating individual isochrone plots and shapefiles...")
+  }
 
   for (time in drive_times) {
-    message(paste("Processing isochrones for", time, "minutes..."))
+    if (isTRUE(verbose)) {
+      message("Processing isochrones for ", time, " minutes...")
+    }
 
     # Filter isochrones for the specified drive time
     isochrones_filtered <- dplyr::filter(isochrones, drive_time == time)
@@ -73,7 +73,9 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
     # Create a base map
     my_map <- tyler::create_base_map("")
 
-    message(paste("Creating a Leaflet map of isochrones for", time, "minutes..."))
+    if (isTRUE(verbose)) {
+      message("Creating a Leaflet map of isochrones for ", time, " minutes...")
+    }
 
     # Create the Leaflet plot
     isochrone_map <- my_map %>%
@@ -92,17 +94,25 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
     output_file <- paste0("figures/isochrone_maps/isochrone_map_", time, "_minutes.html")
     htmlwidgets::saveWidget(isochrone_map, file = output_file)
 
-    message(paste("Saved isochrone map for", time, "minutes as:", output_file))
+    if (isTRUE(verbose)) {
+      message("Saved isochrone map for ", time, " minutes as: ", output_file)
+    }
 
     # Write the shapefile for the current drive time
     output_shapefile <- paste0("data/shp/isochrone_files/isochrones_", time, "_minutes.shp")
     sf::st_write(isochrones_sf, output_shapefile, append = FALSE)
 
-    message(paste("Saved shapefile for", time, "minutes as:", output_shapefile))
+    if (isTRUE(verbose)) {
+      message("Saved shapefile for ", time, " minutes as: ", output_shapefile)
+    }
 
-  message(paste("Processed isochrones for", time, "minutes."))
+    if (isTRUE(verbose)) {
+      message("Processed isochrones for ", time, " minutes.")
+    }
   }
 
-  message("Individual isochrone plots and shapefiles creation completed.")
+  if (isTRUE(verbose)) {
+    message("Individual isochrone plots and shapefiles creation completed.")
+  }
   beepr::beep(2)
 }

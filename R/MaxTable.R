@@ -4,6 +4,7 @@
 #'
 #' @param InVec Input vector, expected to be a factor variable or convertible to a factor.
 #' @param mult Logical value indicating whether to return multiple maximum values or just the first one. Default is FALSE.
+#' @param verbose Logical; if TRUE, prints status messages. Default is FALSE.
 #' @return If \code{mult} is FALSE, returns the level corresponding to the maximum value of the factor variable.
 #'         If \code{mult} is TRUE, returns a character vector containing all the levels with the maximum value.
 #' @examples
@@ -12,7 +13,7 @@
 #' max_table(vec, mult = TRUE) # Returns c("A", "B")
 #' @export
 
-max_table <- function(InVec, mult = FALSE) {
+max_table <- function(InVec, mult = FALSE, verbose = FALSE) {
   if (length(InVec) == 0) {
     return(character(0))
   }

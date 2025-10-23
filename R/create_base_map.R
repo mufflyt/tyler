@@ -8,6 +8,7 @@
 #' @param jitter_range The range for adding jitter to latitude and longitude coordinates.
 #' @param color_palette The color palette for ACOG district colors.
 #' @param popup_var The variable to use for popup text.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #' @return Invisibly returns the Leaflet map object.
 #'
 #' @importFrom viridis viridis
@@ -36,21 +37,29 @@
 #'
 #' @family mapping
 #' @export
-create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
+create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name", verbose = FALSE) {
   # Add jitter to latitude and longitude coordinates
   jittered_physician_data <- dplyr::mutate(physician_data,
                                            lat = lat + runif(n()) * jitter_range,
                                            long = long + runif(n()) * jitter_range)
 
   # Create a base map using tyler::create_base_map()
-  cat("Setting up the base map...\n")
+  if (isTRUE(verbose)) {
+    message("Setting up the base map...")
+  }
   base_map <- tyler::create_base_map("Physician Dot Map")
-  cat("Map setup complete.\n")
+  if (isTRUE(verbose)) {
+    message("Map setup complete.")
+  }
 
   # Generate ACOG districts using tyler::generate_acog_districts_sf()
-  cat("Generating the ACOG district boundaries...\n")
+  if (isTRUE(verbose)) {
+    message("Generating the ACOG district boundaries...")
+  }
   acog_districts <- tyler::generate_acog_districts_sf()
-  cat("ACOG district boundaries generated.\n")
+  if (isTRUE(verbose)) {
+    message("ACOG district boundaries generated.")
+  }
 
   # Define the number of ACOG districts
   num_acog_districts <- 11
@@ -96,11 +105,15 @@ create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.0
 
   # Save the Leaflet map as an HTML file
   htmlwidgets::saveWidget(widget = dot_map, file = html_file, selfcontained = TRUE)
-  cat("Leaflet map saved as HTML:", html_file, "\n")
+  if (isTRUE(verbose)) {
+    message("Leaflet map saved as HTML: ", html_file)
+  }
 
   # Capture and save a screenshot as PNG
   webshot::webshot(html_file, file = png_file)
-  cat("Screenshot saved as PNG:", png_file, "\n")
+  if (isTRUE(verbose)) {
+    message("Screenshot saved as PNG: ", png_file)
+  }
 
   # Return the Leaflet map invisibly
   invisible(dot_map)

@@ -3,13 +3,14 @@
 #' This function creates a Leaflet BASE map with specific configurations, including the base tile layer, scale bar,
 #' default view settings, and layers control.
 #'
+#' @param verbose Logical; if TRUE, prints status messages. Default is FALSE.
 #' @return Invisibly returns the Leaflet map object.
 #' @importFrom leaflet leaflet addProviderTiles clearBounds clearMarkers addScaleBar setView addLayersControl addTiles
 #' @family mapping
 #' @export
 #' @examples
 #' map <- generate_leaflet_base_map()
-generate_leaflet_base_map <- function() {
+generate_leaflet_base_map <- function(verbose = FALSE) {
   # Create a new Leaflet map object
   map <- leaflet::leaflet() %>%
     # Add CartoDB Voyager tiles as the base tile layer

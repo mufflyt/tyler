@@ -59,7 +59,7 @@ clean_phase_1_results <- function(phase1_data,
     stop("Required packages are not installed. Please install them using install.packages().")
   }
 
-  notify <- function(...) {
+  notify <- function(..., verbose = verbose) {
     if (isTRUE(verbose)) {
       cat(...)
     }
@@ -96,7 +96,7 @@ clean_phase_1_results <- function(phase1_data,
   }
 
   notify("Handling missing NPI numbers...\n")
-  generate_random_ids <- function(n) {
+  generate_random_ids <- function(n, verbose = verbose) {
     if (!n) {
       return(numeric(0))
     }

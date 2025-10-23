@@ -8,6 +8,7 @@
 #'                  isochrones will be calculated.
 #'
 #' @return Prints messages indicating errors, if any, during isochrone retrieval.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @details This function uses the `hereR` package to calculate isochrones based on the
 #'          provided geographic coordinates. It retrieves isochrones for each location in
@@ -33,7 +34,7 @@
 #' #   dplyr::filter(!id %in% error_rows)
 #'
 
-test_and_process_isochrones <- function(input_file) {
+test_and_process_isochrones <- function(input_file, verbose = FALSE) {
   # Parameter validation
   stopifnot(is.data.frame(input_file), all(c("lat", "long") %in% colnames(input_file)))
 
@@ -74,7 +75,9 @@ test_and_process_isochrones <- function(input_file) {
         )
       },
       error = function(e) {
-        message("Error processing row ", i, ": ", e$message)
+        if (isTRUE(verbose)) {
+          message("Error processing row ", i, ": ", e$message)
+        }
         return(NULL)
       }
     )
@@ -88,9 +91,13 @@ test_and_process_isochrones <- function(input_file) {
   error_rows <- unlist(error_rows, use.names = FALSE)
 
   if (length(error_rows) > 0) {
-    message("Rows with errors: ", paste(error_rows, collapse = ", "))
+    if (isTRUE(verbose)) {
+      message("Rows with errors: ", paste(error_rows, collapse = ", "))
+    }
   } else {
-    message("No errors found.")
+    if (isTRUE(verbose)) {
+      message("No errors found.")
+    }
   }
   beepr::beep(2)
 }
@@ -107,6 +114,7 @@ test_and_process_isochrones <- function(input_file) {
 #' @param chunk_size The number of rows to process in each chunk. Default is 25.
 #'
 #' @return An sf (simple features) data frame containing isochrone polygons.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @details This function uses the `hereR` package to calculate isochrones based on the
 #'          provided geographic coordinates. It retrieves isochrones for each location in
@@ -129,7 +137,7 @@ test_and_process_isochrones <- function(input_file) {
 #'              layer = "isochrones", driver = "ESRI Shapefile", quiet = FALSE)
 #'
 
-process_and_save_isochrones <- function(input_file, chunk_size = 25) {
+process_and_save_isochrones <- function(input_file, chunk_size = 25, verbose = FALSE) {
   # Parameter validation
   stopifnot(is.data.frame(input_file), all(c("lat", "long") %in% colnames(input_file)),
             is.numeric(chunk_size), chunk_size > 0)
@@ -174,7 +182,9 @@ process_and_save_isochrones <- function(input_file, chunk_size = 25) {
         )
       },
       error = function(e) {
-        message("Error processing chunk ", i, ": ", e$message)
+        if (isTRUE(verbose)) {
+          message("Error processing chunk ", i, ": ", e$message)
+        }
         return(NULL)
       }
     )

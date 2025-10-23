@@ -3,6 +3,7 @@
 #' This function calculates and returns a sentence that describes the most common gender, specialty, training, and academic affiliation in the provided dataset.
 #'
 #' @param data A data frame containing the columns `gender`, `specialty`, `Provider.Credential.Text`, and `academic_affiliation`.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A character string summarizing the most common gender, specialty, training, and academic affiliation along with their respective proportions.
 #'
@@ -41,9 +42,9 @@
 #'
 #' @import dplyr
 #' @export
-most_common_gender_training_academic <- function(data) {
+most_common_gender_training_academic <- function(data, verbose = FALSE) {
   # Helper function to get the most common value and proportion
-  calculate_proportion <- function(input_data, column) {
+  calculate_proportion <- function(input_data, column, verbose = verbose) {
     input_data <- input_data %>% filter(!is.na(!!sym(column)))
     total_count <- nrow(input_data)
     if (total_count == 0) {
@@ -54,26 +55,29 @@ most_common_gender_training_academic <- function(data) {
       dplyr::arrange(desc(n), !!sym(column)) %>%
       dplyr::slice(1)  # Select the first row after sorting by count and column
     proportion <- round((most_common$n / total_count) * 100, 1)
+    if (isTRUE(verbose)) {
+      message("Most common value for ", column, ": ", most_common[[1]], " (", proportion, "%)")
+    }
     list(value = most_common[[1]], proportion = proportion)
   }
 
   # Most common gender
-  gender_info <- calculate_proportion(data, "gender")
+  gender_info <- calculate_proportion(data, "gender", verbose = verbose)
   most_gender <- tolower(gender_info$value)
   proportion_gender <- gender_info$proportion
 
   # Most common specialty
-  specialty_info <- calculate_proportion(data, "specialty")
+  specialty_info <- calculate_proportion(data, "specialty", verbose = verbose)
   most_specialty <- specialty_info$value
   proportion_specialty <- specialty_info$proportion
 
   # Most common training
-  training_info <- calculate_proportion(data, "Provider.Credential.Text")
+  training_info <- calculate_proportion(data, "Provider.Credential.Text", verbose = verbose)
   most_training <- training_info$value
   proportion_training <- training_info$proportion
 
   # Most common academic affiliation
-  academic_info <- calculate_proportion(data, "academic_affiliation")
+  academic_info <- calculate_proportion(data, "academic_affiliation", verbose = verbose)
   most_academic <- tolower(academic_info$value)
   proportion_academic <- academic_info$proportion
 

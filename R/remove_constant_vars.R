@@ -3,6 +3,7 @@
 #' This function takes a data frame and returns a new data frame with constant variables removed.
 #'
 #' @param data_frame A data frame from which constant variables should be removed.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A data frame with constant variables removed.
 #'
@@ -15,36 +16,42 @@
 #' }
 #'
 #' @export
-remove_constant_vars <- function(data_frame) {
+remove_constant_vars <- function(data_frame, verbose = FALSE) {
 
-  # Log: Starting the function
-  message("Starting the function to remove constant variables.")
+  if (isTRUE(verbose)) {
+    message("Starting the function to remove constant variables.")
+  }
 
-  # Log: Checking if the data frame is empty
   if (nrow(data_frame) == 0 || ncol(data_frame) == 0) {
-    message("The data frame is empty. Exiting function.")
+    if (isTRUE(verbose)) {
+      message("The data frame is empty. Exiting function.")
+    }
     return(data_frame)
   }
 
-  # Identify constant variables
-  message("Identifying constant variables...")
+  if (isTRUE(verbose)) {
+    message("Identifying constant variables...")
+  }
   const_vars <- dplyr::select(data_frame, dplyr::where(~ length(unique(.)) == 1)) %>% names()
 
-  # Log: Number of constant variables found
-  message(glue("Found {length(const_vars)} constant variables."))
-
-  # Remove constant variables if any
-  if (length(const_vars) > 0) {
-    # Log: Removing constant variables
-    message("Removing constant variables...")
-    data_frame <- data_frame %>% dplyr::select(-dplyr::all_of(const_vars))
-  } else {
-    # Log: No constant variables to remove
-    message("No constant variables to remove.")
+  if (isTRUE(verbose)) {
+    message(glue("Found {length(const_vars)} constant variables."))
   }
 
-  # Log: Function completed
-  message("Function completed.")
+  if (length(const_vars) > 0) {
+    if (isTRUE(verbose)) {
+      message("Removing constant variables...")
+    }
+    data_frame <- data_frame %>% dplyr::select(-dplyr::all_of(const_vars))
+  } else {
+    if (isTRUE(verbose)) {
+      message("No constant variables to remove.")
+    }
+  }
+
+  if (isTRUE(verbose)) {
+    message("Function completed.")
+  }
 
   return(data_frame)
 }

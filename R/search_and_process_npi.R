@@ -19,6 +19,7 @@
 #'   is appended to and created automatically if it does not exist.
 #' @param notify Logical. If `TRUE`, play a notification sound when processing
 #'   completes (requires the optional `beepr` package). Defaults to `TRUE`.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #' @return A data frame containing the processed NPI search results.
 #'
 #' @importFrom dplyr filter mutate select rename distinct arrange bind_rows tibble
@@ -43,7 +44,8 @@ search_and_process_npi <- function(data,
                                    accumulate_path = NULL,
                                    resume = FALSE,
                                    progress_log = NULL,
-                                   notify = TRUE) {
+                                   notify = TRUE,
+                                   verbose = FALSE) {
   if (!is.data.frame(data)) {
     stop("Input 'data' must be a data frame.")
   }
@@ -54,22 +56,25 @@ search_and_process_npi <- function(data,
     stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "))
   }
 
-  log_progress <- function(message) {
+  log_progress <- function(message, verbose = verbose) {
     if (!is.null(progress_log)) {
       dir.create(dirname(progress_log), showWarnings = FALSE, recursive = TRUE)
       cat(sprintf("[%s] %s\n", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), message),
           file = progress_log, append = TRUE)
     }
+    if (isTRUE(verbose)) {
+      message(message)
+    }
   }
 
-  read_existing_accumulation <- function() {
+  read_existing_accumulation <- function(verbose = verbose) {
     if (is.null(accumulate_path) || !file.exists(accumulate_path)) {
       return(NULL)
     }
     tryCatch(
       readr::read_csv(accumulate_path, show_col_types = FALSE),
       error = function(e) {
-        log_progress(sprintf("Unable to read accumulation file '%s': %s", accumulate_path, e$message))
+        log_progress(sprintf("Unable to read accumulation file '%s': %s", accumulate_path, e$message), verbose = verbose)
         NULL
       }
     )
@@ -78,7 +83,7 @@ search_and_process_npi <- function(data,
   existing_accumulated <- NULL
   processed_terms <- character(0)
   if (isTRUE(resume)) {
-    existing_accumulated <- read_existing_accumulation()
+    existing_accumulated <- read_existing_accumulation(verbose = verbose)
     if (!is.null(existing_accumulated) && "search_term" %in% names(existing_accumulated)) {
       processed_terms <- unique(existing_accumulated$search_term[!is.na(existing_accumulated$search_term)])
     }
@@ -112,7 +117,7 @@ search_and_process_npi <- function(data,
     pb <- progress::progress_bar$new(total = total_names, clear = FALSE, show_after = 0)
   }
 
-  save_results <- function(result, file_prefix, directory) {
+  save_results <- function(result, file_prefix, directory, verbose = verbose) {
     if (is.null(directory) || is.na(directory) || !nrow(result)) {
       return(invisible(NULL))
     }
@@ -120,10 +125,10 @@ search_and_process_npi <- function(data,
     timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
     file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, ".csv"))
     readr::write_csv(result, file_name)
-    log_progress(sprintf("Saved chunk '%s' with %d rows", basename(file_name), nrow(result)))
+    log_progress(sprintf("Saved chunk '%s' with %d rows", basename(file_name), nrow(result)), verbose = verbose)
   }
 
-  append_accumulated <- function(result) {
+  append_accumulated <- function(result, verbose = verbose) {
     if (is.null(accumulate_path) || is.na(accumulate_path) || !nrow(result)) {
       return(invisible(NULL))
     }
@@ -131,13 +136,13 @@ search_and_process_npi <- function(data,
     append_mode <- file.exists(accumulate_path)
     tryCatch({
       readr::write_csv(result, accumulate_path, append = append_mode, col_names = !append_mode)
-      log_progress(sprintf("Appended %d rows to '%s'", nrow(result), accumulate_path))
+      log_progress(sprintf("Appended %d rows to '%s'", nrow(result), accumulate_path), verbose = verbose)
     }, error = function(e) {
-      log_progress(sprintf("Unable to append to '%s': %s", accumulate_path, e$message))
+      log_progress(sprintf("Unable to append to '%s': %s", accumulate_path, e$message), verbose = verbose)
     })
   }
 
-  search_npi <- function(first_name, last_name) {
+  search_npi <- function(first_name, last_name, verbose = verbose) {
     tryCatch({
       npi_obj <- npi::npi_search(
         first_name = first_name,
@@ -197,7 +202,9 @@ search_and_process_npi <- function(data,
       filtered <- dplyr::arrange(filtered, last_name, first_name)
       filtered
     }, error = function(e) {
-      message(sprintf("Error searching %s %s: %s", first_name, last_name, e$message))
+      if (isTRUE(verbose)) {
+        message(sprintf("Error searching %s %s: %s", first_name, last_name, e$message))
+      }
       NULL
     })
   }
@@ -212,7 +219,7 @@ search_and_process_npi <- function(data,
       return(NULL)
     }
 
-    result <- search_npi(first_name, last_name)
+    result <- search_npi(first_name, last_name, verbose = verbose)
 
     if (is.null(result) || !nrow(result)) {
       log_progress(sprintf("No results for %s", search_term))
@@ -221,10 +228,10 @@ search_and_process_npi <- function(data,
 
     should_save <- is.numeric(save_chunk_size) && !is.na(save_chunk_size) && save_chunk_size > 0 && nrow(result) >= save_chunk_size
     if (should_save) {
-      save_results(result, "results_of_search_and_process_npi", dest_dir)
+      save_results(result, "results_of_search_and_process_npi", dest_dir, verbose = verbose)
     }
 
-    append_accumulated(result)
+    append_accumulated(result, verbose = verbose)
     log_progress(sprintf("Retrieved %d rows for %s", nrow(result), search_term))
     
     result

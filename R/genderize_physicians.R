@@ -6,6 +6,7 @@
 #'
 #' @param input_csv The path to the input CSV file containing physician data.
 #' @param output_dir The directory where the output CSV file will be saved. Default is the current working directory.
+#' @param verbose Logical; if TRUE, prints status messages while processing. Default is FALSE.
 #' @return A data frame with genderized information joined to the original data.
 #'
 #' The function queries the [Genderize.io](https://genderize.io) API for first
@@ -24,7 +25,7 @@
 #'
 #' @family gender
 #' @export
-genderize_physicians <- function(input_csv, output_dir = getwd()) {
+genderize_physicians <- function(input_csv, output_dir = getwd(), verbose = FALSE) {
   # Read the data
   gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE) %>%
     dplyr::mutate(first_name = trimws(first_name))
@@ -32,7 +33,7 @@ genderize_physicians <- function(input_csv, output_dir = getwd()) {
   # Get first names
   first_names <- gender_Physicians$first_name
 
-  resolved_genders <- genderize_fetch(first_names)
+  resolved_genders <- genderize_fetch(first_names, verbose = verbose)
 
   x <- resolved_genders %>%
     dplyr::distinct(first_name, .keep_all = TRUE)
@@ -53,18 +54,18 @@ genderize_physicians <- function(input_csv, output_dir = getwd()) {
   readr::write_csv(y, output_csv)
 
   # Print the number of missing genders in both datasets
-  cat("Missing genders in original data:", sum(is.na(x$gender)), "\n")
-  cat("Missing genders in joined data:", missing_genders_joined, "\n")
-
-  # Print the path and filename of the new CSV
-  cat("Result saved to:", output_csv, "\n")
+  if (isTRUE(verbose)) {
+    message("Missing genders in original data: ", sum(is.na(x$gender)))
+    message("Missing genders in joined data: ", missing_genders_joined)
+    message("Result saved to: ", output_csv)
+  }
 
   # Return the result
   beepr::beep(2)
   return(y)
 }
 
-genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api.genderize.io/") {
+genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api.genderize.io/", verbose = FALSE) {
   if (is.null(first_names) || length(first_names) == 0) {
     return(tibble::tibble(
       first_name = character(),
@@ -88,6 +89,9 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
 
   results <- lapply(batches, function(name_batch) {
     query <- stats::setNames(as.list(name_batch), paste0("name[", seq_along(name_batch) - 1, "]"))
+    if (isTRUE(verbose)) {
+      message("Requesting genders for batch of ", length(name_batch), " names")
+    }
     response <- httr::GET(api_url, query = query, httr::timeout(10))
 
     if (httr::http_error(response)) {

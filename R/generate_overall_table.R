@@ -7,6 +7,7 @@
 #' @param title The title for the overall table summary (default is "Overall Table Summary").
 #' @param selected_columns Optional vector of selected columns to include in the table.
 #' @param label_translations Optional named list for label translations.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #' @return Path to the generated PDF file
 #'
 #' @importFrom arsenal write2pdf tableby
@@ -30,6 +31,7 @@
 #'
 #' @param object An `arsenal` table object to write.
 #' @param filename Path to the output PDF file.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return Invisibly returns the file path.
 #'
@@ -38,24 +40,31 @@
 #' tm_write2pdf(overall_summary, "table.pdf")
 #' }
 #' @export
-tm_write2pdf <- function(object, filename) {
-  print("Function Sanity Check: Creating Arsenal Table as a PDF")
+tm_write2pdf <- function(object, filename, verbose = FALSE) {
+  if (isTRUE(verbose)) {
+    message("Function Sanity Check: Creating Arsenal Table as a PDF")
+  }
   arsenal::write2pdf(object, filename, keep.md = TRUE, quiet = TRUE)
 }
 
-generate_overall_table <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
-  cat("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.\n")
-  # Log function start
-  cat("Generating the overall table...\n")
+generate_overall_table <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL, verbose = FALSE) {
+  if (isTRUE(verbose)) {
+    message("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.")
+    message("Generating the overall table...")
+  }
 
   # Ensure the output directory exists
   if (!fs::dir_exists(output_directory)) {
-    cat("Creating output directory...\n")
+    if (isTRUE(verbose)) {
+      message("Creating output directory...")
+    }
     fs::dir_create(output_directory)
   }
 
   # Read the data
-  cat("Reading data from file:", input_file_path, "\n")
+  if (isTRUE(verbose)) {
+    message("Reading data from file: ", input_file_path)
+  }
   data <- readr::read_rds(input_file_path)
 
   # Check if the data is empty
@@ -66,20 +75,28 @@ generate_overall_table <- function(input_file_path, output_directory, title = "O
   # Check if selected_columns argument is provided
   if (is.null(selected_columns)) {
     # If not provided, use all columns in the data
-    cat("Using all columns in the data for the table.\n")
+    if (isTRUE(verbose)) {
+      message("Using all columns in the data for the table.")
+    }
     selected_data <- data
   } else {
     # If selected_columns is provided, select only those columns from the data
-    cat("Selecting specific columns for the table: ", paste(selected_columns, collapse = ", "), "\n")
+    if (isTRUE(verbose)) {
+      message("Selecting specific columns for the table: ", paste(selected_columns, collapse = ", "))
+    }
     selected_data <- data[, selected_columns, drop = FALSE]
   }
 
   # Log data summary
-  cat("Data summary:\n")
-  print(str(selected_data))
+  if (isTRUE(verbose)) {
+    message("Data summary:")
+    print(str(selected_data))
+  }
 
   # Generate the overall table using arsenal::tableby
-  cat("Generating the overall table using arsenal::tableby...\n")
+  if (isTRUE(verbose)) {
+    message("Generating the overall table using arsenal::tableby...")
+  }
   overall_arsenal_table <- arsenal::tableby(
     ~ .,
     data = selected_data,
@@ -112,7 +129,9 @@ generate_overall_table <- function(input_file_path, output_directory, title = "O
   )
 
   # Generate the summary of the overall table
-  cat("Generating the summary of the overall table...\n")
+  if (isTRUE(verbose)) {
+    message("Generating the summary of the overall table...")
+  }
   overall_summary <- summary(
     overall_arsenal_table,
     text = TRUE,
@@ -122,8 +141,10 @@ generate_overall_table <- function(input_file_path, output_directory, title = "O
   )
 
   # Log the overall summary
-  cat("Overall table summary:\n")
-  print(overall_summary)
+  if (isTRUE(verbose)) {
+    message("Overall table summary:")
+    print(overall_summary)
+  }
 
   # Access the current date and time
   date_time <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
@@ -132,10 +153,14 @@ generate_overall_table <- function(input_file_path, output_directory, title = "O
   filename <- file.path(output_directory, paste("arsenal_overall_table", date_time, sep = "_"))
 
   # Save the overall table as a PDF
-  cat("Saving the overall table as a PDF: ", filename, "\n")
-  tm_write2pdf(overall_summary, filename)
+  if (isTRUE(verbose)) {
+    message("Saving the overall table as a PDF: ", filename)
+  }
+  tm_write2pdf(overall_summary, filename, verbose = verbose)
 
   # Log function end
-  cat("Overall table generation completed.\n")
+  if (isTRUE(verbose)) {
+    message("Overall table generation completed.")
+  }
   beepr::beep(2)
 }

@@ -4,6 +4,7 @@
 #' format using the npi package, and removes rows with missing or invalid NPIs.
 #'
 #' @param input_data Either a dataframe containing NPI numbers or a path to a CSV file.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A dataframe containing valid NPI numbers.
 #'
@@ -11,11 +12,14 @@
 #' @importFrom readr read_csv cols col_character col_guess
 #' @importFrom dplyr filter mutate
 #' @export
-validate_and_remove_invalid_npi <- function(input_data) {
+validate_and_remove_invalid_npi <- function(input_data, verbose = FALSE) {
 
   if (is.data.frame(input_data)) {
     npi_df <- input_data
   } else if (is.character(input_data) && length(input_data) == 1) {
+    if (isTRUE(verbose)) {
+      message("Reading NPI data from ", input_data)
+    }
     npi_df <- readr::read_csv(
       input_data,
       col_types = readr::cols(.default = readr::col_guess(), npi = readr::col_character())
@@ -38,6 +42,9 @@ validate_and_remove_invalid_npi <- function(input_data) {
 
   if (!nrow(npi_df)) {
     npi_df$npi_is_valid <- logical()
+    if (isTRUE(verbose)) {
+      message("No NPI records found after initial filtering")
+    }
     return(npi_df[, unique(c("npi", "npi_is_valid", names(npi_df))), drop = FALSE])
   }
 
@@ -45,11 +52,18 @@ validate_and_remove_invalid_npi <- function(input_data) {
   npi_df$npi_is_valid <- FALSE
 
   if (any(valid_format)) {
+    if (isTRUE(verbose)) {
+      message("Validating ", sum(valid_format), " NPI numbers with check digit")
+    }
     npi_df$npi_is_valid[valid_format] <- npi::npi_is_valid(npi_df$npi[valid_format])
   }
 
   npi_df <- npi_df %>%
     dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
+
+  if (isTRUE(verbose)) {
+    message("Returning ", nrow(npi_df), " valid NPI records")
+  }
 
   npi_df
 }

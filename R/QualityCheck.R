@@ -6,6 +6,7 @@
 #'
 #' @param data A data frame containing the columns 'npi' and 'name'.
 #' @param filepath The path where the CSV file should be saved.
+#' @param verbose Logical; if TRUE, prints status messages about the process.
 #' @return Prints a message to the console indicating that the CSV file has been saved successfully.
 #' @importFrom dplyr group_by summarise arrange filter
 #' @family utilities
@@ -15,7 +16,7 @@
 #' save_quality_check_table(my_data, "qc.csv")
 #' }
 
-save_quality_check_table <- function(data, filepath) {
+save_quality_check_table <- function(data, filepath, verbose = FALSE) {
   # Group by 'npi' and 'name', calculate counts, filter where count > 2, and arrange by count descending
   filtered_data <- data %>%
     dplyr::group_by(npi, name) %>%
@@ -26,8 +27,9 @@ save_quality_check_table <- function(data, filepath) {
   # Save the filtered data to a CSV file
   write.csv(filtered_data, file = filepath, row.names = FALSE)
 
-  # Print a message indicating successful file save
-  cat("CSV file saved successfully!\n")
+  if (isTRUE(verbose)) {
+    message("CSV file saved successfully!")
+  }
 
   # Return the filtered data for testing purposes
   return(filtered_data)

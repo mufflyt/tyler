@@ -4,6 +4,7 @@
 #'
 #' @param data A data frame containing the age data.
 #' @param age_column A character string representing the name of the column in `data` that contains the age data.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A character string summarizing the median age and IQR of the specified age column in the dataset.
 #'
@@ -27,7 +28,7 @@
 #'
 #' @import dplyr
 #' @export
-physician_age <- function(data, age_column) {
+physician_age <- function(data, age_column, verbose = FALSE) {
   # Calculate the median age
   median_age <- round(median(data[[age_column]], na.rm = TRUE), 2)
 
@@ -44,6 +45,10 @@ physician_age <- function(data, age_column) {
     "The median age of the dataset was ", median_age,
     " (IQR 25th percentile ", q25, " to 75th percentile ", q75, ")."
   )
+
+  if (isTRUE(verbose)) {
+    message(sentence)
+  }
 
   return(sentence)
 }

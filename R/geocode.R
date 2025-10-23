@@ -11,6 +11,8 @@
 #' @param output_file_path Optional path to save the geocoded dataset as CSV.
 #' @param notify Logical. If `TRUE`, play a notification sound when geocoding
 #'   finishes (requires the optional `beepr` package). Defaults to `TRUE`.
+#' @param verbose Logical; if `TRUE`, emit progress messages while geocoding.
+#'   Defaults to `FALSE`.
 #'
 #' @return A data frame with latitude and longitude columns added.
 #' @export
@@ -25,13 +27,17 @@
 #'
 geocode_unique_addresses <- function(file_path, google_maps_api_key,
                                      output_file_path = NULL,
-                                     notify = TRUE) {
+                                     notify = TRUE,
+                                     verbose = FALSE) {
   if (!file.exists(file_path)) {
     stop("Input file not found.")
   }
 
   # Read input based on extension
   ext <- tools::file_ext(file_path)
+  if (isTRUE(verbose)) {
+    message("Reading input file: ", file_path)
+  }
   data <- switch(tolower(ext),
                  csv = readr::read_csv(file_path, show_col_types = FALSE),
                  rds = readRDS(file_path),
@@ -42,6 +48,9 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
     stop("The dataset must have a column named 'address' for geocoding.")
   }
 
+  if (isTRUE(verbose)) {
+    message("Registering Google Maps API key and geocoding unique addresses…")
+  }
   ggmap::register_google(key = google_maps_api_key)
 
   unique_add <- dplyr::distinct(data, address)
@@ -53,11 +62,17 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   data <- dplyr::left_join(data, unique_add, by = "address")
 
   if (!is.null(output_file_path)) {
+    if (isTRUE(verbose)) {
+      message("Writing geocoded data to ", output_file_path)
+    }
     readr::write_csv(data, output_file_path)
   }
 
   if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
+  }
+  if (isTRUE(verbose)) {
+    message("Geocoding complete.")
   }
   data
 }

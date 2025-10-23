@@ -4,6 +4,7 @@
 #'
 #' @param x A numeric value or vector that you want to format as a percentage.
 #' @param my_digits An integer specifying the number of decimal places to include in the formatted percentage. The default is 1.
+#' @param verbose Logical; if TRUE, prints status messages. Default is FALSE.
 #'
 #' @return A character vector representing the formatted percentage(s) with the specified number of decimal places.
 #'
@@ -26,6 +27,10 @@
 #'
 #' @family utilities
 #' @export
-format_pct <- function(x, my_digits = 1) {
-  format(x, digits = my_digits, nsmall = my_digits)
+format_pct <- function(x, my_digits = 1, verbose = FALSE) {
+  result <- format(x, digits = my_digits, nsmall = my_digits)
+  if (isTRUE(verbose)) {
+    message("Formatted values: ", paste(result, collapse = ", "))
+  }
+  result
 }

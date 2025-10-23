@@ -2,6 +2,7 @@
 #'
 #' @param object An object to be written to Word, typically an Arsenal table.
 #' @param filename The filename (without extension) for the Word document.
+#' @param verbose Logical; if TRUE, prints status messages. Default is FALSE.
 #' @return None
 #' @export
 #'
@@ -11,7 +12,7 @@
 #' \dontrun{
 #' arsenal_tables_write2word(my_table, "output_table")
 #' }
-arsenal_tables_write2word <- function(object, filename) {
+arsenal_tables_write2word <- function(object, filename, verbose = FALSE) {
   # Validate input parameters
   if (!is.data.frame(object)) {
     stop("Error: 'object' must be a data frame object.")
@@ -28,7 +29,9 @@ arsenal_tables_write2word <- function(object, filename) {
   # Create full path for the Word file
   word_path <- file.path("tables", paste0(filename, ".docx"))
 
-  message("Creating Arsenal table as a Word document...")
+  if (isTRUE(verbose)) {
+    message("Creating Arsenal table as a Word document...")
+  }
   tryCatch({
     arsenal::write2word(
       object,
@@ -41,5 +44,7 @@ arsenal_tables_write2word <- function(object, filename) {
   })
 
   # Print the full path to the saved file
-  cat("Word file saved successfully at", word_path, "\n")
+  if (isTRUE(verbose)) {
+    message("Word file saved successfully at ", word_path)
+  }
 }

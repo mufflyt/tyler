@@ -8,7 +8,8 @@ geocode_unique_addresses(
   file_path,
   google_maps_api_key,
   output_file_path = NULL,
-  notify = TRUE
+  notify = TRUE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -20,6 +21,9 @@ geocode_unique_addresses(
 
 \item{notify}{Logical. If \code{TRUE}, play a notification sound when geocoding finishes
 (requires the optional \pkg{beepr} package). Defaults to \code{TRUE}.}
+
+\item{verbose}{Logical; if \code{TRUE}, emit progress messages while geocoding.
+Defaults to \code{FALSE}.}
 }
 \value{
 A dataframe containing geocoded address data with latitude and longitude.

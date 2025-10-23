@@ -6,6 +6,7 @@
 #' @param filtered_data A data frame containing filtered data of contacted physicians.
 #' @param all_states A character vector of all possible states including Washington, DC.
 #' If not provided, a default set of states will be used.
+#' @param verbose Logical; if TRUE, prints status messages while running. Default is FALSE.
 #'
 #' @return A character string summarizing the inclusion and exclusion of states.
 #' @family summary
@@ -34,7 +35,7 @@
 #' filtered_data <- data.frame(state = c("California", "New York", "Texas", "Nevada"))
 #' states_where_physicians_were_NOT_contacted(filtered_data)
 #'
-states_where_physicians_were_NOT_contacted <- function(filtered_data, all_states = NULL) {
+states_where_physicians_were_NOT_contacted <- function(filtered_data, all_states = NULL, verbose = FALSE) {
 
   # Default list of all states including Washington, DC
   default_all_states <- c(
@@ -52,9 +53,15 @@ states_where_physicians_were_NOT_contacted <- function(filtered_data, all_states
 
   # Identify the unique included states
   included_states <- dplyr::distinct(filtered_data, state)
+  if (isTRUE(verbose)) {
+    message("Identified ", nrow(included_states), " included states")
+  }
 
   # Identify the excluded states by finding the difference between all states and the included states
   excluded_states <- setdiff(all_states, included_states$state)
+  if (isTRUE(verbose)) {
+    message("Calculated ", length(excluded_states), " excluded states")
+  }
 
   # Ensure "District of Columbia" is not included in the excluded states if it is in the included states
   if ("District of Columbia" %in% included_states$state) {
@@ -83,6 +90,9 @@ states_where_physicians_were_NOT_contacted <- function(filtered_data, all_states
     "."
   )
 
+  if (isTRUE(verbose)) {
+    message("Summary prepared for states where physicians were not contacted")
+  }
   beepr::beep(2)
   return(output_string)
 }

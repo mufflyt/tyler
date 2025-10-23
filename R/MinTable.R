@@ -4,6 +4,7 @@
 #'
 #' @param InVec Input vector, expected to be a factor variable or convertible to a factor.
 #' @param mult Logical value indicating whether to return multiple minimum values or just the first one. Default is FALSE.
+#' @param verbose Logical; if TRUE, prints status messages. Default is FALSE.
 #' @return If \code{mult} is FALSE, returns the level corresponding to the minimum value of the factor variable.
 #'         If \code{mult} is TRUE, returns a character vector containing all the levels with the minimum value.
 #' @examples
@@ -12,7 +13,7 @@
 #' min_table(vec, mult = TRUE) # Returns "C"
 #' @export
 
-min_table <- function(InVec, mult = FALSE) {
+min_table <- function(InVec, mult = FALSE, verbose = FALSE) {
   if (!is.factor(InVec) || length(InVec) == 0) {
     return(character(0))
   }
