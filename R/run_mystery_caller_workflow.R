@@ -33,6 +33,11 @@
 #'   [search_and_process_npi()].
 #' @param all_states Optional character vector of all states to supply to
 #'   [states_where_physicians_were_NOT_contacted()].
+#' @param verbose Logical. When `TRUE`, print stage updates to the console while
+#'   running the workflow. Defaults to `interactive()`.
+#' @param npi_progress_observer Optional callback that receives progress updates
+#'   from [search_and_process_npi()]. It is invoked with the same payload as the
+#'   `progress_callback` argument for that function.
 #'
 #' @return A list containing intermediate artefacts from each workflow stage:
 #'   `roster`, `validated_roster`, `cleaned_phase1`, `cleaned_phase2`,
@@ -65,9 +70,19 @@ run_mystery_caller_workflow <- function(
     "state", "npi", "name"
   ),
   npi_search_args = list(),
-  all_states = NULL
+  all_states = NULL,
+  verbose = interactive(),
+  npi_progress_observer = NULL
 ) {
+  announce <- function(stage) {
+    if (isTRUE(verbose)) {
+      message(sprintf("[%s] %s", format(Sys.time(), "%H:%M:%S"), stage))
+    }
+  }
+
+  announce("Starting mystery caller workflow")
   roster_taxonomy <- if (!is.null(taxonomy_terms) && length(taxonomy_terms)) {
+    announce("Searching NPIs by taxonomy")
     search_by_taxonomy(taxonomy_terms)
   } else {
     tibble::tibble()
@@ -82,7 +97,58 @@ run_mystery_caller_workflow <- function(
       if (!all(c("first", "last") %in% names(name_data))) {
         stop("`name_data` must contain columns named `first` and `last`.")
       }
+      announce("Searching NPIs by name")
       args <- utils::modifyList(list(data = name_data), npi_search_args)
+      user_callback <- NULL
+      if (!is.null(args$progress_callback)) {
+        user_callback <- args$progress_callback
+      }
+      callbacks <- list()
+      if (is.function(user_callback)) {
+        callbacks <- c(callbacks, list(user_callback))
+      }
+      if (is.function(npi_progress_observer)) {
+        callbacks <- c(callbacks, list(npi_progress_observer))
+      }
+      if (isTRUE(verbose)) {
+        callbacks <- c(callbacks, list(function(update) {
+          if (is.null(update$event)) {
+            return(invisible(NULL))
+          }
+          known_events <- c(
+            start = "Starting name searches",
+            result = "Retrieved results",
+            no_results = "No results",
+            skipped = "Skipped",
+            heartbeat = "Still processing",
+            completed = "Completed name searches"
+          )
+          label <- known_events[[update$event]]
+          if (is.null(label)) {
+            label <- update$event
+          }
+          detail <- if (!is.null(update$search_term)) {
+            paste0(" for ", update$search_term)
+          } else {
+            ""
+          }
+          message(sprintf("[%s] %s%s", format(Sys.time(), "%H:%M:%S"), label, detail))
+          invisible(NULL)
+        }))
+        if (is.null(args$heartbeat_seconds)) {
+          args$heartbeat_seconds <- 30
+        }
+      }
+      if (length(callbacks) == 1) {
+        args$progress_callback <- callbacks[[1]]
+      } else if (length(callbacks) > 1) {
+        args$progress_callback <- function(update) {
+          for (cb in callbacks) {
+            try(cb(update), silent = TRUE)
+          }
+          invisible(NULL)
+        }
+      }
       roster_names <- do.call(search_and_process_npi, args)
     }
   }
@@ -94,10 +160,17 @@ run_mystery_caller_workflow <- function(
 
   validated_roster <- combined_roster
   if ("npi" %in% names(combined_roster) && nrow(combined_roster)) {
+    announce("Validating NPI roster")
     validated_roster <- validate_and_remove_invalid_npi(combined_roster)
   }
 
-  cleaned_phase1 <- clean_phase_1_results(phase1_data, output_directory = phase1_output_directory)
+  announce("Cleaning Phase 1 results")
+  cleaned_phase1 <- clean_phase_1_results(
+    phase1_data,
+    output_directory = phase1_output_directory,
+    notify = TRUE
+  )
+  announce("Splitting Phase 1 workbooks for callers")
   split_and_save(
     cleaned_phase1,
     output_directory = output_directory,
@@ -105,6 +178,7 @@ run_mystery_caller_workflow <- function(
     insurance_order = split_insurance_order
   )
 
+  announce("Cleaning Phase 2 results")
   cleaned_phase2 <- clean_phase_2_data(
     data_or_path = phase2_data,
     required_strings = phase2_required_strings,
@@ -113,6 +187,7 @@ run_mystery_caller_workflow <- function(
 
   coverage_summary <- NULL
   if ("state" %in% names(cleaned_phase2)) {
+    announce("Summarising coverage gaps")
     coverage_summary <- states_where_physicians_were_NOT_contacted(cleaned_phase2, all_states = all_states)
   }
 
@@ -122,7 +197,12 @@ run_mystery_caller_workflow <- function(
 
   quality_check_table <- NULL
   if (all(c("npi", "name") %in% names(cleaned_phase2))) {
+    announce("Saving quality check table")
     quality_check_table <- save_quality_check_table(cleaned_phase2, quality_check_path)
+  }
+
+  if (isTRUE(verbose)) {
+    message(sprintf("[%s] Mystery caller workflow complete", format(Sys.time(), "%H:%M:%S")))
   }
 
   list(

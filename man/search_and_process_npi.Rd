@@ -15,7 +15,10 @@ search_and_process_npi(
   accumulate_path = NULL,
   resume = FALSE,
   progress_log = NULL,
-  notify = TRUE
+  notify = TRUE,
+  progress_callback = NULL,
+  heartbeat_seconds = NULL,
+  progress_log_format = c("text", "csv")
 )
 }
 \arguments{
@@ -46,6 +49,18 @@ appended to and created automatically if it does not exist.}
 
 \item{notify}{Logical. If \code{TRUE}, play a notification sound when processing
 completes (requires the optional \pkg{beepr} package). Defaults to \code{TRUE}.}
+
+\item{progress_callback}{Optional function invoked with a named list each time
+progress is updated. The list contains fields such as \code{event},
+\code{timestamp}, \code{search_term}, \code{rows}, \code{index}, and \code{total}.}
+
+\item{heartbeat_seconds}{Optional numeric value specifying how frequently (in
+seconds) to emit a "still processing" heartbeat update while iterating over
+names. Set to \code{NULL} to disable the heartbeat.}
+
+\item{progress_log_format}{Either "text" (default) to append human readable lines to
+\code{progress_log} or "csv" to write structured entries with columns
+\code{timestamp}, \code{event}, \code{search_term}, \code{rows}, and \code{detail}.}
 }
 \value{
 A data frame containing the processed NPI search results.

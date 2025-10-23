@@ -9,6 +9,8 @@
 #' @param drive_time_minutes The drive time value (in minutes) for which to calculate the
 #'   intersection.
 #' @param output_dir The directory where the intersection shapefile will be saved.
+#' @param notify Logical. If `TRUE`, play a notification sound on completion when
+#'   the optional `beepr` package is available. Defaults to `TRUE`.
 #'
 #' @return None. The function saves the intersection shapefile and provides logging.
 #'
@@ -24,7 +26,8 @@
 calculate_intersection_overlap_and_save <- function(block_groups,
                                                     isochrones_joined,
                                                     drive_time_minutes,
-                                                    output_dir) {
+                                                    output_dir,
+                                                    notify = TRUE) {
   # Parameter validation
   if (!inherits(block_groups, "sf")) {
     stop("Error: 'block_groups' must be an sf object.")
@@ -107,7 +110,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   p75 <- round(stats::quantile(non_missing_overlap, probs = 0.75), 4) * 100
   message("75th Percentile of Overlap Percentages: ", p75, "%")
 
-  if (requireNamespace("beepr", quietly = TRUE)) {
+  if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
 }

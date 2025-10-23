@@ -19,6 +19,15 @@
 #'   is appended to and created automatically if it does not exist.
 #' @param notify Logical. If `TRUE`, play a notification sound when processing
 #'   completes (requires the optional `beepr` package). Defaults to `TRUE`.
+#' @param progress_callback Optional function invoked with a named list each
+#'   time progress is updated. The list contains fields such as `event`,
+#'   `timestamp`, `search_term`, `rows`, `index`, and `total`.
+#' @param heartbeat_seconds Optional numeric value specifying how frequently
+#'   (in seconds) to emit a "still processing" heartbeat update while iterating
+#'   over names. Set to `NULL` to disable the heartbeat.
+#' @param progress_log_format Either "text" (default) to append human readable
+#'   lines to `progress_log` or "csv" to write structured entries with columns
+#'   `timestamp`, `event`, `search_term`, `rows`, and `detail`.
 #' @return A data frame containing the processed NPI search results.
 #'
 #' @importFrom dplyr filter mutate select rename distinct arrange bind_rows tibble
@@ -43,9 +52,20 @@ search_and_process_npi <- function(data,
                                    accumulate_path = NULL,
                                    resume = FALSE,
                                    progress_log = NULL,
-                                   notify = TRUE) {
+                                   notify = TRUE,
+                                   progress_callback = NULL,
+                                   heartbeat_seconds = NULL,
+                                   progress_log_format = c("text", "csv")) {
   if (!is.data.frame(data)) {
     stop("Input 'data' must be a data frame.")
+  }
+
+  progress_log_format <- match.arg(progress_log_format)
+  if (!is.null(heartbeat_seconds)) {
+    if (!is.numeric(heartbeat_seconds) || length(heartbeat_seconds) != 1L ||
+        is.na(heartbeat_seconds) || heartbeat_seconds <= 0) {
+      stop("`heartbeat_seconds` must be a single positive numeric value or NULL.")
+    }
   }
 
   required_cols <- c("first", "last")
@@ -54,11 +74,67 @@ search_and_process_npi <- function(data,
     stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "))
   }
 
-  log_progress <- function(message) {
-    if (!is.null(progress_log)) {
-      dir.create(dirname(progress_log), showWarnings = FALSE, recursive = TRUE)
-      cat(sprintf("[%s] %s\n", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), message),
-          file = progress_log, append = TRUE)
+  write_structured_log <- function(timestamp, event, search_term, rows, detail) {
+    if (is.null(progress_log)) {
+      return(invisible(NULL))
+    }
+    dir.create(dirname(progress_log), showWarnings = FALSE, recursive = TRUE)
+    if (identical(progress_log_format, "text")) {
+      detail_msg <- if (!is.null(detail) && nzchar(detail)) {
+        paste0(" - ", detail)
+      } else {
+        ""
+      }
+      search_msg <- if (!is.na(search_term) && nzchar(search_term)) {
+        paste0(" [", search_term, "]")
+      } else {
+        ""
+      }
+      rows_msg <- if (!is.na(rows)) {
+        paste0(" (rows: ", rows, ")")
+      } else {
+        ""
+      }
+      cat(sprintf("[%s] %s%s%s%s\n", timestamp, event, search_msg, rows_msg, detail_msg),
+        file = progress_log, append = TRUE)
+    } else {
+      new_row <- data.frame(
+        timestamp = timestamp,
+        event = event,
+        search_term = if (is.na(search_term)) "" else search_term,
+        rows = rows,
+        detail = if (is.null(detail)) "" else detail,
+        stringsAsFactors = FALSE
+      )
+      readr::write_csv(
+        new_row,
+        progress_log,
+        append = file.exists(progress_log),
+        col_names = !file.exists(progress_log)
+      )
+    }
+  }
+
+  dispatch_progress <- function(event,
+                                 search_term = NA_character_,
+                                 rows = NA_integer_,
+                                 detail = NULL,
+                                 index = NA_integer_) {
+    timestamp <- Sys.time()
+    timestamp_chr <- format(timestamp, "%Y-%m-%d %H:%M:%S")
+    write_structured_log(timestamp_chr, event, search_term, rows, detail)
+
+    if (is.function(progress_callback)) {
+      update <- list(
+        event = event,
+        timestamp = timestamp,
+        search_term = if (!is.na(search_term)) search_term else NULL,
+        rows = if (!is.na(rows)) rows else NULL,
+        detail = detail,
+        index = if (!is.na(index)) index else NULL,
+        total = if (exists("total_names", inherits = FALSE)) total_names else NULL
+      )
+      try(progress_callback(update), silent = TRUE)
     }
   }
 
@@ -69,7 +145,10 @@ search_and_process_npi <- function(data,
     tryCatch(
       readr::read_csv(accumulate_path, show_col_types = FALSE),
       error = function(e) {
-        log_progress(sprintf("Unable to read accumulation file '%s': %s", accumulate_path, e$message))
+        dispatch_progress(
+          event = "accumulation_error",
+          detail = sprintf("Unable to read accumulation file '%s': %s", accumulate_path, e$message)
+        )
         NULL
       }
     )
@@ -94,6 +173,12 @@ search_and_process_npi <- function(data,
 
   first_names <- as.character(data$first)
   last_names <- as.character(data$last)
+  total_names <- length(first_names)
+
+  dispatch_progress(
+    event = "start",
+    detail = sprintf("Processing %d name(s)", total_names)
+  )
 
   vc <- c(
     "Allergy & Immunology", "Anesthesiology", "Dermatology", "Emergency Medicine",
@@ -106,11 +191,13 @@ search_and_process_npi <- function(data,
     credential_filter <- tolower(gsub("[^A-Za-z0-9]", "", filter_credentials))
   }
 
-  total_names <- length(first_names)
   pb <- NULL
   if (total_names > 0) {
     pb <- progress::progress_bar$new(total = total_names, clear = FALSE, show_after = 0)
   }
+
+  heartbeat_enabled <- !is.null(heartbeat_seconds)
+  last_heartbeat <- Sys.time()
 
   save_results <- function(result, file_prefix, directory) {
     if (is.null(directory) || is.na(directory) || !nrow(result)) {
@@ -120,7 +207,12 @@ search_and_process_npi <- function(data,
     timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
     file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, ".csv"))
     readr::write_csv(result, file_name)
-    log_progress(sprintf("Saved chunk '%s' with %d rows", basename(file_name), nrow(result)))
+    dispatch_progress(
+      event = "chunk_saved",
+      search_term = basename(file_name),
+      rows = nrow(result),
+      detail = "Chunk saved to disk"
+    )
   }
 
   append_accumulated <- function(result) {
@@ -131,9 +223,16 @@ search_and_process_npi <- function(data,
     append_mode <- file.exists(accumulate_path)
     tryCatch({
       readr::write_csv(result, accumulate_path, append = append_mode, col_names = !append_mode)
-      log_progress(sprintf("Appended %d rows to '%s'", nrow(result), accumulate_path))
+      dispatch_progress(
+        event = "accumulated",
+        rows = nrow(result),
+        detail = sprintf("Appended to %s", accumulate_path)
+      )
     }, error = function(e) {
-      log_progress(sprintf("Unable to append to '%s': %s", accumulate_path, e$message))
+      dispatch_progress(
+        event = "accumulation_error",
+        detail = sprintf("Unable to append to '%s': %s", accumulate_path, e$message)
+      )
     })
   }
 
@@ -198,25 +297,51 @@ search_and_process_npi <- function(data,
       filtered
     }, error = function(e) {
       message(sprintf("Error searching %s %s: %s", first_name, last_name, e$message))
+      dispatch_progress(
+        event = "search_error",
+        search_term = trimws(paste(first_name, last_name)),
+        detail = e$message
+      )
       NULL
     })
   }
 
-  out <- purrr::map2(first_names, last_names, function(first_name, last_name) {
+  out <- vector("list", length = total_names)
+  for (i in seq_len(total_names)) {
+    first_name <- first_names[[i]]
+    last_name <- last_names[[i]]
     if (!is.null(pb)) {
       pb$tick()
     }
+    if (heartbeat_enabled) {
+      now <- Sys.time()
+      if (difftime(now, last_heartbeat, units = "secs") >= heartbeat_seconds) {
+        message("Still processing...")
+        dispatch_progress(event = "heartbeat", detail = "Processing in progress")
+        last_heartbeat <- now
+      }
+    }
     search_term <- trimws(paste(first_name, last_name))
     if (isTRUE(resume) && length(processed_terms) && search_term %in% processed_terms) {
-      log_progress(sprintf("Skipping %s (already present in accumulation)", search_term))
-      return(NULL)
+      dispatch_progress(
+        event = "skipped",
+        search_term = search_term,
+        detail = "Already present in accumulation",
+        index = i
+      )
+      next
     }
 
     result <- search_npi(first_name, last_name)
 
     if (is.null(result) || !nrow(result)) {
-      log_progress(sprintf("No results for %s", search_term))
-      return(NULL)
+      dispatch_progress(
+        event = "no_results",
+        search_term = search_term,
+        detail = "Search returned no data",
+        index = i
+      )
+      next
     }
 
     should_save <- is.numeric(save_chunk_size) && !is.na(save_chunk_size) && save_chunk_size > 0 && nrow(result) >= save_chunk_size
@@ -225,10 +350,16 @@ search_and_process_npi <- function(data,
     }
 
     append_accumulated(result)
-    log_progress(sprintf("Retrieved %d rows for %s", nrow(result), search_term))
-    
-    result
-  })
+    dispatch_progress(
+      event = "result",
+      search_term = search_term,
+      rows = nrow(result),
+      detail = "Retrieved rows",
+      index = i
+    )
+
+    out[[i]] <- result
+  }
 
   npi_data <- purrr::keep(out, function(x) is.data.frame(x) && nrow(x) > 0)
   if (!length(npi_data)) {
@@ -243,7 +374,11 @@ search_and_process_npi <- function(data,
     }
   }
 
-  log_progress(sprintf("Completed processing. Returning %d rows.", nrow(final_result)))
+  dispatch_progress(
+    event = "completed",
+    rows = nrow(final_result),
+    detail = "Finished processing all names"
+  )
 
   if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)

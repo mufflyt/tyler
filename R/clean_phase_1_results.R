@@ -13,6 +13,8 @@
 #'   Defaults to `tempdir()`.
 #' @param verbose Logical. If `TRUE`, progress messages are printed while cleaning.
 #'   Defaults to `TRUE`.
+#' @param notify Logical. If `TRUE`, play a notification sound on completion when
+#'   the optional `beepr` package is available. Defaults to `TRUE`.
 #' @param duplicate_rows Logical. If `TRUE`, each row in `phase1_data` is duplicated
 #'   to retain the previous behaviour that paired insurance entries for each
 #'   physician. Set to `FALSE` to keep the original number of rows.
@@ -49,6 +51,7 @@
 clean_phase_1_results <- function(phase1_data,
                                   output_directory = tempdir(),
                                   verbose = TRUE,
+                                  notify = TRUE,
                                   duplicate_rows = TRUE,
                                   id_seed = NULL) {
   if (!requireNamespace("dplyr", quietly = TRUE) ||
@@ -59,7 +62,7 @@ clean_phase_1_results <- function(phase1_data,
     stop("Required packages are not installed. Please install them using install.packages().")
   }
 
-  notify <- function(...) {
+  announce <- function(...) {
     if (isTRUE(verbose)) {
       cat(...)
     }
@@ -83,19 +86,19 @@ clean_phase_1_results <- function(phase1_data,
     set.seed(id_seed)
   }
 
-  notify("Converting column types...\n")
+  announce("Converting column types...\n")
   phase1_data <- readr::type_convert(phase1_data)
 
-  notify("Cleaning column names...\n")
+  announce("Cleaning column names...\n")
   phase1_data <- janitor::clean_names(phase1_data, case = "snake")
 
-  notify("Checking required columns...\n")
+  announce("Checking required columns...\n")
   required_columns <- c("names", "practice_name", "phone_number", "state_name")
   if (!all(required_columns %in% names(phase1_data))) {
     stop("The following required columns are missing: ", paste(setdiff(required_columns, names(phase1_data)), collapse = ", "))
   }
 
-  notify("Handling missing NPI numbers...\n")
+  announce("Handling missing NPI numbers...\n")
   generate_random_ids <- function(n) {
     if (!n) {
       return(numeric(0))
@@ -121,36 +124,36 @@ clean_phase_1_results <- function(phase1_data,
 
   if (nrow(phase1_data) > 0) {
     if (isTRUE(duplicate_rows)) {
-      notify("Duplicating rows...\n")
+      announce("Duplicating rows...\n")
       phase1_data <- dplyr::bind_rows(phase1_data, phase1_data)
     } else {
-      notify("Skipping row duplication as requested...\n")
+      announce("Skipping row duplication as requested...\n")
     }
 
-    notify("Arranging rows by 'names'...\n")
+    announce("Arranging rows by 'names'...\n")
     phase1_data <- dplyr::arrange(phase1_data, names)
 
-    notify("Adding insurance information...\n")
+    announce("Adding insurance information...\n")
     phase1_data <- dplyr::mutate(
       phase1_data,
       insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(phase1_data))
     )
 
-    notify("Adding a numbered 'id' column...\n")
+    announce("Adding a numbered 'id' column...\n")
     phase1_data <- dplyr::mutate(
       phase1_data,
       id = dplyr::row_number(),
       id_number = paste0("id:", id)
     )
 
-    notify("Extracting last name and creating 'dr_name'...\n")
+    announce("Extracting last name and creating 'dr_name'...\n")
     phase1_data <- dplyr::mutate(
       phase1_data,
       last_name = humaniformat::last_name(names),
       dr_name = paste("Dr.", last_name)
     )
 
-    notify("Identifying academic or private practice...\n")
+    announce("Identifying academic or private practice...\n")
     phase1_data <- dplyr::mutate(
       phase1_data,
       academic = ifelse(
@@ -160,7 +163,7 @@ clean_phase_1_results <- function(phase1_data,
       )
     )
 
-    notify("Uniting columns for REDCap upload...\n")
+    announce("Uniting columns for REDCap upload...\n")
     phase1_data <- dplyr::mutate(
       phase1_data,
       doctor_id = if ("npi" %in% names(phase1_data)) {
@@ -173,7 +176,7 @@ clean_phase_1_results <- function(phase1_data,
 
     phase1_data <- dplyr::select(phase1_data, for_redcap, dplyr::everything())
   } else {
-    notify("No data to process.\n")
+    announce("No data to process.\n")
   }
 
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
@@ -182,7 +185,11 @@ clean_phase_1_results <- function(phase1_data,
   }
   output_file <- file.path(output_directory, paste0("clean_phase_1_results_", current_datetime, ".csv"))
   readr::write_csv(phase1_data, output_file)
-  notify("Saved cleaned Phase 1 results dataframe to ", output_file, "\n")
+  announce("Saved cleaned Phase 1 results dataframe to ", output_file, "\n")
+
+  if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
 
   invisible(phase1_data)
 }
