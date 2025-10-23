@@ -9,7 +9,21 @@
 [![R-CMD-check](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of the 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting. The second goal is to assist with workforce distribution research for OBGYNs.  
+The goal of the 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting. The second goal is to assist with workforce distribution research for OBGYNs.
+
+## Citing tyler
+
+If you use `tyler` in your research or analysis, please cite the package so others can locate it. You can generate the preferred citation with:
+
+``` r
+citation("tyler")
+```
+
+At the time of writing, the package should be cited as:
+
+> Muffly, T. (2024). *tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care* (R package version 1.2.1). <https://github.com/mufflyt/tyler>
+
+Including this reference in publications, presentations, or data products helps sustain the project and gives proper credit to its contributors.
 
 ## Installation
 
