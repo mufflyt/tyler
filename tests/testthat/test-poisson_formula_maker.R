@@ -1,4 +1,5 @@
 library(testthat)
+testthat::skip_if_not_installed("dplyr")
 library(dplyr)
 
 # Sample data for testing

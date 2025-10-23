@@ -1,5 +1,13 @@
 library(testthat)
 
+if (!exists("min_table")) {
+  source(testthat::test_path("..", "..", "R", "MinTable.R"))
+}
+
+if (!exists("max_table")) {
+  source(testthat::test_path("..", "..", "R", "MaxTable.R"))
+}
+
 # Assuming definition of vec for testing multiple minimums
 vec <- factor(c("A", "B", "C", "C", "B", "A"))
 

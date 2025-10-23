@@ -1,6 +1,9 @@
 # Now, let's write tests for the updated function
 
 library(testthat)
+testthat::skip_if_not_installed("dplyr")
+testthat::skip_if_not_installed("readr")
+testthat::skip_if_not_installed("mockery")
 library(dplyr)
 library(readr)
 library(mockery)

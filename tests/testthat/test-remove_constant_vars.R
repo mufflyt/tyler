@@ -1,4 +1,5 @@
 library(testthat)
+testthat::skip_if_not_installed("dplyr")
 library(dplyr)
 
 # Test Case 1: Remove constant variables from a data frame

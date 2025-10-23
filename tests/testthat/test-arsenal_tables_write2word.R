@@ -1,4 +1,5 @@
 library(testthat)
+testthat::skip_if_not_installed("arsenal")
 library(arsenal)
 
 # Setup and cleanup functions to manage the test environment

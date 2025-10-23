@@ -1,4 +1,7 @@
 library(testthat)
+testthat::skip_if_not_installed("readr")
+testthat::skip_if_not_installed("dplyr")
+testthat::skip_if_not_installed("mockery")
 library(readr)
 library(dplyr)
 library(mockery)
