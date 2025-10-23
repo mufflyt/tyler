@@ -11,9 +11,10 @@ create_block_group_overlap_map(
 )
 }
 \arguments{
-\item{bg_data}{A SpatialPolygonsDataFrame representing block group data.}
+\item{bg_data}{An \code{sf} polygon object representing block group data in EPSG:4326.}
 
-\item{isochrones_data}{A SpatialPolygonsDataFrame representing isochrone data.}
+\item{isochrones_data}{An \code{sf} polygon object representing isochrone data with a
+drive-time column expressed in minutes.}
 
 \item{output_dir}{Directory path for exporting the map files. Default is "figures/".}
 }
@@ -21,7 +22,11 @@ create_block_group_overlap_map(
 None
 }
 \description{
-This function creates a map that displays block groups and their overlap with isochrones.
+This function creates a map that displays block groups and their overlap with
+isochrones. Polygons are repaired and oriented before plotting, and the
+isochrones are unioned and rendered from the longest drive time (red 180 minute
+zones) to the shortest (blue 30 minute zones) so shorter travel bands always
+appear on top.
 }
 \examples{
 \dontrun{

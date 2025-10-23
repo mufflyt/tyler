@@ -29,6 +29,8 @@
 #' @export
 #' @importFrom memoise memoise
 #' @importFrom hereR set_freemium set_key set_verbose isoline
+#' @importFrom sf st_make_valid st_is_valid st_transform
+#' @importFrom lwgeom st_orient
 create_isochrones <- memoise::memoise(function(location, range, posix_time = as.POSIXct("2023-10-20 08:00:00", format = "%Y-%m-%d %H:%M:%S"), api_key = Sys.getenv("HERE_API_KEY")) {
 
 
@@ -76,7 +78,15 @@ create_isochrones <- memoise::memoise(function(location, range, posix_time = as.
 
       # Add a unique identifier to each row in isochrones_temp
       temp <- temp %>%
-        mutate(unique_id = row_number())
+        sf::st_make_valid() %>%
+        dplyr::mutate(unique_id = dplyr::row_number())
+
+      if (!all(sf::st_is_valid(temp))) {
+        stop("HERE API returned geometries that could not be validated.")
+      }
+
+      temp <- sf::st_transform(temp, 4326)
+      temp <- lwgeom::st_orient(temp)
 
       # Store the isoline in the list
       isolines_list[[as.character(r)]] <- temp
