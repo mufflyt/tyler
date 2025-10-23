@@ -57,7 +57,7 @@ clean_phase_1_results <- function(phase1_data, output_directory = tempdir()) {
   cat("Checking required columns...\n")
   required_columns <- c("names", "practice_name", "phone_number", "state_name")
   if (!all(required_columns %in% names(phase1_data))) {
-    stop("The following required columns are missing: ", paste(setdiff(required_columns, names(phase1_data)), collapse = ", \"))
+    stop("The following required columns are missing: ", paste(setdiff(required_columns, names(phase1_data)), collapse = ", "))
   }
 
   cat("Handling missing NPI numbers...\n")

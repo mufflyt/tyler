@@ -23,9 +23,6 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 
-
-  library(sf)
-  library(easyr)
   if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.")
 
   hereR::set_key(api_key)
@@ -68,13 +65,17 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
       isochrones_temp[[i]] <- dplyr::bind_rows(isochrones_temp[[i]], .id = "column_label")
 
       # Create the 'name' column with descriptive labels
+      # Convert breaks from seconds to minutes to match the range/60 conversion
       isochrones_temp[[i]]$name <- cut(
         isochrones_temp[[i]]$range / 60,
-        breaks = breaks,
-        labels = paste0(breaks[-length(breaks)], "-", breaks[-1] - 1, " minutes")
+        breaks = breaks / 60,
+        labels = paste0(breaks[-length(breaks)] / 60, "-", (breaks[-1] - 1) / 60, " minutes")
       )
     }
   }
+
+  # Collapse the list of results into a single data frame
+  isochrones <- data.table::rbindlist(isochrones_temp, fill = TRUE)
 
   # Save the isochrones data to an RDS file
   readr::write_rds(
@@ -88,10 +89,10 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
       )
     )
   )
-  beepr::beep(2)
 
-  # Collapse the list of results into a single data frame
-  isochrones <- data.table::rbindlist(isochrones_temp, fill = TRUE)
+  if (requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
 
   return(isochrones)
 }

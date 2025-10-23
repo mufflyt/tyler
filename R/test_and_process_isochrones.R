@@ -22,8 +22,7 @@
 #' @examples
 #' # Validate the file of geocoded data.
 #' input_file <- readr::read_csv("data/isochrones/inner_join_postmastr_clinician_data.csv") %>%
-#'   dplyr::mutate(id = dplyr::row_number()) %>%
-#'   dplyr::filter(postmastr.name.x != "Hye In Park, MD")
+#'   dplyr::mutate(id = dplyr::row_number())
 #'
 #' test_and_process_isochrones(input_file = input_file)
 #'
@@ -37,13 +36,15 @@ test_and_process_isochrones <- function(input_file) {
   # Parameter validation
   stopifnot(is.data.frame(input_file), all(c("lat", "long") %in% colnames(input_file)))
 
-  Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
-  readRenviron("~/.Renviron")
-  hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+  # Use API key from environment variable
+  api_key <- Sys.getenv("HERE_API_KEY")
+  if (api_key == "") {
+    stop("HERE_API_KEY environment variable must be set")
+  }
+  hereR::set_key(api_key)
 
   input_file <- input_file %>%
-    dplyr::mutate(id = dplyr::row_number()) %>%
-    dplyr::filter(postmastr.name.x != "Hye In Park, MD")
+    dplyr::mutate(id = dplyr::row_number())
 
   input_file$lat <- as.numeric(input_file$lat)
   input_file$long <- as.numeric(input_file$long)
@@ -92,7 +93,9 @@ test_and_process_isochrones <- function(input_file) {
   } else {
     message("No errors found.")
   }
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
 }
 
 #' Process and Save Isochrones
@@ -134,13 +137,15 @@ process_and_save_isochrones <- function(input_file, chunk_size = 25) {
   stopifnot(is.data.frame(input_file), all(c("lat", "long") %in% colnames(input_file)),
             is.numeric(chunk_size), chunk_size > 0)
 
-  Sys.setenv(HERE_API_KEY = "VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
-  readRenviron("~/.Renviron")
-  hereR::set_key("VnDX-Rafqchcmb4LUDgEpYlvk8S1-LCYkkrtb1ujOrM")
+  # Use API key from environment variable
+  api_key <- Sys.getenv("HERE_API_KEY")
+  if (api_key == "") {
+    stop("HERE_API_KEY environment variable must be set")
+  }
+  hereR::set_key(api_key)
 
   input_file <- input_file %>%
-    dplyr::mutate(id = dplyr::row_number()) %>%
-    dplyr::filter(postmastr.name.x != "Hye In Park, MD")
+    dplyr::mutate(id = dplyr::row_number())
 
   input_file$lat <- as.numeric(input_file$lat)
   input_file$long <- as.numeric(input_file$long)
@@ -205,6 +210,8 @@ process_and_save_isochrones <- function(input_file, chunk_size = 25) {
   # Combine all isochrones from the list into one data frame
   isochrones_data <- do.call(rbind, isochrones_list)
 
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
   return(isochrones_data)
 }
