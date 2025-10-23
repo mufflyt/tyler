@@ -12,6 +12,10 @@
 #' @importFrom dplyr filter mutate
 #' @export
 validate_and_remove_invalid_npi <- function(input_data) {
+  # Check if npi package is available
+  if (!requireNamespace("npi", quietly = TRUE)) {
+    stop("Package 'npi' is required for this function. Install it with: install.packages('npi')")
+  }
 
   if (is.data.frame(input_data)) {
     npi_df <- input_data
@@ -47,7 +51,15 @@ validate_and_remove_invalid_npi <- function(input_data) {
   if (any(valid_format)) {
     npi_df$npi_is_valid[valid_format] <- vapply(
       npi_df$npi[valid_format],
-      npi::npi_is_valid,
+      function(x) {
+        tryCatch(
+          npi::npi_is_valid(x),
+          error = function(e) {
+            warning("Error validating NPI '", x, "': ", e$message, call. = FALSE)
+            FALSE
+          }
+        )
+      },
       logical(1),
       USE.NAMES = FALSE
     )

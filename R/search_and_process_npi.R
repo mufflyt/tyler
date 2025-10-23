@@ -5,9 +5,9 @@
 #' and filtering credentials.
 #'
 #' @param data A data frame with columns 'first' and 'last' containing the names to search.
-#' @param enumeration_type The enumeration type for NPI search (e.g., "ind", "org", "all"). Default is "ind".
-#' @param limit The maximum number of search results to request for each name pair. Default is 5.
-#' @param country_code Filter for only the "US".
+#' @param enumeration_type (Currently not used - npi package limitation) The enumeration type for NPI search (e.g., "ind", "org", "all"). Default is "ind".
+#' @param limit (Currently not used - npi package limitation) The maximum number of search results to request for each name pair. Default is 5.
+#' @param country_code (Currently not used - npi package limitation) Filter for only the "US".
 #' @param filter_credentials A character vector containing the credentials to filter the NPI results. Default is c("MD", "DO").
 #' @param save_chunk_size The number of results to save per chunk. Default is 10.
 #' @param dest_dir Destination directory to save chunked results. Default is NULL (no files written).
@@ -32,6 +32,10 @@ search_and_process_npi <- function(data,
                                    filter_credentials = c("MD", "DO"),
                                    save_chunk_size = 10,
                                    dest_dir = NULL) {
+  if (!requireNamespace("npi", quietly = TRUE)) {
+    stop("Package 'npi' is required for this function. Install it with: install.packages('npi')")
+  }
+
   if (!is.data.frame(data)) {
     stop("Input 'data' must be a data frame.")
   }
@@ -158,9 +162,7 @@ search_and_process_npi <- function(data,
 
   result <- dplyr::bind_rows(npi_data)
 
-  if (requireNamespace("beepr", quietly = TRUE)) {
-    if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
-  }
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
 
   result
 }

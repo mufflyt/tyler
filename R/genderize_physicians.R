@@ -25,8 +25,23 @@
 #' @family gender
 #' @export
 genderize_physicians <- function(input_csv, output_dir = getwd()) {
+  # Input validation
+  if (!is.character(input_csv) || length(input_csv) != 1) {
+    stop("'input_csv' must be a single character string specifying the path to the input file.")
+  }
+  if (!file.exists(input_csv)) {
+    stop("The input file '", input_csv, "' does not exist.")
+  }
+
   # Read the data
-  gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE) %>%
+  gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE)
+
+  # Validate that first_name column exists
+  if (!"first_name" %in% names(gender_Physicians)) {
+    stop("The input data must contain a 'first_name' column.")
+  }
+
+  gender_Physicians <- gender_Physicians %>%
     dplyr::mutate(first_name = trimws(first_name))
 
   # Get first names

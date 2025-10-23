@@ -54,6 +54,12 @@ clean_phase_1_results <- function(phase1_data, output_directory = tempdir()) {
   cat("Cleaning column names...\n")
   phase1_data <- janitor::clean_names(phase1_data, case = "snake")
 
+  cat("Checking for empty data frame...\n")
+  if (nrow(phase1_data) == 0) {
+    message("The data frame is empty. Exiting function.")
+    return(invisible(phase1_data))
+  }
+
   cat("Checking required columns...\n")
   required_columns <- c("names", "practice_name", "phone_number", "state_name")
   if (!all(required_columns %in% names(phase1_data))) {
@@ -78,13 +84,13 @@ clean_phase_1_results <- function(phase1_data, output_directory = tempdir()) {
   }
 
   if (nrow(phase1_data) > 0) {
-    cat("Duplicating rows...\n")
-    phase1_data <- dplyr::bind_rows(phase1_data, phase1_data)
+    cat("Removing duplicate rows...\n")
+    phase1_data <- dplyr::distinct(phase1_data)
 
     cat("Arranging rows by 'names'...\n")
     phase1_data <- dplyr::arrange(phase1_data, names)
 
-    cat("Adding insurance and duplicating rows...\n")
+    cat("Adding insurance column...\n")
     phase1_data <- dplyr::mutate(
       phase1_data,
       insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(phase1_data))
