@@ -94,9 +94,15 @@ clean_phase_1_results <- function(phase1_data,
 
   announce("Checking required columns...\n")
   required_columns <- c("names", "practice_name", "phone_number", "state_name")
-  if (!all(required_columns %in% names(phase1_data))) {
-    stop("The following required columns are missing: ", paste(setdiff(required_columns, names(phase1_data)), collapse = ", "))
+  missing_required <- setdiff(required_columns, names(phase1_data))
+  if (length(missing_required)) {
+    stop("The following required columns are missing: ", paste(missing_required, collapse = ", "))
   }
+  announce(sprintf(
+    "Validated %d required columns (%s).\n",
+    length(required_columns),
+    paste(required_columns, collapse = ", ")
+  ))
 
   announce("Handling missing NPI numbers...\n")
   generate_random_ids <- function(n) {
@@ -127,7 +133,10 @@ clean_phase_1_results <- function(phase1_data,
       announce("Duplicating rows...\n")
       phase1_data <- dplyr::bind_rows(phase1_data, phase1_data)
     } else {
-      announce("Skipping row duplication as requested...\n")
+      announce(sprintf(
+        "Skipping row duplication as requested; keeping %d original row(s).\n",
+        nrow(phase1_data)
+      ))
     }
 
     announce("Arranging rows by 'names'...\n")
@@ -176,7 +185,7 @@ clean_phase_1_results <- function(phase1_data,
 
     phase1_data <- dplyr::select(phase1_data, for_redcap, dplyr::everything())
   } else {
-    announce("No data to process.\n")
+    announce("No data available; skipping duplication, insurance assignment, and ID generation.\n")
   }
 
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
@@ -185,7 +194,12 @@ clean_phase_1_results <- function(phase1_data,
   }
   output_file <- file.path(output_directory, paste0("clean_phase_1_results_", current_datetime, ".csv"))
   readr::write_csv(phase1_data, output_file)
-  announce("Saved cleaned Phase 1 results dataframe to ", output_file, "\n")
+  announce(sprintf(
+    "Saved cleaned Phase 1 results dataframe to %s with %d row(s) and %d column(s).\n",
+    output_file,
+    nrow(phase1_data),
+    ncol(phase1_data)
+  ))
 
   if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)

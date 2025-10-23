@@ -26,8 +26,12 @@ save_quality_check_table <- function(data, filepath) {
   # Save the filtered data to a CSV file
   write.csv(filtered_data, file = filepath, row.names = FALSE)
 
-  # Print a message indicating successful file save
-  cat("CSV file saved successfully!\n")
+  # Print a message indicating successful file save with context
+  cat(sprintf(
+    "Saved quality-check table with %d row(s) to %s.\n",
+    nrow(filtered_data),
+    filepath
+  ))
 
   # Return the filtered data for testing purposes
   return(filtered_data)
