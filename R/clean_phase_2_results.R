@@ -71,6 +71,8 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' @param data_or_path Path to the data file or a data frame.
 #' @param required_strings Vector of substrings for which to search in column names.
 #' @param standard_names Vector of new names to apply to the matched columns.
+#' @param output_directory Directory where the cleaned CSV should be written.
+#'   Defaults to the project root resolved via [here::here()].
 #' @return A data frame with processed data.
 #' @export
 #' @importFrom readr read_csv write_csv
@@ -92,7 +94,12 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' standard_names <- c("doctor_info", "patient_contact_info")
 #' cleaned_df <- clean_phase_2_data(df, required_strings, standard_names)
 #' print(cleaned_df)
-clean_phase_2_data <- function(data_or_path, required_strings, standard_names) {
+clean_phase_2_data <- function(
+  data_or_path,
+  required_strings,
+  standard_names,
+  output_directory = here::here()
+) {
   # Data loading and initial checks
   if (is.character(data_or_path)) {
     if (!file.exists(data_or_path)) {
@@ -118,8 +125,12 @@ clean_phase_2_data <- function(data_or_path, required_strings, standard_names) {
   message("Proceeding with additional data processing steps...")
 
   # Saving the cleaned data
+  if (!dir.exists(output_directory)) {
+    dir.create(output_directory, recursive = TRUE, showWarnings = FALSE)
+  }
+
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
-  output_file_path <- paste0("cleaned_phase_2_data_", current_datetime, ".csv")
+  output_file_path <- file.path(output_directory, paste0("cleaned_phase_2_data_", current_datetime, ".csv"))
   readr::write_csv(data, output_file_path)
   message("Cleaned data successfully saved to: ", output_file_path)
 
