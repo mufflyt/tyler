@@ -36,10 +36,7 @@ search_by_taxonomy <- function(taxonomy_to_search) {
   for (taxonomy in taxonomy_to_search) {
     tryCatch({
       search_result <- npi::npi_search(
-        taxonomy_description = taxonomy,
-        country_code = "US",
-        enumeration_type = "ind",
-        limit = 1200
+        taxonomy_description = taxonomy
       )
 
       if (is.null(search_result)) {

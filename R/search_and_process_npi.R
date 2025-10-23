@@ -80,10 +80,7 @@ search_and_process_npi <- function(data,
     tryCatch({
       npi_obj <- npi::npi_search(
         first_name = first_name,
-        last_name = last_name,
-        enumeration_type = enumeration_type,
-        limit = limit,
-        country_code = country_code
+        last_name = last_name
       )
 
       if (is.null(npi_obj)) {

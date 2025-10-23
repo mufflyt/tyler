@@ -16,7 +16,14 @@ has_latex <- function() {
   if (!requireNamespace("tinytex", quietly = TRUE)) {
     return(FALSE)
   }
-  tinytex::check_installed(error = FALSE)
+  # tinytex::check_installed() returns TRUE if installed, errors if not
+  # We need to wrap it in tryCatch to handle the error gracefully
+  tryCatch({
+    tinytex::tinytex_root()
+    return(TRUE)
+  }, error = function(e) {
+    return(FALSE)
+  })
 }
 
 # Sample data for testing
