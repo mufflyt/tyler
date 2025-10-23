@@ -33,10 +33,13 @@
 #'   [search_and_process_npi()].
 #' @param all_states Optional character vector of all states to supply to
 #'   [states_where_physicians_were_NOT_contacted()].
+#' @param verbose Logical flag controlling workflow progress messages.
 #'
 #' @return A list containing intermediate artefacts from each workflow stage:
 #'   `roster`, `validated_roster`, `cleaned_phase1`, `cleaned_phase2`,
-#'   `coverage_summary`, and `quality_check_table`.
+#'   `coverage_summary`, and `quality_check_table`, plus file paths generated
+#'   along the way (`cleaned_phase1_path`, `cleaned_phase2_path`,
+#'   `quality_check_path`, and `split_workbook_paths`).
 #'
 #' @export
 #' @importFrom dplyr bind_rows distinct
@@ -65,8 +68,49 @@ run_mystery_caller_workflow <- function(
     "state", "npi", "name"
   ),
   npi_search_args = list(),
-  all_states = NULL
+  all_states = NULL,
+  verbose = TRUE
 ) {
+  roster <- build_roster_stage(taxonomy_terms, name_data, npi_search_args, verbose)
+  phase1 <- prepare_phase1_stage(
+    phase1_data = phase1_data,
+    lab_assistant_names = lab_assistant_names,
+    output_directory = output_directory,
+    phase1_output_directory = phase1_output_directory,
+    split_insurance_order = split_insurance_order,
+    verbose = verbose
+  )
+
+  phase2 <- process_phase2_stage(
+    phase2_data = phase2_data,
+    required_strings = phase2_required_strings,
+    standard_names = phase2_standard_names,
+    verbose = verbose
+  )
+
+  quality <- export_quality_checks_stage(
+    cleaned_phase2 = phase2$data,
+    quality_check_path = quality_check_path,
+    all_states = all_states,
+    verbose = verbose
+  )
+
+  list(
+    roster = roster$combined,
+    validated_roster = roster$validated,
+    cleaned_phase1 = phase1$data,
+    cleaned_phase1_path = phase1$output_path,
+    split_workbook_paths = phase1$workbook_paths,
+    cleaned_phase2 = phase2$data,
+    cleaned_phase2_path = phase2$output_path,
+    coverage_summary = quality$coverage_summary,
+    quality_check_table = quality$table,
+    quality_check_path = quality$path
+  )
+}
+
+build_roster_stage <- function(taxonomy_terms, name_data, npi_search_args, verbose) {
+  workflow_log("Building provider roster...", verbose = verbose)
   roster_taxonomy <- if (!is.null(taxonomy_terms) && length(taxonomy_terms)) {
     search_by_taxonomy(taxonomy_terms)
   } else {
@@ -75,13 +119,9 @@ run_mystery_caller_workflow <- function(
 
   roster_names <- tibble::tibble()
   if (!is.null(name_data)) {
-    if (!is.data.frame(name_data)) {
-      stop("`name_data` must be a data frame with `first` and `last` columns.")
-    }
+    assert_is_dataframe(name_data, "name_data")
     if (nrow(name_data)) {
-      if (!all(c("first", "last") %in% names(name_data))) {
-        stop("`name_data` must contain columns named `first` and `last`.")
-      }
+      assert_has_columns(name_data, c("first", "last"), "name_data")
       args <- utils::modifyList(list(data = name_data), npi_search_args)
       roster_names <- do.call(search_and_process_npi, args)
     }
@@ -97,40 +137,75 @@ run_mystery_caller_workflow <- function(
     validated_roster <- validate_and_remove_invalid_npi(combined_roster)
   }
 
-  cleaned_phase1 <- clean_phase_1_results(phase1_data, output_directory = phase1_output_directory)
-  split_and_save(
+  list(combined = combined_roster, validated = validated_roster)
+}
+
+prepare_phase1_stage <- function(phase1_data,
+                                 lab_assistant_names,
+                                 output_directory,
+                                 phase1_output_directory,
+                                 split_insurance_order,
+                                 verbose) {
+  workflow_log("Cleaning Phase 1 roster...", verbose = verbose)
+  cleaned_phase1 <- clean_phase_1_results(
+    phase1_data,
+    output_directory = phase1_output_directory,
+    verbose = verbose
+  )
+  output_path <- attr(cleaned_phase1, "output_path")
+
+  workflow_log("Splitting Phase 1 workbook...", verbose = verbose)
+  split_result <- split_and_save(
     cleaned_phase1,
     output_directory = output_directory,
     lab_assistant_names = lab_assistant_names,
-    insurance_order = split_insurance_order
+    insurance_order = split_insurance_order,
+    verbose = verbose
   )
 
+  list(
+    data = cleaned_phase1,
+    output_path = output_path,
+    workbook_paths = split_result
+  )
+}
+
+process_phase2_stage <- function(phase2_data, required_strings, standard_names, verbose) {
+  workflow_log("Cleaning Phase 2 call outcomes...", verbose = verbose)
   cleaned_phase2 <- clean_phase_2_data(
     data_or_path = phase2_data,
-    required_strings = phase2_required_strings,
-    standard_names = phase2_standard_names
+    required_strings = required_strings,
+    standard_names = standard_names,
+    verbose = verbose
   )
 
-  coverage_summary <- NULL
-  if ("state" %in% names(cleaned_phase2)) {
-    coverage_summary <- states_where_physicians_were_NOT_contacted(cleaned_phase2, all_states = all_states)
-  }
+  list(
+    data = cleaned_phase2,
+    output_path = attr(cleaned_phase2, "output_path")
+  )
+}
 
-  if (!dir.exists(dirname(quality_check_path))) {
-    dir.create(dirname(quality_check_path), recursive = TRUE, showWarnings = FALSE)
+export_quality_checks_stage <- function(cleaned_phase2, quality_check_path, all_states, verbose) {
+  coverage_summary <- NULL
+  if (!is.null(cleaned_phase2) && "state" %in% names(cleaned_phase2)) {
+    coverage_summary <- states_where_physicians_were_NOT_contacted(
+      cleaned_phase2,
+      all_states = all_states
+    )
   }
 
   quality_check_table <- NULL
-  if (all(c("npi", "name") %in% names(cleaned_phase2))) {
-    quality_check_table <- save_quality_check_table(cleaned_phase2, quality_check_path)
+  if (!is.null(cleaned_phase2) && all(c("npi", "name") %in% names(cleaned_phase2))) {
+    quality_check_table <- save_quality_check_table(
+      cleaned_phase2,
+      quality_check_path,
+      verbose = verbose
+    )
   }
 
   list(
-    roster = combined_roster,
-    validated_roster = validated_roster,
-    cleaned_phase1 = cleaned_phase1,
-    cleaned_phase2 = cleaned_phase2,
     coverage_summary = coverage_summary,
-    quality_check_table = quality_check_table
+    table = quality_check_table,
+    path = if (!is.null(quality_check_table)) quality_check_path else NULL
   )
 }

@@ -11,12 +11,14 @@
 #' @param split_file_prefix Prefix for each split output file name (default is empty).
 #' @param recursive_create Logical indicating if directories should be created recursively (default is TRUE).
 #' @param insurance_order Vector of insurance types ordered by priority for call scheduling (default is c("Medicaid", "Blue Cross/Blue Shield")).
+#' @param verbose Logical flag controlling progress messages.
 #'
-#' @importFrom dplyr arrange sample_n mutate select
+#' @importFrom dplyr arrange group_by mutate n ungroup
 #' @importFrom openxlsx write.xlsx
 #' @importFrom fs dir_create dir_exists
 #' @importFrom readr read_csv
-#' @return Invisible list of file paths to the created Excel files
+#' @return Invisibly returns a list containing the complete workbook path and
+#'   the individual caller workbook paths.
 #' @export
 #'
 #' @examples
@@ -31,15 +33,18 @@
 
 split_and_save <- function(data_or_path, output_directory, lab_assistant_names, seed = 1978,
                            complete_file_prefix = "complete_non_split_version_", split_file_prefix = "",
-                           recursive_create = TRUE, insurance_order = c("Medicaid", "Blue Cross/Blue Shield")) {
+                           recursive_create = TRUE, insurance_order = c("Medicaid", "Blue Cross/Blue Shield"),
+                           verbose = TRUE) {
   # Validate input data or read from file path
   if (is.character(data_or_path)) {
     if (!base::file.exists(data_or_path)) {
       stop("File does not exist at the specified path: ", data_or_path)
     }
-    data <- readr::read_csv(data_or_path)  # Assuming CSV for simplicity
+    data <- readr::read_csv(data_or_path, show_col_types = FALSE)
+    workflow_log(sprintf("Loaded data from %s", data_or_path), verbose = verbose)
   } else if (is.data.frame(data_or_path)) {
     data <- data_or_path
+    workflow_log("Using provided data frame for workbook splitting.", verbose = verbose)
   } else {
     stop("Data input must be either a dataframe or a valid file path.")
   }
@@ -59,8 +64,8 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
   # Create a ranking based on the insurance order for sorting
   insurance_rank <- setNames(seq_along(insurance_order), insurance_order)
   data <- data %>%
-    mutate(insurance_rank = insurance_rank[insurance]) %>%
-    arrange(insurance_rank, doctor_id)  # Sort by insurance rank, then by doctor_id if necessary
+    dplyr::mutate(insurance_rank = insurance_rank[insurance]) %>%
+    dplyr::arrange(insurance_rank, doctor_id)  # Sort by insurance rank, then by doctor_id if necessary
 
   # Check if lab_assistant_names is provided and has at least two names
   if (length(lab_assistant_names) < 2) {
@@ -70,9 +75,9 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
   # Randomize the data within each insurance group
   set.seed(seed)
   data <- data %>%
-    group_by(insurance_rank) %>%
-    mutate(lab_assistant_assigned = sample(lab_assistant_names, n(), replace = TRUE)) %>%
-    ungroup()
+    dplyr::group_by(insurance_rank) %>%
+    dplyr::mutate(lab_assistant_assigned = sample(lab_assistant_names, dplyr::n(), replace = TRUE)) %>%
+    dplyr::ungroup()
 
   # Create output directory if it doesn't exist
   if (!fs::dir_exists(output_directory)) {
@@ -89,22 +94,34 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
 
   tryCatch({
     openxlsx::write.xlsx(data, complete_output_file)
-    message("Saved unsplit and complete data to: ", complete_output_file)
+    workflow_log(sprintf("Saved unsplit data to %s", complete_output_file), verbose = verbose)
   }, error = function(e) {
     stop("Error saving the complete file. Check if the output directory is writable.")
   })
 
   # Split the data into parts based on lab assistants and save each part
   splits <- base::split(data, data$lab_assistant_assigned)
+  split_paths <- character(0)
   for (lab_assistant_name in names(splits)) {
     output_file <- file.path(output_directory,
                              paste0(split_file_prefix, lab_assistant_name, "_", current_datetime, ".xlsx"))
     tryCatch({
       openxlsx::write.xlsx(splits[[lab_assistant_name]], output_file)
-      message("Saved split data for ", lab_assistant_name, " to: ", output_file)
+      workflow_log(
+        sprintf("Saved split data for %s to %s", lab_assistant_name, output_file),
+        verbose = verbose
+      )
+      split_paths <- c(split_paths, output_file)
     }, error = function(e) {
       stop("Error saving split data for ", lab_assistant_name, ". Check if the output directory is writable.")
     })
   }
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
+
+  invisible(list(
+    complete_path = complete_output_file,
+    split_paths = split_paths
+  ))
 }
