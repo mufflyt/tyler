@@ -9,6 +9,8 @@
 #'   column.
 #' @param google_maps_api_key A valid Google Maps API key.
 #' @param output_file_path Optional path to save the geocoded dataset as CSV.
+#' @param notify Logical. If `TRUE`, play a notification sound when geocoding
+#'   finishes (requires the optional `beepr` package). Defaults to `TRUE`.
 #'
 #' @return A data frame with latitude and longitude columns added.
 #' @export
@@ -22,7 +24,8 @@
 #' @importFrom dplyr left_join distinct mutate
 #'
 geocode_unique_addresses <- function(file_path, google_maps_api_key,
-                                     output_file_path = NULL) {
+                                     output_file_path = NULL,
+                                     notify = TRUE) {
   if (!file.exists(file_path)) {
     stop("Input file not found.")
   }
@@ -53,6 +56,8 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
     readr::write_csv(data, output_file_path)
   }
 
-  beepr::beep(2)
+  if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
   data
 }

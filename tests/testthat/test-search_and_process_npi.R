@@ -75,7 +75,7 @@ test_that("Processes data frame input correctly", {
   mockery::stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
   mockery::stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
 
-  result <- search_and_process_npi(sample_data)
+  result <- search_and_process_npi(sample_data, notify = FALSE)
 
   expect_true(nrow(result) >= 3) # Should return results for at least 3 names, possibly more due to multiple matches
   expect_true("first_name" %in% colnames(result))
@@ -86,13 +86,13 @@ test_that("Processes data frame input correctly", {
 test_that("Handles empty input data frame", {
   cat("Running test: Handles empty input data frame\n")
   empty_data <- data.frame(first = character(), last = character(), stringsAsFactors = FALSE)
-  result <- search_and_process_npi(empty_data)
+  result <- search_and_process_npi(empty_data, notify = FALSE)
 
   expect_equal(nrow(result), 0)
 })
 
 test_that("validates required columns", {
-  expect_error(search_and_process_npi(data.frame(first = "A")), "columns: last")
+  expect_error(search_and_process_npi(data.frame(first = "A"), notify = FALSE), "columns: last")
 })
 
 test_that("Handles invalid NPIs gracefully", {
@@ -106,9 +106,53 @@ test_that("Handles invalid NPIs gracefully", {
     cat("Mock flatten for invalid NPI object\n")
     return(NULL)
   })
-  result <- search_and_process_npi(invalid_data)
+  result <- search_and_process_npi(invalid_data, notify = FALSE)
 
   expect_equal(nrow(result), 0)
+})
+
+
+test_that("Accumulates results and resumes processing", {
+  cat("Running test: Accumulates results and resumes processing\n")
+  temp_accumulate <- file.path(tempdir(), "npi_accumulate.csv")
+  temp_log <- file.path(tempdir(), "npi_progress.log")
+  if (file.exists(temp_accumulate)) {
+    file.remove(temp_accumulate)
+  }
+  if (file.exists(temp_log)) {
+    file.remove(temp_log)
+  }
+
+  mockery::stub(search_and_process_npi, 'npi::npi_search', mock_npi_search)
+  mockery::stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
+
+  data <- data.frame(
+    first = c("John", "Jane"),
+    last = c("Doe", "Smith"),
+    stringsAsFactors = FALSE
+  )
+
+  result_1 <- search_and_process_npi(
+    data,
+    accumulate_path = temp_accumulate,
+    progress_log = temp_log,
+    notify = FALSE
+  )
+
+  expect_true(file.exists(temp_accumulate))
+  expect_true(file.exists(temp_log))
+  accumulated <- readr::read_csv(temp_accumulate, show_col_types = FALSE)
+  expect_true(nrow(accumulated) >= 2)
+
+  result_2 <- search_and_process_npi(
+    data[1, , drop = FALSE],
+    accumulate_path = temp_accumulate,
+    resume = TRUE,
+    notify = FALSE
+  )
+
+  expect_equal(nrow(result_2), nrow(accumulated))
+  expect_true(all(result_2$search_term %in% accumulated$search_term))
 })
 
 
@@ -127,7 +171,7 @@ test_that("Processes various names correctly", {
 
   for (test_case in test_cases) {
     data <- data.frame(first = test_case$first, last = test_case$last, stringsAsFactors = FALSE)
-    result <- search_and_process_npi(data)
+    result <- search_and_process_npi(data, notify = FALSE)
 
     if (test_case$first == "Invalid") {
       expect_equal(nrow(result), 0)
@@ -153,7 +197,7 @@ test_that("Handles large datasets efficiently", {
   mockery::stub(search_and_process_npi, 'npi::npi_flatten', mock_npi_flatten)
 
   start_time <- Sys.time()
-  result <- search_and_process_npi(large_data)
+  result <- search_and_process_npi(large_data, notify = FALSE)
   end_time <- Sys.time()
 
   expect_true(nrow(result) >= 300)

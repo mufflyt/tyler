@@ -3,6 +3,12 @@
 #' This function searches the NPI Database for healthcare providers based on a taxonomy description.
 #'
 #' @param taxonomy_to_search A character vector containing the taxonomy description(s) to search for.
+#' @param write_snapshot Logical. If `TRUE`, the retrieved data is saved as an `.rds`
+#'   file for later reference. Defaults to `TRUE`.
+#' @param snapshot_dir Directory where snapshot files should be written when
+#'   `write_snapshot` is `TRUE`. Defaults to `"data"`.
+#' @param notify Logical. If `TRUE`, play a notification sound when processing
+#'   completes (requires the optional `beepr` package). Defaults to `TRUE`.
 #' @return A data frame with filtered NPI data based on the specified taxonomy description.
 #'
 #' @examples
@@ -19,7 +25,10 @@
 #' @importFrom dplyr tibble
 #' @family npi
 #' @export
-search_by_taxonomy <- function(taxonomy_to_search) {
+search_by_taxonomy <- function(taxonomy_to_search,
+                               write_snapshot = TRUE,
+                               snapshot_dir = "data",
+                               notify = TRUE) {
   if (missing(taxonomy_to_search) || is.null(taxonomy_to_search)) {
     return(dplyr::tibble())
   }
@@ -99,15 +108,17 @@ search_by_taxonomy <- function(taxonomy_to_search) {
     })
   }
 
-  tryCatch({
-    dir.create("data", showWarnings = FALSE, recursive = TRUE)
-    filename <- file.path("data", paste0("search_taxonomy_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds"))
-    readr::write_rds(npi_data, filename)
-  }, error = function(e) {
-    message("Error saving data to file:\n", e$message)
-  })
+  if (isTRUE(write_snapshot) && !is.null(snapshot_dir)) {
+    tryCatch({
+      dir.create(snapshot_dir, showWarnings = FALSE, recursive = TRUE)
+      filename <- file.path(snapshot_dir, paste0("search_taxonomy_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds"))
+      readr::write_rds(npi_data, filename)
+    }, error = function(e) {
+      message("Error saving data to file:\n", e$message)
+    })
+  }
 
-  if (requireNamespace("beepr", quietly = TRUE)) {
+  if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
 

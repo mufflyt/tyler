@@ -34,20 +34,20 @@ test_that("Reads input file correctly", {
 # Test if the function handles missing file correctly
 test_that("Handles missing file correctly", {
   mockery::stub(geocode_unique_addresses, 'file.exists', function(file) FALSE)
-  expect_error(geocode_unique_addresses("nonexistent_file.csv", "fake_api_key"), "Input file not found.")
+  expect_error(geocode_unique_addresses("nonexistent_file.csv", "fake_api_key", notify = FALSE), "Input file not found.")
 })
 
 # Test if the function handles missing address column correctly
 test_that("Handles missing address column correctly", {
   temp_csv <- create_temp_csv(sample_data %>% select(-address))
-  expect_error(geocode_unique_addresses(temp_csv, "fake_api_key"), "The dataset must have a column named 'address' for geocoding.")
+  expect_error(geocode_unique_addresses(temp_csv, "fake_api_key", notify = FALSE), "The dataset must have a column named 'address' for geocoding.")
 })
 
 # Test if the function processes data correctly
 test_that("Processes data correctly", {
   temp_csv <- create_temp_csv(sample_data)
   mockery::stub(geocode_unique_addresses, 'ggmap::geocode', mock_geocode)
-  result <- geocode_unique_addresses(temp_csv, "fake_api_key")
+  result <- geocode_unique_addresses(temp_csv, "fake_api_key", notify = FALSE)
   expect_equal(ncol(result), ncol(sample_data) + 2)  # Original columns + latitude and longitude
   expect_true("latitude" %in% colnames(result))
   expect_true("longitude" %in% colnames(result))
@@ -58,7 +58,7 @@ test_that("Saves output file correctly", {
   temp_csv <- create_temp_csv(sample_data)
   output_csv <- file.path(tempdir(), "output_data.csv")
   mockery::stub(geocode_unique_addresses, 'ggmap::geocode', mock_geocode)
-  geocode_unique_addresses(temp_csv, "fake_api_key", output_csv)
+  geocode_unique_addresses(temp_csv, "fake_api_key", output_csv, notify = FALSE)
   expect_true(file.exists(output_csv))
   output_data <- suppressMessages(read_csv(output_csv))
   expect_equal(ncol(output_data), ncol(sample_data) + 2)

@@ -4,10 +4,24 @@
 \alias{search_by_taxonomy}
 \title{Search NPI Database by Taxonomy}
 \usage{
-search_by_taxonomy(taxonomy_to_search)
+search_by_taxonomy(
+  taxonomy_to_search,
+  write_snapshot = TRUE,
+  snapshot_dir = "data",
+  notify = TRUE
+)
 }
 \arguments{
 \item{taxonomy_to_search}{A character vector containing the taxonomy description(s) to search for.}
+
+\item{write_snapshot}{Logical. If \code{TRUE}, the retrieved data is saved as an \code{.rds}
+file for later reference. Defaults to \code{TRUE}.}
+
+\item{snapshot_dir}{Directory where snapshot files should be written when
+\code{write_snapshot} is \code{TRUE}. Defaults to \code{"data"}.}
+
+\item{notify}{Logical. If \code{TRUE}, play a notification sound when processing completes
+(requires the optional \pkg{beepr} package). Defaults to \code{TRUE}.}
 }
 \value{
 A data frame with filtered NPI data based on the specified taxonomy description.

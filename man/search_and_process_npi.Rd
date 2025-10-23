@@ -11,7 +11,11 @@ search_and_process_npi(
   country_code = "US",
   filter_credentials = c("MD", "DO"),
   save_chunk_size = 10,
-  dest_dir = NULL
+  dest_dir = NULL,
+  accumulate_path = NULL,
+  resume = FALSE,
+  progress_log = NULL,
+  notify = TRUE
 )
 }
 \arguments{
@@ -27,7 +31,21 @@ search_and_process_npi(
 
 \item{save_chunk_size}{The number of results to save per chunk. Default is 10.}
 
-\item{dest_dir}{Destination directory to save chunked results. Default is NULL (current working directory).}
+\item{dest_dir}{Destination directory to save chunked results. Default is \code{NULL}
+(no chunk files are written).}
+
+\item{accumulate_path}{Optional CSV path that accumulates every non-empty result. When
+provided, results are appended after each successful lookup.}
+
+\item{resume}{Logical. If \code{TRUE} and \code{accumulate_path} already exists, names
+that have been processed previously (based on the \code{search_term} column) are
+skipped.}
+
+\item{progress_log}{Optional file path used to log progress updates. The log file is
+appended to and created automatically if it does not exist.}
+
+\item{notify}{Logical. If \code{TRUE}, play a notification sound when processing
+completes (requires the optional \pkg{beepr} package). Defaults to \code{TRUE}.}
 }
 \value{
 A data frame containing the processed NPI search results.

@@ -7,7 +7,8 @@
 geocode_unique_addresses(
   file_path,
   google_maps_api_key,
-  output_file_path = NULL
+  output_file_path = NULL,
+  notify = TRUE
 )
 }
 \arguments{
@@ -16,6 +17,9 @@ geocode_unique_addresses(
 \item{google_maps_api_key}{Your Google Maps API key.}
 
 \item{output_file_path}{Path to the output CSV file where the geocoded data will be saved. (Optional)}
+
+\item{notify}{Logical. If \code{TRUE}, play a notification sound when geocoding finishes
+(requires the optional \pkg{beepr} package). Defaults to \code{TRUE}.}
 }
 \value{
 A dataframe containing geocoded address data with latitude and longitude.
