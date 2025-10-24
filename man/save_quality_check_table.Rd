@@ -4,18 +4,29 @@
 \alias{save_quality_check_table}
 \title{Save Quality Check Table}
 \usage{
-save_quality_check_table(df, filepath)
+save_quality_check_table(data, filepath)
 }
 \arguments{
-\item{df}{A data frame containing the columns 'npi' and 'name'.}
+\item{data}{A data frame containing the columns 'npi' and 'name'.}
 
 \item{filepath}{The path where the CSV file should be saved.}
 }
 \value{
-Prints a message to the console indicating that the CSV file has been saved successfully.
+The filtered data. A message is emitted indicating where the CSV was saved.
 }
 \description{
 This function takes a data frame containing 'npi' and 'name' columns and creates a quality check table.
 The table includes the count of observations for each 'npi' and 'name' combination where the count is greater than 2.
 The resulting table is saved as a CSV file.
 }
+\examples{
+\dontrun{
+save_quality_check_table(my_data, "qc.csv")
+}
+}
+\seealso{
+Other utilities: 
+\code{\link{download_large_file}()},
+\code{\link{format_pct}()}
+}
+\concept{utilities}

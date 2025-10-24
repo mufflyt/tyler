@@ -4,12 +4,15 @@
 \alias{arsenal_tables_write2word}
 \title{Writes an Arsenal table object to a Word document.}
 \usage{
-arsenal_tables_write2word(object, filename)
+arsenal_tables_write2word(object, filename, output_dir = NULL)
 }
 \arguments{
 \item{object}{An object to be written to Word, typically an Arsenal table.}
 
 \item{filename}{The filename (without extension) for the Word document.}
+
+\item{output_dir}{Directory where the Word document should be written.
+Defaults to a session-specific folder inside \code{\link[=tempdir]{tempdir()}}.}
 }
 \value{
 None

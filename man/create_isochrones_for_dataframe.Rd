@@ -17,19 +17,35 @@ create_isochrones_for_dataframe(
 
 \item{breaks}{A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).}
 
-\item{api_key}{HERE API key supplied explicitly or read from the `HERE_API_KEY` environment variable.}
+\item{output_dir}{Directory where intermediate \code{.rds} results are written.
+Defaults to a session-specific folder beneath \code{\link[=tempdir]{tempdir()}}.}
 
-\item{output_dir}{Directory where intermediate `.rds` results are written. Defaults to a session-specific folder beneath\break
-\code{tempdir()}.}
-
-\item{save_interval}{Number of seconds between automatic checkpoint saves. Defaults to 240 seconds (~4 minutes).}
+\item{save_interval}{Number of seconds between automatic checkpoint saves.
+Defaults to 240 seconds (~4 minutes).}
 }
 \value{
 A dataframe containing the isochrones data with added 'name' column.
 }
 \description{
 This function retrieves isochrones for each point in a given dataframe by looping
-over the rows and calling the create_isochrones function for each point while
-periodically checkpointing results to both RDS and GeoPackage files so progress
-is preserved during long runs.
+over the rows and calling the create_isochrones function for each point.
 }
+\examples{
+\dontrun{
+isochrones_data <- create_isochrones_for_dataframe("points.csv")
+}
+}
+\seealso{
+Other mapping: 
+\code{\link{create_density_plot}()},
+\code{\link{create_individual_isochrone_plots}()},
+\code{\link{create_isochrones}()},
+\code{\link{create_line_plot}()},
+\code{\link{create_scatter_plot}()},
+\code{\link{map_create_acog_districts_sf}()},
+\code{\link{map_create_base}()},
+\code{\link{map_create_block_group_overlap}()},
+\code{\link{map_create_leaflet_base}()},
+\code{\link{map_create_physician_dot}()}
+}
+\concept{mapping}

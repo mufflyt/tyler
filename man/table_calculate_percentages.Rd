@@ -18,7 +18,10 @@ A data frame containing the most common value and its count, along with the perc
 This function calculates the percentage of the most common value in a specified categorical variable from a data frame.
 }
 \details{
-The function converts the variable name to a character string, then counts the occurrences of each unique value in the specified column. It calculates the percentage each value represents of the total and returns the most common value with its count and percentage.
+The function converts the variable name to a character string, then counts
+the occurrences of each unique value in the specified column. It calculates the
+percentage each value represents of the total and returns the most common value
+with its count and percentage.
 }
 \examples{
 # Example 1: Basic usage with a simple dataset
@@ -35,4 +38,5 @@ print(result)
 df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
 result <- table_calculate_percentages(df_na, "category")
 print(result)
+
 }

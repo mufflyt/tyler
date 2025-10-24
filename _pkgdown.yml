@@ -22,26 +22,103 @@ navbar:
       href: reference/index.html#datasets
 
 reference:
-  - title: "Other Exported Functions"
+  - title: "Data and Datasets"
+    contents:
+      - ACOG_Districts
+      - acgme
+      - census_summaries
+      - fips
+      - taxonomy
+
+  - title: "Core Functions"
+    contents:
+      - search_and_process_npi
+      - search_by_taxonomy
+      - validate_and_remove_invalid_npi
+      - retrieve_clinician_data
+      - genderize_physicians
+
+  - title: "Mapping and Geospatial"
+    contents:
+      - create_isochrones
+      - create_isochrones_for_dataframe
+      - create_individual_isochrone_plots
+      - geocode_unique_addresses
+      - cityStateToLatLong
+      - map_create_base
+      - map_create_leaflet_base
+      - map_create_acog_districts_sf
+      - map_create_block_group_overlap
+      - map_create_physician_dot
+      - calculate_intersection_overlap_and_save
+      - hrr
+      - hrr_generate_maps
+      - ensure_hrr_shapefile
+      - validate_sf_inputs
+
+  - title: "Census and Demographics"
+    contents:
+      - get_census_data
+      - summarize_census_data
+      - plot_census_age_distribution
+
+  - title: "Data Processing and Analysis"
+    contents:
+      - clean_phase_1_results
+      - clean_phase_2_data
+      - rename_columns_by_substring
+      - split_and_save
+      - remove_constant_vars
+      - remove_near_zero_var
+      - check_normality
+      - create_formula
+      - run_mystery_caller_workflow
+
+  - title: "Visualization and Plotting"
+    contents:
+      - create_and_plot_interaction
+      - create_density_plot
+      - create_line_plot
+      - create_scatter_plot
+      - plot_and_save_emmeans
+
+  - title: "Tables and Reports"
     contents:
       - max_table
       - min_table
       - arsenal_tables_write2word
-      - calculate_intersection_overlap_and_save
-      - clean_phase_1_results
-      - genderize_physicians
-      - map_create_leaflet_base
-      - geocode_unique_addresses
-      - hrr
-      - hrr_generate_maps
-      - remove_constant_vars
-      - remove_near_zero_var
-      - retrieve_clinician_data
-      - save_quality_check_table
-      - scrape_physicians_data_with_tor
-      - search_by_taxonomy
-      - split_and_save
+      - table_calculate_percentages
+      - table_calculate_proportion
       - table_write_pdf
+      - save_quality_check_table
+      - format_pct
+
+  - title: "Utilities and Helpers"
+    contents:
+      - utility_library
+      - tyler_check_dependencies
+      - tyler_resolve_path
+      - tyler_check_data_completeness
+      - tyler_export_with_backup
+      - tyler_use_quiet_logging
+      - tyler_log_info
+      - tyler_standard_labels
+      - tyler_standard_palette
+      - tyler_quality_tier
+      - tyler_tempdir
+      - tyler_cache_dir
+      - validate_dataframe
+      - download_large_file
+      - progress_tracker
+      - progress_tracker_start
+      - progress_tracker_finish
+      - progress_tracker_fail
+      - progress_tracker_update
+      - progress_tracker_summary
+      - most_common_gender_training_academic
+      - physician_age
+      - states_where_physicians_were_NOT_contacted
+      - scrape_physicians_data_with_tor
       - tyler-package
 
   - title: "Deprecated"
@@ -49,6 +126,7 @@ reference:
       - search_npi
       - test_and_process_isochrones
       - process_and_save_isochrones
+      - tyler-deprecated
 
 articles:
   - title: "Vignettes"
@@ -60,5 +138,5 @@ articles:
       - imotive-news
       - my-vignette
       - search_and_process_npi
-      - validate_and_remove_invalid_npi
+      - aggregating_provider_data
 

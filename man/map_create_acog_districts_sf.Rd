@@ -7,13 +7,19 @@
 map_create_acog_districts_sf(acog_districts_file = NULL)
 }
 \arguments{
-\item{acog_districts_file}{Optional path to a CSV containing the mapping of states to ACOG districts. Defaults to the packaged \code{inst/extdata/ACOG_Districts.csv}.}
+\item{acog_districts_file}{Optional path to a CSV containing the mapping of
+states to ACOG districts. Defaults to the packaged
+\code{inst/extdata/ACOG_Districts.csv}.}
 }
 \value{
-An \code{sf} object with one row per ACOG district and columns describing the district name, subregion, member states, and their abbreviations.
+An \code{sf} object with one row per ACOG district and columns describing
+the district name, subregion, member states, and their abbreviations.
 }
 \description{
-This helper reads the packaged ACOG district lookup table and joins it with state geometries from Natural Earth to construct polygons for each district. The resulting object can be used to add district boundaries to Leaflet maps or for further spatial analysis.
+This helper reads the packaged ACOG district lookup table and joins it with
+state geometries from Natural Earth to construct polygons for each district.
+The resulting object can be used to add district boundaries to Leaflet maps
+or for further spatial analysis.
 }
 \examples{
 \dontrun{
@@ -21,3 +27,17 @@ map_create_acog_districts_sf()
 map_create_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
 }
 }
+\seealso{
+Other mapping: 
+\code{\link{create_density_plot}()},
+\code{\link{create_individual_isochrone_plots}()},
+\code{\link{create_isochrones}()},
+\code{\link{create_isochrones_for_dataframe}()},
+\code{\link{create_line_plot}()},
+\code{\link{create_scatter_plot}()},
+\code{\link{map_create_base}()},
+\code{\link{map_create_block_group_overlap}()},
+\code{\link{map_create_leaflet_base}()},
+\code{\link{map_create_physician_dot}()}
+}
+\concept{mapping}

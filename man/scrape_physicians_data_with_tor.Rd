@@ -4,7 +4,13 @@
 \alias{scrape_physicians_data_with_tor}
 \title{Scrape Physicians' Data with Tor}
 \usage{
-scrape_physicians_data_with_tor(startID, endID, torPort)
+scrape_physicians_data_with_tor(
+  startID,
+  endID,
+  torPort,
+  wrong_ids_path = NULL,
+  output_format = c("csv", "parquet")
+)
 }
 \arguments{
 \item{startID}{The starting ID for scraping.}
@@ -12,6 +18,12 @@ scrape_physicians_data_with_tor(startID, endID, torPort)
 \item{endID}{The ending ID for scraping.}
 
 \item{torPort}{The port number for Tor SOCKS proxy.}
+
+\item{wrong_ids_path}{Optional path to a roster of IDs to skip. CSV and Parquet
+files are supported.}
+
+\item{output_format}{File format to use when saving scraped results. Choose from
+"csv" (default) or "parquet".}
 }
 \value{
 A dataframe containing scraped physicians' data.
@@ -20,9 +32,13 @@ A dataframe containing scraped physicians' data.
 This function scrapes data for physicians within a specified ID range, excluding wrong IDs.
 }
 \examples{
-if (interactive()) {
-# Running this helper requires a local Tor proxy and network access, so we keep
-# the example non-executing on automated checks.
-scrape_result <- scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 9150)
-}
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Running this helper requires a local Tor proxy and network access, so we
+# keep the example non-executing on automated checks.
+scrape_result <- scrape_physicians_data_with_tor(
+  startID = 9045999,
+  endID = 9046000,
+  torPort = 9150
+)
+\dontshow{\}) # examplesIf}
 }

@@ -7,7 +7,7 @@
 map_create_leaflet_base()
 }
 \value{
-A Leaflet map object.
+Invisibly returns the Leaflet map object.
 }
 \description{
 This function creates a Leaflet BASE map with specific configurations, including the base tile layer, scale bar,
@@ -16,3 +16,17 @@ default view settings, and layers control.
 \examples{
 map <- map_create_leaflet_base()
 }
+\seealso{
+Other mapping: 
+\code{\link{create_density_plot}()},
+\code{\link{create_individual_isochrone_plots}()},
+\code{\link{create_isochrones}()},
+\code{\link{create_isochrones_for_dataframe}()},
+\code{\link{create_line_plot}()},
+\code{\link{create_scatter_plot}()},
+\code{\link{map_create_acog_districts_sf}()},
+\code{\link{map_create_base}()},
+\code{\link{map_create_block_group_overlap}()},
+\code{\link{map_create_physician_dot}()}
+}
+\concept{mapping}

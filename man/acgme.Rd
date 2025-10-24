@@ -17,19 +17,19 @@ Data was obtained from the ACGME website: \url{https://apps.acgme.org/ads/Public
 \usage{
 acgme
 }
+\value{
+A tibble listing ACGME-accredited OBGYN residency programs and
+their program directors.
+}
 \description{
 This dataset provides information about Obstetricians and Gynecologists (OBGYN) residency programs accredited by the Accreditation Council for Graduate Medical Education (ACGME).
-}
-\value{
-A tibble listing ACGME-accredited OBGYN residency programs and their
-program directors.
 }
 \examples{
 # Load the ACGME OBGYN Residency Data
 data(acgme)
 
-# View the first few rows of the dataset
-head(acgme)
+# Inspect the dataset
+print(acgme)
 
 # Get a summary of the dataset
 summary(acgme)
@@ -37,4 +37,12 @@ summary(acgme)
 # Perform data analysis and exploration
 
 }
+\seealso{
+Other datasets: 
+\code{\link{ACOG_Districts}},
+\code{\link{cityStateToLatLong}},
+\code{\link{fips}},
+\code{\link{taxonomy}}
+}
+\concept{datasets}
 \keyword{dataset}

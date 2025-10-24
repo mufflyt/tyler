@@ -25,11 +25,19 @@ A tibble with 243 rows and 10 variables:
 \usage{
 fips
 }
+\value{
+A tibble containing Federal Information Processing Standards
+(FIPS) codes for states and counties.
+}
 \description{
 3 columns with 51 observations.
 }
-\value{
-A tibble containing Federal Information Processing Standards (FIPS) codes for
-states and counties.
+\seealso{
+Other datasets: 
+\code{\link{ACOG_Districts}},
+\code{\link{acgme}},
+\code{\link{cityStateToLatLong}},
+\code{\link{taxonomy}}
 }
+\concept{datasets}
 \keyword{datasets}

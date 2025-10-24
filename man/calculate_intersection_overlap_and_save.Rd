@@ -23,20 +23,21 @@ intersection.}
 
 \item{output_dir}{The directory where the intersection shapefile will be saved.}
 
-\item{crosswalk}{Optional function used to translate ACS block groups between the 2010
-and 2020 vintages when the provider \code{data_year} and ACS \code{vintage}
-columns disagree. The function receives the sf object and a list containing
-\code{from} and \code{to} years and must return an sf object whose \code{vintage}
-column matches the provider year.}
+\item{crosswalk}{Optional function used to translate ACS geographies between
+2010 and 2020 definitions. When supplied, it should accept two arguments:
+an sf object and a named list with \code{from} and \code{to} years, returning an sf
+object whose \code{vintage} column matches the provider \code{data_year}.}
 
-\item{notify}{Logical. If \code{TRUE}, play a notification sound on completion when the optional \pkg{beepr}
-package is available. Defaults to \code{TRUE}.}
+\item{notify}{Logical. If \code{TRUE}, play a notification sound on completion when
+the optional \code{beepr} package is available. Defaults to \code{TRUE}.}
 }
 \value{
 None. The function saves the intersection shapefile and provides logging.
 }
 \description{
-This function calculates the intersection between block groups and isochrones for a specific drive time and saves the results to a shapefile.  Areas are measured after reprojecting both datasets to an equal-area coordinate reference system for accuracy. Provider and ACS vintages must match; if a 2010/2020 mismatch is detected, users must supply a \code{crosswalk} to perform the translation. Isochrone polygons are unioned before intersection so overlapping catchments are treated once, and the resulting outputs record the area measurement method that was used.
+This function calculates the intersection between block groups and isochrones for a specific drive time and saves the results to a shapefile.  To
+ensure accurate area-based calculations, both datasets are temporarily
+projected to an equal-area CRS before measuring.
 }
 \examples{
 calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")

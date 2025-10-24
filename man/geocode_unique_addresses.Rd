@@ -2,7 +2,7 @@
 % Please edit documentation in R/geocode.R
 \name{geocode_unique_addresses}
 \alias{geocode_unique_addresses}
-\title{Geocode Unique Addresses}
+\title{Geocode unique addresses from a file}
 \usage{
 geocode_unique_addresses(
   file_path,
@@ -16,47 +16,41 @@ geocode_unique_addresses(
 )
 }
 \arguments{
-\item{file_path}{Path to the input file (CSV, RDS, or XLSX) containing address data.}
+\item{file_path}{Path to a CSV, RDS or XLSX file containing an \code{address}
+column.}
 
-\item{google_maps_api_key}{Your Google Maps API key.}
+\item{google_maps_api_key}{A valid Google Maps API key.}
 
-\item{output_file_path}{Path to the output CSV file where the geocoded data will be saved. (Optional)}
+\item{output_file_path}{Optional path to save the geocoded dataset as CSV.}
 
-\item{failed_output_path}{Optional path that captures addresses which could not
-be geocoded after all retries. Existing files are preserved as
-timestamped backups.}
+\item{failed_output_path}{Optional path that captures rows that failed to
+geocode after all retries. When supplied, a timestamped backup is created
+before overwriting existing results.}
 
-\item{notify}{Logical. If \code{TRUE}, play a notification sound when geocoding finishes
-(requires the optional \pkg{beepr} package). Defaults to \code{TRUE}.}
+\item{notify}{Logical. If \code{TRUE}, play a notification sound when geocoding
+finishes (requires the optional \code{beepr} package). Defaults to \code{TRUE}.}
 
-\item{quiet}{Logical flag controlling log verbosity. Defaults to the
-package-wide quiet-mode option.}
+\item{quiet}{Logical flag controlling log verbosity. Defaults to the package
+quiet-mode option.}
 
-\item{tracker}{Optional progress tracker created with
-\code{progress_tracker()}. When supplied, the geocoding stage is started
-and finished (or failed) automatically.}
+\item{tracker}{Optional progress tracker created with \code{\link[=progress_tracker]{progress_tracker()}}.
+When supplied, the step named by \code{tracker_step} is automatically started and
+marked as complete or failed with an appropriate quality tier.}
 
-\item{tracker_step}{Character string identifying the tracker step name.}
+\item{tracker_step}{Character string describing the step name used when
+updating \code{tracker}.}
 }
 \value{
-A dataframe containing geocoded address data with latitude and longitude.
+A data frame with latitude and longitude columns added.
 }
 \description{
-This function geocodes unique addresses using the Google Maps API and appends the
-latitude and longitude to the original dataset. Please ensure that every dataset
-must have a column named 'address'.
+Reads an input dataset containing an \code{address} column, geocodes the unique
+addresses using the Google Maps API via \code{ggmap::geocode}, and returns the
+data with additional \code{latitude} and \code{longitude} columns. Optionally writes the
+result to \code{output_file_path}.
 }
 \examples{
 \dontrun{
-# Define the input file path, Google Maps API key, and output file path (optional)
-file_path <- "input_data.csv"
-google_maps_api_key <- "your_api_key"
-output_file_path <- "output_data.csv"  # Optional
-
-# Call the geocode_unique_addresses function with or without specifying output_file_path
-geocoded_data <- geocode_unique_addresses(file_path, google_maps_api_key)
-# or
-geocoded_data <- geocode_unique_addresses(file_path, google_maps_api_key, output_file_path)
+result <- geocode_unique_addresses("addresses.csv", "my_api_key")
 }
-
 }

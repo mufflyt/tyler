@@ -1,0 +1,15 @@
+pandoc: 3.8.2.1
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  aggregating_provider_data: aggregating_provider_data.html
+  create_isochrones: create_isochrones.html
+  geocode: geocode.html
+  get_census_data: get_census_data.html
+  imotive-news: imotive-news.html
+  my-vignette: my-vignette.html
+  search_and_process_npi: search_and_process_npi.html
+last_built: 2025-10-24T22:24Z
+urls:
+  reference: https://mufflyt.github.io/tyler/reference
+  article: https://mufflyt.github.io/tyler/articles

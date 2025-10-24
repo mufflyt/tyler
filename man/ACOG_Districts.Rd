@@ -17,19 +17,19 @@ Data was obtained from the official ACOG website: \url{https://www.acog.org/comm
 \usage{
 ACOG_Districts
 }
+\value{
+A tibble where each row represents an ACOG district with its
+corresponding two-letter abbreviation and full state name.
+}
 \description{
 This dataset contains information about American College of Obstetricians and Gynecologists (ACOG) districts, including their two-letter state abbreviations and full state names.
-}
-\value{
-A tibble where each row represents an ACOG district with its two-letter
-abbreviation and corresponding state name.
 }
 \examples{
 # Load the ACOG Districts Data
 data(ACOG_Districts)
 
-# View the first few rows of the dataset
-head(ACOG_Districts)
+# Inspect the dataset
+print(ACOG_Districts)
 
 # Get a summary of the dataset
 summary(ACOG_Districts)
@@ -37,4 +37,12 @@ summary(ACOG_Districts)
 # Perform data analysis and exploration
 
 }
+\seealso{
+Other datasets: 
+\code{\link{acgme}},
+\code{\link{cityStateToLatLong}},
+\code{\link{fips}},
+\code{\link{taxonomy}}
+}
+\concept{datasets}
 \keyword{dataset}

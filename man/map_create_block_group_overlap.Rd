@@ -11,10 +11,9 @@ map_create_block_group_overlap(
 )
 }
 \arguments{
-\item{bg_data}{An \code{sf} polygon object representing block group data in EPSG:4326.}
+\item{bg_data}{A SpatialPolygonsDataFrame representing block group data.}
 
-\item{isochrones_data}{An \code{sf} polygon object representing isochrone data with a
-drive-time column expressed in minutes.}
+\item{isochrones_data}{A SpatialPolygonsDataFrame representing isochrone data.}
 
 \item{output_dir}{Directory path for exporting the map files. Default is "figures/".}
 }
@@ -22,11 +21,7 @@ drive-time column expressed in minutes.}
 None
 }
 \description{
-This function creates a map that displays block groups and their overlap with
-isochrones. Polygons are repaired and oriented before plotting, and the
-isochrones are unioned and rendered from the longest drive time (red 180 minute
-zones) to the shortest (blue 30 minute zones) so shorter travel bands always
-appear on top.
+This function creates a map that displays block groups and their overlap with isochrones.
 }
 \examples{
 \dontrun{
@@ -38,3 +33,17 @@ map_create_block_group_overlap(block_groups, isochrones_joined_map, "custom_outp
 }
 
 }
+\seealso{
+Other mapping: 
+\code{\link{create_density_plot}()},
+\code{\link{create_individual_isochrone_plots}()},
+\code{\link{create_isochrones}()},
+\code{\link{create_isochrones_for_dataframe}()},
+\code{\link{create_line_plot}()},
+\code{\link{create_scatter_plot}()},
+\code{\link{map_create_acog_districts_sf}()},
+\code{\link{map_create_base}()},
+\code{\link{map_create_leaflet_base}()},
+\code{\link{map_create_physician_dot}()}
+}
+\concept{mapping}

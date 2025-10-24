@@ -4,7 +4,15 @@
 \alias{hrr_generate_maps}
 \title{Generate Hexagon Maps for Hospital Referral Regions (HRR)}
 \usage{
-hrr_generate_maps(physician_sf, trait_map = "all", honey_map = "all")
+hrr_generate_maps(
+  physician_sf,
+  trait_map = "all",
+  honey_map = "all",
+  output_dir = NULL,
+  dpi = 600,
+  width = 7,
+  height = 5
+)
 }
 \arguments{
 \item{physician_sf}{An sf object containing physician data with coordinates.}
@@ -12,10 +20,24 @@ hrr_generate_maps(physician_sf, trait_map = "all", honey_map = "all")
 \item{trait_map}{A string specifying the trait map (default is "all").}
 
 \item{honey_map}{A string specifying the honey map (default is "all").}
+
+\item{output_dir}{Directory where generated figures are written. Defaults to a
+session-specific folder inside \code{\link[=tempdir]{tempdir()}}.}
+
+\item{dpi}{Resolution used when saving the final figure (default is 600).}
+
+\item{width}{Final figure width in inches for journal submission (default is 7).}
+
+\item{height}{Final figure height in inches for journal submission (default is 5).}
 }
 \value{
-A ggplot object of the generated map.
+Invisibly returns the ggplot object of the generated map.
 }
 \description{
 This function generates hexagon maps for hospital referral regions.
+}
+\examples{
+\dontrun{
+hrr_generate_maps(physician_sf)
+}
 }

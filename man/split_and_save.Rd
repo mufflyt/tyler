@@ -16,7 +16,7 @@ split_and_save(
 )
 }
 \arguments{
-\item{data_or_path}{Either a dataframe containing the input data or a path to the input data file (RDS, CSV, or XLS/XLSX).}
+\item{data_or_path}{Either a dataframe containing the input data or a path to the input data file (RDS, CSV, Parquet, or XLS/XLSX).}
 
 \item{output_directory}{Directory where output Excel files will be saved.}
 
@@ -31,6 +31,9 @@ split_and_save(
 \item{recursive_create}{Logical indicating if directories should be created recursively (default is TRUE).}
 
 \item{insurance_order}{Vector of insurance types ordered by priority for call scheduling (default is c("Medicaid", "Blue Cross/Blue Shield")).}
+}
+\value{
+Invisible list of file paths to the created Excel files
 }
 \description{
 This function splits the data based on provided lab assistant names and saves each part as a separate Excel file.

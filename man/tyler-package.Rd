@@ -4,15 +4,16 @@
 \name{tyler-package}
 \alias{tyler}
 \alias{tyler-package}
-\title{tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care}
+\title{tyler: Tools for Mystery Caller and Audit Healthcare Studies}
 \description{
-The 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting.
+Provides utilities for mystery caller and audit studies evaluating patient access to healthcare. Functions help search and process National Provider Identifier (NPI) records, summarize provider demographics, and generate tables and maps for analysis and reporting.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/mufflyt/tyler}
   \item \url{https://mufflyt.github.io/tyler/}
+  \item Report bugs at \url{https://github.com/mufflyt/tyler/issues}
 }
 
 }
@@ -23,3 +24,4 @@ Useful links:
 \keyword{NPI}
 \keyword{NPPES}
 \keyword{healthcare}
+\keyword{internal}

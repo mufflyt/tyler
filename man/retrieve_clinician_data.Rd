@@ -15,3 +15,14 @@ A tibble with clinician data for the provided NPIs.
 \description{
 This function retrieves clinician data for each valid NPI in the input dataframe.
 }
+\examples{
+\dontrun{
+clinician_df <- retrieve_clinician_data("clinicians.csv")
+}
+}
+\seealso{
+Other npi: 
+\code{\link{search_and_process_npi}()},
+\code{\link{search_by_taxonomy}()}
+}
+\concept{npi}

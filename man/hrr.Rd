@@ -14,4 +14,9 @@ An sf object containing the hospital referral region data.
 }
 \description{
 This function loads the hospital referral region shapefile and optionally removes Hawaii and Alaska.
+The shapefile (~8 MB) is downloaded from the Dartmouth Atlas website on first use and cached in the
+user's R cache directory for subsequent calls.
+}
+\examples{
+hrr()
 }

@@ -7,7 +7,8 @@
 create_isochrones(
   location,
   range,
-  posix_time = as.POSIXct("2023-10-20 08:00:00", format = "\%Y-\%m-\%d \%H:\%M:\%S")
+  posix_time = as.POSIXct("2023-10-20 08:00:00", format = "\%Y-\%m-\%d \%H:\%M:\%S"),
+  api_key = Sys.getenv("HERE_API_KEY")
 )
 }
 \arguments{
@@ -27,10 +28,8 @@ This function calculates isolines for a given location using the hereR package.
 \dontrun{
 # Set your HERE API key in your Renviron file using the following steps:
 # 1. Add key to .Renviron
-Sys.setenv(HERE_API_KEY = "your_api_key_here")
-# 2. Reload .Renviron
-readRenviron("~/.Renviron")
-
+#' # 2. Reload .Renviron
+#'
 # Define a sf object for the location
 location <- sf::st_point(c(-73.987, 40.757))
 
@@ -43,3 +42,17 @@ print(isolines)
 }
 
 }
+\seealso{
+Other mapping: 
+\code{\link{create_density_plot}()},
+\code{\link{create_individual_isochrone_plots}()},
+\code{\link{create_isochrones_for_dataframe}()},
+\code{\link{create_line_plot}()},
+\code{\link{create_scatter_plot}()},
+\code{\link{map_create_acog_districts_sf}()},
+\code{\link{map_create_base}()},
+\code{\link{map_create_block_group_overlap}()},
+\code{\link{map_create_leaflet_base}()},
+\code{\link{map_create_physician_dot}()}
+}
+\concept{mapping}

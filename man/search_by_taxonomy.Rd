@@ -7,7 +7,7 @@
 search_by_taxonomy(
   taxonomy_to_search,
   write_snapshot = TRUE,
-  snapshot_dir = "data",
+  snapshot_dir = NULL,
   notify = TRUE
 )
 }
@@ -18,10 +18,11 @@ search_by_taxonomy(
 file for later reference. Defaults to \code{TRUE}.}
 
 \item{snapshot_dir}{Directory where snapshot files should be written when
-\code{write_snapshot} is \code{TRUE}. Defaults to \code{"data"}.}
+\code{write_snapshot} is \code{TRUE}. Defaults to a session-specific folder inside
+\code{\link[=tempdir]{tempdir()}} when not supplied.}
 
-\item{notify}{Logical. If \code{TRUE}, play a notification sound when processing completes
-(requires the optional \pkg{beepr} package). Defaults to \code{TRUE}.}
+\item{notify}{Logical. If \code{TRUE}, play a notification sound when processing
+completes (requires the optional \code{beepr} package). Defaults to \code{TRUE}.}
 }
 \value{
 A data frame with filtered NPI data based on the specified taxonomy description.
@@ -37,3 +38,9 @@ rei_data <- search_by_taxonomy("Reproductive Endocrinology")
 mfm_data <- search_by_taxonomy("Maternal & Fetal Medicine")
 
 }
+\seealso{
+Other npi: 
+\code{\link{retrieve_clinician_data}()},
+\code{\link{search_and_process_npi}()}
+}
+\concept{npi}

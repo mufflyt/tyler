@@ -36,3 +36,17 @@ create_individual_isochrone_plots(isochrones, drive_times)
 }
 
 }
+\seealso{
+Other mapping: 
+\code{\link{create_density_plot}()},
+\code{\link{create_isochrones}()},
+\code{\link{create_isochrones_for_dataframe}()},
+\code{\link{create_line_plot}()},
+\code{\link{create_scatter_plot}()},
+\code{\link{map_create_acog_districts_sf}()},
+\code{\link{map_create_base}()},
+\code{\link{map_create_block_group_overlap}()},
+\code{\link{map_create_leaflet_base}()},
+\code{\link{map_create_physician_dot}()}
+}
+\concept{mapping}

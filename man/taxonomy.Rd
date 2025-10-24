@@ -17,12 +17,12 @@ A data frame with two columns:
 \usage{
 taxonomy
 }
+\value{
+A tibble mapping NUCC taxonomy codes to descriptive provider
+types relevant to obstetrics and gynecology research.
+}
 \description{
 This dataset contains taxonomy codes for Obstetricians and Gynecologists among other healthcare providers.
-}
-\value{
-A tibble mapping NUCC taxonomy codes to descriptive provider types relevant
-to obstetrics and gynecology research.
 }
 \examples{
 \dontrun{
@@ -30,7 +30,15 @@ to obstetrics and gynecology research.
 data(taxonomy)
 
 # Explore the dataset
-head(taxonomy)
+print(taxonomy)
 }
 }
+\seealso{
+Other datasets: 
+\code{\link{ACOG_Districts}},
+\code{\link{acgme}},
+\code{\link{cityStateToLatLong}},
+\code{\link{fips}}
+}
+\concept{datasets}
 \keyword{datasets}

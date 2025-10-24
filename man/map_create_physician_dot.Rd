@@ -12,21 +12,23 @@ map_create_physician_dot(
 )
 }
 \arguments{
-\item{physician_data}{An sf object containing physician data with "long" and "lat" columns.}
+\item{physician_data}{An sf object containing physician data with \code{"long"}
+and \code{"lat"} columns.}
 
-\item{jitter_range}{The range for adding jitter to latitude and longitude coordinates.}
+\item{jitter_range}{The range for adding jitter to latitude and longitude
+coordinates.}
 
 \item{color_palette}{The color palette for ACOG district colors.}
 
 \item{popup_var}{The variable to use for popup text.}
 }
 \value{
-A Leaflet map object.
+Invisibly returns the Leaflet map object.
 }
 \description{
-This function creates a Leaflet dot map of physicians using their longitude and latitude
-coordinates. It also adds ACOG district boundaries to the map and saves it as an HTML file
-with an accompanying PNG screenshot.
+This function creates a Leaflet dot map of physicians using their longitude
+and latitude coordinates. It also adds ACOG district boundaries to the map
+and saves it as an HTML file with an accompanying PNG screenshot.
 }
 \examples{
 \dontrun{
@@ -47,3 +49,17 @@ map_create_physician_dot(physician_data)
 }
 
 }
+\seealso{
+Other mapping: 
+\code{\link{create_density_plot}()},
+\code{\link{create_individual_isochrone_plots}()},
+\code{\link{create_isochrones}()},
+\code{\link{create_isochrones_for_dataframe}()},
+\code{\link{create_line_plot}()},
+\code{\link{create_scatter_plot}()},
+\code{\link{map_create_acog_districts_sf}()},
+\code{\link{map_create_base}()},
+\code{\link{map_create_block_group_overlap}()},
+\code{\link{map_create_leaflet_base}()}
+}
+\concept{mapping}

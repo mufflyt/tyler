@@ -7,19 +7,39 @@
 map_create_base(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4)
 }
 \arguments{
-\item{title}{Optional HTML string used for a title control in the upper left corner of the map. Supply \code{NULL} or an empty string to omit the control.}
+\item{title}{Optional HTML string used for a title control in the upper
+left corner of the map. Supply \code{NULL} or an empty string to omit the
+control.}
 
-\item{lat, lng}{Numeric latitude and longitude used to centre the initial view. Defaults position the map over the continental United States.}
+\item{lat, lng}{Numeric latitude and longitude used to centre the initial
+view. Defaults position the map over the continental United States.}
 
-\item{zoom}{Numeric zoom level passed to \code{leaflet::setView()}.}
+\item{zoom}{Numeric zoom level passed to \code{\link[leaflet:map-methods]{leaflet::setView()}}.}
 }
 \value{
-A \code{leaflet::leaflet()} map object pre-configured with controls and basemap layers.
+A \code{\link[leaflet:leaflet]{leaflet::leaflet()}} map object pre-configured with controls and
+basemap layers.
 }
 \description{
-Build a Leaflet base map with sensible defaults for the tyler mapping helpers. The map includes multiple tile providers, a scale bar, optional title control, and centres on the continental United States by default.
+Build a Leaflet base map with sensible defaults for the tyler mapping
+helpers. The map includes multiple tile providers, a scale bar, optional
+title control, and centres on the continental United States by default.
 }
 \examples{
 map_create_base()
 map_create_base("<strong>Custom title</strong>")
 }
+\seealso{
+Other mapping: 
+\code{\link{create_density_plot}()},
+\code{\link{create_individual_isochrone_plots}()},
+\code{\link{create_isochrones}()},
+\code{\link{create_isochrones_for_dataframe}()},
+\code{\link{create_line_plot}()},
+\code{\link{create_scatter_plot}()},
+\code{\link{map_create_acog_districts_sf}()},
+\code{\link{map_create_block_group_overlap}()},
+\code{\link{map_create_leaflet_base}()},
+\code{\link{map_create_physician_dot}()}
+}
+\concept{mapping}

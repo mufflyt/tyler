@@ -15,10 +15,12 @@ table_calculate_proportion(data, variable_name)
 A data frame with two columns: \code{n} (the count of each level) and \code{percent} (the percentage of the total count represented by each level).
 }
 \description{
-This function calculates the proportion of each level in a specified categorical variable within a data frame. It returns a data frame with the counts and percentages of each level.
+This function calculates the proportion of each level in a specified categorical variable within a data frame.
+It returns a data frame with the counts and percentages of each level.
 }
 \details{
-The function counts the occurrences of each unique value in the specified variable and calculates the percentage each value represents of the total count. The percentages are rounded to two decimal places.
+The function counts the occurrences of each unique value in the specified variable and calculates the percentage each value represents of the total count.
+The percentages are rounded to two decimal places.
 }
 \examples{
 # Example 1: Basic usage with a simple dataset
@@ -35,4 +37,5 @@ print(result)
 df_multi <- data.frame(grade = c("A", "B", "A", "C", "B", "A", "C", "B"))
 result <- table_calculate_proportion(df_multi, grade)
 print(result)
+
 }

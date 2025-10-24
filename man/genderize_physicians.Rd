@@ -4,23 +4,33 @@
 \alias{genderize_physicians}
 \title{Genderize Physicians Data}
 \usage{
-genderize_physicians(input_csv, output_dir = getwd())
+genderize_physicians(
+  input_csv,
+  output_dir = NULL,
+  output_format = c("csv", "parquet")
+)
 }
 \arguments{
-\item{input_csv}{The path to the input CSV file containing physician data.}
+\item{input_csv}{The path to the input roster file. CSV and Parquet sources are
+supported.}
 
-\item{output_dir}{The directory where the output CSV file will be saved. Default is the current working directory.}
+\item{output_dir}{The directory where the output file will be saved. Default
+is a session-specific folder inside \code{\link[=tempdir]{tempdir()}}.}
+
+\item{output_format}{Output format for the saved roster. Either "csv" or
+"parquet" with "csv" as the default to preserve backwards compatibility.}
 }
 \value{
 A data frame with genderized information joined to the original data.
+
+The function queries the \href{https://genderize.io}{Genderize.io} API for first
+name gender predictions. First names are deduplicated before querying the
+service to minimise repeated requests.
 }
 \description{
 This function reads a CSV file containing physician data, genderizes the first names,
 and joins the gender information back to the original data. It then saves the
-result to a new CSV file with a timestamp. The function calls the
-\href{https://genderize.io}{Genderize.io} API to obtain gender predictions for
-deduplicated first names, adds the returned probability and count information,
-and requires an active internet connection.
+result to a new CSV file with a timestamp.
 }
 \examples{
 \dontrun{
@@ -28,3 +38,4 @@ result <- genderize_physicians("sample.csv")
 }
 
 }
+\concept{gender}

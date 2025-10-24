@@ -12,6 +12,7 @@ search_and_process_npi(
   filter_credentials = c("MD", "DO"),
   save_chunk_size = 10,
   dest_dir = NULL,
+  file_format = NULL,
   accumulate_path = NULL,
   resume = FALSE,
   progress_log = NULL,
@@ -34,32 +35,36 @@ search_and_process_npi(
 
 \item{save_chunk_size}{The number of results to save per chunk. Default is 10.}
 
-\item{dest_dir}{Destination directory to save chunked results. Default is \code{NULL}
-(no chunk files are written).}
+\item{dest_dir}{Destination directory to save chunked results. Default is NULL (no files written).
+Files are written using the format specified by \code{file_format}.}
 
-\item{accumulate_path}{Optional CSV path that accumulates every non-empty result. When
-provided, results are appended after each successful lookup.}
+\item{file_format}{Optional override controlling whether chunked and accumulated
+results are saved as "csv" or "parquet". When \code{NULL}, the format defaults to CSV
+unless \code{accumulate_path} ends with ".parquet".}
 
-\item{resume}{Logical. If \code{TRUE} and \code{accumulate_path} already exists, names
-that have been processed previously (based on the \code{search_term} column) are
-skipped.}
+\item{accumulate_path}{Optional output path that accumulates every non-empty result.
+When provided, results are appended after each successful lookup using the
+format inferred from \code{file_format} or the file extension.}
 
-\item{progress_log}{Optional file path used to log progress updates. The log file is
-appended to and created automatically if it does not exist.}
+\item{resume}{Logical. If \code{TRUE} and \code{accumulate_path} already exists, names that
+have been processed previously (based on the \code{search_term} column) are skipped.}
+
+\item{progress_log}{Optional file path used to log progress updates. The log file
+is appended to and created automatically if it does not exist.}
 
 \item{notify}{Logical. If \code{TRUE}, play a notification sound when processing
-completes (requires the optional \pkg{beepr} package). Defaults to \code{TRUE}.}
+completes (requires the optional \code{beepr} package). Defaults to \code{TRUE}.}
 
-\item{progress_callback}{Optional function invoked with a named list each time
-progress is updated. The list contains fields such as \code{event},
+\item{progress_callback}{Optional function invoked with a named list each
+time progress is updated. The list contains fields such as \code{event},
 \code{timestamp}, \code{search_term}, \code{rows}, \code{index}, and \code{total}.}
 
-\item{heartbeat_seconds}{Optional numeric value specifying how frequently (in
-seconds) to emit a "still processing" heartbeat update while iterating over
-names. Set to \code{NULL} to disable the heartbeat.}
+\item{heartbeat_seconds}{Optional numeric value specifying how frequently
+(in seconds) to emit a "still processing" heartbeat update while iterating
+over names. Set to \code{NULL} to disable the heartbeat.}
 
-\item{progress_log_format}{Either "text" (default) to append human readable lines to
-\code{progress_log} or "csv" to write structured entries with columns
+\item{progress_log_format}{Either "text" (default) to append human readable
+lines to \code{progress_log} or "csv" to write structured entries with columns
 \code{timestamp}, \code{event}, \code{search_term}, \code{rows}, and \code{detail}.}
 }
 \value{
@@ -70,3 +75,15 @@ This function takes an input data frame containing first and last names, perform
 and filters results based on specified taxonomies. It supports customization for enumeration type, search limit,
 and filtering credentials.
 }
+\examples{
+\dontrun{
+df <- data.frame(first = "John", last = "Doe")
+results <- search_and_process_npi(df)
+}
+}
+\seealso{
+Other npi: 
+\code{\link{retrieve_clinician_data}()},
+\code{\link{search_by_taxonomy}()}
+}
+\concept{npi}

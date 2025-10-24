@@ -10,48 +10,50 @@ clean_phase_1_results(
   verbose = TRUE,
   notify = TRUE,
   duplicate_rows = TRUE,
-  id_seed = NULL
+  id_seed = NULL,
+  output_format = c("csv", "parquet")
 )
 }
 \arguments{
 \item{phase1_data}{A data frame containing the Phase 1 results data. Ensure that it
-includes columns like 'names', 'practice_name', 'phone_number', 'state_name', and
-optionally 'npi'. If 'npi' is missing or any of its values are NA, a \code{random_id}
-is generated as a fallback.}
+includes columns like 'for_redcap', 'id', 'names', 'practice_name', 'phone_number',
+'state_name', and optionally 'npi'. If 'npi' is missing or any of its values are NA,
+a \code{random_id} is generated as a fallback.}
 
-\item{output_directory}{Directory where the cleaned Phase 1 CSV should be written.
+\item{output_directory}{Directory where the cleaned Phase 1 data should be written.
 Defaults to \code{tempdir()}.}
 
 \item{verbose}{Logical. If \code{TRUE}, progress messages are printed while cleaning.
 Defaults to \code{TRUE}.}
 
 \item{notify}{Logical. If \code{TRUE}, play a notification sound on completion when
-the optional \pkg{beepr} package is available. Defaults to \code{TRUE}.}
+the optional \code{beepr} package is available. Defaults to \code{TRUE}.}
 
-\item{duplicate_rows}{Logical. If \code{TRUE}, each row in \code{phase1_data} is
-duplicated to match legacy workflows that expect paired insurance entries. Set to
-\code{FALSE} to keep the original number of rows.}
+\item{duplicate_rows}{Logical. If \code{TRUE}, each row in \code{phase1_data} is duplicated
+to retain the previous behaviour that paired insurance entries for each
+physician. Set to \code{FALSE} to keep the original number of rows.}
 
-\item{id_seed}{Optional integer seed used when generating fallback random IDs so runs
-can be reproduced without permanently mutating the global RNG state.}
+\item{id_seed}{Optional integer seed used when generating fallback random IDs so
+runs can be reproduced without permanently mutating the global RNG state.}
+
+\item{output_format}{File format to use when writing the cleaned dataset.
+Supported options are "csv" (default) and "parquet".}
 }
 \value{
 Invisibly returns the cleaned data frame.
 }
 \description{
-This function reads the Phase 1 results data file, performs various cleaning and
-transformation operations, and prepares the data for further analysis. It ensures all
-required fields are present and formats column names. Missing NPI numbers are handled
-by generating a unique \code{random_id}. Additional parameters let callers silence
-console output, retain the original row count, and make random ID generation
-reproducible.
+This function reads the Phase 1 results data file, performs various cleaning
+and transformation operations, and prepares the data for further analysis.
+It ensures all required fields are present and formats column names. Missing
+NPI numbers are handled by generating a unique \code{random_id}.
 }
 \examples{
 \dontrun{
 library(tyler)
 file_path <- "/path/to/your/input/file.xls"
-df <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
-clean_phase_1_results(df)
+phase1_data <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
+clean_phase_1_results(phase1_data)
 }
 
 }

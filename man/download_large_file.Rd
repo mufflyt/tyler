@@ -11,15 +11,22 @@ download_large_file(url, dest, overwrite = FALSE, quiet = TRUE)
 
 \item{dest}{Destination file path for the downloaded file.}
 
-\item{overwrite}{Logical. If \code{TRUE}, overwrite any existing file at \code{dest}. Defaults to \code{FALSE}.}
+\item{overwrite}{Logical. If \code{TRUE}, overwrite any existing file at
+\code{dest}. Defaults to \code{FALSE}.}
 
-\item{quiet}{Logical. When \code{TRUE} (default) suppress command output emitted by the underlying download tools.}
+\item{quiet}{Logical. When \code{TRUE} (default) suppress command output
+emitted by the underlying download tools.}
 }
 \value{
 The path to the downloaded file (i.e. \code{dest}).
 }
 \description{
-Provides a resilient download helper that prefers \code{wget} with continuation support, falling back to \code{curl} and then base R's \code{download.file()}. Downloads are written to a temporary \code{.download} file and moved to the requested destination once the transfer is complete. A lightweight lock file prevents concurrent downloads of the same target path.
+Provides a resilient download helper that prefers \code{wget} with
+continuation support, falling back to \code{curl} and then base R's
+\code{download.file()}. Downloads are written to a temporary \code{.download}
+file and moved to the requested destination once the transfer is
+complete. A lightweight lock file prevents concurrent downloads of
+the same target path.
 }
 \examples{
 \dontrun{
@@ -28,4 +35,13 @@ download_large_file(
   file.path(tempdir(), "big-file.zip")
 )
 }
+
 }
+\seealso{
+\code{\link[utils:download.file]{utils::download.file()}}
+
+Other utilities: 
+\code{\link{format_pct}()},
+\code{\link{save_quality_check_table}()}
+}
+\concept{utilities}
