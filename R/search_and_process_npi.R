@@ -11,8 +11,13 @@
 #' @param filter_credentials A character vector containing the credentials to filter the NPI results. Default is c("MD", "DO").
 #' @param save_chunk_size The number of results to save per chunk. Default is 10.
 #' @param dest_dir Destination directory to save chunked results. Default is NULL (no files written).
-#' @param accumulate_path Optional CSV path that accumulates every non-empty result.
-#'   When provided, results are appended after each successful lookup.
+#'   Files are written using the format specified by `file_format`.
+#' @param file_format Optional override controlling whether chunked and accumulated
+#'   results are saved as "csv" or "parquet". When `NULL`, the format defaults to CSV
+#'   unless `accumulate_path` ends with ".parquet".
+#' @param accumulate_path Optional output path that accumulates every non-empty result.
+#'   When provided, results are appended after each successful lookup using the
+#'   format inferred from `file_format` or the file extension.
 #' @param resume Logical. If `TRUE` and `accumulate_path` already exists, names that
 #'   have been processed previously (based on the `search_term` column) are skipped.
 #' @param progress_log Optional file path used to log progress updates. The log file
@@ -49,6 +54,7 @@ search_and_process_npi <- function(data,
                                    filter_credentials = c("MD", "DO"),
                                    save_chunk_size = 10,
                                    dest_dir = NULL,
+                                   file_format = NULL,
                                    accumulate_path = NULL,
                                    resume = FALSE,
                                    progress_log = NULL,
@@ -67,6 +73,8 @@ search_and_process_npi <- function(data,
       stop("`heartbeat_seconds` must be a single positive numeric value or NULL.")
     }
   }
+
+  table_format <- tyler_normalize_file_format(file_format, path = accumulate_path)
 
   required_cols <- c("first", "last")
   missing_cols <- setdiff(required_cols, names(data))
@@ -143,7 +151,7 @@ search_and_process_npi <- function(data,
       return(NULL)
     }
     tryCatch(
-      readr::read_csv(accumulate_path, show_col_types = FALSE),
+      tyler_read_table(accumulate_path, format = table_format),
       error = function(e) {
         dispatch_progress(
           event = "accumulation_error",
@@ -214,8 +222,9 @@ search_and_process_npi <- function(data,
     }
     dir.create(directory, showWarnings = FALSE, recursive = TRUE)
     timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
-    file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, ".csv"))
-    readr::write_csv(result, file_name)
+    extension <- if (identical(table_format, "parquet")) ".parquet" else ".csv"
+    file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, extension))
+    tyler_write_table(result, file_name, format = table_format)
     dispatch_progress(
       event = "chunk_saved",
       search_term = basename(file_name),
@@ -231,7 +240,7 @@ search_and_process_npi <- function(data,
     dir.create(dirname(accumulate_path), showWarnings = FALSE, recursive = TRUE)
     append_mode <- file.exists(accumulate_path)
     tryCatch({
-      readr::write_csv(result, accumulate_path, append = append_mode, col_names = !append_mode)
+      tyler_write_table(result, accumulate_path, format = table_format, append = append_mode, col_names = !append_mode)
       dispatch_progress(
         event = "accumulated",
         rows = nrow(result),

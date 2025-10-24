@@ -96,8 +96,10 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' @param data_or_path Path to the data file or a data frame.
 #' @param required_strings Vector of substrings for which to search in column names.
 #' @param standard_names Vector of new names to apply to the matched columns.
-#' @param output_directory Directory where the cleaned CSV should be written.
+#' @param output_directory Directory where the cleaned dataset should be written.
 #'   Defaults to a session-specific folder inside [tempdir()] when not provided.
+#' @param output_format File format to use when persisting the cleaned dataset.
+#'   Supported values are "csv" (default) and "parquet".
 #' @return A data frame with processed data.
 #' @export
 #' @importFrom readr read_csv write_csv
@@ -123,14 +125,17 @@ clean_phase_2_data <- function(
   data_or_path,
   required_strings,
   standard_names,
-  output_directory = NULL
+  output_directory = NULL,
+  output_format = c("csv", "parquet")
 ) {
+  output_format <- match.arg(output_format)
   # Data loading and initial checks
   if (is.character(data_or_path)) {
     if (!file.exists(data_or_path)) {
       stop("File does not exist at the specified path: ", data_or_path)
     }
-    data <- readr::read_csv(data_or_path, show_col_types = FALSE)
+    input_format <- tyler_normalize_file_format(path = data_or_path)
+    data <- tyler_read_table(data_or_path, format = input_format)
     message(sprintf("Loaded Phase 2 data from %s with %d row(s) and %d column(s).", data_or_path, nrow(data), ncol(data)))
   } else if (is.data.frame(data_or_path)) {
     data <- data_or_path
@@ -182,8 +187,9 @@ clean_phase_2_data <- function(
   }
 
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
-  output_file_path <- file.path(output_directory, paste0("cleaned_phase_2_data_", current_datetime, ".csv"))
-  readr::write_csv(data, output_file_path)
+  output_extension <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
+  output_file_path <- file.path(output_directory, paste0("cleaned_phase_2_data_", current_datetime, output_extension))
+  tyler_write_table(data, output_file_path, format = output_format)
   message(sprintf("Cleaned Phase 2 data (%d row(s), %d column(s)) saved to: %s", nrow(data), ncol(data), output_file_path))
 
   attr(data, "output_path") <- output_file_path

@@ -5,7 +5,10 @@
 #' @param startID The starting ID for scraping.
 #' @param endID The ending ID for scraping.
 #' @param torPort The port number for Tor SOCKS proxy.
-#' @param wrong_ids_path Optional path to a CSV of IDs to skip.
+#' @param wrong_ids_path Optional path to a roster of IDs to skip. CSV and Parquet
+#'   files are supported.
+#' @param output_format File format to use when saving scraped results. Choose from
+#'   "csv" (default) or "parquet".
 #' @return A dataframe containing scraped physicians' data.
 #'
 #' @importFrom httr GET content use_proxy
@@ -22,7 +25,9 @@
 #'   torPort = 9150
 #' )
 #'
-scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_path = NULL) {
+scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_path = NULL,
+                                            output_format = c("csv", "parquet")) {
+  output_format <- match.arg(output_format)
   cat("Starting scrape_physicians_data_with_tor...\n")
   cat("Parameters - startID:", startID, "endID:", endID, "torPort:", torPort, "\n")
 
@@ -31,7 +36,7 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_p
   cat("ID list:", paste(id_list, collapse = ", "), "\n")
 
   # Load the list of wrong IDs to exclude from scraping
-  wrongs1 <- if (!is.null(wrong_ids_path)) readr::read_csv(wrong_ids_path) else data.frame(WrongIDs = integer())
+  wrongs1 <- if (!is.null(wrong_ids_path)) tyler_read_table(wrong_ids_path) else data.frame(WrongIDs = integer())
   wrong_ids <- wrongs1$WrongIDs
   cat("Wrong IDs loaded:", paste(wrong_ids, collapse = ", "), "\n")
 
@@ -97,15 +102,18 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_p
   }
 
   # Define file names
-  physicians_file <- file.path(temp_dir, paste("Physicians_", startID, "-", endID, "_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".csv", sep = ""))
-  wrong_ids_file <- file.path(temp_dir, paste("Wrong_IDs_", startID, "-", tail(WrongIDs, 1), "_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".csv", sep = ""))
+  timestamp <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
+  extension <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
+  physicians_file <- file.path(temp_dir, paste0("Physicians_", startID, "-", endID, "_", timestamp, extension))
+  wrong_tail <- if (length(WrongIDs)) tail(WrongIDs, 1) else endID
+  wrong_ids_file <- file.path(temp_dir, paste0("Wrong_IDs_", startID, "-", wrong_tail, "_", timestamp, extension))
 
-  # Write data frames to CSV files
-  write.csv(Physicians, physicians_file, row.names = FALSE)
-  write.csv(data.frame(WrongIDs = WrongIDs), wrong_ids_file, row.names = FALSE)
+  # Write data frames to disk
+  tyler_write_table(Physicians, physicians_file, format = output_format)
+  tyler_write_table(data.frame(WrongIDs = WrongIDs), wrong_ids_file, format = output_format)
 
-  cat("CSV file for Physicians saved as:", physicians_file, "\n")
-  cat("CSV file for Wrong IDs saved as:", wrong_ids_file, "\n")
+  cat("Roster saved to:", physicians_file, "\n")
+  cat("Wrong ID log saved to:", wrong_ids_file, "\n")
 
   cat("Finished scrape_physicians_data_with_tor.\n")
 
