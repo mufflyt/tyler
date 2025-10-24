@@ -58,7 +58,7 @@ The package vignettes highlight practical workflows for working with provider da
    * All this is heavily borrowed from "https://github.com/khnews/2021-delta-appalachia-stroke-access"
 8) Create overlap maps of isochrones and block groups
    * `tyler::calculate_intersection_overlap_and_save`- THIS NEEDS WORK
-   * `tyler::create_block_group_overlap_map`
+   * `tyler::map_create_block_group_overlap`
    * 
 
 # Data: Workforce
@@ -322,26 +322,20 @@ tract, and block group along with the Census vintage used to source the
 estimates. Use these identifiers—especially the `geoid`—for all downstream
 joins rather than relying on place names.
 
-### `tyler::create_block_group_overlap_map`
+### `tyler::map_create_block_group_overlap`
 Function Parameters:
 * bg_data: A SpatialPolygonsDataFrame representing block group data.
 * isochrones_data: A SpatialPolygonsDataFrame representing isochrone data.
-* output_html: File path for exporting the map as an HTML file.
-* output_png: File path for exporting the map as a PNG image.
+* output_dir: Directory path for exporting the map files. Defaults to `"figures/"`.
 ```r
-# Define output file paths for HTML and PNG
-output_html <- "figures/overlap_bg_map.html"
-output_png <- "figures/overlap_bg_map.png"
-
 # Create and export the map
-tyler::create_block_group_overlap_map(block_groups, isochrones_joined_map, output_html, output_png)
+tyler::map_create_block_group_overlap(block_groups, isochrones_joined_map)
 
-# Call the create_block_group_overlap_map function with your data
-tyler::create_block_group_overlap_map(
+# Call the map_create_block_group_overlap function with your data
+tyler::map_create_block_group_overlap(
   bg_data = your_block_group_data,
   isochrones_data = your_isochrones_data,
-  output_html = "your_output_html_file.html",
-  output_png = "your_output_png_file.png"
+  output_dir = "your_output_directory/"
 )
 ```
 <img src="https://github.com/mufflyt/tyler/assets/44621942/713a0397-30fc-4a5a-972b-5feb691a1922" width="75%">
@@ -353,11 +347,11 @@ This function loads the hospital referral region shapefile and optionally remove
 tyler::hrr_generate_maps <- function(physician_sf, trait_map = "all", honey_map = "all", breaks = c(1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200), map_title = "OBGYN Residency\n Faculty Subspecialists") 
 ```
 # MAKING MAPS
-### `tyler::create_basemap`
+### `tyler::map_create_base`
 This is a nice leaflet map with all the features you want for an interactive html map.  We can use it for dot maps.  Leaflet provides a user-friendly and intuitive interface for interacting with maps. It supports features like zooming, panning, and click events, making it easy for users to explore and interact with geographic data.
 ```r
 # Create a base map with a custom title
-my_map <- tyler::create_base_map("TITLE")
+my_map <- tyler::map_create_base("TITLE")
 
 # Display the map and add circle markers
 my_map <- my_map %>%
@@ -373,10 +367,10 @@ my_map <- my_map %>%
 ```
 <img src="https://github.com/mufflyt/tyler/assets/44621942/87a04a9d-7ddd-46b6-8917-947530983088" width="50%">
 
-### `create_and_save_physician_dot_map.R`
+### `map_create_physician_dot.R`
 Leaflet dot map of physicians on colored ACOG Districts.  We introduce some jitter for people who work at the same location.  Dot maps allow viewers to identify patterns and trends in the data distribution. 
 ```r
-tyler::create_and_save_physician_dot_map(physician_data = gyn_onc, jitter_range = 0.05, color_palette = "magma", popup_var = "name")
+tyler::map_create_physician_dot(physician_data = gyn_onc, jitter_range = 0.05, color_palette = "magma", popup_var = "name")
 ```
 <img src="https://github.com/mufflyt/tyler/assets/44621942/43227656-cd1c-4242-a2db-cdf1ebce20e8" width="50%">
 
@@ -386,8 +380,8 @@ tyler::create_and_save_physician_dot_map(physician_data = gyn_onc, jitter_range 
 Loops through each ACOG district to generate hex maps individually.  Hexagon grids provide a uniform and regular tessellation of geographic space. Unlike traditional square grids or irregular polygons, hexagons have consistent shapes and sizes. This uniformity makes it easier to analyze and interpret the distribution of data.
 ```r
 #Use case:
-tyler::generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
-tyler::generate_acog_districts_sf()
+tyler::map_create_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
+tyler::map_create_acog_districts_sf()
 
 all_map <-
   tyler::generate_maps(

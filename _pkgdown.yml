@@ -28,7 +28,7 @@ reference:
       - calculate_intersection_overlap_and_save
       - clean_phase_1_results
       - genderize_physicians
-      - generate_leaflet_base_map
+      - map_create_leaflet_base
       - geocode_unique_addresses
       - hrr
       - hrr_generate_maps
@@ -39,7 +39,7 @@ reference:
       - scrape_physicians_data_with_tor
       - search_by_taxonomy
       - split_and_save
-      - tm_write2pdf
+      - table_write_pdf
       - tyler-package
 
   - title: "Deprecated"

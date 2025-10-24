@@ -12,10 +12,10 @@
 #' @examples
 #' \dontrun{
 #' # Create and export the map with the default output directory
-#' create_block_group_overlap_map(block_groups, isochrones_joined_map)
+#' map_create_block_group_overlap(block_groups, isochrones_joined_map)
 #'
 #' # Create and export the map with a custom output directory
-#' create_block_group_overlap_map(block_groups, isochrones_joined_map, "custom_output/")
+#' map_create_block_group_overlap(block_groups, isochrones_joined_map, "custom_output/")
 #' }
 #'
 #' @importFrom leaflet addPolygons addLegend colorNumeric
@@ -29,7 +29,7 @@
 #'
 #' @family mapping
 #' @export
-create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir = "figures/") {
+map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir = "figures/") {
   if (!inherits(bg_data, "sf")) {
     stop("`bg_data` must be an sf object with polygon geometries.")
   }
@@ -73,7 +73,7 @@ create_block_group_overlap_map <- function(bg_data, isochrones_data, output_dir 
   pal <- leaflet::colorNumeric("Purples", domain = bg_data$overlap)
 
   # Create the base map
-  base_map <- create_base_map("<h1>Block Group Overlap Map</h1>")
+  base_map <- map_create_base("<h1>Block Group Overlap Map</h1>")
 
   # Create the map
   map <- base_map %>%

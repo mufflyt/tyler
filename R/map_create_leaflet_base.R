@@ -1,4 +1,4 @@
-#' Generate Leaflet Base Map
+#' Create a Leaflet Base Map
 #'
 #' This function creates a Leaflet BASE map with specific configurations, including the base tile layer, scale bar,
 #' default view settings, and layers control.
@@ -8,8 +8,8 @@
 #' @family mapping
 #' @export
 #' @examples
-#' map <- generate_leaflet_base_map()
-generate_leaflet_base_map <- function() {
+#' map <- map_create_leaflet_base()
+map_create_leaflet_base <- function() {
   # Create a new Leaflet map object
   map <- leaflet::leaflet() %>%
     # Add CartoDB Voyager tiles as the base tile layer
