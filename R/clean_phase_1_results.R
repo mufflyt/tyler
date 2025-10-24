@@ -201,6 +201,9 @@ clean_phase_1_results <- function(phase1_data,
     phase1_data <- dplyr::select(phase1_data, for_redcap, dplyr::everything())
     attr(phase1_data, "output_directory") <- output_directory
   } else {
+    if (isTRUE(verbose)) {
+      cat("No data to process.\n")
+    }
     announce("No data available; skipping duplication, insurance assignment, and ID generation.")
   }
 

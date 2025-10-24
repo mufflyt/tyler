@@ -35,7 +35,7 @@ validate_required_columns <- function(x, required, name = "data") {
   if (length(missing_required)) {
     stop(
       sprintf(
-        "`%s` is missing the following required column(s): %s",
+        "Required columns are missing from `%s`: %s",
         name,
         paste(sort(missing_required), collapse = ", ")
       ),
