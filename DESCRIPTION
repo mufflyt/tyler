@@ -1,5 +1,5 @@
 Package: tyler
-Title: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care
+Title: Tools for Mystery Caller and Audit Healthcare Studies
 Version: 1.2.1
 Author: Tyler Muffly [aut, cre]
 Authors@R:
