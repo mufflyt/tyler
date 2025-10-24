@@ -42,6 +42,8 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @param physician_sf An sf object containing physician data with coordinates.
 #' @param trait_map A string specifying the trait map (default is "all").
 #' @param honey_map A string specifying the honey map (default is "all").
+#' @param output_dir Directory where generated figures are written. Defaults to a
+#'   session-specific folder inside [tempdir()].
 #' @param dpi Resolution used when saving the final figure (default is 600).
 #' @param width Final figure width in inches for journal submission (default is 7).
 #' @param height Final figure height in inches for journal submission (default is 5).
@@ -55,7 +57,7 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @importFrom scales pretty_breaks label_number squish
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom grid grid.newpage grid.draw
-#' @importFrom fs dir_create path
+#' @importFrom fs dir_create dir_exists
 #'
 #' @export
 #' @examples
@@ -66,6 +68,7 @@ hrr_generate_maps <- function(
     physician_sf,
     trait_map = "all",
     honey_map = "all",
+    output_dir = NULL,
     dpi = 600,
     width = 7,
     height = 5
@@ -189,10 +192,13 @@ hrr_generate_maps <- function(
   grid::grid.draw(combined_map)
 
   # Ensure output directory exists
-  output_dir <- fs::path("figures", "hexmap", "hexmap_figures")
-  fs::dir_create(output_dir)
+  if (is.null(output_dir)) {
+    output_dir <- tyler_tempdir("hrr_maps", create = TRUE)
+  } else if (!fs::dir_exists(output_dir)) {
+    fs::dir_create(output_dir, recurse = TRUE)
+  }
 
-  output_stub <- fs::path(output_dir, paste0(trait_map, "_", honey_map, "_honey"))
+  output_stub <- file.path(output_dir, paste0(trait_map, "_", honey_map, "_honey"))
   cat("Saving the map for Obstetrics & Gynecology submission...\n")
   ggplot2::ggsave(paste0(output_stub, ".tiff"), plot = combined_map, width = width, height = height, dpi = dpi, units = "in", compression = "lzw")
   ggplot2::ggsave(paste0(output_stub, ".png"), plot = combined_map, width = width, height = height, dpi = dpi, units = "in")

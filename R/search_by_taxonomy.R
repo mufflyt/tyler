@@ -6,7 +6,8 @@
 #' @param write_snapshot Logical. If `TRUE`, the retrieved data is saved as an `.rds`
 #'   file for later reference. Defaults to `TRUE`.
 #' @param snapshot_dir Directory where snapshot files should be written when
-#'   `write_snapshot` is `TRUE`. Defaults to `"data"`.
+#'   `write_snapshot` is `TRUE`. Defaults to a session-specific folder inside
+#'   [tempdir()] when not supplied.
 #' @param notify Logical. If `TRUE`, play a notification sound when processing
 #'   completes (requires the optional `beepr` package). Defaults to `TRUE`.
 #' @return A data frame with filtered NPI data based on the specified taxonomy description.
@@ -27,7 +28,7 @@
 #' @export
 search_by_taxonomy <- function(taxonomy_to_search,
                                write_snapshot = TRUE,
-                               snapshot_dir = "data",
+                               snapshot_dir = NULL,
                                notify = TRUE) {
   if (missing(taxonomy_to_search) || is.null(taxonomy_to_search)) {
     return(tibble::tibble())
@@ -153,9 +154,13 @@ search_by_taxonomy <- function(taxonomy_to_search,
     }
   }
 
-  if (isTRUE(write_snapshot) && !is.null(snapshot_dir)) {
-    tryCatch({
+  if (isTRUE(write_snapshot)) {
+    if (is.null(snapshot_dir)) {
+      snapshot_dir <- tyler_tempdir("search_by_taxonomy", create = TRUE)
+    } else if (!dir.exists(snapshot_dir)) {
       dir.create(snapshot_dir, showWarnings = FALSE, recursive = TRUE)
+    }
+    tryCatch({
       filename <- file.path(snapshot_dir, paste0("search_taxonomy_", format(Sys.time(), "%Y-%m-%d_%H-%M-%S"), ".rds"))
       readr::write_rds(npi_data, filename)
     }, error = function(e) {

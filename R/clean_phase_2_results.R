@@ -85,7 +85,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' @param required_strings Vector of substrings for which to search in column names.
 #' @param standard_names Vector of new names to apply to the matched columns.
 #' @param output_directory Directory where the cleaned CSV should be written.
-#'   Defaults to the project root resolved via [here::here()].
+#'   Defaults to a session-specific folder inside [tempdir()] when not provided.
 #' @return A data frame with processed data.
 #' @export
 #' @importFrom readr read_csv write_csv
@@ -111,7 +111,7 @@ clean_phase_2_data <- function(
   data_or_path,
   required_strings,
   standard_names,
-  output_directory = here::here()
+  output_directory = NULL
 ) {
   # Data loading and initial checks
   if (is.character(data_or_path)) {
@@ -139,7 +139,9 @@ clean_phase_2_data <- function(
   message("Proceeding with additional data processing steps...")
 
   # Saving the cleaned data
-  if (!dir.exists(output_directory)) {
+  if (is.null(output_directory)) {
+    output_directory <- tyler_tempdir("phase2", create = TRUE)
+  } else if (!dir.exists(output_directory)) {
     dir.create(output_directory, recursive = TRUE, showWarnings = FALSE)
   }
 

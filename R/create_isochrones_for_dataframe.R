@@ -5,6 +5,8 @@
 #'
 #' @param input_file A path to the input file containing points for which isochrones are to be retrieved.
 #' @param breaks A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).
+#' @param output_dir Directory where intermediate `.rds` results are written.
+#'   Defaults to a session-specific folder beneath [tempdir()].
 #' @return A dataframe containing the isochrones data with added 'name' column.
 #' @importFrom dplyr bind_rows
 #' @importFrom readr write_rds
@@ -20,7 +22,7 @@
 #' \dontrun{
 #' isochrones_data <- create_isochrones_for_dataframe("points.csv")
 #' }
-create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800), api_key = Sys.getenv("HERE_API_KEY"), output_dir = "data") {
+create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7200, 10800), api_key = Sys.getenv("HERE_API_KEY"), output_dir = NULL) {
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 
@@ -97,6 +99,11 @@ create_isochrones_for_dataframe <- function(input_file, breaks = c(1800, 3600, 7
   }
 
   # Save the isochrones data to an RDS file
+  if (is.null(output_dir)) {
+    output_dir <- tyler_tempdir("isochrones", create = TRUE)
+  } else if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
   readr::write_rds(
     isochrones,
     file.path(

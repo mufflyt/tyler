@@ -6,7 +6,8 @@
 #' @param specs A character string specifying the predictor variable(s) for which EMMs are to be computed. For example, this could be the treatment groups, scenarios, or demographic variables.
 #' @param variable_of_interest A character string specifying the variable to be plotted on the x-axis. Typically, this would be the same as the `specs`.
 #' @param color_by A character string specifying the variable used to color the points and error bars. This could be a categorical variable like gender, insurance type, or academic affiliation.
-#' @param output_dir A character string specifying the directory where the plot will be saved. Defaults to "Ari/Figures".
+#' @param output_dir A character string specifying the directory where the plot will
+#'   be saved. Defaults to a session-specific folder inside [tempdir()].
 #'
 #' @return Invisibly returns a list containing the estimated marginal means data (`data`) and the ggplot object (`plot`).
 #'
@@ -60,7 +61,7 @@
 #' }
 #'
 #' @export
-plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, color_by, output_dir = "Ari/Figures") {
+plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, color_by, output_dir = NULL) {
   # Load necessary packages
   if (!requireNamespace("emmeans", quietly = TRUE)) {
     stop("Package 'emmeans' is required but not installed.")
@@ -108,8 +109,10 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
     ggplot2::scale_x_discrete(labels = function(x) gsub(" ", "\n", x))
 
   # Ensure the output directory exists
-  if (!dir.exists(output_dir)) {
-    dir.create(output_dir, recursive = TRUE)
+  if (is.null(output_dir)) {
+    output_dir <- tyler_tempdir("emmeans_plots", create = TRUE)
+  } else if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
   # Save the plot with specific dimensions

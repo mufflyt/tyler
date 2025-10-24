@@ -7,7 +7,8 @@
 #' @param y_var A string representing the column name for the y-axis variable. This should be a numeric variable.
 #' @param y_transform A string specifying the transformation for the y-axis: "log" for log transformation (log1p), "sqrt" for square root transformation, or "none" for no transformation. Default is "none".
 #' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 600 for print-ready outputs.
-#' @param output_dir A string representing the directory where the plot files will be saved. Default is "output".
+#' @param output_dir A string representing the directory where the plot files will be
+#'   saved. Defaults to a session-specific folder inside [tempdir()].
 #' @param file_prefix A string used as the prefix for the generated plot filenames. The filenames will have a timestamp appended to ensure uniqueness. Default is "line_plot".
 #' @param use_geom_line A boolean indicating whether to include lines connecting points for grouped data. Default is FALSE.
 #' @param geom_line_group A string representing the column name to group the lines by when `use_geom_line` is TRUE. This should be a categorical or factor variable.
@@ -46,7 +47,7 @@ create_line_plot <- function(plot_data,
                              y_var,
                              y_transform = "none",
                              dpi = 600,
-                             output_dir = "output",
+                             output_dir = NULL,
                              file_prefix = "line_plot",
                              use_geom_line = FALSE,
                              geom_line_group = NULL,
@@ -91,6 +92,12 @@ create_line_plot <- function(plot_data,
       axis.title = ggplot2::element_text(face = "bold"),
       plot.title = ggplot2::element_text(face = "bold", hjust = 0.5)
     )
+
+  if (is.null(output_dir)) {
+    output_dir <- tyler_tempdir("line_plots", create = TRUE)
+  } else if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
 
   # Automatic Filename Generation
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
