@@ -46,7 +46,7 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
     res <- censusapi::getCensus(
       name = "acs/acs5",
       vintage = vintage,
-      vars = c("NAME", paste0("B01001_0", c("01", 26, 33:49), "E")),
+      vars = c("NAME", sprintf("B01001_%03dE", c(1, 2, 26:49))),
       region = "block group:*",
       regionin = stateget,
       key = api_key
