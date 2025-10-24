@@ -4,9 +4,12 @@
 #' and joins the gender information back to the original data. It then saves the
 #' result to a new CSV file with a timestamp.
 #'
-#' @param input_csv The path to the input CSV file containing physician data.
-#' @param output_dir The directory where the output CSV file will be saved. Default
+#' @param input_csv The path to the input roster file. CSV and Parquet sources are
+#'   supported.
+#' @param output_dir The directory where the output file will be saved. Default
 #'   is a session-specific folder inside [tempdir()].
+#' @param output_format Output format for the saved roster. Either "csv" or
+#'   "parquet" with "csv" as the default to preserve backwards compatibility.
 #' @return A data frame with genderized information joined to the original data.
 #'
 #' The function queries the [Genderize.io](https://genderize.io) API for first
@@ -25,13 +28,16 @@
 #'
 #' @family gender
 #' @export
-genderize_physicians <- function(input_csv, output_dir = NULL) {
+genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c("csv", "parquet")) {
+  output_format <- match.arg(output_format)
   if (!file.exists(input_csv)) {
     stop(sprintf("Input file not found: %s", input_csv), call. = FALSE)
   }
 
+  input_format <- tyler_normalize_file_format(path = input_csv)
+
   # Read the data
-  gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE)
+  gender_Physicians <- tyler_read_table(input_csv, format = input_format)
   validate_dataframe(gender_Physicians, name = "genderize input", allow_zero_rows = FALSE)
   message(sprintf("Loaded %d row(s) for genderization from %s.", nrow(gender_Physicians), input_csv))
 
@@ -65,11 +71,13 @@ genderize_physicians <- function(input_csv, output_dir = NULL) {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
 
-  # Create the output CSV filename with timestamp
-  output_csv <- file.path(output_dir, paste0("genderized_", timestamp, "_", basename(input_csv)))
+  # Create the output filename with timestamp
+  input_stem <- tools::file_path_sans_ext(basename(input_csv))
+  output_extension <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
+  output_path <- file.path(output_dir, paste0("genderized_", timestamp, "_", input_stem, output_extension))
 
-  # Write the result to a CSV file
-  readr::write_csv(y, output_csv)
+  # Write the result to disk
+  tyler_write_table(y, output_path, format = output_format)
 
   # Print the number of missing genders in both datasets using plain-language summaries
   message(sprintf(
@@ -83,7 +91,7 @@ genderize_physicians <- function(input_csv, output_dir = NULL) {
   ))
 
   # Print the path and filename of the new CSV
-  message(sprintf("Genderized roster saved to: %s", output_csv))
+  message(sprintf("Genderized roster saved to: %s", output_path))
 
   # Return the result
   if (requireNamespace("beepr", quietly = TRUE)) {

@@ -9,7 +9,7 @@
 #' includes columns like 'for_redcap', 'id', 'names', 'practice_name', 'phone_number',
 #' 'state_name', and optionally 'npi'. If 'npi' is missing or any of its values are NA,
 #' a `random_id` is generated as a fallback.
-#' @param output_directory Directory where the cleaned Phase 1 CSV should be written.
+#' @param output_directory Directory where the cleaned Phase 1 data should be written.
 #'   Defaults to `tempdir()`.
 #' @param verbose Logical. If `TRUE`, progress messages are printed while cleaning.
 #'   Defaults to `TRUE`.
@@ -20,6 +20,8 @@
 #'   physician. Set to `FALSE` to keep the original number of rows.
 #' @param id_seed Optional integer seed used when generating fallback random IDs so
 #'   runs can be reproduced without permanently mutating the global RNG state.
+#' @param output_format File format to use when writing the cleaned dataset.
+#'   Supported options are "csv" (default) and "parquet".
 #'
 #' @return Invisibly returns the cleaned data frame.
 #'
@@ -53,7 +55,9 @@ clean_phase_1_results <- function(phase1_data,
                                   verbose = TRUE,
                                   notify = TRUE,
                                   duplicate_rows = TRUE,
-                                  id_seed = NULL) {
+                                  id_seed = NULL,
+                                  output_format = c("csv", "parquet")) {
+  output_format <- match.arg(output_format)
   if (!requireNamespace("dplyr", quietly = TRUE) ||
       !requireNamespace("janitor", quietly = TRUE) ||
       !requireNamespace("readr", quietly = TRUE) ||
@@ -211,8 +215,9 @@ clean_phase_1_results <- function(phase1_data,
   if (!dir.exists(output_directory)) {
     dir.create(output_directory, recursive = TRUE, showWarnings = FALSE)
   }
-  output_file <- file.path(output_directory, paste0("clean_phase_1_results_", current_datetime, ".csv"))
-  readr::write_csv(phase1_data, output_file)
+  output_extension <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
+  output_file <- file.path(output_directory, paste0("clean_phase_1_results_", current_datetime, output_extension))
+  tyler_write_table(phase1_data, output_file, format = output_format)
   announce(sprintf(
     "Saved cleaned Phase 1 results dataframe to %s with %d row(s) and %d column(s).",
     output_file,

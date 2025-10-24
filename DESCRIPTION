@@ -85,6 +85,7 @@ Remotes:
 LazyData: true
 Files: R/
 Suggests:
+    arrow,
     knitr,
     pkgdown,
     rmarkdown,

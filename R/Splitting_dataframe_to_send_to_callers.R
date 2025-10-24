@@ -3,7 +3,7 @@
 #' This function splits the data based on provided lab assistant names and saves each part as a separate Excel file.
 #' It allows the arrangement of calls by insurance type to prioritize Medicaid in the first two days and Blue Cross/Blue Shield in the last two days.
 #' @name split_and_save
-#' @param data_or_path Either a dataframe containing the input data or a path to the input data file (RDS, CSV, or XLS/XLSX).
+#' @param data_or_path Either a dataframe containing the input data or a path to the input data file (RDS, CSV, Parquet, or XLS/XLSX).
 #' @param output_directory Directory where output Excel files will be saved.
 #' @param lab_assistant_names Vector of lab assistant names to name the output files.
 #' @param seed Seed value for randomization (default is 1978).
@@ -37,7 +37,19 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
     if (!base::file.exists(data_or_path)) {
       stop("File does not exist at the specified path: ", data_or_path)
     }
-    data <- readr::read_csv(data_or_path)  # Assuming CSV for simplicity
+    ext <- tolower(tools::file_ext(data_or_path))
+    if (ext %in% c("csv", "parquet")) {
+      data <- tyler_read_table(data_or_path)
+    } else if (ext %in% c("rds", "rda")) {
+      data <- readRDS(data_or_path)
+    } else if (ext %in% c("xls", "xlsx")) {
+      if (!requireNamespace("readxl", quietly = TRUE)) {
+        stop("Reading Excel workbooks requires the 'readxl' package. Install it with install.packages('readxl').")
+      }
+      data <- readxl::read_excel(data_or_path)
+    } else {
+      stop("Unsupported file extension: ", ext, ". Provide a CSV, Parquet, RDS, or Excel file.")
+    }
   } else if (is.data.frame(data_or_path)) {
     data <- data_or_path
   } else {
