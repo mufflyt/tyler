@@ -8,7 +8,11 @@ geocode_unique_addresses(
   file_path,
   google_maps_api_key,
   output_file_path = NULL,
-  notify = TRUE
+  failed_output_path = NULL,
+  notify = TRUE,
+  quiet = getOption("tyler.quiet", FALSE),
+  tracker = NULL,
+  tracker_step = "Geocoding"
 )
 }
 \arguments{
@@ -18,8 +22,21 @@ geocode_unique_addresses(
 
 \item{output_file_path}{Path to the output CSV file where the geocoded data will be saved. (Optional)}
 
+\item{failed_output_path}{Optional path that captures addresses which could not
+be geocoded after all retries. Existing files are preserved as
+timestamped backups.}
+
 \item{notify}{Logical. If \code{TRUE}, play a notification sound when geocoding finishes
 (requires the optional \pkg{beepr} package). Defaults to \code{TRUE}.}
+
+\item{quiet}{Logical flag controlling log verbosity. Defaults to the
+package-wide quiet-mode option.}
+
+\item{tracker}{Optional progress tracker created with
+\code{progress_tracker()}. When supplied, the geocoding stage is started
+and finished (or failed) automatically.}
+
+\item{tracker_step}{Character string identifying the tracker step name.}
 }
 \value{
 A dataframe containing geocoded address data with latitude and longitude.
