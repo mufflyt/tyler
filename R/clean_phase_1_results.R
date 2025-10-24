@@ -70,6 +70,8 @@ clean_phase_1_results <- function(phase1_data,
     }
   }
 
+  validate_dataframe(phase1_data, name = "phase1_data")
+
   if (!is.null(id_seed)) {
     restore_rng <- if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
       get(".Random.seed", envir = .GlobalEnv)
@@ -96,15 +98,26 @@ clean_phase_1_results <- function(phase1_data,
 
   announce("Checking required columns...")
   required_columns <- c("names", "practice_name", "phone_number", "state_name")
-  missing_required <- setdiff(required_columns, names(phase1_data))
-  if (length(missing_required)) {
-    stop("The following required columns are missing: ", paste(missing_required, collapse = ", "))
-  }
+  validate_required_columns(phase1_data, required_columns, name = "phase1_data")
   announce(sprintf(
     "Validated %d required columns (%s).",
     length(required_columns),
     paste(required_columns, collapse = ", ")
   ))
+
+  announce("Standardising core text fields...")
+  phase1_data <- dplyr::mutate(
+    phase1_data,
+    names = stringr::str_squish(as.character(names)),
+    practice_name = stringr::str_squish(as.character(practice_name)),
+    phone_number = format_phone_number(phone_number),
+    state_name = stringr::str_squish(as.character(state_name))
+  )
+
+  missing_phone <- sum(is.na(phase1_data$phone_number) | phase1_data$phone_number == "")
+  if (missing_phone) {
+    announce(sprintf("Detected %d row(s) with missing or unparseable phone numbers.", missing_phone))
+  }
 
   announce("Handling missing NPI numbers...")
   generate_random_ids <- function(n) {
@@ -186,6 +199,7 @@ clean_phase_1_results <- function(phase1_data,
     )
 
     phase1_data <- dplyr::select(phase1_data, for_redcap, dplyr::everything())
+    attr(phase1_data, "output_directory") <- output_directory
   } else {
     announce("No data available; skipping duplication, insurance assignment, and ID generation.")
   }
@@ -202,12 +216,48 @@ clean_phase_1_results <- function(phase1_data,
     nrow(phase1_data),
     ncol(phase1_data)
   ))
+  attr(phase1_data, "output_path") <- output_file
 
   if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
 
   invisible(phase1_data)
+}
+
+
+format_phone_number <- function(phone_values) {
+  phone_chr <- as.character(phone_values)
+  digits <- gsub("[^0-9]", "", phone_chr)
+
+  strip_leading_one <- function(x) {
+    if (nchar(x) == 11 && substr(x, 1, 1) == "1") {
+      substr(x, 2, 11)
+    } else {
+      x
+    }
+  }
+
+  formatted <- vapply(digits, function(d) {
+    if (is.na(d) || !nzchar(d)) {
+      return("")
+    }
+    clean <- strip_leading_one(d)
+    if (nchar(clean) == 10) {
+      sprintf("(%s) %s-%s", substr(clean, 1, 3), substr(clean, 4, 6), substr(clean, 7, 10))
+    } else if (nchar(clean) == 7) {
+      sprintf("%s-%s", substr(clean, 1, 3), substr(clean, 4, 7))
+    } else if (nchar(clean) == 0) {
+      ""
+    } else {
+      clean
+    }
+  }, character(1))
+
+  # Preserve original NAs
+  formatted[is.na(phone_chr)] <- NA_character_
+
+  formatted
 }
 
 

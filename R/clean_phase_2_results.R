@@ -40,6 +40,8 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 
   message("--- Starting to search and rename columns based on target substrings ---")
   # Loop over all target strings
+  rename_log <- list()
+  rename_index <- 0L
   for (i in seq_along(target_strings)) {
     # Identify columns that contain the target string
     matches <- grepl(target_strings[i], names(data), ignore.case = TRUE)
@@ -59,6 +61,13 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
       }
       # Rename the first matching column
       names(data)[names(data) == matched_cols[1]] <- new_names[i]
+      rename_index <- rename_index + 1L
+      rename_log[[rename_index]] <- data.frame(
+        pattern = target_strings[i],
+        renamed_from = matched_cols[1],
+        renamed_to = new_names[i],
+        stringsAsFactors = FALSE
+      )
       message(sprintf(
         "Renamed '%s' to '%s'.",
         matched_cols[1],
@@ -74,6 +83,9 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
     "--- Column renaming complete. Final column set: %s ---",
     paste(names(data), collapse = ", ")
   ))
+  if (length(rename_log)) {
+    attr(data, "rename_log") <- do.call(rbind, rename_log)
+  }
   return(data)
 }
 
@@ -127,16 +139,40 @@ clean_phase_2_data <- function(
     stop("Data input must be either a dataframe or a valid file path.")
   }
 
+  validate_dataframe(data, name = "phase2_data")
+
+  if (missing(required_strings) || !length(required_strings)) {
+    stop("`required_strings` must supply at least one pattern to search for.", call. = FALSE)
+  }
+  if (missing(standard_names) || !length(standard_names)) {
+    stop("`standard_names` must supply at least one column name to apply.", call. = FALSE)
+  }
+
+  if (length(unique(standard_names)) != length(standard_names)) {
+    warning("Duplicate values detected in `standard_names`; later entries may overwrite earlier renames.")
+  }
+
   # Clean and standardize column names
   data <- janitor::clean_names(data)
   message("Converted column names to snake_case format.")
 
   # Apply the renaming function with detailed logging
   data <- rename_columns_by_substring(data, required_strings, standard_names)
+  rename_log <- attr(data, "rename_log")
+  if (!is.null(rename_log)) {
+    message("Summary of applied renames:")
+    summary_lines <- utils::capture.output(print(rename_log))
+    message(paste(summary_lines, collapse = "\n"))
+  }
   message("Standardised Phase 2 column names based on required patterns.")
 
   # Additional data processing
   message("Proceeding with additional data processing steps...")
+
+  available_standard <- intersect(standard_names, names(data))
+  if (length(available_standard)) {
+    data <- dplyr::select(data, dplyr::all_of(available_standard), dplyr::everything())
+  }
 
   # Saving the cleaned data
   if (is.null(output_directory)) {
@@ -149,6 +185,8 @@ clean_phase_2_data <- function(
   output_file_path <- file.path(output_directory, paste0("cleaned_phase_2_data_", current_datetime, ".csv"))
   readr::write_csv(data, output_file_path)
   message(sprintf("Cleaned Phase 2 data (%d row(s), %d column(s)) saved to: %s", nrow(data), ncol(data), output_file_path))
+
+  attr(data, "output_path") <- output_file_path
 
   return(data)
 }
