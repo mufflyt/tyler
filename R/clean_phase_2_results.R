@@ -38,7 +38,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
     stop("target_strings and new_names must have the same length.")
   }
 
-  cat("\n--- Starting to search and rename columns based on target substrings ---\n")
+  message("--- Starting to search and rename columns based on target substrings ---")
   # Loop over all target strings
   for (i in seq_along(target_strings)) {
     # Identify columns that contain the target string
@@ -47,8 +47,8 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 
     # Detailed log of what matches were found
     if (any(matches)) {
-      cat(sprintf(
-        "Matched %d column(s) containing '%s': %s\n",
+      message(sprintf(
+        "Matched %d column(s) containing '%s': %s",
         sum(matches),
         target_strings[i],
         paste(matched_cols, collapse = ", ")
@@ -59,23 +59,21 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
       }
       # Rename the first matching column
       names(data)[names(data) == matched_cols[1]] <- new_names[i]
-      cat(sprintf(
-        "Renamed '%s' to '%s'.\n",
+      message(sprintf(
+        "Renamed '%s' to '%s'.",
         matched_cols[1],
         new_names[i]
       ))
     } else {
       warning(sprintf("No columns contained '%s'; nothing was renamed for this pattern.", target_strings[i]))
     }
-    cat("\n")  # Adding a blank line for better separation
+    message("")  # Adding a blank line for better separation
   }
 
-  cat(
-    "\n--- Column renaming complete. Final column set: ",
-    paste(names(data), collapse = ", "),
-    " ---\n",
-    sep = ""
-  )
+  message(sprintf(
+    "--- Column renaming complete. Final column set: %s ---",
+    paste(names(data), collapse = ", ")
+  ))
   return(data)
 }
 

@@ -64,7 +64,9 @@ clean_phase_1_results <- function(phase1_data,
 
   announce <- function(...) {
     if (isTRUE(verbose)) {
-      cat(...)
+      text <- paste0(...)
+      text <- sub("\\n$", "", text)
+      message(text)
     }
   }
 
@@ -86,25 +88,25 @@ clean_phase_1_results <- function(phase1_data,
     set.seed(id_seed)
   }
 
-  announce("Converting column types...\n")
+  announce("Converting column types...")
   phase1_data <- readr::type_convert(phase1_data)
 
-  announce("Cleaning column names...\n")
+  announce("Cleaning column names...")
   phase1_data <- janitor::clean_names(phase1_data, case = "snake")
 
-  announce("Checking required columns...\n")
+  announce("Checking required columns...")
   required_columns <- c("names", "practice_name", "phone_number", "state_name")
   missing_required <- setdiff(required_columns, names(phase1_data))
   if (length(missing_required)) {
     stop("The following required columns are missing: ", paste(missing_required, collapse = ", "))
   }
   announce(sprintf(
-    "Validated %d required columns (%s).\n",
+    "Validated %d required columns (%s).",
     length(required_columns),
     paste(required_columns, collapse = ", ")
   ))
 
-  announce("Handling missing NPI numbers...\n")
+  announce("Handling missing NPI numbers...")
   generate_random_ids <- function(n) {
     if (!n) {
       return(numeric(0))
@@ -130,39 +132,39 @@ clean_phase_1_results <- function(phase1_data,
 
   if (nrow(phase1_data) > 0) {
     if (isTRUE(duplicate_rows)) {
-      announce("Duplicating rows...\n")
+      announce("Duplicating rows...")
       phase1_data <- dplyr::bind_rows(phase1_data, phase1_data)
     } else {
       announce(sprintf(
-        "Skipping row duplication as requested; keeping %d original row(s).\n",
+        "Skipping row duplication as requested; keeping %d original row(s).",
         nrow(phase1_data)
       ))
     }
 
-    announce("Arranging rows by 'names'...\n")
+    announce("Arranging rows by 'names'...")
     phase1_data <- dplyr::arrange(phase1_data, names)
 
-    announce("Adding insurance information...\n")
+    announce("Adding insurance information...")
     phase1_data <- dplyr::mutate(
       phase1_data,
       insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(phase1_data))
     )
 
-    announce("Adding a numbered 'id' column...\n")
+    announce("Adding a numbered 'id' column...")
     phase1_data <- dplyr::mutate(
       phase1_data,
       id = dplyr::row_number(),
       id_number = paste0("id:", id)
     )
 
-    announce("Extracting last name and creating 'dr_name'...\n")
+    announce("Extracting last name and creating 'dr_name'...")
     phase1_data <- dplyr::mutate(
       phase1_data,
       last_name = humaniformat::last_name(names),
       dr_name = paste("Dr.", last_name)
     )
 
-    announce("Identifying academic or private practice...\n")
+    announce("Identifying academic or private practice...")
     phase1_data <- dplyr::mutate(
       phase1_data,
       academic = ifelse(
@@ -172,7 +174,7 @@ clean_phase_1_results <- function(phase1_data,
       )
     )
 
-    announce("Uniting columns for REDCap upload...\n")
+    announce("Uniting columns for REDCap upload...")
     phase1_data <- dplyr::mutate(
       phase1_data,
       doctor_id = if ("npi" %in% names(phase1_data)) {
@@ -185,7 +187,7 @@ clean_phase_1_results <- function(phase1_data,
 
     phase1_data <- dplyr::select(phase1_data, for_redcap, dplyr::everything())
   } else {
-    announce("No data available; skipping duplication, insurance assignment, and ID generation.\n")
+    announce("No data available; skipping duplication, insurance assignment, and ID generation.")
   }
 
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
@@ -195,7 +197,7 @@ clean_phase_1_results <- function(phase1_data,
   output_file <- file.path(output_directory, paste0("clean_phase_1_results_", current_datetime, ".csv"))
   readr::write_csv(phase1_data, output_file)
   announce(sprintf(
-    "Saved cleaned Phase 1 results dataframe to %s with %d row(s) and %d column(s).\n",
+    "Saved cleaned Phase 1 results dataframe to %s with %d row(s) and %d column(s).",
     output_file,
     nrow(phase1_data),
     ncol(phase1_data)
