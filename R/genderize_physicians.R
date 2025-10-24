@@ -5,7 +5,8 @@
 #' result to a new CSV file with a timestamp.
 #'
 #' @param input_csv The path to the input CSV file containing physician data.
-#' @param output_dir The directory where the output CSV file will be saved. Default is the current working directory.
+#' @param output_dir The directory where the output CSV file will be saved. Default
+#'   is a session-specific folder inside [tempdir()].
 #' @return A data frame with genderized information joined to the original data.
 #'
 #' The function queries the [Genderize.io](https://genderize.io) API for first
@@ -24,7 +25,7 @@
 #'
 #' @family gender
 #' @export
-genderize_physicians <- function(input_csv, output_dir = getwd()) {
+genderize_physicians <- function(input_csv, output_dir = NULL) {
   # Read the data
   gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE)
 
@@ -51,6 +52,12 @@ genderize_physicians <- function(input_csv, output_dir = getwd()) {
 
   # Generate a timestamp
   timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
+
+  if (is.null(output_dir)) {
+    output_dir <- tyler_tempdir("genderize_physicians", create = TRUE)
+  } else if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
 
   # Create the output CSV filename with timestamp
   output_csv <- file.path(output_dir, paste0("genderized_", timestamp, "_", basename(input_csv)))

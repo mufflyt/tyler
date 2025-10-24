@@ -7,7 +7,8 @@
 #' @param y_var A string representing the column name for the y-axis variable. This should be a numeric variable (e.g., waiting time in days).
 #' @param y_transform A string specifying the transformation for the y-axis: "log" for log transformation (log1p), "sqrt" for square root transformation, or "none" for no transformation. Default is "none".
 #' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 600 for print-ready outputs.
-#' @param output_dir A string representing the directory where the plot files will be saved. Default is "output".
+#' @param output_dir A string representing the directory where the plot files will be
+#'   saved. Defaults to a session-specific folder inside [tempdir()].
 #' @param file_prefix A string used as the prefix for the generated plot filenames. The filenames will have a timestamp appended to ensure uniqueness. Default is "scatter_plot".
 #' @param jitter_width A numeric value specifying the width of the jitter along the x-axis. Default is 0.2.
 #' @param jitter_height A numeric value specifying the height of the jitter along the y-axis. Default is 0.
@@ -75,7 +76,7 @@ create_scatter_plot <- function(plot_data,
                                 y_var,
                                 y_transform = "none",
                                 dpi = 600,
-                                output_dir = "output",
+                                output_dir = NULL,
                                 file_prefix = "scatter_plot",
                                 jitter_width = 0.2,
                                 jitter_height = 0,
@@ -121,6 +122,12 @@ create_scatter_plot <- function(plot_data,
 
   # Display the plot
   print(scatter_plot)
+
+  if (is.null(output_dir)) {
+    output_dir <- tyler_tempdir("scatter_plots", create = TRUE)
+  } else if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
 
   # Automatic Filename Generation
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")

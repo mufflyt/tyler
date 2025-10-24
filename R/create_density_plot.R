@@ -7,7 +7,8 @@
 #' @param fill_var A string representing the column name for the fill variable. This should be a categorical or factor variable (e.g., insurance type).
 #' @param x_transform A string specifying the transformation for the x-axis: "log" for log transformation (log1p), "sqrt" for square root transformation, or "none" for no transformation. Default is "none".
 #' @param dpi An integer specifying the resolution of the saved plot in dots per inch (DPI). Default is 600 for print-ready outputs.
-#' @param output_dir A string representing the directory where the plot files will be saved. Default is "output".
+#' @param output_dir A string representing the directory where the plot files will be
+#'   saved. Defaults to a session-specific folder inside [tempdir()].
 #' @param file_prefix A string used as the prefix for the generated plot filenames. The filenames will have a timestamp appended to ensure uniqueness. Default is "density_plot".
 #' @param x_label A string specifying the label for the x-axis. Default is `NULL` (uses x_var).
 #' @param y_label A string specifying the label for the y-axis. Default is "Density".
@@ -69,7 +70,7 @@ create_density_plot <- function(data,
                                 fill_var,
                                 x_transform = "none",
                                 dpi = 600,
-                                output_dir = "output",
+                                output_dir = NULL,
                                 file_prefix = "density_plot",
                                 x_label = NULL,
                                 y_label = "Density",
@@ -109,6 +110,12 @@ create_density_plot <- function(data,
 
   # Display the plot
   print(density_plot)
+
+  if (is.null(output_dir)) {
+    output_dir <- tyler_tempdir("density_plots", create = TRUE)
+  } else if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
 
   # Automatic Filename Generation
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
