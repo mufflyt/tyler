@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   pkgdown:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
     runs-on: ubuntu-latest
     concurrency:
       group: pkgdown-${{ github.event.workflow_run.head_branch || github.ref }}
@@ -30,6 +30,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
           ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Configure git safe directory
