@@ -68,8 +68,6 @@ Imports:
     utils,
     viridis,
     zipcodeR
-Remotes:
-    andrewwallenbruce/provider
 LazyData: true
 Suggests:
     arrow,
@@ -82,8 +80,6 @@ Suggests:
     lwgeom,
     mockery,
     pkgdown,
-    postmastr,
-    provider,
     remotes,
     renv,
     rmarkdown,
