@@ -9,7 +9,7 @@
 #' @param label_translations Optional named list for label translations.
 #' @return Path to the generated PDF file
 #'
-#' @importFrom arsenal write2pdf tableby
+#' @importFrom arsenal write2pdf tableby tableby.control
 #' @importFrom readr read_rds
 #' @importFrom easyr read.any
 #' @importFrom fs dir_create dir_exists
@@ -40,7 +40,14 @@
 #' @export
 table_write_pdf <- function(object, filename) {
   print("Function Sanity Check: Creating Arsenal Table as a PDF")
-  arsenal::write2pdf(object, filename, keep.md = TRUE, quiet = TRUE)
+  output_file <- if (grepl("\\.pdf$", filename, ignore.case = TRUE)) {
+    filename
+  } else {
+    paste0(filename, ".pdf")
+  }
+
+  arsenal::write2pdf(object, output_file, keep.md = TRUE, quiet = TRUE)
+  invisible(output_file)
 }
 
 table_generate_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
@@ -83,7 +90,7 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
   overall_arsenal_table <- arsenal::tableby(
     ~ .,
     data = selected_data,
-    control = tableby.control(
+    control = arsenal::tableby.control(
       test = FALSE,
       total = FALSE,
       digits = 0L,
@@ -133,9 +140,13 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
 
   # Save the overall table as a PDF
   cat("Saving the overall table as a PDF: ", filename, "\n")
-  table_write_pdf(overall_summary, filename)
+  output_path <- table_write_pdf(overall_summary, filename)
 
   # Log function end
   cat("Overall table generation completed.\n")
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
+
+  invisible(output_path)
 }

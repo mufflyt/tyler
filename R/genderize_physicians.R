@@ -26,7 +26,13 @@
 #' @export
 genderize_physicians <- function(input_csv, output_dir = getwd()) {
   # Read the data
-  gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE) %>%
+  gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE)
+
+  if (!"first_name" %in% names(gender_Physicians)) {
+    stop("Input data must include a 'first_name' column.")
+  }
+
+  gender_Physicians <- gender_Physicians %>%
     dplyr::mutate(first_name = trimws(first_name))
 
   # Get first names
@@ -67,7 +73,10 @@ genderize_physicians <- function(input_csv, output_dir = getwd()) {
   cat(sprintf("Genderized roster saved to: %s\n", output_csv))
 
   # Return the result
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) {
+    beepr::beep(2)
+  }
+
   return(y)
 }
 

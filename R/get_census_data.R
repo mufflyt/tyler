@@ -13,7 +13,7 @@
 #'   indicating the Census vintage that supplied the estimates.
 #' @importFrom dplyr bind_rows mutate rename
 #' @importFrom censusapi getCensus
-#' @importFrom tibble as_tibble
+#' @importFrom tibble as_tibble tibble
 #' @importFrom stringr str_pad
 #' @family census
 #' @export
@@ -28,7 +28,7 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
   }
 
   if (!length(us_fips_list)) {
-    return(dplyr::tibble())
+    return(tibble::tibble())
   }
 
   if (!is.character(us_fips_list)) {
@@ -80,7 +80,7 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
   }
 
   if (!length(state_data)) {
-    return(dplyr::tibble())
+    return(tibble::tibble())
   }
 
   acs_raw <- dplyr::bind_rows(state_data)

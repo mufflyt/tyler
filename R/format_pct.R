@@ -27,5 +27,6 @@
 #' @family utilities
 #' @export
 format_pct <- function(x, my_digits = 1) {
-  format(x, digits = my_digits, nsmall = my_digits)
+  formatted <- formatC(100 * x, format = "f", digits = my_digits)
+  paste0(formatted, "%")
 }
