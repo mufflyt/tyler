@@ -98,7 +98,7 @@ test_that("clean_phase_2_data standardises Phase 2 exports", {
 
   expect_equal(as.data.frame(cleaned), expected)
 
-  output_files <- list.files(tmp_dir, pattern = "^cleaned_phase_2_data_.*\\\.csv$")
+  output_files <- list.files(tmp_dir, pattern = "^cleaned_phase_2_data_.*\\.csv$")
   expect_length(output_files, 1L)
 
   persisted <- readr::read_csv(file.path(tmp_dir, output_files[[1]]), show_col_types = FALSE)
@@ -165,6 +165,6 @@ test_that("clean_phase_2_data reads from file paths", {
   expect_equal(names(cleaned), standard_names)
   expect_identical(cleaned$physician_info, raw$PhysicianInformation)
 
-  output_files <- list.files(tmp_dir, pattern = "^cleaned_phase_2_data_.*\\\.csv$")
+  output_files <- list.files(tmp_dir, pattern = "^cleaned_phase_2_data_.*\\.csv$")
   expect_true(any(output_files != "phase2.csv"))
 })
