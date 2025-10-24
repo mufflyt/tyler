@@ -22,47 +22,26 @@
 #' @family mapping
 #' @export
 #' @examples
-#' # Example 1: Basic density plot with log transformation
-#' create_density_plot(
-#'     data = df3,
-#'     x_var = "business_days_until_appointment",
-#'     fill_var = "insurance",
-#'     x_transform = "log",  # Log transformation
-#'     dpi = 100,
-#'     output_dir = "ortho_sports_med/Figures",
-#'     file_prefix = "ortho_sports_vs_insurance_density",
-#'     x_label = "Log (Waiting Times in Days)",
-#'     y_label = "Density",
-#'     plot_title = "Density Plot of Waiting Times by Insurance"
+#' \donttest{
+#' example_data <- data.frame(
+#'   insurance = rep(c("Medicaid", "Commercial"), each = 3),
+#'   business_days_until_appointment = c(1.5, 2.2, 3.1, 1.8, 2.5, 2.9)
 #' )
 #'
-#' # Example 2: Density plot with square root transformation
 #' create_density_plot(
-#'     data = df3,
-#'     x_var = "business_days_until_appointment",
-#'     fill_var = "insurance",
-#'     x_transform = "sqrt",  # Square root transformation
-#'     dpi = 150,
-#'     output_dir = "ortho_sports_med/Figures",
-#'     file_prefix = "ortho_sports_vs_insurance_density_sqrt",
-#'     x_label = "Sqrt (Waiting Times in Days)",
-#'     y_label = "Density",
-#'     plot_title = "Square Root Transformed Density Plot"
+#'   data = example_data,
+#'   x_var = "business_days_until_appointment",
+#'   fill_var = "insurance",
+#'   x_transform = "none",
+#'   dpi = 50,
+#'   output_dir = tempdir(),
+#'   file_prefix = "demo_density",
+#'   x_label = "Waiting Times in Days",
+#'   y_label = "Density",
+#'   plot_title = "Example Density Plot",
+#'   verbose = FALSE
 #' )
-#'
-#' # Example 3: Density plot without any transformation
-#' create_density_plot(
-#'     data = df3,
-#'     x_var = "business_days_until_appointment",
-#'     fill_var = "insurance",
-#'     x_transform = "none",  # No transformation
-#'     dpi = 200,
-#'     output_dir = "ortho_sports_med/Figures",
-#'     file_prefix = "ortho_sports_vs_insurance_density_none",
-#'     x_label = "Waiting Times in Days",
-#'     y_label = "Density",
-#'     plot_title = "Density Plot Without Transformation"
-#' )
+#' }
 
 create_density_plot <- function(data,
                                 x_var,

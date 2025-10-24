@@ -25,50 +25,26 @@
 #' @family mapping
 #' @export
 #' @examples
-#' # Example 1: Basic scatter plot with log transformation
-#' create_scatter_plot(
-#'     plot_data = df3,
-#'     x_var = "insurance",
-#'     y_var = "business_days_until_appointment",
-#'     y_transform = "log",  # Log transformation
-#'     dpi = 100,
-#'     output_dir = "ortho_sports_med/Figures",
-#'     file_prefix = "ortho_sports_vs_insurance",
-#'     x_label = "Insurance",
-#'     y_label = "Log (Waiting Times in Days)",
-#'     plot_title = "Scatter Plot of Waiting Times by Insurance"
+#' \donttest{
+#' example_data <- data.frame(
+#'   insurance = rep(c("Medicaid", "Commercial", "Medicare"), each = 3),
+#'   business_days_until_appointment = c(1.5, 2.0, 2.8, 1.9, 2.4, 2.6, 2.1, 2.7, 3.0)
 #' )
 #'
-#' # Example 2: Scatter plot with square root transformation and custom jitter
 #' create_scatter_plot(
-#'     plot_data = df3,
-#'     x_var = "insurance",
-#'     y_var = "business_days_until_appointment",
-#'     y_transform = "sqrt",  # Square root transformation
-#'     dpi = 150,
-#'     output_dir = "ortho_sports_med/Figures",
-#'     file_prefix = "ortho_sports_vs_insurance_sqrt",
-#'     jitter_width = 0.3,
-#'     jitter_height = 0.1,
-#'     x_label = "Insurance",
-#'     y_label = "Square Root (Waiting Times in Days)",
-#'     plot_title = "Square Root Transformed Scatter Plot"
+#'   plot_data = example_data,
+#'   x_var = "insurance",
+#'   y_var = "business_days_until_appointment",
+#'   y_transform = "none",
+#'   dpi = 50,
+#'   output_dir = tempdir(),
+#'   file_prefix = "demo_scatter",
+#'   x_label = "Insurance",
+#'   y_label = "Waiting Times in Days",
+#'   plot_title = "Example Scatter Plot",
+#'   verbose = FALSE
 #' )
-#'
-#' # Example 3: Scatter plot without any transformation and increased transparency
-#' create_scatter_plot(
-#'     plot_data = df3,
-#'     x_var = "insurance",
-#'     y_var = "business_days_until_appointment",
-#'     y_transform = "none",  # No transformation
-#'     dpi = 200,
-#'     output_dir = "ortho_sports_med/Figures",
-#'     file_prefix = "ortho_sports_vs_insurance_none",
-#'     point_alpha = 0.8,
-#'     x_label = "Insurance",
-#'     y_label = "Waiting Times in Days",
-#'     plot_title = "Scatter Plot Without Transformation"
-#' )
+#' }
 
 create_scatter_plot <- function(plot_data,
                                 x_var,

@@ -23,40 +23,23 @@
 #' @family mapping
 #' @export
 #' @examples
-#' # Example 1: Basic plot with log transformation
-#' create_line_plot(
-#'     plot_data = df3,
-#'     x_var = "insurance",
-#'     y_var = "business_days_until_appointment",
-#'     y_transform = "log",  # Log transformation
-#'     dpi = 100,
-#'     output_dir = "ortho_sports_med/Figures",
-#'     file_prefix = "ortho_sports_vs_insurance"
+#' \donttest{
+#' example_data <- data.frame(
+#'   insurance = rep(c("Medicaid", "Commercial", "Medicare"), each = 3),
+#'   business_days_until_appointment = c(1.5, 2.1, 2.8, 1.7, 2.3, 2.5, 1.9, 2.6, 3.1)
 #' )
 #'
-#' # Example 2: Plot with square root transformation and lines grouped by 'last'
 #' create_line_plot(
-#'     plot_data = df3,
-#'     x_var = "insurance",
-#'     y_var = "business_days_until_appointment",
-#'     y_transform = "sqrt",  # Square root transformation
-#'     dpi = 150,
-#'     output_dir = "ortho_sports_med/Figures",
-#'     file_prefix = "ortho_sports_vs_insurance_sqrt",
-#'     use_geom_line = TRUE,  # Include lines
-#'     geom_line_group = "last"  # Group lines by 'last' column
+#'   plot_data = example_data,
+#'   x_var = "insurance",
+#'   y_var = "business_days_until_appointment",
+#'   y_transform = "none",
+#'   dpi = 50,
+#'   output_dir = tempdir(),
+#'   file_prefix = "demo_line",
+#'   verbose = FALSE
 #' )
-#'
-#' # Example 3: Plot without any transformation and without lines
-#' create_line_plot(
-#'     plot_data = df3,
-#'     x_var = "insurance",
-#'     y_var = "business_days_until_appointment",
-#'     y_transform = "none",  # No transformation
-#'     dpi = 200,
-#'     output_dir = "ortho_sports_med/Figures",
-#'     file_prefix = "ortho_sports_vs_insurance_none"
-#' )
+#' }
 
 create_line_plot <- function(plot_data,
                              x_var,
