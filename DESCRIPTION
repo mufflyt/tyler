@@ -80,6 +80,7 @@ Suggests:
     lwgeom,
     mockery,
     pkgdown,
+    provider,
     remotes,
     renv,
     rmarkdown,
