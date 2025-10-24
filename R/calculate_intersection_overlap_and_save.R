@@ -49,15 +49,17 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     stop("Error: 'output_dir' must be a character string.")
   }
 
-  block_groups <- sf::st_make_valid(block_groups)
-  isochrones_joined <- sf::st_make_valid(isochrones_joined)
-
-  if (!all(sf::st_is_valid(block_groups))) {
-    stop("Block group geometries remain invalid after attempted repair.")
-  }
-  if (!all(sf::st_is_valid(isochrones_joined))) {
-    stop("Isochrone geometries remain invalid after attempted repair.")
-  }
+  validated <- validate_sf_inputs(
+    block_groups = block_groups,
+    isochrones_joined = isochrones_joined,
+    expected_types = list(
+      block_groups = c("POLYGON", "MULTIPOLYGON"),
+      isochrones_joined = c("POLYGON", "MULTIPOLYGON")
+    ),
+    context = "calculate_intersection_overlap_and_save()"
+  )
+  block_groups <- validated$block_groups
+  isochrones_joined <- validated$isochrones_joined
 
   block_groups <- lwgeom::st_orient(block_groups)
   isochrones_joined <- lwgeom::st_orient(isochrones_joined)
@@ -116,12 +118,20 @@ calculate_intersection_overlap_and_save <- function(block_groups,
       stop("The object returned by `crosswalk` must include a `vintage` column.")
     }
 
-    block_groups <- sf::st_make_valid(block_groups)
-    if (!all(sf::st_is_valid(block_groups))) {
-      stop("Crosswalk output contains invalid geometries that could not be repaired.")
-    }
+    validated_crosswalk <- validate_sf_inputs(
+      block_groups = block_groups,
+      isochrones_joined = isochrones_joined,
+      expected_types = list(
+        block_groups = c("POLYGON", "MULTIPOLYGON"),
+        isochrones_joined = c("POLYGON", "MULTIPOLYGON")
+      ),
+      context = "calculate_intersection_overlap_and_save(): post-crosswalk"
+    )
+    block_groups <- validated_crosswalk$block_groups
+    isochrones_joined <- validated_crosswalk$isochrones_joined
 
     block_groups <- lwgeom::st_orient(block_groups)
+    isochrones_joined <- lwgeom::st_orient(isochrones_joined)
 
     acs_years <- stats::na.omit(unique(block_groups$vintage))
     if (length(acs_years) != 1L || !identical(acs_years[[1]], provider_year)) {
