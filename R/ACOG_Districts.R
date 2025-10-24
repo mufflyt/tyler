@@ -2,6 +2,9 @@
 #'
 #' This dataset contains information about American College of Obstetricians and Gynecologists (ACOG) districts, including their two-letter state abbreviations and full state names.
 #'
+#' @return A tibble where each row represents an ACOG district with its
+#'   corresponding two-letter abbreviation and full state name.
+#'
 #' @format A data frame with the following columns:
 #' \describe{
 #'   \item{ACOG_District}{Two-letter state abbreviations representing ACOG districts.}

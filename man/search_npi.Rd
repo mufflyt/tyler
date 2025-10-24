@@ -11,6 +11,9 @@ search_npi(input_data, ...)
 \item{...}{Additional arguments passed to
 \code{\link{search_and_process_npi}}.}
 }
+\value{
+A tibble containing the results returned by \code{search_and_process_npi}.
+}
 \description{
 \strong{Deprecated}. Use \code{\link{search_and_process_npi}} instead.
 }

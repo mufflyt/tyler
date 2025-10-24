@@ -11,6 +11,9 @@ process_and_save_isochrones(input_file, chunk_size = 25, ...)
 
 \item{...}{Ignored.}
 }
+\value{
+No return value; this helper always errors with a deprecation message.
+}
 \description{
 \strong{Deprecated}. Use \code{\link{create_isochrones_for_dataframe}} and
 standard \pkg{sf} writers instead.

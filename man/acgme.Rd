@@ -20,6 +20,10 @@ acgme
 \description{
 This dataset provides information about Obstetricians and Gynecologists (OBGYN) residency programs accredited by the Accreditation Council for Graduate Medical Education (ACGME).
 }
+\value{
+A tibble listing ACGME-accredited OBGYN residency programs and their
+program directors.
+}
 \examples{
 # Load the ACGME OBGYN Residency Data
 data(acgme)

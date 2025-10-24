@@ -4,6 +4,12 @@
 #' deprecation warnings and defer to the modern workflow helpers where
 #' possible.
 #'
+#' @return
+#' * `search_npi()` returns the tibble produced by
+#'   [search_and_process_npi()].
+#' * `test_and_process_isochrones()` and `process_and_save_isochrones()` do
+#'   not return a value and instead stop with a deprecation error.
+#'
 #' @name tyler-deprecated
 NULL
 

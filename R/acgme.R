@@ -2,6 +2,9 @@
 #'
 #' This dataset provides information about Obstetricians and Gynecologists (OBGYN) residency programs accredited by the Accreditation Council for Graduate Medical Education (ACGME).
 #'
+#' @return A tibble listing ACGME-accredited OBGYN residency programs and
+#'   their program directors.
+#'
 #' @format A data frame with the following columns:
 #' \describe{
 #'   \item{Program directors}{The names of program directors for OBGYN residency programs.}
