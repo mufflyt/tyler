@@ -71,7 +71,7 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
     index <- which(drive_times == time)
 
     # Create a base map
-    my_map <- tyler::create_base_map("")
+    my_map <- tyler::map_create_base("")
 
     message(paste("Creating a Leaflet map of isochrones for", time, "minutes..."))
 

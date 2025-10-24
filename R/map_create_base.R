@@ -17,9 +17,9 @@
 #' @family mapping
 #' @export
 #' @examples
-#' create_base_map()
-#' create_base_map("<strong>Custom title</strong>")
-create_base_map <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
+#' map_create_base()
+#' map_create_base("<strong>Custom title</strong>")
+map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
   map <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = TRUE)) %>%
     leaflet::addProviderTiles("CartoDB.Voyager", group = "CartoDB Voyager") %>%
     leaflet::addProviderTiles("Stamen.TonerLite", group = "Toner by Stamen") %>%
@@ -80,12 +80,12 @@ create_base_map <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
 #' )
 #'
 #' # Create and save the dot map
-#' create_and_save_physician_dot_map(physician_data)
+#' map_create_physician_dot(physician_data)
 #' }
 #'
 #' @family mapping
 #' @export
-create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
+map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
   jittered_physician_data <- dplyr::mutate(
     physician_data,
     lat = lat + runif(n()) * jitter_range,
@@ -93,11 +93,11 @@ create_and_save_physician_dot_map <- function(physician_data, jitter_range = 0.0
   )
 
   cat("Setting up the base map...\n")
-  base_map <- create_base_map("Physician Dot Map")
+  base_map <- map_create_base("Physician Dot Map")
   cat("Map setup complete.\n")
 
   cat("Generating the ACOG district boundaries...\n")
-  acog_districts <- generate_acog_districts_sf()
+  acog_districts <- map_create_acog_districts_sf()
   cat("ACOG district boundaries generated.\n")
 
   num_acog_districts <- dplyr::n_distinct(acog_districts$ACOG_District)

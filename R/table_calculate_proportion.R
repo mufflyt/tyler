@@ -14,22 +14,22 @@
 #' @examples
 #' # Example 1: Basic usage with a simple dataset
 #' data <- data.frame(gender = c("Male", "Female", "Female", "Male", "Male", "Female"))
-#' result <- calculate_proportion(data, gender)
+#' result <- table_calculate_proportion(data, gender)
 #' print(result)
 #'
 #' # Example 2: Handling a dataset with missing values
 #' df_na <- data.frame(gender = c("Male", NA, "Female", "Female", "Male", "Female", NA))
-#' result <- calculate_proportion(df_na, gender)
+#' result <- table_calculate_proportion(df_na, gender)
 #' print(result)
 #'
 #' # Example 3: Using a variable with multiple levels
 #' df_multi <- data.frame(grade = c("A", "B", "A", "C", "B", "A", "C", "B"))
-#' result <- calculate_proportion(df_multi, grade)
+#' result <- table_calculate_proportion(df_multi, grade)
 #' print(result)
 #'
 #' @import dplyr
 #' @export
-calculate_proportion <- function(data, variable_name) {
+table_calculate_proportion <- function(data, variable_name) {
   tabyl_result <- data %>%
     count({{ variable_name }}, name = "n") %>%
     mutate(percent = n / sum(n) * 100)

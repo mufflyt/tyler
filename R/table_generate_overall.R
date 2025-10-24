@@ -1,4 +1,4 @@
-#' Generate overall table
+#' Generate an overall summary table
 #'
 #' Generate an overall table summarizing the demographics of the Table 1.
 #'
@@ -20,7 +20,7 @@
 #' @examples
 #' \dontrun{
 #' # Generate the overall table
-#' generate_overall_table("data/Table1.rds", "output_tables")
+#' table_generate_overall("data/Table1.rds", "output_tables")
 #' }
 
 #' Write an Arsenal table to a PDF file
@@ -35,15 +35,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' tm_write2pdf(overall_summary, "table.pdf")
+#' table_write_pdf(overall_summary, "table.pdf")
 #' }
 #' @export
-tm_write2pdf <- function(object, filename) {
+table_write_pdf <- function(object, filename) {
   print("Function Sanity Check: Creating Arsenal Table as a PDF")
   arsenal::write2pdf(object, filename, keep.md = TRUE, quiet = TRUE)
 }
 
-generate_overall_table <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
+table_generate_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
   cat("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.\n")
   # Log function start
   cat("Generating the overall table...\n")
@@ -133,7 +133,7 @@ generate_overall_table <- function(input_file_path, output_directory, title = "O
 
   # Save the overall table as a PDF
   cat("Saving the overall table as a PDF: ", filename, "\n")
-  tm_write2pdf(overall_summary, filename)
+  table_write_pdf(overall_summary, filename)
 
   # Log function end
   cat("Overall table generation completed.\n")

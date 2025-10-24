@@ -16,10 +16,10 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' generate_acog_districts_sf()
-#' generate_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
+#' map_create_acog_districts_sf()
+#' map_create_acog_districts_sf("inst/extdata/ACOG_Districts.csv")
 #' }
-generate_acog_districts_sf <- function(acog_districts_file = NULL) {
+map_create_acog_districts_sf <- function(acog_districts_file = NULL) {
   if (is.null(acog_districts_file)) {
     acog_districts_file <- system.file("extdata", "ACOG_Districts.csv", package = "tyler")
   }
