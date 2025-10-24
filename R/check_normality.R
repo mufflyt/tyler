@@ -10,6 +10,7 @@
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_density labs stat_qq stat_qq_line
 #' @importFrom dplyr %>%
+#' @importFrom rlang sym
 #' @importFrom stats shapiro.test IQR median
 #'
 #' @examples
@@ -20,7 +21,11 @@ check_normality <- function(data, variable) {
   message("Starting normality check and summary calculation for variable: ", variable)
 
   # Extract the variable data and remove NA values
-  data_var <- data[[variable]]
+  if (!variable %in% names(data)) {
+    stop("Variable not found in data frame: ", variable)
+  }
+
+  data_var <- stats::na.omit(data[[variable]])
   message("Data extracted for variable: ", variable)
 
   # Check if the sample size is adequate for the Shapiro-Wilk test
@@ -41,14 +46,16 @@ check_normality <- function(data, variable) {
   }
 
   # Create Histogram with Density Plot
-  hist_plot <- ggplot2::ggplot(data, ggplot2::aes(x = !!sym(variable))) +
+  clean_data <- data[!is.na(data[[variable]]), , drop = FALSE]
+
+  hist_plot <- ggplot2::ggplot(clean_data, ggplot2::aes(x = !!rlang::sym(variable))) +
     ggplot2::geom_histogram(binwidth = 0.5, fill = "lightblue", color = "black", na.rm = TRUE) +
     ggplot2::geom_density(alpha = 0.2, fill = "#FF6666", na.rm = TRUE) +
     ggplot2::labs(title = paste("Histogram and Density Plot of", variable), x = variable)
   message("Histogram with Density Plot created.")
 
   # Create Q-Q Plot
-  qq_plot <- ggplot2::ggplot(data, ggplot2::aes(sample = !!sym(variable))) +
+  qq_plot <- ggplot2::ggplot(clean_data, ggplot2::aes(sample = !!rlang::sym(variable))) +
     ggplot2::stat_qq(na.rm = TRUE) +
     ggplot2::stat_qq_line(na.rm = TRUE) +
     ggplot2::labs(title = paste("Q-Q Plot of", variable))

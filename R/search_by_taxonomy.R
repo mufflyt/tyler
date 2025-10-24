@@ -22,7 +22,7 @@
 #' @importFrom dplyr bind_rows arrange filter select distinct mutate rename
 #' @importFrom stringr str_remove_all str_to_lower str_detect str_extract str_trunc
 #' @importFrom readr write_rds
-#' @importFrom dplyr tibble
+#' @importFrom tibble tibble
 #' @family npi
 #' @export
 search_by_taxonomy <- function(taxonomy_to_search,
@@ -30,15 +30,15 @@ search_by_taxonomy <- function(taxonomy_to_search,
                                snapshot_dir = "data",
                                notify = TRUE) {
   if (missing(taxonomy_to_search) || is.null(taxonomy_to_search)) {
-    return(dplyr::tibble())
+    return(tibble::tibble())
   }
 
   taxonomy_to_search <- taxonomy_to_search[!is.na(taxonomy_to_search)]
   if (!length(taxonomy_to_search)) {
-    return(dplyr::tibble())
+    return(tibble::tibble())
   }
 
-  npi_data <- dplyr::tibble()
+  npi_data <- tibble::tibble()
 
   extract_status <- function(msg) {
     status <- stringr::str_extract(msg, "\\b[0-9]{3}\\b")

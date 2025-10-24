@@ -12,7 +12,7 @@
 #' @param recursive_create Logical indicating if directories should be created recursively (default is TRUE).
 #' @param insurance_order Vector of insurance types ordered by priority for call scheduling (default is c("Medicaid", "Blue Cross/Blue Shield")).
 #'
-#' @importFrom dplyr arrange sample_n mutate select
+#' @importFrom dplyr arrange sample_n mutate select group_by ungroup n
 #' @importFrom openxlsx write.xlsx
 #' @importFrom fs dir_create dir_exists
 #' @importFrom readr read_csv
@@ -93,12 +93,12 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
   if (nrow(data) == 0) {
     message("Input contains zero rows; workbooks will be created without assignments.")
     data <- data %>%
-      mutate(lab_assistant_assigned = character(dplyr::n()))
+      dplyr::mutate(lab_assistant_assigned = character(dplyr::n()))
   } else {
     data <- data %>%
-      group_by(insurance_rank) %>%
-      mutate(lab_assistant_assigned = sample(lab_assistant_names, n(), replace = TRUE)) %>%
-      ungroup()
+      dplyr::group_by(insurance_rank) %>%
+      dplyr::mutate(lab_assistant_assigned = sample(lab_assistant_names, dplyr::n(), replace = TRUE)) %>%
+      dplyr::ungroup()
   }
 
   # Create output directory if it doesn't exist

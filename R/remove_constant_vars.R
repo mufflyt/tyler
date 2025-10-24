@@ -31,7 +31,7 @@ remove_constant_vars <- function(data_frame) {
   const_vars <- dplyr::select(data_frame, dplyr::where(~ length(unique(.)) == 1)) %>% names()
 
   # Log: Number of constant variables found
-  message(glue("Found {length(const_vars)} constant variables."))
+  message(glue::glue("Found {length(const_vars)} constant variables."))
 
   # Remove constant variables if any
   if (length(const_vars) > 0) {
