@@ -20,6 +20,10 @@ ACOG_Districts
 \description{
 This dataset contains information about American College of Obstetricians and Gynecologists (ACOG) districts, including their two-letter state abbreviations and full state names.
 }
+\value{
+A tibble where each row represents an ACOG district with its two-letter
+abbreviation and corresponding state name.
+}
 \examples{
 # Load the ACOG Districts Data
 data(ACOG_Districts)

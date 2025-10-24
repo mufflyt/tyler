@@ -9,6 +9,9 @@ test_and_process_isochrones(input_file, ...)
 
 \item{...}{Ignored.}
 }
+\value{
+No return value; this helper always errors with a deprecation message.
+}
 \description{
 \strong{Deprecated}. This helper no longer performs any work.
 }

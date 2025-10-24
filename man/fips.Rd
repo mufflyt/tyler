@@ -7,6 +7,16 @@
 \format{
 A tibble with 243 rows and 10 variables:
 \describe{
+\item{state}{Two-letter postal abbreviation.}
+\item{state_name}{Full state name.}
+\item{state_fips}{Two-digit state FIPS code.}
+\item{county_fips}{Three-digit county FIPS code.}
+\item{fips}{Combined five-digit state and county code.}
+\item{class}{Geography class indicator.}
+\item{county}{County name.}
+\item{county_ansi}{County ANSI code.}
+\item{county_short}{Simplified county name.}
+\item{state_ansi}{State ANSI code.}
 }
 }
 \source{
@@ -17,5 +27,9 @@ fips
 }
 \description{
 3 columns with 51 observations.
+}
+\value{
+A tibble containing Federal Information Processing Standards (FIPS) codes for
+states and counties.
 }
 \keyword{datasets}

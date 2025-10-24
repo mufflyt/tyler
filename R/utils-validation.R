@@ -5,6 +5,9 @@
 #' exported functions can depend on them without bloating the public
 #' API surface area.
 #'
+#' @return These helpers return the validated object (invisibly) so they can
+#'   be used inline while performing assertions.
+#'
 #' @keywords internal
 validate_dataframe <- function(x, name = "data", allow_null = FALSE, allow_zero_rows = TRUE) {
   if (is.null(x)) {

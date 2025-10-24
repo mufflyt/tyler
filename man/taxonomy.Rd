@@ -20,6 +20,10 @@ taxonomy
 \description{
 This dataset contains taxonomy codes for Obstetricians and Gynecologists among other healthcare providers.
 }
+\value{
+A tibble mapping NUCC taxonomy codes to descriptive provider types relevant
+to obstetrics and gynecology research.
+}
 \examples{
 \dontrun{
 # Load the taxonomy dataset
