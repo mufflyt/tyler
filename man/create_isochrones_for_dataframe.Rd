@@ -6,18 +6,30 @@
 \usage{
 create_isochrones_for_dataframe(
   input_file,
-  breaks = c(1800, 3600, 7200, 10800)
+  breaks = c(1800, 3600, 7200, 10800),
+  api_key = Sys.getenv("HERE_API_KEY"),
+  output_dir = NULL,
+  save_interval = 240
 )
 }
 \arguments{
 \item{input_file}{A path to the input file containing points for which isochrones are to be retrieved.}
 
 \item{breaks}{A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).}
+
+\item{api_key}{HERE API key supplied explicitly or read from the `HERE_API_KEY` environment variable.}
+
+\item{output_dir}{Directory where intermediate `.rds` results are written. Defaults to a session-specific folder beneath\break
+\code{tempdir()}.}
+
+\item{save_interval}{Number of seconds between automatic checkpoint saves. Defaults to 240 seconds (~4 minutes).}
 }
 \value{
 A dataframe containing the isochrones data with added 'name' column.
 }
 \description{
 This function retrieves isochrones for each point in a given dataframe by looping
-over the rows and calling the create_isochrones function for each point.
+over the rows and calling the create_isochrones function for each point while
+periodically checkpointing results to both RDS and GeoPackage files so progress
+is preserved during long runs.
 }
