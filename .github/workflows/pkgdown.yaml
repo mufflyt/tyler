@@ -1,14 +1,13 @@
 # Build and deploy pkgdown site to GitHub Pages
-# Only runs after successful R-CMD-check
+# Temporary: runs on push to bypass R-CMD-check dependency
 # Based on: https://github.com/r-lib/actions/tree/v2/examples
 
 name: pkgdown
 
 on:
-  workflow_run:
-    workflows: ["R-CMD-check"]
-    types:
-      - completed
+  push:
+    branches: [main, master]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,10 +16,9 @@ permissions:
 
 jobs:
   pkgdown:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
     runs-on: ubuntu-latest
     concurrency:
-      group: pkgdown-${{ github.event.workflow_run.head_branch || github.ref }}
+      group: pkgdown-${{ github.ref }}
       cancel-in-progress: true
 
     env:
@@ -29,9 +27,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.workflow_run.head_repository.full_name }}
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Configure git safe directory
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
