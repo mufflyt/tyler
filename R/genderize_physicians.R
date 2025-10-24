@@ -59,18 +59,18 @@ genderize_physicians <- function(input_csv, output_dir = getwd()) {
   readr::write_csv(y, output_csv)
 
   # Print the number of missing genders in both datasets using plain-language summaries
-  cat(sprintf(
-    "Identified %d unique first name(s); %d lacked gender predictions prior to joining.\n",
+  message(sprintf(
+    "Identified %d unique first name(s); %d lacked gender predictions prior to joining.",
     nrow(x),
     sum(is.na(x$gender))
   ))
-  cat(sprintf(
-    "After joining, %d record(s) still have missing gender values.\n",
+  message(sprintf(
+    "After joining, %d record(s) still have missing gender values.",
     missing_genders_joined
   ))
 
   # Print the path and filename of the new CSV
-  cat(sprintf("Genderized roster saved to: %s\n", output_csv))
+  message(sprintf("Genderized roster saved to: %s", output_csv))
 
   # Return the result
   if (requireNamespace("beepr", quietly = TRUE)) {

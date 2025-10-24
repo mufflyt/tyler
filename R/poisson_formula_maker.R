@@ -20,30 +20,35 @@
 #'
 #' @export
 create_formula <- function(data, response_var, random_effect = NULL) {
-  cat("Creating formula with response variable:", response_var, "\n")
+  message(sprintf("Creating formula with response variable: %s", response_var))
 
   # Get the column names of the dataframe except for the response variable
   predictor_vars <- setdiff(names(data), response_var)
-  cat("Predictor variables identified:", paste(predictor_vars, collapse = ", "), "\n")
+  message(sprintf(
+    "Predictor variables identified: %s",
+    paste(predictor_vars, collapse = ", ")
+  ))
 
   # Enclose predictor variables in backticks to handle special characters or spaces
   predictor_vars <- sapply(predictor_vars, function(x) paste0("`", x, "`"))
-  cat("Predictor variables after formatting:", paste(predictor_vars, collapse = ", "), "\n")
+  message(sprintf(
+    "Predictor variables after formatting: %s",
+    paste(predictor_vars, collapse = ", ")
+  ))
 
   # Create the initial formula string without the random effect
   formula_str <- paste(response_var, "~", paste(predictor_vars, collapse = " + "))
-  cat("Initial formula string:", formula_str, "\n")
+  message(sprintf("Initial formula string: %s", formula_str))
 
   # If a random effect is provided, append it to the formula
   if (!is.null(random_effect)) {
     formula_str <- paste(formula_str, "+ (1 |", random_effect, ")")
-    cat("Formula string with random effect:", formula_str, "\n")
+    message(sprintf("Formula string with random effect: %s", formula_str))
   }
 
   # Convert the formula string to a formula object
   formula_obj <- as.formula(formula_str)
-  cat("Final formula object created:\n")
-  print(formula_obj)
+  message(sprintf("Final formula object created: %s", deparse(formula_obj)))
 
   return(formula_obj)
 }

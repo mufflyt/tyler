@@ -6,7 +6,7 @@
 #'
 #' @param data A data frame containing the columns 'npi' and 'name'.
 #' @param filepath The path where the CSV file should be saved.
-#' @return Prints a message to the console indicating that the CSV file has been saved successfully.
+#' @return The filtered data. A message is emitted indicating where the CSV was saved.
 #' @importFrom dplyr group_by summarise arrange filter
 #' @family utilities
 #' @export
@@ -27,8 +27,8 @@ save_quality_check_table <- function(data, filepath) {
   write.csv(filtered_data, file = filepath, row.names = FALSE)
 
   # Print a message indicating successful file save with context
-  cat(sprintf(
-    "Saved quality-check table with %d row(s) to %s.\n",
+  message(sprintf(
+    "Saved quality-check table with %d row(s) to %s.",
     nrow(filtered_data),
     filepath
   ))
