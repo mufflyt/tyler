@@ -35,6 +35,8 @@ Imports:
     fs,
     ggmap,
     ggplot2,
+    grDevices,
+    grid,
     ggspatial,
     glue,
     gridExtra,
@@ -69,6 +71,7 @@ Imports:
     rnaturalearth,
     scales,
     sf,
+    stats,
     stringr,
     testthat,
     tibble,
@@ -77,6 +80,7 @@ Imports:
     tigris,
     tmap,
     tools,
+    utils,
     viridis,
     webshot,
     zipcodeR
@@ -89,7 +93,6 @@ Suggests:
     pkgdown,
     rmarkdown,
     covr,
-    stats,
     postmastr,
     provider
 VignetteBuilder: knitr
