@@ -26,8 +26,14 @@
 #' @family gender
 #' @export
 genderize_physicians <- function(input_csv, output_dir = NULL) {
+  if (!file.exists(input_csv)) {
+    stop(sprintf("Input file not found: %s", input_csv), call. = FALSE)
+  }
+
   # Read the data
   gender_Physicians <- readr::read_csv(input_csv, show_col_types = FALSE)
+  validate_dataframe(gender_Physicians, name = "genderize input", allow_zero_rows = FALSE)
+  message(sprintf("Loaded %d row(s) for genderization from %s.", nrow(gender_Physicians), input_csv))
 
   if (!"first_name" %in% names(gender_Physicians)) {
     stop("Input data must include a 'first_name' column.")
@@ -109,7 +115,11 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
 
   batches <- split(clean_names, ceiling(seq_along(clean_names) / batch_size))
 
-  results <- lapply(batches, function(name_batch) {
+  total_batches <- length(batches)
+  results <- vector("list", total_batches)
+  for (i in seq_along(batches)) {
+    name_batch <- batches[[i]]
+    message(sprintf("Requesting gender predictions for batch %d of %d (%d name(s)).", i, total_batches, length(name_batch)))
     query <- stats::setNames(as.list(name_batch), paste0("name[", seq_along(name_batch) - 1, "]"))
     response <- httr::GET(api_url, query = query, httr::timeout(10))
 
@@ -129,7 +139,7 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
 
     entries <- if (!is.null(parsed$name)) list(parsed) else parsed
 
-    tibble::tibble(
+    results[[i]] <- tibble::tibble(
       first_name = vapply(entries, function(x) {
         if (is.null(x$name)) NA_character_ else x$name
       }, character(1), USE.NAMES = FALSE),
@@ -143,7 +153,7 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
         if (is.null(x$count)) NA_integer_ else as.integer(x$count)
       }, integer(1), USE.NAMES = FALSE)
     )
-  })
+  }
 
   dplyr::bind_rows(results)
 }
