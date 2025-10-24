@@ -1,6 +1,8 @@
 url: https://mufflyt.github.io/tyler/
 destination: docs  # Needed for correct site deployment
 
+# Trigger workflow after LFS removal
+
 template:
   bootstrap: 5
 
