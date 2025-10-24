@@ -37,18 +37,18 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
     stop("`isochrones_data` must be an sf object with polygon geometries.")
   }
 
-  bg_data <- sf::st_make_valid(bg_data)
-  isochrones_data <- sf::st_make_valid(isochrones_data)
-
-  if (!all(sf::st_is_valid(bg_data))) {
-    stop("Block group geometries remain invalid after attempting repair.")
-  }
-  if (!all(sf::st_is_valid(isochrones_data))) {
-    stop("Isochrone geometries remain invalid after attempting repair.")
-  }
-
-  bg_data <- sf::st_transform(bg_data, 4326)
-  isochrones_data <- sf::st_transform(isochrones_data, 4326)
+  validated <- validate_sf_inputs(
+    bg_data = bg_data,
+    isochrones_data = isochrones_data,
+    expected_types = list(
+      bg_data = c("POLYGON", "MULTIPOLYGON"),
+      isochrones_data = c("POLYGON", "MULTIPOLYGON")
+    ),
+    target_crs = 4326,
+    context = "map_create_block_group_overlap()"
+  )
+  bg_data <- validated$bg_data
+  isochrones_data <- validated$isochrones_data
 
   bg_data <- lwgeom::st_orient(bg_data)
   isochrones_data <- lwgeom::st_orient(isochrones_data)
