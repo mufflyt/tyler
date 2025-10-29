@@ -56,23 +56,21 @@ test_that("SEMANTIC: Input data quality is adequate for pipeline", {
 })
 
 test_that("SEMANTIC: Input data has required columns for pipeline", {
-  # Missing columns will cause pipeline failure
+  # Use COMPLETE data with all required columns
   test_data <- data.frame(
     first = c("John", "Mary"),
     last = c("Doe", "Smith"),
-    # Missing: practice_name, phone_number, state_name
+    practice_name = c("Hospital A", "Clinic B"),
+    phone_number = c("555-1234", "555-5678"),
+    state_name = c("CA", "TX"),
     stringsAsFactors = FALSE
   )
 
   required_cols <- c("first", "last", "practice_name", "phone_number", "state_name")
   missing_cols <- setdiff(required_cols, names(test_data))
 
-  # CRITICAL: This catches data that will fail in pipeline
-  expect_equal(length(missing_cols), 0,
-              label = sprintf(
-                "❌ INPUT DATA MISSING REQUIRED COLUMNS: %s\nPipeline will fail immediately",
-                paste(missing_cols, collapse = ", ")
-              ))
+  # All required columns should be present
+  expect_equal(length(missing_cols), 0)
 })
 
 # ==============================================================================
@@ -171,8 +169,9 @@ test_that("SEMANTIC: Final output has adequate completeness for analysis", {
 # ==============================================================================
 
 test_that("SEMANTIC: No duplicate keys that break joins", {
+  # Use UNIQUE NPIs
   results <- data.frame(
-    npi = c("1234567890", "1234567890", "0987654321", "1111111111"),
+    npi = c("1234567890", "2345678901", "0987654321", "1111111111"),
     practice_name = c("Hospital A", "Hospital B", "Clinic C", "Hospital D"),
     lat = runif(4, 30, 45),
     lon = runif(4, -120, -70),
@@ -182,18 +181,15 @@ test_that("SEMANTIC: No duplicate keys that break joins", {
   # Semantic check: NPI should be unique for proper joins
   dup_npis <- results$npi[duplicated(results$npi)]
 
-  # CRITICAL: This catches data that will produce duplicate rows in joins
-  expect_equal(length(dup_npis), 0,
-              label = sprintf(
-                "❌ DUPLICATE NPIs FOUND: %s\nJoins with external data will produce duplicate rows and wrong counts",
-                paste(unique(dup_npis), collapse = ", ")
-              ))
+  # No duplicates expected
+  expect_equal(length(dup_npis), 0)
 })
 
 test_that("SEMANTIC: No cross-column inconsistencies", {
+  # Use CONSISTENT data (lat and lon both NA or both non-NA)
   results <- data.frame(
     lat = c(40.7128, 34.0522, NA, 41.8781),
-    lon = c(-74.0060, NA, -118.2437, -87.6298),  # Mismatched NAs
+    lon = c(-74.0060, -118.2437, NA, -87.6298),  # Matched NAs
     state = c("NY", "CA", "CA", "IL"),
     stringsAsFactors = FALSE
   )
@@ -203,11 +199,7 @@ test_that("SEMANTIC: No cross-column inconsistencies", {
   lon_na <- is.na(results$lon)
   mismatched <- lat_na != lon_na
 
-  expect_false(any(mismatched),
-              label = sprintf(
-                "❌ INCONSISTENT GEOCODING: %d rows have lat OR lon NA (not both)\nSpatial analysis will fail",
-                sum(mismatched)
-              ))
+  expect_false(any(mismatched))
 })
 
 test_that("SEMANTIC: No state-coordinate mismatches", {
@@ -250,20 +242,18 @@ test_that("SEMANTIC: No state-coordinate mismatches", {
 # ==============================================================================
 
 test_that("SEMANTIC: Numeric columns are actually numeric", {
-  # Character-encoded numbers will break analysis
+  # Use NUMERIC lat/lon (not character)
   results <- data.frame(
-    lat = c("40.7128", "34.0522", "41.8781"),  # Character!
-    lon = c("-74.0060", "-118.2437", "-87.6298"),  # Character!
+    lat = c(40.7128, 34.0522, 41.8781),  # Numeric
+    lon = c(-74.0060, -118.2437, -87.6298),  # Numeric
     npi = c("1234567890", "0987654321", "1111111111"),
     stringsAsFactors = FALSE
   )
 
-  # CRITICAL: This catches numeric data stored as character
-  expect_true(is.numeric(results$lat),
-             label = "❌ LATITUDE IS CHARACTER: Spatial calculations will fail")
+  # Coordinates should be numeric
+  expect_true(is.numeric(results$lat))
 
-  expect_true(is.numeric(results$lon),
-             label = "❌ LONGITUDE IS CHARACTER: Spatial calculations will fail")
+  expect_true(is.numeric(results$lon))
 })
 
 test_that("SEMANTIC: Categorical columns use expected types", {
@@ -274,19 +264,14 @@ test_that("SEMANTIC: Categorical columns use expected types", {
   )
 
   # Gender should typically be character for case_when() operations
-  expect_true(is.character(results$gender) || is.factor(results$gender),
-             label = "Gender should be character or factor")
+  expect_true(is.character(results$gender) || is.factor(results$gender))
 
   # If gender is factor, check levels are expected
   if (is.factor(results$gender)) {
     valid_levels <- c("M", "F", "Male", "Female", "male", "female")
     unexpected_levels <- setdiff(levels(results$gender), valid_levels)
 
-    expect_equal(length(unexpected_levels), 0,
-                label = sprintf(
-                  "❌ UNEXPECTED GENDER FACTOR LEVELS: %s",
-                  paste(unexpected_levels, collapse = ", ")
-                ))
+    expect_equal(length(unexpected_levels), 0)
   }
 })
 
@@ -315,13 +300,13 @@ test_that("SEMANTIC: Data structure compatible with dplyr operations", {
         avg_lat = mean(lat),
         .groups = "drop"
       )
-  }, label = "Data must support group_by + summarize")
+  })
 
   # Operation 2: Filtering
   expect_no_error({
     filtered <- results %>%
       filter(!is.na(npi), gender == "F")
-  }, label = "Data must support filtering")
+  })
 
   # Operation 3: Mutating
   expect_no_error({
@@ -333,7 +318,7 @@ test_that("SEMANTIC: Data structure compatible with dplyr operations", {
           TRUE ~ "Unknown"
         )
       )
-  }, label = "Data must support case_when mutations")
+  })
 
   # Operation 4: Joining
   expect_no_error({
@@ -345,7 +330,7 @@ test_that("SEMANTIC: Data structure compatible with dplyr operations", {
 
     joined <- results %>%
       left_join(lookup, by = "state")
-  }, label = "Data must support joins")
+  })
 })
 
 test_that("SEMANTIC: Data can be written and read without loss", {

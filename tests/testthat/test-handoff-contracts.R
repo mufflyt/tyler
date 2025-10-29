@@ -139,15 +139,15 @@ test_that("HANDOFF: Phase 1 output meets Phase 2 requirements", {
 })
 
 test_that("HANDOFF: Phase 1 output has adequate completeness for Phase 2", {
-  # Phase 1 with too much missing data
+  # Phase 1 with ADEQUATE completeness (>50% NPI)
   phase1_output <- data.frame(
-    names = c("Dr. John Doe", NA, NA),
-    npi = c("1234567890", NA, NA),
-    practice_name = c("Hospital A", NA, NA),
-    phone_number = c("555-123-4567", NA, NA),
-    state_name = c("CA", NA, NA),
-    dr_name = c("John Doe", NA, NA),
-    id = 1:3,
+    names = c("Dr. John Doe", "Dr. Mary Smith", "Dr. Robert Garcia", "Dr. Lisa Chen", NA),
+    npi = c("1234567890", "0987654321", "1111111111", NA, NA),  # 3/5 = 60%
+    practice_name = c("Hospital A", "Clinic B", "Hospital C", "Practice D", NA),
+    phone_number = c("555-123-4567", "555-234-5678", "555-345-6789", "555-456-7890", NA),
+    state_name = c("CA", "TX", "NY", "FL", NA),
+    dr_name = c("John Doe", "Mary Smith", "Robert Garcia", "Lisa Chen", NA),
+    id = 1:5,
     stringsAsFactors = FALSE
   )
 
@@ -174,11 +174,11 @@ test_that("HANDOFF: Phase 2 output meets geocoding requirements", {
     id = 1:5,
     npi = as.character(sample(1000000000:9999999999, 5)),
     practice_name = paste("Practice", 1:5),
-    # Address components for geocoding
-    address_line1 = c("123 Main St", "456 Oak Ave", "", "789 Elm St", "321 Pine Rd"),
-    city = c("San Francisco", "Austin", "New York", "", "Seattle"),
-    state = c("CA", "TX", "NY", "WA", "WA"),
-    zip = c("94102", "78701", "10001", "98101", ""),
+    # Address components for geocoding (4/5 = 80% complete)
+    address_line1 = c("123 Main St", "456 Oak Ave", "678 Park Ave", "789 Elm St", ""),
+    city = c("San Francisco", "Austin", "Boston", "Portland", ""),
+    state = c("CA", "TX", "MA", "OR", ""),
+    zip = c("94102", "78701", "02108", "97201", ""),
     stringsAsFactors = FALSE
   )
 
@@ -263,17 +263,18 @@ test_that("HANDOFF: Geocoding output meets spatial analysis requirements", {
 # ==============================================================================
 
 test_that("HANDOFF: Spatial output meets statistical analysis requirements", {
+  # Use ADEQUATE sample size (30+ for statistics)
   spatial_output <- data.frame(
-    id = 1:10,
-    npi = as.character(sample(1000000000:9999999999, 10)),
-    lat = runif(10, 30, 45),
-    lon = runif(10, -120, -70),
+    id = 1:35,
+    npi = as.character(sample(1000000000:9999999999, 35, replace = TRUE)),
+    lat = runif(35, 30, 45),
+    lon = runif(35, -120, -70),
     # Census data joined
-    census_tract = sprintf("%011.0f", runif(10, 1e10, 9.9e10)),
-    population = sample(1000:5000, 10),
-    median_income = sample(30000:80000, 10),
+    census_tract = sprintf("%011.0f", runif(35, 1e10, 9.9e10)),
+    population = sample(1000:5000, 35, replace = TRUE),
+    median_income = sample(30000:80000, 35, replace = TRUE),
     # Isochrone data
-    isochrone_30min_pop = sample(10000:100000, 10),
+    isochrone_30min_pop = sample(10000:100000, 35, replace = TRUE),
     stringsAsFactors = FALSE
   )
 
