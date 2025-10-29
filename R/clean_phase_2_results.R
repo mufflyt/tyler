@@ -43,23 +43,27 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
   rename_log <- list()
   rename_index <- 0L
   for (i in seq_along(target_strings)) {
-    # Identify columns that contain the target string
-    matches <- grepl(target_strings[i], names(data), ignore.case = TRUE)
+    # Bug #8 fix: Use exact matching instead of substring matching to avoid renaming wrong columns
+    matches <- tolower(names(data)) == tolower(target_strings[i])
     matched_cols <- names(data)[matches]
 
     # Detailed log of what matches were found
     if (any(matches)) {
       message(sprintf(
-        "Matched %d column(s) containing '%s': %s",
+        "Matched %d column(s) exactly matching '%s': %s",
         sum(matches),
         target_strings[i],
         paste(matched_cols, collapse = ", ")
       ))
-      # Warn if more than one match is found
+      # Error if more than one exact match is found (should never happen)
       if (length(matched_cols) > 1) {
-        warning(sprintf("Multiple columns contained '%s'. Renaming only '%s' to '%s'.", target_strings[i], matched_cols[1], new_names[i]))
+        stop(sprintf(
+          "Multiple columns with exact name '%s': %s. This should not happen - check for duplicate column names.",
+          target_strings[i],
+          paste(matched_cols, collapse = ", ")
+        ))
       }
-      # Rename the first matching column
+      # Rename the matching column
       names(data)[names(data) == matched_cols[1]] <- new_names[i]
       rename_index <- rename_index + 1L
       rename_log[[rename_index]] <- data.frame(

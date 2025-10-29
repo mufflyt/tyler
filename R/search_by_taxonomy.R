@@ -85,6 +85,17 @@ search_by_taxonomy <- function(taxonomy_to_search,
           data_taxonomy <- dplyr::filter(data_taxonomy, addresses_country_name == "United States")
           data_taxonomy <- dplyr::filter(data_taxonomy, stringr::str_detect(taxonomies_desc, taxonomy))
 
+          # Bug #13 fix: Validate required API columns exist before renaming
+          required_cols <- c("basic_first_name", "basic_last_name", "basic_middle_name")
+          missing_cols <- setdiff(required_cols, names(data_taxonomy))
+          if (length(missing_cols) > 0) {
+            stop(sprintf(
+              "NPI API response missing required columns: %s. Available columns: %s",
+              paste(missing_cols, collapse = ", "),
+              paste(names(data_taxonomy), collapse = ", ")
+            ))
+          }
+
           data_taxonomy <- dplyr::rename(
             data_taxonomy,
             first_name = basic_first_name,
