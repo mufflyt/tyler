@@ -32,16 +32,21 @@ test_that("PROVENANCE: ID columns preserved through Phase 1", {
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
-    notify = FALSE
+    notify = FALSE,
+    duplicate_rows = FALSE  # Keep original row count for this test
   )
 
-  # ID column should be present
+  # Both new id and original_id columns should be present
   expect_true("id" %in% names(results))
+  expect_true("original_id" %in% names(results))
 
-  # All IDs should be from input set
-  if ("id" %in% names(results)) {
-    expect_true(all(results$id %in% test_data$id))
+  # Original IDs should be preserved in original_id column
+  if ("original_id" %in% names(results)) {
+    expect_true(all(results$original_id %in% test_data$id))
   }
+
+  # New id column exists for REDCap workflow
+  expect_equal(length(unique(results$id)), nrow(results))
 
   unlink(temp_dir, recursive = TRUE)
 })
@@ -103,7 +108,8 @@ test_that("PROVENANCE: Track row count changes through pipeline", {
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
-    notify = FALSE
+    notify = FALSE,
+    duplicate_rows = FALSE  # Disable duplication to test row preservation
   )
 
   output_rows <- nrow(results)
@@ -115,6 +121,11 @@ test_that("PROVENANCE: Track row count changes through pipeline", {
   # Should be able to explain row count changes
   expect_gte(output_rows, 0)
   expect_lte(output_rows, input_rows)
+
+  # Check audit trail captured this
+  audit <- attr(results, "audit_trail")
+  expect_equal(audit$input_rows, input_rows)
+  expect_equal(audit$output_rows, output_rows)
 
   message(sprintf(
     "Provenance: %d input rows → %d output rows (%.1f%% retained)",
@@ -627,27 +638,32 @@ test_that("PROVENANCE: Validate data consistency across stages", {
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
-    notify = FALSE
+    notify = FALSE,
+    duplicate_rows = FALSE  # Disable duplication to test NPI preservation
   )
 
-  # Cross-stage validation: NPIs should remain consistent
-  if ("id" %in% names(results) && "npi" %in% names(results) && "npi" %in% names(test_data)) {
-    # Join to check consistency
+  # Cross-stage validation: NPIs should remain consistent using preserved columns
+  if ("original_id" %in% names(results) && "original_npi" %in% names(results)) {
+    # Join using original_id (preserved from input)
     merged <- test_data %>%
-      inner_join(results, by = "id", suffix = c("_input", "_output"))
+      inner_join(results, by = c("id" = "original_id"), suffix = c("_input", "_output"))
 
-    if ("npi_input" %in% names(merged) && "npi_output" %in% names(merged)) {
-      # NPIs should match where present
+    if ("npi_input" %in% names(merged) && "original_npi" %in% names(merged)) {
+      # NPIs should match between input and original_npi (preserved)
       matching_npis <- merged %>%
-        filter(!is.na(npi_input) & !is.na(npi_output)) %>%
-        summarize(match_pct = mean(npi_input == npi_output) * 100)
+        filter(!is.na(npi_input) & !is.na(original_npi)) %>%
+        summarize(match_pct = mean(as.character(npi_input) == as.character(original_npi)) * 100)
 
       if (nrow(matching_npis) > 0) {
-        message(sprintf("NPI consistency: %.1f%% match", matching_npis$match_pct[1]))
+        message(sprintf("NPI consistency (original_npi): %.1f%% match", matching_npis$match_pct[1]))
         expect_gte(matching_npis$match_pct[1], 95)
       }
     }
   }
+
+  # Also check that audit trail tracked NPI preservation
+  audit <- attr(results, "audit_trail")
+  expect_true(audit$original_npi_preserved)
 
   unlink(temp_dir, recursive = TRUE)
 })
