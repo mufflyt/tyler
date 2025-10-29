@@ -42,6 +42,7 @@
 #' # ...
 #' }
 #'
+#' @param skip_preflight Skip preflight checks (not recommended)
 #' @export
 run_mystery_caller_workflow_with_logging <- function(input_data,
                                                       output_dir,
@@ -49,7 +50,28 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
                                                       here_api_key,
                                                       drive_time_minutes = c(30, 60, 120, 180),
                                                       census_year = 2020,
-                                                      log_file = NULL) {
+                                                      log_file = NULL,
+                                                      skip_preflight = FALSE) {
+
+  # ==================== PREFLIGHT CHECKS ====================
+  # Run comprehensive validation before starting workflow
+  if (!skip_preflight) {
+    preflight_result <- tyler_preflight_check(
+      input_data = input_data,
+      output_dir = output_dir,
+      google_maps_api_key = google_maps_api_key,
+      here_api_key = here_api_key,
+      check_apis = TRUE,
+      estimate_resources = TRUE,
+      interactive = interactive(),
+      required_columns = c("first", "last")
+    )
+
+    # Use validated data from preflight if available
+    if (!is.null(preflight_result$data)) {
+      input_data <- preflight_result$data
+    }
+  }
 
   # Create output directory
   dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)

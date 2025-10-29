@@ -11,7 +11,8 @@ run_mystery_caller_workflow_with_logging(
   here_api_key,
   drive_time_minutes = c(30, 60, 120, 180),
   census_year = 2020,
-  log_file = NULL
+  log_file = NULL,
+  skip_preflight = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ run_mystery_caller_workflow_with_logging(
 \item{census_year}{Census data year (default: 2020)}
 
 \item{log_file}{Optional path to save log file (default: auto-generated)}
+
+\item{skip_preflight}{Skip preflight checks (not recommended)}
 }
 \value{
 Final results data frame
