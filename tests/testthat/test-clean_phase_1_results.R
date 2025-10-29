@@ -12,7 +12,8 @@ library(humaniformat)
 
 test_that("clean_phase_1_results handles empty data frames correctly", {
   df_empty <- data.frame()
-  expect_output(clean_phase_1_results(df_empty, verbose = TRUE), "No data to process.")
+  # After Bug #7 fix, empty data frames error early due to missing required columns
+  expect_error(clean_phase_1_results(df_empty, verbose = TRUE), "Required columns are missing")
 })
 
 test_that("clean_phase_1_results stops if required columns are missing", {

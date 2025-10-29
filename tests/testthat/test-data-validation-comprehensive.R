@@ -159,8 +159,8 @@ test_that("Data validation: Phone number format validation", {
       validation_rate <- total_valid / length(valid_phones)
 
       # Allow some flexibility for phone number formats
-      expect_gte(validation_rate, 0.5,
-                 info = paste("Phone number validation rate", validation_rate, "too low"))
+      # Phone number validation rate should be at least 50%
+      expect_gte(validation_rate, 0.5)
     }
   }
 })
@@ -184,8 +184,8 @@ test_that("Data validation: State code/name validation", {
       state_matches <- sum(valid_states %in% DATA_VALIDATION_RULES$state$valid_values)
       state_validation_rate <- state_matches / length(valid_states)
 
-      expect_gte(state_validation_rate, 0.7,
-                 info = paste("State validation rate", state_validation_rate, "too low"))
+      # State validation rate should be at least 70%
+      expect_gte(state_validation_rate, 0.7)
     }
   }
 })
@@ -507,7 +507,7 @@ test_that("Data validation: Property-based data quality", {
       phone_number = paste0(sample(200:999, n, replace = TRUE), "-555-",
                            sprintf("%04d", sample(1000:9999, n, replace = TRUE))),
       state_name = sample(state.name[1:10], n, replace = TRUE),
-      npi = paste0(sample(100000000:999999999, n), sample(0:9, n)),
+      npi = paste0(sample(100000000:999999999, n, replace = TRUE), sample(0:9, n, replace = TRUE)),
       for_redcap = sample(c("Yes", "No"), n, replace = TRUE),
       stringsAsFactors = FALSE
     )
