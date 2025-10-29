@@ -129,10 +129,29 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
     name_batch <- batches[[i]]
     message(sprintf("Requesting gender predictions for batch %d of %d (%d name(s)).", i, total_batches, length(name_batch)))
     query <- stats::setNames(as.list(name_batch), paste0("name[", seq_along(name_batch) - 1, "]"))
-    response <- httr::GET(api_url, query = query, httr::timeout(10))
+
+    # Add retry logic for API requests
+    max_retries <- 3
+    retry_count <- 0
+    response <- NULL
+
+    while (retry_count < max_retries) {
+      response <- httr::GET(api_url, query = query, httr::timeout(10))
+
+      if (!httr::http_error(response)) {
+        break  # Success, exit retry loop
+      }
+
+      retry_count <- retry_count + 1
+      if (retry_count < max_retries) {
+        wait_time <- retry_count * 2  # Exponential backoff
+        message(sprintf("Request failed, retrying in %d seconds (attempt %d/%d)...", wait_time, retry_count, max_retries))
+        Sys.sleep(wait_time)
+      }
+    }
 
     if (httr::http_error(response)) {
-      stop("Genderize.io request failed with status ", httr::status_code(response), call. = FALSE)
+      stop("Genderize.io request failed after ", max_retries, " attempts with status ", httr::status_code(response), call. = FALSE)
     }
 
     parsed <- httr::content(response, as = "parsed", type = "application/json", encoding = "UTF-8")

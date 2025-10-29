@@ -114,6 +114,25 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
         Sys.sleep(delay)
       } else {
         coords <- attempt_result
+
+        # Validate geocoding result structure immediately (Bug #11 fix)
+        if (!is.data.frame(coords)) {
+          stop("Geocoding API returned unexpected data type (expected data frame).")
+        }
+        if (!"lat" %in% names(coords) || !"lon" %in% names(coords)) {
+          stop(sprintf(
+            "Geocoding API returned unexpected structure. Expected 'lat' and 'lon' columns, got: %s",
+            paste(names(coords), collapse = ", ")
+          ))
+        }
+        if (nrow(coords) != total_unique) {
+          warning(sprintf(
+            "Geocoding returned %d rows but expected %d. Some addresses may be missing results.",
+            nrow(coords),
+            total_unique
+          ))
+        }
+
         break
       }
     }

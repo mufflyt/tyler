@@ -62,8 +62,15 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_p
       next
     }
 
-    # Create the API URL for the current ID
-    url <- paste(base, endpoint, id, action, sep = "")
+    # Validate and sanitize ID to prevent URL injection
+    if (!is.numeric(id) || is.na(id)) {
+      cat("Invalid ID:", id, "- skipping\n")
+      next
+    }
+
+    # Create the API URL for the current ID with validation
+    id_clean <- as.character(as.integer(id))  # Ensure numeric only
+    url <- paste(base, endpoint, id_clean, action, sep = "")
     cat("API URL:", url, "\n")
 
     # Send a GET request through Tor

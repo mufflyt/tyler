@@ -37,7 +37,7 @@ table_calculate_percentages <- function(data_frame, variable) {
   summary_df <- data_frame %>%
     dplyr::count(!!rlang::sym(variable), name = "n") %>%
     dplyr::mutate(percent = 100 * n / sum(n)) %>%
-    dplyr::slice_max(n, n = 1)
+    dplyr::filter(n == max(n))  # Return all rows with maximum value, not artificially limited to 1
 
   return(summary_df)
 }

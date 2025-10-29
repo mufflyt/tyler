@@ -109,11 +109,18 @@ progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler
 progress_tracker_start <- function(tracker, step, note = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
-  env$records$status[idx] <- "in_progress"
-  env$records$started_at[idx] <- Sys.time()
-  if (!is.null(note)) {
-    env$records$note[idx] <- note
-  }
+
+  # Use atomic operations to prevent race conditions
+  tryCatch({
+    env$records$status[idx] <- "in_progress"
+    env$records$started_at[idx] <- Sys.time()
+    if (!is.null(note)) {
+      env$records$note[idx] <- note
+    }
+  }, error = function(e) {
+    stop("Failed to update progress tracker: ", e$message, call. = FALSE)
+  })
+
   .tracker_log(tracker, sprintf("Started %s", step))
   .tracker_emit_update(tracker, force = TRUE)
   invisible(tracker)

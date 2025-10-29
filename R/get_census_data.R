@@ -43,14 +43,21 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
 
   for (f in us_fips_list) {
     stateget <- paste0("state:", f, "&in=county:*&in=tract:*")
-    res <- censusapi::getCensus(
-      name = "acs/acs5",
-      vintage = vintage,
-      vars = c("NAME", sprintf("B01001_%03dE", c(1, 2, 26:49))),
-      region = "block group:*",
-      regionin = stateget,
-      key = api_key
-    )
+
+    # Add error handling for Census API calls
+    res <- tryCatch({
+      censusapi::getCensus(
+        name = "acs/acs5",
+        vintage = vintage,
+        vars = c("NAME", sprintf("B01001_%03dE", c(1, 2, 26:49))),
+        region = "block group:*",
+        regionin = stateget,
+        key = api_key
+      )
+    }, error = function(e) {
+      warning(sprintf("Census API request failed for FIPS %s: %s", f, e$message))
+      return(NULL)
+    })
 
     if (!is.null(res) && nrow(res)) {
       res <- tibble::as_tibble(res, .name_repair = "minimal")

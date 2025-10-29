@@ -63,8 +63,7 @@ search_by_taxonomy <- function(taxonomy_to_search,
         search_result <- npi::npi_search(
           taxonomy_description = taxonomy,
           country_code = "US",
-          enumeration_type = "ind",
-          limit = 1200
+          enumeration_type = "ind"
         )
 
         data_taxonomy <- NULL

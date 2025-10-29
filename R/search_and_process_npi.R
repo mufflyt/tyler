@@ -49,7 +49,7 @@
 #' }
 search_and_process_npi <- function(data,
                                    enumeration_type = "ind",
-                                   limit = 5L,
+                                   limit = NULL,
                                    country_code = "US",
                                    filter_credentials = c("MD", "DO"),
                                    save_chunk_size = 10,
@@ -80,6 +80,28 @@ search_and_process_npi <- function(data,
   missing_cols <- setdiff(required_cols, names(data))
   if (length(missing_cols)) {
     stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "))
+  }
+
+  # Validate that required columns contain actual data, not all NA (Bug #7 fix)
+  if (nrow(data) > 0) {
+    if (all(is.na(data$first))) {
+      stop("Column 'first' must contain non-missing values (currently all NA).")
+    }
+    if (all(is.na(data$last))) {
+      stop("Column 'last' must contain non-missing values (currently all NA).")
+    }
+    # Remove rows where both first and last are NA
+    valid_rows <- !is.na(data$first) & !is.na(data$last)
+    if (!any(valid_rows)) {
+      stop("No rows have both 'first' and 'last' name values. Cannot proceed with NPI search.")
+    }
+    if (sum(!valid_rows) > 0) {
+      warning(sprintf(
+        "Removing %d row(s) with missing 'first' or 'last' name values.",
+        sum(!valid_rows)
+      ))
+      data <- data[valid_rows, , drop = FALSE]
+    }
   }
 
   write_structured_log <- function(timestamp, event, search_term, rows, detail) {
@@ -272,13 +294,20 @@ search_and_process_npi <- function(data,
 
     repeat {
       result <- tryCatch({
-        npi_obj <- npi::npi_search(
+        # Build search parameters conditionally to avoid artificial limits
+        search_params <- list(
           first_name = first_name,
           last_name = last_name,
           enumeration_type = enumeration_type,
-          limit = limit,
           country_code = country_code
         )
+
+        # Only add limit if explicitly specified (not NULL)
+        if (!is.null(limit)) {
+          search_params$limit <- limit
+        }
+
+        npi_obj <- do.call(npi::npi_search, search_params)
 
         if (is.null(npi_obj)) {
           return(NULL)

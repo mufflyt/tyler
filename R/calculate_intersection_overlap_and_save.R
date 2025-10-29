@@ -169,6 +169,16 @@ calculate_intersection_overlap_and_save <- function(block_groups,
       area_method = "projected:EPSG:5070"
     )
 
+  # Validate GEOID exists in intersection result (Bug #12 fix)
+  if (!"GEOID" %in% names(intersect)) {
+    stop("Error: Intersection result missing required 'GEOID' column. Check that block_groups contains GEOID.")
+  }
+
+  # Validate GEOID exists in block_groups (Bug #12 fix)
+  if (!"GEOID" %in% names(block_groups_proj)) {
+    stop("Error: block_groups missing required 'GEOID' column.")
+  }
+
   # Data frame version for joins
   intersect_df <- intersect %>%
     dplyr::select(GEOID, intersect_area, area_method) %>%
@@ -181,6 +191,15 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   output_shapefile <- file.path(output_dir, sprintf("intersect_%s_minutes.shp", drive_time_minutes))
   sf::st_write(sf::st_transform(intersect, 4326), output_shapefile, append = FALSE)
   message("Intersection calculated and saved successfully.")
+
+  # Validate GEOID compatibility before join (Bug #4 fix)
+  missing_geoids <- setdiff(intersect_df$GEOID, block_groups_proj$GEOID)
+  if (length(missing_geoids) > 0) {
+    warning(sprintf(
+      "Warning: %d GEOIDs in intersection result are not in block_groups. These rows will be dropped.",
+      length(missing_geoids)
+    ))
+  }
 
   # Merge intersection area by GEOID on projected data
   block_groups_proj <- dplyr::left_join(block_groups_proj, intersect_df, by = "GEOID")

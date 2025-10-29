@@ -41,6 +41,26 @@ create_isochrones_for_dataframe <- function(
     stop("The dataframe must have 'lat' and 'long' columns.")
   }
 
+  # Validate CRS assumption: lat/long should be in WGS84 bounds (Bug #9 fix)
+  invalid_lat <- dataframe$lat < -90 | dataframe$lat > 90
+  invalid_lon <- dataframe$long < -180 | dataframe$long > 180
+
+  if (any(invalid_lat, na.rm = TRUE)) {
+    n_invalid <- sum(invalid_lat, na.rm = TRUE)
+    stop(sprintf(
+      "Error: %d latitude values are outside valid WGS84 range [-90, 90]. Check that coordinates are in decimal degrees.",
+      n_invalid
+    ))
+  }
+
+  if (any(invalid_lon, na.rm = TRUE)) {
+    n_invalid <- sum(invalid_lon, na.rm = TRUE)
+    stop(sprintf(
+      "Error: %d longitude values are outside valid WGS84 range [-180, 180]. Check that coordinates are in decimal degrees.",
+      n_invalid
+    ))
+  }
+
   # Convert dataframe to sf object
   dataframe_sf <- dataframe %>%
     janitor::clean_names() %>%
@@ -152,6 +172,10 @@ create_isochrones_for_dataframe <- function(
         processed_isochrones[[length(processed_isochrones) + 1]] <- point_sf
         save_snapshot(force = FALSE)
       }
+
+      # Clean up temporary objects to prevent memory leaks
+      rm(point_isochrones, flattened, point_sf, attributes_df, repeated_attrs)
+      gc()  # Force garbage collection
     }
 
     if (!is.null(pb)) {
