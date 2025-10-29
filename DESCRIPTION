@@ -73,6 +73,7 @@ Suggests:
     arrow,
     beepr,
     caret,
+    cli,
     devtools,
     easyr,
     imager,
