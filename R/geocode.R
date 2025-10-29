@@ -64,6 +64,11 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   total_unique <- nrow(unique_add)
   tyler_log_info(sprintf("Geocoding %d unique address(es).", total_unique), quiet = quiet)
 
+  # Comprehensive logging: show what we're about to do
+  if (!quiet) {
+    tyler_log_info(sprintf("Found %d total address records, %d unique", nrow(data), total_unique), indent = TRUE)
+  }
+
   if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
     progress_tracker_start(tracker, tracker_step, note = sprintf("%d unique address(es)", total_unique))
   }
@@ -144,6 +149,24 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
 
   failed_rows <- unique_add[!stats::complete.cases(unique_add[, c("latitude", "longitude")]), , drop = FALSE]
   success_rate <- if (total_unique) 1 - nrow(failed_rows) / total_unique else 1
+  success_count <- total_unique - nrow(failed_rows)
+
+  # Comprehensive logging: Report geocoding results
+  if (!quiet) {
+    if (success_rate >= 0.95) {
+      tyler_log_success(sprintf("Geocoding complete: %d/%d succeeded (%.1f%%)",
+                               success_count, total_unique, success_rate * 100),
+                       indent = TRUE)
+    } else if (success_rate >= 0.80) {
+      tyler_log_warning(sprintf("Geocoding finished with warnings: %d/%d succeeded (%.1f%%)",
+                               success_count, total_unique, success_rate * 100),
+                       indent = TRUE)
+    } else {
+      tyler_log_error(sprintf("Geocoding had low success rate: %d/%d succeeded (%.1f%%)",
+                             success_count, total_unique, success_rate * 100),
+                     indent = TRUE)
+    }
+  }
 
   if (nrow(failed_rows) && !is.null(failed_output_path)) {
     tyler_export_with_backup(failed_rows, failed_output_path, quiet = quiet)
@@ -158,6 +181,9 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
 
   if (!is.null(output_file_path)) {
     tyler_export_with_backup(data, output_file_path, quiet = quiet, backup = TRUE)
+    if (!quiet) {
+      tyler_log_save(output_file_path, n_rows = nrow(data))
+    }
   }
 
   if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {

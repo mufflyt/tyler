@@ -7,7 +7,7 @@
 search_and_process_npi(
   data,
   enumeration_type = "ind",
-  limit = 5L,
+  limit = NULL,
   country_code = "US",
   filter_credentials = c("MD", "DO"),
   save_chunk_size = 10,
