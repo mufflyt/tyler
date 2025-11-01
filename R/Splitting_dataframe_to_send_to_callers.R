@@ -2,6 +2,9 @@
 #'
 #' This function splits the data based on provided lab assistant names and saves each part as a separate Excel file.
 #' It allows the arrangement of calls by insurance type to prioritize Medicaid in the first two days and Blue Cross/Blue Shield in the last two days.
+#'
+#' @section Lifecycle:
+#' \lifecycle{stable}
 #' @name split_and_save
 #' @param data_or_path Either a dataframe containing the input data or a path to the input data file (RDS, CSV, Parquet, or XLS/XLSX).
 #' @param output_directory Directory where output Excel files will be saved.

@@ -7,6 +7,8 @@
 [![Codecov test coverage](https://codecov.io/gh/mufflyt/tyler/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mufflyt/tyler?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/tyler)](https://CRAN.R-project.org/package=tyler)
 [![R-CMD-check](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 The goal of the 'tyler' package provides a collection of functions designed to facilitate mystery caller studies, often used in evaluating patient access to healthcare. It includes tools for searching and processing National Provider Identifier (NPI) numbers based on names and analyzing demographic data associated with these NPIs. The package simplifies the handling of NPI data and the creation of informative tables for analysis and reporting. The second goal is to assist with workforce distribution research for OBGYNs.
