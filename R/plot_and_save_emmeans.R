@@ -89,16 +89,36 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
   cat("Estimated data:\n")
   print(edata)
 
+  # Detect response and CI column names — names differ by model family:
+  # Poisson/response scale: "rate", "asymp.LCL", "asymp.UCL"
+  # Gaussian / emmean scale: "emmean", "lower.CL", "upper.CL"
+  response_col <- intersect(c("rate", "emmean", "response", "prob"), names(edata))
+  lcl_col      <- intersect(c("asymp.LCL", "lower.CL", "lower.HPD"), names(edata))
+  ucl_col      <- intersect(c("asymp.UCL", "upper.CL", "upper.HPD"), names(edata))
+
+  if (!length(response_col) || !length(lcl_col) || !length(ucl_col)) {
+    stop(sprintf(
+      "Could not identify emmeans response/CI columns. Available columns: %s",
+      paste(names(edata), collapse = ", ")
+    ), call. = FALSE)
+  }
+  response_col <- response_col[[1]]
+  lcl_col      <- lcl_col[[1]]
+  ucl_col      <- ucl_col[[1]]
+
   # Check the range of the estimated data
-  rate_range <- range(c(edata$asymp.LCL, edata$asymp.UCL), na.rm = TRUE)
+  rate_range <- range(c(edata[[lcl_col]], edata[[ucl_col]]), na.rm = TRUE)
+  if (any(is.infinite(rate_range))) {
+    stop("CI columns contain no finite values; cannot set y-axis limits.", call. = FALSE)
+  }
   cat("Range of estimated marginal means with CIs:", rate_range, "\n")
 
   # Create the plot
   cat("Creating the plot...\n")
-  p <- ggplot2::ggplot(edata, ggplot2::aes(x = .data[[variable_of_interest]], y = .data[["rate"]])) +
+  p <- ggplot2::ggplot(edata, ggplot2::aes(x = .data[[variable_of_interest]], y = .data[[response_col]])) +
     ggplot2::geom_point(ggplot2::aes(color = .data[[color_by]]), size = 2, stroke = 2,
                         position = ggplot2::position_dodge(width = 0.2)) +
-    ggplot2::geom_errorbar(ggplot2::aes(ymin = .data[["asymp.LCL"]], ymax = .data[["asymp.UCL"]], color = .data[[color_by]]),
+    ggplot2::geom_errorbar(ggplot2::aes(ymin = .data[[lcl_col]], ymax = .data[[ucl_col]], color = .data[[color_by]]),
                            width = 0.2, position = ggplot2::position_dodge(width = 0.2)) +
     ggplot2::ylim(rate_range[1] - 5, rate_range[2] + 5) +
     ggplot2::ggtitle(paste("Estimated Marginal Means -", variable_of_interest)) +

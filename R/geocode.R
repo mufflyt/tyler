@@ -154,7 +154,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   success_count <- total_unique - nrow(failed_rows)
 
   # Comprehensive logging: Report geocoding results
-  if (!quiet) {
+  if (!isTRUE(quiet)) {
     if (success_rate >= 0.95) {
       tyler_log_success(sprintf("Geocoding complete: %d/%d succeeded (%.1f%%)",
                                success_count, total_unique, success_rate * 100),
