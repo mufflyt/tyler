@@ -451,12 +451,12 @@ format_phone_number <- function(phone_values) {
     } else if (nchar(clean) == 0) {
       ""
     } else {
-      # Bug #5 fix: Warn about invalid phone number lengths instead of silently returning malformed numbers
+      # Treat unsupported lengths as invalid and return missing value.
       warning(sprintf(
-        "Phone number has invalid length (%d digits): '%s'. Expected 7 or 10 digits. Returning as-is.",
+        "Phone number has invalid length (%d digits): '%s'. Expected 7 or 10 digits; returning NA.",
         nchar(clean), d
       ), call. = FALSE)
-      clean
+      NA_character_
     }
   }, character(1))
 
