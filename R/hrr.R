@@ -52,7 +52,6 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @importFrom dplyr mutate group_by summarize filter n
 #' @importFrom ggplot2 geom_sf scale_fill_viridis_c guide_colorbar element_text theme_minimal theme labs
 #' @importFrom stringr str_detect
-#' @importFrom stringr str_detect
 #' @importFrom scales pretty_breaks label_number squish
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom grid grid.newpage grid.draw

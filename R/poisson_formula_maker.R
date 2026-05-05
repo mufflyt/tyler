@@ -22,8 +22,8 @@
 create_formula <- function(data, response_var, random_effect = NULL) {
   message(sprintf("Creating formula with response variable: %s", response_var))
 
-  # Get the column names of the dataframe except for the response variable
-  predictor_vars <- setdiff(names(data), response_var)
+  # Get the column names of the dataframe except for the response variable and random effect
+  predictor_vars <- setdiff(names(data), c(response_var, random_effect))
   message(sprintf(
     "Predictor variables identified: %s",
     paste(predictor_vars, collapse = ", ")

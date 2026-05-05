@@ -15,9 +15,6 @@
 #' }
 arsenal_tables_write2word <- function(object, filename, output_dir = NULL) {
   # Validate input parameters
-  if (!is.data.frame(object)) {
-    stop("Error: 'object' must be a data frame object.")
-  }
   if (!is.character(filename)) {
     stop("Error: 'filename' must be a character string.")
   }
