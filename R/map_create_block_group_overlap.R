@@ -122,8 +122,9 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
 
   # Define file names with timestamps
-  html_file <- paste0(output_dir, "overlap_bg_map_", timestamp, ".html")
-  png_file <- paste0(output_dir, "overlap_bg_map_", timestamp, ".png")
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  html_file <- file.path(output_dir, paste0("overlap_bg_map_", timestamp, ".html"))
+  png_file <- file.path(output_dir, paste0("overlap_bg_map_", timestamp, ".png"))
 
   # Export the map to HTML
   htmlwidgets::saveWidget(widget = map, file = html_file, selfcontained = FALSE)

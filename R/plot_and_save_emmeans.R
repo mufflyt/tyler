@@ -116,7 +116,7 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
   }
 
   # Save the plot with specific dimensions
-  file_name <- paste0(output_dir, "/interaction_", variable_of_interest, "_comparison_plot_", timestamp, ".png")
+  file_name <- file.path(output_dir, paste0("interaction_", variable_of_interest, "_comparison_plot_", timestamp, ".png"))
   cat("Saving plot to:", file_name, "\n")
   ggplot2::ggsave(filename = file_name, plot = p, width = 10, height = 6, bg = "white")
 
