@@ -56,6 +56,8 @@ create_density_plot <- function(data,
                                 plot_title = NULL,
                                 verbose = TRUE) {
 
+  x_transform <- match.arg(x_transform, c("none", "log", "sqrt"))
+
   # Filter out zero or negative values and NAs from the x_var column
   data <- dplyr::filter(data, .data[[x_var]] > 0, !is.na(.data[[x_var]]))
 

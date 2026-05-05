@@ -151,7 +151,7 @@ tyler_resolve_path <- function(..., type = NULL, base_dir = getOption("tyler.bas
 #' df <- tibble::tibble(id = 1:3, value = c(1, NA, 3))
 #' tyler_check_data_completeness(df, required = c("id", "value"))
 tyler_check_data_completeness <- function(data, required = NULL, id_cols = NULL, thresholds = c(high = 0.9, medium = 0.75)) {
-  validate_dataframe(data, name = "data")
+  validate_dataframe(data, name = "data", allow_zero_rows = FALSE)
   validate_required_columns(data, required, name = "data")
 
   if (!is.null(id_cols)) {

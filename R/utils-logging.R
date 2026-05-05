@@ -323,7 +323,7 @@ tyler_workflow_end <- function(final_n = NULL, input_n = NULL) {
           pct <- round(step$success_rate * 100, 1)
           message(sprintf("    %d. %s: %.1f%% success in %s",
                          step_num, step$name, pct, step_dur))
-        } else if (!is.null(step$n_success) && !is.null(step$n_total)) {
+        } else if (!is.null(step$n_success) && !is.null(step$n_total) && step$n_total > 0) {
           pct <- round(step$n_success / step$n_total * 100, 1)
           message(sprintf("    %d. %s: %d/%d (%.1f%%) in %s",
                          step_num, step$name, step$n_success, step$n_total, pct, step_dur))
