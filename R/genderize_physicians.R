@@ -48,22 +48,28 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
   gender_Physicians <- gender_Physicians %>%
     dplyr::mutate(first_name = trimws(first_name))
 
+  join_key <- tolower(gender_Physicians$first_name)
+
   # Get first names
   first_names <- gender_Physicians$first_name
 
   resolved_genders <- genderize_fetch(first_names)
 
   x <- resolved_genders %>%
-    dplyr::distinct(first_name, .keep_all = TRUE)
+    dplyr::mutate(first_name = trimws(first_name), join_first_name = tolower(first_name)) %>%
+    dplyr::distinct(join_first_name, .keep_all = TRUE) %>%
+    dplyr::select(-dplyr::any_of(c("first_name")))
 
   # Bug #1 fix: Drop overlapping columns before join to prevent .x/.y suffixes
   # genderize_fetch() returns: first_name, gender, probability, count
   # We want the fresh API data, not any pre-existing columns with these names
   gender_Physicians_clean <- gender_Physicians %>%
-    dplyr::select(-dplyr::any_of(c("gender", "probability", "count")))
+    dplyr::select(-dplyr::any_of(c("gender", "probability", "count"))) %>%
+    dplyr::mutate(join_first_name = join_key)
 
   # Rejoin with the original database
-  y <- dplyr::left_join(gender_Physicians_clean, x, by = "first_name")
+  y <- dplyr::left_join(gender_Physicians_clean, x, by = "join_first_name") %>%
+    dplyr::select(-dplyr::any_of(c("join_first_name")))
 
   # Check for missing genders in the joined dataset
   missing_genders_joined <- sum(is.na(y$gender))
