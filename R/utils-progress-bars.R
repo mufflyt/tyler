@@ -46,14 +46,18 @@ tyler_progress_bar <- function(name,
                                 show_after = 0,
                                 force = FALSE) {
 
+  make_pb_env <- function(...) {
+    env <- list2env(list(...), parent = emptyenv())
+    class(env) <- "tyler_progress"
+    env
+  }
+
   # Check if cli is available
   if (!requireNamespace("cli", quietly = TRUE)) {
     # Fallback to simple message-based progress
     message(sprintf("Starting: %s (%d items)", name, total))
-    return(structure(
-      list(name = name, total = total, current = 0, use_cli = FALSE),
-      class = "tyler_progress"
-    ))
+    return(make_pb_env(name = name, total = total, current = 0L,
+                       use_cli = FALSE, start_time = Sys.time()))
   }
 
   # Check if we should show progress bar
@@ -62,10 +66,8 @@ tyler_progress_bar <- function(name,
   if (!show_progress) {
     # Fallback to message-based progress
     message(sprintf("Starting: %s (%d items)", name, total))
-    return(structure(
-      list(name = name, total = total, current = 0, use_cli = FALSE),
-      class = "tyler_progress"
-    ))
+    return(make_pb_env(name = name, total = total, current = 0L,
+                       use_cli = FALSE, start_time = Sys.time()))
   }
 
   # Default format string
@@ -89,17 +91,8 @@ tyler_progress_bar <- function(name,
     .auto_close = FALSE
   )
 
-  return(structure(
-    list(
-      id = pb_id,
-      name = name,
-      total = total,
-      current = 0,
-      use_cli = TRUE,
-      start_time = Sys.time()
-    ),
-    class = "tyler_progress"
-  ))
+  make_pb_env(id = pb_id, name = name, total = total, current = 0L,
+              use_cli = TRUE, start_time = Sys.time())
 }
 
 
