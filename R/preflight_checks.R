@@ -412,7 +412,7 @@ tyler_assess_data_quality <- function(data, required_columns = c("first", "last"
   for (col in required_columns) {
     if (col %in% names(data)) {
       na_count <- sum(is.na(data[[col]]))
-      na_pct <- na_count / nrow(data)
+      na_pct <- if (nrow(data) > 0) na_count / nrow(data) else 0
 
       if (na_pct > 0.5) {
         issues <- c(issues, list(list(
@@ -432,7 +432,7 @@ tyler_assess_data_quality <- function(data, required_columns = c("first", "last"
 
   # Check for duplicate rows
   dup_count <- sum(duplicated(data))
-  dup_pct <- dup_count / nrow(data)
+  dup_pct <- if (nrow(data) > 0) dup_count / nrow(data) else 0
 
   if (dup_pct > 0.1) {
     issues <- c(issues, list(list(

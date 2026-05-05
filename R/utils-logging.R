@@ -190,7 +190,7 @@ tyler_log_error <- function(msg, cause = NULL, fix = NULL, indent = TRUE) {
 #' @return Invisible NULL
 #' @export
 tyler_log_progress <- function(current, total, status = NULL, show_percent = TRUE) {
-  pct <- round(current / total * 100, 1)
+  pct <- if (total > 0) round(current / total * 100, 1) else 0
 
   if (show_percent) {
     if (!is.null(status)) {
@@ -264,7 +264,7 @@ tyler_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_tot
       pct <- round(success_rate * 100, 1)
       msg <- sprintf("  \u2713 Step complete: %.1f%% success in %s", pct, duration_str)
     } else if (!is.null(n_success) && !is.null(n_total)) {
-      pct <- round(n_success / n_total * 100, 1)
+      pct <- if (n_total > 0) round(n_success / n_total * 100, 1) else 0
       msg <- sprintf("  \u2713 Step complete: %d/%d (%.1f%%) in %s",
                      n_success, n_total, pct, duration_str)
     } else {
@@ -410,6 +410,7 @@ tyler_progress_callback <- function(total, label = "Processing") {
   start_time <- Sys.time()
 
   function(current) {
+    if (total == 0) return(invisible(NULL))
     # Report every 10% or on last item
     pct <- current / total
     should_report <- (pct - last_reported >= 0.1) || (current == total)
