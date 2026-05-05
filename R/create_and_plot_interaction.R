@@ -137,7 +137,7 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
     dplyr::group_by(int_var, var_interest) %>%
     dplyr::summarise(mean_pred = mean(pred), .groups = 'drop')
 
-  ggplot(plot_data, aes(x = int_var, y = mean_pred, color = var_interest)) +
+  p <- ggplot(plot_data, aes(x = int_var, y = mean_pred, color = var_interest)) +
     geom_point() +
     geom_line(aes(group = var_interest)) +
     labs(title = "Interaction Effect Plot", y = response_variable, x = interaction_variable) +
@@ -146,7 +146,7 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
   # Save the plot
   plot_filename <- file.path(output_path, paste0("interaction_", interaction_variable, "_", variable_of_interest, ".png"))
   cat("Saving effects plot to:", plot_filename, "\n")
-  ggsave(plot_filename, width = 6, height = 4, dpi = resolution)
+  ggsave(plot_filename, plot = p, width = 6, height = 4, dpi = resolution)
   cat("Effects plot saved successfully.\n\n")
 
   # Log outputs

@@ -119,7 +119,7 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
       notify = FALSE
     )
 
-    success_rate_npi <- nrow(npi_results) / input_n
+    success_rate_npi <- if (input_n > 0) nrow(npi_results) / input_n else 0
     tyler_log_step_complete(
       n_success = nrow(npi_results),
       n_total = input_n
@@ -262,7 +262,7 @@ tyler_print_dashboard <- function(results) {
   message("\u2570", strrep("\u2500", 58), "\u256F")
   message("")
 
-  if (!is.null(results$input_n) && !is.null(results$final_n)) {
+  if (!is.null(results$input_n) && !is.null(results$final_n) && results$input_n > 0) {
     pct <- round(results$final_n / results$input_n * 100, 1)
     message(sprintf("  Input:  %s physicians", format(results$input_n, big.mark = ",")))
     message(sprintf("  Output: %s complete records (%.1f%%)",

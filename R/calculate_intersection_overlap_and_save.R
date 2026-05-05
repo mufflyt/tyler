@@ -215,7 +215,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   block_groups_proj <- block_groups_proj %>%
     dplyr::mutate(
       intersect_area = dplyr::coalesce(intersect_area, 0),
-      overlap = intersect_area / bg_area
+      overlap = ifelse(bg_area > 0, intersect_area / bg_area, NA_real_)
     )
 
   # Filter out missing overlap values for quantile calculation

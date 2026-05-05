@@ -1,8 +1,7 @@
 #' Function to create and export a map showing block group overlap with isochrones
 #'
 #' This function creates a map that displays block groups and their overlap with isochrones.
-# The map is exported as an HTML file and a PNG image.
-#
+#' The map is exported as an HTML file and a PNG image.
 #' @param bg_data A SpatialPolygonsDataFrame representing block group data.
 #' @param isochrones_data A SpatialPolygonsDataFrame representing isochrone data.
 #' @param output_dir Directory path for exporting the map files. Default is "figures/".
