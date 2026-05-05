@@ -49,7 +49,7 @@
 #'
 #' @importFrom npi npi_search npi_flatten
 #' @importFrom dplyr bind_rows arrange filter select distinct mutate rename
-#' @importFrom stringr str_remove_all str_to_lower str_detect str_extract str_trunc
+#' @importFrom stringr str_remove_all str_to_lower str_detect str_extract str_trunc fixed
 #' @importFrom readr write_rds
 #' @importFrom tibble tibble
 #' @family npi
@@ -198,7 +198,13 @@ search_by_taxonomy <- function(taxonomy_to_search,
             is.na(credential_lower) | credential_lower %in% stringr::str_to_lower(c("MD", "DO"))
           )
           data_taxonomy <- dplyr::filter(data_taxonomy, addresses_country_name == "United States")
-          data_taxonomy <- dplyr::filter(data_taxonomy, stringr::str_detect(taxonomies_desc, taxonomy))
+          data_taxonomy <- dplyr::filter(
+            data_taxonomy,
+            stringr::str_detect(
+              string = taxonomies_desc,
+              pattern = stringr::fixed(taxonomy, ignore_case = TRUE)
+            )
+          )
 
           data_taxonomy <- dplyr::rename(
             data_taxonomy,

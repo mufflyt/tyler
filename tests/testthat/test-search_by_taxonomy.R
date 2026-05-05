@@ -66,3 +66,24 @@ test_that("Handles saboteur payload missing optional columns", {
   expect_true("first_name" %in% names(result))
   expect_true("middle_name" %in% names(result))
 })
+
+test_that("Handles saboteur taxonomy strings containing regex metacharacters", {
+  taxonomy <- "OB/GYN (MFM)+"
+  mockery::stub(search_by_taxonomy, 'npi::npi_search', function(...) list(id = 1))
+  mockery::stub(search_by_taxonomy, 'npi::npi_flatten', function(...) {
+    data.frame(
+      npi = c("1234567890"),
+      basic_first_name = c("Ada"),
+      basic_last_name = c("Lovelace"),
+      basic_middle_name = c(NA_character_),
+      basic_credential = c("MD"),
+      addresses_country_name = c("United States"),
+      taxonomies_desc = c("ob/gyn (mfm)+"),
+      stringsAsFactors = FALSE
+    )
+  })
+
+  result <- search_by_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
+  expect_equal(nrow(result), 1)
+  expect_equal(result$search_term, taxonomy)
+})
