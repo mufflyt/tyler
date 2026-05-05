@@ -59,7 +59,7 @@ validate_sf_inputs <- function(...,
   }
 
   # Validate CRS is a recognized coordinate system
-  if (!is.null(ref_crs) && !sf::st_is_longlat(sf::st_crs(ref_crs))) {
+  if (!is.null(ref_crs) && isFALSE(sf::st_is_longlat(sf::st_crs(ref_crs)))) {
     # Ensure projected CRS has valid bounds
     tryCatch({
       bbox_test <- sf::st_bbox(sf::st_point(c(0, 0)) %>% sf::st_sfc(crs = ref_crs))

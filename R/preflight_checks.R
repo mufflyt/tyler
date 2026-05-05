@@ -67,6 +67,7 @@ tyler_preflight_check <- function(input_data,
 
   errors <- character()
   warnings <- character()
+  estimates <- NULL
 
   # ==================== Check 1: Input Data ====================
   message("\U0001F4CA Checking input data...")

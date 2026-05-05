@@ -295,17 +295,16 @@ clean_phase_1_results <- function(phase1_data,
     announce("Extracting last name and creating 'dr_name'...")
     phase1_data <- dplyr::mutate(
       phase1_data,
-      last_name = ifelse(
-        is.na(names) | names == "",
-        NA_character_,
+      last_name = vapply(names, function(n) {
+        if (is.na(n) || !nzchar(n)) return(NA_character_)
         tryCatch(
-          humaniformat::last_name(names),
+          humaniformat::last_name(n),
           error = function(e) {
             warning(sprintf("Error extracting last name: %s. Returning NA.", e$message), call. = FALSE)
             NA_character_
           }
         )
-      ),
+      }, character(1)),
       dr_name = ifelse(
         is.na(last_name),
         NA_character_,

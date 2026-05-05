@@ -144,6 +144,7 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
     theme_minimal()
 
   # Save the plot
+  dir.create(output_path, recursive = TRUE, showWarnings = FALSE)
   plot_filename <- file.path(output_path, paste0("interaction_", interaction_variable, "_", variable_of_interest, ".png"))
   cat("Saving effects plot to:", plot_filename, "\n")
   ggsave(plot_filename, plot = p, width = 6, height = 4, dpi = resolution)

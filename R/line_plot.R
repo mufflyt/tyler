@@ -55,6 +55,8 @@ create_line_plot <- function(plot_data,
                              line_color = "viridis",
                              verbose = TRUE) {
 
+  y_transform <- match.arg(y_transform, c("none", "log", "sqrt"))
+
   # Remove NA values from the y_var column
   plot_data <- dplyr::filter(plot_data, !is.na(.data[[y_var]]))
 
