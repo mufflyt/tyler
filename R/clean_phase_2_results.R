@@ -64,7 +64,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
         ))
       }
       # Rename the matching column
-      names(data)[names(data) == matched_cols[1]] <- new_names[i]
+      names(data)[which(matches)[1]] <- new_names[i]
       rename_index <- rename_index + 1L
       rename_log[[rename_index]] <- data.frame(
         pattern = target_strings[i],
@@ -78,7 +78,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
         new_names[i]
       ))
     } else {
-      warning(sprintf("No columns contained '%s'; nothing was renamed for this pattern.", target_strings[i]))
+      warning(sprintf("No columns exactly matched '%s'; nothing was renamed for this pattern.", target_strings[i]))
     }
     message("")  # Adding a blank line for better separation
   }
