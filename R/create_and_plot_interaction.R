@@ -57,7 +57,7 @@
 #' )
 #' }
 #'
-#' @importFrom dplyr rename mutate
+#' @importFrom dplyr rename mutate group_by summarise
 #' @importFrom ggplot2 ggplot aes geom_point geom_line labs theme_minimal ggsave
 #' @export
 create_and_plot_interaction <- function(data_path, response_variable, variable_of_interest, interaction_variable, random_intercept, output_path, resolution = 100) {
@@ -134,8 +134,8 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
     dplyr::mutate(pred = predict(glmer_model, type = "response"))
 
   plot_data <- pred_data %>%
-    group_by(int_var, var_interest) %>%
-    summarise(mean_pred = mean(pred), .groups = 'drop')
+    dplyr::group_by(int_var, var_interest) %>%
+    dplyr::summarise(mean_pred = mean(pred), .groups = 'drop')
 
   ggplot(plot_data, aes(x = int_var, y = mean_pred, color = var_interest)) +
     geom_point() +

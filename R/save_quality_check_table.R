@@ -7,7 +7,7 @@
 #' @param data A data frame containing the columns 'npi' and 'name'.
 #' @param filepath The path where the CSV file should be saved.
 #' @return The filtered data. A message is emitted indicating where the CSV was saved.
-#' @importFrom dplyr group_by summarise arrange filter
+#' @importFrom dplyr group_by summarise arrange filter n desc
 #' @family utilities
 #' @export
 #' @examples
@@ -24,6 +24,7 @@ save_quality_check_table <- function(data, filepath) {
     dplyr::arrange(desc(count))
 
   # Save the filtered data to a CSV file
+  dir.create(dirname(filepath), recursive = TRUE, showWarnings = FALSE)
   write.csv(filtered_data, file = filepath, row.names = FALSE)
 
   # Print a message indicating successful file save with context
