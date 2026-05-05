@@ -46,3 +46,23 @@ test_that("Filters and renames taxonomy results", {
   expect_true("first_name" %in% names(result))
   expect_equal(result$first_name, "Ada")
 })
+
+test_that("Handles saboteur payload missing optional columns", {
+  taxonomy <- "Gynecologic Oncology"
+  mockery::stub(search_by_taxonomy, 'npi::npi_search', function(...) list(id = 1))
+  mockery::stub(search_by_taxonomy, 'npi::npi_flatten', function(...) {
+    data.frame(
+      npi = c("1234567890"),
+      basic_first_name = c("Ada"),
+      basic_last_name = c("Lovelace"),
+      addresses_country_name = c("United States"),
+      taxonomies_desc = c(taxonomy),
+      stringsAsFactors = FALSE
+    )
+  })
+
+  result <- search_by_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
+  expect_equal(nrow(result), 1)
+  expect_true("first_name" %in% names(result))
+  expect_true("middle_name" %in% names(result))
+})

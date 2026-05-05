@@ -165,6 +165,28 @@ search_by_taxonomy <- function(taxonomy_to_search,
         }
 
         if (!is.null(data_taxonomy) && nrow(data_taxonomy)) {
+          required_cols <- c(
+            "npi",
+            "addresses_country_name",
+            "taxonomies_desc",
+            "basic_first_name",
+            "basic_last_name"
+          )
+          missing_required <- setdiff(required_cols, names(data_taxonomy))
+          if (length(missing_required) > 0) {
+            stop(sprintf(
+              "NPI API response missing required columns: %s. Available columns: %s",
+              paste(missing_required, collapse = ", "),
+              paste(names(data_taxonomy), collapse = ", ")
+            ))
+          }
+          if (!"basic_middle_name" %in% names(data_taxonomy)) {
+            data_taxonomy$basic_middle_name <- NA_character_
+          }
+          if (!"basic_credential" %in% names(data_taxonomy)) {
+            data_taxonomy$basic_credential <- NA_character_
+          }
+
           data_taxonomy <- dplyr::distinct(data_taxonomy, npi, .keep_all = TRUE)
           data_taxonomy <- dplyr::mutate(
             data_taxonomy,
@@ -177,16 +199,6 @@ search_by_taxonomy <- function(taxonomy_to_search,
           )
           data_taxonomy <- dplyr::filter(data_taxonomy, addresses_country_name == "United States")
           data_taxonomy <- dplyr::filter(data_taxonomy, stringr::str_detect(taxonomies_desc, taxonomy))
-
-          required_cols <- c("basic_first_name", "basic_last_name", "basic_middle_name")
-          missing_cols <- setdiff(required_cols, names(data_taxonomy))
-          if (length(missing_cols) > 0) {
-            stop(sprintf(
-              "NPI API response missing required columns: %s. Available columns: %s",
-              paste(missing_cols, collapse = ", "),
-              paste(names(data_taxonomy), collapse = ", ")
-            ))
-          }
 
           data_taxonomy <- dplyr::rename(
             data_taxonomy,
