@@ -40,6 +40,7 @@
 #' print(result)
 #'
 #' @import dplyr
+#' @importFrom rlang sym
 #' @export
 most_common_gender_training_academic <- function(data) {
   # Helper function to get the most common value and proportion
