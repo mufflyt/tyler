@@ -30,6 +30,12 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for map_create_block_group_overlap(). Install with: install.packages('leaflet')", call. = FALSE)
   }
+  if (!requireNamespace("lwgeom", quietly = TRUE)) {
+    stop("Package 'lwgeom' is required for map_create_block_group_overlap(). Install with: install.packages('lwgeom')", call. = FALSE)
+  }
+  if (!requireNamespace("webshot", quietly = TRUE)) {
+    stop("Package 'webshot' is required for map_create_block_group_overlap(). Install with: install.packages('webshot')", call. = FALSE)
+  }
   if (!inherits(bg_data, "sf")) {
     stop("`bg_data` must be an sf object with polygon geometries.", call. = FALSE)
   }

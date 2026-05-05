@@ -35,6 +35,10 @@ calculate_intersection_overlap_and_save <- function(block_groups,
                                                     output_dir,
                                                     crosswalk = NULL,
                                                     notify = TRUE) {
+  if (!requireNamespace("lwgeom", quietly = TRUE)) {
+    stop("Package 'lwgeom' is required for calculate_intersection_overlap_and_save(). Install with: install.packages('lwgeom')", call. = FALSE)
+  }
+
   # Parameter validation
   if (!inherits(block_groups, "sf")) {
     stop("Error: 'block_groups' must be an sf object.", call. = FALSE)
