@@ -352,6 +352,9 @@ tyler_preflight_check <- function(input_data,
 #' @return List with valid (logical) and error (character) fields
 #' @keywords internal
 tyler_validate_google_api <- function(api_key) {
+  if (!requireNamespace("ggmap", quietly = TRUE)) {
+    return(list(valid = FALSE, error = "Package 'ggmap' is required to validate the Google Maps API key. Install with: install.packages('ggmap')"))
+  }
   tryCatch({
     # Try a simple geocoding request
     ggmap::register_google(key = api_key)
