@@ -17,6 +17,13 @@ This function loads the hospital referral region shapefile and optionally remove
 The shapefile (~8 MB) is downloaded from the Dartmouth Atlas website on first use and cached in the
 user's R cache directory for subsequent calls.
 }
+\details{
+Uses \code{\link{ensure_hrr_shapefile}()} to download/cache Dartmouth Atlas data on first use and reuses the local cache for subsequent calls.
+}
+\seealso{
+\code{\link{ensure_hrr_shapefile}()}, \code{\link{hrr_generate_maps}()}, \code{\link{map_create_base}()}
+}
+\concept{geospatial helpers}
 \examples{
 hrr()
 }

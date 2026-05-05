@@ -59,6 +59,8 @@
 #'
 #' @importFrom dplyr rename mutate group_by summarise
 #' @importFrom ggplot2 ggplot aes geom_point geom_line labs theme_minimal ggsave
+#' @seealso [plot_and_save_emmeans()], [create_formula()], [poisson_formula_maker()]
+#' @family modeling helpers
 #' @export
 create_and_plot_interaction <- function(data_path, response_variable, variable_of_interest, interaction_variable, random_intercept, output_path, resolution = 100) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
