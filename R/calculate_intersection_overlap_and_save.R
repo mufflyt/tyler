@@ -244,7 +244,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   # Calculate area in all block groups (projected CRS)
   block_groups_proj <- block_groups_proj %>%
     dplyr::mutate(
-      bg_area = as.numeric(sf::st_area(block_groups_proj)),
+      bg_area = as.numeric(sf::st_area(.)),
       area_method = dplyr::coalesce(rlang::.data$area_method, "projected:EPSG:5070")
     )
 
