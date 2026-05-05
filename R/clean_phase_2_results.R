@@ -43,8 +43,16 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
   rename_log <- list()
   rename_index <- 0L
   for (i in seq_along(target_strings)) {
-    # Bug #8 fix: Use exact matching instead of substring matching to avoid renaming wrong columns
-    matches <- tolower(names(data)) == tolower(target_strings[i])
+    target <- tolower(target_strings[i])
+    normalized_names <- tolower(names(data))
+
+    # Prefer exact case-insensitive matches first.
+    matches <- normalized_names == target
+    # Fall back to substring matching to preserve historical behavior and
+    # prevent downstream column mismatch errors when callers pass patterns.
+    if (!any(matches)) {
+      matches <- grepl(target, normalized_names, fixed = TRUE)
+    }
     matched_cols <- names(data)[matches]
 
     # Detailed log of what matches were found
@@ -55,10 +63,10 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
         target_strings[i],
         paste(matched_cols, collapse = ", ")
       ))
-      # Error if more than one exact match is found (should never happen)
+      # Error if more than one match is found to avoid ambiguous renames.
       if (length(matched_cols) > 1) {
         stop(sprintf(
-          "Multiple columns with exact name '%s': %s. This should not happen - check for duplicate column names.",
+          "Multiple columns matched '%s': %s. Use a more specific target string to disambiguate.",
           target_strings[i],
           paste(matched_cols, collapse = ", ")
         ))
@@ -78,7 +86,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
         new_names[i]
       ))
     } else {
-      warning(sprintf("No columns exactly matched '%s'; nothing was renamed for this pattern.", target_strings[i]))
+      warning(sprintf("No columns matched '%s'; nothing was renamed for this pattern.", target_strings[i]))
     }
     message("")  # Adding a blank line for better separation
   }
