@@ -89,9 +89,17 @@ map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
 #'
 #' @family mapping
 #' @export
-map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
+map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name", output_dir = NULL) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for map_create_physician_dot(). Install with: install.packages('leaflet')", call. = FALSE)
+  }
+  if (!requireNamespace("webshot", quietly = TRUE)) {
+    stop("Package 'webshot' is required for map_create_physician_dot(). Install with: install.packages('webshot')", call. = FALSE)
+  }
+  if (is.null(output_dir)) {
+    output_dir <- tyler_tempdir("physician_maps", create = TRUE)
+  } else {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
   jittered_physician_data <- dplyr::mutate(
     physician_data,
@@ -146,10 +154,9 @@ map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_
     )
 
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
-  html_file <- paste0("figures/dot_map_", timestamp, ".html")
-  png_file <- paste0("figures/dot_map_", timestamp, ".png")
+  html_file <- file.path(output_dir, paste0("dot_map_", timestamp, ".html"))
+  png_file <- file.path(output_dir, paste0("dot_map_", timestamp, ".png"))
 
-  dir.create(dirname(html_file), recursive = TRUE, showWarnings = FALSE)
   htmlwidgets::saveWidget(widget = dot_map, file = html_file, selfcontained = TRUE)
   cat("Leaflet map saved as HTML:", html_file, "\n")
 
