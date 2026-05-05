@@ -43,10 +43,16 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     stop("Error: 'isochrones_joined' must be an sf object.")
   }
   if (!is.numeric(drive_time_minutes) || length(drive_time_minutes) != 1L || drive_time_minutes < 0) {
-    stop("Error: 'drive_time_minutes' must be a single non-negative numeric value.")
+    stop(
+      sprintf(
+        "`drive_time_minutes` must be a single non-negative numeric value; received: %s",
+        paste(drive_time_minutes, collapse = ", ")
+      ),
+      call. = FALSE
+    )
   }
-  if (!is.character(output_dir)) {
-    stop("Error: 'output_dir' must be a character string.")
+  if (!is.character(output_dir) || length(output_dir) != 1L || !nzchar(output_dir)) {
+    stop("`output_dir` must be a single, non-empty character path.", call. = FALSE)
   }
 
   validated <- validate_sf_inputs(
@@ -146,7 +152,26 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   isochrones_filtered <- isochrones_joined[isochrones_joined$drive_time == drive_time_minutes, , drop = FALSE]
 
   if (nrow(isochrones_filtered) == 0) {
-    stop("Error: no isochrones found for the requested drive time.")
+    available_drive_times <- sort(unique(stats::na.omit(isochrones_joined$drive_time)))
+    available_text <- if (length(available_drive_times)) {
+      paste(available_drive_times, collapse = ", ")
+    } else {
+      "<none>"
+    }
+
+    stop(
+      sprintf(
+        paste(
+          "No isochrones found for `drive_time_minutes = %s`.",
+          "Available drive_time values: %s",
+          "Tip: verify unit consistency (minutes expected) and upstream isochrone generation.",
+          sep = "\n"
+        ),
+        drive_time_minutes,
+        available_text
+      ),
+      call. = FALSE
+    )
   }
 
   isochrones_filtered <- sf::st_union(isochrones_filtered)
@@ -171,12 +196,12 @@ calculate_intersection_overlap_and_save <- function(block_groups,
 
   # Validate GEOID exists in intersection result (Bug #12 fix)
   if (!"GEOID" %in% names(intersect)) {
-    stop("Error: Intersection result missing required 'GEOID' column. Check that block_groups contains GEOID.")
+    stop("Intersection result is missing required `GEOID`; verify `block_groups` includes `GEOID` before intersection.", call. = FALSE)
   }
 
   # Validate GEOID exists in block_groups (Bug #12 fix)
   if (!"GEOID" %in% names(block_groups_proj)) {
-    stop("Error: block_groups missing required 'GEOID' column.")
+    stop("`block_groups` is missing required `GEOID` column.", call. = FALSE)
   }
 
   # Data frame version for joins
