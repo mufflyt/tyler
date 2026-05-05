@@ -56,7 +56,7 @@ create_line_plot <- function(plot_data,
                              verbose = TRUE) {
 
   # Remove NA values from the y_var column
-  plot_data <- dplyr::filter(plot_data, !is.na(rlang::sym(y_var)))
+  plot_data <- dplyr::filter(plot_data, !is.na(.data[[y_var]]))
 
   # Handle transformations
   if (y_transform == "log") {
@@ -76,9 +76,9 @@ create_line_plot <- function(plot_data,
   line_plot <- ggplot2::ggplot(plot_data, ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var))) +
     ggplot2::geom_point(color = resolved_point_color, size = 2.5, alpha = 0.9)
 
-  if (use_geom_line & !is.null(geom_line_group)) {
+  if (use_geom_line && !is.null(geom_line_group)) {
     line_plot <- line_plot +
-      ggplot2::geom_line(ggplot2::aes_string(group = geom_line_group), color = "#9AA0A6", linewidth = 0.6)
+      ggplot2::geom_line(ggplot2::aes(group = !!rlang::sym(geom_line_group)), color = "#9AA0A6", linewidth = 0.6)
   }
 
   line_plot <- line_plot +

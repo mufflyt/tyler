@@ -151,5 +151,5 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
     })
   }
   message(sprintf("Split run complete: generated %d workbook(s).", length(splits)))
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
 }

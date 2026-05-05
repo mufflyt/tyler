@@ -95,10 +95,10 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
 
   # Create the plot
   cat("Creating the plot...\n")
-  p <- ggplot2::ggplot(edata, ggplot2::aes_string(x = variable_of_interest, y = "rate")) +
-    ggplot2::geom_point(ggplot2::aes_string(color = color_by), size = 2, stroke = 2,
+  p <- ggplot2::ggplot(edata, ggplot2::aes(x = .data[[variable_of_interest]], y = .data[["rate"]])) +
+    ggplot2::geom_point(ggplot2::aes(color = .data[[color_by]]), size = 2, stroke = 2,
                         position = ggplot2::position_dodge(width = 0.2)) +
-    ggplot2::geom_errorbar(ggplot2::aes_string(ymin = "asymp.LCL", ymax = "asymp.UCL", color = color_by),
+    ggplot2::geom_errorbar(ggplot2::aes(ymin = .data[["asymp.LCL"]], ymax = .data[["asymp.UCL"]], color = .data[[color_by]]),
                            width = 0.2, position = ggplot2::position_dodge(width = 0.2)) +
     ggplot2::ylim(rate_range[1] - 5, rate_range[2] + 5) +
     ggplot2::ggtitle(paste("Estimated Marginal Means -", variable_of_interest)) +
