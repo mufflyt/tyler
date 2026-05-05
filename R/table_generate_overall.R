@@ -1,27 +1,3 @@
-#' Generate an overall summary table
-#'
-#' Generate an overall table summarizing the demographics of the Table 1.
-#'
-#' @param input_file_path The path to the data file (in RDS, CSV, or XLS format).
-#' @param output_directory The directory where the output table file will be saved.
-#' @param title The title for the overall table summary (default is "Overall Table Summary").
-#' @param selected_columns Optional vector of selected columns to include in the table.
-#' @param label_translations Optional named list for label translations.
-#' @return Path to the generated PDF file
-#'
-#' @importFrom arsenal write2pdf tableby tableby.control
-#' @importFrom readr read_rds
-#' @importFrom fs dir_create dir_exists
-#' @importFrom here here
-#' @family table
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' # Generate the overall table
-#' table_generate_overall("data/Table1.rds", "output_tables")
-#' }
-
 #' Write an Arsenal table to a PDF file
 #'
 #' Utility wrapper around `arsenal::write2pdf` to save a table object
@@ -49,6 +25,28 @@ table_write_pdf <- function(object, filename) {
   invisible(output_file)
 }
 
+#' Generate an overall summary table
+#'
+#' Generate an overall table summarizing the demographics of the Table 1.
+#'
+#' @param input_file_path The path to the data file (in RDS, CSV, or XLS format).
+#' @param output_directory The directory where the output table file will be saved.
+#' @param title The title for the overall table summary (default is "Overall Table Summary").
+#' @param selected_columns Optional vector of selected columns to include in the table.
+#' @param label_translations Optional named list for label translations.
+#' @return Path to the generated PDF file
+#'
+#' @importFrom arsenal write2pdf tableby tableby.control
+#' @importFrom readr read_rds
+#' @importFrom fs dir_create dir_exists
+#' @family table
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Generate the overall table
+#' table_generate_overall("data/Table1.rds", "output_tables")
+#' }
 table_generate_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
   cat("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.\n")
   # Log function start
