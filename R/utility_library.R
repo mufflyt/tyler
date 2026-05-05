@@ -249,7 +249,7 @@ tyler_export_with_backup <- function(x, path, backup = TRUE, quiet = getOption("
 #' Toggle quiet logging for helper functions
 #'
 #' @param quiet Logical flag. When `TRUE`, suppress messages emitted by
-#'   `tyler_log_info()`.
+#'   [tyler_log_info()].
 #'
 #' @return The previous quiet value (invisibly).
 #' @export
@@ -257,19 +257,6 @@ tyler_use_quiet_logging <- function(quiet = TRUE) {
   old <- getOption("tyler.quiet", FALSE)
   options(tyler.quiet = quiet)
   invisible(old)
-}
-
-#' Emit a timestamped log message when quiet mode is disabled
-#'
-#' @param message_text Character string to print.
-#' @param quiet Optional override for quiet behaviour.
-#'
-#' @export
-tyler_log_info <- function(message_text, quiet = getOption("tyler.quiet", FALSE)) {
-  if (!isTRUE(quiet)) {
-    message(sprintf("[%s] %s", format(Sys.time(), "%H:%M:%S"), message_text))
-  }
-  invisible(NULL)
 }
 
 # -------------------------------------------------------------------------

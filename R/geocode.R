@@ -64,11 +64,9 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
 
   unique_add <- dplyr::distinct(data, address)
   total_unique <- nrow(unique_add)
-  tyler_log_info(sprintf("Geocoding %d unique address(es).", total_unique), quiet = quiet)
-
-  # Comprehensive logging: show what we're about to do
-  if (!quiet) {
-    tyler_log_info(sprintf("Found %d total address records, %d unique", nrow(data), total_unique), indent = TRUE)
+  if (!isTRUE(quiet)) {
+    tyler_log_info(sprintf("Geocoding %d unique address(es).", total_unique))
+    tyler_log_info(sprintf("Found %d total address records, %d unique", nrow(data), total_unique))
   }
 
   if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
@@ -96,13 +94,15 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
 
       if (inherits(attempt_result, "error")) {
         reason <- extract_status(attempt_result$message)
-        tyler_log_info(sprintf(
-          "Attempt %d/%d for address '%s' failed %s.",
-          attempt,
-          max_attempts,
-          first_address,
-          reason
-        ), quiet = quiet)
+        if (!isTRUE(quiet)) {
+          tyler_log_info(sprintf(
+            "Attempt %d/%d for address '%s' failed %s.",
+            attempt,
+            max_attempts,
+            first_address,
+            reason
+          ))
+        }
 
         if (attempt == max_attempts) {
           failure_reason <- sprintf("Geocoding failed after %d attempts: %s", max_attempts, attempt_result$message)
@@ -117,7 +117,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
         }
 
         delay <- base_delay * 2^(attempt - 1)
-        tyler_log_info(sprintf("Retrying geocode request in %.1f seconds...", delay), quiet = quiet)
+        if (!isTRUE(quiet)) tyler_log_info(sprintf("Retrying geocode request in %.1f seconds...", delay))
         Sys.sleep(delay)
       } else {
         coords <- attempt_result
@@ -172,7 +172,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
 
   if (nrow(failed_rows) && !is.null(failed_output_path)) {
     tyler_export_with_backup(failed_rows, failed_output_path, quiet = quiet)
-    tyler_log_info(sprintf("Exported %d failed address(es) to %s", nrow(failed_rows), failed_output_path), quiet = quiet)
+    if (!isTRUE(quiet)) tyler_log_info(sprintf("Exported %d failed address(es) to %s", nrow(failed_rows), failed_output_path))
   }
 
   if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {

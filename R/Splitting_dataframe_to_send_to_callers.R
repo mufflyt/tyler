@@ -135,7 +135,9 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
 
   # Split the data into parts based on lab assistants and save each part
   splits <- base::split(data, data$lab_assistant_assigned)
-  for (lab_assistant_name in names(splits)) {
+  split_paths <- character(length(splits))
+  for (i in seq_along(splits)) {
+    lab_assistant_name <- names(splits)[[i]]
     output_file <- file.path(output_directory,
                              paste0(split_file_prefix, lab_assistant_name, "_", current_datetime, ".xlsx"))
     tryCatch({
@@ -149,7 +151,9 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
     }, error = function(e) {
       stop("Error saving split data for ", lab_assistant_name, ". Check if the output directory is writable.")
     })
+    split_paths[[i]] <- output_file
   }
   message(sprintf("Split run complete: generated %d workbook(s).", length(splits)))
   if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
+  invisible(c(complete_output_file, split_paths))
 }
