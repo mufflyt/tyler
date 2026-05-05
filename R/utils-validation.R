@@ -36,11 +36,53 @@ validate_required_columns <- function(x, required, name = "data") {
 
   missing_required <- setdiff(required, names(x))
   if (length(missing_required)) {
+    available_cols <- names(x)
+
+    suggestion_lines <- vapply(missing_required, function(col) {
+      if (!length(available_cols)) {
+        return(sprintf("  - `%s` (no columns are available)", col))
+      }
+
+      distances <- utils::adist(col, available_cols)
+      closest_idx <- which.min(distances)
+      closest_col <- available_cols[[closest_idx]]
+      closest_distance <- distances[[closest_idx]]
+
+      if (closest_distance <= 2) {
+        sprintf("  - `%s` (did you mean `%s`?)", col, closest_col)
+      } else {
+        sprintf("  - `%s`", col)
+      }
+    }, character(1))
+
+    available_preview <- if (length(available_cols)) {
+      paste(utils::head(available_cols, 15), collapse = ", ")
+    } else {
+      "<none>"
+    }
+
+    suffix <- if (length(available_cols) > 15) {
+      sprintf(" ... and %d more", length(available_cols) - 15)
+    } else {
+      ""
+    }
+
     stop(
       sprintf(
-        "Required columns are missing from `%s`: %s",
+        paste0(
+          "Required columns are missing from `%s` (%d missing):
+",
+          "%s
+",
+          "Available columns (%d): %s%s"
+        ),
         name,
-        paste(sort(missing_required), collapse = ", ")
+        length(missing_required),
+        paste(suggestion_lines, collapse = "
+"),
+        length(available_cols),
+        available_preview,
+        suffix
       ),
       call. = FALSE
     )
