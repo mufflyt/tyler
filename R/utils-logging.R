@@ -400,6 +400,17 @@ tyler_log_to_file <- function(msg) {
   if (!is.null(.tyler_workflow$log_file)) {
     # Remove ANSI codes and special characters for file logging
     clean_msg <- gsub("\u2713|\u2717|\u26A0|\u2139|\u25B6|\u25B8|\u21BB|\u1F4BE", "", msg)
+    lock_path <- paste0(.tyler_workflow$log_file, ".lock")
+    lock_acquired <- FALSE
+    for (i in seq_len(100)) {
+      lock_acquired <- dir.create(lock_path, showWarnings = FALSE)
+      if (lock_acquired) break
+      Sys.sleep(0.01)
+    }
+    if (!lock_acquired) {
+      stop("Unable to acquire log file lock: ", .tyler_workflow$log_file, call. = FALSE)
+    }
+    on.exit(unlink(lock_path, recursive = TRUE, force = TRUE), add = TRUE)
     write(clean_msg, file = .tyler_workflow$log_file, append = TRUE)
   }
   invisible(NULL)
