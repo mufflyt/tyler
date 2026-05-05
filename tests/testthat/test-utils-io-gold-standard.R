@@ -113,6 +113,19 @@ test_that("tyler_write_table - returns the path invisibly", {
   expect_equal(result, tmp)
 })
 
+test_that("tyler_write_table - non-append writes replace atomically", {
+  tmp <- tempfile(fileext = ".csv")
+  on.exit(unlink(tmp))
+
+  tyler_write_table(data.frame(x = 1:3), tmp, format = "csv")
+  tyler_write_table(data.frame(x = 4:6), tmp, format = "csv")
+  df2 <- tyler_read_table(tmp, format = "csv")
+
+  expect_equal(df2$x, 4:6)
+  tmp_sidecars <- list.files(dirname(tmp), pattern = "\\.tmp$", full.names = TRUE)
+  expect_equal(length(tmp_sidecars), 0L)
+})
+
 test_that("tyler_read_table - infers CSV format from file extension", {
   df <- data.frame(a = 1:3)
   tmp <- tempfile(fileext = ".csv")
