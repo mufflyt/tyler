@@ -22,7 +22,6 @@
 #' calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")
 #'
 #' @importFrom sf st_intersection st_write st_area st_transform st_make_valid st_is_valid st_union st_sf
-#' @importFrom lwgeom st_orient
 #' @importFrom dplyr mutate select left_join coalesce
 #' @importFrom rlang .data
 #' @importFrom stats quantile na.omit
@@ -35,6 +34,19 @@ calculate_intersection_overlap_and_save <- function(block_groups,
                                                     output_dir,
                                                     crosswalk = NULL,
                                                     notify = TRUE) {
+  orient_geometries <- function(x) {
+    if (!requireNamespace("lwgeom", quietly = TRUE)) {
+      return(x)
+    }
+
+    orient_fn <- get0("st_orient", envir = asNamespace("lwgeom"), mode = "function")
+    if (is.null(orient_fn)) {
+      return(x)
+    }
+
+    orient_fn(x)
+  }
+
   # Parameter validation
   if (!inherits(block_groups, "sf")) {
     stop("Error: 'block_groups' must be an sf object.")
@@ -67,8 +79,8 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   block_groups <- validated$block_groups
   isochrones_joined <- validated$isochrones_joined
 
-  block_groups <- lwgeom::st_orient(block_groups)
-  isochrones_joined <- lwgeom::st_orient(isochrones_joined)
+  block_groups <- orient_geometries(block_groups)
+  isochrones_joined <- orient_geometries(isochrones_joined)
 
   # Year alignment enforcement
   if (!"data_year" %in% names(isochrones_joined)) {
@@ -136,8 +148,8 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     block_groups <- validated_crosswalk$block_groups
     isochrones_joined <- validated_crosswalk$isochrones_joined
 
-    block_groups <- lwgeom::st_orient(block_groups)
-    isochrones_joined <- lwgeom::st_orient(isochrones_joined)
+    block_groups <- orient_geometries(block_groups)
+    isochrones_joined <- orient_geometries(isochrones_joined)
 
     acs_years <- stats::na.omit(unique(block_groups$vintage))
     if (length(acs_years) != 1L || !identical(acs_years[[1]], provider_year)) {
@@ -181,7 +193,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     geometry = isochrones_filtered,
     crs = sf::st_crs(isochrones_joined)
   )
-  isochrones_filtered <- lwgeom::st_orient(isochrones_filtered)
+  isochrones_filtered <- orient_geometries(isochrones_filtered)
 
   # Project to an equal-area CRS for area calculations
   block_groups_proj <- sf::st_transform(block_groups, area_crs)
