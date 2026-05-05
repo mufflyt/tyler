@@ -70,9 +70,22 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
     )
   )
 
-  # Ensure that specified insurance types are valid
-  if (!all(insurance_order %in% unique(data$insurance))) {
-    stop("Specified insurance_order contains values not present in the data.", call. = FALSE)
+  # Ensure that all insurance types in the data are covered by insurance_order
+  data_insurance_values <- unique(data$insurance[!is.na(data$insurance)])
+  missing_from_order <- setdiff(data_insurance_values, insurance_order)
+  if (length(missing_from_order) > 0) {
+    stop(sprintf(
+      "Data contains insurance value(s) not in insurance_order: %s. Add them to insurance_order.",
+      paste(missing_from_order, collapse = ", ")
+    ), call. = FALSE)
+  }
+  # Also warn if insurance_order contains values absent from the data
+  extra_in_order <- setdiff(insurance_order, data_insurance_values)
+  if (length(extra_in_order) > 0) {
+    warning(sprintf(
+      "insurance_order contains value(s) not found in the data: %s.",
+      paste(extra_in_order, collapse = ", ")
+    ), call. = FALSE)
   }
 
   # Create a ranking based on the insurance order for sorting

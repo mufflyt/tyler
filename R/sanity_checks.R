@@ -356,18 +356,18 @@ tyler_check_no_data_loss <- function(before,
 
   if (abs(unexpected_change) > tolerance) {
     if (unexpected_change < 0) {
+      pct_lost <- if (n_before > 0) abs(actual_change) / n_before * 100 else NaN
       stop(sprintf(
         "DATA LOSS detected in '%s':\n  Before: %d rows\n  After: %d rows\n  Lost: %d rows (%.1f%%)\n  Expected change: %+d\n  Tolerance: ±%d\n\nThis indicates silent filtering, failed joins, or data corruption.",
         operation, n_before, n_after, abs(actual_change),
-        abs(actual_change) / n_before * 100,
-        expected_change, tolerance
+        pct_lost, expected_change, tolerance
       ), call. = FALSE)
     } else {
+      pct_added <- if (n_before > 0) actual_change / n_before * 100 else NaN
       warning(sprintf(
         "UNEXPECTED ROW INCREASE in '%s':\n  Before: %d rows\n  After: %d rows\n  Added: %d rows (%.1f%%)\n  Expected change: %+d\n\nThis may indicate row duplication or incorrect joins.",
         operation, n_before, n_after, actual_change,
-        actual_change / n_before * 100,
-        expected_change
+        pct_added, expected_change
       ), call. = FALSE)
     }
   }

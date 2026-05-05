@@ -229,7 +229,7 @@ search_by_taxonomy <- function(taxonomy_to_search,
         list(error = e)
       })
 
-      if (is.list(result) && !is.null(result$error)) {
+      if (!inherits(result, "data.frame") && is.list(result) && !is.null(result$error)) {
         err <- result$error
         if (attempt >= max_attempts) {
           message(sprintf(
