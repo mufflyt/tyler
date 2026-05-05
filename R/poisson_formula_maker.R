@@ -26,6 +26,9 @@ create_formula <- function(data, response_var, random_effect = NULL) {
   if (!response_var %in% names(data)) {
     stop(sprintf("Response variable '%s' not found in data.", response_var), call. = FALSE)
   }
+  if (!is.null(random_effect) && !random_effect %in% names(data)) {
+    stop(sprintf("Random effect variable '%s' not found in data.", random_effect), call. = FALSE)
+  }
 
   message(sprintf("Creating formula with response variable: %s", response_var))
 
