@@ -62,6 +62,8 @@ create_scatter_plot <- function(plot_data,
                                 plot_title = NULL,
                                 verbose = TRUE) {
 
+  y_transform <- match.arg(y_transform, c("none", "log", "sqrt"))
+
   # Filter out zero or negative values and NAs from the y_var column
   plot_data <- dplyr::filter(plot_data, .data[[y_var]] > 0, !is.na(.data[[y_var]]))
 
