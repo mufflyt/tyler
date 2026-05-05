@@ -149,6 +149,7 @@ map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_
   html_file <- paste0("figures/dot_map_", timestamp, ".html")
   png_file <- paste0("figures/dot_map_", timestamp, ".png")
 
+  dir.create(dirname(html_file), recursive = TRUE, showWarnings = FALSE)
   htmlwidgets::saveWidget(widget = dot_map, file = html_file, selfcontained = TRUE)
   cat("Leaflet map saved as HTML:", html_file, "\n")
 

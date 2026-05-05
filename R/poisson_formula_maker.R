@@ -20,10 +20,21 @@
 #'
 #' @export
 create_formula <- function(data, response_var, random_effect = NULL) {
+  if (!is.data.frame(data)) {
+    stop("`data` must be a data frame.", call. = FALSE)
+  }
+  if (!response_var %in% names(data)) {
+    stop(sprintf("Response variable '%s' not found in data.", response_var), call. = FALSE)
+  }
+
   message(sprintf("Creating formula with response variable: %s", response_var))
 
   # Get the column names of the dataframe except for the response variable and random effect
   predictor_vars <- setdiff(names(data), c(response_var, random_effect))
+
+  if (length(predictor_vars) == 0) {
+    stop("No predictor variables remain after excluding response_var and random_effect.", call. = FALSE)
+  }
   message(sprintf(
     "Predictor variables identified: %s",
     paste(predictor_vars, collapse = ", ")

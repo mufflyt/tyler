@@ -251,18 +251,16 @@ tyler_progress_fail <- function(pb, msg = NULL) {
 #' tyler_multi_done(tracker)
 #' }
 tyler_multi_progress <- function(steps, show_overall = TRUE) {
-  structure(
-    list(
-      steps = steps,
-      total_steps = length(steps),
-      current_step = 0,
-      show_overall = show_overall,
-      overall_pb = NULL,
-      step_pb = NULL,
-      use_cli = requireNamespace("cli", quietly = TRUE)
-    ),
-    class = "tyler_multi_progress"
-  )
+  env <- new.env(parent = emptyenv())
+  env$steps <- steps
+  env$total_steps <- length(steps)
+  env$current_step <- 0L
+  env$show_overall <- show_overall
+  env$overall_pb <- NULL
+  env$step_pb <- NULL
+  env$use_cli <- requireNamespace("cli", quietly = TRUE)
+  class(env) <- "tyler_multi_progress"
+  env
 }
 
 

@@ -305,7 +305,7 @@ tyler_workflow_end <- function(final_n = NULL, input_n = NULL) {
   message(strrep("=", 60))
   message("")
 
-  if (!is.null(final_n) && !is.null(input_n)) {
+  if (!is.null(final_n) && !is.null(input_n) && input_n > 0) {
     pct <- round(final_n / input_n * 100, 1)
     message(sprintf("  Input:  %s records", format(input_n, big.mark = ",")))
     message(sprintf("  Output: %s records (%.1f%%)", format(final_n, big.mark = ","), pct))

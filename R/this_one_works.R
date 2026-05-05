@@ -74,17 +74,30 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_p
     cat("API URL:", url, "\n")
 
     # Send a GET request through Tor
-    ph_r <- httr::GET(url, use_proxy(paste0("socks5://localhost:", torPort)))
+    ph_r <- tryCatch(
+      httr::GET(url, use_proxy(paste0("socks5://localhost:", torPort))),
+      error = function(e) {
+        cat("Network error for ID:", id, "-", conditionMessage(e), "\n")
+        NULL
+      }
+    )
 
-    # Check if the request was successful
-    if (ph_r$status_code == 200) {
+    if (is.null(ph_r)) {
+      WrongIDs <- c(WrongIDs, id)
+    } else if (ph_r$status_code == 200) {
       cat("Request successful for ID:", id, "\n")
 
       # Parse JSON response
-      ph_data <- jsonlite::fromJSON(httr::content(ph_r, as = "text"))
+      ph_data <- tryCatch(
+        jsonlite::fromJSON(httr::content(ph_r, as = "text", encoding = "UTF-8")),
+        error = function(e) {
+          cat("JSON parse error for ID:", id, "-", conditionMessage(e), "\n")
+          NULL
+        }
+      )
 
       # Check if the response is not empty
-      if (length(ph_data) > 0) {
+      if (!is.null(ph_data) && length(ph_data) > 0) {
         cat("Non-empty response for ID:", id, "\n")
 
         # Add ID and current timestamp to the data

@@ -51,6 +51,10 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
   message("Creating individual isochrone plots and shapefiles...")
 
   for (time in drive_times) {
+    if (is.na(time)) {
+      message("Skipping NA drive time.")
+      next
+    }
     message(paste("Processing isochrones for", time, "minutes..."))
 
     # Filter isochrones for the specified drive time
@@ -70,7 +74,7 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
     colors <- grDevices::rainbow(length(drive_times))
 
     # Get the index of the current drive time
-    index <- which(drive_times == time)
+    index <- match(time, drive_times)
 
     # Create a base map
     my_map <- tyler::map_create_base("")
@@ -92,12 +96,14 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
 
     # Save the plot to an HTML file
     output_file <- paste0("figures/isochrone_maps/isochrone_map_", time, "_minutes.html")
+    dir.create(dirname(output_file), recursive = TRUE, showWarnings = FALSE)
     htmlwidgets::saveWidget(isochrone_map, file = output_file)
 
     message(paste("Saved isochrone map for", time, "minutes as:", output_file))
 
     # Write the shapefile for the current drive time
     output_shapefile <- paste0("data/shp/isochrone_files/isochrones_", time, "_minutes.shp")
+    dir.create(dirname(output_shapefile), recursive = TRUE, showWarnings = FALSE)
     sf::st_write(isochrones_sf, output_shapefile, append = FALSE)
 
     message(paste("Saved shapefile for", time, "minutes as:", output_shapefile))

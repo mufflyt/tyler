@@ -28,6 +28,13 @@
 #' @import dplyr
 #' @export
 physician_age <- function(data, age_column) {
+  if (!is.data.frame(data)) {
+    stop("`data` must be a data frame.", call. = FALSE)
+  }
+  if (!age_column %in% names(data)) {
+    stop(sprintf("Column '%s' not found in data.", age_column), call. = FALSE)
+  }
+
   # Calculate the median age
   median_age <- round(median(data[[age_column]], na.rm = TRUE), 2)
 
