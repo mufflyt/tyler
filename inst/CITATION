@@ -6,8 +6,8 @@ entry <- bibentry(
   bibtype = "Manual",
   title = "tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care",
   author = person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2044-1693")),
-  year = "2024",
-  note = "R package version 1.2.1",
+  year = "2026",
+  note = "R package version 1.2.2",
   url = "https://github.com/mufflyt/tyler"
 )
 

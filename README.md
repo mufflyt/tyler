@@ -21,19 +21,42 @@ citation("tyler")
 
 At the time of writing, the package should be cited as:
 
-> Muffly, T. (2024). *tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care* (R package version 1.2.1). <https://github.com/mufflyt/tyler>
+> Muffly, T. (2026). *tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care* (R package version 1.2.2). <https://github.com/mufflyt/tyler>
 
 Including this reference in publications, presentations, or data products helps sustain the project and gives proper credit to its contributors.
 
 ## Installation
 
 You can install the development version of tyler from [GitHub](https://github.com/) with:
+
 ``` r
 # install.packages("devtools")
 devtools::install_github("mufflyt/tyler")
 ```
 
-See the package vignette for a fuller introduction and suggestions on how to use the `tyler()` function efficiently.
+`library(tyler)` loads quickly with a minimal footprint. Optional packages for mapping, geospatial analysis, and mixed models are installed only when needed:
+
+``` r
+# For isochrone mapping (HERE API):
+install.packages(c("hereR", "sf", "lwgeom"))
+
+# For interactive Leaflet maps:
+install.packages("leaflet")
+
+# For Google Maps geocoding:
+install.packages("ggmap")
+
+# For HRR hexagon maps:
+install.packages(c("ggspatial", "rnaturalearth"))
+
+# For mixed-effects models:
+install.packages("lme4")
+
+# For Census block-group data:
+install.packages("censusapi")
+```
+
+See the package vignette for a fuller introduction and workflow examples.
 
 vignette(topic = "????", package = "tyler")
 
@@ -146,28 +169,37 @@ obgyn_taxonomy <- tyler::taxonomy %>% filter(str_detect(`Classification`, fixed(
 ```
 
 ### Searching for Data: `tyler::search_by_taxonomy`
-This function searches the NPI Database for healthcare providers based on a taxonomy description.  The `search_by_taxonomy` function is a wrapper on the `npi::npi_search` accessing the registry's Version 2.1 API.  Many thanks to the author and maintainers of the `npi` package for their amazing work.This helps confirm outside data about subspecialist provider counts and fill in the gaps for providers who are not board-certified but are practicing (board-eligible).  This data can be matched to other databases.  Please see `Exploratory/workforce/subspecialists_only` for more code on how to do this.  The nice thing is that all these search results will come with an NPI.  
-```
-# This will allow us to get subspecialty names and NPI numbers
+This function searches the NPI Database for healthcare providers based on a taxonomy description.  The `search_by_taxonomy` function is a wrapper on `npi::npi_search` (registry Version 2.1 API).  Many thanks to the author and maintainers of the `npi` package for their amazing work. This helps confirm outside data about subspecialist provider counts and fill in the gaps for providers who are not board-certified but are practicing (board-eligible).
+
+**Important:** The NPI API returns at most **1,200 records per query**. For large specialties this means a national search only captures providers whose names start with early letters of the alphabet. Pass a `states` vector to loop over each state and retrieve all providers:
+
+```r
+# Simple national search (capped at 1,200 records per taxonomy):
 go_data <- search_by_taxonomy("Gynecologic Oncology")
-fpmrs_data <- search_by_taxonomy("Female Pelvic Medicine and Reconstructive Surgery")
-rei_data <- search_by_taxonomy("Reproductive Endocrinology")
-mfm_data <- search_by_taxonomy("Maternal & Fetal Medicine")
+
+# Complete national search — loops over all 50 states to bypass the cap:
+all_states <- c(
+  "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA",
+  "HI","ID","IL","IN","IA","KS","KY","LA","ME","MD",
+  "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
+  "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+  "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
+)
+
+fpmrs_data <- search_by_taxonomy(
+  "Female Pelvic Medicine and Reconstructive Surgery",
+  states = all_states
+)
+rei_data   <- search_by_taxonomy("Reproductive Endocrinology",   states = all_states)
+mfm_data   <- search_by_taxonomy("Maternal & Fetal Medicine",    states = all_states)
+
+# Optional: filter by city or state directly
+co_obgyn <- search_by_taxonomy("Obstetrics & Gynecology", states = "CO")
 
 # Merge all data frames into one
-      all_taxonomy_search_data <- bind_rows(
-        go_data,
-        fpmrs_data,
-        rei_data,
-        mfm_data) %>%
-        dplyr::distinct(npi, .keep_all = TRUE)
-
-      dim(all_taxonomy_search_data)
-      glimpse(all_taxonomy_search_data)
-
-# 1200 records requested
-# Requesting records 0-200...
-# Requesting records 200-400...
+all_taxonomy_search_data <- dplyr::bind_rows(
+  go_data, fpmrs_data, rei_data, mfm_data
+) |> dplyr::distinct(npi, .keep_all = TRUE)
 ```
 
 ### Searching for Data: `tyler::search_and_process_npi`
@@ -260,7 +292,18 @@ Most of the difference in travel distance between methods is associated with the
 
 
 ### `tyler::create_isochrones`
-A function that interfaces with HERE API to gather the geometry for the isochrones.  Does not need to be used on its own.  Used INTERNALLY only.  We use the HERE API to calculate optimal routes and directions for various modes of transportation, including driving, walking, cycling, and public transit. It provides detailed turn-by-turn instructions, estimated travel times, and route alternatives.  This is simpler than using an OSRM server running the AWS cloud, and the cost is minimal.  
+A function that interfaces with the HERE API to calculate drive-time isochrone polygons for a single point (sf object). Requires the optional `hereR` package and a `HERE_API_KEY` environment variable.
+
+Results are memoized in memory for the duration of the R session so repeated calls for the same location are instant. After processing a large batch, call `tyler::tyler_clear_isochrone_cache()` to release that memory:
+
+```r
+# Create isochrones for a single location
+location <- sf::st_sfc(sf::st_point(c(-104.9, 39.7)), crs = 4326)
+isolines <- tyler::create_isochrones(location, range = c(1800, 3600, 7200, 10800))
+
+# Free the cache when done
+tyler::tyler_clear_isochrone_cache()
+```
 
 ### `tyler::create_isochrones_for_dataframe`
 A function that iterates the `tyler::create_isochrones` over an entire dataframe.  The only input is a dataframe and the breaks for the number of minutes for each drive-time isochrone.  Drive time isochrones take into account road networks, traffic conditions, and other factors that influence actual travel time. Geodesic distances, on the other hand, represent straight-line distances "as the crow flies" and do not consider road networks. For real-world navigation or route planning, drive time isochrones provide more accurate estimates of travel time.  While drive time isochrones have these advantages, geodesic distances are still valuable in scenarios where the focus is solely on measuring straight-line distances or when road network information is not available or necessary. 

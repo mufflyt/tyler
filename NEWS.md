@@ -1,3 +1,42 @@
+# tyler 1.2.2
+
+Released 2026-05-04.
+
+## Bug fixes
+
+* `library(tyler)` no longer crashes R or causes system memory exhaustion.
+  Seven heavy packages (`ggmap`, `ggspatial`, `hereR`, `leaflet`,
+  `leaflet.extras`, `lme4`, `censusapi`) were moved from `Imports` to
+  `Suggests` so their compiled spatial libraries (GDAL, GEOS, PROJ) are
+  loaded **only when the relevant function is first called**, not on package
+  attach. Two packages declared in `Imports` but never called (`tigris`,
+  `effects`) were removed entirely.
+
+* `create_isochrones()` no longer accumulates memoized results in RAM
+  indefinitely. The internal memoization object is now exposed through a new
+  exported function `tyler_clear_isochrone_cache()` that releases the cache on
+  demand. Call it after processing a large batch to reclaim memory.
+
+* `create_isochrones_for_dataframe()` and `create_individual_isochrone_plots()`
+  previously called `beepr::beep()` unconditionally even though `beepr` is a
+  suggested package. Both calls are now guarded with `requireNamespace()`.
+
+## New features
+
+* `search_by_taxonomy()` gains three new arguments:
+  - **`states`** — a character vector of two-letter state abbreviations. When
+    supplied the function loops over each state and deduplicates on NPI,
+    bypassing the NPI API's hard 1,200-record-per-query cap that previously
+    caused national searches to return only providers whose names start with
+    "A". Pass all 50 state abbreviations to perform a complete national search.
+  - **`city`** — optional city filter passed directly to `npi::npi_search()`.
+  - **`limit`** — controls records per API call (max 1,200, the API ceiling).
+
+* All mapping and geospatial functions that depend on now-optional packages
+  (`ggmap`, `ggspatial`, `hereR`, `leaflet`, `lme4`, `censusapi`, `easyr`)
+  now emit a clear `stop()` message with the exact `install.packages()` command
+  if the package is not installed.
+
 # tyler 1.2.1
 
 * Released on 2025-10-23 to align all metadata artifacts with the

@@ -4,7 +4,7 @@
   "identifier": "tyler",
   "name": "tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care",
   "description": "Provides utilities for mystery caller and audit studies evaluating patient access to healthcare. Functions help search and process National Provider Identifier (NPI) records, summarize provider demographics, and generate tables and maps for analysis and reporting.",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "license": "https://spdx.org/licenses/MIT",
   "codeRepository": "https://github.com/mufflyt/tyler",
   "relatedLink": [
@@ -12,7 +12,7 @@
   ],
   "issueTracker": "https://github.com/mufflyt/tyler/issues",
   "datePublished": "2025-10-23",
-  "dateModified": "2025-10-23",
+  "dateModified": "2026-05-04",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -107,18 +107,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "censusapi",
-      "name": "censusapi",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=censusapi"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "data.table",
       "name": "data.table",
       "provider": {
@@ -167,18 +155,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "effects",
-      "name": "effects",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=effects"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "emmeans",
       "name": "emmeans",
       "provider": {
@@ -215,18 +191,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "ggmap",
-      "name": "ggmap",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=ggmap"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "ggplot2",
       "name": "ggplot2",
       "provider": {
@@ -236,18 +200,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=ggplot2"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "ggspatial",
-      "name": "ggspatial",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=ggspatial"
     },
     {
       "@type": "SoftwareApplication",
@@ -284,18 +236,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=here"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "hereR",
-      "name": "hereR",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=hereR"
     },
     {
       "@type": "SoftwareApplication",
@@ -383,30 +323,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "leaflet",
-      "name": "leaflet",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=leaflet"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "leaflet.extras",
-      "name": "leaflet.extras",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=leaflet.extras"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "lifecycle",
       "name": "lifecycle",
       "provider": {
@@ -416,18 +332,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=lifecycle"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "lme4",
-      "name": "lme4",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=lme4"
     },
     {
       "@type": "SoftwareApplication",
@@ -760,6 +664,90 @@
     }
   ],
   "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "censusapi",
+      "name": "censusapi",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=censusapi"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "ggmap",
+      "name": "ggmap",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggmap"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "ggspatial",
+      "name": "ggspatial",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggspatial"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "hereR",
+      "name": "hereR",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=hereR"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "leaflet",
+      "name": "leaflet",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=leaflet"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "leaflet.extras",
+      "name": "leaflet.extras",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=leaflet.extras"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "lme4",
+      "name": "lme4",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lme4"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",

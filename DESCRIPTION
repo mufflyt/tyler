@@ -1,6 +1,6 @@
 Package: tyler
 Title: Tools for Mystery Caller and Audit Healthcare Studies
-Version: 1.2.1
+Version: 1.2.2
 Author: Tyler Muffly [aut, cre]
 Authors@R:
     person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
@@ -12,7 +12,7 @@ RoxygenNote: 7.3.2
 License: MIT + file LICENSE
 URL: https://github.com/mufflyt/tyler, https://mufflyt.github.io/tyler/
 BugReports: https://github.com/mufflyt/tyler/issues
-Date: 2025-10-23
+Date: 2026-05-04
 Lifecycle: experimental
 Keywords: healthcare, patient access, audit study, NPI
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
