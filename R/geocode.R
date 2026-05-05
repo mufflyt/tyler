@@ -42,7 +42,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
                                      tracker = NULL,
                                      tracker_step = "Geocoding") {
   if (!file.exists(file_path)) {
-    stop("Input file not found.")
+    stop("Input file not found.", call. = FALSE)
   }
 
   # Read input based on extension
@@ -51,10 +51,10 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
                  csv = readr::read_csv(file_path, show_col_types = FALSE),
                  rds = readRDS(file_path),
                  xlsx = readxl::read_excel(file_path),
-                 stop("Unsupported file type: ", ext))
+                 stop("Unsupported file type: ", ext, call. = FALSE))
 
   if (!"address" %in% names(data)) {
-    stop("The dataset must have a column named 'address' for geocoding.")
+    stop("The dataset must have a column named 'address' for geocoding.", call. = FALSE)
   }
 
   if (!requireNamespace("ggmap", quietly = TRUE)) {
@@ -113,7 +113,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
           if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
             progress_tracker_fail(tracker, tracker_step, reason = failure_reason)
           }
-          stop(failure_reason)
+          stop(failure_reason, call. = FALSE)
         }
 
         delay <- base_delay * 2^(attempt - 1)
@@ -124,13 +124,13 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
 
         # Validate geocoding result structure immediately (Bug #11 fix)
         if (!is.data.frame(coords)) {
-          stop("Geocoding API returned unexpected data type (expected data frame).")
+          stop("Geocoding API returned unexpected data type (expected data frame).", call. = FALSE)
         }
         if (!"lat" %in% names(coords) || !"lon" %in% names(coords)) {
           stop(sprintf(
             "Geocoding API returned unexpected structure. Expected 'lat' and 'lon' columns, got: %s",
             paste(names(coords), collapse = ", ")
-          ))
+          ), call. = FALSE)
         }
         if (nrow(coords) != total_unique) {
           warning(sprintf(
