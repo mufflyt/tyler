@@ -16,6 +16,12 @@
 #' }
 
 save_quality_check_table <- function(data, filepath) {
+  required_cols <- c("npi", "name")
+  missing_cols <- setdiff(required_cols, names(data))
+  if (length(missing_cols)) {
+    stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "), call. = FALSE)
+  }
+
   # Group by 'npi' and 'name', calculate counts, filter where count > 2, and arrange by count descending
   filtered_data <- data %>%
     dplyr::group_by(npi, name) %>%

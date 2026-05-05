@@ -57,9 +57,11 @@ check_normality <- function(data, variable) {
   clean_data <- data[!is.na(data[[variable]]), , drop = FALSE]
 
   hist_plot <- ggplot2::ggplot(clean_data, ggplot2::aes(x = !!rlang::sym(variable))) +
-    ggplot2::geom_histogram(binwidth = 0.5, fill = "lightblue", color = "black", na.rm = TRUE) +
+    ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
+                            binwidth = 0.5, fill = "lightblue", color = "black", na.rm = TRUE) +
     ggplot2::geom_density(alpha = 0.2, fill = "#FF6666", na.rm = TRUE) +
-    ggplot2::labs(title = paste("Histogram and Density Plot of", variable), x = variable)
+    ggplot2::labs(title = paste("Histogram and Density Plot of", variable), x = variable,
+                  y = "Density")
   message("Histogram with Density Plot created.")
 
   # Create Q-Q Plot

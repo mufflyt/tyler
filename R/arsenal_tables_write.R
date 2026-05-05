@@ -14,6 +14,9 @@
 #' arsenal_tables_write2word(my_table, "output_table")
 #' }
 arsenal_tables_write2word <- function(object, filename, output_dir = NULL) {
+  if (!requireNamespace("arsenal", quietly = TRUE)) {
+    stop("Package 'arsenal' is required for arsenal_tables_write2word(). Install with: install.packages('arsenal')", call. = FALSE)
+  }
   # Validate input parameters
   if (!is.character(filename)) {
     stop("Error: 'filename' must be a character string.", call. = FALSE)
@@ -37,7 +40,7 @@ arsenal_tables_write2word <- function(object, filename, output_dir = NULL) {
       quiet = TRUE
     )
   }, error = function(e) {
-    stop("Error occurred while writing to Word document:", e$message, call. = FALSE)
+    stop("Error occurred while writing to Word document: ", e$message, call. = FALSE)
   })
 
   # Print the full path to the saved file
