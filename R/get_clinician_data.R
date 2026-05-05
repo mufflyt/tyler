@@ -31,11 +31,11 @@ retrieve_clinician_data <- function(input_data) {
       col_types = readr::cols(.default = readr::col_guess(), npi = readr::col_character())
     )
   } else {
-    stop("Input must be a dataframe or a file path to a CSV.")
+    stop("Input must be a dataframe or a file path to a CSV.", call. = FALSE)
   }
 
   if (!"npi" %in% names(clinician_df)) {
-    stop("Input data must contain an 'npi' column.")
+    stop("Input data must contain an 'npi' column.", call. = FALSE)
   }
 
   cleaned_df <- validate_and_remove_invalid_npi(clinician_df)

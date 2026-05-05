@@ -26,7 +26,7 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
     stop("Package 'censusapi' is required for get_census_data(). Install with: install.packages('censusapi')", call. = FALSE)
   }
   if (is.null(us_fips_list)) {
-    stop("`us_fips_list` must be a character vector of FIPS codes.")
+    stop("`us_fips_list` must be a character vector of FIPS codes.", call. = FALSE)
   }
 
   if (!length(us_fips_list)) {
@@ -34,11 +34,11 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
   }
 
   if (!is.character(us_fips_list)) {
-    stop("`us_fips_list` must be a character vector of FIPS codes.")
+    stop("`us_fips_list` must be a character vector of FIPS codes.", call. = FALSE)
   }
 
   if (!nzchar(api_key)) {
-    stop("Census API key required via argument or CENSUS_API_KEY env var.")
+    stop("Census API key required via argument or CENSUS_API_KEY env var.", call. = FALSE)
   }
 
   state_data <- list()
@@ -69,7 +69,7 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
       }
 
       if (!"block_group" %in% names(res)) {
-        stop("Census response did not include a `block group` column.")
+        stop("Census response did not include a `block group` column.", call. = FALSE)
       }
 
       res <- dplyr::rename(res, name = NAME)

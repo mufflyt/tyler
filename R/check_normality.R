@@ -27,7 +27,7 @@ check_normality <- function(data, variable) {
 
   # Extract the variable data and remove NA values
   if (!variable %in% names(data)) {
-    stop("Variable not found in data frame: ", variable)
+    stop("Variable not found in data frame: ", variable, call. = FALSE)
   }
 
   data_var <- stats::na.omit(data[[variable]])
@@ -35,10 +35,10 @@ check_normality <- function(data, variable) {
 
   # Check if the sample size is adequate for the Shapiro-Wilk test
   if (length(data_var) < 3) {
-    stop("Sample size must be at least 3 for the Shapiro-Wilk test.")
+    stop("Sample size must be at least 3 for the Shapiro-Wilk test.", call. = FALSE)
   }
   if (length(data_var) > 5000) {
-    stop("Sample size must be no more than 5000 for the Shapiro-Wilk test.")
+    stop("Sample size must be no more than 5000 for the Shapiro-Wilk test.", call. = FALSE)
   }
 
   # Check normality using Shapiro-Wilk test

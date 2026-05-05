@@ -25,7 +25,7 @@ map_create_acog_districts_sf <- function(acog_districts_file = NULL) {
   }
 
   if (!nzchar(acog_districts_file) || !file.exists(acog_districts_file)) {
-    stop("Could not locate the ACOG districts file at '", acog_districts_file, "'.")
+    stop("Could not locate the ACOG districts file at '", acog_districts_file, "'.", call. = FALSE)
   }
 
   districts <- readr::read_csv(acog_districts_file, show_col_types = FALSE, progress = FALSE)
@@ -36,7 +36,7 @@ map_create_acog_districts_sf <- function(acog_districts_file = NULL) {
   }
 
   if (!"State" %in% names(districts)) {
-    stop("The ACOG districts file must contain a 'State' column.")
+    stop("The ACOG districts file must contain a 'State' column.", call. = FALSE)
   }
 
   districts <- dplyr::mutate(
@@ -60,7 +60,7 @@ map_create_acog_districts_sf <- function(acog_districts_file = NULL) {
   states_with_districts <- dplyr::filter(states_with_districts, !is.na(ACOG_District))
 
   if (!nrow(states_with_districts)) {
-    stop("No matching states were found when joining Natural Earth geometries to the district table.")
+    stop("No matching states were found when joining Natural Earth geometries to the district table.", call. = FALSE)
   }
 
   states_with_districts <- dplyr::mutate(

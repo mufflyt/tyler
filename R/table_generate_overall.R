@@ -64,7 +64,7 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
 
   # Check if the data is empty
   if (nrow(data) == 0 || ncol(data) == 0) {
-    stop("The input data is empty.")
+    stop("The input data is empty.", call. = FALSE)
   }
 
   # Check if selected_columns argument is provided

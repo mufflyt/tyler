@@ -63,14 +63,14 @@ search_and_process_npi <- function(data,
                                    heartbeat_seconds = NULL,
                                    progress_log_format = c("text", "csv")) {
   if (!is.data.frame(data)) {
-    stop("Input 'data' must be a data frame.")
+    stop("Input 'data' must be a data frame.", call. = FALSE)
   }
 
   progress_log_format <- match.arg(progress_log_format)
   if (!is.null(heartbeat_seconds)) {
     if (!is.numeric(heartbeat_seconds) || length(heartbeat_seconds) != 1L ||
         is.na(heartbeat_seconds) || heartbeat_seconds <= 0) {
-      stop("`heartbeat_seconds` must be a single positive numeric value or NULL.")
+      stop("`heartbeat_seconds` must be a single positive numeric value or NULL.", call. = FALSE)
     }
   }
 
@@ -79,21 +79,21 @@ search_and_process_npi <- function(data,
   required_cols <- c("first", "last")
   missing_cols <- setdiff(required_cols, names(data))
   if (length(missing_cols)) {
-    stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "))
+    stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "), call. = FALSE)
   }
 
   # Validate that required columns contain actual data, not all NA (Bug #7 fix)
   if (nrow(data) > 0) {
     if (all(is.na(data$first))) {
-      stop("Column 'first' must contain non-missing values (currently all NA).")
+      stop("Column 'first' must contain non-missing values (currently all NA).", call. = FALSE)
     }
     if (all(is.na(data$last))) {
-      stop("Column 'last' must contain non-missing values (currently all NA).")
+      stop("Column 'last' must contain non-missing values (currently all NA).", call. = FALSE)
     }
     # Remove rows where both first and last are NA
     valid_rows <- !is.na(data$first) & !is.na(data$last)
     if (!any(valid_rows)) {
-      stop("No rows have both 'first' and 'last' name values. Cannot proceed with NPI search.")
+      stop("No rows have both 'first' and 'last' name values. Cannot proceed with NPI search.", call. = FALSE)
     }
     if (sum(!valid_rows) > 0) {
       warning(sprintf(

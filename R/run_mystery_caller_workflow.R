@@ -142,11 +142,11 @@ run_mystery_caller_workflow <- function(
   roster_names <- tibble::tibble()
   if (!is.null(name_data)) {
     if (!is.data.frame(name_data)) {
-      stop("`name_data` must be a data frame with `first` and `last` columns.")
+      stop("`name_data` must be a data frame with `first` and `last` columns.", call. = FALSE)
     }
     if (nrow(name_data)) {
       if (!all(c("first", "last") %in% names(name_data))) {
-        stop("`name_data` must contain columns named `first` and `last`.")
+        stop("`name_data` must contain columns named `first` and `last`.", call. = FALSE)
       }
       announce("Searching NPIs by name")
       args <- utils::modifyList(list(data = name_data), npi_search_args)

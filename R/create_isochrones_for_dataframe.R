@@ -35,14 +35,14 @@ create_isochrones_for_dataframe <- function(
   if (!requireNamespace("easyr", quietly = TRUE)) {
     stop("Package 'easyr' is required for create_isochrones_for_dataframe(). Install with: install.packages('easyr')", call. = FALSE)
   }
-  if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.")
+  if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
 
   hereR::set_key(api_key)
   dataframe <- easyr::read.any(input_file)
 
   # Check if "lat" and "long" columns exist
   if (!all(c("lat", "long") %in% colnames(dataframe))) {
-    stop("The dataframe must have 'lat' and 'long' columns.")
+    stop("The dataframe must have 'lat' and 'long' columns.", call. = FALSE)
   }
 
   # Validate CRS assumption: lat/long should be in WGS84 bounds (Bug #9 fix)
@@ -54,7 +54,7 @@ create_isochrones_for_dataframe <- function(
     stop(sprintf(
       "Error: %d latitude values are outside valid WGS84 range [-90, 90]. Check that coordinates are in decimal degrees.",
       n_invalid
-    ))
+    ), call. = FALSE)
   }
 
   if (any(invalid_lon, na.rm = TRUE)) {
@@ -62,7 +62,7 @@ create_isochrones_for_dataframe <- function(
     stop(sprintf(
       "Error: %d longitude values are outside valid WGS84 range [-180, 180]. Check that coordinates are in decimal degrees.",
       n_invalid
-    ))
+    ), call. = FALSE)
   }
 
   # Convert dataframe to sf object
@@ -72,7 +72,7 @@ create_isochrones_for_dataframe <- function(
 
   # Ensure it's an sf object
   if (!is(dataframe_sf, "sf")) {
-    stop("FYI: The file is not an sf object.")
+    stop("FYI: The file is not an sf object.", call. = FALSE)
   }
 
   dataframe <- dataframe_sf
@@ -96,7 +96,7 @@ create_isochrones_for_dataframe <- function(
   }
 
   if (!is.numeric(save_interval) || length(save_interval) != 1 || is.na(save_interval) || save_interval <= 0) {
-    stop("save_interval must be a positive number of seconds.")
+    stop("save_interval must be a positive number of seconds.", call. = FALSE)
   }
 
   if (is.null(output_dir)) {

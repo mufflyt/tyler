@@ -16,7 +16,7 @@
 arsenal_tables_write2word <- function(object, filename, output_dir = NULL) {
   # Validate input parameters
   if (!is.character(filename)) {
-    stop("Error: 'filename' must be a character string.")
+    stop("Error: 'filename' must be a character string.", call. = FALSE)
   }
 
   if (is.null(output_dir)) {
@@ -37,7 +37,7 @@ arsenal_tables_write2word <- function(object, filename, output_dir = NULL) {
       quiet = TRUE
     )
   }, error = function(e) {
-    stop("Error occurred while writing to Word document:", e$message)
+    stop("Error occurred while writing to Word document:", e$message, call. = FALSE)
   })
 
   # Print the full path to the saved file

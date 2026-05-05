@@ -185,7 +185,7 @@ search_by_taxonomy <- function(taxonomy_to_search,
               "NPI API response missing required columns: %s. Available columns: %s",
               paste(missing_cols, collapse = ", "),
               paste(names(data_taxonomy), collapse = ", ")
-            ))
+            ), call. = FALSE)
           }
 
           data_taxonomy <- dplyr::rename(

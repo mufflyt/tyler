@@ -35,7 +35,7 @@
 rename_columns_by_substring <- function(data, target_strings, new_names) {
   # Initial checks and setup
   if (length(target_strings) != length(new_names)) {
-    stop("target_strings and new_names must have the same length.")
+    stop("target_strings and new_names must have the same length.", call. = FALSE)
   }
 
   message("--- Starting to search and rename columns based on target substrings ---")
@@ -61,7 +61,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
           "Multiple columns with exact name '%s': %s. This should not happen - check for duplicate column names.",
           target_strings[i],
           paste(matched_cols, collapse = ", ")
-        ))
+        ), call. = FALSE)
       }
       # Rename the matching column
       names(data)[names(data) == matched_cols[1]] <- new_names[i]
@@ -136,7 +136,7 @@ clean_phase_2_data <- function(
   # Data loading and initial checks
   if (is.character(data_or_path)) {
     if (!file.exists(data_or_path)) {
-      stop("File does not exist at the specified path: ", data_or_path)
+      stop("File does not exist at the specified path: ", data_or_path, call. = FALSE)
     }
     input_format <- tyler_normalize_file_format(path = data_or_path)
     data <- tyler_read_table(data_or_path, format = input_format)
@@ -145,7 +145,7 @@ clean_phase_2_data <- function(
     data <- data_or_path
     message(sprintf("Loaded Phase 2 data from provided data frame with %d row(s) and %d column(s).", nrow(data), ncol(data)))
   } else {
-    stop("Data input must be either a dataframe or a valid file path.")
+    stop("Data input must be either a dataframe or a valid file path.", call. = FALSE)
   }
 
   validate_dataframe(data, name = "phase2_data")

@@ -64,13 +64,13 @@
 plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, color_by, output_dir = NULL) {
   # Load necessary packages
   if (!requireNamespace("emmeans", quietly = TRUE)) {
-    stop("Package 'emmeans' is required but not installed.")
+    stop("Package 'emmeans' is required but not installed.", call. = FALSE)
   }
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Package 'ggplot2' is required but not installed.")
+    stop("Package 'ggplot2' is required but not installed.", call. = FALSE)
   }
   if (!requireNamespace("dplyr", quietly = TRUE)) {
-    stop("Package 'dplyr' is required but not installed.")
+    stop("Package 'dplyr' is required but not installed.", call. = FALSE)
   }
 
   # Get the current timestamp for unique file naming
@@ -82,7 +82,7 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
     emmeans::emmeans(object = model_object, specs = specs, type = "response") %>%
       as.data.frame()
   }, error = function(e) {
-    stop("Error computing estimated marginal means: ", e$message)
+    stop("Error computing estimated marginal means: ", e$message, call. = FALSE)
   })
 
   # Log the retrieved data

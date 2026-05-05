@@ -55,7 +55,7 @@ create_isochrones <- function(location,
 # tyler_clear_isochrone_cache() can call memoise::forget() on it.
 .isochrone_memo <- memoise::memoise(function(location, range, posix_time, api_key) {
   if (api_key == "") {
-    stop("HERE API key is required via argument or HERE_API_KEY env var.")
+    stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
   }
 
   hereR::set_freemium(ans = FALSE)
@@ -86,7 +86,7 @@ create_isochrones <- function(location,
         dplyr::mutate(unique_id = dplyr::row_number())
 
       if (!all(sf::st_is_valid(temp))) {
-        stop("HERE API returned geometries that could not be validated.")
+        stop("HERE API returned geometries that could not be validated.", call. = FALSE)
       }
 
       temp <- sf::st_transform(temp, 4326)

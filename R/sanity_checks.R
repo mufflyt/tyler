@@ -28,7 +28,7 @@ tyler_check_no_limits <- function(data,
                                    min_expected = NULL,
                                    max_expected = NULL) {
   if (!is.data.frame(data)) {
-    stop(sprintf("'%s' must be a data frame, got: %s", context, class(data)[1]))
+    stop(sprintf("'%s' must be a data frame, got: %s", context, class(data)[1]), call. = FALSE)
   }
 
   n <- nrow(data)
@@ -126,7 +126,7 @@ tyler_scan_for_limits <- function(path = "R",
                                    recursive = TRUE,
                                    exclude_pattern = NULL) {
   if (!dir.exists(path)) {
-    stop(sprintf("Directory '%s' does not exist", path))
+    stop(sprintf("Directory '%s' does not exist", path), call. = FALSE)
   }
 
   # Anti-patterns to search for
@@ -286,7 +286,7 @@ tyler_check_api_response <- function(result,
                                      api_name = "API",
                                      tolerance = 0) {
   if (!is.data.frame(result)) {
-    stop(sprintf("%s returned non-dataframe result: %s", api_name, class(result)[1]))
+    stop(sprintf("%s returned non-dataframe result: %s", api_name, class(result)[1]), call. = FALSE)
   }
 
   actual <- nrow(result)
@@ -297,7 +297,7 @@ tyler_check_api_response <- function(result,
     stop(sprintf(
       "%s response count mismatch:\n  Expected: %d rows\n  Actual: %d rows\n  Difference: %d (%.1f%%)\n  This indicates API failure or partial response.",
       api_name, expected, actual, diff, pct_diff
-    ))
+    ), call. = FALSE)
   }
 
   if (diff > 0 && diff <= tolerance) {
@@ -361,7 +361,7 @@ tyler_check_no_data_loss <- function(before,
         operation, n_before, n_after, abs(actual_change),
         abs(actual_change) / n_before * 100,
         expected_change, tolerance
-      ))
+      ), call. = FALSE)
     } else {
       warning(sprintf(
         "UNEXPECTED ROW INCREASE in '%s':\n  Before: %d rows\n  After: %d rows\n  Added: %d rows (%.1f%%)\n  Expected change: %+d\n\nThis may indicate row duplication or incorrect joins.",

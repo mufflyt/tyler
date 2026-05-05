@@ -72,7 +72,8 @@ ensure_hrr_shapefile <- function(quiet = TRUE) {
     stop(
       "Failed to retrieve the HRR boundary shapefile. ",
       "Please try again or download it manually from ",
-      "https://data.dartmouthatlas.org/supplemental/."
+      "https://data.dartmouthatlas.org/supplemental/.",
+      call. = FALSE
     )
   }
 

@@ -89,7 +89,7 @@ clean_phase_1_results <- function(phase1_data,
       !requireNamespace("readr", quietly = TRUE) ||
       !requireNamespace("stringr", quietly = TRUE) ||
       !requireNamespace("humaniformat", quietly = TRUE)) {
-    stop("Required packages are not installed. Please install them using install.packages().")
+    stop("Required packages are not installed. Please install them using install.packages().", call. = FALSE)
   }
 
   announce <- function(...) {

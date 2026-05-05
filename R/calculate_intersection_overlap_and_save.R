@@ -37,16 +37,16 @@ calculate_intersection_overlap_and_save <- function(block_groups,
                                                     notify = TRUE) {
   # Parameter validation
   if (!inherits(block_groups, "sf")) {
-    stop("Error: 'block_groups' must be an sf object.")
+    stop("Error: 'block_groups' must be an sf object.", call. = FALSE)
   }
   if (!inherits(isochrones_joined, "sf")) {
-    stop("Error: 'isochrones_joined' must be an sf object.")
+    stop("Error: 'isochrones_joined' must be an sf object.", call. = FALSE)
   }
   if (!is.numeric(drive_time_minutes) || length(drive_time_minutes) != 1L || drive_time_minutes < 0) {
-    stop("Error: 'drive_time_minutes' must be a single non-negative numeric value.")
+    stop("Error: 'drive_time_minutes' must be a single non-negative numeric value.", call. = FALSE)
   }
   if (!is.character(output_dir)) {
-    stop("Error: 'output_dir' must be a character string.")
+    stop("Error: 'output_dir' must be a character string.", call. = FALSE)
   }
 
   validated <- validate_sf_inputs(
@@ -66,20 +66,20 @@ calculate_intersection_overlap_and_save <- function(block_groups,
 
   # Year alignment enforcement
   if (!"data_year" %in% names(isochrones_joined)) {
-    stop("`isochrones_joined` must include a `data_year` column for provider vintage alignment.")
+    stop("`isochrones_joined` must include a `data_year` column for provider vintage alignment.", call. = FALSE)
   }
   if (!"vintage" %in% names(block_groups)) {
-    stop("`block_groups` must include a `vintage` column indicating ACS vintage.")
+    stop("`block_groups` must include a `vintage` column indicating ACS vintage.", call. = FALSE)
   }
 
   provider_years <- stats::na.omit(unique(isochrones_joined$data_year))
   acs_years <- stats::na.omit(unique(block_groups$vintage))
 
   if (length(provider_years) != 1L) {
-    stop("`isochrones_joined$data_year` must contain a single, non-missing year value.")
+    stop("`isochrones_joined$data_year` must contain a single, non-missing year value.", call. = FALSE)
   }
   if (length(acs_years) != 1L) {
-    stop("`block_groups$vintage` must contain a single, non-missing year value.")
+    stop("`block_groups$vintage` must contain a single, non-missing year value.", call. = FALSE)
   }
 
   provider_year <- provider_years[[1]]
@@ -92,7 +92,8 @@ calculate_intersection_overlap_and_save <- function(block_groups,
           "Provider data_year (%s) and ACS vintage (%s) differ. Provide matching vintages.",
           provider_year,
           acs_year
-        )
+        ),
+        call. = FALSE
       )
     }
 
@@ -105,17 +106,18 @@ calculate_intersection_overlap_and_save <- function(block_groups,
           ),
           provider_year,
           acs_year
-        )
+        ),
+        call. = FALSE
       )
     }
 
     block_groups <- crosswalk(block_groups, list(from = acs_year, to = provider_year))
 
     if (!inherits(block_groups, "sf")) {
-      stop("`crosswalk` must return an sf object.")
+      stop("`crosswalk` must return an sf object.", call. = FALSE)
     }
     if (!"vintage" %in% names(block_groups)) {
-      stop("The object returned by `crosswalk` must include a `vintage` column.")
+      stop("The object returned by `crosswalk` must include a `vintage` column.", call. = FALSE)
     }
 
     validated_crosswalk <- validate_sf_inputs(
@@ -135,7 +137,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
 
     acs_years <- stats::na.omit(unique(block_groups$vintage))
     if (length(acs_years) != 1L || !identical(acs_years[[1]], provider_year)) {
-      stop("`crosswalk` did not return ACS data aligned to the provider year.")
+      stop("`crosswalk` did not return ACS data aligned to the provider year.", call. = FALSE)
     }
   }
 
@@ -146,7 +148,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   isochrones_filtered <- isochrones_joined[isochrones_joined$drive_time == drive_time_minutes, , drop = FALSE]
 
   if (nrow(isochrones_filtered) == 0) {
-    stop("Error: no isochrones found for the requested drive time.")
+    stop("Error: no isochrones found for the requested drive time.", call. = FALSE)
   }
 
   isochrones_filtered <- sf::st_union(isochrones_filtered)
@@ -171,12 +173,12 @@ calculate_intersection_overlap_and_save <- function(block_groups,
 
   # Validate GEOID exists in intersection result (Bug #12 fix)
   if (!"GEOID" %in% names(intersect)) {
-    stop("Error: Intersection result missing required 'GEOID' column. Check that block_groups contains GEOID.")
+    stop("Error: Intersection result missing required 'GEOID' column. Check that block_groups contains GEOID.", call. = FALSE)
   }
 
   # Validate GEOID exists in block_groups (Bug #12 fix)
   if (!"GEOID" %in% names(block_groups_proj)) {
-    stop("Error: block_groups missing required 'GEOID' column.")
+    stop("Error: block_groups missing required 'GEOID' column.", call. = FALSE)
   }
 
   # Data frame version for joins

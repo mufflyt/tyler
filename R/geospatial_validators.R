@@ -25,7 +25,7 @@ validate_sf_inputs <- function(...,
                                context = "geospatial operation") {
   objects <- list(...)
   if (!length(objects)) {
-    stop("No sf objects supplied for validation.")
+    stop("No sf objects supplied for validation.", call. = FALSE)
   }
 
   object_names <- names(objects)
@@ -44,7 +44,7 @@ validate_sf_inputs <- function(...,
         expected_types[missing_names] <- expected_types[[1]]
       }
     } else {
-      stop("`expected_types` must be a character vector or named list.")
+      stop("`expected_types` must be a character vector or named list.", call. = FALSE)
     }
   }
 
@@ -55,7 +55,7 @@ validate_sf_inputs <- function(...,
   }
 
   if (is.na(ref_crs)) {
-    stop(sprintf("Reference CRS is missing for %s.", context))
+    stop(sprintf("Reference CRS is missing for %s.", context), call. = FALSE)
   }
 
   # Validate CRS is a recognized coordinate system
@@ -64,24 +64,24 @@ validate_sf_inputs <- function(...,
     tryCatch({
       bbox_test <- sf::st_bbox(sf::st_point(c(0, 0)) %>% sf::st_sfc(crs = ref_crs))
       if (any(is.infinite(bbox_test) | is.na(bbox_test))) {
-        stop(sprintf("Invalid CRS bounds detected for %s.", context))
+        stop(sprintf("Invalid CRS bounds detected for %s.", context), call. = FALSE)
       }
     }, error = function(e) {
-      stop(sprintf("CRS validation failed for %s: %s", context, e$message))
+      stop(sprintf("CRS validation failed for %s: %s", context, e$message), call. = FALSE)
     })
   }
 
   sanitize_object <- function(obj, name) {
     if (!inherits(obj, "sf")) {
-      stop(sprintf("`%s` must be an sf object for %s.", name, context))
+      stop(sprintf("`%s` must be an sf object for %s.", name, context), call. = FALSE)
     }
     if (!nrow(obj)) {
-      stop(sprintf("`%s` has no rows; cannot proceed with %s.", name, context))
+      stop(sprintf("`%s` has no rows; cannot proceed with %s.", name, context), call. = FALSE)
     }
 
     obj_crs <- sf::st_crs(obj)
     if (is.na(obj_crs)) {
-      stop(sprintf("`%s` is missing a defined CRS for %s.", name, context))
+      stop(sprintf("`%s` is missing a defined CRS for %s.", name, context), call. = FALSE)
     }
 
     if (!is.null(target_crs)) {
@@ -92,13 +92,13 @@ validate_sf_inputs <- function(...,
 
     geom <- sf::st_geometry(obj)
     if (is.null(geom)) {
-      stop(sprintf("`%s` lacks a geometry column required for %s.", name, context))
+      stop(sprintf("`%s` lacks a geometry column required for %s.", name, context), call. = FALSE)
     }
 
     empty_idx <- which(sf::st_is_empty(geom))
     if (length(empty_idx)) {
       stop(sprintf("`%s` contains empty geometries (rows: %s) incompatible with %s.",
-                   name, paste(empty_idx, collapse = ", "), context))
+                   name, paste(empty_idx, collapse = ", "), context), call. = FALSE)
     }
 
     invalid_idx <- which(!sf::st_is_valid(obj))
@@ -108,11 +108,11 @@ validate_sf_inputs <- function(...,
         still_invalid <- which(!sf::st_is_valid(obj))
         if (length(still_invalid)) {
           stop(sprintf("`%s` has geometries that remain invalid after repair (rows: %s) during %s.",
-                       name, paste(still_invalid, collapse = ", "), context))
+                       name, paste(still_invalid, collapse = ", "), context), call. = FALSE)
         }
       } else {
         stop(sprintf("`%s` contains invalid geometries (rows: %s) disallowed in %s.",
-                     name, paste(invalid_idx, collapse = ", "), context))
+                     name, paste(invalid_idx, collapse = ", "), context), call. = FALSE)
       }
     }
 
@@ -130,17 +130,17 @@ validate_sf_inputs <- function(...,
             paste(geom_types, collapse = ", "),
             paste(allowed_types, collapse = ", "),
             context
-          ))
+          ), call. = FALSE)
         }
       }
     }
 
     bbox <- sf::st_bbox(obj)
     if (any(!is.finite(bbox))) {
-      stop(sprintf("`%s` has a bounding box with non-finite values in %s.", name, context))
+      stop(sprintf("`%s` has a bounding box with non-finite values in %s.", name, context), call. = FALSE)
     }
     if (bbox["xmin"] >= bbox["xmax"] || bbox["ymin"] >= bbox["ymax"]) {
-      stop(sprintf("`%s` has a degenerate bounding box incompatible with %s.", name, context))
+      stop(sprintf("`%s` has a degenerate bounding box incompatible with %s.", name, context), call. = FALSE)
     }
 
     obj
@@ -152,7 +152,7 @@ validate_sf_inputs <- function(...,
     bbox_sfc <- lapply(objects, function(x) sf::st_as_sfc(sf::st_bbox(x)))
     bbox_intersection <- Reduce(sf::st_intersection, bbox_sfc)
     if (sf::st_is_empty(bbox_intersection)) {
-      stop(sprintf("Bounding boxes of supplied objects do not overlap for %s.", context))
+      stop(sprintf("Bounding boxes of supplied objects do not overlap for %s.", context), call. = FALSE)
     }
   }
 

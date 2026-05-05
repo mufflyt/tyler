@@ -31,10 +31,10 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
     stop("Package 'leaflet' is required for map_create_block_group_overlap(). Install with: install.packages('leaflet')", call. = FALSE)
   }
   if (!inherits(bg_data, "sf")) {
-    stop("`bg_data` must be an sf object with polygon geometries.")
+    stop("`bg_data` must be an sf object with polygon geometries.", call. = FALSE)
   }
   if (!inherits(isochrones_data, "sf")) {
-    stop("`isochrones_data` must be an sf object with polygon geometries.")
+    stop("`isochrones_data` must be an sf object with polygon geometries.", call. = FALSE)
   }
 
   validated <- validate_sf_inputs(
@@ -54,7 +54,7 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   isochrones_data <- lwgeom::st_orient(isochrones_data)
 
   if (!"drive_time" %in% names(isochrones_data)) {
-    stop("`isochrones_data` must include a `drive_time` column in minutes.")
+    stop("`isochrones_data` must include a `drive_time` column in minutes.", call. = FALSE)
   }
 
   palette <- c(

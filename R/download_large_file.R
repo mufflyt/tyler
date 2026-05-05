@@ -30,10 +30,10 @@
 #' @seealso [utils::download.file()]
 download_large_file <- function(url, dest, overwrite = FALSE, quiet = TRUE) {
   if (!is.character(url) || length(url) != 1L || !nzchar(url)) {
-    stop("`url` must be a non-empty character string.")
+    stop("`url` must be a non-empty character string.", call. = FALSE)
   }
   if (!is.character(dest) || length(dest) != 1L || !nzchar(dest)) {
-    stop("`dest` must be a non-empty character string.")
+    stop("`dest` must be a non-empty character string.", call. = FALSE)
   }
 
   dest <- normalizePath(dest, mustWork = FALSE)
@@ -73,7 +73,7 @@ download_large_file <- function(url, dest, overwrite = FALSE, quiet = TRUE) {
         unlink(dest_tmp)
       }
       if (!file.rename(dest, dest_tmp)) {
-        stop("Failed to move existing file to temporary path for resuming download.")
+        stop("Failed to move existing file to temporary path for resuming download.", call. = FALSE)
       }
     }
   }
@@ -84,14 +84,14 @@ download_large_file <- function(url, dest, overwrite = FALSE, quiet = TRUE) {
 
   if (!file.exists(dest_tmp)) {
     if (!file.create(dest_tmp)) {
-      stop(sprintf("Unable to create temporary file '%s'.", dest_tmp))
+      stop(sprintf("Unable to create temporary file '%s'.", dest_tmp), call. = FALSE)
     }
     on.exit(if (file.exists(dest_tmp) && !download_success) unlink(dest_tmp), add = TRUE)
   }
 
   lock_created <- file.create(lock_path)
   if (!lock_created && !file.exists(lock_path)) {
-    stop(sprintf("Unable to create lock file '%s'.", lock_path))
+    stop(sprintf("Unable to create lock file '%s'.", lock_path), call. = FALSE)
   }
   on.exit(if (file.exists(lock_path)) unlink(lock_path), add = TRUE)
 
@@ -106,7 +106,7 @@ download_large_file <- function(url, dest, overwrite = FALSE, quiet = TRUE) {
   }
 
   if (!download_success) {
-    stop(sprintf("Failed to download '%s' to '%s'.", url, dest))
+    stop(sprintf("Failed to download '%s' to '%s'.", url, dest), call. = FALSE)
   }
 
   if (file.exists(dest)) {
@@ -114,7 +114,7 @@ download_large_file <- function(url, dest, overwrite = FALSE, quiet = TRUE) {
   }
 
   if (!file.rename(dest_tmp, dest)) {
-    stop("Unable to move downloaded file into place.")
+    stop("Unable to move downloaded file into place.", call. = FALSE)
   }
 
   dest

@@ -42,7 +42,7 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
   message(sprintf("Loaded %d row(s) for genderization from %s.", nrow(gender_Physicians), input_csv))
 
   if (!"first_name" %in% names(gender_Physicians)) {
-    stop("Input data must include a 'first_name' column.")
+    stop("Input data must include a 'first_name' column.", call. = FALSE)
   }
 
   gender_Physicians <- gender_Physicians %>%

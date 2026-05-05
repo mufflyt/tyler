@@ -49,7 +49,7 @@ summarize_census_data <- function(census_df,
                                   reproductive_age_vars = sprintf("B01001_%03dE", 30:38)) {
 
   if (!is.data.frame(census_df)) {
-    stop("`census_df` must be a data frame.")
+    stop("`census_df` must be a data frame.", call. = FALSE)
   }
 
   census_tbl <- tibble::as_tibble(census_df)
@@ -62,12 +62,13 @@ summarize_census_data <- function(census_df,
   missing_required <- setdiff(required_columns, names(census_tbl))
 
   if (length(missing_required)) {
-    stop("Missing required columns: ", paste(missing_required, collapse = ", "), ".")
+    stop("Missing required columns: ", paste(missing_required, collapse = ", "), ".", call. = FALSE)
   }
 
   if (length(group_vars) && !all(group_vars %in% names(census_tbl))) {
     stop("Grouping variables not found in census data: ",
-      paste(setdiff(group_vars, names(census_tbl)), collapse = ", ")
+      paste(setdiff(group_vars, names(census_tbl)), collapse = ", "),
+      call. = FALSE
     )
   }
 
@@ -162,20 +163,20 @@ plot_census_age_distribution <- function(census_df,
                                           verbose = TRUE) {
 
   if (!is.data.frame(census_df)) {
-    stop("`census_df` must be a data frame.")
+    stop("`census_df` must be a data frame.", call. = FALSE)
   }
 
   census_tbl <- tibble::as_tibble(census_df)
 
   if (!nrow(census_tbl)) {
-    stop("`census_df` must contain at least one row to create a plot.")
+    stop("`census_df` must contain at least one row to create a plot.", call. = FALSE)
   }
 
   age_vars <- sprintf("B01001_%03dE", 27:49)
   available_age_vars <- intersect(age_vars, names(census_tbl))
 
   if (!length(available_age_vars)) {
-    stop("Female age estimate columns (B01001_027E:B01001_049E) were not found.")
+    stop("Female age estimate columns (B01001_027E:B01001_049E) were not found.", call. = FALSE)
   }
 
   census_tbl <- dplyr::mutate(
@@ -227,11 +228,11 @@ plot_census_age_distribution <- function(census_df,
 
   if (!is.null(group_var)) {
     if (length(group_var) != 1L) {
-      stop("`group_var` must be a single column name or NULL.")
+      stop("`group_var` must be a single column name or NULL.", call. = FALSE)
     }
 
     if (!group_var %in% names(census_tbl)) {
-      stop("`group_var` not found in census data: ", group_var)
+      stop("`group_var` not found in census data: ", group_var, call. = FALSE)
     }
 
     aggregated <- age_long |>

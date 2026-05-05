@@ -35,7 +35,7 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
   # Validate input data or read from file path
   if (is.character(data_or_path)) {
     if (!base::file.exists(data_or_path)) {
-      stop("File does not exist at the specified path: ", data_or_path)
+      stop("File does not exist at the specified path: ", data_or_path, call. = FALSE)
     }
     ext <- tolower(tools::file_ext(data_or_path))
     if (ext %in% c("csv", "parquet")) {
@@ -44,23 +44,23 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
       data <- readRDS(data_or_path)
     } else if (ext %in% c("xls", "xlsx")) {
       if (!requireNamespace("readxl", quietly = TRUE)) {
-        stop("Reading Excel workbooks requires the 'readxl' package. Install it with install.packages('readxl').")
+        stop("Reading Excel workbooks requires the 'readxl' package. Install it with install.packages('readxl').", call. = FALSE)
       }
       data <- readxl::read_excel(data_or_path)
     } else {
-      stop("Unsupported file extension: ", ext, ". Provide a CSV, Parquet, RDS, or Excel file.")
+      stop("Unsupported file extension: ", ext, ". Provide a CSV, Parquet, RDS, or Excel file.", call. = FALSE)
     }
   } else if (is.data.frame(data_or_path)) {
     data <- data_or_path
   } else {
-    stop("Data input must be either a dataframe or a valid file path.")
+    stop("Data input must be either a dataframe or a valid file path.", call. = FALSE)
   }
 
   # Check for the presence of necessary columns including 'insurance'
   required_columns <- c("for_redcap", "id", "doctor_id", "insurance")
   missing_columns <- base::setdiff(required_columns, base::names(data))
   if (length(missing_columns) > 0) {
-    stop("The input data is missing the following columns: ", base::paste(missing_columns, collapse = ", "))
+    stop("The input data is missing the following columns: ", base::paste(missing_columns, collapse = ", "), call. = FALSE)
   }
   message(
     sprintf(
@@ -72,7 +72,7 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
 
   # Ensure that specified insurance types are valid
   if (!all(insurance_order %in% unique(data$insurance))) {
-    stop("Specified insurance_order contains values not present in the data.")
+    stop("Specified insurance_order contains values not present in the data.", call. = FALSE)
   }
 
   # Create a ranking based on the insurance order for sorting
@@ -90,7 +90,7 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
 
   # Check if lab_assistant_names is provided and has at least two names
   if (length(lab_assistant_names) < 2) {
-    stop("Please provide at least two lab assistant names for the splits.")
+    stop("Please provide at least two lab assistant names for the splits.", call. = FALSE)
   }
   message(
     sprintf(
@@ -118,7 +118,7 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
     tryCatch({
       fs::dir_create(output_directory, recursive = recursive_create)
     }, error = function(e) {
-      stop("Failed to create output directory. Check directory permissions and try again.")
+      stop("Failed to create output directory. Check directory permissions and try again.", call. = FALSE)
     })
   }
 
@@ -130,7 +130,7 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
     openxlsx::write.xlsx(data, complete_output_file)
     message(sprintf("Saved unsplit roster (%d row(s)) to: %s", nrow(data), complete_output_file))
   }, error = function(e) {
-    stop("Error saving the complete file. Check if the output directory is writable.")
+    stop("Error saving the complete file. Check if the output directory is writable.", call. = FALSE)
   })
 
   # Split the data into parts based on lab assistants and save each part
@@ -149,7 +149,7 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
         output_file
       ))
     }, error = function(e) {
-      stop("Error saving split data for ", lab_assistant_name, ". Check if the output directory is writable.")
+      stop("Error saving split data for ", lab_assistant_name, ". Check if the output directory is writable.", call. = FALSE)
     })
     split_paths[[i]] <- output_file
   }
