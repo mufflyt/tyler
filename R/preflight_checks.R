@@ -146,7 +146,7 @@ tyler_preflight_check <- function(input_data,
   message("")
   message("\U0001F511 Checking API keys...")
 
-  if (!is.null(google_maps_api_key) && nzchar(google_maps_api_key)) {
+  if (!is.null(google_maps_api_key) && !is.na(google_maps_api_key) && nzchar(google_maps_api_key)) {
     if (check_apis) {
       google_check <- tyler_validate_google_api(google_maps_api_key)
       if (google_check$valid) {
@@ -161,7 +161,7 @@ tyler_preflight_check <- function(input_data,
     warnings <- c(warnings, "No Google Maps API key provided (geocoding will fail)")
   }
 
-  if (!is.null(here_api_key) && nzchar(here_api_key)) {
+  if (!is.null(here_api_key) && !is.na(here_api_key) && nzchar(here_api_key)) {
     if (check_apis) {
       here_check <- tyler_validate_here_api(here_api_key)
       if (here_check$valid) {
