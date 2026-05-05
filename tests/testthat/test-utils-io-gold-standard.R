@@ -150,3 +150,5 @@ test_that("tyler_require_arrow - errors with install message when arrow absent",
   skip_if(requireNamespace("arrow", quietly = TRUE), "arrow is installed")
   expect_error(tyler_require_arrow(), "arrow")
 })
+test_that("tyler_read_table normalizes numeric-looking npi columns to character digits", {
+  writeLines(c("npi", "1922051358"), tmp)
