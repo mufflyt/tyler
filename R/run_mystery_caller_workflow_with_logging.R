@@ -177,11 +177,10 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
 
   tryCatch({
     isochrone_data <- create_isochrones_for_dataframe(
-      dataframe = data,
+      input_file = data,
       api_key = here_api_key,
-      range_in_seconds = drive_time_minutes * 60,
-      output_dir = file.path(output_dir, "isochrones"),
-      notify = FALSE
+      breaks = drive_time_minutes * 60,
+      output_dir = file.path(output_dir, "isochrones")
     )
 
     tyler_log_step_complete()
@@ -206,10 +205,8 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
 
     tryCatch({
       overlap_result <- calculate_intersection_overlap_and_save(
-        isochrones = data,
+        isochrones_joined = data,
         drive_time_minutes = drive_time,
-        provider_year = census_year,
-        acs_year = census_year,
         output_dir = output_dir
       )
 

@@ -181,7 +181,7 @@ tyler_check_data_completeness <- function(data, required = NULL, id_cols = NULL,
     )
   }
 
-  overall_score <- mean(summary$completeness)
+  overall_score <- mean(summary$completeness, na.rm = TRUE)
   quality <- tyler_quality_tier(overall_score, thresholds = thresholds)
 
   list(summary = summary, quality = quality, score = overall_score)

@@ -309,7 +309,7 @@ tyler_preflight_check <- function(input_data,
     if (data_check$success) {
       message(sprintf("  Ready to process %s records",
                      format(data_check$n_rows, big.mark = ",")))
-      if (estimate_resources) {
+      if (estimate_resources && exists("estimates", inherits = FALSE)) {
         message(sprintf("  Estimated time: %s", estimates$runtime_str))
         message(sprintf("  Estimated memory: %s", estimates$memory_str))
       }

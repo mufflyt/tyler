@@ -135,7 +135,7 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
 
   plot_data <- pred_data %>%
     dplyr::group_by(int_var, var_interest) %>%
-    dplyr::summarise(mean_pred = mean(pred), .groups = 'drop')
+    dplyr::summarise(mean_pred = mean(pred, na.rm = TRUE), .groups = 'drop')
 
   p <- ggplot(plot_data, aes(x = int_var, y = mean_pred, color = var_interest)) +
     geom_point() +
