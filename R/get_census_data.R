@@ -37,7 +37,7 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
     stop("`us_fips_list` must be a character vector of FIPS codes.", call. = FALSE)
   }
 
-  if (!nzchar(api_key)) {
+  if (is.na(api_key) || !nzchar(api_key)) {
     stop("Census API key required via argument or CENSUS_API_KEY env var.", call. = FALSE)
   }
 

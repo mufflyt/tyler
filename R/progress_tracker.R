@@ -164,7 +164,9 @@ progress_tracker_fail <- function(tracker, step, reason = NULL) {
   env <- tracker$env
   env$records$status[idx] <- "failed"
   env$records$finished_at[idx] <- Sys.time()
-  env$records$note[idx] <- reason
+  if (!is.null(reason)) {
+    env$records$note[idx] <- reason
+  }
   .tracker_log(tracker, sprintf("Failed %s%s", step, if (!is.null(reason)) paste0(": ", reason) else ""), force = TRUE)
   .tracker_emit_update(tracker, force = TRUE)
   invisible(tracker)
