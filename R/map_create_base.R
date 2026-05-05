@@ -65,7 +65,6 @@ map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
 #' @return Invisibly returns the Leaflet map object.
 #'
 #' @importFrom viridis viridis
-#' @importFrom webshot webshot
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom dplyr mutate
 #'

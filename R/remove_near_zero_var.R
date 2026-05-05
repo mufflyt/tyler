@@ -13,9 +13,8 @@
 #' new_data <- remove_near_zero_var(data_frame)
 #' }
 #'
-#'@importFrom caret nearZeroVar
-#'@importFrom glue glue
-#'@importFrom dplyr select
+#' @importFrom glue glue
+#' @importFrom dplyr select
 #'
 #' @export
 remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
