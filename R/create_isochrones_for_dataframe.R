@@ -38,7 +38,14 @@ create_isochrones_for_dataframe <- function(
   if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
 
   hereR::set_key(api_key)
-  dataframe <- easyr::read.any(input_file)
+  if (is.data.frame(input_file)) {
+    dataframe <- input_file
+  } else {
+    dataframe <- easyr::read.any(input_file)
+  }
+
+  # Normalise column names before validation so that "LAT"/"LONG" etc. are accepted
+  dataframe <- janitor::clean_names(dataframe)
 
   # Check if "lat" and "long" columns exist
   if (!all(c("lat", "long") %in% colnames(dataframe))) {
@@ -65,10 +72,8 @@ create_isochrones_for_dataframe <- function(
     ), call. = FALSE)
   }
 
-  # Convert dataframe to sf object
-  dataframe_sf <- dataframe %>%
-    janitor::clean_names() %>%
-    sf::st_as_sf(coords = c("long", "lat"), crs = 4326)
+  # Convert dataframe to sf object (clean_names already applied above)
+  dataframe_sf <- sf::st_as_sf(dataframe, coords = c("long", "lat"), crs = 4326)
 
   # Ensure it's an sf object
   if (!is(dataframe_sf, "sf")) {

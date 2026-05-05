@@ -191,6 +191,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
 
   # Write the intersection shapefile
   output_shapefile <- file.path(output_dir, sprintf("intersect_%s_minutes.shp", drive_time_minutes))
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   sf::st_write(sf::st_transform(intersect, 4326), output_shapefile, append = FALSE)
   message("Intersection calculated and saved successfully.")
 
