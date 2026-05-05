@@ -1,13 +1,10 @@
 # Build and deploy pkgdown site to GitHub Pages
 # Temporary: runs on push to bypass R-CMD-check dependency
 # Based on: https://github.com/r-lib/actions/tree/v2/examples
+on:
+  workflow_dispatch:
 
 name: pkgdown
-
-on:
-  push:
-    branches: [main, master]
-  workflow_dispatch:
 
 permissions:
   contents: write
