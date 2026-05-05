@@ -11,7 +11,13 @@
 #' @param drive_time_minutes Drive time breaks (default: c(30, 60, 120, 180))
 #' @param census_year Census data year (default: 2020)
 #' @param log_file Optional path to save log file (default: auto-generated)
-#' @return Final results data frame
+#' @param skip_preflight Logical; if `TRUE`, skip preflight checks. This is
+#'   primarily intended for debugging and is not recommended for production.
+#' @return Invisibly returns the final processed data frame after NPI lookup,
+#'   geocoding, isochrone generation, and overlap calculation.
+#' @seealso [run_mystery_caller_workflow()], [tyler_preflight_check()],
+#'   [tyler_workflow_start()]
+#' @family workflow helpers
 #'
 #' @examples
 #' \dontrun{
@@ -42,7 +48,6 @@
 #' # ...
 #' }
 #'
-#' @param skip_preflight Skip preflight checks (not recommended)
 #' @export
 run_mystery_caller_workflow_with_logging <- function(input_data,
                                                       output_dir,
