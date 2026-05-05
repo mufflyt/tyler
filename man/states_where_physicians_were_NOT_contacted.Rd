@@ -22,6 +22,13 @@ were not successfully contacted and those that were included. It also reports ho
 physicians were successfully reached by filtering to rows with affirmative contact indicators
 (e.g., "Yes" values in \code{contact_office} or \code{included_in_study}).
 }
+\details{
+Contact success is inferred from \code{contact_office} and \code{included_in_study} when those columns are present. Accepted positive values include logical \code{TRUE}, non-zero numeric values, and case-insensitive text variants such as \code{"yes"}, \code{"y"}, \code{"true"}, and \code{"1"}.
+}
+\seealso{
+\code{\link{summarize_census_data}()}, \code{\link{retrieve_clinician_data}()}, \code{\link{clean_phase_1_results}()}
+}
+\concept{study summary helpers}
 \examples{
 # Example with provided all_states
 filtered_data <- data.frame(state = c("California", "New York", "Texas"))
@@ -43,4 +50,4 @@ filtered_data <- data.frame(state = c("California", "New York", "Texas", "Nevada
 states_where_physicians_were_NOT_contacted(filtered_data)
 
 }
-\concept{summary}
+

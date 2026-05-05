@@ -19,14 +19,15 @@ This function takes a data frame containing 'npi' and 'name' columns and creates
 The table includes the count of observations for each 'npi' and 'name' combination where the count is greater than 2.
 The resulting table is saved as a CSV file.
 }
+\details{
+This helper is designed for rapid manual QA during mystery caller roster preparation. It aggregates duplicate \code{npi}-\code{name} combinations, retains only combinations with more than two rows, writes a CSV artifact, and returns the same filtered table for programmatic checks.
+}
 \examples{
 \dontrun{
 save_quality_check_table(my_data, "qc.csv")
 }
 }
 \seealso{
-Other utilities: 
-\code{\link{download_large_file}()},
-\code{\link{format_pct}()}
+\code{\link{validate_dataframe}()}, \code{\link{tyler_check_no_data_loss}()}, \code{\link{split_and_save}()}
 }
-\concept{utilities}
+\concept{quality assurance helpers}

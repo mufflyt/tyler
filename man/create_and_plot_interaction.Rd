@@ -46,7 +46,13 @@ The function performs the following steps:
 }
 
 This function is useful in scenarios where you want to examine the interaction between two categorical variables and their combined effect on a count-based response variable (e.g., the number of business days until an appointment). It can handle complex data structures and controls for variability across groups using random intercepts.
+
+Model fitting uses \code{\link[lme4:glmer]{lme4::glmer()}} with a Poisson log link and \code{nAGQ = 0} for speed. The saved plot file is named \code{interaction_<interaction_variable>_<variable_of_interest>.png} in \code{output_path}.
 }
+\seealso{
+\code{\link{plot_and_save_emmeans}()}, \code{\link{create_formula}()}, \code{\link{check_normality}()}
+}
+\concept{modeling and inference helpers}
 \examples{
 \dontrun{
 # Example 1: Analyzing the effect of gender and appointment center on wait times
