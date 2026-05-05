@@ -18,6 +18,7 @@ map_create_leaflet_base <- function() {
   map <- leaflet::leaflet() %>%
     # Add CartoDB Voyager tiles as the base tile layer
     leaflet::addProviderTiles("CartoDB.Voyager", group = "CartoDB Voyager") %>%
+    leaflet::addProviderTiles("Stamen.TonerLite", group = "Toner by Stamen") %>%
     # Clear any previously set bounds
     leaflet::clearBounds() %>%
     # Clear any previously set markers
@@ -28,12 +29,8 @@ map_create_leaflet_base <- function() {
     leaflet::setView(lat = 39.8282, lng = -98.5795, zoom = 3) %>%
     # Add a layers control for selecting different base layers
     leaflet::addLayersControl(
-      baseGroups = c("CartoDB Voyager", "Toner by Stamen"),  # Base layer options
-      options = leaflet::layersControlOptions(
-        collapsed = FALSE,  # Keep the layers control expanded
-        zoomToLimits = TRUE  # Zoom to the extent of the selected layer
-      ),
-      overlayGroups = NULL  # No overlay groups for this map
+      baseGroups = c("CartoDB Voyager", "Toner by Stamen"),
+      options = leaflet::layersControlOptions(collapsed = FALSE)
     ) %>%
     # Add default map tiles with caching and cross-origin support
     leaflet::addTiles(options = leaflet::tileOptions(useCache = TRUE, crossOrigin = TRUE))
