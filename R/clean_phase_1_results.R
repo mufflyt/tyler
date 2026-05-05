@@ -153,7 +153,12 @@ clean_phase_1_results <- function(phase1_data,
   }
 
   announce("Converting column types...")
+  npi_col_before_clean <- names(phase1_data)[tolower(names(phase1_data)) == "npi"]
   phase1_data <- readr::type_convert(phase1_data)
+
+  if (length(npi_col_before_clean) == 1 && npi_col_before_clean %in% names(phase1_data)) {
+    phase1_data[[npi_col_before_clean]] <- trimws(format(phase1_data[[npi_col_before_clean]], scientific = FALSE, trim = TRUE))
+  }
 
   announce("Cleaning column names...")
   phase1_data <- janitor::clean_names(phase1_data, case = "snake")
