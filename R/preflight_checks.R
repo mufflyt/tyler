@@ -67,6 +67,17 @@ tyler_preflight_check <- function(input_data,
 
   errors <- character()
   warnings <- character()
+  append_error <- function(msg) {
+    errors <<- c(errors, msg)
+  }
+  append_warning <- function(msg) {
+    warnings <<- c(warnings, msg)
+  }
+  api_errors <- character()
+  append_api_error <- function(msg) {
+    api_errors <<- c(api_errors, msg)
+    append_error(msg)
+  }
 
   # ==================== Check 1: Input Data ====================
   message("\U0001F4CA Checking input data...")
@@ -74,7 +85,7 @@ tyler_preflight_check <- function(input_data,
   data_check <- tryCatch({
     if (is.character(input_data)) {
       if (!file.exists(input_data)) {
-        errors <- c(errors, sprintf("Input file not found: %s", input_data))
+        append_error(sprintf("Input file not found: %s", input_data))
         list(success = FALSE, n_rows = 0, data = NULL)
       } else {
         data <- tyler_read_table(input_data)
@@ -90,11 +101,11 @@ tyler_preflight_check <- function(input_data,
                      format(nrow(input_data), big.mark = ",")))
       list(success = TRUE, n_rows = nrow(input_data), data = input_data)
     } else {
-      errors <- c(errors, "Input must be a file path or data frame")
+      append_error("Input must be a file path or data frame")
       list(success = FALSE, n_rows = 0, data = NULL)
     }
   }, error = function(e) {
-    errors <- c(errors, sprintf("Failed to load input data: %s", e$message))
+    append_error(sprintf("Failed to load input data: %s", e$message))
     list(success = FALSE, n_rows = 0, data = NULL)
   })
 
@@ -102,7 +113,7 @@ tyler_preflight_check <- function(input_data,
   if (data_check$success && !is.null(data_check$data)) {
     missing_cols <- setdiff(required_columns, names(data_check$data))
     if (length(missing_cols) > 0) {
-      errors <- c(errors, sprintf(
+      append_error(sprintf(
         "Input data missing required columns: %s",
         paste(missing_cols, collapse = ", ")
       ))
@@ -122,7 +133,7 @@ tyler_preflight_check <- function(input_data,
       checks$output_dir <- TRUE
       message(sprintf("  \u2713 Created output directory: %s", output_dir))
     }, error = function(e) {
-      errors <- c(errors, sprintf("Cannot create output directory: %s", e$message))
+      append_error(sprintf("Cannot create output directory: %s", e$message))
     })
   } else {
     # Check if writable
@@ -137,7 +148,7 @@ tyler_preflight_check <- function(input_data,
       checks$output_dir <- TRUE
       message(sprintf("  \u2713 Output directory writable: %s", output_dir))
     } else {
-      errors <- c(errors, sprintf("Output directory not writable: %s", output_dir))
+      append_error(sprintf("Output directory not writable: %s", output_dir))
     }
   }
 
@@ -151,13 +162,13 @@ tyler_preflight_check <- function(input_data,
       if (google_check$valid) {
         message("  \u2713 Google Maps API key valid")
       } else {
-        errors <- c(errors, sprintf("Google Maps API key invalid: %s", google_check$error))
+        append_api_error(sprintf("Google Maps API key invalid: %s", google_check$error))
       }
     } else {
       message("  \u2713 Google Maps API key provided (not tested)")
     }
   } else {
-    warnings <- c(warnings, "No Google Maps API key provided (geocoding will fail)")
+    append_warning("No Google Maps API key provided (geocoding will fail)")
   }
 
   if (!is.null(here_api_key) && nzchar(here_api_key)) {
@@ -166,16 +177,16 @@ tyler_preflight_check <- function(input_data,
       if (here_check$valid) {
         message("  \u2713 HERE API key valid")
       } else {
-        errors <- c(errors, sprintf("HERE API key invalid: %s", here_check$error))
+        append_api_error(sprintf("HERE API key invalid: %s", here_check$error))
       }
     } else {
       message("  \u2713 HERE API key provided (not tested)")
     }
   } else {
-    warnings <- c(warnings, "No HERE API key provided (isochrones will fail)")
+    append_warning("No HERE API key provided (isochrones will fail)")
   }
 
-  checks$api_keys <- length(errors) == 0
+  checks$api_keys <- length(api_errors) == 0
 
   # ==================== Check 5: Data Quality ====================
   message("")
@@ -194,9 +205,9 @@ tyler_preflight_check <- function(input_data,
                    if (quality_report$score >= 0.80) "\u2713" else "\u26A0"))
 
     if (quality_report$score < 0.70) {
-      errors <- c(errors, "Data quality too low (< 70%). Review and clean data first.")
+      append_error("Data quality too low (< 70%). Review and clean data first.")
     } else if (quality_report$score < 0.80) {
-      warnings <- c(warnings, sprintf(
+      append_warning(sprintf(
         "Data quality acceptable but not ideal (%.1f%%). Consider cleaning data.",
         quality_report$score * 100
       ))
@@ -226,14 +237,14 @@ tyler_preflight_check <- function(input_data,
                    estimates$memory_str))
 
     if (estimates$memory_gb > 8) {
-      warnings <- c(warnings, sprintf(
+      append_warning(sprintf(
         "High memory usage estimated (%.1f GB). Ensure sufficient RAM available.",
         estimates$memory_gb
       ))
     }
 
     if (estimates$runtime_hours > 2) {
-      warnings <- c(warnings, sprintf(
+      append_warning(sprintf(
         "Long runtime estimated (%.1f hours). Consider running overnight or in batches.",
         estimates$runtime_hours
       ))
@@ -256,7 +267,7 @@ tyler_preflight_check <- function(input_data,
   }
 
   if (length(missing_packages) > 0) {
-    errors <- c(errors, sprintf(
+    append_error(sprintf(
       "Missing required packages: %s. Install with: install.packages(c(%s))",
       paste(missing_packages, collapse = ", "),
       paste(sprintf("'%s'", missing_packages), collapse = ", ")

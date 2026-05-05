@@ -22,7 +22,6 @@
 #' calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")
 #'
 #' @importFrom sf st_intersection st_write st_area st_transform st_make_valid st_is_valid st_union st_sf
-#' @importFrom lwgeom st_orient
 #' @importFrom dplyr mutate select left_join coalesce
 #' @importFrom rlang .data
 #' @importFrom stats quantile na.omit
@@ -35,6 +34,8 @@ calculate_intersection_overlap_and_save <- function(block_groups,
                                                     output_dir,
                                                     crosswalk = NULL,
                                                     notify = TRUE) {
+  orientation_warning_sent <- FALSE
+
   # Parameter validation
   if (!inherits(block_groups, "sf")) {
     stop("Error: 'block_groups' must be an sf object.")
@@ -54,6 +55,18 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   if (!is.character(output_dir) || length(output_dir) != 1L || !nzchar(output_dir)) {
     stop("`output_dir` must be a single, non-empty character path.", call. = FALSE)
   }
+  if (!dir.exists(output_dir)) {
+    created <- dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+    if (!isTRUE(created) && !dir.exists(output_dir)) {
+      stop(sprintf("Unable to create `output_dir`: %s", output_dir), call. = FALSE)
+    }
+  }
+  test_write_path <- tempfile(pattern = ".tyler_write_test_", tmpdir = output_dir)
+  can_write_output <- try(writeLines("test", con = test_write_path), silent = TRUE)
+  if (inherits(can_write_output, "try-error")) {
+    stop(sprintf("`output_dir` is not writable: %s", output_dir), call. = FALSE)
+  }
+  unlink(test_write_path, force = TRUE)
 
   validated <- validate_sf_inputs(
     block_groups = block_groups,
@@ -67,8 +80,9 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   block_groups <- validated$block_groups
   isochrones_joined <- validated$isochrones_joined
 
-  block_groups <- lwgeom::st_orient(block_groups)
-  isochrones_joined <- lwgeom::st_orient(isochrones_joined)
+  block_groups <- tyler_orient_geometries(block_groups, warn = !orientation_warning_sent)
+  orientation_warning_sent <- TRUE
+  isochrones_joined <- tyler_orient_geometries(isochrones_joined, warn = !orientation_warning_sent)
 
   # Year alignment enforcement
   if (!"data_year" %in% names(isochrones_joined)) {
@@ -136,8 +150,9 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     block_groups <- validated_crosswalk$block_groups
     isochrones_joined <- validated_crosswalk$isochrones_joined
 
-    block_groups <- lwgeom::st_orient(block_groups)
-    isochrones_joined <- lwgeom::st_orient(isochrones_joined)
+    block_groups <- tyler_orient_geometries(block_groups, warn = !orientation_warning_sent)
+    orientation_warning_sent <- TRUE
+    isochrones_joined <- tyler_orient_geometries(isochrones_joined, warn = !orientation_warning_sent)
 
     acs_years <- stats::na.omit(unique(block_groups$vintage))
     if (length(acs_years) != 1L || !identical(acs_years[[1]], provider_year)) {
@@ -181,7 +196,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     geometry = isochrones_filtered,
     crs = sf::st_crs(isochrones_joined)
   )
-  isochrones_filtered <- lwgeom::st_orient(isochrones_filtered)
+  isochrones_filtered <- tyler_orient_geometries(isochrones_filtered, warn = !orientation_warning_sent)
 
   # Project to an equal-area CRS for area calculations
   block_groups_proj <- sf::st_transform(block_groups, area_crs)
@@ -232,7 +247,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   # Calculate area in all block groups (projected CRS)
   block_groups_proj <- block_groups_proj %>%
     dplyr::mutate(
-      bg_area = as.numeric(sf::st_area(block_groups_proj)),
+      bg_area = as.numeric(sf::st_area(.)),
       area_method = dplyr::coalesce(rlang::.data$area_method, "projected:EPSG:5070")
     )
 
