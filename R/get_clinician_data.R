@@ -50,7 +50,13 @@ retrieve_clinician_data <- function(input_data) {
       return(NULL)
     }
 
-    clinician_info <- provider::clinicians(npi = npi)
+    clinician_info <- tryCatch(
+      provider::clinicians(npi = npi),
+      error = function(e) {
+        message(sprintf("provider::clinicians() failed for NPI %s: %s", npi, conditionMessage(e)))
+        NULL
+      }
+    )
     if (is.null(clinician_info) || !nrow(clinician_info)) {
       return(NULL)
     }

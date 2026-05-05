@@ -142,9 +142,15 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
     response <- NULL
 
     while (retry_count < max_retries) {
-      response <- httr::GET(api_url, query = query, httr::timeout(10))
+      response <- tryCatch(
+        httr::GET(api_url, query = query, httr::timeout(10)),
+        error = function(e) {
+          message(sprintf("Network error on attempt %d: %s", retry_count + 1L, conditionMessage(e)))
+          NULL
+        }
+      )
 
-      if (!httr::http_error(response)) {
+      if (!is.null(response) && !httr::http_error(response)) {
         break  # Success, exit retry loop
       }
 
@@ -156,6 +162,9 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
       }
     }
 
+    if (is.null(response)) {
+      stop("Genderize.io request failed: network error after ", max_retries, " attempts.", call. = FALSE)
+    }
     if (httr::http_error(response)) {
       stop("Genderize.io request failed after ", max_retries, " attempts with status ", httr::status_code(response), call. = FALSE)
     }
