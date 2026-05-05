@@ -369,9 +369,9 @@ clean_phase_1_results <- function(phase1_data,
 
   # Calculate data quality metrics
   quality_metrics <- list(
-    completeness_npi = if ("npi" %in% names(phase1_data)) sum(!is.na(phase1_data$npi)) / nrow(phase1_data) else 0,
-    completeness_phone = if ("phone_number" %in% names(phase1_data)) sum(!is.na(phase1_data$phone_number) & phase1_data$phone_number != "") / nrow(phase1_data) else 0,
-    completeness_names = if ("names" %in% names(phase1_data)) sum(!is.na(phase1_data$names) & phase1_data$names != "") / nrow(phase1_data) else 0,
+    completeness_npi = if ("npi" %in% names(phase1_data) && nrow(phase1_data) > 0) sum(!is.na(phase1_data$npi)) / nrow(phase1_data) else 0,
+    completeness_phone = if ("phone_number" %in% names(phase1_data) && nrow(phase1_data) > 0) sum(!is.na(phase1_data$phone_number) & phase1_data$phone_number != "") / nrow(phase1_data) else 0,
+    completeness_names = if ("names" %in% names(phase1_data) && nrow(phase1_data) > 0) sum(!is.na(phase1_data$names) & phase1_data$names != "") / nrow(phase1_data) else 0,
     has_processing_flags = any(grepl("^processing_flag_", names(phase1_data)))
   )
   audit_trail$quality_metrics <- quality_metrics
