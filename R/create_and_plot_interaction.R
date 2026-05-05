@@ -72,6 +72,13 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
     stop("Data must be a data.frame", call. = FALSE)
   }
 
+  required_cols <- c(response_variable, variable_of_interest, interaction_variable, random_intercept)
+  missing_cols <- setdiff(required_cols, names(data))
+  if (length(missing_cols)) {
+    stop("The following required columns were not found in the data: ",
+         paste(missing_cols, collapse = ", "), call. = FALSE)
+  }
+
   # Log inputs
   cat("Inputs:\n")
   cat("response_variable:", response_variable, "\n")
