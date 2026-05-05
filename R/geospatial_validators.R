@@ -158,3 +158,43 @@ validate_sf_inputs <- function(...,
 
   objects
 }
+
+#' Orient polygon ring direction when lwgeom support is available
+#'
+#' Uses `lwgeom::st_orient()` when available. If `lwgeom` is unavailable or
+#' does not expose `st_orient`, the input is returned unchanged.
+#'
+#' @param x An sf object.
+#' @param warn Logical. If `TRUE`, emit a warning when orientation is skipped.
+#'
+#' @return The oriented sf object, or `x` unchanged when orientation support is
+#'   unavailable.
+#' @keywords internal
+tyler_orient_geometries <- function(x, warn = TRUE) {
+  if (!inherits(x, "sf")) {
+    stop("`x` must be an sf object.", call. = FALSE)
+  }
+
+  if (!requireNamespace("lwgeom", quietly = TRUE)) {
+    if (isTRUE(warn)) {
+      warning(
+        "Package `lwgeom` is not installed; continuing without geometry ring orientation.",
+        call. = FALSE
+      )
+    }
+    return(x)
+  }
+
+  orient_fn <- get0("st_orient", envir = asNamespace("lwgeom"), mode = "function")
+  if (is.null(orient_fn)) {
+    if (isTRUE(warn)) {
+      warning(
+        "Function `lwgeom::st_orient` is unavailable; continuing without geometry ring orientation.",
+        call. = FALSE
+      )
+    }
+    return(x)
+  }
+
+  orient_fn(x)
+}
