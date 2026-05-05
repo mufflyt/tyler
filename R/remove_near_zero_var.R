@@ -19,6 +19,9 @@
 #'
 #' @export
 remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
+  if (!requireNamespace("caret", quietly = TRUE)) {
+    stop("Package 'caret' is required for remove_near_zero_var(). Install with: install.packages('caret')", call. = FALSE)
+  }
   # Log: Starting the function
   message("Starting the function to remove near-zero variance variables.")
 

@@ -29,7 +29,7 @@ table_write_pdf <- function(object, filename) {
 #'
 #' Generate an overall table summarizing the demographics of the Table 1.
 #'
-#' @param input_file_path The path to the data file (in RDS, CSV, or XLS format).
+#' @param input_file_path The path to an RDS data file.
 #' @param output_directory The directory where the output table file will be saved.
 #' @param title The title for the overall table summary (default is "Overall Table Summary").
 #' @param selected_columns Optional vector of selected columns to include in the table.

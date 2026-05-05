@@ -8,8 +8,8 @@
 #'         If \code{mult} is TRUE, returns a character vector containing all the levels with the maximum value.
 #' @examples
 #' vec <- factor(c("A", "B", "A", "C", "B", "B"))
-#' max_table(vec) # Returns "A"
-#' max_table(vec, mult = TRUE) # Returns c("A", "B")
+#' max_table(vec) # Returns "B"
+#' max_table(vec, mult = TRUE) # Returns "B"
 #' @export
 
 max_table <- function(InVec, mult = FALSE) {
