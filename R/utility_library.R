@@ -55,7 +55,7 @@ tyler_check_dependencies <- function(packages, install = FALSE, repos = getOptio
     )
   })
 
-  summary <- tibble::as_tibble(do.call(rbind, results))
+  summary <- dplyr::bind_rows(results)
 
   missing_pkgs <- summary$package[!summary$installed]
   if (length(missing_pkgs)) {
