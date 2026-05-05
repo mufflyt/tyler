@@ -13,10 +13,12 @@
 #' @export
 
 min_table <- function(InVec, mult = FALSE) {
-  if (!is.factor(InVec) || length(InVec) == 0) {
+  if (length(InVec) == 0) {
     return(character(0))
   }
-  InVec <- factor(InVec)
+  if (!is.factor(InVec)) {
+    InVec <- factor(InVec)
+  }
   A <- tabulate(InVec)
   if (isTRUE(mult)) {
     levels(InVec)[A == min(A)]

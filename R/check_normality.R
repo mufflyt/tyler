@@ -37,6 +37,9 @@ check_normality <- function(data, variable) {
   if (length(data_var) < 3) {
     stop("Sample size must be at least 3 for the Shapiro-Wilk test.")
   }
+  if (length(data_var) > 5000) {
+    stop("Sample size must be no more than 5000 for the Shapiro-Wilk test.")
+  }
 
   # Check normality using Shapiro-Wilk test
   normality_test <- stats::shapiro.test(data_var)
