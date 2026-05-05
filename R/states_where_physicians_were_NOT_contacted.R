@@ -11,6 +11,7 @@
 #'
 #' @return A character string summarizing the inclusion and exclusion of states
 #'   alongside the count of unique physicians successfully contacted.
+#' @seealso [summarize_census_data()], [retrieve_clinician_data()], [clean_phase_1_results()]
 #' @family summary
 #' @export
 #'
