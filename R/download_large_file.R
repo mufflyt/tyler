@@ -98,8 +98,8 @@ download_large_file <- function(url, dest, overwrite = FALSE, quiet = TRUE) {
   attempts <- list(download_with_wget, download_with_curl, download_with_download_file)
 
   for (attempt in attempts) {
-    attempt(url, dest_tmp, quiet)
-    if (is_download_complete(dest_tmp, expected_size)) {
+    succeeded <- isTRUE(attempt(url, dest_tmp, quiet))
+    if (succeeded && is_download_complete(dest_tmp, expected_size)) {
       download_success <- TRUE
       break
     }

@@ -43,6 +43,12 @@
 #' @importFrom rlang sym
 #' @export
 most_common_gender_training_academic <- function(data) {
+  required_cols <- c("gender", "specialty", "Provider.Credential.Text", "academic_affiliation")
+  missing_cols <- setdiff(required_cols, names(data))
+  if (length(missing_cols)) {
+    stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "), call. = FALSE)
+  }
+
   # Helper function to get the most common value and proportion
   calculate_proportion <- function(input_data, column) {
     input_data <- input_data %>% filter(!is.na(!!sym(column)))

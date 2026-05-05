@@ -46,6 +46,9 @@ map_create_acog_districts_sf <- function(acog_districts_file = NULL) {
     Subregion = dplyr::coalesce(stringr::str_trim(Subregion), ACOG_District)
   )
 
+  if (!requireNamespace("rnaturalearth", quietly = TRUE)) {
+    stop("Package 'rnaturalearth' is required for map_create_acog_districts_sf(). Install with: install.packages('rnaturalearth')", call. = FALSE)
+  }
   states_sf <- rnaturalearth::ne_states(country = "united states of america", returnclass = "sf")
   states_sf <- dplyr::transmute(
     states_sf,

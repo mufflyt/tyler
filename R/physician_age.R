@@ -35,12 +35,17 @@ physician_age <- function(data, age_column) {
     stop(sprintf("Column '%s' not found in data.", age_column), call. = FALSE)
   }
 
+  age_vals <- data[[age_column]][!is.na(data[[age_column]])]
+  if (length(age_vals) < 2) {
+    stop(sprintf("Column '%s' must have at least 2 non-missing values to compute age statistics.", age_column), call. = FALSE)
+  }
+
   # Calculate the median age
-  median_age <- round(median(data[[age_column]], na.rm = TRUE), 2)
+  median_age <- round(median(age_vals), 2)
 
   # Calculate the 25th and 75th percentiles
-  q25 <- quantile(data[[age_column]], probs = 0.25, na.rm = TRUE)
-  q75 <- quantile(data[[age_column]], probs = 0.75, na.rm = TRUE)
+  q25 <- quantile(age_vals, probs = 0.25)
+  q75 <- quantile(age_vals, probs = 0.75)
 
   # Round the percentiles to one decimal place
   q25 <- round(q25, 1)
