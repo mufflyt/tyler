@@ -42,12 +42,15 @@
 #' # ...
 #' }
 #'
+#' @param block_groups An `sf` object of census block group geometries passed to
+#'   [calculate_intersection_overlap_and_save()].
 #' @param skip_preflight Skip preflight checks (not recommended)
 #' @export
 run_mystery_caller_workflow_with_logging <- function(input_data,
                                                       output_dir,
                                                       google_maps_api_key,
                                                       here_api_key,
+                                                      block_groups,
                                                       drive_time_minutes = c(30, 60, 120, 180),
                                                       census_year = 2020,
                                                       log_file = NULL,
@@ -205,6 +208,7 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
 
     tryCatch({
       overlap_result <- calculate_intersection_overlap_and_save(
+        block_groups = block_groups,
         isochrones_joined = data,
         drive_time_minutes = drive_time,
         output_dir = output_dir

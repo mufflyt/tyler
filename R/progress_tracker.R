@@ -147,7 +147,7 @@ progress_tracker_finish <- function(tracker, step, score = NULL, quality = NULL,
   }
   resolved_quality <- if (!is.null(quality)) quality else tyler_quality_tier(score)
   env$records$quality[idx] <- resolved_quality
-  .tracker_log(tracker, sprintf("Completed %s (%s)", step, if (!is.null(resolved_quality)) resolved_quality else "no tier"))
+  .tracker_log(tracker, sprintf("Completed %s (%s)", step, if (!is.null(resolved_quality) && !is.na(resolved_quality)) resolved_quality else "no tier"))
   .tracker_emit_update(tracker, force = TRUE)
   invisible(tracker)
 }

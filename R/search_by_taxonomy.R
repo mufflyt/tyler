@@ -176,7 +176,7 @@ search_by_taxonomy <- function(taxonomy_to_search,
             is.na(credential_lower) | credential_lower %in% stringr::str_to_lower(c("MD", "DO"))
           )
           data_taxonomy <- dplyr::filter(data_taxonomy, addresses_country_name == "United States")
-          data_taxonomy <- dplyr::filter(data_taxonomy, stringr::str_detect(taxonomies_desc, taxonomy))
+          data_taxonomy <- dplyr::filter(data_taxonomy, stringr::str_detect(taxonomies_desc, stringr::fixed(taxonomy)))
 
           required_cols <- c("basic_first_name", "basic_last_name", "basic_middle_name")
           missing_cols <- setdiff(required_cols, names(data_taxonomy))
