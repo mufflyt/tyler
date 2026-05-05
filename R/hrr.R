@@ -21,10 +21,10 @@ hrr <- function(remove_HI_AK = TRUE) {
   hrr <- sf::read_sf(hrr_path)
   hrr <- sf::st_transform(hrr, 4326)
 
-  # Optionally remove Hawaii and Alaska
+  # Optionally remove Hawaii and Alaska (all HRRs, not just the largest cities)
   if (remove_HI_AK) {
     hrr <- hrr %>%
-      dplyr::filter(!(hrrcity %in% c("AK- ANCHORAGE", "HI- HONOLULU")))
+      dplyr::filter(!stringr::str_detect(hrrcity, "^(AK|HI)"))
   }
 
   # Provide information about the function's purpose
