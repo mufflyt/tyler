@@ -12,7 +12,6 @@
 #'   `countyfp`, `tractce`, `block_group`, `geoid`) and a `vintage` column
 #'   indicating the Census vintage that supplied the estimates.
 #' @importFrom dplyr bind_rows mutate rename
-#' @importFrom censusapi getCensus
 #' @importFrom tibble as_tibble tibble
 #' @importFrom stringr str_pad
 #' @family census
@@ -23,6 +22,9 @@
 #' census_df <- get_census_data(us_fips_list)
 #' }
 get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("CENSUS_API_KEY")) {
+  if (!requireNamespace("censusapi", quietly = TRUE)) {
+    stop("Package 'censusapi' is required for get_census_data(). Install with: install.packages('censusapi')", call. = FALSE)
+  }
   if (is.null(us_fips_list)) {
     stop("`us_fips_list` must be a character vector of FIPS codes.")
   }

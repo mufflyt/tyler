@@ -11,7 +11,6 @@
 #'
 #' @importFrom arsenal write2pdf tableby tableby.control
 #' @importFrom readr read_rds
-#' @importFrom easyr read.any
 #' @importFrom fs dir_create dir_exists
 #' @importFrom here here
 #' @family table

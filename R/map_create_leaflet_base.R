@@ -4,12 +4,16 @@
 #' default view settings, and layers control.
 #'
 #' @return Invisibly returns the Leaflet map object.
-#' @importFrom leaflet leaflet addProviderTiles clearBounds clearMarkers addScaleBar setView addLayersControl addTiles
 #' @family mapping
 #' @export
 #' @examples
+#' \dontrun{
 #' map <- map_create_leaflet_base()
+#' }
 map_create_leaflet_base <- function() {
+  if (!requireNamespace("leaflet", quietly = TRUE)) {
+    stop("Package 'leaflet' is required for map_create_leaflet_base(). Install with: install.packages('leaflet')", call. = FALSE)
+  }
   # Create a new Leaflet map object
   map <- leaflet::leaflet() %>%
     # Add CartoDB Voyager tiles as the base tile layer

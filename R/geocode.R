@@ -28,7 +28,6 @@
 #' \dontrun{
 #' result <- geocode_unique_addresses("addresses.csv", "my_api_key")
 #' }
-#' @importFrom ggmap geocode register_google
 #' @importFrom readr read_csv write_csv
 #' @importFrom readxl read_excel
 #' @importFrom dplyr left_join distinct mutate
@@ -58,6 +57,9 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
     stop("The dataset must have a column named 'address' for geocoding.")
   }
 
+  if (!requireNamespace("ggmap", quietly = TRUE)) {
+    stop("Package 'ggmap' is required for geocode_unique_addresses(). Install with: install.packages('ggmap')", call. = FALSE)
+  }
   ggmap::register_google(key = google_maps_api_key)
 
   unique_add <- dplyr::distinct(data, address)

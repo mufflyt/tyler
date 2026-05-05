@@ -18,18 +18,19 @@
 #' map_create_block_group_overlap(block_groups, isochrones_joined_map, "custom_output/")
 #' }
 #'
-#' @importFrom leaflet addPolygons addLegend colorNumeric
-#' @importFrom webshot webshot
+#' @importFrom dplyr arrange mutate
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom sf st_make_valid st_transform st_is_valid st_union st_sf
 #' @importFrom lwgeom st_orient
-#' @importFrom dplyr arrange mutate
 #' @importFrom purrr walk
 #' @importFrom rlang .data
 #'
 #' @family mapping
 #' @export
 map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir = "figures/") {
+  if (!requireNamespace("leaflet", quietly = TRUE)) {
+    stop("Package 'leaflet' is required for map_create_block_group_overlap(). Install with: install.packages('leaflet')", call. = FALSE)
+  }
   if (!inherits(bg_data, "sf")) {
     stop("`bg_data` must be an sf object with polygon geometries.")
   }

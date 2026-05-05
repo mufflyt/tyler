@@ -12,8 +12,6 @@
 #' @return A dataframe containing the isochrones data with added 'name' column.
 #' @importFrom readr write_rds
 #' @importFrom sf st_as_sf st_drop_geometry write_sf
-#' @importFrom easyr read.any
-#' @importFrom hereR set_key
 #' @importFrom janitor clean_names
 #' @importFrom progress progress_bar
 #' @family mapping
@@ -31,6 +29,12 @@ create_isochrones_for_dataframe <- function(
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 
+  if (!requireNamespace("hereR", quietly = TRUE)) {
+    stop("Package 'hereR' is required for create_isochrones_for_dataframe(). Install with: install.packages('hereR')", call. = FALSE)
+  }
+  if (!requireNamespace("easyr", quietly = TRUE)) {
+    stop("Package 'easyr' is required for create_isochrones_for_dataframe(). Install with: install.packages('easyr')", call. = FALSE)
+  }
   if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.")
 
   hereR::set_key(api_key)
@@ -184,7 +188,7 @@ create_isochrones_for_dataframe <- function(
   }
 
   save_snapshot(force = TRUE)
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
 
   if (!length(processed_isochrones)) {
     return(data.frame())

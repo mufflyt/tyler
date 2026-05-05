@@ -8,7 +8,6 @@
 #' @return None. The function creates and saves individual maps and shapefiles.
 #'
 #' @importFrom sf st_union st_sf st_transform st_write
-#' @importFrom leaflet addProviderTiles addPolygons
 #' @importFrom dplyr filter tibble
 #' @importFrom grDevices rainbow
 #' @importFrom htmlwidgets saveWidget
@@ -33,6 +32,9 @@
 #' @family mapping
 #' @export
 create_individual_isochrone_plots <- function(isochrones, drive_times) {
+  if (!requireNamespace("leaflet", quietly = TRUE)) {
+    stop("Package 'leaflet' is required for create_individual_isochrone_plots(). Install with: install.packages('leaflet')", call. = FALSE)
+  }
   # Display setup instructions
   cat("\033[34mInstructions:\033[0m\n")
   cat("\033[34mTo use this function, follow the example code below:\033[0m\n")
@@ -104,5 +106,5 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
   }
 
   message("Individual isochrone plots and shapefiles creation completed.")
-  beepr::beep(2)
+  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
 }

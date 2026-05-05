@@ -17,9 +17,14 @@
 #' @family mapping
 #' @export
 #' @examples
+#' \dontrun{
 #' map_create_base()
 #' map_create_base("<strong>Custom title</strong>")
+#' }
 map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
+  if (!requireNamespace("leaflet", quietly = TRUE)) {
+    stop("Package 'leaflet' is required for map_create_base(). Install with: install.packages('leaflet')", call. = FALSE)
+  }
   map <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = TRUE)) %>%
     leaflet::addProviderTiles("CartoDB.Voyager", group = "CartoDB Voyager") %>%
     leaflet::addProviderTiles("Stamen.TonerLite", group = "Toner by Stamen") %>%
@@ -60,7 +65,6 @@ map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
 #' @return Invisibly returns the Leaflet map object.
 #'
 #' @importFrom viridis viridis
-#' @importFrom leaflet addCircleMarkers addPolygons addLegend
 #' @importFrom webshot webshot
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom dplyr mutate
@@ -86,6 +90,9 @@ map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
 #' @family mapping
 #' @export
 map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name") {
+  if (!requireNamespace("leaflet", quietly = TRUE)) {
+    stop("Package 'leaflet' is required for map_create_physician_dot(). Install with: install.packages('leaflet')", call. = FALSE)
+  }
   jittered_physician_data <- dplyr::mutate(
     physician_data,
     lat = lat + runif(n()) * jitter_range,

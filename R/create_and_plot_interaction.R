@@ -57,9 +57,13 @@
 #' )
 #' }
 #'
-#' @import lme4 dplyr ggplot2
+#' @importFrom dplyr rename mutate
+#' @importFrom ggplot2 ggplot aes geom_point geom_line labs theme_minimal ggsave
 #' @export
 create_and_plot_interaction <- function(data_path, response_variable, variable_of_interest, interaction_variable, random_intercept, output_path, resolution = 100) {
+  if (!requireNamespace("lme4", quietly = TRUE)) {
+    stop("Package 'lme4' is required for create_and_plot_interaction(). Install with: install.packages('lme4')", call. = FALSE)
+  }
   # Read the data
   data <- readRDS(data_path)
 
