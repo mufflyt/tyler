@@ -30,7 +30,6 @@ NULL
 #' tyler_check_dependencies(c("dplyr", "sf"), install = FALSE)
 #' }
 tyler_check_dependencies <- function(packages, install = FALSE, repos = getOption("repos"), quietly = FALSE) {
-  validate_dataframe(data.frame(pkg = packages), name = "packages", allow_zero_rows = FALSE)
   if (!is.character(packages)) {
     stop("`packages` must be a character vector of package names.", call. = FALSE)
   }

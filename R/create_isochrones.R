@@ -54,7 +54,7 @@ create_isochrones <- function(location,
 # Internal memoized worker — stored in the package namespace so
 # tyler_clear_isochrone_cache() can call memoise::forget() on it.
 .isochrone_memo <- memoise::memoise(function(location, range, posix_time, api_key) {
-  if (api_key == "") {
+  if (is.na(api_key) || !nzchar(api_key)) {
     stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
   }
 

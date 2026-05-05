@@ -35,7 +35,7 @@ create_isochrones_for_dataframe <- function(
   if (!requireNamespace("easyr", quietly = TRUE)) {
     stop("Package 'easyr' is required for create_isochrones_for_dataframe(). Install with: install.packages('easyr')", call. = FALSE)
   }
-  if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
+  if (is.na(api_key) || !nzchar(api_key)) stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
 
   hereR::set_key(api_key)
   if (is.data.frame(input_file)) {
