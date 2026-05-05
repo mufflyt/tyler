@@ -94,7 +94,7 @@ tyler_preflight_check <- function(input_data,
       list(success = FALSE, n_rows = 0, data = NULL)
     }
   }, error = function(e) {
-    errors <- c(errors, sprintf("Failed to load input data: %s", e$message))
+    errors <<- c(errors, sprintf("Failed to load input data: %s", e$message))
     list(success = FALSE, n_rows = 0, data = NULL)
   })
 
@@ -122,7 +122,7 @@ tyler_preflight_check <- function(input_data,
       checks$output_dir <- TRUE
       message(sprintf("  \u2713 Created output directory: %s", output_dir))
     }, error = function(e) {
-      errors <- c(errors, sprintf("Cannot create output directory: %s", e$message))
+      errors <<- c(errors, sprintf("Cannot create output directory: %s", e$message))
     })
   } else {
     # Check if writable
