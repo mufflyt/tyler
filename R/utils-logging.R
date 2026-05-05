@@ -4,6 +4,8 @@
 #' user-friendly output for long-running workflows.
 #'
 #' @name logging-utils
+#' @seealso [run_mystery_caller_workflow_with_logging()],
+#'   [tyler_preflight_check()], [tyler_multi_progress()]
 NULL
 
 # Global environment for tracking workflow state
@@ -14,7 +16,9 @@ NULL
 #' @param workflow_name Name of the workflow (e.g., "Mystery Caller Workflow")
 #' @param total_steps Total number of major steps
 #' @param log_file Optional path to log file for persistent logging
-#' @return Invisible NULL
+#' @return `invisible(NULL)`; initializes internal workflow state in
+#'   `.tyler_workflow` and prints a workflow header.
+#' @family logging utilities
 #' @export
 tyler_workflow_start <- function(workflow_name, total_steps = NULL, log_file = NULL) {
   .tyler_workflow$name <- workflow_name
@@ -54,7 +58,9 @@ tyler_workflow_start <- function(workflow_name, total_steps = NULL, log_file = N
 #' @param step_name Name of the step
 #' @param detail Optional additional details
 #' @param n_items Number of items to process (for progress tracking)
-#' @return Invisible NULL
+#' @return `invisible(NULL)`; updates the internal step counter and emits a
+#'   formatted step header.
+#' @family logging utilities
 #' @export
 tyler_log_step <- function(step_name, detail = NULL, n_items = NULL) {
   if (exists("current_step", envir = .tyler_workflow)) {
@@ -100,7 +106,8 @@ tyler_log_step <- function(step_name, detail = NULL, n_items = NULL) {
 #'
 #' @param msg Message to log
 #' @param indent Whether to indent (default TRUE)
-#' @return Invisible NULL
+#' @return `invisible(NULL)`.
+#' @family logging utilities
 #' @export
 tyler_log_info <- function(msg, indent = TRUE) {
   formatted <- if (indent) sprintf("  \u2139 %s", msg) else sprintf("\u2139 %s", msg)
@@ -114,7 +121,8 @@ tyler_log_info <- function(msg, indent = TRUE) {
 #' @param msg Message to log
 #' @param details Optional list of details (name-value pairs)
 #' @param indent Whether to indent (default TRUE)
-#' @return Invisible NULL
+#' @return `invisible(NULL)`.
+#' @family logging utilities
 #' @export
 tyler_log_success <- function(msg, details = NULL, indent = TRUE) {
   formatted <- if (indent) sprintf("  \u2713 %s", msg) else sprintf("\u2713 %s", msg)
@@ -137,7 +145,8 @@ tyler_log_success <- function(msg, details = NULL, indent = TRUE) {
 #' @param msg Warning message
 #' @param fix Optional suggested fix
 #' @param indent Whether to indent (default TRUE)
-#' @return Invisible NULL
+#' @return `invisible(NULL)`.
+#' @family logging utilities
 #' @export
 tyler_log_warning <- function(msg, fix = NULL, indent = TRUE) {
   formatted <- if (indent) sprintf("  \u26A0 WARNING: %s", msg) else sprintf("\u26A0 WARNING: %s", msg)
@@ -159,7 +168,8 @@ tyler_log_warning <- function(msg, fix = NULL, indent = TRUE) {
 #' @param cause Root cause of error
 #' @param fix Suggested fix
 #' @param indent Whether to indent (default TRUE)
-#' @return Invisible NULL
+#' @return `invisible(NULL)`.
+#' @family logging utilities
 #' @export
 tyler_log_error <- function(msg, cause = NULL, fix = NULL, indent = TRUE) {
   formatted <- if (indent) sprintf("  \u2717 ERROR: %s", msg) else sprintf("\u2717 ERROR: %s", msg)
@@ -188,6 +198,7 @@ tyler_log_error <- function(msg, cause = NULL, fix = NULL, indent = TRUE) {
 #' @param status Optional status message
 #' @param show_percent Whether to show percentage (default TRUE)
 #' @return Invisible NULL
+#' @family logging utilities
 #' @export
 tyler_log_progress <- function(current, total, status = NULL, show_percent = TRUE) {
   pct <- round(current / total * 100, 1)
@@ -215,7 +226,8 @@ tyler_log_progress <- function(current, total, status = NULL, show_percent = TRU
 #'
 #' @param what What was loaded from cache
 #' @param n_items Number of cached items
-#' @return Invisible NULL
+#' @return `invisible(NULL)`.
+#' @family logging utilities
 #' @export
 tyler_log_cache_hit <- function(what, n_items) {
   msg <- sprintf("  \u21BB Loaded %s from cache (%s item(s))",
@@ -231,6 +243,7 @@ tyler_log_cache_hit <- function(what, n_items) {
 #' @param path File path
 #' @param n_rows Number of rows (optional)
 #' @return Invisible NULL
+#' @family logging utilities
 #' @export
 tyler_log_save <- function(path, n_rows = NULL) {
   if (!is.null(n_rows)) {
@@ -250,7 +263,9 @@ tyler_log_save <- function(path, n_rows = NULL) {
 #' @param success_rate Optional success rate (0-1)
 #' @param n_success Number of successful items
 #' @param n_total Total items attempted
-#' @return Invisible NULL
+#' @return `invisible(NULL)` after printing duration and optional success
+#'   metrics for the current step.
+#' @family logging utilities
 #' @export
 tyler_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_total = NULL) {
   step_num <- .tyler_workflow$current_step
