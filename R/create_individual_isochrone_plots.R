@@ -5,6 +5,8 @@
 #'
 #' @param isochrones An sf object containing isochrone data.
 #' @param drive_times A vector of unique drive times (in minutes) for which maps and shapefiles will be created.
+#' @param output_dir Directory where HTML maps and shapefiles are saved.
+#'   Defaults to a session-specific folder inside [tempdir()].
 #' @return None. The function creates and saves individual maps and shapefiles.
 #'
 #' @importFrom sf st_union st_sf st_transform st_write
@@ -31,10 +33,21 @@
 #'
 #' @family mapping
 #' @export
-create_individual_isochrone_plots <- function(isochrones, drive_times) {
+create_individual_isochrone_plots <- function(isochrones, drive_times, output_dir = NULL) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for create_individual_isochrone_plots(). Install with: install.packages('leaflet')", call. = FALSE)
   }
+
+  if (is.null(output_dir)) {
+    output_dir <- tyler_tempdir("isochrone_plots", create = TRUE)
+  } else {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
+  map_dir  <- file.path(output_dir, "isochrone_maps")
+  shp_dir  <- file.path(output_dir, "shp")
+  dir.create(map_dir, recursive = TRUE, showWarnings = FALSE)
+  dir.create(shp_dir, recursive = TRUE, showWarnings = FALSE)
+
   # Display setup instructions
   cat("\033[34mInstructions:\033[0m\n")
   cat("\033[34mTo use this function, follow the example code below:\033[0m\n")
@@ -77,13 +90,12 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
     index <- match(time, drive_times)
 
     # Create a base map
-    my_map <- tyler::map_create_base("")
+    my_map <- map_create_base("")
 
     message(paste("Creating a Leaflet map of isochrones for", time, "minutes..."))
 
     # Create the Leaflet plot
     isochrone_map <- my_map %>%
-      leaflet::addProviderTiles("CartoDB.Voyager") %>%
       leaflet::addPolygons(
         data = isochrones_sf,
         fillColor = colors[index],
@@ -95,15 +107,13 @@ create_individual_isochrone_plots <- function(isochrones, drive_times) {
       )
 
     # Save the plot to an HTML file
-    output_file <- paste0("figures/isochrone_maps/isochrone_map_", time, "_minutes.html")
-    dir.create(dirname(output_file), recursive = TRUE, showWarnings = FALSE)
+    output_file <- file.path(map_dir, paste0("isochrone_map_", time, "_minutes.html"))
     htmlwidgets::saveWidget(isochrone_map, file = output_file)
 
     message(paste("Saved isochrone map for", time, "minutes as:", output_file))
 
     # Write the shapefile for the current drive time
-    output_shapefile <- paste0("data/shp/isochrone_files/isochrones_", time, "_minutes.shp")
-    dir.create(dirname(output_shapefile), recursive = TRUE, showWarnings = FALSE)
+    output_shapefile <- file.path(shp_dir, paste0("isochrones_", time, "_minutes.shp"))
     sf::st_write(isochrones_sf, output_shapefile, append = FALSE)
 
     message(paste("Saved shapefile for", time, "minutes as:", output_shapefile))
