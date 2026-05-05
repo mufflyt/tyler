@@ -178,7 +178,8 @@ create_isochrones_for_dataframe <- function(
       }
 
       # Clean up temporary objects to prevent memory leaks
-      rm(point_isochrones, flattened, point_sf, attributes_df, repeated_attrs)
+      rm(point_isochrones, flattened, point_sf, attributes_df)
+      if (exists("repeated_attrs", inherits = FALSE)) rm(repeated_attrs)
       gc()  # Force garbage collection
     }
 

@@ -136,14 +136,14 @@ tyler_progress_update <- function(pb, amount = 1, status = NULL, set = NULL) {
       pb$current <- pb$current + amount
     }
 
-    pct <- round(pb$current / pb$total * 100)
-    prev_pct <- round((pb$current - amount) / pb$total * 100)
+    pct <- if (pb$total > 0) round(pb$current / pb$total * 100) else 0
+    prev_pct <- if (pb$total > 0) round((pb$current - amount) / pb$total * 100) else 0
 
     # Report every 10%
     if ((pct %/% 10) > (prev_pct %/% 10) || pb$current == pb$total) {
       elapsed <- as.numeric(difftime(Sys.time(), pb$start_time, units = "secs"))
-      rate <- pb$current / elapsed
-      remaining_secs <- (pb$total - pb$current) / rate
+      rate <- if (elapsed > 0) pb$current / elapsed else pb$current
+      remaining_secs <- if (rate > 0) (pb$total - pb$current) / rate else 0
       eta_str <- tyler_format_duration(remaining_secs)
 
       message(sprintf("  Progress: %d/%d (%d%%) - ETA: %s",

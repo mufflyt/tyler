@@ -191,7 +191,7 @@ clean_phase_1_results <- function(phase1_data,
   }
   # === END: EDGE CASE HANDLING ===
 
-  missing_phone <- sum(is.na(phase1_data$phone_number) | phase1_data$phone_number == "")
+  missing_phone <- sum(is.na(phase1_data$phone_number) | phase1_data$phone_number == "", na.rm = TRUE)
   if (missing_phone) {
     announce(sprintf("Detected %d row(s) with missing or unparseable phone numbers.", missing_phone))
   }

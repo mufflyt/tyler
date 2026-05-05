@@ -75,7 +75,7 @@ progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler
   }
 
   records <- env$records
-  completed <- sum(records$status == "completed")
+  completed <- sum(records$status == "completed", na.rm = TRUE)
   total <- nrow(records)
   progress <- if (total) completed / total else 0
   elapsed_total <- as.numeric(difftime(Sys.time(), env$start_time, units = "secs"))

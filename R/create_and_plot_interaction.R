@@ -69,7 +69,7 @@ create_and_plot_interaction <- function(data_path, response_variable, variable_o
 
   # Ensure the data is a data frame
   if (!is.data.frame(data)) {
-    stop("Data must be a data.frame")
+    stop("Data must be a data.frame", call. = FALSE)
   }
 
   # Log inputs
