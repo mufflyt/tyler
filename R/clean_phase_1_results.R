@@ -215,20 +215,21 @@ clean_phase_1_results <- function(phase1_data,
 
   generate_random_ids <- function(n) {
     if (!n) {
-      return(numeric(0))
+      return(character(0))
     }
-    # Use timestamp + process ID for better uniqueness
-    base_time <- as.numeric(Sys.time())
+    # Use timestamp + process ID for better uniqueness.
+    # Keep IDs as character to avoid precision loss with large numeric values.
+    base_time <- format(Sys.time(), "%Y%m%d%H%M%S")
     process_id <- Sys.getpid()
-    unique_ids <- numeric(n)
+    unique_ids <- character(n)
 
     for (i in seq_len(n)) {
       # Combine timestamp, process ID, and counter to ensure uniqueness
-      unique_ids[i] <- as.numeric(paste0(
-        floor(base_time),
+      unique_ids[i] <- paste0(
+        base_time,
         sprintf("%05d", process_id %% 100000),
         sprintf("%03d", i)
-      ))
+      )
     }
     unique_ids
   }
@@ -239,7 +240,7 @@ clean_phase_1_results <- function(phase1_data,
       random_id = ifelse(
         is.na(npi),
         generate_random_ids(dplyr::n()),
-        npi
+        as.character(npi)
       ),
       processing_flag_generated_id = is.na(npi)
     )

@@ -114,6 +114,8 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
 }
 
 genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api.genderize.io/") {
+  checkmate::assert_count(batch_size, positive = TRUE, .var.name = "batch_size")
+  checkmate::assert_string(api_url, min.chars = 1, .var.name = "api_url")
   if (is.null(first_names) || length(first_names) == 0) {
     return(tibble::tibble(
       first_name = character(),
@@ -123,7 +125,8 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
     ))
   }
 
-  clean_names <- unique(stats::na.omit(trimws(first_names)))
+  clean_names <- unique(stats::na.omit(trimws(as.character(first_names))))
+  clean_names <- clean_names[nzchar(clean_names)]
   if (length(clean_names) == 0) {
     return(tibble::tibble(
       first_name = character(),
