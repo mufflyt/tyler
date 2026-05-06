@@ -137,11 +137,6 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
         coords <- attempt_result
 
         # Validate geocoding result structure immediately (Bug #11 fix)
-        checkmate::assert_true(length(coords$lat) == nrow(coords), .var.name = "lat length")
-        checkmate::assert_true(length(coords$lon) == nrow(coords), .var.name = "lon length")
-  checkmate::assert_number(success_rate, lower = 0, upper = 1)
-  checkmate::assert_int(success_count, lower = 0)
-  checkmate::assert_true(success_count <= total_unique, .var.name = "success_count bound")
         if (!is.data.frame(coords)) {
           stop("Geocoding API returned unexpected data type (expected data frame).")
         }
@@ -151,6 +146,9 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
             paste(names(coords), collapse = ", ")
           ))
         }
+        checkmate::assert_true(length(coords$lat) == nrow(coords), .var.name = "lat length")
+        checkmate::assert_true(length(coords$lon) == nrow(coords), .var.name = "lon length")
+
         if (nrow(coords) != total_unique) {
           warning(sprintf(
             "Geocoding returned %d rows but expected %d. Some addresses may be missing results.",
@@ -171,6 +169,9 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   failed_rows <- unique_add[!stats::complete.cases(unique_add[, c("latitude", "longitude")]), , drop = FALSE]
   success_rate <- if (total_unique) 1 - nrow(failed_rows) / total_unique else 1
   success_count <- total_unique - nrow(failed_rows)
+  checkmate::assert_number(success_rate, lower = 0, upper = 1)
+  checkmate::assert_int(success_count, lower = 0)
+  checkmate::assert_true(success_count <= total_unique, .var.name = "success_count bound")
 
   # Comprehensive logging: Report geocoding results
   if (!quiet) {

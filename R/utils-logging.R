@@ -247,11 +247,11 @@ tyler_log_cache_hit <- function(what, n_items) {
 #' @export
 tyler_log_save <- function(path, n_rows = NULL) {
   if (!is.null(n_rows)) {
-    msg <- sprintf("  \u1F4BE Saved to: %s (%s rows)",
+    msg <- sprintf("  \U0001F4BE Saved to: %s (%s rows)",
                    path,
                    format(n_rows, big.mark = ","))
   } else {
-    msg <- sprintf("  \u1F4BE Saved to: %s", path)
+    msg <- sprintf("  \U0001F4BE Saved to: %s", path)
   }
   message(msg)
   tyler_log_to_file(msg)
@@ -399,7 +399,7 @@ tyler_format_duration <- function(seconds) {
 tyler_log_to_file <- function(msg) {
   if (!is.null(.tyler_workflow$log_file)) {
     # Remove ANSI codes and special characters for file logging
-    clean_msg <- gsub("\u2713|\u2717|\u26A0|\u2139|\u25B6|\u25B8|\u21BB|\u1F4BE", "", msg)
+    clean_msg <- gsub("\u2713|\u2717|\u26A0|\u2139|\u25B6|\u25B8|\u21BB|\U0001F4BE", "", msg)
     lock_path <- paste0(.tyler_workflow$log_file, ".lock")
     lock_acquired <- FALSE
     for (i in seq_len(100)) {

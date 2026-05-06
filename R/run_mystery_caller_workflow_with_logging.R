@@ -58,6 +58,13 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
                                                       log_file = NULL,
                                                       skip_preflight = FALSE) {
 
+  checkmate::assert_string(output_dir, min.chars = 1, any.missing = FALSE)
+  checkmate::assert_flag(skip_preflight)
+  checkmate::assert_numeric(drive_time_minutes, any.missing = FALSE, min.len = 1)
+  checkmate::assert_true(all(is.finite(drive_time_minutes)), .var.name = "drive_time_minutes finite")
+  checkmate::assert_true(all(drive_time_minutes > 0), .var.name = "drive_time_minutes positive")
+  drive_time_minutes <- sort(unique(as.integer(round(drive_time_minutes))))
+
   # ==================== PREFLIGHT CHECKS ====================
   # Run comprehensive validation before starting workflow
   if (!skip_preflight) {
@@ -88,9 +95,11 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
   }
 
   # Initialize workflow tracking
+  total_steps <- 4 + length(drive_time_minutes)
+
   tyler_workflow_start(
     workflow_name = "Mystery Caller Workflow",
-    total_steps = 5,
+    total_steps = total_steps,
     log_file = log_file
   )
 
@@ -124,7 +133,6 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
       notify = FALSE
     )
 
-    success_rate_npi <- nrow(npi_results) / input_n
     tyler_log_step_complete(
       n_success = nrow(npi_results),
       n_total = input_n
@@ -150,8 +158,14 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
   )
 
   tryCatch({
+    npi_input_path <- file.path(output_dir, "npi_accumulated.csv")
+    if (!file.exists(npi_input_path)) {
+      npi_input_path <- file.path(output_dir, "npi_for_geocoding.csv")
+      tyler_write_table(data, npi_input_path)
+    }
+
     geocoded_data <- geocode_unique_addresses(
-      file_path = file.path(output_dir, "npi_accumulated.csv"),
+      file_path = npi_input_path,
       google_maps_api_key = google_maps_api_key,
       output_file_path = file.path(output_dir, "geocoded_physicians.csv"),
       failed_output_path = file.path(output_dir, "geocoding_failures.csv"),
