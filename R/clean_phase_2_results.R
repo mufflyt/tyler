@@ -43,21 +43,31 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
   rename_log <- list()
   rename_index <- 0L
   for (i in seq_along(target_strings)) {
-    # Match target strings as case-insensitive substrings.
-    # This supports handoff files where columns contain survey prefixes/suffixes
-    # (e.g., "q1_physician_information_details") while still keeping matching
-    # deterministic by renaming only the first match.
-    matches <- grepl(
-      pattern = tolower(target_strings[i]),
-      x = tolower(names(data)),
-      fixed = TRUE
-    )
+    nm_lower <- tolower(names(data))
+    target_lower <- tolower(target_strings[i])
+
+    # Matching strategy (most specific to least specific):
+    # 1) exact case-insensitive equality
+    # 2) token-aware snake_case boundary match: (^|_)target($|_)
+    # 3) fixed substring fallback for legacy handoff exports
+    exact_matches <- nm_lower == target_lower
+    token_pattern <- paste0("(^|_)", target_lower, "($|_)")
+    token_matches <- grepl(token_pattern, nm_lower, perl = TRUE)
+    fuzzy_matches <- grepl(target_lower, nm_lower, fixed = TRUE)
+
+    matches <- if (any(exact_matches)) {
+      exact_matches
+    } else if (any(token_matches)) {
+      token_matches
+    } else {
+      fuzzy_matches
+    }
     matched_cols <- names(data)[matches]
 
     # Detailed log of what matches were found
     if (any(matches)) {
       message(sprintf(
-        "Matched %d column(s) containing '%s': %s",
+        "Matched %d column(s) for '%s': %s",
         sum(matches),
         target_strings[i],
         paste(matched_cols, collapse = ", ")
@@ -65,7 +75,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
       # Warn when multiple matches are found and use the first one.
       if (length(matched_cols) > 1) {
         warning(sprintf(
-          "Multiple columns contained '%s': %s. Renaming only the first match '%s'.",
+          "Multiple columns matched '%s': %s. Renaming only the first match '%s'.",
           target_strings[i],
           paste(matched_cols, collapse = ", "),
           matched_cols[1]
@@ -86,7 +96,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
         new_names[i]
       ))
     } else {
-      warning(sprintf("No columns contained '%s'; nothing was renamed for this pattern.", target_strings[i]))
+      warning(sprintf("No columns matched '%s'; nothing was renamed for this pattern.", target_strings[i]))
     }
     message("")  # Adding a blank line for better separation
   }
