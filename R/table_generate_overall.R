@@ -71,10 +71,6 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
   cat("Reading data from file:", input_file_path, "\n")
   data <- readr::read_rds(input_file_path)
   checkmate::assert_data_frame(data, min.rows = 1, min.cols = 1)
-    checkmate::assert_subset(selected_columns, choices = names(data), empty.ok = FALSE)
-  checkmate::assert_data_frame(selected_data, min.rows = 1, min.cols = 1)
-    stop("The input data is empty.")
-  }
 
   # Check if selected_columns argument is provided
   if (is.null(selected_columns)) {
@@ -83,9 +79,12 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
     selected_data <- data
   } else {
     # If selected_columns is provided, select only those columns from the data
+    checkmate::assert_subset(selected_columns, choices = names(data), empty.ok = FALSE)
     cat("Selecting specific columns for the table: ", paste(selected_columns, collapse = ", "), "\n")
     selected_data <- data[, selected_columns, drop = FALSE]
   }
+
+  checkmate::assert_data_frame(selected_data, min.rows = 1, min.cols = 1)
 
   # Log data summary
   cat("Data summary:\n")

@@ -137,11 +137,6 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
         coords <- attempt_result
 
         # Validate geocoding result structure immediately (Bug #11 fix)
-        checkmate::assert_true(length(coords$lat) == nrow(coords), .var.name = "lat length")
-        checkmate::assert_true(length(coords$lon) == nrow(coords), .var.name = "lon length")
-  checkmate::assert_number(success_rate, lower = 0, upper = 1)
-  checkmate::assert_int(success_count, lower = 0)
-  checkmate::assert_true(success_count <= total_unique, .var.name = "success_count bound")
         if (!is.data.frame(coords)) {
           stop("Geocoding API returned unexpected data type (expected data frame).")
         }
@@ -150,6 +145,20 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
             "Geocoding API returned unexpected structure. Expected 'lat' and 'lon' columns, got: %s",
             paste(names(coords), collapse = ", ")
           ))
+        }
+        checkmate::assert_true(length(coords$lat) == nrow(coords), .var.name = "lat length")
+        checkmate::assert_true(length(coords$lon) == nrow(coords), .var.name = "lon length")
+        checkmate::assert_numeric(coords$lat, any.missing = TRUE, finite = FALSE, .var.name = "coords$lat")
+        checkmate::assert_numeric(coords$lon, any.missing = TRUE, finite = FALSE, .var.name = "coords$lon")
+        invalid_coord_rows <- which((!is.na(coords$lat) & (coords$lat < -90 | coords$lat > 90)) |
+                                      (!is.na(coords$lon) & (coords$lon < -180 | coords$lon > 180)))
+        if (length(invalid_coord_rows)) {
+          warning(sprintf(
+            "Geocoding returned %d row(s) with out-of-bounds coordinates; setting those results to NA.",
+            length(invalid_coord_rows)
+          ))
+          coords$lat[invalid_coord_rows] <- NA_real_
+          coords$lon[invalid_coord_rows] <- NA_real_
         }
         if (nrow(coords) != total_unique) {
           warning(sprintf(
@@ -171,6 +180,8 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   failed_rows <- unique_add[!stats::complete.cases(unique_add[, c("latitude", "longitude")]), , drop = FALSE]
   success_rate <- if (total_unique) 1 - nrow(failed_rows) / total_unique else 1
   success_count <- total_unique - nrow(failed_rows)
+  checkmate::assert_number(success_rate, lower = 0, upper = 1, .var.name = "success_rate")
+  checkmate::assert_int(success_count, lower = 0, upper = total_unique, .var.name = "success_count")
 
   # Comprehensive logging: Report geocoding results
   if (!quiet) {
@@ -195,7 +206,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   }
 
   if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
-    progress_tracker_finish(tracker, tracker_step, score = success_rate, note = sprintf("%d/%d succeeded", total_unique - nrow(failed_rows), total_unique))
+    progress_tracker_finish(tracker, tracker_step, score = success_rate, note = sprintf("%d/%d succeeded", success_count, total_unique))
   }
 
   data <- dplyr::left_join(data, unique_add, by = "address")
