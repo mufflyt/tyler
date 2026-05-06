@@ -41,8 +41,19 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
                                      quiet = getOption("tyler.quiet", FALSE),
                                      tracker = NULL,
                                      tracker_step = "Geocoding") {
-  if (!file.exists(file_path)) {
-    stop("Input file not found.")
+  checkmate::assert_string(file_path, min.chars = 1, any.missing = FALSE)
+  checkmate::assert_file_exists(file_path)
+  checkmate::assert_string(google_maps_api_key, min.chars = 1, any.missing = FALSE)
+  checkmate::assert_flag(notify)
+  checkmate::assert_flag(quiet)
+  checkmate::assert_string(tracker_step, min.chars = 1, any.missing = FALSE)
+  if (!is.null(output_file_path)) {
+    checkmate::assert_string(output_file_path, min.chars = 1, any.missing = FALSE)
+    checkmate::assert_true(dirname(output_file_path) != "", .var.name = "output_file_path directory")
+  }
+  if (!is.null(failed_output_path)) {
+    checkmate::assert_string(failed_output_path, min.chars = 1, any.missing = FALSE)
+    checkmate::assert_true(dirname(failed_output_path) != "", .var.name = "failed_output_path directory")
   }
 
   # Read input based on extension
@@ -53,9 +64,10 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
                  xlsx = readxl::read_excel(file_path),
                  stop("Unsupported file type: ", ext))
 
-  if (!"address" %in% names(data)) {
-    stop("The dataset must have a column named 'address' for geocoding.")
-  }
+  checkmate::assert_data_frame(data, min.rows = 1)
+  checkmate::assert_names(names(data), must.include = "address")
+  checkmate::assert_true(all(!is.na(data$address)), .var.name = "address has no missing values")
+  checkmate::assert_true(all(trimws(data$address) != ""), .var.name = "address has no blank values")
 
   if (!requireNamespace("ggmap", quietly = TRUE)) {
     stop("Package 'ggmap' is required for geocode_unique_addresses(). Install with: install.packages('ggmap')", call. = FALSE)
@@ -64,6 +76,8 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
 
   unique_add <- dplyr::distinct(data, address)
   total_unique <- nrow(unique_add)
+  checkmate::assert_int(total_unique, lower = 0)
+  checkmate::assert_true(total_unique <= nrow(data), .var.name = "unique address count")
   tyler_log_info(sprintf("Geocoding %d unique address(es).", total_unique), quiet = quiet)
 
   # Comprehensive logging: show what we're about to do
@@ -123,6 +137,11 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
         coords <- attempt_result
 
         # Validate geocoding result structure immediately (Bug #11 fix)
+        checkmate::assert_true(length(coords$lat) == nrow(coords), .var.name = "lat length")
+        checkmate::assert_true(length(coords$lon) == nrow(coords), .var.name = "lon length")
+  checkmate::assert_number(success_rate, lower = 0, upper = 1)
+  checkmate::assert_int(success_count, lower = 0)
+  checkmate::assert_true(success_count <= total_unique, .var.name = "success_count bound")
         if (!is.data.frame(coords)) {
           stop("Geocoding API returned unexpected data type (expected data frame).")
         }
