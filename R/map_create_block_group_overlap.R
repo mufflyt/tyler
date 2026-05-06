@@ -19,7 +19,7 @@
 #' }
 #'
 #' @importFrom dplyr arrange mutate
-#' @importFrom checkmate assert_class assert_string
+#' @importFrom checkmate assert_class assert_string assert_numeric
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom sf st_make_valid st_transform st_is_valid st_union st_sf
 #' @importFrom lwgeom st_orient
@@ -35,6 +35,21 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   checkmate::assert_class(bg_data, "sf", .var.name = "bg_data")
   checkmate::assert_class(isochrones_data, "sf", .var.name = "isochrones_data")
   checkmate::assert_string(output_dir, min.chars = 1, .var.name = "output_dir")
+  checkmate::assert_numeric(
+    bg_data$overlap,
+    lower = 0,
+    upper = 1,
+    any.missing = FALSE,
+    finite = TRUE,
+    .var.name = "bg_data$overlap"
+  )
+  checkmate::assert_numeric(
+    suppressWarnings(as.numeric(isochrones_data$drive_time)),
+    lower = 0,
+    any.missing = FALSE,
+    finite = TRUE,
+    .var.name = "drive_time"
+  )
 
   validated <- validate_sf_inputs(
     bg_data = bg_data,
