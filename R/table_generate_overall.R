@@ -38,6 +38,7 @@
 #' }
 #' @export
 table_write_pdf <- function(object, filename) {
+  checkmate::assert_character(filename, len = 1, any.missing = FALSE, min.chars = 1)
   print("Function Sanity Check: Creating Arsenal Table as a PDF")
   output_file <- if (grepl("\\.pdf$", filename, ignore.case = TRUE)) {
     filename
@@ -50,6 +51,12 @@ table_write_pdf <- function(object, filename) {
 }
 
 table_generate_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
+  checkmate::assert_character(input_file_path, len = 1, any.missing = FALSE, min.chars = 1)
+  checkmate::assert_file_exists(input_file_path)
+  checkmate::assert_character(output_directory, len = 1, any.missing = FALSE, min.chars = 1)
+  checkmate::assert_character(title, len = 1, any.missing = FALSE)
+  checkmate::assert_character(selected_columns, null.ok = TRUE, any.missing = FALSE, min.len = 1)
+  checkmate::assert_list(label_translations, null.ok = TRUE, any.missing = FALSE, names = "named")
   cat("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.\n")
   # Log function start
   cat("Generating the overall table...\n")
