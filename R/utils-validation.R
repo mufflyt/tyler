@@ -10,6 +10,9 @@
 #'
 #' @keywords internal
 validate_dataframe <- function(x, name = "data", allow_null = FALSE, allow_zero_rows = TRUE) {
+  checkmate::assert_string(name, min.chars = 1, any.missing = FALSE)
+  checkmate::assert_flag(allow_null)
+  checkmate::assert_flag(allow_zero_rows)
   if (is.null(x)) {
     if (allow_null) {
       return(invisible(x))
@@ -30,9 +33,14 @@ validate_dataframe <- function(x, name = "data", allow_null = FALSE, allow_zero_
 
 #' @keywords internal
 validate_required_columns <- function(x, required, name = "data") {
+  checkmate::assert_data_frame(x, null.ok = FALSE)
+  checkmate::assert_string(name, min.chars = 1, any.missing = FALSE)
   if (is.null(required) || !length(required)) {
     return(invisible(x))
   }
+
+  checkmate::assert_character(required, any.missing = FALSE, min.chars = 1)
+
 
   missing_required <- setdiff(required, names(x))
   if (length(missing_required)) {

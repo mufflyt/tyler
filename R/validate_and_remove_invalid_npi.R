@@ -16,6 +16,7 @@ validate_and_remove_invalid_npi <- function(input_data) {
   if (is.data.frame(input_data)) {
     npi_df <- input_data
   } else if (is.character(input_data) && length(input_data) == 1) {
+    checkmate::assert_file_exists(input_data)
     npi_df <- readr::read_csv(
       input_data,
       col_types = readr::cols(.default = readr::col_guess(), npi = readr::col_character())
