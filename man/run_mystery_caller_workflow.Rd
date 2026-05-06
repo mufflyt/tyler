@@ -10,6 +10,7 @@ run_mystery_caller_workflow(
   lab_assistant_names,
   output_directory,
   phase2_data,
+  phase2_output_directory = output_directory,
   quality_check_path,
   phase1_output_directory = output_directory,
   split_insurance_order = c("Medicaid", "Blue Cross/Blue Shield"),
@@ -44,6 +45,8 @@ run_mystery_caller_workflow(
 
 \item{phase2_data}{Data frame or file path consumed by \code{clean_phase_2_data()}.}
 
+\item{phase2_output_directory}{Directory where Phase 2 exports should be written. Defaults to \code{output_directory}.}
+
 \item{quality_check_path}{File path where \code{save_quality_check_table()} should write the quality check CSV.}
 
 \item{phase1_output_directory}{Directory where \code{clean_phase_1_results()} should write the cleaned Phase 1 CSV. Defaults to \code{output_directory}.}
@@ -63,7 +66,7 @@ run_mystery_caller_workflow(
 \item{npi_progress_observer}{Optional callback that receives progress updates from \code{search_and_process_npi()}. It is invoked with the same payload as that function's \code{progress_callback} argument.}
 }
 \value{
-A list containing intermediate artefacts from each workflow stage: \code{roster}, \code{validated_roster}, \code{cleaned_phase1}, \code{cleaned_phase2}, \code{coverage_summary}, and \code{quality_check_table}.
+A list containing intermediate artefacts from each workflow stage: \code{roster}, \code{validated_roster}, \code{cleaned_phase1}, \code{cleaned_phase2}, \code{coverage_summary}, \code{quality_check_table}, and a \code{workflow_summary} data frame documenting row counts, retention rates, and output paths for audit transparency.
 }
 \description{
 This helper orchestrates the core steps required to prepare and execute a mystery caller campaign. It stitches together roster creation, NPI validation, call sheet preparation, workload splitting, and Phase 2 hygiene checks so teams can focus on execution instead of plumbing.
