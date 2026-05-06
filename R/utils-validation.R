@@ -10,6 +10,9 @@
 #'
 #' @keywords internal
 validate_dataframe <- function(x, name = "data", allow_null = FALSE, allow_zero_rows = TRUE) {
+  checkmate::assert_string(name, min.chars = 1, .var.name = "name")
+  checkmate::assert_flag(allow_null, .var.name = "allow_null")
+  checkmate::assert_flag(allow_zero_rows, .var.name = "allow_zero_rows")
   if (is.null(x)) {
     if (allow_null) {
       return(invisible(x))
@@ -28,8 +31,34 @@ validate_dataframe <- function(x, name = "data", allow_null = FALSE, allow_zero_
   invisible(x)
 }
 
+
+#' @keywords internal
+validate_scalar_positive_numeric <- function(x, name, allow_null = TRUE) {
+  checkmate::assert_string(name, min.chars = 1, .var.name = "name")
+  checkmate::assert_flag(allow_null, .var.name = "allow_null")
+  if (is.null(x)) {
+    if (allow_null) {
+      return(invisible(x))
+    }
+    stop(sprintf("`%s` must not be NULL.", name), call. = FALSE)
+  }
+
+  checkmate::assert_number(
+    x,
+    lower = 0,
+    finite = TRUE,
+    na.ok = FALSE,
+    .var.name = name
+  )
+
+  invisible(x)
+}
+
 #' @keywords internal
 validate_required_columns <- function(x, required, name = "data") {
+  checkmate::assert_data_frame(x, .var.name = "x")
+  checkmate::assert_character(required, null.ok = TRUE, any.missing = FALSE, .var.name = "required")
+  checkmate::assert_string(name, min.chars = 1, .var.name = "name")
   if (is.null(required) || !length(required)) {
     return(invisible(x))
   }
