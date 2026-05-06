@@ -65,10 +65,12 @@ create_density_plot <- function(data,
   checkmate::assert_flag(verbose)
 
   validate_required_columns(data, c(x_var, fill_var), name = "data")
-  checkmate::assert_numeric(data[[x_var]], any.missing = TRUE, lower = 0)
+  checkmate::assert_numeric(data[[x_var]], any.missing = TRUE, lower = 0, finite = TRUE)
+  checkmate::assert_true(is.factor(data[[fill_var]]) || is.character(data[[fill_var]]), .var.name = "fill_var column")
 
   # Filter out zero or negative values and NAs from the x_var column
   data <- dplyr::filter(data, .data[[x_var]] > 0, !is.na(.data[[x_var]]))
+  checkmate::assert_true(nrow(data) > 0, .var.name = "filtered data rows")
 
   # Handle transformations
   if (x_transform == "log") {
