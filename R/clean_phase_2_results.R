@@ -43,24 +43,32 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
   rename_log <- list()
   rename_index <- 0L
   for (i in seq_along(target_strings)) {
-    # Bug #8 fix: Use exact matching instead of substring matching to avoid renaming wrong columns
-    matches <- tolower(names(data)) == tolower(target_strings[i])
+    # Match target strings as case-insensitive substrings.
+    # This supports handoff files where columns contain survey prefixes/suffixes
+    # (e.g., "q1_physician_information_details") while still keeping matching
+    # deterministic by renaming only the first match.
+    matches <- grepl(
+      pattern = tolower(target_strings[i]),
+      x = tolower(names(data)),
+      fixed = TRUE
+    )
     matched_cols <- names(data)[matches]
 
     # Detailed log of what matches were found
     if (any(matches)) {
       message(sprintf(
-        "Matched %d column(s) exactly matching '%s': %s",
+        "Matched %d column(s) containing '%s': %s",
         sum(matches),
         target_strings[i],
         paste(matched_cols, collapse = ", ")
       ))
-      # Error if more than one exact match is found (should never happen)
+      # Warn when multiple matches are found and use the first one.
       if (length(matched_cols) > 1) {
-        stop(sprintf(
-          "Multiple columns with exact name '%s': %s. This should not happen - check for duplicate column names.",
+        warning(sprintf(
+          "Multiple columns contained '%s': %s. Renaming only the first match '%s'.",
           target_strings[i],
-          paste(matched_cols, collapse = ", ")
+          paste(matched_cols, collapse = ", "),
+          matched_cols[1]
         ))
       }
       # Rename the matching column
@@ -78,7 +86,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
         new_names[i]
       ))
     } else {
-      warning(sprintf("No columns exactly matched '%s'; nothing was renamed for this pattern.", target_strings[i]))
+      warning(sprintf("No columns contained '%s'; nothing was renamed for this pattern.", target_strings[i]))
     }
     message("")  # Adding a blank line for better separation
   }
