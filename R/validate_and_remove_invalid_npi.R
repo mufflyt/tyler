@@ -3,9 +3,9 @@
 #' This function reads a CSV file containing NPI numbers, validates their
 #' format using the npi package, and removes rows with missing or invalid NPIs.
 #'
-#' @param input_data Either a dataframe containing NPI numbers or a path to a CSV file.
+#' @param input_data Either a data frame containing NPI numbers or a path to a CSV file.
 #'
-#' @return A dataframe containing valid NPI numbers.
+#' @return A data frame containing valid NPI numbers.
 #'
 #' @importFrom npi npi_is_valid
 #' @importFrom readr read_csv cols col_character col_guess
@@ -16,16 +16,20 @@ validate_and_remove_invalid_npi <- function(input_data) {
   if (is.data.frame(input_data)) {
     npi_df <- input_data
   } else if (is.character(input_data) && length(input_data) == 1) {
+    if (!file.exists(input_data)) {
+      stop(sprintf("CSV file not found: %s", input_data), call. = FALSE)
+    }
+
     npi_df <- readr::read_csv(
       input_data,
       col_types = readr::cols(.default = readr::col_guess(), npi = readr::col_character())
     )
   } else {
-    stop("Input must be a dataframe or a file path to a CSV.")
+    stop(sprintf("`input_data` must be a data frame or a single CSV file path; received class: %s.", paste(class(input_data), collapse = ", ")), call. = FALSE)
   }
 
   if (!"npi" %in% names(npi_df)) {
-    stop("Input data must contain an 'npi' column.")
+    stop(sprintf("`input_data` is missing required column `npi`. Available columns: %s", if (length(names(npi_df))) paste(names(npi_df), collapse = ", ") else "<none>"), call. = FALSE)
   }
 
   npi_df <- npi_df %>%
