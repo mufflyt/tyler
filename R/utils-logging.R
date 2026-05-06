@@ -455,3 +455,17 @@ tyler_progress_callback <- function(total, label = "Processing") {
     }
   }
 }
+
+
+#' Toggle quiet logging for helper functions
+#'
+#' @param quiet Logical flag. When `TRUE`, suppress messages emitted by
+#'   `tyler_log_info()` when using quiet-aware wrappers.
+#'
+#' @return The previous quiet value (invisibly).
+#' @export
+tyler_use_quiet_logging <- function(quiet = TRUE) {
+  old <- getOption("tyler.quiet", FALSE)
+  options(tyler.quiet = quiet)
+  invisible(old)
+}
