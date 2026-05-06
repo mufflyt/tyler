@@ -62,25 +62,18 @@ search_and_process_npi <- function(data,
                                    progress_callback = NULL,
                                    heartbeat_seconds = NULL,
                                    progress_log_format = c("text", "csv")) {
-  if (!is.data.frame(data)) {
-    stop("Input 'data' must be a data frame.")
-  }
+  validate_dataframe(data, name = "data")
 
   progress_log_format <- match.arg(progress_log_format)
-  if (!is.null(heartbeat_seconds)) {
-    if (!is.numeric(heartbeat_seconds) || length(heartbeat_seconds) != 1L ||
-        is.na(heartbeat_seconds) || heartbeat_seconds <= 0) {
-      stop("`heartbeat_seconds` must be a single positive numeric value or NULL.")
-    }
-  }
+  validate_scalar_positive_numeric(
+    heartbeat_seconds,
+    name = "heartbeat_seconds",
+    allow_null = TRUE
+  )
 
   table_format <- tyler_normalize_file_format(file_format, path = accumulate_path)
 
-  required_cols <- c("first", "last")
-  missing_cols <- setdiff(required_cols, names(data))
-  if (length(missing_cols)) {
-    stop("Input data must contain columns: ", paste(missing_cols, collapse = ", "))
-  }
+  validate_required_columns(data, required = c("first", "last"), name = "data")
 
   # Validate that required columns contain actual data, not all NA (Bug #7 fix)
   if (nrow(data) > 0) {
