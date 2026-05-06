@@ -22,6 +22,7 @@ Imports:
     RColorBrewer,
     arsenal,
     broom,
+    checkmate,
     data.table,
     dplyr,
     emmeans,
