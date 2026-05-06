@@ -41,8 +41,17 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
                                      quiet = getOption("tyler.quiet", FALSE),
                                      tracker = NULL,
                                      tracker_step = "Geocoding") {
-  if (!file.exists(file_path)) {
-    stop("Input file not found.")
+  checkmate::assert_string(file_path, min.chars = 1, any.missing = FALSE)
+  checkmate::assert_file_exists(file_path)
+  checkmate::assert_string(google_maps_api_key, min.chars = 1, any.missing = FALSE)
+  checkmate::assert_flag(notify)
+  checkmate::assert_flag(quiet)
+  checkmate::assert_string(tracker_step, min.chars = 1, any.missing = FALSE)
+  if (!is.null(output_file_path)) {
+    checkmate::assert_string(output_file_path, min.chars = 1, any.missing = FALSE)
+  }
+  if (!is.null(failed_output_path)) {
+    checkmate::assert_string(failed_output_path, min.chars = 1, any.missing = FALSE)
   }
 
   # Read input based on extension
@@ -53,9 +62,8 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
                  xlsx = readxl::read_excel(file_path),
                  stop("Unsupported file type: ", ext))
 
-  if (!"address" %in% names(data)) {
-    stop("The dataset must have a column named 'address' for geocoding.")
-  }
+  checkmate::assert_data_frame(data, min.rows = 1)
+  checkmate::assert_names(names(data), must.include = "address")
 
   if (!requireNamespace("ggmap", quietly = TRUE)) {
     stop("Package 'ggmap' is required for geocode_unique_addresses(). Install with: install.packages('ggmap')", call. = FALSE)
