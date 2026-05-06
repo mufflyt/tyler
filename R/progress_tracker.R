@@ -25,6 +25,9 @@ NULL
 #' Sys.sleep(1)
 #' progress_tracker_finish(tracker, "Geocode", score = 0.95)
 progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler.quiet", FALSE)) {
+  checkmate::assert_character(steps, any.missing = FALSE, min.chars = 1)
+  checkmate::assert_number(update_every, lower = 0)
+  checkmate::assert_flag(quiet)
   if (!is.character(steps) || !length(steps)) {
     stop("`steps` must be a non-empty character vector.", call. = FALSE)
   }
@@ -179,6 +182,7 @@ progress_tracker_fail <- function(tracker, step, reason = NULL) {
 #'
 #' @export
 progress_tracker_update <- function(tracker, force = FALSE) {
+  checkmate::assert_flag(force)
   .tracker_emit_update(tracker, force = force)
   invisible(tracker)
 }

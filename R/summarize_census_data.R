@@ -48,6 +48,10 @@ summarize_census_data <- function(census_df,
                                   group_vars = "statefp",
                                   reproductive_age_vars = sprintf("B01001_%03dE", 30:38)) {
 
+  checkmate::assert_data_frame(census_df)
+  checkmate::assert_character(group_vars, any.missing = FALSE)
+  checkmate::assert_character(reproductive_age_vars, any.missing = FALSE, min.chars = 1)
+
   if (!is.data.frame(census_df)) {
     stop("`census_df` must be a data frame.")
   }
@@ -160,6 +164,10 @@ plot_census_age_distribution <- function(census_df,
                                           file_prefix = "census_age_distribution",
                                           dpi = 600,
                                           verbose = TRUE) {
+
+  checkmate::assert_data_frame(census_df)
+  checkmate::assert_string(file_prefix, min.chars = 1)
+  checkmate::assert_number(dpi, lower = 1)
 
   if (!is.data.frame(census_df)) {
     stop("`census_df` must be a data frame.")
