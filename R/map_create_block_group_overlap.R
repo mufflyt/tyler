@@ -19,6 +19,7 @@
 #' }
 #'
 #' @importFrom dplyr arrange mutate
+#' @importFrom checkmate assert_class assert_string
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom sf st_make_valid st_transform st_is_valid st_union st_sf
 #' @importFrom lwgeom st_orient
@@ -31,12 +32,9 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for map_create_block_group_overlap(). Install with: install.packages('leaflet')", call. = FALSE)
   }
-  if (!inherits(bg_data, "sf")) {
-    stop("`bg_data` must be an sf object with polygon geometries.")
-  }
-  if (!inherits(isochrones_data, "sf")) {
-    stop("`isochrones_data` must be an sf object with polygon geometries.")
-  }
+  checkmate::assert_class(bg_data, "sf", .var.name = "bg_data")
+  checkmate::assert_class(isochrones_data, "sf", .var.name = "isochrones_data")
+  checkmate::assert_string(output_dir, min.chars = 1, .var.name = "output_dir")
 
   validated <- validate_sf_inputs(
     bg_data = bg_data,

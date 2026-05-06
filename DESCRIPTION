@@ -19,6 +19,7 @@ Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:
     R (>= 3.5.0)
 Imports:
+    checkmate,
     RColorBrewer,
     arsenal,
     broom,
