@@ -23,6 +23,7 @@
 #'
 #' @importFrom sf st_intersection st_write st_area st_transform st_make_valid st_is_valid st_union st_sf
 #' @importFrom dplyr mutate select left_join coalesce
+#' @importFrom checkmate assert_class assert_number assert_string assert_function
 #' @importFrom rlang .data
 #' @importFrom stats quantile na.omit
 #'
@@ -48,23 +49,21 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   }
 
   # Parameter validation
-  if (!inherits(block_groups, "sf")) {
-    stop("Error: 'block_groups' must be an sf object.")
-  }
-  if (!inherits(isochrones_joined, "sf")) {
-    stop("Error: 'isochrones_joined' must be an sf object.")
-  }
-  if (!is.numeric(drive_time_minutes) || length(drive_time_minutes) != 1L || drive_time_minutes < 0) {
-    stop(
-      sprintf(
-        "`drive_time_minutes` must be a single non-negative numeric value; received: %s",
-        paste(drive_time_minutes, collapse = ", ")
-      ),
-      call. = FALSE
-    )
-  }
-  if (!is.character(output_dir) || length(output_dir) != 1L || !nzchar(output_dir)) {
-    stop("`output_dir` must be a single, non-empty character path.", call. = FALSE)
+  checkmate::assert_class(block_groups, "sf", .var.name = "block_groups")
+  checkmate::assert_class(isochrones_joined, "sf", .var.name = "isochrones_joined")
+  checkmate::assert_number(
+    drive_time_minutes,
+    lower = 0,
+    finite = TRUE,
+    .var.name = "drive_time_minutes"
+  )
+  checkmate::assert_string(
+    output_dir,
+    min.chars = 1,
+    .var.name = "output_dir"
+  )
+  if (!is.null(crosswalk)) {
+    checkmate::assert_function(crosswalk, .var.name = "crosswalk")
   }
 
   validated <- validate_sf_inputs(
