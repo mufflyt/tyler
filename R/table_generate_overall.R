@@ -53,11 +53,11 @@ table_write_pdf <- function(object, filename) {
 table_generate_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
   checkmate::assert_character(input_file_path, len = 1, any.missing = FALSE, min.chars = 1)
   checkmate::assert_file_exists(input_file_path)
+  checkmate::assert_choice(tolower(tools::file_ext(input_file_path)), choices = "rds")
   checkmate::assert_character(output_directory, len = 1, any.missing = FALSE, min.chars = 1)
-  checkmate::assert_character(title, len = 1, any.missing = FALSE)
-  checkmate::assert_character(selected_columns, null.ok = TRUE, any.missing = FALSE, min.len = 1)
+  checkmate::assert_character(title, len = 1, any.missing = FALSE, min.chars = 1)
+  checkmate::assert_character(selected_columns, null.ok = TRUE, any.missing = FALSE, min.len = 1, unique = TRUE)
   checkmate::assert_list(label_translations, null.ok = TRUE, any.missing = FALSE, names = "named")
-  cat("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.\n")
   # Log function start
   cat("Generating the overall table...\n")
 
@@ -70,9 +70,9 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
   # Read the data
   cat("Reading data from file:", input_file_path, "\n")
   data <- readr::read_rds(input_file_path)
-
-  # Check if the data is empty
-  if (nrow(data) == 0 || ncol(data) == 0) {
+  checkmate::assert_data_frame(data, min.rows = 1, min.cols = 1)
+    checkmate::assert_subset(selected_columns, choices = names(data), empty.ok = FALSE)
+  checkmate::assert_data_frame(selected_data, min.rows = 1, min.cols = 1)
     stop("The input data is empty.")
   }
 
