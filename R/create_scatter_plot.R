@@ -62,6 +62,22 @@ create_scatter_plot <- function(plot_data,
                                 plot_title = NULL,
                                 verbose = TRUE) {
 
+  checkmate::assert_data_frame(plot_data, min.rows = 1, .var.name = "plot_data")
+  checkmate::assert_string(x_var, min.chars = 1)
+  checkmate::assert_string(y_var, min.chars = 1)
+  checkmate::assert_choice(y_transform, c("none", "log", "sqrt"))
+  checkmate::assert_int(dpi, lower = 1)
+  checkmate::assert_string(file_prefix, min.chars = 1)
+  checkmate::assert_numeric(plot_data[[y_var]], any.missing = TRUE, lower = 0, finite = TRUE)
+  checkmate::assert_true(is.factor(plot_data[[x_var]]) || is.character(plot_data[[x_var]]), .var.name = "x_var column")
+  checkmate::assert_true(nrow(plot_data) > 0, .var.name = "filtered plot_data rows")
+  checkmate::assert_number(jitter_height, lower = 0)
+  checkmate::assert_number(point_alpha, lower = 0, upper = 1)
+  checkmate::assert_flag(verbose)
+
+  validate_required_columns(plot_data, c(x_var, y_var), name = "plot_data")
+  checkmate::assert_numeric(plot_data[[y_var]], any.missing = TRUE, lower = 0)
+
   # Filter out zero or negative values and NAs from the y_var column
   plot_data <- dplyr::filter(plot_data, .data[[y_var]] > 0, !is.na(.data[[y_var]]))
 
