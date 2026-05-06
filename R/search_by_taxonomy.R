@@ -65,7 +65,12 @@ search_by_taxonomy <- function(taxonomy_to_search,
     return(tibble::tibble())
   }
 
-  taxonomy_to_search <- taxonomy_to_search[!is.na(taxonomy_to_search)]
+  checkmate::assert_flag(write_snapshot, .var.name = "write_snapshot")
+  checkmate::assert_flag(notify, .var.name = "notify")
+  checkmate::assert_number(limit, lower = 1, upper = 1200, finite = TRUE, .var.name = "limit")
+
+  taxonomy_to_search <- trimws(as.character(taxonomy_to_search))
+  taxonomy_to_search <- taxonomy_to_search[!is.na(taxonomy_to_search) & nzchar(taxonomy_to_search)]
   if (!length(taxonomy_to_search)) {
     return(tibble::tibble())
   }
@@ -73,7 +78,15 @@ search_by_taxonomy <- function(taxonomy_to_search,
   # When states are provided loop over each state so we bypass the 1200-record
   # per-query cap. Results are deduplicated on NPI before returning.
   if (!is.null(states) && length(states)) {
+    states <- toupper(trimws(as.character(states)))
     states <- unique(states[!is.na(states) & nzchar(states)])
+    invalid_states <- states[nchar(states) != 2]
+    if (length(invalid_states)) {
+      stop(sprintf(
+        "`states` must contain two-letter abbreviations. Invalid entries: %s",
+        paste(invalid_states, collapse = ", ")
+      ), call. = FALSE)
+    }
     message(sprintf(
       "Searching %d taxonomy term(s) across %d state(s) to bypass the 1200-record cap...",
       length(taxonomy_to_search), length(states)
