@@ -58,17 +58,11 @@ validate_sf_inputs <- function(...,
     stop(sprintf("Reference CRS is missing for %s.", context))
   }
 
-  # Validate CRS is a recognized coordinate system
-  if (!is.null(ref_crs) && !sf::st_is_longlat(sf::st_crs(ref_crs))) {
-    # Ensure projected CRS has valid bounds
-    tryCatch({
-      bbox_test <- sf::st_bbox(sf::st_sfc(sf::st_point(c(0, 0)), crs = ref_crs))
-      if (any(is.infinite(bbox_test) | is.na(bbox_test))) {
-        stop(sprintf("Invalid CRS bounds detected for %s.", context))
-      }
-    }, error = function(e) {
-      stop(sprintf("CRS validation failed for %s: %s", context, e$message))
-    })
+  # Validate CRS is parseable and suitable for downstream transforms.
+  # Rely on sf/PROJ CRS parsing instead of synthetic point/bbox checks that can
+  # produce false negatives for some valid projected CRSs.
+  if (is.na(ref_crs$wkt) || !nzchar(ref_crs$wkt)) {
+    stop(sprintf("CRS validation failed for %s: unresolved CRS definition.", context))
   }
 
   sanitize_object <- function(obj, name) {
