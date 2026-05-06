@@ -38,11 +38,29 @@ create_isochrones_for_dataframe <- function(
   if (api_key == "") stop("HERE API key is required via argument or HERE_API_KEY env var.")
 
   hereR::set_key(api_key)
-  dataframe <- easyr::read.any(input_file)
+
+  if (is.data.frame(input_file)) {
+    dataframe <- input_file
+  } else {
+    dataframe <- easyr::read.any(input_file)
+  }
+
+  if (!is.numeric(breaks) || !length(breaks) || anyNA(breaks) || any(!is.finite(breaks)) || any(breaks <= 0)) {
+    stop("`breaks` must be a non-empty numeric vector of positive, finite seconds.")
+  }
 
   # Check if "lat" and "long" columns exist
   if (!all(c("lat", "long") %in% colnames(dataframe))) {
     stop("The dataframe must have 'lat' and 'long' columns.")
+  }
+
+  dataframe$lat <- suppressWarnings(as.numeric(dataframe$lat))
+  dataframe$long <- suppressWarnings(as.numeric(dataframe$long))
+
+  invalid_or_missing_coords <- is.na(dataframe$lat) | is.na(dataframe$long)
+  if (any(invalid_or_missing_coords)) {
+    warning(sprintf("Dropping %d row(s) with missing or non-numeric lat/long values.", sum(invalid_or_missing_coords)))
+    dataframe <- dataframe[!invalid_or_missing_coords, , drop = FALSE]
   }
 
   # Validate CRS assumption: lat/long should be in WGS84 bounds (Bug #9 fix)
@@ -147,6 +165,7 @@ create_isochrones_for_dataframe <- function(
     Sys.sleep(0.4)
     point_isochrones <- create_isochrones(location = point_temp, range = breaks)
     if (is.list(point_isochrones) && length(point_isochrones) && !is.null(point_isochrones$error)) {
+      warning(sprintf("Skipping row %d due to isochrone error: %s", i, point_isochrones$error))
       next
     }
 
@@ -177,9 +196,6 @@ create_isochrones_for_dataframe <- function(
         save_snapshot(force = FALSE)
       }
 
-      # Clean up temporary objects to prevent memory leaks
-      rm(point_isochrones, flattened, point_sf, attributes_df, repeated_attrs)
-      gc()  # Force garbage collection
     }
 
     if (!is.null(pb)) {

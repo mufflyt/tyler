@@ -90,7 +90,7 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
   # Initialize workflow tracking
   tyler_workflow_start(
     workflow_name = "Mystery Caller Workflow",
-    total_steps = 5,
+    total_steps = length(drive_time_minutes) + 4,
     log_file = log_file
   )
 
@@ -124,7 +124,6 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
       notify = FALSE
     )
 
-    success_rate_npi <- nrow(npi_results) / input_n
     tyler_log_step_complete(
       n_success = nrow(npi_results),
       n_total = input_n
@@ -182,11 +181,10 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
 
   tryCatch({
     isochrone_data <- create_isochrones_for_dataframe(
-      dataframe = data,
+      input_file = data,
+      breaks = drive_time_minutes * 60,
       api_key = here_api_key,
-      range_in_seconds = drive_time_minutes * 60,
-      output_dir = file.path(output_dir, "isochrones"),
-      notify = FALSE
+      output_dir = file.path(output_dir, "isochrones")
     )
 
     tyler_log_step_complete()
