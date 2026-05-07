@@ -28,7 +28,6 @@
 #' result <- table_calculate_percentages(df_na, "category")
 #' print(result)
 #'
-#' @import dplyr
 #' @importFrom rlang sym
 #' @export
 table_calculate_percentages <- function(data_frame, variable) {

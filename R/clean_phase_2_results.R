@@ -7,7 +7,6 @@
 #' @param new_names A vector of new names corresponding to the target strings.
 #' @return A data frame with renamed columns.
 #' @export
-#' @import dplyr
 #' @importFrom stats setNames
 #' @importFrom utils head
 #' @examples

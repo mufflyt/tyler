@@ -39,7 +39,7 @@
 #' result <- most_common_gender_training_academic(df_large)
 #' print(result)
 #'
-#' @import dplyr
+#' @importFrom dplyr filter count arrange desc slice
 #' @importFrom rlang sym
 #' @export
 most_common_gender_training_academic <- function(data) {
