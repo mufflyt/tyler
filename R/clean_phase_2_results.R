@@ -109,11 +109,13 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' @importFrom dplyr filter mutate
 #' @importFrom janitor clean_names
 #' @examples
+#' \dontrun{
 #' # Assuming an input path to a CSV file
 #' input_path <- "path_to_your_data.csv"
 #' required_strings <- c("physician_information", "able_to_contact_office")
 #' standard_names <- c("physician_info", "contact_office")
 #' cleaned_data <- clean_phase_2_data(input_path, required_strings, standard_names)
+#' }
 #'
 #' # Directly using a data frame
 #' df <- data.frame(

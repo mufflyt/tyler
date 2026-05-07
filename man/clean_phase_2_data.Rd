@@ -32,11 +32,13 @@ A data frame with processed data.
 This function reads data from a file or data frame, cleans column names, and applies renaming based on specified criteria to facilitate data analysis. The function logs each step of the process, including data loading, column cleaning, and renaming for transparency.
 }
 \examples{
+\dontrun{
 # Assuming an input path to a CSV file
 input_path <- "path_to_your_data.csv"
 required_strings <- c("physician_information", "able_to_contact_office")
 standard_names <- c("physician_info", "contact_office")
 cleaned_data <- clean_phase_2_data(input_path, required_strings, standard_names)
+}
 
 # Directly using a data frame
 df <- data.frame(
