@@ -40,6 +40,7 @@ ensure accurate area-based calculations, both datasets are temporarily
 projected to an equal-area CRS before measuring.
 }
 \examples{
+\dontrun{
 calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")
-
+}
 }

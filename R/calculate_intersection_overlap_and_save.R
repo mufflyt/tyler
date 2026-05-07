@@ -19,7 +19,9 @@
 #' @return None. The function saves the intersection shapefile and provides logging.
 #'
 #' @examples
+#' \dontrun{
 #' calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")
+#' }
 #'
 #' @importFrom sf st_intersection st_write st_area st_transform st_make_valid st_is_valid st_union st_sf
 #' @importFrom dplyr mutate select left_join coalesce
