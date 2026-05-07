@@ -17,6 +17,8 @@ create_isochrones(
 \item{range}{A numeric vector of time ranges in seconds.}
 
 \item{posix_time}{A POSIXct object representing the date and time of calculation. Default is "2023-10-20 08:00:00".}
+
+\item{api_key}{HERE API key. Defaults to the \code{HERE_API_KEY} environment variable.}
 }
 \value{
 A list of isolines for different time ranges, or an error message if the calculation fails.
