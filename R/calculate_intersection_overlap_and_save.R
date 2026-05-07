@@ -22,7 +22,6 @@
 #' calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")
 #'
 #' @importFrom sf st_intersection st_write st_area st_transform st_make_valid st_is_valid st_union st_sf
-#' @importFrom lwgeom st_orient
 #' @importFrom dplyr mutate select left_join coalesce
 #' @importFrom rlang .data
 #' @importFrom stats quantile na.omit

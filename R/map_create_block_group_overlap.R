@@ -20,7 +20,6 @@
 #' @importFrom dplyr arrange mutate
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom sf st_make_valid st_transform st_is_valid st_union st_sf
-#' @importFrom lwgeom st_orient
 #' @importFrom purrr walk
 #' @importFrom rlang .data
 #'
