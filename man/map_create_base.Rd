@@ -26,8 +26,10 @@ helpers. The map includes multiple tile providers, a scale bar, optional
 title control, and centres on the continental United States by default.
 }
 \examples{
+\dontrun{
 map_create_base()
 map_create_base("<strong>Custom title</strong>")
+}
 }
 \seealso{
 Other mapping: 

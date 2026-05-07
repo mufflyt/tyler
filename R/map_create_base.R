@@ -27,10 +27,10 @@ map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
   }
   map <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = TRUE)) %>%
     leaflet::addProviderTiles("CartoDB.Voyager", group = "CartoDB Voyager") %>%
-    leaflet::addProviderTiles("Stamen.TonerLite", group = "Toner by Stamen") %>%
+    leaflet::addProviderTiles("Stadia.StamenTonerLite", group = "Toner Lite") %>%
     leaflet::addScaleBar(position = "bottomleft") %>%
     leaflet::addLayersControl(
-      baseGroups = c("CartoDB Voyager", "Toner by Stamen"),
+      baseGroups = c("CartoDB Voyager", "Toner Lite"),
       options = leaflet::layersControlOptions(collapsed = FALSE)
     ) %>%
     leaflet::setView(lat = lat, lng = lng, zoom = zoom) %>%
