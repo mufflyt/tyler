@@ -92,7 +92,7 @@ summarize_census_data <- function(census_df,
     census_tbl <- dplyr::mutate(
       census_tbl,
       reproductive_age_female = rowSums(
-        dplyr::select(., dplyr::all_of(reproductive_age_vars)),
+        dplyr::select(census_tbl, dplyr::all_of(reproductive_age_vars)),
         na.rm = TRUE
       )
     )
