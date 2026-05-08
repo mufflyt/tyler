@@ -112,9 +112,9 @@ run_mystery_caller_workflow_with_logging <- function(
 #' @export
 tyler_print_dashboard <- function(results) {
   message("")
-  message("╭", strrep("─", 58), "╮")
-  message("│", "   Mystery Caller Workflow Summary", strrep(" ", 23), "│")
-  message("╰", strrep("─", 58), "╯")
+  message("\u256d", strrep("\u2500", 58), "\u256e")
+  message("\u2502", "   Mystery Caller Workflow Summary", strrep(" ", 23), "\u2502")
+  message("\u2570", strrep("\u2500", 58), "\u256f")
   message("")
 
   if (!is.null(results$workflow_summary)) {
@@ -125,6 +125,6 @@ tyler_print_dashboard <- function(results) {
     message("")
   }
 
-  message(strrep("─", 60))
+  message(strrep("\u2500", 60))
   message("")
 }
