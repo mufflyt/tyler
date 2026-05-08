@@ -17,9 +17,7 @@
 #' map_create_block_group_overlap(block_groups, isochrones_joined_map, "custom_output/")
 #' }
 #'
-#' @importFrom dplyr arrange mutate
 #' @importFrom sf st_make_valid st_transform st_is_valid st_union st_sf
-#' @importFrom rlang .data
 #'
 #' @family mapping
 #' @export
@@ -36,11 +34,24 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
     stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
   }
+  checkmate::assert_string(output_dir, min.chars = 1, .var.name = "output_dir")
   if (!inherits(bg_data, "sf")) {
     stop("`bg_data` must be an sf object with polygon geometries.", call. = FALSE)
   }
   if (!inherits(isochrones_data, "sf")) {
     stop("`isochrones_data` must be an sf object with polygon geometries.", call. = FALSE)
+  }
+  if (!"drive_time" %in% names(isochrones_data)) {
+    stop("`isochrones_data` must include a `drive_time` column in minutes.", call. = FALSE)
+  }
+  if (!is.numeric(isochrones_data$drive_time)) {
+    stop("`isochrones_data$drive_time` must be a numeric column.", call. = FALSE)
+  }
+  if (!"overlap" %in% names(bg_data)) {
+    stop("`bg_data` must include an `overlap` column (proportion 0-1). Run calculate_intersection_overlap_and_save() first.", call. = FALSE)
+  }
+  if (any(!is.na(bg_data$overlap) & (bg_data$overlap < 0 | bg_data$overlap > 1))) {
+    stop("`bg_data$overlap` values must be between 0 and 1.", call. = FALSE)
   }
 
   validated <- validate_sf_inputs(
@@ -56,19 +67,6 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   bg_data <- validated$bg_data
   isochrones_data <- validated$isochrones_data
 
-  if (!"drive_time" %in% names(isochrones_data)) {
-    stop("`isochrones_data` must include a `drive_time` column in minutes.", call. = FALSE)
-  }
-  if (!is.numeric(isochrones_data$drive_time)) {
-    stop("`isochrones_data$drive_time` must be a numeric column.", call. = FALSE)
-  }
-  if (!"overlap" %in% names(bg_data)) {
-    stop("`bg_data` must include an `overlap` column (proportion 0-1). Run calculate_intersection_overlap_and_save() first.", call. = FALSE)
-  }
-  if (any(!is.na(bg_data$overlap) & (bg_data$overlap < 0 | bg_data$overlap > 1))) {
-    stop("`bg_data$overlap` values must be between 0 and 1.", call. = FALSE)
-  }
-
   bg_data <- lwgeom::st_force_polygon_cw(bg_data)
   isochrones_data <- lwgeom::st_force_polygon_cw(isochrones_data)
 
@@ -81,9 +79,9 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
 
   draw_order <- c(180, 120, 60, 30)
 
-  isochrones_ordered <- isochrones_data %>%
-    dplyr::mutate(drive_time = as.numeric(rlang::.data$drive_time)) %>%
-    dplyr::arrange(match(rlang::.data$drive_time, draw_order))
+  isochrones_ordered <- isochrones_data
+  isochrones_ordered[["drive_time"]] <- as.numeric(isochrones_ordered[["drive_time"]])
+  isochrones_ordered <- isochrones_ordered[order(match(isochrones_ordered[["drive_time"]], draw_order)), , drop = FALSE]
 
   pal <- leaflet::colorNumeric("Purples", domain = bg_data$overlap)
 
