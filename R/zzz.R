@@ -5,6 +5,7 @@ NULL
 
 utils::globalVariables(c(
   ".",
+  ".isochrone_memo",
   "ACOG_District",
   "GEOID",
   "NAME",
