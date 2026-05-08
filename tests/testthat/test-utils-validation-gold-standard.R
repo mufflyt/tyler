@@ -133,7 +133,7 @@ test_that("validate_required_columns - extra unrequired columns are ignored", {
 test_that("validate_required_columns - includes available columns in error", {
   df <- data.frame(npi = 1, state = "CO", specialty = "OBGYN")
   err <- tryCatch(
-    validate_required_columns(df, required = c("npi", "zip_code")),
+    tyler:::validate_required_columns(df, required = c("npi", "zip_code")),
     error = function(e) e$message
   )
 
@@ -146,7 +146,7 @@ test_that("validate_required_columns - includes available columns in error", {
 test_that("validate_required_columns - typo suggestions are included when close match exists", {
   df <- data.frame(provider_npi = 1, provider_name = "A")
   err <- tryCatch(
-    validate_required_columns(df, required = "provider_np"),
+    tyler:::validate_required_columns(df, required = "provider_np"),
     error = function(e) e$message
   )
 

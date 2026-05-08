@@ -23,7 +23,7 @@ test_that("reads from csv with preserved digits", {
 
 test_that("errors when npi column missing", {
   df <- data.frame(id = 1:2)
-  expect_error(validate_and_remove_invalid_npi(df), "'npi' column")
+  expect_error(validate_and_remove_invalid_npi(df), "required column")
 })
 
 test_that("returns empty tibble when no valid NPIs", {

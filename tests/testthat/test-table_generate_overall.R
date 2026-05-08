@@ -4,6 +4,11 @@ testthat::skip_if_not_installed("dplyr")
 testthat::skip_if_not_installed("arsenal")
 testthat::skip_if_not_installed("fs")
 testthat::skip_if_not(rmarkdown::pandoc_available(), "pandoc not available")
+testthat::skip_if_not(
+  nzchar(Sys.which("pdflatex")) || nzchar(Sys.which("xelatex")) ||
+    (requireNamespace("tinytex", quietly = TRUE) && isTRUE(tinytex::is_tinytex())),
+  "LaTeX not available"
+)
 library(readr)
 library(dplyr)
 library(arsenal)
