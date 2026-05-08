@@ -150,5 +150,5 @@ test_that("validate_required_columns - typo suggestions are included when close 
     error = function(e) e$message
   )
 
-  expect_match(err, "did you mean `provider_npi`\?", perl = TRUE)
+  expect_match(err, "did you mean `provider_npi`\\?", perl = TRUE)
 })

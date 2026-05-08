@@ -151,4 +151,10 @@ test_that("tyler_require_arrow - errors with install message when arrow absent",
   expect_error(tyler_require_arrow(), "arrow")
 })
 test_that("tyler_read_table normalizes numeric-looking npi columns to character digits", {
+  tmp <- tempfile(fileext = ".csv")
+  on.exit(unlink(tmp))
   writeLines(c("npi", "1922051358"), tmp)
+  df <- tyler_read_table(tmp, format = "csv")
+  expect_type(df$npi, "character")
+  expect_equal(df$npi, "1922051358")
+})
