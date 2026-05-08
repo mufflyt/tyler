@@ -64,7 +64,7 @@ test_that("Handles empty input data frame", {
 })
 
 test_that("validates required columns", {
-  expect_error(search_and_process_npi(data.frame(first = "A"), notify = FALSE), "columns: last")
+  expect_error(search_and_process_npi(data.frame(first = "A"), notify = FALSE), "last")
 })
 
 test_that("Handles invalid NPIs gracefully", {

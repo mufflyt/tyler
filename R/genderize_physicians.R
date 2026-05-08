@@ -56,7 +56,9 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
   resolved_genders <- genderize_fetch(first_names)
 
   x <- resolved_genders %>%
-    dplyr::distinct(.data$first_name, .keep_all = TRUE)
+    dplyr::distinct(.data$first_name, .keep_all = TRUE) %>%
+    dplyr::mutate(join_first_name = tolower(.data$first_name)) %>%
+    dplyr::select(-"first_name")
 
   # Bug #1 fix: Drop overlapping columns before join to prevent .x/.y suffixes
   # genderize_fetch() returns: first_name, gender, probability, count

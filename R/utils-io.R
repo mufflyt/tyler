@@ -35,12 +35,16 @@ tyler_require_arrow <- function() {
 
 tyler_read_table <- function(path, format = NULL, ...) {
   fmt <- tyler_normalize_file_format(format, path = path)
-  if (identical(fmt, "csv")) {
+  df <- if (identical(fmt, "csv")) {
     readr::read_csv(path, show_col_types = FALSE, ...)
   } else {
     tyler_require_arrow()
     arrow::read_parquet(path, as_data_frame = TRUE)
   }
+  if ("npi" %in% names(df) && is.numeric(df[["npi"]])) {
+    df[["npi"]] <- sprintf("%.0f", df[["npi"]])
+  }
+  df
 }
 
 tyler_write_table <- function(data, path, format = NULL, append = FALSE, col_names = TRUE, ...) {

@@ -34,6 +34,9 @@
 rename_columns_by_substring <- function(data, target_strings, new_names) {
   # Initial checks and setup
   validate_dataframe(data, name = "data")
+  if (!length(target_strings) && !length(new_names)) {
+    return(invisible(data))
+  }
   checkmate::assert_character(target_strings, any.missing = FALSE, min.len = 1, .var.name = "target_strings")
   checkmate::assert_character(new_names, any.missing = FALSE, min.len = 1, .var.name = "new_names")
 

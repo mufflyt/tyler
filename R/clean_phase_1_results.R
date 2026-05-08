@@ -440,7 +440,7 @@ format_phone_number <- function(phone_values) {
     }
   }
 
-  formatted <- vapply(digits, function(d) {
+  formatted <- unname(vapply(digits, function(d) {
     if (is.na(d) || !nzchar(d)) {
       return("")
     }
@@ -459,7 +459,7 @@ format_phone_number <- function(phone_values) {
       ), call. = FALSE)
       NA_character_
     }
-  }, character(1))
+  }, character(1)))
 
   # Preserve original NAs
   formatted[is.na(phone_chr)] <- NA_character_

@@ -62,6 +62,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   if (!is.null(crosswalk) && !is.function(crosswalk)) {
     stop("Error: 'crosswalk' must be a function or NULL.", call. = FALSE)
   }
+  checkmate::assert_flag(notify, .var.name = "notify")
 
   validated <- validate_sf_inputs(
     block_groups = block_groups,

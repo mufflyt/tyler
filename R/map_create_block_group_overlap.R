@@ -62,8 +62,14 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   if (!"drive_time" %in% names(isochrones_data)) {
     stop("`isochrones_data` must include a `drive_time` column in minutes.", call. = FALSE)
   }
+  if (!is.numeric(isochrones_data$drive_time)) {
+    stop("`isochrones_data$drive_time` must be a numeric column.", call. = FALSE)
+  }
   if (!"overlap" %in% names(bg_data)) {
     stop("`bg_data` must include an `overlap` column (proportion 0-1). Run calculate_intersection_overlap_and_save() first.", call. = FALSE)
+  }
+  if (any(!is.na(bg_data$overlap) & (bg_data$overlap < 0 | bg_data$overlap > 1))) {
+    stop("`bg_data$overlap` values must be between 0 and 1.", call. = FALSE)
   }
 
   palette <- c(
