@@ -8,7 +8,8 @@ map_create_physician_dot(
   physician_data,
   jitter_range = 0.05,
   color_palette = "magma",
-  popup_var = "name"
+  popup_var = "name",
+  output_dir = NULL
 )
 }
 \arguments{
@@ -21,6 +22,9 @@ coordinates.}
 \item{color_palette}{The color palette for ACOG district colors.}
 
 \item{popup_var}{The variable to use for popup text.}
+
+\item{output_dir}{Directory where the HTML map and PNG screenshot are saved.
+Defaults to a session-specific temporary folder.}
 }
 \value{
 Invisibly returns the Leaflet map object.

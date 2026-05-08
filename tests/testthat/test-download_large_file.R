@@ -2,6 +2,7 @@ test_that("download_large_file returns existing complete file", {
   tmp_dir <- tempdir()
   dest <- normalizePath(file.path(tmp_dir, "example.dat"), mustWork = FALSE)
   writeBin(raw(10), dest)
+  dest <- normalizePath(dest)  # re-resolve after file creation (macOS /var → /private/var)
 
   mockery::stub(download_large_file, "get_content_length", function(...) 10)
   expect_equal(download_large_file("https://example.com/data", dest, overwrite = FALSE), dest)
@@ -42,7 +43,7 @@ test_that("download_large_file falls back through download methods", {
   })
 
   result <- download_large_file("https://example.com/data", dest, overwrite = TRUE)
-  expect_equal(result, normalizePath(dest, mustWork = FALSE))
+  expect_equal(normalizePath(result), normalizePath(dest))
   expect_true(file.exists(result))
   expect_equal(file.info(result)$size, 4)
   expect_equal(calls, c("wget", "curl", "download.file"))

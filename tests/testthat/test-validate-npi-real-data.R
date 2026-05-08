@@ -188,8 +188,7 @@ test_that("output has same row count as valid input rows (no silent duplication)
   for (npi_val in valid_npis) {
     df     <- make_npi_df(npi_val)
     result <- suppressMessages(validate_and_remove_invalid_npi(df))
-    expect_lte(nrow(result), 1L,
-               info = paste("Duplication check for NPI:", npi_val))
+    expect_lte(nrow(result), 1L)
   }
 })
 

@@ -8,7 +8,7 @@ plot_and_save_emmeans(
   model_object,
   specs,
   variable_of_interest,
-  color_by,
+  color_by = NULL,
   output_dir = NULL
 )
 }

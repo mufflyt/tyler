@@ -1,4 +1,4 @@
-local_edition(3)
+local_edition(2)
 
 setup_polygons <- function(crs = 4326) {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))
@@ -14,9 +14,13 @@ test_that("validate_sf_inputs repairs invalid geometries and enforces expectatio
   polygons <- setup_polygons()
   invalid_coords <- rbind(c(0, 0), c(1, 1), c(1, 0), c(0, 1), c(0, 0))
   invalid_poly <- sf::st_polygon(list(invalid_coords))
+  repaired <- sf::st_make_valid(sf::st_sfc(invalid_poly, crs = 4326))
+  if (!all(sf::st_is_valid(repaired))) {
+    skip("st_make_valid cannot repair this geometry on the current GEOS version")
+  }
   polygons$bg$geometry <- sf::st_sfc(invalid_poly, crs = 4326)
 
-  validated <- validate_sf_inputs(
+  validated <- tyler:::validate_sf_inputs(
     block_groups = polygons$bg,
     isochrones = polygons$iso,
     expected_types = list(
@@ -36,7 +40,7 @@ test_that("validate_sf_inputs flags unexpected geometry types", {
   polygons$iso$geometry <- sf::st_sfc(point_geom, crs = 4326)
 
   expect_error(
-    validate_sf_inputs(
+    tyler:::validate_sf_inputs(
       block_groups = polygons$bg,
       isochrones = polygons$iso,
       expected_types = list(
@@ -51,10 +55,12 @@ test_that("validate_sf_inputs flags unexpected geometry types", {
 
 test_that("validate_sf_inputs requires overlapping bounding boxes", {
   polygons <- setup_polygons()
-  sf::st_geometry(polygons$iso) <- sf::st_geometry(polygons$iso) + c(100, 100)
+  shifted <- sf::st_geometry(polygons$iso) + c(100, 100)
+  sf::st_crs(shifted) <- sf::st_crs(polygons$iso)
+  sf::st_geometry(polygons$iso) <- shifted
 
   expect_error(
-    validate_sf_inputs(
+    tyler:::validate_sf_inputs(
       block_groups = polygons$bg,
       isochrones = polygons$iso,
       expected_types = list(
@@ -73,7 +79,7 @@ test_that("validate_sf_inputs catches empty geometries", {
   polygons$bg$geometry <- sf::st_sfc(empty_multi, crs = 4326)
 
   expect_error(
-    validate_sf_inputs(
+    tyler:::validate_sf_inputs(
       block_groups = polygons$bg,
       isochrones = polygons$iso,
       expected_types = list(

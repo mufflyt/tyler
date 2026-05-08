@@ -18,9 +18,7 @@
 #' }
 #'
 #' @importFrom dplyr arrange mutate
-#' @importFrom htmlwidgets saveWidget
 #' @importFrom sf st_make_valid st_transform st_is_valid st_union st_sf
-#' @importFrom purrr walk
 #' @importFrom rlang .data
 #'
 #' @family mapping
@@ -34,6 +32,9 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   }
   if (!requireNamespace("webshot", quietly = TRUE)) {
     stop("Package 'webshot' is required for map_create_block_group_overlap(). Install with: install.packages('webshot')", call. = FALSE)
+  }
+  if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
+    stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
   }
   if (!inherits(bg_data, "sf")) {
     stop("`bg_data` must be an sf object with polygon geometries.", call. = FALSE)
@@ -55,8 +56,8 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   bg_data <- validated$bg_data
   isochrones_data <- validated$isochrones_data
 
-  bg_data <- lwgeom::st_orient(bg_data)
-  isochrones_data <- lwgeom::st_orient(isochrones_data)
+  bg_data <- lwgeom::st_force_polygon_cw(bg_data)
+  isochrones_data <- lwgeom::st_force_polygon_cw(isochrones_data)
 
   if (!"drive_time" %in% names(isochrones_data)) {
     stop("`isochrones_data` must include a `drive_time` column in minutes.", call. = FALSE)
@@ -103,7 +104,7 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
       opacity = 1
     )
 
-  purrr::walk(draw_order, function(dt) {
+  invisible(lapply(draw_order, function(dt) {
     subset <- isochrones_ordered[isochrones_ordered$drive_time == dt, , drop = FALSE]
     if (!nrow(subset)) {
       return(NULL)
@@ -111,7 +112,7 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
 
     union_geom <- sf::st_union(subset)
     union_sf <- sf::st_sf(drive_time = dt, geometry = union_geom, crs = 4326)
-    union_sf <- lwgeom::st_orient(union_sf)
+    union_sf <- lwgeom::st_force_polygon_cw(union_sf)
 
     map <<- map %>%
       leaflet::addPolygons(
@@ -124,7 +125,7 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
         weight = 1.5,
         group = paste0(dt, " minutes")
       )
-  })
+  }))
 
   # Generate a timestamp
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")

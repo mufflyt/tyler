@@ -403,10 +403,11 @@ tyler_validate_here_api <- function(api_key) {
 
 #' Assess data quality
 #'
-#' @param data Data frame to assess
-#' @param required_columns Required column names
+#' @param data Data frame to assess.
+#' @param required_columns Character vector of column names that must be present
+#'   and sufficiently complete. Defaults to `c("first", "last")`.
 #' @return List with score (0-1) and issues
-#' @keywords internal
+#' @export
 tyler_assess_data_quality <- function(data, required_columns = c("first", "last")) {
   issues <- list()
   penalties <- 0
@@ -471,9 +472,10 @@ tyler_assess_data_quality <- function(data, required_columns = c("first", "last"
 
 #' Estimate workflow resources
 #'
-#' @param n_rows Number of input rows
+#' @param n_rows Integer number of input rows used to project runtime and
+#'   memory requirements.
 #' @return List with runtime and memory estimates
-#' @keywords internal
+#' @export
 tyler_estimate_resources <- function(n_rows) {
   # Rough estimates based on typical performance
   # These should be calibrated with real-world data

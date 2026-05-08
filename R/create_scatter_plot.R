@@ -21,7 +21,6 @@
 #' @return Invisibly returns the generated ggplot object.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_jitter scale_y_log10 scale_y_sqrt labs theme_minimal element_rect element_blank ggsave
-#' @importFrom viridis viridis_pal
 #' @importFrom rlang sym .data
 #' @family mapping
 #' @export

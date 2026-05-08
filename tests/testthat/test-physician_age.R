@@ -41,19 +41,7 @@ test_that("physician_age handles NA values correctly", {
 })
 
 test_that("physician_age handles an empty dataframe correctly", {
-  # Create empty test data
+  # Empty data frames should error since there are no values to compute statistics
   df <- data.frame(age = numeric(0))
-
-  # Calculate expected result
-  median_age <- round(median(df$age, na.rm = TRUE), 2)
-  q25 <- round(quantile(df$age, probs = 0.25, na.rm = TRUE), 1)
-  q75 <- round(quantile(df$age, probs = 0.75, na.rm = TRUE), 1)
-  expected <- paste0(
-    "The median age of the dataset was ", median_age,
-    " (IQR 25th percentile ", q25, " to 75th percentile ", q75, ")."
-  )
-
-  # Run test
-  result <- physician_age(df, "age")
-  expect_equal(result, expected)
+  expect_error(physician_age(df, "age"), "at least 2 non-missing values")
 })

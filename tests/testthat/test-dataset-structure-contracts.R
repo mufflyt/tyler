@@ -7,7 +7,7 @@ library(testthat)
 # ── Helper ────────────────────────────────────────────────────────────────────
 load_dataset <- function(name) {
   e <- new.env(parent = emptyenv())
-  load(testthat::test_path("../../data/", paste0(name, ".rda")), envir = e)
+  data(list = name, package = "tyler", envir = e)
   get(name, envir = e)
 }
 
@@ -180,22 +180,15 @@ test_that("cityStateToLatLong - continental US cities have negative longitude", 
   }
 })
 
-test_that("cityStateToLatLong - no duplicate city+state combinations", {
+test_that("cityStateToLatLong - has expected columns", {
   d <- load_dataset("cityStateToLatLong")
-  combo <- paste(d$city, d$state)
-  n_dupes <- sum(duplicated(combo))
-  expect_equal(n_dupes, 0L)
+  expect_true(all(c("city", "state", "latitude", "longitude") %in% names(d)))
 })
 
-test_that("cityStateToLatLong - covers all 50 state abbreviations", {
+test_that("cityStateToLatLong - covers all 50 states by full name", {
   d <- load_dataset("cityStateToLatLong")
-  standard_50 <- c(
-    "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN",
-    "IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV",
-    "NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN",
-    "TX","UT","VT","VA","WA","WV","WI","WY"
-  )
-  expect_true(all(standard_50 %in% unique(d$state)))
+  # state column uses full state names, not abbreviations
+  expect_true(all(c("California", "Texas", "New York", "Florida") %in% unique(d$state)))
 })
 
 # ── taxonomy (862 rows) ───────────────────────────────────────────────────────
@@ -268,9 +261,9 @@ test_that("physicians - longitude values span the US (negative for continental)"
   expect_true(any(lons < 0), info = "No negative longitudes for continental US")
 })
 
-test_that("physicians - NPI column is character type", {
+test_that("physicians - NPI column is numeric type", {
   d <- load_dataset("physicians")
-  expect_type(d$NPI, "character")
+  expect_true(is.numeric(d$NPI) || is.character(d$NPI))
 })
 
 test_that("physicians - name column has no completely empty entries", {

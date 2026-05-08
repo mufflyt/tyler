@@ -18,7 +18,7 @@ A function that updates progress
 Create a simple progress callback for batch operations
 }
 \examples{
-\dontrun{
+\donttest{
 progress <- tyler_progress_callback(100, "Processing")
 for (i in 1:100) {
   # do work

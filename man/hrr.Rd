@@ -18,5 +18,7 @@ The shapefile (~8 MB) is downloaded from the Dartmouth Atlas website on first us
 user's R cache directory for subsequent calls.
 }
 \examples{
+\dontrun{
 hrr()
+}
 }

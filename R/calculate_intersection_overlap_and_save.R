@@ -66,8 +66,8 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   block_groups <- validated$block_groups
   isochrones_joined <- validated$isochrones_joined
 
-  block_groups <- lwgeom::st_orient(block_groups)
-  isochrones_joined <- lwgeom::st_orient(isochrones_joined)
+  block_groups <- lwgeom::st_force_polygon_cw(block_groups)
+  isochrones_joined <- lwgeom::st_force_polygon_cw(isochrones_joined)
 
   # Year alignment enforcement
   if (!"data_year" %in% names(isochrones_joined)) {
@@ -137,8 +137,8 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     block_groups <- validated_crosswalk$block_groups
     isochrones_joined <- validated_crosswalk$isochrones_joined
 
-    block_groups <- lwgeom::st_orient(block_groups)
-    isochrones_joined <- lwgeom::st_orient(isochrones_joined)
+    block_groups <- lwgeom::st_force_polygon_cw(block_groups)
+    isochrones_joined <- lwgeom::st_force_polygon_cw(isochrones_joined)
 
     acs_years <- stats::na.omit(unique(block_groups$vintage))
     if (length(acs_years) != 1L || !identical(acs_years[[1]], provider_year)) {
@@ -163,7 +163,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     geometry = isochrones_filtered,
     crs = sf::st_crs(isochrones_joined)
   )
-  isochrones_filtered <- lwgeom::st_orient(isochrones_filtered)
+  isochrones_filtered <- lwgeom::st_force_polygon_cw(isochrones_filtered)
 
   # Project to an equal-area CRS for area calculations
   block_groups_proj <- sf::st_transform(block_groups, area_crs)
@@ -216,14 +216,14 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   block_groups_proj <- block_groups_proj %>%
     dplyr::mutate(
       bg_area = as.numeric(sf::st_area(block_groups_proj)),
-      area_method = dplyr::coalesce(rlang::.data$area_method, "projected:EPSG:5070")
+      area_method = dplyr::coalesce(.data$area_method, "projected:EPSG:5070")
     )
 
   # Calculate overlap percent between block groups and isochrones
   block_groups_proj <- block_groups_proj %>%
     dplyr::mutate(
-      intersect_area = dplyr::coalesce(intersect_area, 0),
-      overlap = ifelse(bg_area > 0, intersect_area / bg_area, NA_real_)
+      intersect_area = dplyr::coalesce(.data$intersect_area, 0),
+      overlap = ifelse(.data$bg_area > 0, .data$intersect_area / .data$bg_area, NA_real_)
     )
 
   # Filter out missing overlap values for quantile calculation

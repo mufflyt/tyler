@@ -24,7 +24,7 @@ using \code{\link[=install.packages]{install.packages()}}. Defaults to \code{FAL
 suppresses status messages.}
 }
 \value{
-A tibble summarising the dependency status for each package.
+A tibble summarizing the dependency status for each package.
 }
 \description{
 Check for required R package dependencies

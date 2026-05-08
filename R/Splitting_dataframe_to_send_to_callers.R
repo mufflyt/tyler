@@ -12,26 +12,31 @@
 #' @param recursive_create Logical indicating if directories should be created recursively (default is TRUE).
 #' @param insurance_order Vector of insurance types ordered by priority for call scheduling (default is c("Medicaid", "Blue Cross/Blue Shield")).
 #'
-#' @importFrom dplyr arrange sample_n mutate select group_by ungroup n
-#' @importFrom openxlsx write.xlsx
-#' @importFrom fs dir_create dir_exists
+#' @importFrom dplyr arrange mutate group_by ungroup n
 #' @importFrom readr read_csv
 #' @return Invisible list of file paths to the created Excel files
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' library(tyler)
 #' input_data <- readr::read_csv("/path/to/your/input/file.csv")
 #' output_directory <- "/path/to/your/output/directory"
 #' lab_assistant_names <- c("Label1", "Label2", "Label3")
 #' insurance_order <- c("Medicaid", "Blue Cross/Blue Shield")
-#' split_and_save(data_or_path = input_data, output_directory, lab_assistant_names, insurance_order = insurance_order)
+#' split_and_save(
+#'   data_or_path = input_data,
+#'   output_directory = output_directory,
+#'   lab_assistant_names = lab_assistant_names,
+#'   insurance_order = insurance_order
+#' )
 #' }
 
 split_and_save <- function(data_or_path, output_directory, lab_assistant_names, seed = 1978,
                            complete_file_prefix = "complete_non_split_version_", split_file_prefix = "",
                            recursive_create = TRUE, insurance_order = c("Medicaid", "Blue Cross/Blue Shield")) {
+  if (!requireNamespace("openxlsx", quietly = TRUE)) {
+    stop("Package 'openxlsx' is required for this function. Install with: install.packages('openxlsx')", call. = FALSE)
+  }
   # Validate input data or read from file path
   if (is.character(data_or_path)) {
     if (!base::file.exists(data_or_path)) {
@@ -91,8 +96,8 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
   # Create a ranking based on the insurance order for sorting
   insurance_rank <- setNames(seq_along(insurance_order), insurance_order)
   data <- data %>%
-    mutate(insurance_rank = insurance_rank[insurance]) %>%
-    arrange(insurance_rank, doctor_id)  # Sort by insurance rank, then by doctor_id if necessary
+    dplyr::mutate(insurance_rank = insurance_rank[.data$insurance]) %>%
+    dplyr::arrange(.data$insurance_rank, .data$doctor_id)  # Sort by insurance rank, then by doctor_id if necessary
   message(
     sprintf(
       "Arranged %d row(s) by insurance priority: %s.",
@@ -121,15 +126,15 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
       dplyr::mutate(lab_assistant_assigned = character(dplyr::n()))
   } else {
     data <- data %>%
-      dplyr::group_by(insurance_rank) %>%
+      dplyr::group_by(.data$insurance_rank) %>%
       dplyr::mutate(lab_assistant_assigned = sample(lab_assistant_names, dplyr::n(), replace = TRUE)) %>%
       dplyr::ungroup()
   }
 
   # Create output directory if it doesn't exist
-  if (!fs::dir_exists(output_directory)) {
+  if (!dir.exists(output_directory)) {
     tryCatch({
-      fs::dir_create(output_directory, recursive = recursive_create)
+      dir.create(output_directory, recursive = recursive_create, showWarnings = FALSE)
     }, error = function(e) {
       stop("Failed to create output directory. Check directory permissions and try again.", call. = FALSE)
     })

@@ -14,7 +14,7 @@ This function creates a Leaflet BASE map with specific configurations, including
 default view settings, and layers control.
 }
 \examples{
-\dontrun{
+\donttest{
 map <- map_create_leaflet_base()
 }
 }

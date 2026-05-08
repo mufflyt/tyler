@@ -22,6 +22,7 @@ None
 }
 \description{
 This function creates a map that displays block groups and their overlap with isochrones.
+The map is exported as an HTML file and a PNG image.
 }
 \examples{
 \dontrun{

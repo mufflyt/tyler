@@ -117,23 +117,18 @@ test_that("Regression: search_by_taxonomy match rates", {
       error_rate <- errors / length(known_taxonomies)
 
       # Regression checks
-      expect_gte(match_rate, BASELINE_METRICS$search_by_taxonomy$min_match_rate,
-                 info = paste("Match rate", match_rate, "below baseline",
-                             BASELINE_METRICS$search_by_taxonomy$min_match_rate))
+      expect_gte(match_rate, BASELINE_METRICS$search_by_taxonomy$min_match_rate)
 
-      expect_lte(error_rate, BASELINE_METRICS$search_by_taxonomy$max_error_rate,
-                 info = paste("Error rate", error_rate, "above baseline",
-                             BASELINE_METRICS$search_by_taxonomy$max_error_rate))
+      expect_lte(error_rate, BASELINE_METRICS$search_by_taxonomy$max_error_rate)
 
       # Data quality checks
       for (result in results) {
         if (nrow(result) > 0) {
           # Check NPI format validity
-          valid_npis <- sum(grepl("^[0-9]{10}$", result$npi, na.rm = TRUE))
+          valid_npis <- sum(grepl("^[0-9]{10}$", result$npi[!is.na(result$npi)]))
           npi_quality_rate <- valid_npis / nrow(result)
 
-          expect_gte(npi_quality_rate, BASELINE_METRICS$search_by_taxonomy$min_data_quality,
-                     info = paste("NPI quality rate", npi_quality_rate, "below baseline"))
+          expect_gte(npi_quality_rate, BASELINE_METRICS$search_by_taxonomy$min_data_quality)
         }
       }
     }
@@ -162,8 +157,7 @@ test_that("Regression: clean_phase_1_results retention rates", {
       retention_rate <- nrow(result) / original_rows
 
       # Check against baseline
-      expect_gte(retention_rate, BASELINE_METRICS$clean_phase_1_results$min_retention_rate,
-                 info = paste("Retention rate", retention_rate, "below baseline for scenario", scenario))
+      expect_gte(retention_rate, BASELINE_METRICS$clean_phase_1_results$min_retention_rate)
 
       # Check required columns are present
       required_cols <- c("names", "practice_name", "phone_number", "state_name")
@@ -171,8 +165,7 @@ test_that("Regression: clean_phase_1_results retention rates", {
       column_presence_rate <- present_cols / length(required_cols)
 
       expect_equal(column_presence_rate,
-                   BASELINE_METRICS$clean_phase_1_results$required_columns_present,
-                   info = paste("Required columns missing in scenario", scenario))
+                   BASELINE_METRICS$clean_phase_1_results$required_columns_present)
 
     }, error = function(e) {
       # Should not have processing errors for valid input
@@ -212,7 +205,7 @@ test_that("Regression: NPI validation accuracy", {
 
   # Calculate validation accuracy
   valid_npis_in_result <- if (nrow(result) > 0 && "npi" %in% names(result)) {
-    sum(grepl("^[0-9]{10}$", result$npi, na.rm = TRUE))
+    sum(grepl("^[0-9]{10}$", result$npi[!is.na(result$npi)]))
   } else {
     0
   }
@@ -226,8 +219,7 @@ test_that("Regression: NPI validation accuracy", {
   if (total_npis_in_result > 0) {
     validation_accuracy <- valid_npis_in_result / total_npis_in_result
 
-    expect_gte(validation_accuracy, BASELINE_METRICS$npi_validation$min_valid_npi_rate,
-               info = paste("NPI validation accuracy", validation_accuracy, "below baseline"))
+    expect_gte(validation_accuracy, BASELINE_METRICS$npi_validation$min_valid_npi_rate)
   }
 
   # Check for duplicates
@@ -237,8 +229,7 @@ test_that("Regression: NPI validation accuracy", {
 
     if (total_npis > 0) {
       duplicate_rate <- 1 - (unique_npis / total_npis)
-      expect_lte(duplicate_rate, BASELINE_METRICS$npi_validation$max_duplicate_rate,
-                 info = paste("Duplicate rate", duplicate_rate, "above baseline"))
+      expect_lte(duplicate_rate, BASELINE_METRICS$npi_validation$max_duplicate_rate)
     }
   }
 })
@@ -261,15 +252,13 @@ test_that("Regression: Taxonomy data completeness", {
       valid_codes <- sum(nchar(as.character(taxonomy_data$Code)) == 10, na.rm = TRUE)
       code_quality_rate <- valid_codes / nrow(taxonomy_data)
 
-      expect_gte(code_quality_rate, 0.95,
-                 info = paste("Taxonomy code quality rate", code_quality_rate, "below 95%"))
+      expect_gte(code_quality_rate, 0.95)
     }
 
     # Check for OBGYN-related entries
     if ("Classification" %in% names(taxonomy_data)) {
       obgyn_entries <- sum(grepl("Obstetrics|Gynecol", taxonomy_data$Classification, ignore.case = TRUE))
-      expect_gt(obgyn_entries, 5,
-                info = "Should have multiple OBGYN taxonomy entries")
+      expect_gt(obgyn_entries, 5)
     }
   }
 })
@@ -292,8 +281,7 @@ test_that("Regression: Performance benchmarks", {
   processing_time <- as.numeric(end_time - start_time, units = "secs")
 
   # Should process small dataset quickly
-  expect_lt(processing_time, 5,
-            info = paste("Processing time", processing_time, "seconds exceeds 5 second baseline"))
+  expect_lt(processing_time, 5)
 
   # Memory usage should be reasonable
   expect_s3_class(result, "data.frame")
@@ -385,7 +373,6 @@ test_that("Regression: State and geographic data validation", {
     state_validity_rate <- sum(result$state_name %in% valid_states, na.rm = TRUE) / nrow(result)
 
     # Allow some flexibility for state name variations
-    expect_gte(state_validity_rate, 0.8,
-               info = paste("State validity rate", state_validity_rate, "below 80%"))
+    expect_gte(state_validity_rate, 0.8)
   }
 })

@@ -24,7 +24,7 @@ test_that("Creates formula with random effect", {
   cat("Running test: Creates formula with random effect\n")
   result <- create_formula(sample_data, "days", "name")
 
-  expected_formula <- as.formula("days ~ `age` + `name` + (1 | name)")
+  expected_formula <- as.formula("days ~ `age` + (1 | name)")  # random_effect var excluded from fixed effects
 
   expect_equal(as.character(result), as.character(expected_formula))
 })

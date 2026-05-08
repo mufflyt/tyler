@@ -7,7 +7,7 @@
 #' @param data A data frame containing the columns 'npi' and 'name'.
 #' @param filepath The path where the CSV file should be saved.
 #' @return The filtered data. A message is emitted indicating where the CSV was saved.
-#' @importFrom dplyr group_by summarise arrange filter n desc
+#' @importFrom dplyr group_by summarize arrange filter n desc
 #' @family utilities
 #' @export
 #' @examples
@@ -24,10 +24,10 @@ save_quality_check_table <- function(data, filepath) {
 
   # Group by 'npi' and 'name', calculate counts, filter where count > 2, and arrange by count descending
   filtered_data <- data %>%
-    dplyr::group_by(npi, name) %>%
-    dplyr::summarise(count = n(), .groups = 'drop') %>%
-    dplyr::filter(count > 2) %>%
-    dplyr::arrange(desc(count))
+    dplyr::group_by(.data$npi, .data$name) %>%
+    dplyr::summarize(count = n(), .groups = 'drop') %>%
+    dplyr::filter(.data$count > 2) %>%
+    dplyr::arrange(desc(.data$count))
 
   # Save the filtered data to a CSV file
   dir.create(dirname(filepath), recursive = TRUE, showWarnings = FALSE)

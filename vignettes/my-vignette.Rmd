@@ -20,6 +20,7 @@ editor_options:
 
 ```{r, include = FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+library(magrittr)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -150,9 +151,9 @@ data <- search_by_taxonomy(taxonomy_to_search = taxonomy_descriptions)
 dplyr::count(data, basic_gender, addresses_state)
 ```
 
-You can easily summarise the resulting data frame in a user-friendly format.
+You can easily summarize the resulting data frame in a user-friendly format.
 ```{r, include=TRUE}
-# Summarise the resulting data frame by state
+# Summarize the resulting data frame by state
 data %>%
   dplyr::count(addresses_state)
 ```

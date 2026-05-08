@@ -5,14 +5,15 @@
 #' @return A tibble mapping NUCC taxonomy codes to descriptive provider
 #'   types relevant to obstetrics and gynecology research.
 #' @source <https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf>
-#' @format A data frame with two columns:
+#' @format A data frame with three columns:
 #'   \describe{
-#'     \item{NUCC Code}{NUCC (National Uniform Claim Committee) code for healthcare providers.}
-#'     \item{Provider Type}{The type of healthcare provider corresponding to the NUCC code.}
+#'     \item{Code}{NUCC (National Uniform Claim Committee) taxonomy code.}
+#'     \item{Classification}{Provider classification (e.g., Allopathic & Osteopathic Physicians).}
+#'     \item{Specialization}{Provider specialization within the classification.}
 #'   }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Load the taxonomy dataset
 #' data(taxonomy)
 #'

@@ -13,7 +13,6 @@
 #' new_data <- remove_near_zero_var(data_frame)
 #' }
 #'
-#' @importFrom glue glue
 #' @importFrom dplyr select
 #'
 #' @export
@@ -36,7 +35,7 @@ remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
   remove_cols <- sort(remove_cols)
 
   # Log: Number of near-zero variance variables found
-  message(glue::glue("Found {length(remove_cols)} near-zero variance variables."))
+  message(sprintf("Found %d near-zero variance variables.", length(remove_cols)))
 
   # Remove near-zero variance variables if any
   if (length(remove_cols) > 0) {

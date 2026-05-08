@@ -14,7 +14,7 @@ validate_dataframe <- function(x, name = "data", allow_null = FALSE, allow_zero_
     if (allow_null) {
       return(invisible(x))
     }
-    stop(sprintf("`%s` must not be NULL.", name), call. = FALSE)
+    stop(sprintf("`%s` must be a data frame; received NULL.", name), call. = FALSE)
   }
 
   if (!inherits(x, "data.frame")) {

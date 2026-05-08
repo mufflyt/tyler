@@ -1,13 +1,11 @@
 library(testthat)
 testthat::skip_if_not_installed("dplyr")
-testthat::skip_if_not_installed("fs")
 if (!requireNamespace("openxlsx", quietly = TRUE)) {
   testthat::skip("Package 'openxlsx' is not installed")
 } else {
   library(openxlsx)
 }
 library(dplyr)
-library(fs)
 
 # Test if the function stops when required columns are missing
 test_that("Missing required columns handling", {
@@ -86,7 +84,9 @@ test_that("Invalid file path handling", {
 })
 
 test_that("Insufficient lab assistant names handling", {
-  data <- data.frame(for_redcap = 1:4, id = 1:4, doctor_id = 1:4, stringsAsFactors = FALSE)
+  data <- data.frame(for_redcap = 1:4, id = 1:4, doctor_id = 1:4,
+                     insurance = rep(c("Medicaid", "Blue Cross/Blue Shield"), 2),
+                     stringsAsFactors = FALSE)
   expect_error(
     split_and_save(data_or_path = data, output_directory = tempdir(), lab_assistant_names = c("Alice")),
     "Please provide at least two lab assistant names for the splits.",

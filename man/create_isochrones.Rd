@@ -21,7 +21,8 @@ create_isochrones(
 \item{api_key}{HERE API key. Defaults to the \code{HERE_API_KEY} environment variable.}
 }
 \value{
-A list of isolines for different time ranges, or an error message if the calculation fails.
+A named list of sf isolines keyed by range in seconds, or a list
+with an \code{error} element if the calculation fails.
 }
 \description{
 This function calculates isolines for a given location using the hereR package.
@@ -30,8 +31,8 @@ This function calculates isolines for a given location using the hereR package.
 \dontrun{
 # Set your HERE API key in your Renviron file using the following steps:
 # 1. Add key to .Renviron
-#' # 2. Reload .Renviron
-#'
+# 2. Reload .Renviron
+
 # Define a sf object for the location
 location <- sf::st_point(c(-73.987, 40.757))
 
@@ -41,6 +42,8 @@ isolines <- create_isochrones(location = location, range = c(1800, 3600, 7200, 1
 # Print the isolines
 print(isolines)
 
+# Free the in-memory cache when done with a batch
+tyler_clear_isochrone_cache()
 }
 
 }

@@ -106,7 +106,7 @@ summarize_census_data <- function(census_df,
     census_tbl
   }
 
-  summarized <- dplyr::summarise(
+  summarized <- dplyr::summarize(
     grouped_tbl,
     block_group_count = dplyr::n(),
     total_population = sum(.data$B01001_001E, na.rm = TRUE),
@@ -139,7 +139,7 @@ summarize_census_data <- function(census_df,
 #' @inheritParams summarize_census_data
 #' @param group_var Optional single column name used to facet the distribution.
 #'   When supplied, stacked bars are produced for each value of `group_var`. Set
-#'   to `NULL` (the default) to visualise the aggregate distribution across all
+#'   to `NULL` (the default) to visualize the aggregate distribution across all
 #'   rows in `census_df`.
 #' @param output_dir Directory where image files should be written. Defaults to a
 #'   session-specific directory from [tyler_tempdir()].
@@ -152,7 +152,7 @@ summarize_census_data <- function(census_df,
 #' @export
 #' @family census
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'   plot_census_age_distribution(census_example, group_var = "statefp", verbose = FALSE)
 #' }
 plot_census_age_distribution <- function(census_df,
@@ -161,6 +161,9 @@ plot_census_age_distribution <- function(census_df,
                                           file_prefix = "census_age_distribution",
                                           dpi = 600,
                                           verbose = TRUE) {
+  if (!requireNamespace("tidyr", quietly = TRUE)) {
+    stop("Package 'tidyr' is required for this function. Install with: install.packages('tidyr')", call. = FALSE)
+  }
 
   if (!is.data.frame(census_df)) {
     stop("`census_df` must be a data frame.", call. = FALSE)
@@ -237,7 +240,7 @@ plot_census_age_distribution <- function(census_df,
 
     aggregated <- age_long |>
       dplyr::group_by(.data[[group_var]], .data$age_label) |>
-      dplyr::summarise(population = sum(.data$estimate, na.rm = TRUE), .groups = "drop") |>
+      dplyr::summarize(population = sum(.data$estimate, na.rm = TRUE), .groups = "drop") |>
       dplyr::group_by(.data[[group_var]]) |>
       dplyr::mutate(share = ifelse(sum(population) > 0, population / sum(population), NA_real_)) |>
       dplyr::ungroup()
@@ -266,7 +269,7 @@ plot_census_age_distribution <- function(census_df,
   } else {
     aggregated <- age_long |>
       dplyr::group_by(.data$age_label) |>
-      dplyr::summarise(population = sum(.data$estimate, na.rm = TRUE), .groups = "drop")
+      dplyr::summarize(population = sum(.data$estimate, na.rm = TRUE), .groups = "drop")
 
     total_population <- sum(aggregated$population, na.rm = TRUE)
     aggregated <- dplyr::mutate(

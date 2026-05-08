@@ -9,6 +9,7 @@ run_mystery_caller_workflow_with_logging(
   output_dir,
   google_maps_api_key,
   here_api_key,
+  block_groups,
   drive_time_minutes = c(30, 60, 120, 180),
   census_year = 2020,
   log_file = NULL,
@@ -23,6 +24,9 @@ run_mystery_caller_workflow_with_logging(
 \item{google_maps_api_key}{Google Maps API key for geocoding}
 
 \item{here_api_key}{HERE API key for isochrones}
+
+\item{block_groups}{An \code{sf} object of census block group geometries passed to
+\code{\link[=calculate_intersection_overlap_and_save]{calculate_intersection_overlap_and_save()}}.}
 
 \item{drive_time_minutes}{Drive time breaks (default: c(30, 60, 120, 180))}
 
@@ -57,15 +61,15 @@ results <- run_mystery_caller_workflow_with_logging(
 #   Total Steps: 5
 # ============================================================
 #
-# ▶ Step 1/5: Searching NPI Registry
+# > Step 1/5: Searching NPI Registry
 #   Processing 1,234 item(s)...
-#   ✓ NPI search complete: 1,174/1,234 (95.1\%)
-#   ✓ Step complete: 95.1\% success in 23m 15s
+#   [OK] NPI search complete: 1,174/1,234 (95.1\%)
+#   [OK] Step complete: 95.1\% success in 23m 15s
 #
-# ▶ Step 2/5: Geocoding Addresses
+# > Step 2/5: Geocoding Addresses
 #   Found 1174 total address records, 1152 unique
-#   ✓ Geocoding complete: 1,152/1,152 succeeded (100.0\%)
-#   ✓ Step complete in 12m 30s
+#   [OK] Geocoding complete: 1,152/1,152 succeeded (100.0\%)
+#   [OK] Step complete in 12m 30s
 # ...
 }
 

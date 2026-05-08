@@ -5,36 +5,165 @@
 \alias{acgme}
 \title{ACGME OBGYN Residency Data}
 \format{
-A data frame with the following columns:
+A data frame with 142 columns:
 \describe{
-\item{Program directors}{The names of program directors for OBGYN residency programs.}
-\item{name}{The names of OBGYN residency programs.}
+\item{program_name}{Name of the ACGME-accredited OBGYN residency program.}
+\item{address}{Street address of the program.}
+\item{zip}{ZIP code of the program.}
+\item{city}{City where the program is located.}
+\item{state}{State where the program is located.}
+\item{website}{Program website URL.}
+\item{phone}{Program contact phone number.}
+\item{program_code}{ACGME program code.}
+\item{sponsoring_institution_code}{ACGME code for the sponsoring institution.}
+\item{sponsoring_institution_name}{Name of the sponsoring institution.}
+\item{original_accreditation_date}{Date of original ACGME accreditation.}
+\item{accreditation_status}{Current accreditation status.}
+\item{director_name}{Name of the program director.}
+\item{director_date_appointed}{Date the program director was appointed.}
+\item{coordinator_name_1}{Name of the first program coordinator.}
+\item{coordinator_phone_1}{Phone number of the first program coordinator.}
+\item{coordinator_email_1}{Email address of the first program coordinator.}
+\item{participation_site_code_1}{ACGME code for participation site 1.}
+\item{participation_site_name_1}{Name of participation site 1.}
+\item{rotation_required_1}{Whether rotation at site 1 is required.}
+\item{rotation_months_y1_1}{Months at site 1 during year 1.}
+\item{rotation_months_y2_1}{Months at site 1 during year 2.}
+\item{rotation_months_y3_1}{Months at site 1 during year 3.}
+\item{rotation_months_y4_1}{Months at site 1 during year 4.}
+\item{participation_site_code_2}{ACGME code for participation site 2.}
+\item{participation_site_name_2}{Name of participation site 2.}
+\item{rotation_required_2}{Whether rotation at site 2 is required.}
+\item{rotation_months_y1_2}{Months at site 2 during year 1.}
+\item{rotation_months_y2_2}{Months at site 2 during year 2.}
+\item{rotation_months_y3_2}{Months at site 2 during year 3.}
+\item{rotation_months_y4_2}{Months at site 2 during year 4.}
+\item{participation_site_code_3}{ACGME code for participation site 3.}
+\item{participation_site_name_3}{Name of participation site 3.}
+\item{rotation_required_3}{Whether rotation at site 3 is required.}
+\item{rotation_months_y1_3}{Months at site 3 during year 1.}
+\item{rotation_months_y2_3}{Months at site 3 during year 2.}
+\item{rotation_months_y3_3}{Months at site 3 during year 3.}
+\item{rotation_months_y4_3}{Months at site 3 during year 4.}
+\item{participation_site_code_4}{ACGME code for participation site 4.}
+\item{participation_site_name_4}{Name of participation site 4.}
+\item{rotation_required_4}{Whether rotation at site 4 is required.}
+\item{rotation_months_y1_4}{Months at site 4 during year 1.}
+\item{rotation_months_y2_4}{Months at site 4 during year 2.}
+\item{rotation_months_y3_4}{Months at site 4 during year 3.}
+\item{rotation_months_y4_4}{Months at site 4 during year 4.}
+\item{participation_site_code_5}{ACGME code for participation site 5.}
+\item{participation_site_name_5}{Name of participation site 5.}
+\item{rotation_required_5}{Whether rotation at site 5 is required.}
+\item{rotation_months_y1_5}{Months at site 5 during year 1.}
+\item{rotation_months_y2_5}{Months at site 5 during year 2.}
+\item{rotation_months_y3_5}{Months at site 5 during year 3.}
+\item{rotation_months_y4_5}{Months at site 5 during year 4.}
+\item{participation_site_code_6}{ACGME code for participation site 6.}
+\item{rotation_required_6}{Whether rotation at site 6 is required.}
+\item{rotation_months_y1_6}{Months at site 6 during year 1.}
+\item{rotation_months_y2_6}{Months at site 6 during year 2.}
+\item{rotation_months_y3_6}{Months at site 6 during year 3.}
+\item{rotation_months_y4_6}{Months at site 6 during year 4.}
+\item{participation_site_code_7}{ACGME code for participation site 7.}
+\item{participation_site_name_7}{Name of participation site 7.}
+\item{rotation_required_7}{Whether rotation at site 7 is required.}
+\item{rotation_months_y1_7}{Months at site 7 during year 1.}
+\item{rotation_months_y2_7}{Months at site 7 during year 2.}
+\item{rotation_months_y3_7}{Months at site 7 during year 3.}
+\item{rotation_months_y4_7}{Months at site 7 during year 4.}
+\item{participation_site_code_8}{ACGME code for participation site 8.}
+\item{participation_site_name_8}{Name of participation site 8.}
+\item{rotation_required_8}{Whether rotation at site 8 is required.}
+\item{rotation_months_y1_8}{Months at site 8 during year 1.}
+\item{rotation_months_y2_8}{Months at site 8 during year 2.}
+\item{rotation_months_y3_8}{Months at site 8 during year 3.}
+\item{rotation_months_y4_8}{Months at site 8 during year 4.}
+\item{participation_site_code_9}{ACGME code for participation site 9.}
+\item{participation_site_name_9}{Name of participation site 9.}
+\item{rotation_required_9}{Whether rotation at site 9 is required.}
+\item{rotation_months_y1_9}{Months at site 9 during year 1.}
+\item{rotation_months_y2_9}{Months at site 9 during year 2.}
+\item{rotation_months_y3_9}{Months at site 9 during year 3.}
+\item{rotation_months_y4_9}{Months at site 9 during year 4.}
+\item{participation_site_code_10}{ACGME code for participation site 10.}
+\item{participation_site_name_10}{Name of participation site 10.}
+\item{rotation_required_10}{Whether rotation at site 10 is required.}
+\item{rotation_months_y1_10}{Months at site 10 during year 1.}
+\item{rotation_months_y2_10}{Months at site 10 during year 2.}
+\item{rotation_months_y3_10}{Months at site 10 during year 3.}
+\item{rotation_months_y4_10}{Months at site 10 during year 4.}
+\item{participation_site_code_11}{ACGME code for participation site 11.}
+\item{participation_site_name_11}{Name of participation site 11.}
+\item{rotation_required_11}{Whether rotation at site 11 is required.}
+\item{rotation_months_y1_11}{Months at site 11 during year 1.}
+\item{rotation_months_y2_11}{Months at site 11 during year 2.}
+\item{rotation_months_y3_11}{Months at site 11 during year 3.}
+\item{rotation_months_y4_11}{Months at site 11 during year 4.}
+\item{participation_site_code_12}{ACGME code for participation site 12.}
+\item{participation_site_name_12}{Name of participation site 12.}
+\item{rotation_required_12}{Whether rotation at site 12 is required.}
+\item{rotation_months_y1_12}{Months at site 12 during year 1.}
+\item{rotation_months_y2_12}{Months at site 12 during year 2.}
+\item{rotation_months_y3_12}{Months at site 12 during year 3.}
+\item{rotation_months_y4_12}{Months at site 12 during year 4.}
+\item{participation_site_code_13}{ACGME code for participation site 13.}
+\item{participation_site_name_13}{Name of participation site 13.}
+\item{rotation_required_13}{Whether rotation at site 13 is required.}
+\item{rotation_months_y1_13}{Months at site 13 during year 1.}
+\item{rotation_months_y2_13}{Months at site 13 during year 2.}
+\item{rotation_months_y3_13}{Months at site 13 during year 3.}
+\item{rotation_months_y4_13}{Months at site 13 during year 4.}
+\item{participation_site_code_14}{ACGME code for participation site 14.}
+\item{participation_site_name_14}{Name of participation site 14.}
+\item{rotation_required_14}{Whether rotation at site 14 is required.}
+\item{rotation_months_y1_14}{Months at site 14 during year 1.}
+\item{rotation_months_y2_14}{Months at site 14 during year 2.}
+\item{rotation_months_y3_14}{Months at site 14 during year 3.}
+\item{rotation_months_y4_14}{Months at site 14 during year 4.}
+\item{participation_site_code_15}{ACGME code for participation site 15.}
+\item{participation_site_name_15}{Name of participation site 15.}
+\item{rotation_required_15}{Whether rotation at site 15 is required.}
+\item{rotation_months_y1_15}{Months at site 15 during year 1.}
+\item{rotation_months_y2_15}{Months at site 15 during year 2.}
+\item{rotation_months_y3_15}{Months at site 15 during year 3.}
+\item{rotation_months_y4_15}{Months at site 15 during year 4.}
+\item{participation_site_code_16}{ACGME code for participation site 16.}
+\item{participation_site_name_16}{Name of participation site 16.}
+\item{rotation_required_16}{Whether rotation at site 16 is required.}
+\item{rotation_months_y1_16}{Months at site 16 during year 1.}
+\item{rotation_months_y2_16}{Months at site 16 during year 2.}
+\item{rotation_months_y3_16}{Months at site 16 during year 3.}
+\item{rotation_months_y4_16}{Months at site 16 during year 4.}
+\item{participation_site_code_17}{ACGME code for participation site 17.}
+\item{participation_site_name_17}{Name of participation site 17.}
+\item{rotation_required_17}{Whether rotation at site 17 is required.}
+\item{rotation_months_y1_17}{Months at site 17 during year 1.}
+\item{rotation_months_y2_17}{Months at site 17 during year 2.}
+\item{rotation_months_y3_17}{Months at site 17 during year 3.}
+\item{rotation_months_y4_17}{Months at site 17 during year 4.}
+\item{participation_site_code_18}{ACGME code for participation site 18.}
+\item{participation_site_name_18}{Name of participation site 18.}
+\item{rotation_required_18}{Whether rotation at site 18 is required.}
+\item{rotation_months_y1_18}{Months at site 18 during year 1.}
+\item{rotation_months_y2_18}{Months at site 18 during year 2.}
+\item{rotation_months_y3_18}{Months at site 18 during year 3.}
+\item{rotation_months_y4_18}{Months at site 18 during year 4.}
 }
 }
 \source{
-Data was obtained from the ACGME website: \url{https://apps.acgme.org/ads/Public/Programs/Search}
+\url{https://apps.acgme.org/ads/Public/Programs/Search}
 }
 \usage{
 acgme
 }
-\value{
-A tibble listing ACGME-accredited OBGYN residency programs and
-their program directors.
-}
 \description{
-This dataset provides information about Obstetricians and Gynecologists (OBGYN) residency programs accredited by the Accreditation Council for Graduate Medical Education (ACGME).
+Information about Obstetricians and Gynecologists (OBGYN) residency programs
+accredited by the Accreditation Council for Graduate Medical Education (ACGME).
 }
 \examples{
-# Load the ACGME OBGYN Residency Data
 data(acgme)
-
-# Inspect the dataset
-print(acgme)
-
-# Get a summary of the dataset
-summary(acgme)
-
-# Perform data analysis and exploration
+print(acgme[1:3, 1:5])
 
 }
 \seealso{

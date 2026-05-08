@@ -7,8 +7,10 @@
 \format{
 A data frame with the following columns:
 \describe{
-\item{ACOG_District}{Two-letter state abbreviations representing ACOG districts.}
-\item{name}{Full names of the states corresponding to the ACOG districts.}
+\item{State}{Full name of the US state.}
+\item{ACOG_District}{ACOG district designation (Roman numeral or letter code).}
+\item{Subregion}{Geographic subregion within the ACOG district.}
+\item{State_Abbreviations}{Two-letter US state abbreviation.}
 }
 }
 \source{

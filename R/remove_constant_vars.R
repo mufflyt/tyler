@@ -7,7 +7,6 @@
 #' @return A data frame with constant variables removed.
 #'
 #' @importFrom dplyr select where all_of
-#' @importFrom glue glue
 #'
 #' @examples
 #' \dontrun{
@@ -31,7 +30,7 @@ remove_constant_vars <- function(data_frame) {
   const_vars <- dplyr::select(data_frame, dplyr::where(~ length(unique(.)) == 1)) %>% names()
 
   # Log: Number of constant variables found
-  message(glue::glue("Found {length(const_vars)} constant variables."))
+  message(sprintf("Found %d constant variables.", length(const_vars)))
 
   # Remove constant variables if any
   if (length(const_vars) > 0) {

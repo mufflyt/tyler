@@ -5,7 +5,6 @@
 #' @param input_data Either a dataframe containing NPI numbers or a path to a CSV file.
 #'
 #' @return A tibble with clinician data for the provided NPIs.
-#' @importFrom purrr map
 #' @importFrom readr read_csv cols col_character col_guess
 #' @importFrom dplyr mutate bind_rows
 #' @family npi
@@ -64,7 +63,7 @@ retrieve_clinician_data <- function(input_data) {
   }
 
   cleaned_df <- cleaned_df %>%
-    dplyr::mutate(clinician_data = purrr::map(npi, get_clinician_data))
+    dplyr::mutate(clinician_data = lapply(.data$npi, get_clinician_data))
 
   has_results <- vapply(cleaned_df$clinician_data, function(x) {
     !is.null(x) && nrow(x) > 0
@@ -77,7 +76,7 @@ retrieve_clinician_data <- function(input_data) {
   }
 
   rows_with_results <- cleaned_df[has_results, , drop = FALSE]
-  expanded <- purrr::map(seq_len(nrow(rows_with_results)), function(idx) {
+  expanded <- lapply(seq_len(nrow(rows_with_results)), function(idx) {
     base_row <- rows_with_results[idx, base_cols, drop = FALSE]
     clinician_rows <- rows_with_results$clinician_data[[idx]]
     clinician_rows <- as.data.frame(clinician_rows, stringsAsFactors = FALSE)

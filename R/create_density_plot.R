@@ -18,7 +18,6 @@
 #' @return Invisibly returns the generated ggplot object.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_density scale_x_log10 scale_x_sqrt labs theme_light theme ggsave
-#' @importFrom viridis viridis_pal
 #' @importFrom rlang sym .data
 #' @family mapping
 #' @export
@@ -74,7 +73,7 @@ create_density_plot <- function(data,
 
   # Create the density plot
   density_plot <- ggplot2::ggplot(data, ggplot2::aes(x = !!rlang::sym(x_var), fill = !!rlang::sym(fill_var))) +
-    ggplot2::geom_density(alpha = 0.7, linewidth = 0.3, colour = NA) +
+    ggplot2::geom_density(alpha = 0.7, linewidth = 0.3, color = NA) +
     ggplot2::labs(
       x = x_label,
       y = y_label,

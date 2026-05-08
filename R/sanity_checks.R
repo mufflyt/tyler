@@ -239,7 +239,7 @@ tyler_scan_for_limits <- function(path = "R",
     issues <- issues[order(issues$severity, issues$file, issues$line), ]
 
     warning(sprintf(
-      "\n\n❌ Found %d potential artificial limits in code:\n\nCRITICAL: %d | HIGH: %d | MEDIUM: %d\n\nReview each occurrence carefully!",
+      "\n\nFound %d potential artificial limits in code:\n\nCRITICAL: %d | HIGH: %d | MEDIUM: %d\n\nReview each occurrence carefully!",
       nrow(issues),
       sum(issues$severity == "CRITICAL"),
       sum(issues$severity == "HIGH"),
@@ -248,7 +248,7 @@ tyler_scan_for_limits <- function(path = "R",
 
     print(issues, row.names = FALSE)
   } else {
-    message(sprintf("✓ No artificial data limits found in %d files", length(files)))
+    message(sprintf("No artificial data limits found in %d files", length(files)))
   }
 
   invisible(issues)
@@ -325,7 +325,7 @@ tyler_check_api_response <- function(result,
 #'   operations that should remove rows (e.g., deduplication).
 #' @param tolerance Maximum acceptable unexpected loss. Defaults to 0.
 #'
-#' @return Invisible TRUE if within expected change ± tolerance
+#' @return Invisible TRUE if within expected change +/- tolerance
 #'
 #' @examples
 #' \dontrun{
@@ -334,7 +334,7 @@ tyler_check_api_response <- function(result,
 #' clean_data <- clean_phase_1_results(raw_data)
 #' tyler_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
 #'
-#' # Expect deduplication to remove ~10 rows, allow ±5
+#' # Expect deduplication to remove ~10 rows, allow +/-5
 #' before <- nrow(data)
 #' dedup_data <- deduplicate(data)
 #' tyler_check_no_data_loss(before, dedup_data, "Deduplication",
@@ -358,7 +358,7 @@ tyler_check_no_data_loss <- function(before,
     if (unexpected_change < 0) {
       pct_lost <- if (n_before > 0) abs(actual_change) / n_before * 100 else NaN
       stop(sprintf(
-        "DATA LOSS detected in '%s':\n  Before: %d rows\n  After: %d rows\n  Lost: %d rows (%.1f%%)\n  Expected change: %+d\n  Tolerance: ±%d\n\nThis indicates silent filtering, failed joins, or data corruption.",
+        "DATA LOSS detected in '%s':\n  Before: %d rows\n  After: %d rows\n  Lost: %d rows (%.1f%%)\n  Expected change: %+d\n  Tolerance: +/-%d\n\nThis indicates silent filtering, failed joins, or data corruption.",
         operation, n_before, n_after, abs(actual_change),
         pct_lost, expected_change, tolerance
       ), call. = FALSE)

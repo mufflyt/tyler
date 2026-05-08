@@ -1,7 +1,7 @@
 #' Internal helper for package-specific temporary directories
 #'
 #' Provides a stable location within [tempdir()] that can be reused
-#' across functions which need to write ephemeral artefacts while
+#' across functions which need to write ephemeral artifacts while
 #' avoiding modifications to the user's working tree. Directories are
 #' created on demand when `create = TRUE`.
 #'

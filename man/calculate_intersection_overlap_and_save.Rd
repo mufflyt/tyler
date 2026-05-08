@@ -43,4 +43,5 @@ projected to an equal-area CRS before measuring.
 \dontrun{
 calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "data/shp/")
 }
+
 }

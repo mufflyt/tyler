@@ -14,7 +14,7 @@
 #'
 #' The function queries the [Genderize.io](https://genderize.io) API for first
 #' name gender predictions. First names are deduplicated before querying the
-#' service to minimise repeated requests.
+#' service to minimize repeated requests.
 #'
 #' @importFrom dplyr bind_rows distinct left_join mutate
 #' @importFrom readr read_csv write_csv
@@ -46,7 +46,7 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
   }
 
   gender_Physicians <- gender_Physicians %>%
-    dplyr::mutate(first_name = trimws(first_name))
+    dplyr::mutate(first_name = trimws(.data$first_name))
 
   # Get first names
   first_names <- gender_Physicians$first_name
@@ -54,7 +54,7 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
   resolved_genders <- genderize_fetch(first_names)
 
   x <- resolved_genders %>%
-    dplyr::distinct(first_name, .keep_all = TRUE)
+    dplyr::distinct(.data$first_name, .keep_all = TRUE)
 
   # Bug #1 fix: Drop overlapping columns before join to prevent .x/.y suffixes
   # genderize_fetch() returns: first_name, gender, probability, count

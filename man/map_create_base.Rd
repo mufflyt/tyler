@@ -11,7 +11,7 @@ map_create_base(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4)
 left corner of the map. Supply \code{NULL} or an empty string to omit the
 control.}
 
-\item{lat, lng}{Numeric latitude and longitude used to centre the initial
+\item{lat, lng}{Numeric latitude and longitude used to center the initial
 view. Defaults position the map over the continental United States.}
 
 \item{zoom}{Numeric zoom level passed to \code{\link[leaflet:map-methods]{leaflet::setView()}}.}
@@ -23,10 +23,10 @@ basemap layers.
 \description{
 Build a Leaflet base map with sensible defaults for the tyler mapping
 helpers. The map includes multiple tile providers, a scale bar, optional
-title control, and centres on the continental United States by default.
+title control, and centers on the continental United States by default.
 }
 \examples{
-\dontrun{
+\donttest{
 map_create_base()
 map_create_base("<strong>Custom title</strong>")
 }

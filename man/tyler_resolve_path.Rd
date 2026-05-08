@@ -25,11 +25,11 @@ stored in \code{getOption("tyler.base_dir")} or the current working directory.}
 exists.}
 }
 \value{
-A normalised path as a character string.
+A normalized path as a character string.
 }
 \description{
 Resolve project-relative paths from standard aliases
 }
 \examples{
-tyler_resolve_path("output.csv", type = "tables", create = TRUE)
+tyler_resolve_path("output.csv", type = "tables", create = FALSE)
 }

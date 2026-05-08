@@ -26,7 +26,7 @@ operations that should remove rows (e.g., deduplication).}
 \item{tolerance}{Maximum acceptable unexpected loss. Defaults to 0.}
 }
 \value{
-Invisible TRUE if within expected change ± tolerance
+Invisible TRUE if within expected change +/- tolerance
 }
 \description{
 Ensures row counts don't unexpectedly decrease between operations.
@@ -40,7 +40,7 @@ before <- nrow(raw_data)
 clean_data <- clean_phase_1_results(raw_data)
 tyler_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
 
-# Expect deduplication to remove ~10 rows, allow ±5
+# Expect deduplication to remove ~10 rows, allow +/-5
 before <- nrow(data)
 dedup_data <- deduplicate(data)
 tyler_check_no_data_loss(before, dedup_data, "Deduplication",

@@ -12,7 +12,6 @@
 #' @importFrom sf st_union st_sf st_transform st_write
 #' @importFrom dplyr filter tibble
 #' @importFrom grDevices rainbow
-#' @importFrom htmlwidgets saveWidget
 #'
 #' @examples
 #' \dontrun{
@@ -36,6 +35,9 @@
 create_individual_isochrone_plots <- function(isochrones, drive_times, output_dir = NULL) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for create_individual_isochrone_plots(). Install with: install.packages('leaflet')", call. = FALSE)
+  }
+  if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
+    stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
   }
 
   if (is.null(output_dir)) {

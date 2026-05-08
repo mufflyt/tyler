@@ -21,7 +21,7 @@ NULL
 #' @param quietly Logical flag controlling console output. When `TRUE`,
 #'   suppresses status messages.
 #'
-#' @return A tibble summarising the dependency status for each package.
+#' @return A tibble summarizing the dependency status for each package.
 #' @importFrom tibble as_tibble
 #' @importFrom utils installed.packages install.packages
 #' @export
@@ -90,10 +90,10 @@ tyler_check_dependencies <- function(packages, install = FALSE, repos = getOptio
 #' @param create Logical. When `TRUE`, ensure the resolved parent directory
 #'   exists.
 #'
-#' @return A normalised path as a character string.
+#' @return A normalized path as a character string.
 #' @export
 #' @examples
-#' tyler_resolve_path("output.csv", type = "tables", create = TRUE)
+#' tyler_resolve_path("output.csv", type = "tables", create = FALSE)
 tyler_resolve_path <- function(..., type = NULL, base_dir = getOption("tyler.base_dir", getwd()), create = FALSE) {
   if (!dir.exists(base_dir)) {
     stop(sprintf("Base directory '%s' does not exist.", base_dir), call. = FALSE)
@@ -193,7 +193,7 @@ tyler_check_data_completeness <- function(data, required = NULL, id_cols = NULL,
 #'
 #' @param x Object to export. Data frames are written as CSV files by default
 #'   while `ggplot` objects are saved with [ggplot2::ggsave()]. Other objects are
-#'   serialised via [saveRDS()].
+#'   serialized via [saveRDS()].
 #' @param path Destination file path.
 #' @param backup Logical flag; when `TRUE` and `path` already exists, create a
 #'   timestamped copy before overwriting.
@@ -278,12 +278,12 @@ tyler_standard_labels <- function() {
   )
 }
 
-#' Retrieve a standard colour palette
+#' Retrieve a standard color palette
 #'
 #' @param name Palette identifier. Supported values are `"primary"`,
 #'   `"sequential"`, and `"diverging"`.
 #'
-#' @return A character vector of hex colours.
+#' @return A character vector of hex colors.
 #' @export
 tyler_standard_palette <- function(name = c("primary", "sequential", "diverging")) {
   name <- match.arg(name)

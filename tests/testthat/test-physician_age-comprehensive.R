@@ -118,11 +118,9 @@ test_that("median in physician_age output is between input min and max", {
 # 7. Boundary: single value → median equals that value
 # ---------------------------------------------------------------------------
 
-test_that("physician_age with single value produces that value as median", {
+test_that("physician_age with single value errors (requires >= 2 values)", {
   df <- data.frame(age = 42)
-  result <- physician_age(df, "age")
-  expect_true(grepl("was 42 ", result),
-              info = paste("Output:", result))
+  expect_error(physician_age(df, "age"), "at least 2 non-missing values")
 })
 
 # ---------------------------------------------------------------------------
@@ -136,11 +134,12 @@ test_that("physician_age output satisfies Q25 <= median <= Q75", {
   result <- physician_age(df, "age")
 
   # Parse: "was {med} (IQR 25th percentile {q25} to 75th percentile {q75})."
+  # String contains embedded numbers from labels ("25th", "75th"), so use indices [1], [3], [5]
   nums <- regmatches(result, gregexpr("[0-9]+\\.?[0-9]*", result))[[1]]
-  # nums[1]=median, nums[2]=q25, nums[3]=q75
+  # nums: [med, 25(label), q25, 75(label), q75]
   med <- as.numeric(nums[1])
-  q25 <- as.numeric(nums[2])
-  q75 <- as.numeric(nums[3])
+  q25 <- as.numeric(nums[3])
+  q75 <- as.numeric(nums[5])
 
   expect_gte(med, q25, label = "median >= Q25")
   expect_lte(med, q75, label = "median <= Q75")

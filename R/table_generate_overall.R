@@ -3,8 +3,9 @@
 #' Utility wrapper around `arsenal::write2pdf` to save a table object
 #' as a PDF document.
 #'
-#' @param object An `arsenal` table object to write.
-#' @param filename Path to the output PDF file.
+#' @param object An `arsenal` table object (or summary thereof) to write.
+#' @param filename Path to the output PDF file. A `.pdf` extension is appended
+#'   automatically if not already present.
 #'
 #' @return Invisibly returns the file path.
 #'
@@ -14,6 +15,9 @@
 #' }
 #' @export
 table_write_pdf <- function(object, filename) {
+  if (!requireNamespace("arsenal", quietly = TRUE)) {
+    stop("Package 'arsenal' is required for this function. Install with: install.packages('arsenal')", call. = FALSE)
+  }
   print("Function Sanity Check: Creating Arsenal Table as a PDF")
   output_file <- if (grepl("\\.pdf$", filename, ignore.case = TRUE)) {
     filename
@@ -36,9 +40,7 @@ table_write_pdf <- function(object, filename) {
 #' @param label_translations Optional named list for label translations.
 #' @return Path to the generated PDF file
 #'
-#' @importFrom arsenal write2pdf tableby tableby.control
 #' @importFrom readr read_rds
-#' @importFrom fs dir_create dir_exists
 #' @family table
 #' @export
 #'
@@ -48,14 +50,17 @@ table_write_pdf <- function(object, filename) {
 #' table_generate_overall("data/Table1.rds", "output_tables")
 #' }
 table_generate_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
+  if (!requireNamespace("arsenal", quietly = TRUE)) {
+    stop("Package 'arsenal' is required for this function. Install with: install.packages('arsenal')", call. = FALSE)
+  }
   cat("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.\n")
   # Log function start
   cat("Generating the overall table...\n")
 
   # Ensure the output directory exists
-  if (!fs::dir_exists(output_directory)) {
+  if (!dir.exists(output_directory)) {
     cat("Creating output directory...\n")
-    fs::dir_create(output_directory)
+    dir.create(output_directory, recursive = TRUE, showWarnings = FALSE)
   }
 
   # Read the data

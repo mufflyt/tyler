@@ -31,8 +31,10 @@ map_create_acog_districts_sf <- function(acog_districts_file = NULL) {
   districts <- readr::read_csv(acog_districts_file, show_col_types = FALSE, progress = FALSE)
 
   names(districts) <- gsub("^\\ufeff", "", names(districts))
-  if ("ï..State" %in% names(districts)) {
-    districts <- dplyr::rename(districts, State = "ï..State")
+  names(districts) <- gsub("[^[:ascii:]]", "", names(districts))
+  bom_state_col <- grep("^\\.+State$", names(districts), value = TRUE)
+  if (length(bom_state_col) && !("State" %in% names(districts))) {
+    districts <- dplyr::rename(districts, State = dplyr::all_of(bom_state_col[[1]]))
   }
 
   if (!"State" %in% names(districts)) {
@@ -41,9 +43,9 @@ map_create_acog_districts_sf <- function(acog_districts_file = NULL) {
 
   districts <- dplyr::mutate(
     districts,
-    State = stringr::str_trim(State),
-    ACOG_District = stringr::str_trim(ACOG_District),
-    Subregion = dplyr::coalesce(stringr::str_trim(Subregion), ACOG_District)
+    State = stringr::str_trim(.data$State),
+    ACOG_District = stringr::str_trim(.data$ACOG_District),
+    Subregion = dplyr::coalesce(stringr::str_trim(.data$Subregion), .data$ACOG_District)
   )
 
   if (!requireNamespace("rnaturalearth", quietly = TRUE)) {
@@ -57,10 +59,10 @@ map_create_acog_districts_sf <- function(acog_districts_file = NULL) {
     geometry
   )
 
-  states_sf <- dplyr::filter(states_sf, State %in% districts$State)
+  states_sf <- dplyr::filter(states_sf, .data$State %in% districts$State)
 
   states_with_districts <- dplyr::left_join(states_sf, districts, by = "State")
-  states_with_districts <- dplyr::filter(states_with_districts, !is.na(ACOG_District))
+  states_with_districts <- dplyr::filter(states_with_districts, !is.na(.data$ACOG_District))
 
   if (!nrow(states_with_districts)) {
     stop("No matching states were found when joining Natural Earth geometries to the district table.", call. = FALSE)
@@ -68,18 +70,18 @@ map_create_acog_districts_sf <- function(acog_districts_file = NULL) {
 
   states_with_districts <- dplyr::mutate(
     states_with_districts,
-    State_Abbreviations = dplyr::coalesce(State_Abbreviations, postal)
+    State_Abbreviations = dplyr::coalesce(.data$State_Abbreviations, .data$postal)
   )
 
   districts_sf <- states_with_districts %>%
-    dplyr::group_by(ACOG_District, Subregion) %>%
-    dplyr::summarise(
-      States = paste(sort(unique(State)), collapse = ", "),
-      State_Abbreviations = paste(sort(unique(State_Abbreviations)), collapse = ", "),
-      geometry = sf::st_union(geometry),
+    dplyr::group_by(.data$ACOG_District, .data$Subregion) %>%
+    dplyr::summarize(
+      States = paste(sort(unique(.data$State)), collapse = ", "),
+      State_Abbreviations = paste(sort(unique(.data$State_Abbreviations)), collapse = ", "),
+      geometry = sf::st_union(.data$geometry),
       .groups = "drop"
     ) %>%
-    dplyr::arrange(ACOG_District)
+    dplyr::arrange(.data$ACOG_District)
 
   sf::st_as_sf(districts_sf)
 }

@@ -18,10 +18,11 @@ clean_phase_1_results(
 \item{phase1_data}{A data frame containing the Phase 1 results data. Ensure that it
 includes columns like 'for_redcap', 'id', 'names', 'practice_name', 'phone_number',
 'state_name', and optionally 'npi'. If 'npi' is missing or any of its values are NA,
-a \code{random_id} is generated as a fallback.}
+a \code{random_id} is generated as a fallback. If an 'id' column exists, it will be
+preserved as 'original_id'.}
 
 \item{output_directory}{Directory where the cleaned Phase 1 data should be written.
-Defaults to \code{tempdir()}.}
+Defaults to \code{tempdir()}. An audit trail JSON file will also be saved here.}
 
 \item{verbose}{Logical. If \code{TRUE}, progress messages are printed while cleaning.
 Defaults to \code{TRUE}.}
@@ -30,8 +31,9 @@ Defaults to \code{TRUE}.}
 the optional \code{beepr} package is available. Defaults to \code{TRUE}.}
 
 \item{duplicate_rows}{Logical. If \code{TRUE}, each row in \code{phase1_data} is duplicated
-to retain the previous behaviour that paired insurance entries for each
-physician. Set to \code{FALSE} to keep the original number of rows.}
+to retain the previous behavior that paired insurance entries for each
+physician. Set to \code{FALSE} to keep the original number of rows. A
+\code{processing_flag_is_duplicate} column tracks which rows are duplicates.}
 
 \item{id_seed}{Optional integer seed used when generating fallback random IDs so
 runs can be reproduced without permanently mutating the global RNG state.}
@@ -40,13 +42,40 @@ runs can be reproduced without permanently mutating the global RNG state.}
 Supported options are "csv" (default) and "parquet".}
 }
 \value{
-Invisibly returns the cleaned data frame.
+Invisibly returns the cleaned data frame with the following attributes:
+\itemize{
+\item \code{audit_trail}: List containing processing metadata (timestamps, row counts, flags)
+\item \code{processing_timestamp}: Time when processing completed
+\item \code{function_version}: Version number of the function (2.0)
+\item \code{output_path}: Path to the saved CSV/Parquet file
+\item \code{audit_trail_path}: Path to the saved audit trail JSON file
+}
+
+The returned data frame includes processing flag columns:
+\itemize{
+\item \code{processing_flag_empty_name}: TRUE if name was empty/whitespace
+\item \code{processing_flag_generated_id}: TRUE if random ID was generated (no NPI)
+\item \code{processing_flag_is_duplicate}: TRUE for duplicated rows (when duplicate_rows=TRUE)
+\item \code{processing_flag_no_last_name}: TRUE if last name could not be extracted
+}
 }
 \description{
 This function reads the Phase 1 results data file, performs various cleaning
 and transformation operations, and prepares the data for further analysis.
 It ensures all required fields are present and formats column names. Missing
 NPI numbers are handled by generating a unique \code{random_id}.
+}
+\details{
+\strong{New in Version 2.0: Data Provenance and Audit Trail}
+
+This function now includes comprehensive data provenance tracking:
+\itemize{
+\item Preserves original \code{id} and \code{npi} columns as \code{original_id} and \code{original_npi}
+\item Adds processing flags (e.g., \code{processing_flag_empty_name}, \code{processing_flag_generated_id})
+\item Handles edge cases like whitespace-only strings safely
+\item Saves audit trail JSON file with processing metadata
+\item Attaches audit trail and quality metrics as data frame attributes
+}
 }
 \examples{
 \dontrun{

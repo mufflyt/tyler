@@ -12,13 +12,12 @@ Provides utilities for mystery caller and audit studies evaluating patient acces
 Useful links:
 \itemize{
   \item \url{https://github.com/mufflyt/tyler}
-  \item \url{https://mufflyt.github.io/tyler/}
   \item Report bugs at \url{https://github.com/mufflyt/tyler/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Tyler Muffly \email{tyler.muffly@dhha.org} (ORCID: 0000-0002-2044-1693)
+\strong{Maintainer}: Tyler Muffly \email{tyler.muffly@dhha.org} (\href{https://orcid.org/0000-0002-2044-1693}{ORCID})
 
 }
 \keyword{NPI}

@@ -7,7 +7,8 @@
 tyler_estimate_resources(n_rows)
 }
 \arguments{
-\item{n_rows}{Number of input rows}
+\item{n_rows}{Integer number of input rows used to project runtime and
+memory requirements.}
 }
 \value{
 List with runtime and memory estimates
@@ -15,4 +16,3 @@ List with runtime and memory estimates
 \description{
 Estimate workflow resources
 }
-\keyword{internal}

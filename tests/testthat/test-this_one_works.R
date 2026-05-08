@@ -13,7 +13,7 @@ library(readr)
 # Corrected mock functions
 mock_get <- function(url, ...) {
   cat("Mock GET request to URL:", url, "\n")
-  list(status_code = if (grepl("verify", url)) 200 else 404)
+  list(status_code = 404)  # Wrong IDs never return 200 — nothing gets scraped
 }
 
 mock_content <- function(...) {

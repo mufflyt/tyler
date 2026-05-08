@@ -37,8 +37,6 @@
 #'
 #' @importFrom dplyr filter mutate select rename distinct arrange bind_rows tibble
 #' @importFrom npi npi_search npi_flatten
-#' @importFrom progress progress_bar
-#' @importFrom purrr map2 keep
 #' @importFrom readr write_csv read_csv
 #' @family npi
 #' @export
@@ -232,7 +230,9 @@ search_and_process_npi <- function(data,
 
   pb <- NULL
   if (total_names > 0) {
-    pb <- progress::progress_bar$new(total = total_names, clear = FALSE, show_after = 0)
+    if (requireNamespace("progress", quietly = TRUE)) {
+      pb <- progress::progress_bar$new(total = total_names, clear = FALSE, show_after = 0)
+    }
   }
 
   heartbeat_enabled <- !is.null(heartbeat_seconds)
@@ -318,7 +318,7 @@ search_and_process_npi <- function(data,
           return(NULL)
         }
 
-        filtered <- dplyr::filter(flattened, taxonomies_desc %in% vc | taxonomies_desc %in% bc)
+        filtered <- dplyr::filter(flattened, .data$taxonomies_desc %in% vc | .data$taxonomies_desc %in% bc)
         if (!nrow(filtered)) {
           return(NULL)
         }
@@ -338,25 +338,25 @@ search_and_process_npi <- function(data,
 
         filtered <- dplyr::mutate(
           filtered,
-          credential = basic_credential,
-          credential_clean = tolower(gsub("[^A-Za-z0-9]", "", credential))
+          credential = .data$basic_credential,
+          credential_clean = tolower(gsub("[^A-Za-z0-9]", "", .data$credential))
         )
 
         if (!is.null(credential_filter)) {
-          filtered <- dplyr::filter(filtered, is.na(credential_clean) | credential_clean %in% credential_filter)
+          filtered <- dplyr::filter(filtered, is.na(.data$credential_clean) | .data$credential_clean %in% credential_filter)
         }
 
         filtered <- dplyr::rename(
           filtered,
-          first_name = basic_first_name,
-          last_name = basic_last_name,
-          middle_name = basic_middle_name
+          "first_name" = "basic_first_name",
+          "last_name" = "basic_last_name",
+          "middle_name" = "basic_middle_name"
         )
 
-        filtered <- dplyr::mutate(filtered, search_term = paste(first_name, last_name))
-        filtered <- dplyr::select(filtered, -credential_clean, -basic_credential)
-        filtered <- dplyr::distinct(filtered, npi, taxonomies_desc, .keep_all = TRUE)
-        filtered <- dplyr::arrange(filtered, last_name, first_name)
+        filtered <- dplyr::mutate(filtered, search_term = paste(.data$first_name, .data$last_name))
+        filtered <- dplyr::select(filtered, -dplyr::all_of(c("credential_clean", "basic_credential")))
+        filtered <- dplyr::distinct(filtered, .data$npi, .data$taxonomies_desc, .keep_all = TRUE)
+        filtered <- dplyr::arrange(filtered, .data$last_name, .data$first_name)
         filtered
       }, error = function(e) {
         e
@@ -460,7 +460,7 @@ search_and_process_npi <- function(data,
     out[[i]] <- result
   }
 
-  npi_data <- purrr::keep(out, function(x) is.data.frame(x) && nrow(x) > 0)
+  npi_data <- Filter(function(x) is.data.frame(x) && nrow(x) > 0, out)
   if (!length(npi_data)) {
     final_result <- if (!is.null(existing_accumulated)) existing_accumulated else dplyr::tibble()
   } else {

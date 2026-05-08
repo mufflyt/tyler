@@ -19,7 +19,7 @@ table containing equivalent columns).}
 
 \item{group_var}{Optional single column name used to facet the distribution.
 When supplied, stacked bars are produced for each value of \code{group_var}. Set
-to \code{NULL} (the default) to visualise the aggregate distribution across all
+to \code{NULL} (the default) to visualize the aggregate distribution across all
 rows in \code{census_df}.}
 
 \item{output_dir}{Directory where image files should be written. Defaults to a
@@ -39,7 +39,7 @@ Invisibly returns the generated ggplot object.
 Plot the distribution of female age groups
 }
 \examples{
-\donttest{
+\dontrun{
   plot_census_age_distribution(census_example, group_var = "statefp", verbose = FALSE)
 }
 }

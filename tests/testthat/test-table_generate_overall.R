@@ -3,10 +3,10 @@ testthat::skip_if_not_installed("readr")
 testthat::skip_if_not_installed("dplyr")
 testthat::skip_if_not_installed("arsenal")
 testthat::skip_if_not_installed("fs")
+testthat::skip_if_not(rmarkdown::pandoc_available(), "pandoc not available")
 library(readr)
 library(dplyr)
 library(arsenal)
-library(fs)
 
 # Create a temporary RDS file for testing
 create_temp_rds <- function(data, file_name = "temp_data.rds") {
@@ -98,7 +98,7 @@ test_that("Creates output directory if it does not exist", {
 
   table_generate_overall(temp_rds, output_dir)
 
-  expect_true(fs::dir_exists(output_dir))
+  expect_true(dir.exists(output_dir))
 })
 
 # Test if the function handles label translations correctly

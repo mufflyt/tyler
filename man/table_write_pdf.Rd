@@ -7,9 +7,10 @@
 table_write_pdf(object, filename)
 }
 \arguments{
-\item{object}{An \code{arsenal} table object to write.}
+\item{object}{An \code{arsenal} table object (or summary thereof) to write.}
 
-\item{filename}{Path to the output PDF file.}
+\item{filename}{Path to the output PDF file. A \code{.pdf} extension is appended
+automatically if not already present.}
 }
 \value{
 Invisibly returns the file path.

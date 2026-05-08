@@ -2,12 +2,12 @@
 #'
 #' Build a Leaflet base map with sensible defaults for the tyler mapping
 #' helpers. The map includes multiple tile providers, a scale bar, optional
-#' title control, and centres on the continental United States by default.
+#' title control, and centers on the continental United States by default.
 #'
 #' @param title Optional HTML string used for a title control in the upper
 #'   left corner of the map. Supply `NULL` or an empty string to omit the
 #'   control.
-#' @param lat,lng Numeric latitude and longitude used to centre the initial
+#' @param lat,lng Numeric latitude and longitude used to center the initial
 #'   view. Defaults position the map over the continental United States.
 #' @param zoom Numeric zoom level passed to [leaflet::setView()].
 #'
@@ -17,7 +17,7 @@
 #' @family mapping
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' map_create_base()
 #' map_create_base("<strong>Custom title</strong>")
 #' }
@@ -37,6 +37,9 @@ map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
     leaflet::addTiles(options = leaflet::tileOptions(useCache = TRUE, crossOrigin = TRUE))
 
   if (!is.null(title) && nzchar(title)) {
+    if (!requireNamespace("htmltools", quietly = TRUE)) {
+      stop("Package 'htmltools' is required for this function. Install with: install.packages('htmltools')", call. = FALSE)
+    }
     map <- leaflet::addControl(
       map,
       html = htmltools::tags$div(
@@ -62,10 +65,10 @@ map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
 #'   coordinates.
 #' @param color_palette The color palette for ACOG district colors.
 #' @param popup_var The variable to use for popup text.
+#' @param output_dir Directory where the HTML map and PNG screenshot are saved.
+#'   Defaults to a session-specific temporary folder.
 #' @return Invisibly returns the Leaflet map object.
 #'
-#' @importFrom viridis viridis
-#' @importFrom htmlwidgets saveWidget
 #' @importFrom dplyr mutate
 #'
 #' @examples
@@ -94,6 +97,12 @@ map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_
   }
   if (!requireNamespace("webshot", quietly = TRUE)) {
     stop("Package 'webshot' is required for map_create_physician_dot(). Install with: install.packages('webshot')", call. = FALSE)
+  }
+  if (!requireNamespace("viridis", quietly = TRUE)) {
+    stop("Package 'viridis' is required for this function. Install with: install.packages('viridis')", call. = FALSE)
+  }
+  if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
+    stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
   }
   if (is.null(output_dir)) {
     output_dir <- tyler_tempdir("physician_maps", create = TRUE)

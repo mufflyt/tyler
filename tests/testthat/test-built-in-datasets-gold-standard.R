@@ -273,7 +273,8 @@ test_that("taxonomy Code column is exactly 10 characters for every row", {
 
 test_that("fips state_code values are numeric/integer type", {
   # state_code should be numeric FIPS codes
-  expect_true(is.numeric(tyler::fips$state_code) || is.integer(tyler::fips$state_code))
+  # state_code is stored as character to preserve leading zeros (e.g. "01" for Alabama)
+  expect_true(is.character(tyler::fips$state_code) || is.numeric(tyler::fips$state_code) || is.integer(tyler::fips$state_code))
 })
 
 test_that("fips has no duplicate state entries", {

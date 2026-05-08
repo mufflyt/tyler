@@ -20,6 +20,6 @@ This function returns the level(s) corresponding to the maximum value(s) of a fa
 }
 \examples{
 vec <- factor(c("A", "B", "A", "C", "B", "B"))
-max_table(vec) # Returns "A"
-max_table(vec, mult = TRUE) # Returns c("A", "B")
+max_table(vec) # Returns "B"
+max_table(vec, mult = TRUE) # Returns "B"
 }

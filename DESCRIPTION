@@ -1,96 +1,85 @@
 Package: tyler
 Title: Tools for Mystery Caller and Audit Healthcare Studies
 Version: 1.2.2
-Author: Tyler Muffly [aut, cre]
 Authors@R:
     person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
-           comment = "ORCID: 0000-0002-2044-1693")
+           comment = c(ORCID = "0000-0002-2044-1693"))
 Description: Provides utilities for mystery caller and audit studies evaluating patient access to healthcare. Functions help search and process National Provider Identifier (NPI) records, summarize provider demographics, and generate tables and maps for analysis and reporting.
 Encoding: UTF-8
+Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 License: MIT + file LICENSE
-URL: https://github.com/mufflyt/tyler, https://mufflyt.github.io/tyler/
+URL: https://github.com/mufflyt/tyler
 BugReports: https://github.com/mufflyt/tyler/issues
-Date: 2026-05-04
-Lifecycle: experimental
-Keywords: healthcare, patient access, audit study, NPI
+Date: 2026-05-08
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:
     R (>= 3.5.0)
 Imports:
-    RColorBrewer,
-    arsenal,
-    broom,
-    data.table,
     dplyr,
-    emmeans,
-    fs,
     ggplot2,
     grDevices,
-    grid,
-    glue,
-    gridExtra,
-    here,
-    htmltools,
-    htmlwidgets,
     httr,
-    humaniformat,
     janitor,
-    jsonlite,
-    lifecycle,
-    lubridate,
     magrittr,
-    memoise,
+    methods,
     npi,
-    openxlsx,
-    progress,
-    purrr,
     readr,
-    readxl,
     rlang,
     scales,
     sf,
     stats,
     stringr,
     tibble,
-    tidyr,
     tools,
-    utils,
-    viridis,
-    zipcodeR
+    utils
 LazyData: true
 Suggests:
+    arsenal,
     arrow,
     beepr,
     caret,
     censusapi,
     cli,
+    data.table,
     devtools,
+    digest,
     easyr,
+    emmeans,
     ggmap,
     ggspatial,
+    grid,
+    gridExtra,
     hereR,
+    htmltools,
+    htmlwidgets,
+    humaniformat,
     imager,
+    jsonlite,
     knitr,
     leaflet,
     leaflet.extras,
     lme4,
     lwgeom,
+    memoise,
     mockery,
+    openxlsx,
     pkgdown,
+    progress,
     provider,
+    readxl,
     remotes,
     renv,
     rmarkdown,
     rnaturalearth,
     testthat,
+    tidyr,
     tidyverse,
     tigris,
     tmap,
     covr,
+    viridis,
     webshot
 VignetteBuilder: knitr
-VignetteEngine: knitr::rmarkdown
-Config/pkgdown/doc_url: https://mufflyt.github.io/tyler/
 Config/testthat/edition: 3

@@ -7,8 +7,6 @@
 #' @return None
 #' @export
 #'
-#' @importFrom arsenal write2word
-#'
 #' @examples
 #' \dontrun{
 #' arsenal_tables_write2word(my_table, "output_table")
@@ -17,7 +15,9 @@ arsenal_tables_write2word <- function(object, filename, output_dir = NULL) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
     stop("Package 'arsenal' is required for arsenal_tables_write2word(). Install with: install.packages('arsenal')", call. = FALSE)
   }
-  # Validate input parameters
+  if (!is.data.frame(object)) {
+    stop("Error: 'object' must be a data frame object.", call. = FALSE)
+  }
   if (!is.character(filename)) {
     stop("Error: 'filename' must be a character string.", call. = FALSE)
   }

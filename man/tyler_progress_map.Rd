@@ -31,7 +31,7 @@ Convenience wrapper for processing items in batches with automatic progress
 updates and ETA calculations.
 }
 \examples{
-\dontrun{
+\donttest{
 # Process items with progress bar
 results <- tyler_progress_map(
   items = 1:100,
@@ -41,9 +41,9 @@ results <- tyler_progress_map(
 
 # With custom batch size
 results <- tyler_progress_map(
-  items = addresses,
-  fn = geocode_address,
-  name = "Geocoding addresses",
+  items = 1:50,
+  fn = function(x) x^2,
+  name = "Computing squares",
   batch_size = 10  # Update every 10 items
 )
 }

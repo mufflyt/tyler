@@ -7,9 +7,10 @@
 tyler_assess_data_quality(data, required_columns = c("first", "last"))
 }
 \arguments{
-\item{data}{Data frame to assess}
+\item{data}{Data frame to assess.}
 
-\item{required_columns}{Required column names}
+\item{required_columns}{Character vector of column names that must be present
+and sufficiently complete. Defaults to \code{c("first", "last")}.}
 }
 \value{
 List with score (0-1) and issues
@@ -17,4 +18,3 @@ List with score (0-1) and issues
 \description{
 Assess data quality
 }
-\keyword{internal}

@@ -14,7 +14,7 @@ tyler_export_with_backup(
 \arguments{
 \item{x}{Object to export. Data frames are written as CSV files by default
 while \code{ggplot} objects are saved with \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}. Other objects are
-serialised via \code{\link[=saveRDS]{saveRDS()}}.}
+serialized via \code{\link[=saveRDS]{saveRDS()}}.}
 
 \item{path}{Destination file path.}
 

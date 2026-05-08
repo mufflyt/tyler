@@ -151,7 +151,7 @@ validate_sf_inputs <- function(...,
   if (length(objects) > 1) {
     bbox_sfc <- lapply(objects, function(x) sf::st_as_sfc(sf::st_bbox(x)))
     bbox_intersection <- Reduce(sf::st_intersection, bbox_sfc)
-    if (sf::st_is_empty(bbox_intersection)) {
+    if (length(bbox_intersection) == 0 || all(sf::st_is_empty(bbox_intersection))) {
       stop(sprintf("Bounding boxes of supplied objects do not overlap for %s.", context), call. = FALSE)
     }
   }

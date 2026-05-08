@@ -22,7 +22,7 @@ NULL
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Simple progress bar
 #' pb_id <- tyler_progress_bar("Processing", total = 100)
 #' for (i in 1:100) {
@@ -224,7 +224,7 @@ tyler_progress_fail <- function(pb, msg = NULL) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' tracker <- tyler_multi_progress(c("Load Data", "Process", "Save"))
 #'
 #' # Step 1
@@ -376,7 +376,7 @@ tyler_multi_done <- function(tracker) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Process items with progress bar
 #' results <- tyler_progress_map(
 #'   items = 1:100,
@@ -386,9 +386,9 @@ tyler_multi_done <- function(tracker) {
 #'
 #' # With custom batch size
 #' results <- tyler_progress_map(
-#'   items = addresses,
-#'   fn = geocode_address,
-#'   name = "Geocoding addresses",
+#'   items = 1:50,
+#'   fn = function(x) x^2,
+#'   name = "Computing squares",
 #'   batch_size = 10  # Update every 10 items
 #' )
 #' }
@@ -408,10 +408,10 @@ tyler_progress_map <- function(items,
   # Create progress bar
   pb <- tyler_progress_bar(name = name, total = n)
 
-  # Process items
+  # Process items (use single-bracket assignment to preserve NULL elements)
   results <- vector("list", length = n)
   for (i in seq_along(items)) {
-    results[[i]] <- fn(items[[i]])
+    results[i] <- list(fn(items[[i]]))
 
     # Update progress bar
     if (i %% batch_size == 0 || i == n) {

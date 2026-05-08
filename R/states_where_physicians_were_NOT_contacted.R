@@ -47,8 +47,8 @@ states_where_physicians_were_NOT_contacted <- function(filtered_data, all_states
     if (is.numeric(x)) {
       return(!is.na(x) & x != 0)
     }
-    normalised <- tolower(trimws(as.character(x)))
-    !is.na(normalised) & normalised %in% c("yes", "y", "true", "1")
+    normalized <- tolower(trimws(as.character(x)))
+    !is.na(normalized) & normalized %in% c("yes", "y", "true", "1")
   }
 
   # Default list of all states including Washington, DC

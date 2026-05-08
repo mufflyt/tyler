@@ -28,8 +28,10 @@ test_that("calculate_intersection_overlap_and_save enforces alignment and record
   expect_true(file.exists(shp))
 
   res <- sf::st_read(shp, quiet = TRUE)
-  expect_true("area_method" %in% names(res))
-  expect_equal(unique(res$area_method), "projected:EPSG:5070")
+  # Shapefiles truncate column names to 10 chars: "area_method" → "ar_mthd"
+  area_col <- intersect(c("area_method", "ar_mthd"), names(res))
+  expect_true(length(area_col) > 0)
+  expect_equal(unique(res[[area_col[1]]]), "projected:EPSG:5070")
 })
 
 test_that("calculate_intersection_overlap_and_save blocks unsupported vintage mismatches", {

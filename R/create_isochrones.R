@@ -31,7 +31,6 @@
 #'
 #' @family mapping
 #' @export
-#' @importFrom memoise memoise forget
 #' @importFrom dplyr mutate row_number
 create_isochrones <- function(location,
                               range,
@@ -48,12 +47,15 @@ create_isochrones <- function(location,
     stop("Package 'lwgeom' is required for create_isochrones(). Install with: install.packages('lwgeom')", call. = FALSE)
   }
 
-  .isochrone_memo(location, range, posix_time, api_key)
+  if (is.null(.isochrone_memo)) {
+    .isochrone_worker(location, range, posix_time, api_key)
+  } else {
+    .isochrone_memo(location, range, posix_time, api_key)
+  }
 }
 
-# Internal memoized worker — stored in the package namespace so
-# tyler_clear_isochrone_cache() can call memoise::forget() on it.
-.isochrone_memo <- memoise::memoise(function(location, range, posix_time, api_key) {
+# Internal worker function (unmemoized)
+.isochrone_worker <- function(location, range, posix_time, api_key) {
   if (is.na(api_key) || !nzchar(api_key)) {
     stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
   }
@@ -90,7 +92,7 @@ create_isochrones <- function(location,
       }
 
       temp <- sf::st_transform(temp, 4326)
-      temp <- lwgeom::st_orient(temp)
+      temp <- lwgeom::st_force_polygon_cw(temp)
 
       isolines_list[[as.character(r)]] <- temp
     }
@@ -102,7 +104,17 @@ create_isochrones <- function(location,
   })
 
   out
-})
+}
+
+# Internal memoized worker - stored in the package namespace so
+# tyler_clear_isochrone_cache() can call memoise::forget() on it.
+# If memoise is not installed, .isochrone_memo is NULL and create_isochrones()
+# falls back to calling .isochrone_worker() directly.
+.isochrone_memo <- if (requireNamespace("memoise", quietly = TRUE)) {
+  memoise::memoise(.isochrone_worker)
+} else {
+  NULL
+}
 
 #' Clear the isochrone memoization cache
 #'
@@ -112,8 +124,9 @@ create_isochrones <- function(location,
 #'
 #' @return Invisibly `NULL`.
 #' @export
-#' @importFrom memoise forget
 tyler_clear_isochrone_cache <- function() {
-  memoise::forget(.isochrone_memo)
+  if (!is.null(.isochrone_memo) && requireNamespace("memoise", quietly = TRUE)) {
+    memoise::forget(.isochrone_memo)
+  }
   invisible(NULL)
 }

@@ -15,4 +15,3 @@ Formatted string (e.g., "2h 34m 15s")
 \description{
 Format duration in human-readable form
 }
-\keyword{internal}

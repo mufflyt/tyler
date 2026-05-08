@@ -8,7 +8,7 @@ tyler_use_quiet_logging(quiet = TRUE)
 }
 \arguments{
 \item{quiet}{Logical flag. When \code{TRUE}, suppress messages emitted by
-\code{tyler_log_info()}.}
+\code{\link[=tyler_log_info]{tyler_log_info()}}.}
 }
 \value{
 The previous quiet value (invisibly).

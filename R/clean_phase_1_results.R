@@ -26,7 +26,7 @@
 #' @param notify Logical. If `TRUE`, play a notification sound on completion when
 #'   the optional `beepr` package is available. Defaults to `TRUE`.
 #' @param duplicate_rows Logical. If `TRUE`, each row in `phase1_data` is duplicated
-#'   to retain the previous behaviour that paired insurance entries for each
+#'   to retain the previous behavior that paired insurance entries for each
 #'   physician. Set to `FALSE` to keep the original number of rows. A
 #'   `processing_flag_is_duplicate` column tracks which rows are duplicates.
 #' @param id_seed Optional integer seed used when generating fallback random IDs so
@@ -63,9 +63,6 @@
 #' @importFrom janitor clean_names
 #' @importFrom readr type_convert write_csv
 #' @importFrom stringr str_detect
-#' @importFrom humaniformat last_name
-#' @importFrom readxl read_excel
-#' @importFrom purrr set_names
 #' @export
 
 # library(dplyr)
@@ -126,13 +123,13 @@ clean_phase_1_results <- function(phase1_data,
   original_id_preserved <- FALSE
   if ("id" %in% names(phase1_data)) {
     announce("Preserving original 'id' column as 'original_id'...")
-    phase1_data <- dplyr::rename(phase1_data, original_id = id)
+    phase1_data <- dplyr::rename(phase1_data, "original_id" = "id")
     original_id_preserved <- TRUE
     audit_trail$original_id_preserved <- TRUE
   }
   # === END: AUDIT TRAIL AND PROVENANCE ===
 
-  validate_dataframe(phase1_data, name = "phase1_data")
+  validate_dataframe(phase1_data, name = "phase1_data", allow_zero_rows = FALSE)
 
   if (!is.null(id_seed)) {
     restore_rng <- if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
@@ -170,10 +167,10 @@ clean_phase_1_results <- function(phase1_data,
   announce("Standardising core text fields...")
   phase1_data <- dplyr::mutate(
     phase1_data,
-    names = stringr::str_squish(as.character(names)),
-    practice_name = stringr::str_squish(as.character(practice_name)),
-    phone_number = format_phone_number(phone_number),
-    state_name = stringr::str_squish(as.character(state_name))
+    names = stringr::str_squish(as.character(.data$names)),
+    practice_name = stringr::str_squish(as.character(.data$practice_name)),
+    phone_number = format_phone_number(.data$phone_number),
+    state_name = stringr::str_squish(as.character(.data$state_name))
   )
 
   # === EDGE CASE HANDLING: Whitespace-only strings ===
@@ -181,8 +178,8 @@ clean_phase_1_results <- function(phase1_data,
   announce("Handling edge cases in name field...")
   phase1_data <- dplyr::mutate(
     phase1_data,
-    names = ifelse(names == "" | is.na(names), NA_character_, names),
-    processing_flag_empty_name = (is.na(names))
+    names = ifelse(.data$names == "" | is.na(.data$names), NA_character_, .data$names),
+    processing_flag_empty_name = (is.na(.data$names))
   )
   empty_names_count <- sum(phase1_data$processing_flag_empty_name, na.rm = TRUE)
   if (empty_names_count > 0) {
@@ -202,7 +199,7 @@ clean_phase_1_results <- function(phase1_data,
   original_npi_preserved <- FALSE
   if ("npi" %in% names(phase1_data)) {
     # Store original NPI for provenance tracking
-    phase1_data <- dplyr::mutate(phase1_data, original_npi = npi)
+    phase1_data <- dplyr::mutate(phase1_data, original_npi = .data$npi)
     original_npi_preserved <- TRUE
     audit_trail$original_npi_preserved <- TRUE
     audit_trail$input_npi_count <- sum(!is.na(phase1_data$npi))
@@ -212,12 +209,9 @@ clean_phase_1_results <- function(phase1_data,
     if (!n) {
       return(character(0))
     }
-    base_time <- as.numeric(Sys.time())
-    process_id <- Sys.getpid()
     vapply(seq_len(n), function(i) {
       paste0(
-        floor(base_time),
-        sprintf("%05d", process_id %% 100000),
+        format(abs(sample.int(.Machine$integer.max, 1L)), scientific = FALSE),
         sprintf("%03d", i)
       )
     }, character(1))
@@ -227,11 +221,11 @@ clean_phase_1_results <- function(phase1_data,
     phase1_data <- dplyr::mutate(
       phase1_data,
       random_id = ifelse(
-        is.na(npi),
+        is.na(.data$npi),
         generate_random_ids(dplyr::n()),
-        npi
+        .data$npi
       ),
-      processing_flag_generated_id = is.na(npi)
+      processing_flag_generated_id = is.na(.data$npi)
     )
     generated_ids_count <- sum(phase1_data$processing_flag_generated_id, na.rm = TRUE)
     if (generated_ids_count > 0) {
@@ -276,7 +270,7 @@ clean_phase_1_results <- function(phase1_data,
     # === END: ROW DUPLICATION TRACKING ===
 
     announce("Arranging rows by 'names'...")
-    phase1_data <- dplyr::arrange(phase1_data, names)
+    phase1_data <- dplyr::arrange(phase1_data, .data$names)
 
     announce("Adding insurance information...")
     phase1_data <- dplyr::mutate(
@@ -295,7 +289,7 @@ clean_phase_1_results <- function(phase1_data,
     announce("Extracting last name and creating 'dr_name'...")
     phase1_data <- dplyr::mutate(
       phase1_data,
-      last_name = vapply(names, function(n) {
+      last_name = vapply(.data$names, function(n) {
         if (is.na(n) || !nzchar(n)) return(NA_character_)
         tryCatch(
           humaniformat::last_name(n),
@@ -306,11 +300,11 @@ clean_phase_1_results <- function(phase1_data,
         )
       }, character(1)),
       dr_name = ifelse(
-        is.na(last_name),
+        is.na(.data$last_name),
         NA_character_,
-        paste("Dr.", last_name)
+        paste("Dr.", .data$last_name)
       ),
-      processing_flag_no_last_name = is.na(last_name)
+      processing_flag_no_last_name = is.na(.data$last_name)
     )
     no_last_name_count <- sum(phase1_data$processing_flag_no_last_name, na.rm = TRUE)
     if (no_last_name_count > 0) {
@@ -323,7 +317,7 @@ clean_phase_1_results <- function(phase1_data,
     phase1_data <- dplyr::mutate(
       phase1_data,
       academic = ifelse(
-        stringr::str_detect(practice_name, stringr::str_c(c("University", "Medical College"), collapse = "|")),
+        stringr::str_detect(.data$practice_name, stringr::str_c(c("University", "Medical College"), collapse = "|")),
         "University",
         "Private Practice"
       )
@@ -333,11 +327,11 @@ clean_phase_1_results <- function(phase1_data,
     phase1_data <- dplyr::mutate(
       phase1_data,
       doctor_id = if ("npi" %in% names(phase1_data)) {
-        dplyr::coalesce(as.character(npi), as.character(random_id))
+        dplyr::coalesce(as.character(.data$npi), as.character(.data$random_id))
       } else {
-        as.character(random_id)
+        as.character(.data$random_id)
       },
-      for_redcap = paste(id, dr_name, insurance, phone_number, state_name, random_id, academic, id_number, sep = ", ")
+      for_redcap = paste(.data$id, .data$dr_name, .data$insurance, .data$phone_number, .data$state_name, .data$random_id, .data$academic, .data$id_number, sep = ", ")
     )
 
     phase1_data <- dplyr::select(phase1_data, for_redcap, dplyr::everything())
@@ -376,7 +370,7 @@ clean_phase_1_results <- function(phase1_data,
   audit_trail$quality_metrics <- quality_metrics
 
   announce(sprintf(
-    "Processing complete: %d → %d rows (%.1f%%) in %.2f seconds",
+    "Processing complete: %d -> %d rows (%.1f%%) in %.2f seconds",
     audit_trail$input_rows,
     audit_trail$output_rows,
     audit_trail$rows_retained_pct,

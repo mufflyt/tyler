@@ -17,7 +17,7 @@ create_isochrones_for_dataframe(
 
 \item{breaks}{A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).}
 
-\item{api_key}{HERE API key. Defaults to the \code{HERE_API_KEY} environment variable.}
+\item{api_key}{HERE API key for authenticating isochrone requests. Defaults to the \code{HERE_API_KEY} environment variable.}
 
 \item{output_dir}{Directory where intermediate \code{.rds} results are written.
 Defaults to a session-specific folder beneath \code{\link[=tempdir]{tempdir()}}.}

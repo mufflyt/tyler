@@ -25,7 +25,7 @@ A data frame with genderized information joined to the original data.
 
 The function queries the \href{https://genderize.io}{Genderize.io} API for first
 name gender predictions. First names are deduplicated before querying the
-service to minimise repeated requests.
+service to minimize repeated requests.
 }
 \description{
 This function reads a CSV file containing physician data, genderizes the first names,

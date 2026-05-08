@@ -65,14 +65,14 @@ get_census_data <- function(us_fips_list, vintage = 2022, api_key = Sys.getenv("
       res <- tibble::as_tibble(res, .name_repair = "minimal")
 
       if ("block group" %in% names(res)) {
-        res <- dplyr::rename(res, block_group = `block group`)
+        res <- dplyr::rename(res, "block_group" = "block group")
       }
 
       if (!"block_group" %in% names(res)) {
         stop("Census response did not include a `block group` column.", call. = FALSE)
       }
 
-      res <- dplyr::rename(res, name = NAME)
+      res <- dplyr::rename(res, "name" = "NAME")
 
       res <- dplyr::mutate(
         res,

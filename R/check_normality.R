@@ -9,7 +9,6 @@
 #' @return A list containing the summary statistics (mean and standard deviation if normal, median and IQR if not normal).
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_density labs stat_qq stat_qq_line
-#' @importFrom dplyr %>%
 #' @importFrom rlang sym
 #' @importFrom stats shapiro.test IQR median
 #'

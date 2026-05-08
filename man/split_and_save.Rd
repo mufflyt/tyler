@@ -41,11 +41,15 @@ It allows the arrangement of calls by insurance type to prioritize Medicaid in t
 }
 \examples{
 \dontrun{
-library(tyler)
 input_data <- readr::read_csv("/path/to/your/input/file.csv")
 output_directory <- "/path/to/your/output/directory"
 lab_assistant_names <- c("Label1", "Label2", "Label3")
 insurance_order <- c("Medicaid", "Blue Cross/Blue Shield")
-split_and_save(data_or_path = input_data, output_directory, lab_assistant_names, insurance_order = insurance_order)
+split_and_save(
+  data_or_path = input_data,
+  output_directory = output_directory,
+  lab_assistant_names = lab_assistant_names,
+  insurance_order = insurance_order
+)
 }
 }

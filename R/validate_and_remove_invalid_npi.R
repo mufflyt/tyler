@@ -48,7 +48,11 @@ validate_and_remove_invalid_npi <- function(input_data) {
   npi_df$npi_is_valid <- FALSE
 
   if (any(valid_format)) {
-    npi_df$npi_is_valid[valid_format] <- npi::npi_is_valid(npi_df$npi[valid_format])
+    npi_df$npi_is_valid[valid_format] <- vapply(
+      npi_df$npi[valid_format],
+      npi::npi_is_valid,
+      logical(1)
+    )
   }
 
   npi_df <- npi_df %>%

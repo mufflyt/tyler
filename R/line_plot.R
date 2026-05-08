@@ -19,7 +19,6 @@
 #' @return Invisibly returns the generated ggplot object.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_point geom_line stat_summary ylab theme_minimal element_rect element_blank ggsave
-#' @importFrom viridis viridis_pal
 #' @importFrom rlang sym .data
 #' @family mapping
 #' @export
@@ -72,8 +71,24 @@ create_line_plot <- function(plot_data,
   }
 
   # Create the plot
-  resolved_point_color <- if (point_color == "viridis") viridis::viridis_pal(option = "viridis")(1) else point_color
-  resolved_line_color <- if (line_color == "viridis") viridis::viridis(1, option = "viridis") else line_color
+  resolved_point_color <- if (point_color == "viridis") {
+    if (requireNamespace("viridis", quietly = TRUE)) {
+      viridis::viridis_pal(option = "viridis")(1)
+    } else {
+      "#440154"
+    }
+  } else {
+    point_color
+  }
+  resolved_line_color <- if (line_color == "viridis") {
+    if (requireNamespace("viridis", quietly = TRUE)) {
+      viridis::viridis(1, option = "viridis")
+    } else {
+      "#440154"
+    }
+  } else {
+    line_color
+  }
 
   line_plot <- ggplot2::ggplot(plot_data, ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var))) +
     ggplot2::geom_point(color = resolved_point_color, size = 2.5, alpha = 0.9)

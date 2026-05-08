@@ -2,7 +2,7 @@
 % Please edit documentation in R/utility_library.R
 \name{tyler_standard_palette}
 \alias{tyler_standard_palette}
-\title{Retrieve a standard colour palette}
+\title{Retrieve a standard color palette}
 \usage{
 tyler_standard_palette(name = c("primary", "sequential", "diverging"))
 }
@@ -11,8 +11,8 @@ tyler_standard_palette(name = c("primary", "sequential", "diverging"))
 \code{"sequential"}, and \code{"diverging"}.}
 }
 \value{
-A character vector of hex colours.
+A character vector of hex colors.
 }
 \description{
-Retrieve a standard colour palette
+Retrieve a standard color palette
 }

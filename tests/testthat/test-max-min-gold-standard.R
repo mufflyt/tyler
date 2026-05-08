@@ -58,7 +58,7 @@ test_that("max_table - all same value returns that value", {
 
 test_that("max_table - taxonomy Classification: gold standard Clinic/Center n=63", {
   e <- new.env()
-  load(testthat::test_path("../../data/taxonomy.rda"), envir = e)
+  data("taxonomy", package = "tyler", envir = e)
   result <- max_table(e$taxonomy$Classification)
   # Verified externally: Clinic/Center appears 63 times, more than any other
   expect_equal(result, "Clinic/Center")
@@ -66,7 +66,7 @@ test_that("max_table - taxonomy Classification: gold standard Clinic/Center n=63
 
 test_that("max_table - with mult=TRUE, taxonomy most common is still Clinic/Center", {
   e <- new.env()
-  load(testthat::test_path("../../data/taxonomy.rda"), envir = e)
+  data("taxonomy", package = "tyler", envir = e)
   result <- max_table(e$taxonomy$Classification, mult = TRUE)
   expect_true("Clinic/Center" %in% result)
 })
@@ -101,10 +101,10 @@ test_that("min_table - empty factor returns character(0)", {
   expect_equal(min_table(factor(character(0))), character(0))
 })
 
-test_that("min_table - non-factor input returns character(0) (function guard)", {
-  # The function only processes factors; non-factors return early
+test_that("min_table - non-factor input is coerced to factor and returns least frequent", {
+  # The function coerces non-factors to factor before processing
   result <- min_table(c("a", "b", "a"))
-  expect_equal(result, character(0))
+  expect_equal(result, "b")  # "b" appears once, "a" appears twice
 })
 
 test_that("min_table - single element returns that element", {
@@ -120,7 +120,7 @@ test_that("min_table - all same: min and max are the same", {
 
 test_that("min_table - taxonomy Classification: Acupuncturist appears just once (gold standard)", {
   e <- new.env()
-  load(testthat::test_path("../../data/taxonomy.rda"), envir = e)
+  data("taxonomy", package = "tyler", envir = e)
   result <- min_table(factor(e$taxonomy$Classification), mult = TRUE)
   # Verified externally: multiple classifications appear exactly 1 time
   # Acupuncturist is one of them

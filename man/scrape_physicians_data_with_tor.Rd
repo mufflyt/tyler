@@ -32,7 +32,7 @@ A dataframe containing scraped physicians' data.
 This function scrapes data for physicians within a specified ID range, excluding wrong IDs.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Running this helper requires a local Tor proxy and network access, so we
 # keep the example non-executing on automated checks.
 scrape_result <- scrape_physicians_data_with_tor(

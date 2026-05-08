@@ -42,7 +42,7 @@ Released 2026-05-04.
 * Released on 2025-10-23 to align all metadata artifacts with the
   package website and codemeta specification.
 
-* Introduced an **Imotive News & Changelog** vignette that centralises release
+* Introduced an **Imotive News & Changelog** vignette that centralizes release
   notes for the mystery caller workflow.
 * Documented how `run_mystery_caller_workflow()` coordinates roster creation,
   validation, call preparation, and QA for Imotive projects.
@@ -54,7 +54,7 @@ Released 2026-05-04.
   affirmative contact outcomes and report the number of unique physicians who
   were successfully reached.
 * Deprecated legacy helpers (`search_npi()`, `test_and_process_isochrones()`,
-  and `process_and_save_isochrones()`) in favour of the consolidated
+  and `process_and_save_isochrones()`) in favor of the consolidated
   `search_and_process_npi()` and `create_isochrones_for_dataframe()` workflow.
 
 # tyler 0.0.0.9000

@@ -4,12 +4,15 @@
 \alias{create_individual_isochrone_plots}
 \title{Create Individual Isochrone Maps and Shapefiles}
 \usage{
-create_individual_isochrone_plots(isochrones, drive_times)
+create_individual_isochrone_plots(isochrones, drive_times, output_dir = NULL)
 }
 \arguments{
 \item{isochrones}{An sf object containing isochrone data.}
 
 \item{drive_times}{A vector of unique drive times (in minutes) for which maps and shapefiles will be created.}
+
+\item{output_dir}{Directory where HTML maps and shapefiles are saved.
+Defaults to a session-specific folder inside \code{\link[=tempdir]{tempdir()}}.}
 }
 \value{
 None. The function creates and saves individual maps and shapefiles.

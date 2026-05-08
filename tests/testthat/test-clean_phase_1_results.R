@@ -12,13 +12,12 @@ library(humaniformat)
 
 test_that("clean_phase_1_results handles empty data frames correctly", {
   df_empty <- data.frame()
-  # After Bug #7 fix, empty data frames error early due to missing required columns
-  expect_error(clean_phase_1_results(df_empty, verbose = TRUE), "Required columns are missing")
+  expect_error(clean_phase_1_results(df_empty, verbose = TRUE), "must contain at least one row")
 })
 
 test_that("clean_phase_1_results stops if required columns are missing", {
   df_missing_cols <- data.frame(names = c("John Doe", "Jane Doe"), stringsAsFactors = FALSE)
-  expect_error(clean_phase_1_results(df_missing_cols), "required columns are missing")
+  expect_error(clean_phase_1_results(df_missing_cols), "Required columns are missing")
 })
 
 test_that("clean_phase_1_results processes data correctly", {

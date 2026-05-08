@@ -361,7 +361,7 @@ tyler_workflow_end <- function(final_n = NULL, input_n = NULL) {
 #'
 #' @param seconds Duration in seconds
 #' @return Formatted string (e.g., "2h 34m 15s")
-#' @keywords internal
+#' @export
 tyler_format_duration <- function(seconds) {
   if (seconds < 60) {
     return(sprintf("%.1fs", seconds))
@@ -398,7 +398,7 @@ tyler_log_to_file <- function(msg) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' progress <- tyler_progress_callback(100, "Processing")
 #' for (i in 1:100) {
 #'   # do work

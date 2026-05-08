@@ -3,14 +3,14 @@ testthat::skip_if_not_installed("readr")
 library(readr)
 
 sample_df <- data.frame(
-  npi = c("1234567890", " 123-456-7890 ", "ABCDEFGHIJ", NA, ""),
+  npi = c("1234567893", " 123-456-7893 ", "ABCDEFGHIJ", NA, ""),
   stringsAsFactors = FALSE
 )
 
 test_that("validates numeric and character NPIs", {
   result <- validate_and_remove_invalid_npi(sample_df)
   expect_equal(nrow(result), 2)
-  expect_true(all(result$npi == c("1234567890", "1234567890")))
+  expect_true(all(result$npi == c("1234567893", "1234567893")))
   expect_true(all(result$npi_is_valid))
 })
 
@@ -18,7 +18,7 @@ test_that("reads from csv with preserved digits", {
   temp_file <- tempfile(fileext = ".csv")
   write_csv(sample_df, temp_file)
   result <- validate_and_remove_invalid_npi(temp_file)
-  expect_equal(result$npi, rep("1234567890", 2))
+  expect_equal(result$npi, rep("1234567893", 2))
 })
 
 test_that("errors when npi column missing", {

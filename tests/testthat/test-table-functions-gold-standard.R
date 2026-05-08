@@ -53,7 +53,7 @@ test_that("table_calculate_percentages - variable passed as string is accepted",
 
 test_that("table_calculate_percentages - uses actual taxonomy Classification column", {
   e <- new.env()
-  load(testthat::test_path("../../data/taxonomy.rda"), envir = e)
+  data("taxonomy", package = "tyler", envir = e)
   result <- table_calculate_percentages(e$taxonomy, "Classification")
   # Gold standard: "Clinic/Center" appears 63 times out of 862 rows = 7.309%
   expect_equal(result$Classification[1], "Clinic/Center")

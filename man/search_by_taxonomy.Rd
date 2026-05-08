@@ -6,16 +6,32 @@
 \usage{
 search_by_taxonomy(
   taxonomy_to_search,
+  states = NULL,
+  city = NULL,
+  limit = 1200L,
   write_snapshot = TRUE,
   snapshot_dir = NULL,
   notify = TRUE
 )
 }
 \arguments{
-\item{taxonomy_to_search}{A character vector containing the taxonomy description(s) to search for.}
+\item{taxonomy_to_search}{A character vector containing the taxonomy
+description(s) to search for.}
 
-\item{write_snapshot}{Logical. If \code{TRUE}, the retrieved data is saved as an \code{.rds}
-file for later reference. Defaults to \code{TRUE}.}
+\item{states}{Optional character vector of two-letter US state abbreviations
+(e.g. \code{c("CO", "CA", "NY")}). When supplied the search is repeated for
+each state so that all providers are captured even for large specialties
+that exceed the 1\,200-record per-query limit. Pass all 50 state
+abbreviations to perform a complete national search. Defaults to \code{NULL}
+(national search, capped at \code{limit} records).}
+
+\item{city}{Optional city name passed to \code{\link[npi:npi_search]{npi::npi_search()}}.}
+
+\item{limit}{Maximum records to request per API call. Capped at 1\,200 by
+the NPI API. Defaults to \code{1200L}.}
+
+\item{write_snapshot}{Logical. If \code{TRUE}, the retrieved data is saved as an
+\code{.rds} file for later reference. Defaults to \code{TRUE}.}
 
 \item{snapshot_dir}{Directory where snapshot files should be written when
 \code{write_snapshot} is \code{TRUE}. Defaults to a session-specific folder inside
@@ -25,17 +41,35 @@ file for later reference. Defaults to \code{TRUE}.}
 completes (requires the optional \code{beepr} package). Defaults to \code{TRUE}.}
 }
 \value{
-A data frame with filtered NPI data based on the specified taxonomy description.
+A data frame with filtered NPI data based on the specified taxonomy
+description.
 }
 \description{
-This function searches the NPI Database for healthcare providers based on a taxonomy description.
+This function searches the NPI Database for healthcare providers based on a
+taxonomy description. The NPI API returns at most 1\,200 records per query.
+To retrieve all providers for a large specialty, supply a character vector
+of state abbreviations via the \code{states} argument; the function will loop over
+each state and combine the results, effectively bypassing the 1\,200-record
+cap.
 }
 \examples{
-# Example usage with multiple taxonomy descriptions:
+\dontrun{
+# National search (limited to 1200 records per taxonomy):
 go_data <- search_by_taxonomy("Gynecologic Oncology")
-fpmrs_data <- search_by_taxonomy("Female Pelvic Medicine and Reconstructive Surgery")
-rei_data <- search_by_taxonomy("Reproductive Endocrinology")
-mfm_data <- search_by_taxonomy("Maternal & Fetal Medicine")
+
+# Full national search by looping over every state:
+all_states <- c(
+  "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA",
+  "HI","ID","IL","IN","IA","KS","KY","LA","ME","MD",
+  "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
+  "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+  "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
+)
+fpmrs_data <- search_by_taxonomy(
+  "Female Pelvic Medicine and Reconstructive Surgery",
+  states = all_states
+)
+}
 
 }
 \seealso{

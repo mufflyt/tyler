@@ -12,7 +12,6 @@
 #' @return A dataframe containing scraped physicians' data.
 #'
 #' @importFrom httr GET content use_proxy
-#' @importFrom jsonlite fromJSON
 #' @importFrom dplyr bind_rows
 #' @importFrom readr read_csv write_csv
 #'
@@ -28,6 +27,9 @@
 scrape_physicians_data_with_tor <- function(startID, endID, torPort, wrong_ids_path = NULL,
                                             output_format = c("csv", "parquet")) {
   output_format <- match.arg(output_format)
+  if (!requireNamespace("jsonlite", quietly = TRUE)) {
+    stop("Package 'jsonlite' is required for this function. Install with: install.packages('jsonlite')", call. = FALSE)
+  }
   cat("Starting scrape_physicians_data_with_tor...\n")
   cat("Parameters - startID:", startID, "endID:", endID, "torPort:", torPort, "\n")
 

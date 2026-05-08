@@ -92,7 +92,7 @@ progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler
     completed,
     total,
     progress * 100,
-    if (!is.na(eta)) sprintf(" – ETA %s", eta) else ""
+    if (!is.na(eta)) sprintf(" - ETA %s", eta) else ""
   )
   .tracker_log(tracker, msg)
   env$last_update <- Sys.time()

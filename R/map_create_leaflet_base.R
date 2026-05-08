@@ -7,7 +7,7 @@
 #' @family mapping
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' map <- map_create_leaflet_base()
 #' }
 map_create_leaflet_base <- function() {

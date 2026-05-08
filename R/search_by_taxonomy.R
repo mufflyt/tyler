@@ -29,6 +29,7 @@
 #'   description.
 #'
 #' @examples
+#' \dontrun{
 #' # National search (limited to 1200 records per taxonomy):
 #' go_data <- search_by_taxonomy("Gynecologic Oncology")
 #'
@@ -40,7 +41,6 @@
 #'   "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
 #'   "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
 #' )
-#' \dontrun{
 #' fpmrs_data <- search_by_taxonomy(
 #'   "Female Pelvic Medicine and Reconstructive Surgery",
 #'   states = all_states
@@ -89,7 +89,7 @@ search_by_taxonomy <- function(taxonomy_to_search,
     })
 
     npi_data <- dplyr::bind_rows(all_results)
-    npi_data <- dplyr::distinct(npi_data, npi, taxonomies_desc, .keep_all = TRUE)
+    npi_data <- dplyr::distinct(npi_data, .data$npi, .data$taxonomies_desc, .keep_all = TRUE)
 
     if (isTRUE(write_snapshot)) {
       .save_taxonomy_snapshot(npi_data, snapshot_dir)
@@ -165,18 +165,18 @@ search_by_taxonomy <- function(taxonomy_to_search,
         }
 
         if (!is.null(data_taxonomy) && nrow(data_taxonomy)) {
-          data_taxonomy <- dplyr::distinct(data_taxonomy, npi, .keep_all = TRUE)
+          data_taxonomy <- dplyr::distinct(data_taxonomy, .data$npi, .keep_all = TRUE)
           data_taxonomy <- dplyr::mutate(
             data_taxonomy,
-            credential = stringr::str_remove_all(basic_credential, "[[\\p{P}][\\p{S}]]"),
-            credential_lower = stringr::str_to_lower(credential)
+            credential = stringr::str_remove_all(.data$basic_credential, "[[\\p{P}][\\p{S}]]"),
+            credential_lower = stringr::str_to_lower(.data$credential)
           )
           data_taxonomy <- dplyr::filter(
             data_taxonomy,
-            is.na(credential_lower) | credential_lower %in% stringr::str_to_lower(c("MD", "DO"))
+            is.na(.data$credential_lower) | .data$credential_lower %in% stringr::str_to_lower(c("MD", "DO"))
           )
-          data_taxonomy <- dplyr::filter(data_taxonomy, addresses_country_name == "United States")
-          data_taxonomy <- dplyr::filter(data_taxonomy, stringr::str_detect(taxonomies_desc, stringr::fixed(taxonomy)))
+          data_taxonomy <- dplyr::filter(data_taxonomy, .data$addresses_country_name == "United States")
+          data_taxonomy <- dplyr::filter(data_taxonomy, stringr::str_detect(.data$taxonomies_desc, stringr::fixed(taxonomy)))
 
           required_cols <- c("basic_first_name", "basic_last_name", "basic_middle_name")
           missing_cols <- setdiff(required_cols, names(data_taxonomy))
@@ -190,13 +190,13 @@ search_by_taxonomy <- function(taxonomy_to_search,
 
           data_taxonomy <- dplyr::rename(
             data_taxonomy,
-            first_name = basic_first_name,
-            last_name = basic_last_name,
-            middle_name = basic_middle_name
+            "first_name" = "basic_first_name",
+            "last_name" = "basic_last_name",
+            "middle_name" = "basic_middle_name"
           )
           data_taxonomy <- dplyr::mutate(data_taxonomy, search_term = taxonomy)
-          data_taxonomy <- dplyr::arrange(data_taxonomy, last_name, first_name)
-          data_taxonomy <- dplyr::distinct(data_taxonomy, npi, taxonomies_desc, .keep_all = TRUE)
+          data_taxonomy <- dplyr::arrange(data_taxonomy, .data$last_name, .data$first_name)
+          data_taxonomy <- dplyr::distinct(data_taxonomy, .data$npi, .data$taxonomies_desc, .keep_all = TRUE)
 
           # Drop noisy endpoint/identifier columns that inflate the result
           drop_cols <- intersect(names(data_taxonomy), c(

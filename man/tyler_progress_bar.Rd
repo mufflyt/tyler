@@ -34,7 +34,7 @@ Creates an animated progress bar with ETA, percentage, and custom formatting.
 Uses the cli package for cross-platform compatibility and beautiful output.
 }
 \examples{
-\dontrun{
+\donttest{
 # Simple progress bar
 pb_id <- tyler_progress_bar("Processing", total = 100)
 for (i in 1:100) {

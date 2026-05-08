@@ -132,8 +132,7 @@ test_that("all processing_flag_* columns are logical type", {
              label = "At least one processing_flag_* column must exist")
 
   for (col in flag_cols) {
-    expect_type(result[[col]], "logical",
-                label = paste("processing_flag column", col, "must be logical"))
+    expect_type(result[[col]], "logical")
   }
 })
 

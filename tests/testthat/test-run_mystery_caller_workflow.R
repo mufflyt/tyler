@@ -62,7 +62,7 @@ test_that("run_mystery_caller_workflow orchestrates pipeline without mocks", {
     all_states = c("Colorado", "Wyoming")
   )
 
-  expect_s3_class(result, "list")
+  expect_true(is.list(result))
   expect_equal(sort(names(result)), sort(c(
     "cleaned_phase1", "cleaned_phase2", "coverage_summary",
     "quality_check_table", "roster", "validated_roster"

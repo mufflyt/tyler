@@ -5,6 +5,7 @@
 #'
 #' @param input_file A path to the input file containing points for which isochrones are to be retrieved.
 #' @param breaks A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).
+#' @param api_key HERE API key for authenticating isochrone requests. Defaults to the `HERE_API_KEY` environment variable.
 #' @param output_dir Directory where intermediate `.rds` results are written.
 #'   Defaults to a session-specific folder beneath [tempdir()].
 #' @param save_interval Number of seconds between automatic checkpoint saves.
@@ -13,7 +14,6 @@
 #' @importFrom readr write_rds
 #' @importFrom sf st_as_sf st_drop_geometry write_sf
 #' @importFrom janitor clean_names
-#' @importFrom progress progress_bar
 #' @family mapping
 #' @export
 #' @examples
@@ -92,12 +92,14 @@ create_isochrones_for_dataframe <- function(
   pb <- NULL
   if (total_rows > 0) {
     message(sprintf("Retrieving isochrones for %d point%s...", total_rows, ifelse(total_rows == 1, "", "s")))
-    pb <- progress::progress_bar$new(
-      format = "  Processing [:bar] :percent | :current/:total | eta: :eta",
-      total = total_rows,
-      clear = FALSE,
-      show_after = 0
-    )
+    if (requireNamespace("progress", quietly = TRUE)) {
+      pb <- progress::progress_bar$new(
+        format = "  Processing [:bar] :percent | :current/:total | eta: :eta",
+        total = total_rows,
+        clear = FALSE,
+        show_after = 0
+      )
+    }
   }
 
   if (!is.numeric(save_interval) || length(save_interval) != 1 || is.na(save_interval) || save_interval <= 0) {

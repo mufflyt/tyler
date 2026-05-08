@@ -13,7 +13,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 # Overview
-The `geocode` function is designed to help you geocode datasets containing addresses and change them to lattitude and longitude.  
+The `geocode` function is designed to help you geocode datasets containing addresses and change them to latitude and longitude.  
 
 ## Step 1
 ### Installation
@@ -95,9 +95,9 @@ geocoded_data1 <- geocoded_data %>%
                long = sf::st_coordinates(.)[, "X"])
 ```
 
-* How do you match the `geocoded_data` with the orginal dataframe?  You can use the `postmastr` package that allows the addresses in both dataframes to be parsed into house number, street, state, etc.  Once in their individual parts you can do a join together.  This seems janky af.  
+* How do you match the `geocoded_data` with the original dataframe?  You can use the `postmastr` package that allows the addresses in both dataframes to be parsed into house number, street, state, etc.  Once in their individual parts you can do a join together.  This seems janky af.
 
-* postmast’s functionality rests on an order of operations that must be followed to ensure correct parsing:
+* postmastr's functionality rests on an order of operations that must be followed to ensure correct parsing:
 
 * prep
 * postal code

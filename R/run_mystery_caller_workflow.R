@@ -28,7 +28,7 @@
 #' @param split_insurance_order Ordering passed to [split_and_save()]'s
 #'   `insurance_order` argument. Defaults to `c("Medicaid", "Blue Cross/Blue Shield")`.
 #' @param phase2_required_strings Character vector of substrings used when
-#'   standardising Phase 2 column names via [clean_phase_2_data()].
+#'   standardizing Phase 2 column names via [clean_phase_2_data()].
 #' @param phase2_standard_names Replacement names corresponding to
 #'   `phase2_required_strings`.
 #' @param npi_search_args Named list of additional arguments forwarded to
@@ -41,7 +41,7 @@
 #'   from [search_and_process_npi()]. It is invoked with the same payload as the
 #'   `progress_callback` argument for that function.
 #'
-#' @return A list containing intermediate artefacts from each workflow stage:
+#' @return A list containing intermediate artifacts from each workflow stage:
 #'   `roster`, `validated_roster`, `cleaned_phase1`, `cleaned_phase2`,
 #'   `coverage_summary`, and `quality_check_table`.
 #'

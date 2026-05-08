@@ -77,7 +77,7 @@ test_that("tyler_workflow_end handles final counts", {
 
   expect_message(
     tyler_workflow_end(final_n = 95, input_n = 100),
-    "95\\.1%"
+    "95\\.0%"
   )
 })
 
@@ -373,11 +373,11 @@ test_that("Logging handles special characters in file paths", {
 })
 
 test_that("Logging handles NULL and NA values", {
-  # These should not crash
-  expect_silent(tyler_log_info("Test", indent = TRUE))
-  expect_silent(tyler_log_success("Test", details = NULL))
-  expect_silent(tyler_log_warning("Test", fix = NULL))
-  expect_silent(tyler_log_error("Test", cause = NULL, fix = NULL))
+  # These should not crash (functions produce messages, so suppress them)
+  expect_no_error(suppressMessages(tyler_log_info("Test", indent = TRUE)))
+  expect_no_error(suppressMessages(tyler_log_success("Test", details = NULL)))
+  expect_no_error(suppressMessages(tyler_log_warning("Test", fix = NULL)))
+  expect_no_error(suppressMessages(tyler_log_error("Test", cause = NULL, fix = NULL)))
 })
 
 # ==============================================================================

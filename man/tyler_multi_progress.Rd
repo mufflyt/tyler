@@ -19,7 +19,7 @@ Creates a progress tracker for workflows with multiple major steps.
 Shows overall progress plus current step progress.
 }
 \examples{
-\dontrun{
+\donttest{
 tracker <- tyler_multi_progress(c("Load Data", "Process", "Save"))
 
 # Step 1

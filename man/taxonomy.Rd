@@ -5,10 +5,11 @@
 \alias{taxonomy}
 \title{Taxonomy Codes for Obstetricians and Gynecologists}
 \format{
-A data frame with two columns:
+A data frame with three columns:
 \describe{
-\item{NUCC Code}{NUCC (National Uniform Claim Committee) code for healthcare providers.}
-\item{Provider Type}{The type of healthcare provider corresponding to the NUCC code.}
+\item{Code}{NUCC (National Uniform Claim Committee) taxonomy code.}
+\item{Classification}{Provider classification (e.g., Allopathic & Osteopathic Physicians).}
+\item{Specialization}{Provider specialization within the classification.}
 }
 }
 \source{
@@ -25,7 +26,7 @@ types relevant to obstetrics and gynecology research.
 This dataset contains taxonomy codes for Obstetricians and Gynecologists among other healthcare providers.
 }
 \examples{
-\dontrun{
+\donttest{
 # Load the taxonomy dataset
 data(taxonomy)
 

@@ -29,7 +29,6 @@
 #' result <- geocode_unique_addresses("addresses.csv", "my_api_key")
 #' }
 #' @importFrom readr read_csv write_csv
-#' @importFrom readxl read_excel
 #' @importFrom dplyr left_join distinct mutate
 #' @importFrom tibble tibble
 #' @importFrom stats complete.cases
@@ -50,7 +49,12 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   data <- switch(tolower(ext),
                  csv = readr::read_csv(file_path, show_col_types = FALSE),
                  rds = readRDS(file_path),
-                 xlsx = readxl::read_excel(file_path),
+                 xlsx = {
+                   if (!requireNamespace("readxl", quietly = TRUE)) {
+                     stop("Package 'readxl' is required to read Excel files. Install with: install.packages('readxl')", call. = FALSE)
+                   }
+                   readxl::read_excel(file_path)
+                 },
                  stop("Unsupported file type: ", ext, call. = FALSE))
 
   if (!"address" %in% names(data)) {
