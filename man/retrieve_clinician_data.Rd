@@ -22,6 +22,7 @@ clinician_df <- retrieve_clinician_data("clinicians.csv")
 }
 \seealso{
 Other npi: 
+\code{\link{scrape_physicians_data_with_tor}()},
 \code{\link{search_and_process_npi}()},
 \code{\link{search_by_taxonomy}()}
 }

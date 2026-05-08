@@ -84,6 +84,7 @@ results <- search_and_process_npi(df)
 \seealso{
 Other npi: 
 \code{\link{retrieve_clinician_data}()},
+\code{\link{scrape_physicians_data_with_tor}()},
 \code{\link{search_by_taxonomy}()}
 }
 \concept{npi}

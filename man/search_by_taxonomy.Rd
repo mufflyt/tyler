@@ -75,6 +75,7 @@ fpmrs_data <- search_by_taxonomy(
 \seealso{
 Other npi: 
 \code{\link{retrieve_clinician_data}()},
+\code{\link{scrape_physicians_data_with_tor}()},
 \code{\link{search_and_process_npi}()}
 }
 \concept{npi}
