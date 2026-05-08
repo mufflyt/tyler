@@ -150,7 +150,12 @@ clean_phase_1_results <- function(phase1_data,
   }
 
   announce("Converting column types...")
+  npi_col_before_clean <- names(phase1_data)[tolower(names(phase1_data)) == "npi"]
   phase1_data <- readr::type_convert(phase1_data)
+
+  if (length(npi_col_before_clean) == 1 && npi_col_before_clean %in% names(phase1_data)) {
+    phase1_data[[npi_col_before_clean]] <- trimws(format(phase1_data[[npi_col_before_clean]], scientific = FALSE, trim = TRUE))
+  }
 
   announce("Cleaning column names...")
   phase1_data <- janitor::clean_names(phase1_data, case = "snake")
@@ -209,12 +214,20 @@ clean_phase_1_results <- function(phase1_data,
     if (!n) {
       return(character(0))
     }
-    vapply(seq_len(n), function(i) {
-      paste0(
-        format(abs(sample.int(.Machine$integer.max, 1L)), scientific = FALSE),
+    # Use timestamp + process ID for better uniqueness.
+    # Keep IDs as character to avoid precision loss with large numeric values.
+    base_time <- format(Sys.time(), "%Y%m%d%H%M%S")
+    process_id <- Sys.getpid()
+    unique_ids <- character(n)
+
+    for (i in seq_len(n)) {
+      unique_ids[i] <- paste0(
+        base_time,
+        sprintf("%05d", process_id %% 100000),
         sprintf("%03d", i)
       )
-    }, character(1))
+    }
+    unique_ids
   }
 
   if ("npi" %in% names(phase1_data)) {
@@ -223,7 +236,7 @@ clean_phase_1_results <- function(phase1_data,
       random_id = ifelse(
         is.na(.data$npi),
         generate_random_ids(dplyr::n()),
-        .data$npi
+        as.character(.data$npi)
       ),
       processing_flag_generated_id = is.na(.data$npi)
     )
@@ -439,12 +452,12 @@ format_phone_number <- function(phone_values) {
     } else if (nchar(clean) == 0) {
       ""
     } else {
-      # Bug #5 fix: Warn about invalid phone number lengths instead of silently returning malformed numbers
+      # Treat unsupported lengths as invalid and return missing value.
       warning(sprintf(
-        "Phone number has invalid length (%d digits): '%s'. Expected 7 or 10 digits. Returning as-is.",
+        "Phone number has invalid length (%d digits): '%s'. Expected 7 or 10 digits; returning NA.",
         nchar(clean), d
       ), call. = FALSE)
-      clean
+      NA_character_
     }
   }, character(1))
 

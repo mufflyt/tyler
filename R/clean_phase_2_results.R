@@ -33,8 +33,18 @@
 #' print(df)
 rename_columns_by_substring <- function(data, target_strings, new_names) {
   # Initial checks and setup
+  validate_dataframe(data, name = "data")
+  checkmate::assert_character(target_strings, any.missing = FALSE, min.len = 1, .var.name = "target_strings")
+  checkmate::assert_character(new_names, any.missing = FALSE, min.len = 1, .var.name = "new_names")
+
   if (length(target_strings) != length(new_names)) {
     stop("target_strings and new_names must have the same length.", call. = FALSE)
+  }
+  if (any(!nzchar(trimws(target_strings)))) {
+    stop("`target_strings` cannot contain empty or whitespace-only entries.", call. = FALSE)
+  }
+  if (any(!nzchar(trimws(new_names)))) {
+    stop("`new_names` cannot contain empty or whitespace-only entries.", call. = FALSE)
   }
 
   message("--- Starting to search and rename columns based on target substrings ---")
@@ -42,42 +52,60 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
   rename_log <- list()
   rename_index <- 0L
   for (i in seq_along(target_strings)) {
-    # Bug #8 fix: Use exact matching instead of substring matching to avoid renaming wrong columns
-    matches <- tolower(names(data)) == tolower(target_strings[i])
+    target <- tolower(trimws(target_strings[i]))
+    replacement <- trimws(new_names[i])
+    normalized_names <- tolower(names(data))
+
+    # Prefer exact case-insensitive matches first.
+    matches <- normalized_names == target
+    # Fall back to substring matching to preserve historical behavior and
+    # prevent downstream column mismatch errors when callers pass patterns.
+    matched_by <- "exact"
+    if (!any(matches)) {
+      matches <- grepl(target, normalized_names, fixed = TRUE)
+      matched_by <- "substring"
+    }
     matched_cols <- names(data)[matches]
 
     # Detailed log of what matches were found
     if (any(matches)) {
       message(sprintf(
-        "Matched %d column(s) exactly matching '%s': %s",
+        "Matched %d column(s) by %s match for '%s': %s",
         sum(matches),
+        matched_by,
         target_strings[i],
         paste(matched_cols, collapse = ", ")
       ))
-      # Error if more than one exact match is found (should never happen)
+      # Error if more than one match is found to avoid ambiguous renames.
       if (length(matched_cols) > 1) {
         stop(sprintf(
-          "Multiple columns with exact name '%s': %s. This should not happen - check for duplicate column names.",
+          "Multiple columns matched '%s': %s. Use a more specific target string to disambiguate.",
           target_strings[i],
           paste(matched_cols, collapse = ", ")
         ), call. = FALSE)
       }
       # Rename the matching column
-      names(data)[names(data) == matched_cols[1]] <- new_names[i]
+      if (replacement %in% names(data) && replacement != matched_cols[1]) {
+        stop(sprintf(
+          "Cannot rename '%s' to '%s' because '%s' already exists.",
+          matched_cols[1], replacement, replacement
+        ), call. = FALSE)
+      }
+      names(data)[which(matches)[1]] <- replacement
       rename_index <- rename_index + 1L
       rename_log[[rename_index]] <- data.frame(
         pattern = target_strings[i],
         renamed_from = matched_cols[1],
-        renamed_to = new_names[i],
+        renamed_to = replacement,
         stringsAsFactors = FALSE
       )
       message(sprintf(
         "Renamed '%s' to '%s'.",
         matched_cols[1],
-        new_names[i]
+        replacement
       ))
     } else {
-      warning(sprintf("No columns contained '%s'; nothing was renamed for this pattern.", target_strings[i]))
+      warning(sprintf("No columns matched '%s'; nothing was renamed for this pattern.", target_strings[i]))
     }
     message("")  # Adding a blank line for better separation
   }
@@ -156,6 +184,9 @@ clean_phase_2_data <- function(
   }
   if (missing(standard_names) || !length(standard_names)) {
     stop("`standard_names` must supply at least one column name to apply.", call. = FALSE)
+  }
+  if (length(required_strings) != length(standard_names)) {
+    stop("`required_strings` and `standard_names` must have the same length.", call. = FALSE)
   }
 
   if (length(unique(standard_names)) != length(standard_names)) {

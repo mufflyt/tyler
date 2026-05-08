@@ -25,6 +25,7 @@
 #'
 #' @importFrom sf st_intersection st_write st_area st_transform st_make_valid st_is_valid st_union st_sf
 #' @importFrom dplyr mutate select left_join coalesce
+#' @importFrom checkmate assert_class assert_number assert_string assert_function
 #' @importFrom rlang .data
 #' @importFrom stats quantile na.omit
 #'
@@ -36,8 +37,13 @@ calculate_intersection_overlap_and_save <- function(block_groups,
                                                     output_dir,
                                                     crosswalk = NULL,
                                                     notify = TRUE) {
-  if (!requireNamespace("lwgeom", quietly = TRUE)) {
-    stop("Package 'lwgeom' is required for calculate_intersection_overlap_and_save(). Install with: install.packages('lwgeom')", call. = FALSE)
+  orient_geometries <- function(x) {
+    if (!requireNamespace("lwgeom", quietly = TRUE)) {
+      return(x)
+    }
+    orient_fn <- get0("st_orient", envir = asNamespace("lwgeom"), mode = "function")
+    if (is.null(orient_fn)) return(x)
+    orient_fn(x)
   }
 
   # Parameter validation
@@ -50,8 +56,11 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   if (!is.numeric(drive_time_minutes) || length(drive_time_minutes) != 1L || drive_time_minutes < 0) {
     stop("Error: 'drive_time_minutes' must be a single non-negative numeric value.", call. = FALSE)
   }
-  if (!is.character(output_dir)) {
-    stop("Error: 'output_dir' must be a character string.", call. = FALSE)
+  if (!is.character(output_dir) || !nzchar(output_dir)) {
+    stop("Error: 'output_dir' must be a non-empty character string.", call. = FALSE)
+  }
+  if (!is.null(crosswalk) && !is.function(crosswalk)) {
+    stop("Error: 'crosswalk' must be a function or NULL.", call. = FALSE)
   }
 
   validated <- validate_sf_inputs(
@@ -66,8 +75,8 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   block_groups <- validated$block_groups
   isochrones_joined <- validated$isochrones_joined
 
-  block_groups <- lwgeom::st_force_polygon_cw(block_groups)
-  isochrones_joined <- lwgeom::st_force_polygon_cw(isochrones_joined)
+  block_groups <- orient_geometries(block_groups)
+  isochrones_joined <- orient_geometries(isochrones_joined)
 
   # Year alignment enforcement
   if (!"data_year" %in% names(isochrones_joined)) {
@@ -137,8 +146,8 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     block_groups <- validated_crosswalk$block_groups
     isochrones_joined <- validated_crosswalk$isochrones_joined
 
-    block_groups <- lwgeom::st_force_polygon_cw(block_groups)
-    isochrones_joined <- lwgeom::st_force_polygon_cw(isochrones_joined)
+    block_groups <- orient_geometries(block_groups)
+    isochrones_joined <- orient_geometries(isochrones_joined)
 
     acs_years <- stats::na.omit(unique(block_groups$vintage))
     if (length(acs_years) != 1L || !identical(acs_years[[1]], provider_year)) {
@@ -153,7 +162,20 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   isochrones_filtered <- isochrones_joined[isochrones_joined$drive_time == drive_time_minutes, , drop = FALSE]
 
   if (nrow(isochrones_filtered) == 0) {
-    stop("Error: no isochrones found for the requested drive time.", call. = FALSE)
+    available_drive_times <- sort(unique(stats::na.omit(isochrones_joined$drive_time)))
+    available_text <- if (length(available_drive_times)) {
+      paste(available_drive_times, collapse = ", ")
+    } else {
+      "<none>"
+    }
+    stop(
+      sprintf(
+        "No isochrones found for `drive_time_minutes = %s`. Available drive_time values: %s",
+        drive_time_minutes,
+        available_text
+      ),
+      call. = FALSE
+    )
   }
 
   isochrones_filtered <- sf::st_union(isochrones_filtered)
@@ -163,7 +185,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     geometry = isochrones_filtered,
     crs = sf::st_crs(isochrones_joined)
   )
-  isochrones_filtered <- lwgeom::st_force_polygon_cw(isochrones_filtered)
+  isochrones_filtered <- orient_geometries(isochrones_filtered)
 
   # Project to an equal-area CRS for area calculations
   block_groups_proj <- sf::st_transform(block_groups, area_crs)
@@ -178,12 +200,12 @@ calculate_intersection_overlap_and_save <- function(block_groups,
 
   # Validate GEOID exists in intersection result (Bug #12 fix)
   if (!"GEOID" %in% names(intersect)) {
-    stop("Error: Intersection result missing required 'GEOID' column. Check that block_groups contains GEOID.", call. = FALSE)
+    stop("Intersection result is missing required `GEOID`; verify `block_groups` includes `GEOID` before intersection.", call. = FALSE)
   }
 
   # Validate GEOID exists in block_groups (Bug #12 fix)
   if (!"GEOID" %in% names(block_groups_proj)) {
-    stop("Error: block_groups missing required 'GEOID' column.", call. = FALSE)
+    stop("`block_groups` is missing required `GEOID` column.", call. = FALSE)
   }
 
   # Data frame version for joins
@@ -215,7 +237,7 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   # Calculate area in all block groups (projected CRS)
   block_groups_proj <- block_groups_proj %>%
     dplyr::mutate(
-      bg_area = as.numeric(sf::st_area(block_groups_proj)),
+      bg_area = as.numeric(sf::st_area(.)),
       area_method = dplyr::coalesce(.data$area_method, "projected:EPSG:5070")
     )
 

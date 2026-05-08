@@ -6,7 +6,8 @@ output:
   rmarkdown::html_vignette:
     df_print: kable
 description: >
-  A skeleton vignette describing how to aggregate provider data from multiple sources.
+  Build an analysis-ready provider table by combining roster, enrichment,
+  geography, and call-outcome data.
 vignette: >
   %\VignetteIndexEntry{Aggregating Provider Data for Analysis}
   %\VignetteEncoding{UTF-8}
@@ -14,14 +15,6 @@ vignette: >
 editor_options:
   chunk_output_type: console
 ---
-
-# Objectives
-
-- Demonstrate a workflow for combining provider datasets.
-- Show how to clean and standardize fields prior to merging.
-- Provide a starting point for further analysis.
-
-# Required Packages
 
 ```{r setup, include=FALSE}
 eval_vignettes <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
@@ -37,37 +30,141 @@ if (eval_vignettes) {
 }
 ```
 
-# Inputs
+# Overview
 
-Describe the input files such as NPI exports, Census data, and geocoded locations.
+Most mystery caller projects do not end with a provider roster. The analytical
+work starts when you combine several layers of information into one table:
 
-```{r}
-# Example placeholder for reading data
-# npi_data <- readr::read_csv("npi.csv")
-# census_data <- readr::read_csv("census.csv")
+- provider identity and specialty
+- validated NPI values
+- clinician enrichment from external sources
+- geography and travel-time metrics
+- call outcomes and payer-specific access measures
+
+This vignette outlines a practical structure for that aggregation step.
+
+## Preserve a stable key
+
+Use `npi` as the primary key whenever it is available. Names and addresses can
+change; NPI is usually the most stable identifier across roster creation,
+enrichment, and call outcome files.
+
+```{r eval=FALSE}
+roster <- search_by_taxonomy(
+  "Gynecologic Oncology",
+  states = c("CO", "WY"),
+  write_snapshot = FALSE,
+  notify = FALSE
+) |>
+  validate_and_remove_invalid_npi()
 ```
 
-# Processing Steps
+## Add clinician enrichment
 
-Outline the steps needed to clean names, join datasets, and summarize counts.
+Once you have a validated roster, enrich it with clinician-level attributes
+such as demographics or training metadata. In the current API, the exported
+function for this step is `retrieve_clinician_data()`.
 
-```{r}
-# Example data manipulation steps
-# combined <- dplyr::left_join(npi_data, census_data, by = "geoid")
+```{r eval=FALSE}
+clinician_data <- retrieve_clinician_data(roster)
+
+analysis_base <- roster |>
+  dplyr::left_join(
+    clinician_data,
+    by = "npi",
+    suffix = c("_roster", "_clinician")
+  )
 ```
 
-# Output Examples
+## Keep site-level geography separate from clinician-level attributes
 
-Show an example of the aggregated output such as counts by county.
+Geocoding and isochrone generation happen at the practice-site level, not
+strictly at the person level. If multiple clinicians share one address, it is
+more efficient to geocode the unique site once and join the coordinates back.
 
-```{r}
-# aggregated <- combined %>% dplyr::count(county)
-# aggregated
+```{r eval=FALSE}
+site_table <- analysis_base |>
+  dplyr::distinct(npi, address, .keep_all = TRUE)
 ```
 
-# Conclusions
+After geocoding and travel-time modelling, join the geography back onto the
+analysis table using the columns you preserved upstream.
 
-Summarize the results and next steps for analysis.
+```{r eval=FALSE}
+analysis_with_geo <- analysis_base |>
+  dplyr::left_join(
+    site_geography,
+    by = c("npi", "address")
+  )
+```
 
-# Features and bugs
-If you have ideas for other features that would make data aggregation easier, or find a bug, the best approach is to either report it or add it!
+## Join call outcomes late
+
+Operational call files often contain repeated contacts, reschedules, or payer
+scenarios. It is usually easier to clean those files first and join them late
+in the pipeline.
+
+```{r eval=FALSE}
+phase2_clean <- clean_phase_2_data("phase2_results.xlsx")
+
+analysis_ready <- analysis_with_geo |>
+  dplyr::left_join(
+    phase2_clean,
+    by = c("npi", "name")
+  )
+```
+
+## Example aggregation patterns
+
+Once the core joins are complete, the same table can support several summary
+layers.
+
+### Count providers by subspecialty
+
+```{r}
+tyler::physicians |>
+  dplyr::count(subspecialty, sort = TRUE)
+```
+
+### Summarize access outcomes
+
+```{r eval=FALSE}
+analysis_ready |>
+  dplyr::count(subspecialty, medicaid_accepted)
+```
+
+### Build publication tables
+
+```{r eval=FALSE}
+table_generate_overall(
+  analysis_ready,
+  vars = c("subspecialty", "medicaid_accepted", "appointment_offered")
+)
+```
+
+## Recommended table structure
+
+In practice, an analysis-ready table works best when it has one row per unit of
+analysis. Decide that unit explicitly:
+
+- one row per clinician
+- one row per clinician-site pair
+- one row per call attempt
+
+Do not mix these units casually in the same final table or downstream
+percentages will be hard to interpret.
+
+## Practical guidance
+
+- Keep raw roster creation outputs separate from analysis-ready outputs.
+- Join on `npi` whenever possible.
+- Distinguish clinician-level and site-level variables.
+- Clean repeated call attempts before calculating proportions.
+- Save intermediate tables so you can audit merges and row counts.
+
+# Next step
+
+Once the unified table exists, the remaining tyler helpers for manuscript
+outputs are mostly summarization and visualization: `table_generate_overall()`,
+`table_calculate_percentages()`, and the mapping functions for geographic
+presentation.

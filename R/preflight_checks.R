@@ -51,6 +51,11 @@ tyler_preflight_check <- function(input_data,
                                    interactive = interactive(),
                                    required_columns = c("first", "last")) {
 
+  checkmate::assert_flag(check_apis)
+  checkmate::assert_flag(estimate_resources)
+  checkmate::assert_flag(interactive)
+  checkmate::assert_character(required_columns, any.missing = FALSE)
+
   message("")
   message("\u256D", strrep("\u2500", 58), "\u256E")
   message("\u2502", "   Tyler Package - Preflight Check", strrep(" ", 23), "\u2502")
@@ -75,7 +80,7 @@ tyler_preflight_check <- function(input_data,
   data_check <- tryCatch({
     if (is.character(input_data)) {
       if (!file.exists(input_data)) {
-        errors <- c(errors, sprintf("Input file not found: %s", input_data))
+        errors <- c(errors, sprintf("Input file not found: %s. Provide an existing CSV/Parquet path or pass a data frame directly.", input_data))
         list(success = FALSE, n_rows = 0, data = NULL)
       } else {
         data <- tyler_read_table(input_data)
@@ -91,11 +96,11 @@ tyler_preflight_check <- function(input_data,
                      format(nrow(input_data), big.mark = ",")))
       list(success = TRUE, n_rows = nrow(input_data), data = input_data)
     } else {
-      errors <- c(errors, "Input must be a file path or data frame")
+      errors <- c(errors, sprintf("`input_data` must be either a file path or a data frame; received class: %s.", paste(class(input_data), collapse = ", ") ))
       list(success = FALSE, n_rows = 0, data = NULL)
     }
   }, error = function(e) {
-    errors <<- c(errors, sprintf("Failed to load input data: %s", e$message))
+    errors <<- c(errors, sprintf("Failed to load `input_data`: %s. Confirm the file format and read permissions.", e$message))
     list(success = FALSE, n_rows = 0, data = NULL)
   })
 
@@ -104,7 +109,7 @@ tyler_preflight_check <- function(input_data,
     missing_cols <- setdiff(required_columns, names(data_check$data))
     if (length(missing_cols) > 0) {
       errors <- c(errors, sprintf(
-        "Input data missing required columns: %s",
+        "Input data is missing required column(s): %s. Check column names/casing before retrying.",
         paste(missing_cols, collapse = ", ")
       ))
     } else {
@@ -123,7 +128,7 @@ tyler_preflight_check <- function(input_data,
       checks$output_dir <- TRUE
       message(sprintf("  \u2713 Created output directory: %s", output_dir))
     }, error = function(e) {
-      errors <<- c(errors, sprintf("Cannot create output directory: %s", e$message))
+      errors <<- c(errors, sprintf("Cannot create output directory '%s': %s. Check parent path and permissions.", output_dir, e$message))
     })
   } else {
     # Check if writable
@@ -138,7 +143,7 @@ tyler_preflight_check <- function(input_data,
       checks$output_dir <- TRUE
       message(sprintf("  \u2713 Output directory writable: %s", output_dir))
     } else {
-      errors <- c(errors, sprintf("Output directory not writable: %s", output_dir))
+      errors <- c(errors, sprintf("Output directory is not writable: %s. Update permissions or choose another directory.", output_dir))
     }
   }
 
@@ -146,19 +151,24 @@ tyler_preflight_check <- function(input_data,
   message("")
   message("\U0001F511 Checking API keys...")
 
+  google_ok <- FALSE
+  here_ok <- FALSE
+
   if (!is.null(google_maps_api_key) && !is.na(google_maps_api_key) && nzchar(google_maps_api_key)) {
     if (check_apis) {
       google_check <- tyler_validate_google_api(google_maps_api_key)
       if (google_check$valid) {
         message("  \u2713 Google Maps API key valid")
+        google_ok <- TRUE
       } else {
-        errors <- c(errors, sprintf("Google Maps API key invalid: %s", google_check$error))
+        errors <- c(errors, sprintf("Google Maps API key validation failed: %s. Confirm the key is active and Geocoding API access is enabled.", google_check$error))
       }
     } else {
       message("  \u2713 Google Maps API key provided (not tested)")
+      google_ok <- TRUE
     }
   } else {
-    warnings <- c(warnings, "No Google Maps API key provided (geocoding will fail)")
+    warnings <- c(warnings, "No Google Maps API key provided; geocoding steps will fail unless `google_maps_api_key` is supplied.")
   }
 
   if (!is.null(here_api_key) && !is.na(here_api_key) && nzchar(here_api_key)) {
@@ -166,17 +176,19 @@ tyler_preflight_check <- function(input_data,
       here_check <- tyler_validate_here_api(here_api_key)
       if (here_check$valid) {
         message("  \u2713 HERE API key valid")
+        here_ok <- TRUE
       } else {
-        errors <- c(errors, sprintf("HERE API key invalid: %s", here_check$error))
+        errors <- c(errors, sprintf("HERE API key validation failed: %s. Confirm the key is active and has isochrone permissions.", here_check$error))
       }
     } else {
       message("  \u2713 HERE API key provided (not tested)")
+      here_ok <- TRUE
     }
   } else {
-    warnings <- c(warnings, "No HERE API key provided (isochrones will fail)")
+    warnings <- c(warnings, "No HERE API key provided; isochrone generation will fail unless `here_api_key` is supplied.")
   }
 
-  checks$api_keys <- length(errors) == 0
+  checks$api_keys <- google_ok && here_ok
 
   # ==================== Check 5: Data Quality ====================
   message("")
@@ -412,6 +424,10 @@ tyler_assess_data_quality <- function(data, required_columns = c("first", "last"
   issues <- list()
   penalties <- 0
   max_penalties <- 10
+
+  if (!nrow(data)) {
+    return(list(score = 0, issues = list(list(severity = "error", message = "Input data has zero rows")), penalties = max_penalties))
+  }
 
   # Check for missing values in required columns
   for (col in required_columns) {

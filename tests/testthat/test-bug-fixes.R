@@ -68,6 +68,25 @@ test_that("Bug #5: Phone formatting handles edge cases", {
   })
 })
 
+
+
+test_that("Bug #5: invalid phone lengths are converted to NA in phase 1 cleaning", {
+  df <- data.frame(
+    names = c("John Doe", "Jane Doe"),
+    practice_name = c("Univ Hospital", "Private Clinic"),
+    phone_number = c("12345", "3035550100"),
+    state_name = c("CO", "CO"),
+    npi = c("1234567893", "1234567893"),
+    stringsAsFactors = FALSE
+  )
+
+  expect_warning(
+    cleaned <- clean_phase_1_results(df, duplicate_rows = FALSE, verbose = FALSE),
+    "invalid length"
+  )
+  expect_true(is.na(cleaned$phone_number[cleaned$names == "John Doe"]))
+  expect_equal(cleaned$phone_number[cleaned$names == "Jane Doe"], "(303) 555-0100")
+})
 # ==============================================================================
 # Bug #8: Substring Column Matching
 # ==============================================================================

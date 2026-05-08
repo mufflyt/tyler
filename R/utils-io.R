@@ -46,7 +46,22 @@ tyler_read_table <- function(path, format = NULL, ...) {
 tyler_write_table <- function(data, path, format = NULL, append = FALSE, col_names = TRUE, ...) {
   fmt <- tyler_normalize_file_format(format, path = path)
   if (identical(fmt, "csv")) {
-    readr::write_csv(data, path, append = append, col_names = col_names, ...)
+    # Atomic write for non-append mode to reduce race-condition risk when
+    # multiple processes target the same path.
+    if (!append) {
+      tmp <- tempfile(
+        pattern = paste0(basename(path), "_"),
+        tmpdir = dirname(path),
+        fileext = ".tmp"
+      )
+      readr::write_csv(data, tmp, append = FALSE, col_names = col_names, ...)
+      if (!file.rename(tmp, path)) {
+        unlink(tmp, force = TRUE)
+        stop("Failed to atomically replace file: ", path, call. = FALSE)
+      }
+    } else {
+      readr::write_csv(data, path, append = TRUE, col_names = col_names, ...)
+    }
   } else {
     tyler_require_arrow()
     if (inherits(data, "grouped_df")) {

@@ -1,6 +1,7 @@
-#' Create and Plot Interaction Effects in GLMM
+#' Create and plot interaction effects from a Poisson GLMM
 #'
-#' This function reads data from a specified file, fits a generalized linear mixed model (GLMM) with a specified interaction term, and creates a plot to visualize the interaction effects. The plot is saved to a specified directory. This is particularly useful for analyzing how two categorical variables interact to affect a response variable, controlling for a random intercept.
+#' Reads an `.rds` dataset, fits a Poisson generalized linear mixed model with
+#' an interaction term, and saves a publication-ready interaction plot.
 #'
 #' @param data_path A character string specifying the path to the .rds file containing the dataset.
 #' @param response_variable A character string specifying the name of the response variable in the dataset.
@@ -8,18 +9,26 @@
 #' @param interaction_variable A character string specifying the second categorical predictor variable in the interaction.
 #' @param random_intercept A character string specifying the variable to be used as the random intercept in the model (e.g., "city").
 #' @param output_path A character string specifying the directory where the interaction plot will be saved.
-#' @param resolution An integer specifying the resolution (in DPI) for saving the plot. Defaults to 100.
+#' @param resolution Integer DPI used when saving the plot. Defaults to `100`.
 #'
-#' @return A list containing the fitted GLMM (`model`) and the summarized data used for the effects plot (`effects_plot_data`).
+#' @return A list with:
+#' \describe{
+#'   \item{`model`}{The fitted `lme4::glmer()` model object.}
+#'   \item{`effects_plot_data`}{Summarized predicted values used in the plot.}
+#' }
 #'
-#' @details The function performs the following steps:
-#' - Reads the data from the provided file path.
-#' - Renames and converts the specified columns to appropriate types.
-#' - Fits a Poisson GLMM with an interaction term and a random intercept.
-#' - Summarizes the interaction effects and creates a plot.
-#' - Saves the plot to the specified directory.
+#' @details
+#' The function:
+#' \enumerate{
+#'   \item loads data from `data_path`,
+#'   \item standardizes selected columns for modeling,
+#'   \item fits `response ~ interaction + (1 | random_intercept)` with a Poisson link,
+#'   \item computes grouped mean predicted responses, and
+#'   \item writes a PNG plot to `output_path`.
+#' }
 #'
-#' This function is useful in scenarios where you want to examine the interaction between two categorical variables and their combined effect on a count-based response variable (e.g., the number of business days until an appointment). It can handle complex data structures and controls for variability across groups using random intercepts.
+#' Use this helper when comparing how two categorical predictors jointly relate
+#' to a count-like outcome (for example, business days until appointment).
 #'
 #' @examples
 #' \dontrun{
@@ -59,6 +68,8 @@
 #'
 #' @importFrom dplyr rename mutate group_by summarize
 #' @importFrom ggplot2 ggplot aes geom_point geom_line labs theme_minimal ggsave
+#' @seealso [plot_and_save_emmeans()], [create_formula()], [poisson_formula_maker()]
+#' @family modeling helpers
 #' @export
 create_and_plot_interaction <- function(data_path, response_variable, variable_of_interest, interaction_variable, random_intercept, output_path, resolution = 100) {
   if (!requireNamespace("lme4", quietly = TRUE)) {

@@ -48,6 +48,8 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
   gender_Physicians <- gender_Physicians %>%
     dplyr::mutate(first_name = trimws(.data$first_name))
 
+  join_key <- tolower(gender_Physicians$first_name)
+
   # Get first names
   first_names <- gender_Physicians$first_name
 
@@ -60,10 +62,12 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
   # genderize_fetch() returns: first_name, gender, probability, count
   # We want the fresh API data, not any pre-existing columns with these names
   gender_Physicians_clean <- gender_Physicians %>%
-    dplyr::select(-dplyr::any_of(c("gender", "probability", "count")))
+    dplyr::select(-dplyr::any_of(c("gender", "probability", "count"))) %>%
+    dplyr::mutate(join_first_name = join_key)
 
   # Rejoin with the original database
-  y <- dplyr::left_join(gender_Physicians_clean, x, by = "first_name")
+  y <- dplyr::left_join(gender_Physicians_clean, x, by = "join_first_name") %>%
+    dplyr::select(-dplyr::any_of(c("join_first_name")))
 
   # Check for missing genders in the joined dataset
   missing_genders_joined <- sum(is.na(y$gender))
@@ -108,6 +112,8 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
 }
 
 genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api.genderize.io/") {
+  checkmate::assert_count(batch_size, positive = TRUE, .var.name = "batch_size")
+  checkmate::assert_string(api_url, min.chars = 1, .var.name = "api_url")
   if (is.null(first_names) || length(first_names) == 0) {
     return(tibble::tibble(
       first_name = character(),
@@ -117,7 +123,8 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
     ))
   }
 
-  clean_names <- unique(stats::na.omit(trimws(first_names)))
+  clean_names <- unique(stats::na.omit(trimws(as.character(first_names))))
+  clean_names <- clean_names[nzchar(clean_names)]
   if (length(clean_names) == 0) {
     return(tibble::tibble(
       first_name = character(),

@@ -258,6 +258,7 @@ tyler_use_quiet_logging <- function(quiet = TRUE) {
   invisible(old)
 }
 
+
 # -------------------------------------------------------------------------
 # Standard labels and palettes -------------------------------------------
 

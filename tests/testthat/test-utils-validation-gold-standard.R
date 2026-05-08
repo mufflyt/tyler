@@ -128,3 +128,27 @@ test_that("validate_required_columns - extra unrequired columns are ignored", {
     tyler:::validate_required_columns(df, required = c("a", "b"))
   )
 })
+
+
+test_that("validate_required_columns - includes available columns in error", {
+  df <- data.frame(npi = 1, state = "CO", specialty = "OBGYN")
+  err <- tryCatch(
+    validate_required_columns(df, required = c("npi", "zip_code")),
+    error = function(e) e$message
+  )
+
+  expect_match(err, "Available columns")
+  expect_match(err, "npi")
+  expect_match(err, "state")
+  expect_match(err, "specialty")
+})
+
+test_that("validate_required_columns - typo suggestions are included when close match exists", {
+  df <- data.frame(provider_npi = 1, provider_name = "A")
+  err <- tryCatch(
+    validate_required_columns(df, required = "provider_np"),
+    error = function(e) e$message
+  )
+
+  expect_match(err, "did you mean `provider_npi`\?", perl = TRUE)
+})

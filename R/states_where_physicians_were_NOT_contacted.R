@@ -11,6 +11,15 @@
 #'
 #' @return A character string summarizing the inclusion and exclusion of states
 #'   alongside the count of unique physicians successfully contacted.
+#' @details
+#' If `contact_office` and/or `included_in_study` exist, they are interpreted as
+#' contact indicators and used to restrict the denominator to successfully
+#' contacted rows. Accepted affirmative values include logical `TRUE`, non-zero
+#' numerics, and character values such as `"yes"`, `"y"`, `"true"`, and `"1"`.
+#'
+#' The physician count is derived from the first available identifier among
+#' `npi`, `name`, `physician_info`, and `physician_information`.
+#' @seealso [summarize_census_data()], [retrieve_clinician_data()], [clean_phase_1_results()]
 #' @family summary
 #' @export
 #'

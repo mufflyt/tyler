@@ -49,7 +49,7 @@
 #'
 #' @importFrom npi npi_search npi_flatten
 #' @importFrom dplyr bind_rows arrange filter select distinct mutate rename
-#' @importFrom stringr str_remove_all str_to_lower str_detect str_extract str_trunc
+#' @importFrom stringr str_remove_all str_to_lower str_detect str_extract str_trunc fixed
 #' @importFrom readr write_rds
 #' @importFrom tibble tibble
 #' @family npi
@@ -65,7 +65,12 @@ search_by_taxonomy <- function(taxonomy_to_search,
     return(tibble::tibble())
   }
 
-  taxonomy_to_search <- taxonomy_to_search[!is.na(taxonomy_to_search)]
+  checkmate::assert_flag(write_snapshot, .var.name = "write_snapshot")
+  checkmate::assert_flag(notify, .var.name = "notify")
+  checkmate::assert_number(limit, lower = 1, upper = 1200, finite = TRUE, .var.name = "limit")
+
+  taxonomy_to_search <- trimws(as.character(taxonomy_to_search))
+  taxonomy_to_search <- taxonomy_to_search[!is.na(taxonomy_to_search) & nzchar(taxonomy_to_search)]
   if (!length(taxonomy_to_search)) {
     return(tibble::tibble())
   }
@@ -73,7 +78,15 @@ search_by_taxonomy <- function(taxonomy_to_search,
   # When states are provided loop over each state so we bypass the 1200-record
   # per-query cap. Results are deduplicated on NPI before returning.
   if (!is.null(states) && length(states)) {
+    states <- toupper(trimws(as.character(states)))
     states <- unique(states[!is.na(states) & nzchar(states)])
+    invalid_states <- states[nchar(states) != 2]
+    if (length(invalid_states)) {
+      stop(sprintf(
+        "`states` must contain two-letter abbreviations. Invalid entries: %s",
+        paste(invalid_states, collapse = ", ")
+      ), call. = FALSE)
+    }
     message(sprintf(
       "Searching %d taxonomy term(s) across %d state(s) to bypass the 1200-record cap...",
       length(taxonomy_to_search), length(states)
@@ -165,6 +178,28 @@ search_by_taxonomy <- function(taxonomy_to_search,
         }
 
         if (!is.null(data_taxonomy) && nrow(data_taxonomy)) {
+          required_cols <- c(
+            "npi",
+            "addresses_country_name",
+            "taxonomies_desc",
+            "basic_first_name",
+            "basic_last_name"
+          )
+          missing_required <- setdiff(required_cols, names(data_taxonomy))
+          if (length(missing_required) > 0) {
+            stop(sprintf(
+              "NPI API response missing required columns: %s. Available columns: %s",
+              paste(missing_required, collapse = ", "),
+              paste(names(data_taxonomy), collapse = ", ")
+            ))
+          }
+          if (!"basic_middle_name" %in% names(data_taxonomy)) {
+            data_taxonomy$basic_middle_name <- NA_character_
+          }
+          if (!"basic_credential" %in% names(data_taxonomy)) {
+            data_taxonomy$basic_credential <- NA_character_
+          }
+
           data_taxonomy <- dplyr::distinct(data_taxonomy, .data$npi, .keep_all = TRUE)
           data_taxonomy <- dplyr::mutate(
             data_taxonomy,
@@ -176,17 +211,13 @@ search_by_taxonomy <- function(taxonomy_to_search,
             is.na(.data$credential_lower) | .data$credential_lower %in% stringr::str_to_lower(c("MD", "DO"))
           )
           data_taxonomy <- dplyr::filter(data_taxonomy, .data$addresses_country_name == "United States")
-          data_taxonomy <- dplyr::filter(data_taxonomy, stringr::str_detect(.data$taxonomies_desc, stringr::fixed(taxonomy)))
-
-          required_cols <- c("basic_first_name", "basic_last_name", "basic_middle_name")
-          missing_cols <- setdiff(required_cols, names(data_taxonomy))
-          if (length(missing_cols) > 0) {
-            stop(sprintf(
-              "NPI API response missing required columns: %s. Available columns: %s",
-              paste(missing_cols, collapse = ", "),
-              paste(names(data_taxonomy), collapse = ", ")
-            ), call. = FALSE)
-          }
+          data_taxonomy <- dplyr::filter(
+            data_taxonomy,
+            stringr::str_detect(
+              string = .data$taxonomies_desc,
+              pattern = stringr::fixed(taxonomy, ignore_case = TRUE)
+            )
+          )
 
           data_taxonomy <- dplyr::rename(
             data_taxonomy,

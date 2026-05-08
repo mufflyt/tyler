@@ -43,7 +43,9 @@
 #'
 #' @return A list containing intermediate artifacts from each workflow stage:
 #'   `roster`, `validated_roster`, `cleaned_phase1`, `cleaned_phase2`,
-#'   `coverage_summary`, and `quality_check_table`.
+#'   `coverage_summary`, `quality_check_table`, and a `workflow_summary` data
+#'   frame documenting row counts, retention rates, and output paths for audit
+#'   transparency.
 #'
 #' @export
 #' @importFrom dplyr bind_rows distinct
@@ -253,7 +255,44 @@ run_mystery_caller_workflow <- function(
     quality_check_table <- save_quality_check_table(cleaned_phase2, quality_check_path)
   }
 
+  workflow_summary <- tibble::tibble(
+    stage = c(
+      "combined_roster",
+      "validated_roster",
+      "cleaned_phase1",
+      "cleaned_phase2",
+      "coverage_summary",
+      "quality_check_table"
+    ),
+    n_rows = c(
+      nrow(combined_roster),
+      nrow(validated_roster),
+      nrow(cleaned_phase1),
+      nrow(cleaned_phase2),
+      if (is.null(coverage_summary)) NA_integer_ else nrow(coverage_summary),
+      if (is.null(quality_check_table)) NA_integer_ else nrow(quality_check_table)
+    ),
+    retention_from_previous = c(
+      NA_real_,
+      if (nrow(combined_roster) == 0) NA_real_ else nrow(validated_roster) / nrow(combined_roster),
+      if (nrow(validated_roster) == 0) NA_real_ else nrow(cleaned_phase1) / nrow(validated_roster),
+      if (nrow(cleaned_phase1) == 0) NA_real_ else nrow(cleaned_phase2) / nrow(cleaned_phase1),
+      if (is.null(coverage_summary) || nrow(cleaned_phase2) == 0) NA_real_ else nrow(coverage_summary) / nrow(cleaned_phase2),
+      if (is.null(quality_check_table) || nrow(cleaned_phase2) == 0) NA_real_ else nrow(quality_check_table) / nrow(cleaned_phase2)
+    ),
+    output_path = c(
+      NA_character_,
+      NA_character_,
+      phase1_output_directory,
+      phase2_output_directory,
+      NA_character_,
+      quality_check_path
+    )
+  )
+
   if (isTRUE(verbose)) {
+    message("Workflow summary (rows and retention):")
+    print(workflow_summary)
     message(sprintf("[%s] Mystery caller workflow complete", format(Sys.time(), "%H:%M:%S")))
   }
 
@@ -263,6 +302,7 @@ run_mystery_caller_workflow <- function(
     cleaned_phase1 = cleaned_phase1,
     cleaned_phase2 = cleaned_phase2,
     coverage_summary = coverage_summary,
-    quality_check_table = quality_check_table
+    quality_check_table = quality_check_table,
+    workflow_summary = workflow_summary
   )
 }

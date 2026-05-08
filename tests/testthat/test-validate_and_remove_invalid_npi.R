@@ -32,3 +32,4 @@ test_that("returns empty tibble when no valid NPIs", {
   expect_equal(nrow(result), 0)
   expect_true("npi_is_valid" %in% names(result))
 })
+    npi = c("1922051358", "1922051358", "1922051358"),

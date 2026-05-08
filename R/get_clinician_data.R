@@ -1,8 +1,8 @@
 #' Retrieve Clinician Data
 #'
-#' This function retrieves clinician data for each valid NPI in the input dataframe.
+#' This function retrieves clinician data for each valid NPI in the input data frame.
 #'
-#' @param input_data Either a dataframe containing NPI numbers or a path to a CSV file.
+#' @param input_data Either a data frame containing NPI numbers or a path to a CSV file.
 #'
 #' @return A tibble with clinician data for the provided NPIs.
 #' @importFrom readr read_csv cols col_character col_guess
@@ -25,16 +25,20 @@ retrieve_clinician_data <- function(input_data) {
   if (is.data.frame(input_data)) {
     clinician_df <- input_data
   } else if (is.character(input_data) && length(input_data) == 1) {
+    if (!file.exists(input_data)) {
+      stop(sprintf("CSV file not found: %s", input_data), call. = FALSE)
+    }
+
     clinician_df <- readr::read_csv(
       input_data,
       col_types = readr::cols(.default = readr::col_guess(), npi = readr::col_character())
     )
   } else {
-    stop("Input must be a dataframe or a file path to a CSV.", call. = FALSE)
+    stop(sprintf("`input_data` must be a data frame or a single CSV file path; received class: %s.", paste(class(input_data), collapse = ", ")), call. = FALSE)
   }
 
   if (!"npi" %in% names(clinician_df)) {
-    stop("Input data must contain an 'npi' column.", call. = FALSE)
+    stop(sprintf("`input_data` is missing required column `npi`. Available columns: %s", if (length(names(clinician_df))) paste(names(clinician_df), collapse = ", ") else "<none>"), call. = FALSE)
   }
 
   cleaned_df <- validate_and_remove_invalid_npi(clinician_df)

@@ -6,6 +6,8 @@
 #'
 #' @param remove_HI_AK Logical, should Hawaii and Alaska be removed? Default is TRUE.
 #' @return An sf object containing the hospital referral region data.
+#' @seealso [ensure_hrr_shapefile()], [hrr_generate_maps()], [map_create_base()]
+#' @family geospatial helpers
 #' @importFrom sf read_sf st_transform
 #' @importFrom dplyr filter
 #'
@@ -49,7 +51,10 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @param dpi Resolution used when saving the final figure (default is 600).
 #' @param width Final figure width in inches for journal submission (default is 7).
 #' @param height Final figure height in inches for journal submission (default is 5).
-#' @return Invisibly returns the ggplot object of the generated map.
+#' @return Invisibly returns the arranged grob object containing the contiguous
+#'   US map and Alaska/Hawaii/Puerto Rico inset maps.
+#' @seealso [hrr()], [map_create_base()], [map_create_block_group_overlap()]
+#' @family geospatial plotting
 #' @importFrom sf sf_use_s2 st_transform st_make_grid st_sf st_intersection st_join st_filter
 #' @importFrom dplyr mutate group_by summarize filter n
 #' @importFrom ggplot2 geom_sf scale_fill_viridis_c guide_colorbar element_text theme_minimal theme labs
