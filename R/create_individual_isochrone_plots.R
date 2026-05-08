@@ -7,7 +7,7 @@
 #' @param drive_times A vector of unique drive times (in minutes) for which maps and shapefiles will be created.
 #' @param output_dir Directory where HTML maps and shapefiles are saved.
 #'   Defaults to a session-specific folder inside [tempdir()].
-#' @return None. The function creates and saves individual maps and shapefiles.
+#' @return Called for its side effect of writing per-drive-time map HTML files and shapefiles to disk. Returns `NULL` invisibly.
 #'
 #' @importFrom sf st_union st_sf st_transform st_write
 #' @importFrom dplyr filter tibble
@@ -50,18 +50,7 @@ create_individual_isochrone_plots <- function(isochrones, drive_times, output_di
   dir.create(map_dir, recursive = TRUE, showWarnings = FALSE)
   dir.create(shp_dir, recursive = TRUE, showWarnings = FALSE)
 
-  # Display setup instructions
-  cat("\033[34mInstructions:\033[0m\n")
-  cat("\033[34mTo use this function, follow the example code below:\033[0m\n")
-  cat("\n")
-  cat("\033[34m# Load isochrone data:\033[0m\n")
-  cat("\033[34misochrones <- readRDS(\"path_to_isochrones.rds\")\n")
-  cat("\n")
-  cat("\033[34m# List of unique drive times for which you want to create plots and shapefiles:\033[0m\n")
-  cat("\033[34mdrive_times <- unique(isochrones$drive_time)\n")
-  cat("\n")
-  cat("\033[34m# Create individual isochrone maps and shapefiles:\033[0m\n")
-  cat("\033[34mcreate_individual_isochrone_plots(isochrones, drive_times)\n")
+  message("Usage: load data with readRDS(), get drive times via unique(isochrones$drive_time), then call create_individual_isochrone_plots(isochrones, drive_times).")
 
   message("Creating individual isochrone plots and shapefiles...")
 

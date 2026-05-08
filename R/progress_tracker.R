@@ -18,6 +18,7 @@ NULL
 #'
 #' @return An object of class `tyler_progress_tracker`.
 #' @importFrom tibble tibble
+#' @family logging utilities
 #' @export
 #' @examples
 #' tracker <- progress_tracker(c("Geocode", "Validate", "Export"))
@@ -105,6 +106,7 @@ progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler
 #' @param step Step name.
 #' @param note Optional note stored alongside the step.
 #'
+#' @family logging utilities
 #' @export
 progress_tracker_start <- function(tracker, step, note = NULL) {
   idx <- .tracker_index(tracker, step)
@@ -136,6 +138,7 @@ progress_tracker_start <- function(tracker, step, note = NULL) {
 #'   provided.
 #' @param note Optional note to store for the step.
 #'
+#' @family logging utilities
 #' @export
 progress_tracker_finish <- function(tracker, step, score = NULL, quality = NULL, note = NULL) {
   idx <- .tracker_index(tracker, step)
@@ -158,6 +161,7 @@ progress_tracker_finish <- function(tracker, step, score = NULL, quality = NULL,
 #' @param step Step name.
 #' @param reason Optional string describing why the step failed.
 #'
+#' @family logging utilities
 #' @export
 progress_tracker_fail <- function(tracker, step, reason = NULL) {
   idx <- .tracker_index(tracker, step)
@@ -179,6 +183,7 @@ progress_tracker_fail <- function(tracker, step, reason = NULL) {
 #' @param force Logical flag indicating whether the update should be emitted
 #'   even if the configured interval has not elapsed.
 #'
+#' @family logging utilities
 #' @export
 progress_tracker_update <- function(tracker, force = FALSE) {
   .tracker_emit_update(tracker, force = force)
@@ -191,6 +196,7 @@ progress_tracker_update <- function(tracker, force = FALSE) {
 #'
 #' @return Tibble with per-step status, timestamps, and quality tiers.
 #' @importFrom tibble as_tibble
+#' @family logging utilities
 #' @export
 progress_tracker_summary <- function(tracker) {
   env <- tracker$env

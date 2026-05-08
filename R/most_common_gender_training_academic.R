@@ -41,6 +41,7 @@
 #'
 #' @importFrom dplyr filter count arrange desc slice
 #' @importFrom rlang sym
+#' @family gender
 #' @export
 most_common_gender_training_academic <- function(data) {
   required_cols <- c("gender", "specialty", "Provider.Credential.Text", "academic_affiliation")

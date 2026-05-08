@@ -32,7 +32,7 @@ object whose \code{vintage} column matches the provider \code{data_year}.}
 the optional \code{beepr} package is available. Defaults to \code{TRUE}.}
 }
 \value{
-None. The function saves the intersection shapefile and provides logging.
+Called for its side effect of saving the intersection overlap shapefile and CSV.
 }
 \description{
 This function calculates the intersection between block groups and isochrones for a specific drive time and saves the results to a shapefile.  To
@@ -45,3 +45,9 @@ calculate_intersection_overlap_and_save(block_groups, isochrones_joined, 30L, "d
 }
 
 }
+\seealso{
+Other geospatial helpers: 
+\code{\link{geocode_unique_addresses}()},
+\code{\link{hrr}()}
+}
+\concept{geospatial helpers}

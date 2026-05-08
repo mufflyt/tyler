@@ -15,7 +15,7 @@ create_individual_isochrone_plots(isochrones, drive_times, output_dir = NULL)
 Defaults to a session-specific folder inside \code{\link[=tempdir]{tempdir()}}.}
 }
 \value{
-None. The function creates and saves individual maps and shapefiles.
+Called for its side effect of writing per-drive-time map HTML files and shapefiles to disk. Returns \code{NULL} invisibly.
 }
 \description{
 This function creates individual Leaflet maps and shapefiles for specified drive times

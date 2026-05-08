@@ -50,6 +50,7 @@ test_that("process_and_save_isochrones - chunk_size argument is accepted silentl
 })
 
 test_that("search_npi - emits deprecation warning when called", {
+  skip_on_cran()
   # search_npi delegates to search_and_process_npi, which makes API calls.
   # Test only that the deprecation warning fires before any downstream work.
   df <- data.frame(first = "Jane", last = "Smith")

@@ -17,10 +17,10 @@
 #' hrr()
 #' }
 hrr <- function(remove_HI_AK = TRUE) {
-  cat("Loading necessary packages...\n")
+  message("Loading necessary packages...")
 
   # Load the hospital referral region shapefile
-  cat("Getting the hospital referral region shapefile...\n")
+  message("Getting the hospital referral region shapefile...")
   hrr_path <- ensure_hrr_shapefile()
   hrr <- sf::read_sf(hrr_path)
   hrr <- sf::st_transform(hrr, 4326)
@@ -32,9 +32,9 @@ hrr <- function(remove_HI_AK = TRUE) {
   }
 
   # Provide information about the function's purpose
-  cat("Hospital Referral Region shapefile loaded.\n")
-  cat("This function creates an sf file of hospital referral regions.\n")
-  cat("For more information: https://data.dartmouthatlas.org/supplemental/\n")
+  message("Hospital Referral Region shapefile loaded.")
+  message("This function creates an sf file of hospital referral regions.")
+  message("For more information: https://data.dartmouthatlas.org/supplemental/")
 
   return(hrr)
 }
@@ -89,7 +89,7 @@ hrr_generate_maps <- function(
   sf::sf_use_s2(FALSE)
 
   # Load USA shapefile
-  cat("Loading USA shapefile...\n")
+  message("Loading USA shapefile...")
   usa <- rnaturalearth::ne_countries(country = "United States of America", returnclass = "sf")
   usa <- sf::st_transform(usa, 4326)
 
@@ -97,7 +97,7 @@ hrr_generate_maps <- function(
   hrr_map <- hrr(remove_HI_AK = FALSE)
 
   # Intersect honeycomb grid with physician data to get physician counts
-  cat("Intersecting honeycomb grid with physician data...\n")
+  message("Intersecting honeycomb grid with physician data...")
   honeycomb_grid_sf <- sf::st_make_grid(usa, c(0.3, 0.3), what = "polygons", square = FALSE) %>%
     sf::st_sf() %>%
     dplyr::mutate(grid_id = dplyr::row_number()) %>%
@@ -123,7 +123,7 @@ hrr_generate_maps <- function(
   pretty_breaks <- scales::pretty_breaks(n = 6)(fill_limits)
 
   # Split data for contiguous US and insets
-  cat("Preparing contiguous and inset geographies...\n")
+  message("Preparing contiguous and inset geographies...")
   contiguous_hrr <- hrr_map %>%
     dplyr::filter(!stringr::str_detect(.data$hrrcity, "^(AK|HI|PR)-"))
   alaska_hrr <- hrr_map %>% dplyr::filter(stringr::str_detect(.data$hrrcity, "^AK-"))
@@ -183,7 +183,7 @@ hrr_generate_maps <- function(
       )
   }
 
-  cat("Creating main map and insets...\n")
+  message("Creating main map and insets...")
   main_map <- build_region_plot(contiguous_hrr, contiguous_honey, "Hospital Referral Regions", show_legend = TRUE, base_size = 12) +
     ggspatial::annotation_scale(location = "bl", width_hint = 0.25, bar_cols = c("black", "white")) +
     ggspatial::annotation_north_arrow(
@@ -212,7 +212,7 @@ hrr_generate_maps <- function(
   }
 
   output_stub <- file.path(output_dir, paste0(trait_map, "_", honey_map, "_honey"))
-  cat("Saving the map for Obstetrics & Gynecology submission...\n")
+  message("Saving the map for Obstetrics & Gynecology submission...")
   ggplot2::ggsave(paste0(output_stub, ".tiff"), plot = combined_map, width = width, height = height, dpi = dpi, units = "in", compression = "lzw")
   ggplot2::ggsave(paste0(output_stub, ".png"), plot = combined_map, width = width, height = height, dpi = dpi, units = "in")
 

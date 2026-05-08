@@ -39,3 +39,12 @@ result <- table_calculate_proportion(df_multi, grade)
 print(result)
 
 }
+\seealso{
+Other table: 
+\code{\link{arsenal_tables_write2word}()},
+\code{\link{max_table}()},
+\code{\link{min_table}()},
+\code{\link{table_calculate_percentages}()},
+\code{\link{table_generate_overall}()}
+}
+\concept{table}

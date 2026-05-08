@@ -4,7 +4,7 @@
 <!-- badges: start -->
 <img src="https://github.com/mufflyt/tyler/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57" width="15%" align="right">
 
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![Codecov test coverage](https://codecov.io/gh/mufflyt/tyler/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mufflyt/tyler?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/tyler)](https://CRAN.R-project.org/package=tyler)
 [![R-CMD-check](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml)

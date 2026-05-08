@@ -63,6 +63,7 @@
 #' @importFrom janitor clean_names
 #' @importFrom readr type_convert write_csv
 #' @importFrom stringr str_detect
+#' @family workflow
 #' @export
 
 # library(dplyr)
@@ -348,7 +349,7 @@ clean_phase_1_results <- function(phase1_data,
     attr(phase1_data, "output_directory") <- output_directory
   } else {
     if (isTRUE(verbose)) {
-      cat("No data to process.\n")
+      message("No data to process.")
     }
     announce("No data available; skipping duplication, insurance assignment, and ID generation.")
   }

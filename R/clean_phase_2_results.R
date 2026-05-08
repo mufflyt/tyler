@@ -6,6 +6,7 @@
 #' @param target_strings A vector of substrings to search for within column names.
 #' @param new_names A vector of new names corresponding to the target strings.
 #' @return A data frame with renamed columns.
+#' @family workflow
 #' @export
 #' @importFrom stats setNames
 #' @importFrom utils head
@@ -135,6 +136,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' @param output_format File format to use when persisting the cleaned dataset.
 #'   Supported values are "csv" (default) and "parquet".
 #' @return A data frame with processed data.
+#' @family workflow
 #' @export
 #' @importFrom readr read_csv write_csv
 #' @importFrom dplyr filter mutate

@@ -1,6 +1,7 @@
 #' Retrieve the standard label dictionary used in `tyler`
 #'
 #' @return A named list of canonical labels for common columns.
+#' @family utilities
 #' @export
 tyler_standard_labels <- function() {
   list(
@@ -21,6 +22,7 @@ tyler_standard_labels <- function() {
 #'   `"sequential"`, and `"diverging"`.
 #'
 #' @return A character vector of hex colors.
+#' @family utilities
 #' @export
 tyler_standard_palette <- function(name = c("primary", "sequential", "diverging")) {
   name <- match.arg(name)

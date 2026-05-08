@@ -5,6 +5,7 @@
 #'
 #' @return A quality tier of `"high"`, `"medium"`, or `"low"` (or `NA` when
 #'   the score is missing).
+#' @family utilities
 #' @export
 tyler_quality_tier <- function(score, thresholds = c(high = 0.9, medium = 0.75)) {
   if (is.null(score) || is.na(score)) {
@@ -42,6 +43,7 @@ tyler_quality_tier <- function(score, thresholds = c(high = 0.9, medium = 0.75))
 #' @importFrom dplyr bind_rows
 #' @importFrom tibble tibble
 #' @importFrom stats complete.cases
+#' @family utilities
 #' @export
 #' @examples
 #' df <- tibble::tibble(id = 1:3, value = c(1, NA, 3))
@@ -89,6 +91,7 @@ tyler_check_data_completeness <- function(data, required = NULL, id_cols = NULL,
 #'   [tyler_log_info()].
 #'
 #' @return The previous quiet value (invisibly).
+#' @family utilities
 #' @export
 tyler_use_quiet_logging <- function(quiet = TRUE) {
   old <- getOption("tyler.quiet", FALSE)

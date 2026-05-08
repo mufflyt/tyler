@@ -22,6 +22,7 @@
 #' tyler_check_no_limits(npi_results, "NPI search results", min_expected = 100)
 #' }
 #'
+#' @family utilities
 #' @export
 tyler_check_no_limits <- function(data,
                                    context = "dataset",
@@ -121,6 +122,7 @@ tyler_check_no_limits <- function(data,
 #' issues <- tyler_scan_for_limits("R/", exclude_pattern = "deprecated")
 #' }
 #'
+#' @family utilities
 #' @export
 tyler_scan_for_limits <- function(path = "R",
                                    recursive = TRUE,
@@ -280,6 +282,7 @@ tyler_scan_for_limits <- function(path = "R",
 #'                         tolerance = 5)
 #' }
 #'
+#' @family utilities
 #' @export
 tyler_check_api_response <- function(result,
                                      expected,
@@ -341,6 +344,7 @@ tyler_check_api_response <- function(result,
 #'                         expected_change = -10, tolerance = 5)
 #' }
 #'
+#' @family utilities
 #' @export
 tyler_check_no_data_loss <- function(before,
                                      after,

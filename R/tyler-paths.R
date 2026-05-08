@@ -10,6 +10,7 @@
 #'   exists.
 #'
 #' @return A normalized path as a character string.
+#' @family utilities
 #' @export
 #' @examples
 #' tyler_resolve_path("output.csv", type = "tables", create = FALSE)
@@ -62,6 +63,7 @@ tyler_resolve_path <- function(..., type = NULL, base_dir = getOption("tyler.bas
 #' @importFrom ggplot2 ggsave
 #' @importFrom readr write_csv
 #' @importFrom utils write.table
+#' @family utilities
 #' @export
 #' @examples
 #' tmp <- tempfile(fileext = ".csv")

@@ -81,7 +81,7 @@ create_isochrones <- function(location,
         aggregate = FALSE
       )
 
-      cat("Isoline successfully produced for range:", r, "seconds\n")
+      message("Isoline successfully produced for range: ", r, " seconds")
 
       temp <- temp %>%
         sf::st_make_valid() %>%
@@ -99,7 +99,7 @@ create_isochrones <- function(location,
 
     return(isolines_list)
   }, error = function(e) {
-    cat("Error in create_isochrones:", e$message, "\n")
+    message("Error in create_isochrones: ", e$message)
     return(list(error = e$message))
   })
 

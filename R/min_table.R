@@ -10,6 +10,7 @@
 #' vec <- factor(c("A", "B", "A", "C", "B", "B"))
 #' min_table(vec) # Returns "C"
 #' min_table(vec, mult = TRUE) # Returns "C"
+#' @family table
 #' @export
 
 min_table <- function(InVec, mult = FALSE) {

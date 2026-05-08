@@ -15,6 +15,7 @@
 #'
 #' @importFrom dplyr select
 #'
+#' @family utilities
 #' @export
 remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
   if (!requireNamespace("caret", quietly = TRUE)) {

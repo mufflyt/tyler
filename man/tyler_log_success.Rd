@@ -21,6 +21,12 @@ Log success message
 }
 \seealso{
 Other logging utilities: 
+\code{\link{progress_tracker}()},
+\code{\link{progress_tracker_fail}()},
+\code{\link{progress_tracker_finish}()},
+\code{\link{progress_tracker_start}()},
+\code{\link{progress_tracker_summary}()},
+\code{\link{progress_tracker_update}()},
 \code{\link{tyler_log_cache_hit}()},
 \code{\link{tyler_log_error}()},
 \code{\link{tyler_log_info}()},

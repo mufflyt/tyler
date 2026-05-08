@@ -10,6 +10,7 @@
 #' vec <- factor(c("A", "B", "A", "C", "B", "B"))
 #' max_table(vec) # Returns "B"
 #' max_table(vec, mult = TRUE) # Returns "B"
+#' @family table
 #' @export
 
 max_table <- function(InVec, mult = FALSE) {

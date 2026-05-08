@@ -38,4 +38,8 @@ result <- genderize_physicians("sample.csv")
 }
 
 }
+\seealso{
+Other gender: 
+\code{\link{most_common_gender_training_academic}()}
+}
 \concept{gender}

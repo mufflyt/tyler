@@ -79,3 +79,10 @@ result <- plot_and_save_emmeans(
 }
 
 }
+\seealso{
+Other modeling helpers: 
+\code{\link{check_normality}()},
+\code{\link{create_and_plot_interaction}()},
+\code{\link{create_formula}()}
+}
+\concept{modeling helpers}

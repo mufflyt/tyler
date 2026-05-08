@@ -47,6 +47,7 @@
 #'   frame documenting row counts, retention rates, and output paths for audit
 #'   transparency.
 #'
+#' @family workflow
 #' @export
 #' @importFrom dplyr bind_rows distinct
 #' @importFrom tibble tibble

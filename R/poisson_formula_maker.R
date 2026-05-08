@@ -18,6 +18,7 @@
 #' formula <- create_formula(df3_filtered, response_variable, random_effect_term)
 #' formula
 #'
+#' @family modeling helpers
 #' @export
 create_formula <- function(data, response_var, random_effect = NULL) {
   if (!is.data.frame(data)) {

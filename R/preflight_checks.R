@@ -23,6 +23,7 @@ NULL
 #' @param required_columns Required column names in input data
 #'
 #' @return Invisible list with check results, or stops with error if checks fail
+#' @family utilities
 #' @export
 #'
 #' @examples
@@ -419,6 +420,7 @@ tyler_validate_here_api <- function(api_key) {
 #' @param required_columns Character vector of column names that must be present
 #'   and sufficiently complete. Defaults to `c("first", "last")`.
 #' @return List with score (0-1) and issues
+#' @family utilities
 #' @export
 tyler_assess_data_quality <- function(data, required_columns = c("first", "last")) {
   issues <- list()
@@ -491,6 +493,7 @@ tyler_assess_data_quality <- function(data, required_columns = c("first", "last"
 #' @param n_rows Integer number of input rows used to project runtime and
 #'   memory requirements.
 #' @return List with runtime and memory estimates
+#' @family utilities
 #' @export
 tyler_estimate_resources <- function(n_rows) {
   # Rough estimates based on typical performance

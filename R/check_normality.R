@@ -7,6 +7,7 @@
 #' @param variable A string specifying the column name of the variable to be checked and summarized.
 #'
 #' @return A list containing the summary statistics (mean and standard deviation if normal, median and IQR if not normal).
+#' @family modeling helpers
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_density labs stat_qq stat_qq_line
 #' @importFrom rlang sym

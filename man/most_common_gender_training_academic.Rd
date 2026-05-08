@@ -50,3 +50,8 @@ result <- most_common_gender_training_academic(df_large)
 print(result)
 
 }
+\seealso{
+Other gender: 
+\code{\link{genderize_physicians}()}
+}
+\concept{gender}

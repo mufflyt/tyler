@@ -37,3 +37,8 @@ summary_sentence <- physician_age(df_large, "age")
 print(summary_sentence)
 
 }
+\seealso{
+Other summary: 
+\code{\link{states_where_physicians_were_NOT_contacted}()}
+}
+\concept{summary}

@@ -6,7 +6,7 @@
 #' @param isochrones_data A SpatialPolygonsDataFrame representing isochrone data.
 #' @param output_dir Directory path for exporting the map files. Default is "figures/".
 #'
-#' @return None
+#' @return Called for its side effects of saving the block group overlap map as HTML and PNG inside `output_dir`. Returns `NULL` invisibly.
 #'
 #' @examples
 #' \dontrun{
@@ -141,9 +141,9 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
 
   # Export the map to HTML
   htmlwidgets::saveWidget(widget = map, file = html_file, selfcontained = FALSE)
-  cat("Map saved as HTML:", html_file, "\n")
+  message("Map saved as HTML: ", html_file)
 
   # Export the map as a PNG image
   webshot::webshot(html_file, file = png_file)
-  cat("Map saved as PNG:", png_file, "\n")
+  message("Map saved as PNG: ", png_file)
 }

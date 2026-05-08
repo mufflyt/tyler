@@ -23,6 +23,7 @@
 #'   updating `tracker`.
 #'
 #' @return A data frame with latitude and longitude columns added.
+#' @family geospatial helpers
 #' @export
 #' @examples
 #' \dontrun{

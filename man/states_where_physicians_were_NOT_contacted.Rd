@@ -54,5 +54,8 @@ states_where_physicians_were_NOT_contacted(filtered_data)
 }
 \seealso{
 \code{\link[=summarize_census_data]{summarize_census_data()}}, \code{\link[=retrieve_clinician_data]{retrieve_clinician_data()}}, \code{\link[=clean_phase_1_results]{clean_phase_1_results()}}
+
+Other summary: 
+\code{\link{physician_age}()}
 }
 \concept{summary}

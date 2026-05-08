@@ -15,6 +15,7 @@
 #' @importFrom dplyr arrange mutate group_by ungroup n
 #' @importFrom readr read_csv
 #' @return Invisible list of file paths to the created Excel files
+#' @family workflow
 #' @export
 #'
 #' @examples

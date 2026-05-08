@@ -27,3 +27,10 @@ sample_data <- data.frame(
 check_normality(sample_data, "business_days_until_appointment")
 }
 }
+\seealso{
+Other modeling helpers: 
+\code{\link{create_and_plot_interaction}()},
+\code{\link{create_formula}()},
+\code{\link{plot_and_save_emmeans}()}
+}
+\concept{modeling helpers}

@@ -13,6 +13,7 @@
 #' new_data <- remove_constant_vars(data_frame)
 #' }
 #'
+#' @family utilities
 #' @export
 remove_constant_vars <- function(data_frame) {
 

@@ -16,7 +16,7 @@
 #' @param notify Logical. If `TRUE`, play a notification sound on completion when
 #'   the optional `beepr` package is available. Defaults to `TRUE`.
 #'
-#' @return None. The function saves the intersection shapefile and provides logging.
+#' @return Called for its side effect of saving the intersection overlap shapefile and CSV.
 #'
 #' @examples
 #' \dontrun{
@@ -29,6 +29,7 @@
 #' @importFrom dplyr .data
 #' @importFrom stats quantile na.omit
 #'
+#' @family geospatial helpers
 #' @export
 #'
 calculate_intersection_overlap_and_save <- function(block_groups,

@@ -25,6 +25,7 @@
 #' )
 #' }
 #'
+#' @family workflow
 #' @export
 run_mystery_caller_workflow_with_logging <- function(
   taxonomy_terms = NULL,
@@ -107,6 +108,7 @@ run_mystery_caller_workflow_with_logging <- function(
 #'
 #' @param results List containing workflow results (as returned by
 #'   [run_mystery_caller_workflow()]).
+#' @family workflow
 #' @export
 tyler_print_dashboard <- function(results) {
   message("")

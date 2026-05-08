@@ -18,7 +18,7 @@ map_create_block_group_overlap(
 \item{output_dir}{Directory path for exporting the map files. Default is "figures/".}
 }
 \value{
-None
+Called for its side effects of saving the block group overlap map as HTML and PNG inside \code{output_dir}. Returns \code{NULL} invisibly.
 }
 \description{
 This function creates a map that displays block groups and their overlap with isochrones.

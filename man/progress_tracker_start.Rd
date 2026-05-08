@@ -16,3 +16,22 @@ progress_tracker_start(tracker, step, note = NULL)
 \description{
 Mark a step as started
 }
+\seealso{
+Other logging utilities: 
+\code{\link{progress_tracker}()},
+\code{\link{progress_tracker_fail}()},
+\code{\link{progress_tracker_finish}()},
+\code{\link{progress_tracker_summary}()},
+\code{\link{progress_tracker_update}()},
+\code{\link{tyler_log_cache_hit}()},
+\code{\link{tyler_log_error}()},
+\code{\link{tyler_log_info}()},
+\code{\link{tyler_log_progress}()},
+\code{\link{tyler_log_save}()},
+\code{\link{tyler_log_step}()},
+\code{\link{tyler_log_step_complete}()},
+\code{\link{tyler_log_success}()},
+\code{\link{tyler_log_warning}()},
+\code{\link{tyler_workflow_start}()}
+}
+\concept{logging utilities}

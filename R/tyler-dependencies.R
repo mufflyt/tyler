@@ -11,6 +11,7 @@
 #' @return A tibble summarizing the dependency status for each package.
 #' @importFrom tibble as_tibble
 #' @importFrom utils installed.packages install.packages
+#' @family utilities
 #' @export
 #' @examples
 #' \donttest{

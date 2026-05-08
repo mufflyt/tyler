@@ -54,3 +54,9 @@ result to \code{output_file_path}.
 result <- geocode_unique_addresses("addresses.csv", "my_api_key")
 }
 }
+\seealso{
+Other geospatial helpers: 
+\code{\link{calculate_intersection_overlap_and_save}()},
+\code{\link{hrr}()}
+}
+\concept{geospatial helpers}

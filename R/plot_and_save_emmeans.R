@@ -58,6 +58,7 @@
 #' )
 #' }
 #'
+#' @family modeling helpers
 #' @export
 plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, color_by = NULL, output_dir = NULL) {
   # Load necessary packages
@@ -89,7 +90,7 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
 
   # Compute estimated marginal means
-  cat("Computing estimated marginal means...\n")
+  message("Computing estimated marginal means...")
   edata <- tryCatch({
     emmeans::emmeans(object = model_object, specs = specs, type = "response") %>%
       as.data.frame()
@@ -98,7 +99,7 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
   })
 
   # Log the retrieved data
-  cat("Estimated data:\n")
+  message("Estimated data:")
   print(edata)
 
   # Detect response and CI column names - names differ by model family:
@@ -123,10 +124,10 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
   if (any(is.infinite(rate_range))) {
     stop("CI columns contain no finite values; cannot set y-axis limits.", call. = FALSE)
   }
-  cat("Range of estimated marginal means with CIs:", rate_range, "\n")
+  message("Range of estimated marginal means with CIs: ", rate_range)
 
   # Create the plot
-  cat("Creating the plot...\n")
+  message("Creating the plot...")
   if (!is.null(color_by)) {
     point_aes  <- ggplot2::aes(color = .data[[color_by]])
     bar_aes    <- ggplot2::aes(ymin = .data[[lcl_col]], ymax = .data[[ucl_col]], color = .data[[color_by]])
@@ -156,10 +157,10 @@ plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, col
 
   # Save the plot with specific dimensions
   file_name <- file.path(output_dir, paste0("interaction_", variable_of_interest, "_comparison_plot_", timestamp, ".png"))
-  cat("Saving plot to:", file_name, "\n")
+  message("Saving plot to: ", file_name)
   ggplot2::ggsave(filename = file_name, plot = p, width = 10, height = 6, bg = "white")
 
-  cat("Plot saved successfully.\n")
+  message("Plot saved successfully.")
 
   # Return the data and plot invisibly
   invisible(list(data = edata, plot = p))

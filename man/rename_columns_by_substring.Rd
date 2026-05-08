@@ -42,3 +42,13 @@ df <- rename_columns_by_substring(df,
                                   new_names = c("doctor_info", "notes"))
 print(df)
 }
+\seealso{
+Other workflow: 
+\code{\link{clean_phase_1_results}()},
+\code{\link{clean_phase_2_data}()},
+\code{\link{run_mystery_caller_workflow}()},
+\code{\link{run_mystery_caller_workflow_with_logging}()},
+\code{\link{split_and_save}()},
+\code{\link{tyler_print_dashboard}()}
+}
+\concept{workflow}

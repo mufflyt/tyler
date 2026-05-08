@@ -40,3 +40,12 @@ result <- table_calculate_percentages(df_na, "category")
 print(result)
 
 }
+\seealso{
+Other table: 
+\code{\link{arsenal_tables_write2word}()},
+\code{\link{max_table}()},
+\code{\link{min_table}()},
+\code{\link{table_calculate_proportion}()},
+\code{\link{table_generate_overall}()}
+}
+\concept{table}

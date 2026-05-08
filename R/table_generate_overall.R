@@ -53,18 +53,18 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
   if (!requireNamespace("arsenal", quietly = TRUE)) {
     stop("Package 'arsenal' is required for this function. Install with: install.packages('arsenal')", call. = FALSE)
   }
-  cat("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining the consistency of all data types and factor orderings.\n")
+  message("Ensure factors have their respective frequency followed. RDS is the preferred file for maintaining consistency of data types and factor orderings.")
   # Log function start
-  cat("Generating the overall table...\n")
+  message("Generating the overall table...")
 
   # Ensure the output directory exists
   if (!dir.exists(output_directory)) {
-    cat("Creating output directory...\n")
+    message("Creating output directory...")
     dir.create(output_directory, recursive = TRUE, showWarnings = FALSE)
   }
 
   # Read the data
-  cat("Reading data from file:", input_file_path, "\n")
+  message("Reading data from file: ", input_file_path)
   data <- readr::read_rds(input_file_path)
 
   # Check if the data is empty
@@ -75,20 +75,20 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
   # Check if selected_columns argument is provided
   if (is.null(selected_columns)) {
     # If not provided, use all columns in the data
-    cat("Using all columns in the data for the table.\n")
+    message("Using all columns in the data for the table.")
     selected_data <- data
   } else {
     # If selected_columns is provided, select only those columns from the data
-    cat("Selecting specific columns for the table: ", paste(selected_columns, collapse = ", "), "\n")
+    message("Selecting specific columns: ", paste(selected_columns, collapse = ", "))
     selected_data <- data[, selected_columns, drop = FALSE]
   }
 
   # Log data summary
-  cat("Data summary:\n")
+  message("Data summary:")
   print(str(selected_data))
 
   # Generate the overall table using arsenal::tableby
-  cat("Generating the overall table using arsenal::tableby...\n")
+  message("Generating the overall table using arsenal::tableby...")
   overall_arsenal_table <- arsenal::tableby(
     ~ .,
     data = selected_data,
@@ -121,7 +121,7 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
   )
 
   # Generate the summary of the overall table
-  cat("Generating the summary of the overall table...\n")
+  message("Generating the summary of the overall table...")
   overall_summary <- summary(
     overall_arsenal_table,
     text = TRUE,
@@ -131,7 +131,7 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
   )
 
   # Log the overall summary
-  cat("Overall table summary:\n")
+  message("Overall table summary:")
   print(overall_summary)
 
   # Access the current date and time
@@ -141,11 +141,11 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
   filename <- file.path(output_directory, paste("arsenal_overall_table", date_time, sep = "_"))
 
   # Save the overall table as a PDF
-  cat("Saving the overall table as a PDF: ", filename, "\n")
+  message("Saving the overall table as PDF: ", filename)
   output_path <- table_write_pdf(overall_summary, filename)
 
   # Log function end
-  cat("Overall table generation completed.\n")
+  message("Overall table generation completed.")
   if (requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }

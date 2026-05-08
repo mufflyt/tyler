@@ -29,3 +29,10 @@ formula <- create_formula(df3_filtered, response_variable, random_effect_term)
 formula
 
 }
+\seealso{
+Other modeling helpers: 
+\code{\link{check_normality}()},
+\code{\link{create_and_plot_interaction}()},
+\code{\link{plot_and_save_emmeans}()}
+}
+\concept{modeling helpers}

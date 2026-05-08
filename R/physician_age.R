@@ -25,6 +25,7 @@
 #' summary_sentence <- physician_age(df_large, "age")
 #' print(summary_sentence)
 #'
+#' @family summary
 #' @export
 physician_age <- function(data, age_column) {
   if (!is.data.frame(data)) {

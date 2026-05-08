@@ -24,5 +24,9 @@ hrr()
 }
 \seealso{
 \code{\link[=ensure_hrr_shapefile]{ensure_hrr_shapefile()}}, \code{\link[=hrr_generate_maps]{hrr_generate_maps()}}, \code{\link[=map_create_base]{map_create_base()}}
+
+Other geospatial helpers: 
+\code{\link{calculate_intersection_overlap_and_save}()},
+\code{\link{geocode_unique_addresses}()}
 }
 \concept{geospatial helpers}

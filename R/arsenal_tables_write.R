@@ -4,7 +4,8 @@
 #' @param filename The filename (without extension) for the Word document.
 #' @param output_dir Directory where the Word document should be written.
 #'   Defaults to a session-specific folder inside [tempdir()].
-#' @return None
+#' @return Called for its side effect of saving a Word document to `word_path`. Returns `NULL` invisibly.
+#' @family table
 #' @export
 #'
 #' @examples
@@ -44,5 +45,5 @@ arsenal_tables_write2word <- function(object, filename, output_dir = NULL) {
   })
 
   # Print the full path to the saved file
-  cat("Word file saved successfully at", word_path, "\n")
+  message("Word file saved successfully at ", word_path)
 }

@@ -23,3 +23,12 @@ vec <- factor(c("A", "B", "A", "C", "B", "B"))
 min_table(vec) # Returns "C"
 min_table(vec, mult = TRUE) # Returns "C"
 }
+\seealso{
+Other table: 
+\code{\link{arsenal_tables_write2word}()},
+\code{\link{max_table}()},
+\code{\link{table_calculate_percentages}()},
+\code{\link{table_calculate_proportion}()},
+\code{\link{table_generate_overall}()}
+}
+\concept{table}

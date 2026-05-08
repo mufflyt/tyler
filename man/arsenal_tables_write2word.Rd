@@ -15,7 +15,7 @@ arsenal_tables_write2word(object, filename, output_dir = NULL)
 Defaults to a session-specific folder inside \code{\link[=tempdir]{tempdir()}}.}
 }
 \value{
-None
+Called for its side effect of saving a Word document to \code{word_path}. Returns \code{NULL} invisibly.
 }
 \description{
 Writes an Arsenal table object to a Word document.
@@ -25,3 +25,12 @@ Writes an Arsenal table object to a Word document.
 arsenal_tables_write2word(my_table, "output_table")
 }
 }
+\seealso{
+Other table: 
+\code{\link{max_table}()},
+\code{\link{min_table}()},
+\code{\link{table_calculate_percentages}()},
+\code{\link{table_calculate_proportion}()},
+\code{\link{table_generate_overall}()}
+}
+\concept{table}

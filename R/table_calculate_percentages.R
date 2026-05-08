@@ -29,6 +29,7 @@
 #' print(result)
 #'
 #' @importFrom rlang sym
+#' @family table
 #' @export
 table_calculate_percentages <- function(data_frame, variable) {
   variable <- as.character(variable)  # Ensure the variable name is a string

@@ -106,7 +106,7 @@ create_density_plot <- function(data,
   ggplot2::ggsave(filename = png_filename, plot = density_plot, dpi = dpi, height = 5, width = 7, units = "in")
 
   if (verbose) {
-    cat("Plots saved to:", tiff_filename, "and", png_filename, "\n")
+    message("Plots saved to: ", tiff_filename, " and ", png_filename)
   }
 
   invisible(density_plot)

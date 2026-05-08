@@ -28,6 +28,7 @@
 #' print(result)
 #'
 #' @importFrom dplyr count mutate across where
+#' @family table
 #' @export
 table_calculate_proportion <- function(data, variable_name) {
   tabyl_result <- data %>%

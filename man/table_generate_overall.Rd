@@ -35,4 +35,12 @@ Generate an overall table summarizing the demographics of the Table 1.
 table_generate_overall("data/Table1.rds", "output_tables")
 }
 }
+\seealso{
+Other table: 
+\code{\link{arsenal_tables_write2word}()},
+\code{\link{max_table}()},
+\code{\link{min_table}()},
+\code{\link{table_calculate_percentages}()},
+\code{\link{table_calculate_proportion}()}
+}
 \concept{table}
