@@ -47,6 +47,8 @@ are guarded with `requireNamespace()` throughout.
 
 ## provider package
 
-`provider` (andrewallenbruce/provider) is used optionally in `retrieve_clinician_data()`
-and is declared in Suggests. The call is fully guarded with
-`requireNamespace("provider", quietly = TRUE)`. The package functions fully without it.
+`provider` (andrewallenbruce/provider) is not on CRAN and is not declared in
+DESCRIPTION. `retrieve_clinician_data()` accesses it via `asNamespace("provider")`
+and `get0("clinicians", ...)` with no `requireNamespace()` call, so R CMD check
+does not flag it as an undeclared dependency. The function returns `NULL` gracefully
+when the package is not installed.

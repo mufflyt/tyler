@@ -67,7 +67,6 @@ Suggests:
     openxlsx,
     pkgdown,
     progress,
-    provider,
     readxl,
     remotes,
     renv,

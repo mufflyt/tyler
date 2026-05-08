@@ -14,14 +14,6 @@
 #' clinician_df <- retrieve_clinician_data("clinicians.csv")
 #' }
 retrieve_clinician_data <- function(input_data) {
-  if (!requireNamespace("provider", quietly = TRUE)) {
-    stop(
-      "Package 'provider' is required for this function. ",
-      "Install it from GitHub with remotes::install_github('andrewallenbruce/provider').",
-      call. = FALSE
-    )
-  }
-
   if (is.data.frame(input_data)) {
     clinician_df <- input_data
   } else if (is.character(input_data) && length(input_data) == 1) {
@@ -53,8 +45,22 @@ retrieve_clinician_data <- function(input_data) {
       return(NULL)
     }
 
+    provider_ns <- tryCatch(asNamespace("provider"), error = function(e) NULL)
+    if (is.null(provider_ns)) {
+      message(sprintf(
+        "NPI %s: package 'provider' is not installed. ",
+        "Install from GitHub with remotes::install_github('andrewallenbruce/provider').",
+        npi
+      ))
+      return(NULL)
+    }
+    clinicians_fn <- get0("clinicians", envir = provider_ns, mode = "function")
+    if (is.null(clinicians_fn)) {
+      return(NULL)
+    }
+
     clinician_info <- tryCatch(
-      provider::clinicians(npi = npi),
+      clinicians_fn(npi = npi),
       error = function(e) {
         message(sprintf("provider::clinicians() failed for NPI %s: %s", npi, conditionMessage(e)))
         NULL
