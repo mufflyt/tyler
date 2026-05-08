@@ -31,7 +31,8 @@ session-specific folder inside \code{\link[=tempdir]{tempdir()}}.}
 \item{height}{Final figure height in inches for journal submission (default is 5).}
 }
 \value{
-Invisibly returns the ggplot object of the generated map.
+Invisibly returns the arranged grob object containing the contiguous
+US map and Alaska/Hawaii/Puerto Rico inset maps.
 }
 \description{
 This function generates hexagon maps for hospital referral regions.
@@ -41,3 +42,7 @@ This function generates hexagon maps for hospital referral regions.
 hrr_generate_maps(physician_sf)
 }
 }
+\seealso{
+\code{\link[=hrr]{hrr()}}, \code{\link[=map_create_base]{map_create_base()}}, \code{\link[=map_create_block_group_overlap]{map_create_block_group_overlap()}}
+}
+\concept{geospatial plotting}

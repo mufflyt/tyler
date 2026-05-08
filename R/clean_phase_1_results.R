@@ -214,20 +214,17 @@ clean_phase_1_results <- function(phase1_data,
     if (!n) {
       return(character(0))
     }
-    # Use timestamp + process ID for better uniqueness.
-    # Keep IDs as character to avoid precision loss with large numeric values.
-    base_time <- format(Sys.time(), "%Y%m%d%H%M%S")
-    process_id <- Sys.getpid()
-    unique_ids <- character(n)
-
-    for (i in seq_len(n)) {
-      unique_ids[i] <- paste0(
-        base_time,
-        sprintf("%05d", process_id %% 100000),
-        sprintf("%03d", i)
-      )
+    if (!is.null(id_seed)) {
+      # seed was set above; sample.int uses seeded RNG → reproducible
+      parts <- sample.int(.Machine$integer.max, n, replace = FALSE)
+      sprintf("id%010d%04d", parts %% 1e10, seq_len(n))
+    } else {
+      base_time <- format(Sys.time(), "%Y%m%d%H%M%S")
+      process_id <- Sys.getpid()
+      vapply(seq_len(n), function(i) {
+        paste0(base_time, sprintf("%05d", process_id %% 100000), sprintf("%03d", i))
+      }, character(1))
     }
-    unique_ids
   }
 
   if ("npi" %in% names(phase1_data)) {

@@ -7,10 +7,10 @@
 validate_and_remove_invalid_npi(input_data)
 }
 \arguments{
-\item{input_data}{Either a dataframe containing NPI numbers or a path to a CSV file.}
+\item{input_data}{Either a data frame containing NPI numbers or a path to a CSV file.}
 }
 \value{
-A dataframe containing valid NPI numbers.
+A data frame containing valid NPI numbers.
 }
 \description{
 This function reads a CSV file containing NPI numbers, validates their

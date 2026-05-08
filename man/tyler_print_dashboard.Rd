@@ -7,7 +7,8 @@
 tyler_print_dashboard(results)
 }
 \arguments{
-\item{results}{List containing workflow results}
+\item{results}{List containing workflow results (as returned by
+\code{\link[=run_mystery_caller_workflow]{run_mystery_caller_workflow()}}).}
 }
 \description{
 Print a formatted summary dashboard

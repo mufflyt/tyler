@@ -20,7 +20,10 @@ The table includes the count of observations for each 'npi' and 'name' combinati
 The resulting table is saved as a CSV file.
 }
 \details{
-This helper is designed for rapid manual QA during mystery caller roster preparation. It aggregates duplicate \code{npi}-\code{name} combinations, retains only combinations with more than two rows, writes a CSV artifact, and returns the same filtered table for programmatic checks.
+The output table aggregates by \code{npi} and \code{name}, keeps combinations with more
+than two records, sorts descending by frequency, and writes the result to CSV.
+This helper is useful for flagging repeated provider entries that may require
+manual review.
 }
 \examples{
 \dontrun{
@@ -28,6 +31,11 @@ save_quality_check_table(my_data, "qc.csv")
 }
 }
 \seealso{
-\code{\link{validate_dataframe}()}, \code{\link{tyler_check_no_data_loss}()}, \code{\link{split_and_save}()}
+\code{\link[=run_mystery_caller_workflow]{run_mystery_caller_workflow()}}, \code{\link[=validate_dataframe]{validate_dataframe()}},
+\code{\link[=split_and_save]{split_and_save()}}
+
+Other utilities: 
+\code{\link{download_large_file}()},
+\code{\link{format_pct}()}
 }
-\concept{quality assurance helpers}
+\concept{utilities}

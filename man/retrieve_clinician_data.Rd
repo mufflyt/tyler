@@ -7,13 +7,13 @@
 retrieve_clinician_data(input_data)
 }
 \arguments{
-\item{input_data}{Either a dataframe containing NPI numbers or a path to a CSV file.}
+\item{input_data}{Either a data frame containing NPI numbers or a path to a CSV file.}
 }
 \value{
 A tibble with clinician data for the provided NPIs.
 }
 \description{
-This function retrieves clinician data for each valid NPI in the input dataframe.
+This function retrieves clinician data for each valid NPI in the input data frame.
 }
 \examples{
 \dontrun{

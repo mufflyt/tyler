@@ -26,7 +26,7 @@
 #' @importFrom sf st_intersection st_write st_area st_transform st_make_valid st_is_valid st_union st_sf
 #' @importFrom dplyr mutate select left_join coalesce
 #' @importFrom checkmate assert_class assert_number assert_string assert_function
-#' @importFrom rlang .data
+#' @importFrom dplyr .data
 #' @importFrom stats quantile na.omit
 #'
 #' @export

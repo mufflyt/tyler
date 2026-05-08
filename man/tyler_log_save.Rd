@@ -17,3 +17,16 @@ Invisible NULL
 \description{
 Log file save
 }
+\seealso{
+Other logging utilities: 
+\code{\link{tyler_log_cache_hit}()},
+\code{\link{tyler_log_error}()},
+\code{\link{tyler_log_info}()},
+\code{\link{tyler_log_progress}()},
+\code{\link{tyler_log_step}()},
+\code{\link{tyler_log_step_complete}()},
+\code{\link{tyler_log_success}()},
+\code{\link{tyler_log_warning}()},
+\code{\link{tyler_workflow_start}()}
+}
+\concept{logging utilities}

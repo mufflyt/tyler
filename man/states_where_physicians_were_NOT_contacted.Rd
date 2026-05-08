@@ -23,12 +23,14 @@ physicians were successfully reached by filtering to rows with affirmative conta
 (e.g., "Yes" values in \code{contact_office} or \code{included_in_study}).
 }
 \details{
-Contact success is inferred from \code{contact_office} and \code{included_in_study} when those columns are present. Accepted positive values include logical \code{TRUE}, non-zero numeric values, and case-insensitive text variants such as \code{"yes"}, \code{"y"}, \code{"true"}, and \code{"1"}.
+If \code{contact_office} and/or \code{included_in_study} exist, they are interpreted as
+contact indicators and used to restrict the denominator to successfully
+contacted rows. Accepted affirmative values include logical \code{TRUE}, non-zero
+numerics, and character values such as \code{"yes"}, \code{"y"}, \code{"true"}, and \code{"1"}.
+
+The physician count is derived from the first available identifier among
+\code{npi}, \code{name}, \code{physician_info}, and \code{physician_information}.
 }
-\seealso{
-\code{\link{summarize_census_data}()}, \code{\link{retrieve_clinician_data}()}, \code{\link{clean_phase_1_results}()}
-}
-\concept{study summary helpers}
 \examples{
 # Example with provided all_states
 filtered_data <- data.frame(state = c("California", "New York", "Texas"))
@@ -50,4 +52,7 @@ filtered_data <- data.frame(state = c("California", "New York", "Texas", "Nevada
 states_where_physicians_were_NOT_contacted(filtered_data)
 
 }
-
+\seealso{
+\code{\link[=summarize_census_data]{summarize_census_data()}}, \code{\link[=retrieve_clinician_data]{retrieve_clinician_data()}}, \code{\link[=clean_phase_1_results]{clean_phase_1_results()}}
+}
+\concept{summary}

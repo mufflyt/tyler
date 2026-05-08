@@ -1,294 +1,128 @@
-#' Run Mystery Caller Workflow with Comprehensive Logging
+#' Run the mystery caller workflow with structured logging
 #'
-#' This is an enhanced version of the mystery caller workflow that provides
-#' comprehensive, plain-language logging throughout the entire process. Use this
-#' to see detailed progress, timing, and success rates for each step.
+#' A thin wrapper around [run_mystery_caller_workflow()] that initialises the
+#' `tyler` logging infrastructure before the run and tears it down afterward.
+#' All substantive workflow logic lives in the underlying function; any bug
+#' fixed there is automatically inherited here.
 #'
-#' @param input_data Path to input CSV or data frame with physician data
-#' @param output_dir Directory for output files
-#' @param google_maps_api_key Google Maps API key for geocoding
-#' @param here_api_key HERE API key for isochrones
-#' @param drive_time_minutes Drive time breaks (default: c(30, 60, 120, 180))
-#' @param census_year Census data year (default: 2020)
-#' @param log_file Optional path to save log file (default: auto-generated)
-#' @return Final results data frame
+#' @inheritParams run_mystery_caller_workflow
+#' @param log_file Optional path to write a plain-text log file. When `NULL`
+#'   (default), a timestamped file is created inside `output_directory`.
+#' @param skip_preflight Logical. When `TRUE`, skip the preflight validation
+#'   step. Defaults to `FALSE`.
+#'
+#' @return The same list returned by [run_mystery_caller_workflow()].
 #'
 #' @examples
 #' \dontrun{
-#' # Run with comprehensive logging
 #' results <- run_mystery_caller_workflow_with_logging(
-#'   input_data = "physicians.csv",
-#'   output_dir = "output/",
-#'   google_maps_api_key = Sys.getenv("GOOGLE_API_KEY"),
-#'   here_api_key = Sys.getenv("HERE_API_KEY")
+#'   phase1_data = phase1,
+#'   phase2_data = phase2,
+#'   lab_assistant_names = c("Alice", "Bob"),
+#'   output_directory = "output/",
+#'   quality_check_path = "output/qc.csv",
+#'   log_file = "output/run.log"
 #' )
-#'
-#' # The console will show beautiful progress like:
-#' # ============================================================
-#' #   Mystery Caller Workflow
-#' #   Started: 2025-10-29 14:30:00
-#' #   Total Steps: 5
-#' # ============================================================
-#' #
-#' # > Step 1/5: Searching NPI Registry
-#' #   Processing 1,234 item(s)...
-#' #   [OK] NPI search complete: 1,174/1,234 (95.1%)
-#' #   [OK] Step complete: 95.1% success in 23m 15s
-#' #
-#' # > Step 2/5: Geocoding Addresses
-#' #   Found 1174 total address records, 1152 unique
-#' #   [OK] Geocoding complete: 1,152/1,152 succeeded (100.0%)
-#' #   [OK] Step complete in 12m 30s
-#' # ...
 #' }
 #'
-#' @param block_groups An `sf` object of census block group geometries passed to
-#'   [calculate_intersection_overlap_and_save()].
-#' @param skip_preflight Skip preflight checks (not recommended)
 #' @export
-run_mystery_caller_workflow_with_logging <- function(input_data,
-                                                      output_dir,
-                                                      google_maps_api_key,
-                                                      here_api_key,
-                                                      block_groups,
-                                                      drive_time_minutes = c(30, 60, 120, 180),
-                                                      census_year = 2020,
-                                                      log_file = NULL,
-                                                      skip_preflight = FALSE) {
+run_mystery_caller_workflow_with_logging <- function(
+  taxonomy_terms = NULL,
+  name_data = NULL,
+  phase1_data,
+  lab_assistant_names,
+  output_directory,
+  phase2_data,
+  phase2_output_directory = output_directory,
+  quality_check_path,
+  phase1_output_directory = output_directory,
+  split_insurance_order = c("Medicaid", "Blue Cross/Blue Shield"),
+  phase2_required_strings = c(
+    "physician_information", "able_to_contact_office", "are_we_including",
+    "reason_for_exclusions", "appointment_date", "number_of_transfers",
+    "call_time", "hold_time", "notes", "person_completing",
+    "state", "npi", "name"
+  ),
+  phase2_standard_names = c(
+    "physician_info", "contact_office", "included_in_study",
+    "exclusion_reasons", "appt_date", "transfer_count",
+    "call_duration", "hold_duration", "notes", "completed_by",
+    "state", "npi", "name"
+  ),
+  npi_search_args = list(),
+  all_states = NULL,
+  npi_progress_observer = NULL,
+  log_file = NULL,
+  skip_preflight = FALSE
+) {
+  dir.create(output_directory, showWarnings = FALSE, recursive = TRUE)
 
-  # ==================== PREFLIGHT CHECKS ====================
-  # Run comprehensive validation before starting workflow
-  if (!skip_preflight) {
-    preflight_result <- tyler_preflight_check(
-      input_data = input_data,
-      output_dir = output_dir,
-      google_maps_api_key = google_maps_api_key,
-      here_api_key = here_api_key,
-      check_apis = TRUE,
-      estimate_resources = TRUE,
-      interactive = interactive(),
-      required_columns = c("first", "last")
-    )
-
-    # Use validated data from preflight if available
-    if (!is.null(preflight_result$data)) {
-      input_data <- preflight_result$data
-    }
-  }
-
-  # Create output directory
-  dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
-
-  # Auto-generate log file path if not provided
   if (is.null(log_file)) {
     timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
-    log_file <- file.path(output_dir, sprintf("workflow_log_%s.txt", timestamp))
+    log_file <- file.path(output_directory, sprintf("workflow_log_%s.txt", timestamp))
   }
 
-  # Initialize workflow tracking
   tyler_workflow_start(
     workflow_name = "Mystery Caller Workflow",
-    total_steps = 5,
+    total_steps = 6,
     log_file = log_file
   )
 
-  # Load input data
-  if (is.character(input_data)) {
-    data <- tyler_read_table(input_data)
-    input_n <- nrow(data)
-  } else {
-    data <- input_data
-    input_n <- nrow(data)
-  }
-
-  tyler_log_info(sprintf("Loaded %s input records", format(input_n, big.mark = ",")))
-  tyler_log_info(sprintf("Output directory: %s", output_dir))
-  tyler_log_info(sprintf("Log file: %s", log_file))
-  message("")
-
-  # ==================== STEP 1: NPI Search ====================
-  tyler_log_step(
-    "Searching NPI Registry",
-    detail = "Looking up physician NPIs by name",
-    n_items = input_n
-  )
-
-  tryCatch({
-    npi_results <- search_and_process_npi(
-      data,
-      dest_dir = output_dir,
-      accumulate_path = file.path(output_dir, "npi_accumulated.csv"),
-      resume = TRUE,
-      notify = FALSE
-    )
-
-    success_rate_npi <- if (input_n > 0) nrow(npi_results) / input_n else 0
-    tyler_log_step_complete(
-      n_success = nrow(npi_results),
-      n_total = input_n
-    )
-
-    data <- npi_results
-
-  }, error = function(e) {
-    tyler_log_error(
-      "NPI search failed",
-      cause = e$message,
-      fix = "Check API connectivity and input data format"
-    )
-    tyler_workflow_end()
-    stop(e)
-  })
-
-  # ==================== STEP 2: Geocoding ====================
-  tyler_log_step(
-    "Geocoding Addresses",
-    detail = "Converting addresses to latitude/longitude coordinates",
-    n_items = nrow(data)
-  )
-
-  tryCatch({
-    geocoded_data <- geocode_unique_addresses(
-      file_path = file.path(output_dir, "npi_accumulated.csv"),
-      google_maps_api_key = google_maps_api_key,
-      output_file_path = file.path(output_dir, "geocoded_physicians.csv"),
-      failed_output_path = file.path(output_dir, "geocoding_failures.csv"),
-      notify = FALSE,
-      quiet = FALSE
-    )
-
-    tyler_log_step_complete()
-    data <- geocoded_data
-
-  }, error = function(e) {
-    tyler_log_error(
-      "Geocoding failed",
-      cause = e$message,
-      fix = "Check Google Maps API key and address format"
-    )
-    tyler_workflow_end()
-    stop(e)
-  })
-
-  # ==================== STEP 3: Generate Isochrones ====================
-  tyler_log_step(
-    "Generating Isochrones",
-    detail = sprintf("Creating drive-time polygons: %s minutes",
-                    paste(drive_time_minutes, collapse = ", ")),
-    n_items = nrow(data)
-  )
-
-  tryCatch({
-    isochrone_data <- create_isochrones_for_dataframe(
-      input_file = data,
-      api_key = here_api_key,
-      breaks = drive_time_minutes * 60,
-      output_dir = file.path(output_dir, "isochrones")
-    )
-
-    tyler_log_step_complete()
-    data <- isochrone_data
-
-  }, error = function(e) {
-    tyler_log_error(
-      "Isochrone generation failed",
-      cause = e$message,
-      fix = "Check HERE API key and coordinate validity"
-    )
-    tyler_workflow_end()
-    stop(e)
-  })
-
-  # ==================== STEP 4: Calculate Census Overlap ====================
-  for (drive_time in drive_time_minutes) {
-    tyler_log_step(
-      sprintf("Calculating Census Overlap (%d min)", drive_time),
-      detail = "Computing demographic statistics for service areas"
-    )
-
-    tryCatch({
-      overlap_result <- calculate_intersection_overlap_and_save(
-        block_groups = block_groups,
-        isochrones_joined = data,
-        drive_time_minutes = drive_time,
-        output_dir = output_dir
-      )
-
-      tyler_log_step_complete()
-
-    }, error = function(e) {
-      tyler_log_error(
-        sprintf("Census overlap calculation failed for %d minutes", drive_time),
-        cause = e$message,
-        fix = "Check census data availability and coordinate system alignment"
-      )
+  result <- tryCatch(
+    run_mystery_caller_workflow(
+      taxonomy_terms = taxonomy_terms,
+      name_data = name_data,
+      phase1_data = phase1_data,
+      lab_assistant_names = lab_assistant_names,
+      output_directory = output_directory,
+      phase2_data = phase2_data,
+      phase2_output_directory = phase2_output_directory,
+      quality_check_path = quality_check_path,
+      phase1_output_directory = phase1_output_directory,
+      split_insurance_order = split_insurance_order,
+      phase2_required_strings = phase2_required_strings,
+      phase2_standard_names = phase2_standard_names,
+      npi_search_args = npi_search_args,
+      all_states = all_states,
+      verbose = TRUE,
+      npi_progress_observer = npi_progress_observer
+    ),
+    error = function(e) {
+      tyler_log_error("Workflow failed", cause = e$message, fix = "Check input data and parameters")
       tyler_workflow_end()
       stop(e)
-    })
-  }
-
-  # ==================== STEP 5: Finalize Results ====================
-  tyler_log_step(
-    "Finalizing Results",
-    detail = "Cleaning and exporting final dataset"
+    }
   )
 
-  final_output <- file.path(output_dir, "mystery_caller_final_results.csv")
-  tyler_write_table(data, final_output)
-  tyler_log_save(final_output, n_rows = nrow(data))
-  tyler_log_step_complete()
-
-  # End workflow with summary
   tyler_workflow_end(
-    final_n = nrow(data),
-    input_n = input_n
+    final_n = if (!is.null(result$cleaned_phase2)) nrow(result$cleaned_phase2) else NA_integer_,
+    input_n  = nrow(phase1_data)
   )
 
-  message("")
-  tyler_log_success("Workflow complete! All results saved to output directory.", indent = FALSE)
-  message("")
-
-  invisible(data)
+  invisible(result)
 }
 
 
 #' Print a formatted summary dashboard
 #'
-#' @param results List containing workflow results
+#' @param results List containing workflow results (as returned by
+#'   [run_mystery_caller_workflow()]).
 #' @export
 tyler_print_dashboard <- function(results) {
   message("")
-  message("\u256D", strrep("\u2500", 58), "\u256E")
-  message("\u2502", "   Mystery Caller Workflow Summary", strrep(" ", 23), "\u2502")
-  message("\u2570", strrep("\u2500", 58), "\u256F")
+  message("╭", strrep("─", 58), "╮")
+  message("│", "   Mystery Caller Workflow Summary", strrep(" ", 23), "│")
+  message("╰", strrep("─", 58), "╯")
   message("")
 
-  if (!is.null(results$input_n) && !is.null(results$final_n) && results$input_n > 0) {
-    pct <- round(results$final_n / results$input_n * 100, 1)
-    message(sprintf("  Input:  %s physicians", format(results$input_n, big.mark = ",")))
-    message(sprintf("  Output: %s complete records (%.1f%%)",
-                   format(results$final_n, big.mark = ","), pct))
-    message("")
-  }
-
-  if (!is.null(results$steps)) {
-    message("  \U0001F4CA Step Results:")
-    for (step in results$steps) {
-      icon <- if (step$success) "\u2713" else "\u2717"
-      message(sprintf("    %s %s: %s", icon, step$name, step$result))
+  if (!is.null(results$workflow_summary)) {
+    summary <- results$workflow_summary
+    for (i in seq_len(nrow(summary))) {
+      message(sprintf("  %-20s %s rows", summary$stage[i], format(summary$n_rows[i], big.mark = ",")))
     }
     message("")
   }
 
-  if (!is.null(results$duration)) {
-    message(sprintf("  \U0001F551 Duration: %s", results$duration))
-  }
-
-  if (!is.null(results$output_dir)) {
-    message(sprintf("  \U0001F4BE Output: %s", results$output_dir))
-  }
-
-  message("")
-  message(strrep("\u2500", 60))
+  message(strrep("─", 60))
   message("")
 }

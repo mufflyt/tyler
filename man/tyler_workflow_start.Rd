@@ -14,8 +14,22 @@ tyler_workflow_start(workflow_name, total_steps = NULL, log_file = NULL)
 \item{log_file}{Optional path to log file for persistent logging}
 }
 \value{
-Invisible NULL
+\code{invisible(NULL)}; initializes internal workflow state in
+\code{.tyler_workflow} and prints a workflow header.
 }
 \description{
 Initialize workflow tracking
 }
+\seealso{
+Other logging utilities: 
+\code{\link{tyler_log_cache_hit}()},
+\code{\link{tyler_log_error}()},
+\code{\link{tyler_log_info}()},
+\code{\link{tyler_log_progress}()},
+\code{\link{tyler_log_save}()},
+\code{\link{tyler_log_step}()},
+\code{\link{tyler_log_step_complete}()},
+\code{\link{tyler_log_success}()},
+\code{\link{tyler_log_warning}()}
+}
+\concept{logging utilities}

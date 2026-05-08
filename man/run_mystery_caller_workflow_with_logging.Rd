@@ -2,75 +2,107 @@
 % Please edit documentation in R/run_mystery_caller_workflow_with_logging.R
 \name{run_mystery_caller_workflow_with_logging}
 \alias{run_mystery_caller_workflow_with_logging}
-\title{Run Mystery Caller Workflow with Comprehensive Logging}
+\title{Run the mystery caller workflow with structured logging}
 \usage{
 run_mystery_caller_workflow_with_logging(
-  input_data,
-  output_dir,
-  google_maps_api_key,
-  here_api_key,
-  block_groups,
-  drive_time_minutes = c(30, 60, 120, 180),
-  census_year = 2020,
+  taxonomy_terms = NULL,
+  name_data = NULL,
+  phase1_data,
+  lab_assistant_names,
+  output_directory,
+  phase2_data,
+  phase2_output_directory = output_directory,
+  quality_check_path,
+  phase1_output_directory = output_directory,
+  split_insurance_order = c("Medicaid", "Blue Cross/Blue Shield"),
+  phase2_required_strings = c("physician_information", "able_to_contact_office",
+    "are_we_including", "reason_for_exclusions", "appointment_date",
+    "number_of_transfers", "call_time", "hold_time", "notes", "person_completing",
+    "state", "npi", "name"),
+  phase2_standard_names = c("physician_info", "contact_office", "included_in_study",
+    "exclusion_reasons", "appt_date", "transfer_count", "call_duration", "hold_duration",
+    "notes", "completed_by", "state", "npi", "name"),
+  npi_search_args = list(),
+  all_states = NULL,
+  npi_progress_observer = NULL,
   log_file = NULL,
   skip_preflight = FALSE
 )
 }
 \arguments{
-\item{input_data}{Path to input CSV or data frame with physician data}
+\item{taxonomy_terms}{Character vector of taxonomy descriptions to pass to
+\code{\link[=search_by_taxonomy]{search_by_taxonomy()}}. Set to \code{NULL} to skip taxonomy-based searches.}
 
-\item{output_dir}{Directory for output files}
+\item{name_data}{Optional data frame containing \code{first} and \code{last} columns to
+use with \code{\link[=search_and_process_npi]{search_and_process_npi()}}. Provide \code{NULL} to skip name-based
+searches.}
 
-\item{google_maps_api_key}{Google Maps API key for geocoding}
+\item{phase1_data}{Data frame holding Phase 1 calling roster information to
+pass to \code{\link[=clean_phase_1_results]{clean_phase_1_results()}}.}
 
-\item{here_api_key}{HERE API key for isochrones}
+\item{lab_assistant_names}{Character vector of caller names used when splitting
+the cleaned roster via \code{\link[=split_and_save]{split_and_save()}}. Must contain at least two
+entries.}
 
-\item{block_groups}{An \code{sf} object of census block group geometries passed to
-\code{\link[=calculate_intersection_overlap_and_save]{calculate_intersection_overlap_and_save()}}.}
+\item{output_directory}{Directory where \code{\link[=split_and_save]{split_and_save()}} should write the
+complete and per-caller workbooks.}
 
-\item{drive_time_minutes}{Drive time breaks (default: c(30, 60, 120, 180))}
+\item{phase2_data}{Data frame or file path consumed by
+\code{\link[=clean_phase_2_data]{clean_phase_2_data()}}.}
 
-\item{census_year}{Census data year (default: 2020)}
+\item{phase2_output_directory}{Directory where Phase 2 exports should be
+written. Defaults to \code{output_directory}.}
 
-\item{log_file}{Optional path to save log file (default: auto-generated)}
+\item{quality_check_path}{File path where \code{\link[=save_quality_check_table]{save_quality_check_table()}} should
+write the quality check CSV.}
 
-\item{skip_preflight}{Skip preflight checks (not recommended)}
+\item{phase1_output_directory}{Directory where \code{\link[=clean_phase_1_results]{clean_phase_1_results()}}
+should write the cleaned Phase 1 CSV. Defaults to \code{output_directory}.}
+
+\item{split_insurance_order}{Ordering passed to \code{\link[=split_and_save]{split_and_save()}}'s
+\code{insurance_order} argument. Defaults to \code{c("Medicaid", "Blue Cross/Blue Shield")}.}
+
+\item{phase2_required_strings}{Character vector of substrings used when
+standardizing Phase 2 column names via \code{\link[=clean_phase_2_data]{clean_phase_2_data()}}.}
+
+\item{phase2_standard_names}{Replacement names corresponding to
+\code{phase2_required_strings}.}
+
+\item{npi_search_args}{Named list of additional arguments forwarded to
+\code{\link[=search_and_process_npi]{search_and_process_npi()}}.}
+
+\item{all_states}{Optional character vector of all states to supply to
+\code{\link[=states_where_physicians_were_NOT_contacted]{states_where_physicians_were_NOT_contacted()}}.}
+
+\item{npi_progress_observer}{Optional callback that receives progress updates
+from \code{\link[=search_and_process_npi]{search_and_process_npi()}}. It is invoked with the same payload as the
+\code{progress_callback} argument for that function.}
+
+\item{log_file}{Optional path to write a plain-text log file. When \code{NULL}
+(default), a timestamped file is created inside \code{output_directory}.}
+
+\item{skip_preflight}{Logical. When \code{TRUE}, skip the preflight validation
+step. Defaults to \code{FALSE}.}
 }
 \value{
-Final results data frame
+The same list returned by \code{\link[=run_mystery_caller_workflow]{run_mystery_caller_workflow()}}.
 }
 \description{
-This is an enhanced version of the mystery caller workflow that provides
-comprehensive, plain-language logging throughout the entire process. Use this
-to see detailed progress, timing, and success rates for each step.
+A thin wrapper around \code{\link[=run_mystery_caller_workflow]{run_mystery_caller_workflow()}} that initialises the
+\code{tyler} logging infrastructure before the run and tears it down afterward.
+All substantive workflow logic lives in the underlying function; any bug
+fixed there is automatically inherited here.
 }
 \examples{
 \dontrun{
-# Run with comprehensive logging
 results <- run_mystery_caller_workflow_with_logging(
-  input_data = "physicians.csv",
-  output_dir = "output/",
-  google_maps_api_key = Sys.getenv("GOOGLE_API_KEY"),
-  here_api_key = Sys.getenv("HERE_API_KEY")
+  phase1_data = phase1,
+  phase2_data = phase2,
+  lab_assistant_names = c("Alice", "Bob"),
+  output_directory = "output/",
+  quality_check_path = "output/qc.csv",
+  log_file = "output/run.log"
 )
-
-# The console will show beautiful progress like:
-# ============================================================
-#   Mystery Caller Workflow
-#   Started: 2025-10-29 14:30:00
-#   Total Steps: 5
-# ============================================================
-#
-# > Step 1/5: Searching NPI Registry
-#   Processing 1,234 item(s)...
-#   [OK] NPI search complete: 1,174/1,234 (95.1\%)
-#   [OK] Step complete: 95.1\% success in 23m 15s
-#
-# > Step 2/5: Geocoding Addresses
-#   Found 1174 total address records, 1152 unique
-#   [OK] Geocoding complete: 1,152/1,152 succeeded (100.0\%)
-#   [OK] Step complete in 12m 30s
-# ...
 }
 
 }

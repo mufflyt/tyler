@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_and_plot_interaction.R
 \name{create_and_plot_interaction}
 \alias{create_and_plot_interaction}
-\title{Create and Plot Interaction Effects in GLMM}
+\title{Create and plot interaction effects from a Poisson GLMM}
 \usage{
 create_and_plot_interaction(
   data_path,
@@ -27,32 +27,32 @@ create_and_plot_interaction(
 
 \item{output_path}{A character string specifying the directory where the interaction plot will be saved.}
 
-\item{resolution}{An integer specifying the resolution (in DPI) for saving the plot. Defaults to 100.}
+\item{resolution}{Integer DPI used when saving the plot. Defaults to \code{100}.}
 }
 \value{
-A list containing the fitted GLMM (\code{model}) and the summarized data used for the effects plot (\code{effects_plot_data}).
+A list with:
+\describe{
+\item{\code{model}}{The fitted \code{lme4::glmer()} model object.}
+\item{\code{effects_plot_data}}{Summarized predicted values used in the plot.}
+}
 }
 \description{
-This function reads data from a specified file, fits a generalized linear mixed model (GLMM) with a specified interaction term, and creates a plot to visualize the interaction effects. The plot is saved to a specified directory. This is particularly useful for analyzing how two categorical variables interact to affect a response variable, controlling for a random intercept.
+Reads an \code{.rds} dataset, fits a Poisson generalized linear mixed model with
+an interaction term, and saves a publication-ready interaction plot.
 }
 \details{
-The function performs the following steps:
-\itemize{
-\item Reads the data from the provided file path.
-\item Renames and converts the specified columns to appropriate types.
-\item Fits a Poisson GLMM with an interaction term and a random intercept.
-\item Summarizes the interaction effects and creates a plot.
-\item Saves the plot to the specified directory.
+The function:
+\enumerate{
+\item loads data from \code{data_path},
+\item standardizes selected columns for modeling,
+\item fits \code{response ~ interaction + (1 | random_intercept)} with a Poisson link,
+\item computes grouped mean predicted responses, and
+\item writes a PNG plot to \code{output_path}.
 }
 
-This function is useful in scenarios where you want to examine the interaction between two categorical variables and their combined effect on a count-based response variable (e.g., the number of business days until an appointment). It can handle complex data structures and controls for variability across groups using random intercepts.
-
-Model fitting uses \code{\link[lme4:glmer]{lme4::glmer()}} with a Poisson log link and \code{nAGQ = 0} for speed. The saved plot file is named \code{interaction_<interaction_variable>_<variable_of_interest>.png} in \code{output_path}.
+Use this helper when comparing how two categorical predictors jointly relate
+to a count-like outcome (for example, business days until appointment).
 }
-\seealso{
-\code{\link{plot_and_save_emmeans}()}, \code{\link{create_formula}()}, \code{\link{check_normality}()}
-}
-\concept{modeling and inference helpers}
 \examples{
 \dontrun{
 # Example 1: Analyzing the effect of gender and appointment center on wait times
@@ -90,3 +90,7 @@ result <- create_and_plot_interaction(
 }
 
 }
+\seealso{
+\code{\link[=plot_and_save_emmeans]{plot_and_save_emmeans()}}, \code{\link[=create_formula]{create_formula()}}, \code{\link[=poisson_formula_maker]{poisson_formula_maker()}}
+}
+\concept{modeling helpers}
