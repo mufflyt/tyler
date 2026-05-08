@@ -56,9 +56,6 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   bg_data <- validated$bg_data
   isochrones_data <- validated$isochrones_data
 
-  bg_data <- lwgeom::st_force_polygon_cw(bg_data)
-  isochrones_data <- lwgeom::st_force_polygon_cw(isochrones_data)
-
   if (!"drive_time" %in% names(isochrones_data)) {
     stop("`isochrones_data` must include a `drive_time` column in minutes.", call. = FALSE)
   }
@@ -71,6 +68,9 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   if (any(!is.na(bg_data$overlap) & (bg_data$overlap < 0 | bg_data$overlap > 1))) {
     stop("`bg_data$overlap` values must be between 0 and 1.", call. = FALSE)
   }
+
+  bg_data <- lwgeom::st_force_polygon_cw(bg_data)
+  isochrones_data <- lwgeom::st_force_polygon_cw(isochrones_data)
 
   palette <- c(
     "180" = "#ff0000",

@@ -65,7 +65,7 @@ test_that("run_mystery_caller_workflow orchestrates pipeline without mocks", {
   expect_true(is.list(result))
   expect_equal(sort(names(result)), sort(c(
     "cleaned_phase1", "cleaned_phase2", "coverage_summary",
-    "quality_check_table", "roster", "validated_roster"
+    "quality_check_table", "roster", "validated_roster", "workflow_summary"
   )))
 
   expect_s3_class(result$roster, "data.frame")
