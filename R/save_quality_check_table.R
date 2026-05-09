@@ -5,11 +5,16 @@
 #' The resulting table is saved as a CSV file.
 #'
 #' @param data A data frame containing the columns 'npi' and 'name'.
-#' @param filepath The path where the CSV file should be saved.
-#' @return The filtered data. A message is emitted indicating where the CSV was saved.
+#' @param filepath The path where the output file should be saved.
+#' @param output_format File format for the saved table. Either `"csv"` (default)
+#'   or `"parquet"`. The file extension of `filepath` is ignored; the format
+#'   here controls what is written.
+#' @return The filtered data frame (invisibly). A message is emitted indicating
+#'   where the file was saved.
 #' @details
 #' The output table aggregates by `npi` and `name`, keeps combinations with more
-#' than two records, sorts descending by frequency, and writes the result to CSV.
+#' than two records, sorts descending by frequency, and writes the result to the
+#' specified format via [mysterycall_write_table()].
 #' This helper is useful for flagging repeated provider entries that may require
 #' manual review.
 #' @importFrom dplyr group_by summarize arrange filter n desc
@@ -20,7 +25,8 @@
 #' @examplesIf interactive()
 #' mysterycall_save_quality_table(my_data, "qc.csv")
 
-mysterycall_save_quality_table <- function(data, filepath) {
+mysterycall_save_quality_table <- function(data, filepath, output_format = c("csv", "parquet")) {
+  output_format <- match.arg(output_format)
   required_cols <- c("npi", "name")
   missing_cols <- setdiff(required_cols, names(data))
   if (length(missing_cols)) {
@@ -34,17 +40,17 @@ mysterycall_save_quality_table <- function(data, filepath) {
     dplyr::filter(.data$count > 2) %>%
     dplyr::arrange(desc(.data$count))
 
-  # Save the filtered data to a CSV file
-  dir.create(dirname(filepath), recursive = TRUE, showWarnings = FALSE)
-  write.csv(filtered_data, file = filepath, row.names = FALSE)
+  output_dir <- dirname(filepath)
+  if (nzchar(output_dir) && output_dir != ".") {
+    dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+  }
+  mysterycall_write_table(filtered_data, filepath, format = output_format)
 
-  # Print a message indicating successful file save with context
   message(sprintf(
     "Saved quality-check table with %d row(s) to %s.",
     nrow(filtered_data),
     filepath
   ))
 
-  # Return the filtered data for testing purposes
-  return(filtered_data)
+  invisible(filtered_data)
 }

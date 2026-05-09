@@ -461,7 +461,11 @@ mysterycall_search_and_process_npi <- function(data,
     result <- dplyr::bind_rows(npi_data)
     if (!is.null(existing_accumulated)) {
       final_result <- dplyr::bind_rows(existing_accumulated, result)
-      final_result <- dplyr::distinct(final_result)
+      if ("npi" %in% names(final_result)) {
+        final_result <- dplyr::distinct(final_result, .data$npi, .keep_all = TRUE)
+      } else {
+        final_result <- dplyr::distinct(final_result)
+      }
     } else {
       final_result <- result
     }

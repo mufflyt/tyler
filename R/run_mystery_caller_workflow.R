@@ -35,6 +35,11 @@
 #'   [mysterycall_search_and_process_npi()].
 #' @param all_states Optional character vector of all states to supply to
 #'   [mysterycall_not_contacted_states()].
+#' @param taxonomy_states Optional character vector of two-letter state
+#'   abbreviations forwarded to [mysterycall_search_taxonomy()] as its `states`
+#'   argument. When `NULL` (default) the search is national and capped at 1,200
+#'   records per taxonomy term. Pass all 50 abbreviations to bypass the cap for
+#'   large specialties.
 #' @param verbose Logical. When `TRUE`, print stage updates to the console while
 #'   running the workflow. Defaults to `interactive()`.
 #' @param npi_progress_observer Optional callback that receives progress updates
@@ -124,6 +129,7 @@ mysterycall_run_workflow <- function(
   ),
   npi_search_args = list(),
   all_states = NULL,
+  taxonomy_states = NULL,
   verbose = interactive(),
   npi_progress_observer = NULL
 ) {
@@ -184,7 +190,7 @@ mysterycall_run_workflow <- function(
   }
   roster_taxonomy <- if (!is.null(taxonomy_terms) && length(taxonomy_terms)) {
     announce("Searching NPIs by taxonomy")
-    mysterycall_search_taxonomy(taxonomy_terms)
+    mysterycall_search_taxonomy(taxonomy_terms, states = taxonomy_states)
   } else {
     tibble::tibble()
   }
@@ -269,7 +275,7 @@ mysterycall_run_workflow <- function(
   cleaned_phase1 <- mysterycall_clean_phase1(
     phase1_data,
     output_directory = phase1_output_directory,
-    notify = TRUE
+    notify = isTRUE(verbose)
   )
   announce("Splitting Phase 1 workbooks for callers")
   redcap_ready <- cleaned_phase1

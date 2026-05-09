@@ -9,8 +9,11 @@
 #' @param all_states A character vector of all possible states including Washington, DC.
 #' If not provided, a default set of states will be used.
 #'
-#' @return A character string summarizing the inclusion and exclusion of states
-#'   alongside the count of unique physicians successfully contacted.
+#' @return A data frame with one row per state and columns `state`, `status`
+#'   (`"included"` or `"excluded"`), and `unique_physicians` (the count of unique
+#'   contacted physicians, repeated on every row for convenience). The summary
+#'   sentence is attached as `attr(result, "summary_text")` for human-readable
+#'   output.
 #' @details
 #' If `contact_office` and/or `included_in_study` exist, they are interpreted as
 #' contact indicators and used to restrict the denominator to successfully
@@ -96,15 +99,9 @@ mysterycall_not_contacted_states <- function(filtered_data, all_states = NULL) {
   # Identify the excluded states by finding the difference between all states and the included states
   excluded_states <- setdiff(all_states, included_states$state)
 
-  # Ensure "District of Columbia" is not included in the excluded states if it is in the included states
-  if ("District of Columbia" %in% included_states$state) {
-    excluded_states <- setdiff(excluded_states, "District of Columbia")
-  }
-
   # Convert the excluded_states vector into a human-readable series
   excluded_states_series <- if (length(excluded_states) > 1) {
-    excluded_series <- paste(paste(excluded_states[-length(excluded_states)], collapse = ", "), "and", excluded_states[length(excluded_states)])
-    excluded_series
+    paste(paste(excluded_states[-length(excluded_states)], collapse = ", "), "and", excluded_states[length(excluded_states)])
   } else if (length(excluded_states) == 1) {
     excluded_states
   } else {
@@ -129,19 +126,33 @@ mysterycall_not_contacted_states <- function(filtered_data, all_states = NULL) {
     unique_physicians <- nrow(dplyr::distinct(contacted_data))
   }
 
-  # Prepare the output string
+  # Build DC phrase from actual data, not hardcoded boilerplate
+  dc_phrase <- if ("District of Columbia" %in% included_states$state) {
+    " including the District of Columbia"
+  } else {
+    ""
+  }
+
   output_string <- paste0(
-    "A total of ",
-    unique_physicians,
-    " unique physicians were identified in the dataset and were successfully contacted (i.e., with a recorded wait time for an appointment) in ",
-    num_included_states,
-    " states including the District of Columbia. The excluded states include ",
-    excluded_states_series,
-    "."
+    "A total of ", unique_physicians,
+    " unique physicians were identified in the dataset and were successfully contacted",
+    " (i.e., with a recorded wait time for an appointment) in ",
+    num_included_states, " state(s)", dc_phrase,
+    ". The excluded states include ", excluded_states_series, "."
   )
 
+  # Return a data frame (one row per state) so workflow_summary can record
+  # nrow(coverage_summary) meaningfully. Summary text is an attribute.
+  coverage_df <- data.frame(
+    state            = all_states,
+    status           = ifelse(all_states %in% included_states$state, "included", "excluded"),
+    unique_physicians = unique_physicians,
+    stringsAsFactors = FALSE
+  )
+  attr(coverage_df, "summary_text") <- output_string
+
   if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
-  return(output_string)
+  return(coverage_df)
 }
 
 
