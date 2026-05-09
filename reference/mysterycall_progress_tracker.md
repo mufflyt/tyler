@@ -86,15 +86,15 @@ handles quality tier calculation using
 ``` r
 tracker <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 10)
 mysterycall_progress_start(tracker, "Geocode")
-#> [04:45:17] Started Geocode
-#> [04:45:17] Progress: 0/2 steps complete (0.0%)
+#> [04:57:35] Started Geocode
+#> [04:57:35] Progress: 0/2 steps complete (0.0%)
 mysterycall_progress_finish(tracker, "Geocode", score = 0.92)
-#> [04:45:17] Completed Geocode (high)
-#> [04:45:17] Progress: 1/2 steps complete (50.0%) - ETA 04:45:17
+#> [04:57:35] Completed Geocode (high)
+#> [04:57:35] Progress: 1/2 steps complete (50.0%) - ETA 04:57:35
 mysterycall_progress_summary(tracker)
 #> # A tibble: 2 × 6
 #>   step     status    started_at          finished_at         quality note 
 #>   <chr>    <fct>     <dttm>              <dttm>              <chr>   <chr>
-#> 1 Geocode  completed 2026-05-09 04:45:17 2026-05-09 04:45:17 high    NA   
+#> 1 Geocode  completed 2026-05-09 04:57:35 2026-05-09 04:57:35 high    NA   
 #> 2 Validate pending   NA                  NA                  NA      NA   
 ```
