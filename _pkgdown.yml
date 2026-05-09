@@ -112,7 +112,6 @@ reference:
       - mysterycall_standard_palette
       - mysterycall_quality_tier
       - mysterycall_download_file
-      - mysterycall_write_table_pdf
       - mysterycall_progress_tracker
       - mysterycall_progress_start
       - mysterycall_progress_finish
@@ -122,9 +121,6 @@ reference:
 
   - title: "Deprecated"
     contents:
-      - search_npi
-      - test_and_process_isochrones
-      - process_and_save_isochrones
       - mysterycall-deprecated
 
 articles:
