@@ -4,6 +4,9 @@ destination: docs
 template:
   bootstrap: 5
 
+home:
+  strip_header: true
+
 navbar:
   structure:
     left:
