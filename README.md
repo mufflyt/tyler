@@ -20,26 +20,25 @@ tables and maps.
 ## Installation
 
 ```r
-# install.packages("devtools")
-devtools::install_github("mufflyt/mysterycall")
+# install.packages("pak")
+pak::pkg_install("mufflyt/mysterycall")
 ```
 
-The package loads quickly with a small footprint. Geospatial and modelling
-packages are optional and installed only when you need them:
+The package loads quickly. Geospatial and modelling packages are optional and
+loaded only when first needed:
 
 ```r
-install.packages(c("hereR", "sf", "lwgeom"))   # drive-time isochrones
-install.packages("leaflet")                      # interactive maps
-install.packages("ggmap")                        # Google Maps geocoding
-install.packages(c("ggspatial", "rnaturalearth")) # HRR hex maps
-install.packages("lme4")                         # mixed-effects models
-install.packages("censusapi")                    # Census block-group data
+install.packages(c("hereR", "sf", "lwgeom"))         # drive-time isochrones
+install.packages("leaflet")                            # interactive maps
+install.packages("ggmap")                              # Google Maps geocoding
+install.packages(c("ggspatial", "rnaturalearth"))      # HRR hex maps
+install.packages("lme4")                               # mixed-effects models
+install.packages("censusapi")                          # Census block-group data
 ```
 
 ## Quick start
 
-A typical mystery caller study moves through four stages. Here is a minimal
-end-to-end example for gynecologic oncology:
+A typical mystery caller study moves through four stages:
 
 ```r
 library(mysterycall)
@@ -55,18 +54,18 @@ all_states <- c(
   "TX","UT","VT","VA","WA","WV","WI","WY"
 )
 
-gyn_onc <- search_by_taxonomy("Gynecologic Oncology", states = all_states)
+gyn_onc <- mysterycall_search_taxonomy("Gynecologic Oncology", states = all_states)
 
 # Validate NPI numbers before downstream lookups
-gyn_onc_valid <- validate_and_remove_invalid_npi(gyn_onc)
+gyn_onc_valid <- mysterycall_validate_npi(gyn_onc)
 
 # Enrich with CMS Physician Compare demographics
-gyn_onc_enriched <- get_clinician_data(gyn_onc_valid)
+gyn_onc_enriched <- mysterycall_get_clinician_data(gyn_onc_valid)
 
 # ── 2. Geocode ────────────────────────────────────────────────────────────────
 
 # Requires a Google Maps API key in GOOGLE_API_KEY env var
-geocoded <- geocode_unique_addresses(
+geocoded <- mysterycall_geocode(
   gyn_onc_enriched,
   google_maps_api_key = Sys.getenv("GOOGLE_API_KEY")
 )
@@ -74,7 +73,7 @@ geocoded <- geocode_unique_addresses(
 # ── 3. Drive-time isochrones ──────────────────────────────────────────────────
 
 # Requires a HERE API key in HERE_API_KEY env var
-isochrones <- create_isochrones_for_dataframe(
+isochrones <- mysterycall_isochrones_for_df(
   geocoded,
   breaks = c(1800, 3600, 7200, 10800)   # 30 / 60 / 120 / 180 min
 )
@@ -84,39 +83,42 @@ mysterycall_clear_isochrone_cache()
 
 # ── 4. Map ────────────────────────────────────────────────────────────────────
 
-map_create_physician_dot(geocoded, popup_var = "name")
+mysterycall_map_physicians(geocoded, popup_var = "name")
 ```
 
 ## Core functions
 
 | Stage | Function | Description |
 |---|---|---|
-| **Find providers** | `search_by_taxonomy()` | NPI registry search by taxonomy; loops over states to bypass the 1,200-record cap |
-| | `search_and_process_npi()` | NPI registry search by first/last name |
-| | `validate_and_remove_invalid_npi()` | Remove invalid NPI numbers before enrichment |
-| | `get_clinician_data()` | Pull demographics from CMS Physician Compare |
-| | `genderize_physicians()` | Estimate physician gender via the Genderize.io API |
-| **Geocode** | `geocode_unique_addresses()` | Convert addresses to lat/lon via Google Maps |
-| **Isochrones** | `create_isochrones_for_dataframe()` | Drive-time polygons for every row using the HERE API |
+| **Find providers** | `mysterycall_search_taxonomy()` | NPI search by taxonomy; loops over states to bypass the 1,200-record cap |
+| | `mysterycall_search_and_process_npi()` | NPI search by first/last name |
+| | `mysterycall_validate_npi()` | Remove invalid NPI numbers before enrichment |
+| | `mysterycall_get_clinician_data()` | Pull demographics from CMS Physician Compare |
+| | `mysterycall_genderize()` | Estimate physician gender via the Genderize.io API |
+| **Geocode** | `mysterycall_geocode()` | Convert addresses to lat/lon via Google Maps |
+| **Isochrones** | `mysterycall_isochrones_for_df()` | Drive-time polygons for every row using the HERE API |
+| | `mysterycall_create_isochrones()` | Single-location drive-time polygon |
 | | `mysterycall_clear_isochrone_cache()` | Release the in-session memoization cache |
-| **Census** | `get_census_data()` | ACS block-group demographics by state FIPS |
-| | `calculate_intersection_overlap_and_save()` | Overlap area between isochrones and block groups |
-| **Maps** | `map_create_physician_dot()` | Interactive Leaflet dot map coloured by ACOG district |
-| | `map_create_block_group_overlap()` | Block-group overlap map exported to HTML + PNG |
-| | `hrr_generate_maps()` | Hexagon density map by Hospital Referral Region |
-| **Tables** | `table_generate_overall()` | Table 1 summary (via `arsenal`) |
-| | `table_calculate_percentages()` | Column-percentage tables |
+| **Census** | `mysterycall_get_census_data()` | ACS block-group demographics by state FIPS |
+| | `mysterycall_calculate_overlap()` | Overlap area between isochrones and block groups |
+| **Maps** | `mysterycall_map_physicians()` | Interactive Leaflet dot map coloured by ACOG district |
+| | `mysterycall_map_block_group()` | Block-group overlap map exported to HTML + PNG |
+| | `mysterycall_hrr_maps()` | Hexagon density map by Hospital Referral Region |
+| **Tables** | `mysterycall_table_overall()` | Table 1 summary (via `arsenal`) |
+| | `mysterycall_table_percentages()` | Column-percentage tables |
 
 ## Built-in datasets
 
 | Dataset | Description |
 |---|---|
-| `tyler::taxonomy` | NUCC taxonomy codes (v23.1) for all OBGYN subspecialties |
-| `tyler::ACOG_Districts` | State → ACOG district + Census subregion crosswalk |
-| `tyler::acgme` | All 318 ACGME-accredited OBGYN residency programs |
-| `tyler::physicians` | Sample roster of 4,659 OBGYN subspecialists with coordinates |
-| `tyler::fips` | State FIPS codes and abbreviations |
-| `tyler::cityStateToLatLong` | City/state → lat/lon lookup table |
+| `taxonomy` | NUCC taxonomy codes (v23.1) for all OBGYN subspecialties |
+| `ACOG_Districts` | State → ACOG district + Census subregion crosswalk |
+| `acgme` | All 318 ACGME-accredited OBGYN residency programs |
+| `physicians` | Sample roster of 4,659 OBGYN subspecialists with coordinates |
+| `fips` | State FIPS codes and abbreviations |
+| `cityStateToLatLong` | City/state → lat/lon lookup table |
+| `acog_presidents` | Historical ACOG presidents data |
+| `census_summaries` | Pre-computed Census block-group demographics |
 
 ```r
 # Example: find all OBGYN taxonomy codes
@@ -124,7 +126,7 @@ library(mysterycall)
 library(dplyr)
 library(stringr)
 
-tyler::taxonomy |>
+taxonomy |>
   filter(str_detect(Classification, fixed("GYN", ignore_case = TRUE))) |>
   select(Code, Specialization)
 #> # A tibble: 11 × 2
@@ -140,24 +142,23 @@ tyler::taxonomy |>
 
 ## Learn more
 
-Full documentation, function reference, and worked vignettes live at
-**<https://mufflyt.github.io/tyler/>**:
+Full documentation, function reference, and worked vignettes:
+**<https://mufflyt.github.io/mysterycall/>**
 
-- [Create Isochrones](https://mufflyt.github.io/tyler/articles/create_isochrones.html)
-- [Get Census Data](https://mufflyt.github.io/tyler/articles/get_census_data.html)
-- [Geocoding](https://mufflyt.github.io/tyler/articles/geocode.html)
-- [Search & Process NPI](https://mufflyt.github.io/tyler/articles/search_and_process_npi.html)
-- [Validate & Remove Invalid NPI](https://mufflyt.github.io/tyler/articles/validate_and_remove_invalid_npi.html)
-- [Aggregating Provider Data](https://mufflyt.github.io/tyler/articles/aggregating_provider_data.html)
+- [Create Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.html)
+- [Get Census Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.html)
+- [Geocoding](https://mufflyt.github.io/mysterycall/articles/geocode.html)
+- [Search & Process NPI](https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.html)
+- [Aggregating Provider Data](https://mufflyt.github.io/mysterycall/articles/aggregating_provider_data.html)
 
-## Citing tyler
+## Citing mysterycall
 
 ```r
-citation("tyler")
+citation("mysterycall")
 ```
 
-> Muffly, T. (2026). *tyler: Common Functions for Mystery Caller or Audit
-> Studies Evaluating Patient Access to Care* (R package version 1.2.2).
+> Muffly, T. (2026). *mysterycall: Mystery Caller Study Tools for Healthcare
+> Access Research* (R package version 1.3.0).
 > <https://github.com/mufflyt/mysterycall>
 
 ## Code of conduct
