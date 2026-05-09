@@ -5,7 +5,7 @@
 #'
 #' @param input_file A path to the input file containing points for which isochrones are to be retrieved.
 #' @param breaks A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).
-#' @param api_key HERE API key for authenticating isochrone requests. Defaults to the `HERE_API_KEY` environment variable.
+#' @param api_key API key for the drive-time routing service. Defaults to the `HERE_API_KEY` environment variable.
 #' @param output_dir Directory where intermediate `.rds` results are written.
 #'   Defaults to a session-specific folder beneath [tempdir()].
 #' @param save_interval Number of seconds between automatic checkpoint saves.
@@ -37,7 +37,7 @@ mysterycall_isochrones_for_df <- function(
   if (!requireNamespace("easyr", quietly = TRUE)) {
     stop("Package 'easyr' is required for mysterycall_isochrones_for_df(). Install with: install.packages('easyr')", call. = FALSE)
   }
-  if (is.na(api_key) || !nzchar(api_key)) stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
+  if (is.na(api_key) || !nzchar(api_key)) stop("routing API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
 
   hereR::set_key(api_key)
   if (is.data.frame(input_file)) {

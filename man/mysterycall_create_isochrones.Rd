@@ -19,18 +19,18 @@ mysterycall_create_isochrones(
 
 \item{posix_time}{A POSIXct object representing the date and time of calculation. Default is "2023-10-20 08:00:00".}
 
-\item{api_key}{HERE API key. Defaults to the \code{HERE_API_KEY} environment variable.}
+\item{api_key}{routing API key. Defaults to the \code{HERE_API_KEY} environment variable.}
 }
 \value{
 A named list of sf isolines keyed by range in seconds, or a list
 with an \code{error} element if the calculation fails.
 }
 \description{
-This function calculates isolines for a given location using the hereR package.
+This function calculates isolines for a given location using a drive-time routing package.
 }
 \examples{
 \dontrun{
-# Set your HERE API key in your Renviron file using the following steps:
+# Set your routing API key in your Renviron file using the following steps:
 # 1. Add key to .Renviron
 # 2. Reload .Renviron
 

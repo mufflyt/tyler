@@ -2,17 +2,17 @@
 % Please edit documentation in R/preflight_checks.R
 \name{mysterycall_validate_here_api}
 \alias{mysterycall_validate_here_api}
-\title{Validate HERE API key}
+\title{Validate routing API key}
 \usage{
 mysterycall_validate_here_api(api_key)
 }
 \arguments{
-\item{api_key}{HERE API key}
+\item{api_key}{routing API key}
 }
 \value{
 List with valid (logical) and error (character) fields
 }
 \description{
-Validate HERE API key
+Validate routing API key
 }
 \keyword{internal}

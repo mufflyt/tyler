@@ -50,7 +50,7 @@ install.packages(c("hereR", "sf", "leaflet", "censusapi", "lme4"))
     <div class="mc-step-num">3</div>
     <h4>Drive-time isochrones</h4>
     <p>Generate drive-time polygons (30 / 60 / 120 / 180 min) using the
-       HERE API, with built-in memoization for large batches.</p>
+       drive-time routing service, with built-in memoization for large batches.</p>
   </div>
 
   <div class="mc-step">
@@ -139,7 +139,7 @@ install.packages(c("hereR", "sf", "leaflet", "censusapi", "lme4"))
 
 | Vignette | Topic |
 |---|---|
-| [Create Isochrones](articles/create_isochrones.html) | Drive-time polygons with the HERE API |
+| [Create Isochrones](articles/create_isochrones.html) | Drive-time polygons from geocoded addresses |
 | [Geocoding](articles/geocode.html) | Address → lat/lon with Google Maps |
 | [Get Census Data](articles/get_census_data.html) | ACS block-group demographics |
 | [Search & Process NPI](articles/search_and_process_npi.html) | Name-based provider lookup |

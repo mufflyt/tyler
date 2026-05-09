@@ -1,17 +1,17 @@
 #' Memoized function to try a location with isoline calculations
 #'
-#' This function calculates isolines for a given location using the hereR package.
+#' This function calculates isolines for a given location using a drive-time routing package.
 #'
 #' @param location An sf object representing the location for which isolines will be calculated.
 #' @param range A numeric vector of time ranges in seconds.
 #' @param posix_time A POSIXct object representing the date and time of calculation. Default is "2023-10-20 08:00:00".
-#' @param api_key HERE API key. Defaults to the `HERE_API_KEY` environment variable.
+#' @param api_key API key for the drive-time routing service. Defaults to the `HERE_API_KEY` environment variable.
 #'
 #' @return A named list of sf isolines keyed by range in seconds, or a list
 #'   with an `error` element if the calculation fails.
 #'
 #' @examplesIf interactive()
-#' # Set your HERE API key in your Renviron file using the following steps:
+#' # Set your routing API key in your Renviron file using the following steps:
 #' # 1. Add key to .Renviron
 #' # 2. Reload .Renviron
 #'
@@ -59,7 +59,7 @@ mysterycall_create_isochrones <- function(location,
 # Internal worker function (unmemoized)
 .isochrone_worker <- function(location, range, posix_time, api_key) {
   if (is.na(api_key) || !nzchar(api_key)) {
-    stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
+    stop("routing API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
   }
 
   hereR::set_freemium(ans = FALSE)
@@ -90,7 +90,7 @@ mysterycall_create_isochrones <- function(location,
         dplyr::mutate(unique_id = dplyr::row_number())
 
       if (!all(sf::st_is_valid(temp))) {
-        stop("HERE API returned geometries that could not be validated.", call. = FALSE)
+        stop("drive-time routing service returned geometries that could not be validated.", call. = FALSE)
       }
 
       temp <- sf::st_transform(temp, 4326)

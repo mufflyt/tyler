@@ -28,7 +28,7 @@ The package loads quickly. Geospatial and modelling packages are optional and
 loaded only when first needed:
 
 ```r
-install.packages(c("hereR", "sf", "lwgeom"))         # drive-time isochrones
+install.packages(c("hereR", "sf", "lwgeom"))  # drive-time isochrones
 install.packages("leaflet")                            # interactive maps
 install.packages("ggmap")                              # Google Maps geocoding
 install.packages(c("ggspatial", "rnaturalearth"))      # HRR hex maps
@@ -72,7 +72,7 @@ geocoded <- mysterycall_geocode(
 
 # ── 3. Drive-time isochrones ──────────────────────────────────────────────────
 
-# Requires a HERE API key in HERE_API_KEY env var
+# Requires a routing API key in HERE_API_KEY env var
 isochrones <- mysterycall_isochrones_for_df(
   geocoded,
   breaks = c(1800, 3600, 7200, 10800)   # 30 / 60 / 120 / 180 min
@@ -96,7 +96,7 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 | | `mysterycall_get_clinician_data()` | Pull demographics from CMS Physician Compare |
 | | `mysterycall_genderize()` | Estimate physician gender via the Genderize.io API |
 | **Geocode** | `mysterycall_geocode()` | Convert addresses to lat/lon via Google Maps |
-| **Isochrones** | `mysterycall_isochrones_for_df()` | Drive-time polygons for every row using the HERE API |
+| **Isochrones** | `mysterycall_isochrones_for_df()` | Drive-time polygons for every row using a drive-time routing service |
 | | `mysterycall_create_isochrones()` | Single-location drive-time polygon |
 | | `mysterycall_clear_isochrone_cache()` | Release the in-session memoization cache |
 | **Census** | `mysterycall_get_census_data()` | ACS block-group demographics by state FIPS |

@@ -16,7 +16,7 @@ NULL
 #' @param input_data Path to input data file or data frame
 #' @param output_dir Output directory path
 #' @param google_maps_api_key Google Maps API key (optional if not geocoding)
-#' @param here_api_key HERE API key (optional if not creating isochrones)
+#' @param here_api_key Routing API key (optional if not creating isochrones)
 #' @param check_apis Whether to validate API keys with test calls (default: TRUE)
 #' @param estimate_resources Whether to estimate runtime and memory (default: TRUE)
 #' @param interactive Whether to prompt user for confirmation (default: TRUE)
@@ -174,17 +174,17 @@ mysterycall_preflight_check <- function(input_data,
     if (check_apis) {
       here_check <- mysterycall_validate_here_api(here_api_key)
       if (here_check$valid) {
-        message("  \u2713 HERE API key valid")
+        message("  \u2713 routing API key valid")
         here_ok <- TRUE
       } else {
-        errors <- c(errors, sprintf("HERE API key validation failed: %s. Confirm the key is active and has isochrone permissions.", here_check$error))
+        errors <- c(errors, sprintf("routing API key validation failed: %s. Confirm the key is active and has isochrone permissions.", here_check$error))
       }
     } else {
-      message("  \u2713 HERE API key provided (not tested)")
+      message("  \u2713 routing API key provided (not tested)")
       here_ok <- TRUE
     }
   } else {
-    warnings <- c(warnings, "No HERE API key provided; isochrone generation will fail unless `here_api_key` is supplied.")
+    warnings <- c(warnings, "No routing API key provided; isochrone generation will fail unless `here_api_key` is supplied.")
   }
 
   checks$api_keys <- google_ok && here_ok
@@ -382,9 +382,9 @@ mysterycall_validate_google_api <- function(api_key) {
 }
 
 
-#' Validate HERE API key
+#' Validate routing API key
 #'
-#' @param api_key HERE API key
+#' @param api_key routing API key
 #' @return List with valid (logical) and error (character) fields
 #' @keywords internal
 mysterycall_validate_here_api <- function(api_key) {

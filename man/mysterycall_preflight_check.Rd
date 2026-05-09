@@ -22,7 +22,7 @@ mysterycall_preflight_check(
 
 \item{google_maps_api_key}{Google Maps API key (optional if not geocoding)}
 
-\item{here_api_key}{HERE API key (optional if not creating isochrones)}
+\item{here_api_key}{Routing API key (optional if not creating isochrones)}
 
 \item{check_apis}{Whether to validate API keys with test calls (default: TRUE)}
 
