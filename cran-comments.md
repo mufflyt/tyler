@@ -1,10 +1,10 @@
 ## Test environments
 
 * macOS Ventura 13.7.8, R 4.4.2 (local)
-* win-builder R 4.6.0 (2026-04-24 ucrt) — 2 WARNINGs, 3 NOTEs (same as local)
-* win-builder R-devel — results pending
-* R-hub Linux / macOS (results pending — trigger `.github/workflows/rhub.yaml`
-  via `Actions → R-hub → Run workflow` on GitHub after pushing)
+* win-builder R-devel — results pending (uploaded 2026-05-08)
+* win-builder R-release — results pending (uploaded 2026-05-08)
+* R-hub Linux / macOS (trigger `.github/workflows/rhub.yaml` via
+  `Actions → R-hub → Run workflow` on GitHub after pushing)
 
 ## R CMD check results
 
@@ -32,6 +32,13 @@ environment issue unrelated to the package.
 Pandoc is not installed in the check environment. Both files are standard markdown
 and render correctly where Pandoc is available.
 
+## Package rename
+
+This submission renames the package from `tyler` to `mysterycall`. The previous
+`tyler` package was never accepted to CRAN (was in preparation). All exported
+functions now carry the `mysterycall_` prefix. The former `tyler_` and unprefixed
+names are retained as deprecated backward-compatibility shims via `.Deprecated()`.
+
 ## Imports count
 
 Imports has been reduced from 29 to 17 packages. All optional packages (mapping,
@@ -43,7 +50,7 @@ are guarded with `requireNamespace()` throughout.
 * https://api.abog.org/ — 200 OK
 * https://data.dartmouthatlas.org/downloads/geography/HRR_Bdry__AK_HI_unmodified.zip — 200 OK
 * https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf — 200 OK
-* https://github.com/mufflyt/tyler — 200 OK
+* https://github.com/mufflyt/mysterycall — 200 OK
 
 ## provider package
 
