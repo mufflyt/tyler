@@ -413,7 +413,7 @@ mysterycall_clean_phase1 <- function(phase1_data,
     phase1_data <- dplyr::mutate(
       phase1_data,
       academic = ifelse(
-        stringr::str_detect(.data$practice_name, stringr::str_c(c("University", "Medical College"), collapse = "|")),
+        stringr::str_detect(.data$practice_name, stringr::regex(stringr::str_c(c("University", "Medical College"), collapse = "|"), ignore_case = TRUE)),
         "University",
         "Private Practice"
       )

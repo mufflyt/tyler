@@ -46,8 +46,7 @@ mysterycall_get_clinician_data <- function(input_data) {
     provider_ns <- tryCatch(asNamespace("provider"), error = function(e) NULL)
     if (is.null(provider_ns)) {
       message(sprintf(
-        "NPI %s: package 'provider' is not installed. ",
-        "Install from GitHub with remotes::install_github('andrewallenbruce/provider').",
+        "NPI %s: package 'provider' is not installed. Install from GitHub with remotes::install_github('andrewallenbruce/provider').",
         npi
       ))
       return(NULL)

@@ -119,6 +119,16 @@ mysterycall_split_and_save <- function(data_or_path, output_directory, lab_assis
     ), call. = FALSE)
   }
 
+  # Warn about rows with NA insurance — they will be assigned to callers but
+  # their workbook position is undefined (sorted last, grouped separately).
+  n_na_insurance <- sum(is.na(data$insurance))
+  if (n_na_insurance > 0) {
+    warning(sprintf(
+      "%d row(s) have NA insurance and will be assigned to callers with undefined ordering. Set insurance to a value in insurance_order to control placement.",
+      n_na_insurance
+    ), call. = FALSE)
+  }
+
   # Create a ranking based on the insurance order for sorting
   insurance_rank <- setNames(seq_along(insurance_order), insurance_order)
   data <- data %>%

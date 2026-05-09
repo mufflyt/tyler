@@ -205,8 +205,7 @@ mysterycall_clean_phase2 <- function(
   rename_log <- attr(data, "rename_log")
   if (!is.null(rename_log)) {
     message("Summary of applied renames:")
-    summary_lines <- utils::capture.output(print(rename_log))
-    message(paste(summary_lines, collapse = "\n"))
+    for (line in utils::capture.output(print(rename_log))) message(line)
   }
   message("Standardised Phase 2 column names based on required patterns.")
 

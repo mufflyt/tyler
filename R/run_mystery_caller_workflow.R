@@ -341,8 +341,8 @@ mysterycall_run_workflow <- function(
     retention_from_previous = c(
       NA_real_,
       if (nrow(combined_roster) == 0) NA_real_ else nrow(validated_roster) / nrow(combined_roster),
-      if (nrow(validated_roster) == 0) NA_real_ else nrow(cleaned_phase1) / nrow(validated_roster),
-      if (nrow(cleaned_phase1) == 0) NA_real_ else nrow(cleaned_phase2) / nrow(cleaned_phase1),
+      if (nrow(phase1_data) == 0) NA_real_ else nrow(cleaned_phase1) / nrow(phase1_data),
+      NA_real_,
       if (!is.data.frame(coverage_summary) || nrow(cleaned_phase2) == 0) NA_real_ else nrow(coverage_summary) / nrow(cleaned_phase2),
       if (!is.data.frame(quality_check_table) || nrow(cleaned_phase2) == 0) NA_real_ else nrow(quality_check_table) / nrow(cleaned_phase2)
     ),
