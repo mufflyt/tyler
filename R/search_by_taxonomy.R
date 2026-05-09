@@ -109,10 +109,16 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
     states <- unique(states[!is.na(states) & nzchar(states)])
     invalid_states <- states[nchar(states) != 2]
     if (length(invalid_states)) {
-      stop(sprintf(
-        "`states` must contain two-letter abbreviations. Invalid entries: %s",
+      warning(sprintf(
+        "Skipping %d invalid state abbreviation(s) (must be 2 letters): %s",
+        length(invalid_states),
         paste(invalid_states, collapse = ", ")
       ), call. = FALSE)
+      states <- states[nchar(states) == 2]
+    }
+    if (!length(states)) {
+      message("No valid state abbreviations remain after filtering. Returning empty data frame.")
+      return(tibble::tibble())
     }
     message(sprintf(
       "Searching %d taxonomy term(s) across %d state(s) to bypass the 1200-record cap...",
@@ -235,7 +241,7 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
           )
           data_taxonomy <- dplyr::filter(
             data_taxonomy,
-            is.na(.data$credential_lower) | .data$credential_lower %in% stringr::str_to_lower(c("MD", "DO"))
+            is.na(.data$credential_lower) | stringr::str_detect(.data$credential_lower, "\\bmd\\b|\\bdo\\b")
           )
           data_taxonomy <- dplyr::filter(data_taxonomy, .data$addresses_country_name == "United States")
           data_taxonomy <- dplyr::filter(

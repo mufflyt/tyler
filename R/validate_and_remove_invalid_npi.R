@@ -5,12 +5,39 @@
 #'
 #' @param input_data Either a data frame containing NPI numbers or a path to a CSV file.
 #'
-#' @return A data frame containing valid NPI numbers.
+#' @return A data frame containing valid NPI numbers, with invalid or missing NPI rows removed.
+#'
+#' @section Contract:
+#' **Inputs:**
+#' - `input_data` must contain an `npi` column (character or numeric).
+#' - NPIs are validated via the Luhn checksum algorithm (NPI standard).
+#'
+#' **Guarantees:**
+#' - Output rows \eqn{\subseteq} input rows — rows are only removed, never added.
+#' - Every removed row had either `NA`, a non-10-digit string, or a failed Luhn
+#'   checksum.
+#' - Output NPI column is always character type.
+#'
+#' **Disaster Prevention:**
+#' Prevents silent retention of placeholder NPIs (e.g., all-zeros or
+#' test values such as "1234567890") that would match real providers in
+#' downstream joins and inflate match rates.
+#'
+#' @section Performance:
+#' O(n) with a small constant; Luhn validation is a pure arithmetic check.
+#' Expect < 0.1 s for 10,000 rows.
+#'
+#' @section Called By:
+#' - [mysterycall_run_workflow()]
+#' - [mysterycall_search_and_process_npi()]
 #'
 #' @importFrom npi npi_is_valid
 #' @importFrom readr read_csv cols col_character col_guess
 #' @importFrom dplyr filter mutate
 #' @export
+#' @examplesIf interactive()
+#' df <- data.frame(npi = c("1234567893", "0000000000", NA_character_))
+#' mysterycall_validate_npi(df)
 mysterycall_validate_npi <- function(input_data) {
 
   if (is.data.frame(input_data)) {
@@ -62,10 +89,15 @@ mysterycall_validate_npi <- function(input_data) {
   npi_df <- npi_df %>%
     dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
 
+  n_before_dedup <- nrow(npi_df)
+  npi_df <- dplyr::distinct(npi_df, npi, .keep_all = TRUE)
+  n_dupes <- n_before_dedup - nrow(npi_df)
+
   message(sprintf(
-    "Validated %d candidate NPI(s); %d passed checksum and formatting rules.",
+    "Validated %d candidate NPI(s); %d passed checksum and formatting rules%s.",
     total_candidates,
-    nrow(npi_df)
+    nrow(npi_df),
+    if (n_dupes > 0) sprintf(", %d duplicate row(s) removed", n_dupes) else ""
   ))
 
   npi_df

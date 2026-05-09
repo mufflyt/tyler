@@ -284,29 +284,30 @@ mysterycall_clean_phase1 <- function(phase1_data,
     audit_trail$input_npi_count <- sum(!is.na(phase1_data$npi))
   }
 
-  generate_random_ids <- function(n) {
-    if (!n) {
-      return(character(0))
-    }
-    if (!is.null(id_seed)) {
-      # seed was set above; sample.int uses seeded RNG → reproducible
-      parts <- sample.int(.Machine$integer.max, n, replace = FALSE)
-      sprintf("id%010d%04d", parts %% 1e10, seq_len(n))
-    } else {
-      base_time <- format(Sys.time(), "%Y%m%d%H%M%S")
-      process_id <- Sys.getpid()
-      vapply(seq_len(n), function(i) {
-        paste0(base_time, sprintf("%05d", process_id %% 100000), sprintf("%03d", i))
-      }, character(1))
-    }
+  # Generate a stable, content-addressable ID for rows without a valid NPI.
+  # Using a hash of row-identifying fields (rather than positional sampling) means
+  # the same row always gets the same ID regardless of how many rows are in the
+  # dataset, so re-running on any subset reproduces the original IDs exactly.
+  generate_random_id_for_row <- function(names_val, practice_val, phone_val, state_val) {
+    seed_str <- if (!is.null(id_seed)) as.character(id_seed) else "noseed"
+    content <- paste(
+      as.character(names_val), as.character(practice_val),
+      as.character(phone_val),  as.character(state_val),
+      seed_str, sep = "|"
+    )
+    paste0("id_", substr(digest::digest(content, algo = "sha256", serialize = FALSE), 1, 16))
   }
 
   if ("npi" %in% names(phase1_data)) {
     phase1_data <- dplyr::mutate(
       phase1_data,
-      random_id = ifelse(
+      random_id = dplyr::if_else(
         is.na(.data$npi),
-        generate_random_ids(dplyr::n()),
+        mapply(
+          generate_random_id_for_row,
+          .data$names, .data$practice_name, .data$phone_number, .data$state_name,
+          SIMPLIFY = TRUE, USE.NAMES = FALSE
+        ),
         as.character(.data$npi)
       ),
       processing_flag_generated_id = is.na(.data$npi)
@@ -319,7 +320,11 @@ mysterycall_clean_phase1 <- function(phase1_data,
   } else {
     phase1_data <- dplyr::mutate(
       phase1_data,
-      random_id = generate_random_ids(dplyr::n()),
+      random_id = mapply(
+        generate_random_id_for_row,
+        .data$names, .data$practice_name, .data$phone_number, .data$state_name,
+        SIMPLIFY = TRUE, USE.NAMES = FALSE
+      ),
       processing_flag_generated_id = TRUE
     )
     announce(sprintf("No NPI column found; generated %d random IDs.", nrow(phase1_data)))
@@ -422,7 +427,11 @@ mysterycall_clean_phase1 <- function(phase1_data,
       } else {
         as.character(.data$random_id)
       },
-      for_redcap = paste(.data$id, .data$dr_name, .data$insurance, .data$phone_number, .data$state_name, .data$random_id, .data$academic, .data$id_number, sep = ", ")
+      for_redcap = dplyr::if_else(
+        is.na(.data$dr_name),
+        NA_character_,
+        paste(.data$id, .data$dr_name, .data$insurance, .data$phone_number, .data$state_name, .data$random_id, .data$academic, .data$id_number, sep = ", ")
+      )
     )
 
     phase1_data <- dplyr::select(phase1_data, for_redcap, dplyr::everything())
