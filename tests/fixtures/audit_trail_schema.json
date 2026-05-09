@@ -28,7 +28,8 @@
   "conditional": {
     "generated_ids_count":  "integer — present only when NPI column exists and rows lacked an NPI",
     "input_npi_count":      "integer — present only when NPI column exists",
-    "rows_after_duplication": "integer — present only when duplicate_rows = TRUE"
+    "rows_after_duplication": "integer — present only when duplicate_rows = TRUE",
+    "parent_cohort_hash":   "string — SHA-256 hex digest of the upstream cohort that produced the input; present only when the caller supplied a valid parent_cohort_hash argument; NULL otherwise; enables DAG lineage tracing across pipeline steps"
   },
   "migration_policy": {
     "_comment": "Rules governing when schema_version must be bumped. Follow semantic versioning: MAJOR.MINOR.PATCH. Downstream tooling that reads audit JSON must pin to a MAJOR version.",

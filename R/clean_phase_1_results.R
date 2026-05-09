@@ -33,6 +33,12 @@
 #'   runs can be reproduced without permanently mutating the global RNG state.
 #' @param output_format File format to use when writing the cleaned dataset.
 #'   Supported options are "csv" (default) and "parquet".
+#' @param parent_cohort_hash Optional character scalar. The `cohort_hash` from
+#'   an upstream audit trail (e.g. from `mysterycall_search_taxonomy()` or a
+#'   prior cleaning step). When supplied, it is recorded in the audit JSON as
+#'   `parent_cohort_hash` to enable DAG lineage tracing. Must be a 64-character
+#'   lowercase hex string (SHA-256) or `NULL` (default). Ignored silently if
+#'   not a valid hex digest.
 #'
 #' @return Invisibly returns the cleaned data frame with the following attributes:
 #' \itemize{
@@ -57,6 +63,67 @@
 #' phase1_data <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
 #' mysterycall_clean_phase1(phase1_data)
 #'
+#' @section Contract:
+#' **Inputs:**
+#' - `phase1_data` must contain columns: `names`, `practice_name`, `phone_number`,
+#'   `state_name`, `npi`, `for_redcap`.
+#' - `output_directory` must be writable; function creates it if absent.
+#'
+#' **Guarantees:**
+#' - Output rows \eqn{\geq} input rows (duplicates may be flagged but are never
+#'   silently dropped unless `remove_duplicates = TRUE`).
+#' - Every output row carries `processing_flag_*` columns documenting the reason
+#'   for any modification.
+#' - A JSON audit trail is written alongside the CSV for provenance.
+#'
+#' **Fails if:**
+#' - Required columns are absent from `phase1_data`.
+#' - `output_directory` is not writable and cannot be created.
+#'
+#' @section Provenance Schema:
+#' The JSON audit trail written to `<output_directory>/audit_trail_<timestamp>.json`
+#' always contains these required fields (see also `tests/fixtures/audit_trail_schema.json`):
+#' \preformatted{
+#' {
+#'   "function_name":        "mysterycall_clean_phase1",
+#'   "input_rows":           <integer>,
+#'   "input_cols":           <integer>,
+#'   "input_colnames":       ["names", "practice_name", ...],
+#'   "output_rows":          <integer>,
+#'   "output_cols":          <integer>,
+#'   "empty_names_count":    <integer>,
+#'   "no_last_name_count":   <integer>,
+#'   "rows_retained_pct":    <number>,
+#'   "rows_duplicated":      <boolean>,
+#'   "original_npi_preserved": <boolean>,
+#'   "quality_metrics": {
+#'     "completeness_npi":   <number>,
+#'     "completeness_phone": <number>,
+#'     "completeness_names": <number>,
+#'     "has_processing_flags": <boolean>
+#'   },
+#'   "start_time":           "<ISO-8601>",
+#'   "end_time":             "<ISO-8601>",
+#'   "duration_seconds":     <number>,
+#'   "r_version":            "<string>",
+#'   "platform":             "<string>",
+#'   "package_version":      "<string>",
+#'   "parameters":           { ... }
+#' }
+#' }
+#' The `tests/fixtures/audit_trail_schema.json` file documents which fields are
+#' required, volatile (excluded from snapshot comparisons), and conditional.
+#' This schema is stable across patch versions and constitutes a public API
+#' for downstream reproducibility tooling.
+#'
+#' @section Performance:
+#' O(n) in number of rows. String normalisation via `janitor::clean_names()` and
+#' `stringr` dominates; expect < 1 s for 1,000 rows on modern hardware.
+#'
+#' @section Called By:
+#' - [mysterycall_run_workflow()]
+#' - [mysterycall_run_workflow_logged()]
+#'
 #' @importFrom dplyr arrange mutate select filter bind_rows
 #' @importFrom janitor clean_names
 #' @importFrom readr type_convert write_csv
@@ -78,7 +145,8 @@ mysterycall_clean_phase1 <- function(phase1_data,
                                   notify = TRUE,
                                   duplicate_rows = TRUE,
                                   id_seed = NULL,
-                                  output_format = c("csv", "parquet")) {
+                                  output_format = c("csv", "parquet"),
+                                  parent_cohort_hash = NULL) {
   output_format <- match.arg(output_format)
   if (!requireNamespace("dplyr", quietly = TRUE) ||
       !requireNamespace("janitor", quietly = TRUE) ||
@@ -99,9 +167,16 @@ mysterycall_clean_phase1 <- function(phase1_data,
   # === START: AUDIT TRAIL AND PROVENANCE ===
   # Capture processing start time and metadata
   processing_start_time <- Sys.time()
+  schema_version <- "1.1.0"
+  cohort_hash <- digest::digest(object = phase1_data, algo = "sha256", serialize = TRUE)
+  valid_parent_hash <- is.character(parent_cohort_hash) &&
+    length(parent_cohort_hash) == 1L &&
+    grepl("^[a-f0-9]{64}$", parent_cohort_hash)
   audit_trail <- list(
-    function_name = "mysterycall_clean_phase1",
-    start_time = processing_start_time,
+    schema_version = schema_version,
+    cohort_hash    = cohort_hash,
+    function_name  = "mysterycall_clean_phase1",
+    start_time     = processing_start_time,
     r_version = R.version.string,
     platform = .Platform$OS.type,
     package_version = tryCatch(as.character(packageVersion("mysterycall")), error = function(e) "unknown"),
@@ -363,6 +438,7 @@ mysterycall_clean_phase1 <- function(phase1_data,
   } else {
     0
   }
+  if (valid_parent_hash) audit_trail$parent_cohort_hash <- parent_cohort_hash
 
   # Add provenance metadata as attributes
   attr(phase1_data, "audit_trail") <- audit_trail
