@@ -47,7 +47,54 @@
 #'   frame documenting row counts, retention rates, and output paths for audit
 #'   transparency.
 #'
+#' @section Contract:
+#' **Inputs:**
+#' - `phase1_data` must contain columns: `names`, `practice_name`, `phone_number`,
+#'   `state_name`, `npi`, `for_redcap`.
+#' - `lab_assistant_names` must have at least two entries for workload splitting.
+#' - `output_directory` must be writable; created automatically if absent.
+#'
+#' **Guarantees:**
+#' - Output list always contains `workflow_summary` even when upstream steps fail.
+#' - Row counts at each stage are recorded in `workflow_summary` for audit
+#'   transparency.
+#' - Files written to `output_directory` are overwritten deterministically on
+#'   re-run with the same inputs.
+#'
+#' **Fails if:**
+#' - `phase1_data` is missing required columns (error from `mysterycall_clean_phase1()`).
+#' - `lab_assistant_names` has fewer than two entries.
+#' - `output_directory` is not writable and cannot be created.
+#'
+#' @section Performance:
+#' Complexity is approximately O(n) in number of Phase 1 rows for local steps.
+#' NPI registry calls via `mysterycall_search_taxonomy()` add O(t * p) where
+#' `t` = number of taxonomy terms and `p` = max records per term (default 1,200).
+#' Budget ~5–30 s per taxonomy term depending on network latency.
+#'
+#' @section Calls:
+#' - [mysterycall_search_taxonomy()] (when `taxonomy_terms` is non-NULL)
+#' - [mysterycall_search_and_process_npi()] (when `name_data` is non-NULL)
+#' - [mysterycall_clean_phase1()]
+#' - [mysterycall_validate_npi()]
+#' - [mysterycall_split_and_save()]
+#' - [mysterycall_clean_phase2()]
+#' - [mysterycall_not_contacted_states()]
+#' - [mysterycall_save_quality_table()]
+#'
 #' @family workflow
+#' @examplesIf interactive()
+#' results <- mysterycall_run_workflow(
+#'   phase1_data = data.frame(
+#'     names = "Jane Doe", practice_name = "Clinic A",
+#'     phone_number = "555-0100", state_name = "Colorado",
+#'     npi = "1234567890", for_redcap = "Yes"
+#'   ),
+#'   lab_assistant_names = c("Alice", "Bob"),
+#'   output_directory = tempdir(),
+#'   phase2_data = data.frame(),
+#'   quality_check_path = file.path(tempdir(), "qc.csv")
+#' )
 #' @export
 #' @importFrom dplyr bind_rows distinct
 #' @importFrom tibble tibble
@@ -225,8 +272,20 @@ mysterycall_run_workflow <- function(
     notify = TRUE
   )
   announce("Splitting Phase 1 workbooks for callers")
+  redcap_ready <- cleaned_phase1
+  if ("for_redcap" %in% names(cleaned_phase1)) {
+    n_before_filter <- nrow(redcap_ready)
+    redcap_ready <- dplyr::filter(redcap_ready, !is.na(.data$for_redcap))
+    n_dropped <- n_before_filter - nrow(redcap_ready)
+    if (n_dropped > 0) {
+      announce(sprintf(
+        "Dropped %d row(s) with NA for_redcap (empty-name rows) before workbook split.",
+        n_dropped
+      ))
+    }
+  }
   mysterycall_split_and_save(
-    cleaned_phase1,
+    redcap_ready,
     output_directory = output_directory,
     lab_assistant_names = lab_assistant_names,
     insurance_order = split_insurance_order
@@ -293,7 +352,7 @@ mysterycall_run_workflow <- function(
 
   if (isTRUE(verbose)) {
     message("Workflow summary (rows and retention):")
-    message(capture.output(workflow_summary))
+    for (line in capture.output(print(workflow_summary))) message(line)
     message(sprintf("[%s] Mystery caller workflow complete", format(Sys.time(), "%H:%M:%S")))
   }
 

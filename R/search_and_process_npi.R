@@ -36,6 +36,7 @@
 #' @return A data frame containing the processed NPI search results.
 #'
 #' @importFrom dplyr filter mutate select rename distinct arrange bind_rows tibble
+#' @importFrom stringr str_detect
 #' @importFrom npi npi_search npi_flatten
 #' @importFrom readr write_csv read_csv
 #' @family npi
@@ -208,12 +209,10 @@ mysterycall_search_and_process_npi <- function(data,
     detail = sprintf("Processing %d name(s)", total_names)
   )
 
-  vc <- c(
-    "Allergy & Immunology", "Anesthesiology", "Dermatology", "Emergency Medicine",
-    "Family Medicine", "Internal Medicine", "Obstetrics & Gynecology", "Ophthalmology",
-    "Orthopaedic Surgery", "Pediatrics", "Psychiatry & Neurology", "Radiology", "Surgery", "Urology"
-  )
-  bc <- c("Pathology", "Pediatrics", "Physical Medicine & Rehabilitation", "Plastic Surgery", "Preventive Medicine")
+  # Derive accepted taxonomy descriptions from the package's canonical taxonomy
+  # dataset instead of a hardcoded list. When taxonomy is updated, this filter
+  # automatically picks up the new specialties without any code change.
+  allowed_taxonomies <- unique(mysterycall::taxonomy$Classification)
   credential_filter <- NULL
   if (!is.null(filter_credentials)) {
     credential_filter <- tolower(gsub("[^A-Za-z0-9]", "", filter_credentials))
@@ -309,7 +308,7 @@ mysterycall_search_and_process_npi <- function(data,
           return(NULL)
         }
 
-        filtered <- dplyr::filter(flattened, .data$taxonomies_desc %in% vc | .data$taxonomies_desc %in% bc)
+        filtered <- dplyr::filter(flattened, .data$taxonomies_desc %in% allowed_taxonomies)
         if (!nrow(filtered)) {
           return(NULL)
         }
@@ -334,7 +333,11 @@ mysterycall_search_and_process_npi <- function(data,
         )
 
         if (!is.null(credential_filter)) {
-          filtered <- dplyr::filter(filtered, is.na(.data$credential_clean) | .data$credential_clean %in% credential_filter)
+          pattern <- paste0("\\b(", paste(credential_filter, collapse = "|"), ")\\b")
+          filtered <- dplyr::filter(
+            filtered,
+            is.na(.data$credential_clean) | stringr::str_detect(.data$credential_clean, pattern)
+          )
         }
 
         filtered <- dplyr::rename(
@@ -346,7 +349,7 @@ mysterycall_search_and_process_npi <- function(data,
 
         filtered <- dplyr::mutate(filtered, search_term = paste(.data$first_name, .data$last_name))
         filtered <- dplyr::select(filtered, -dplyr::all_of(c("credential_clean", "basic_credential")))
-        filtered <- dplyr::distinct(filtered, .data$npi, .data$taxonomies_desc, .keep_all = TRUE)
+        filtered <- dplyr::distinct(filtered, .data$npi, .keep_all = TRUE)
         filtered <- dplyr::arrange(filtered, .data$last_name, .data$first_name)
         filtered
       }, error = function(e) {

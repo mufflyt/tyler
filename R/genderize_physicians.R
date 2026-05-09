@@ -4,8 +4,8 @@
 #' and joins the gender information back to the original data. It then saves the
 #' result to a new CSV file with a timestamp.
 #'
-#' @param input_csv The path to the input roster file. CSV and Parquet sources are
-#'   supported.
+#' @param data_or_path A data frame containing physician data, or a path to a
+#'   roster file. CSV and Parquet formats are supported when a path is supplied.
 #' @param output_dir The directory where the output file will be saved. Default
 #'   is a session-specific folder inside [tempdir()].
 #' @param output_format Output format for the saved roster. Either "csv" or
@@ -23,21 +23,30 @@
 #'
 #' @examplesIf interactive()
 #' result <- mysterycall_genderize("sample.csv")
+#' result <- mysterycall_genderize(my_dataframe)  # also accepts a data frame directly
 #'
 #' @family gender
 #' @export
-mysterycall_genderize <- function(input_csv, output_dir = NULL, output_format = c("csv", "parquet")) {
+mysterycall_genderize <- function(data_or_path, output_dir = NULL, output_format = c("csv", "parquet")) {
   output_format <- match.arg(output_format)
-  if (!file.exists(input_csv)) {
-    stop(sprintf("Input file not found: %s", input_csv), call. = FALSE)
+
+  if (is.data.frame(data_or_path)) {
+    gender_Physicians <- data_or_path
+    input_stem <- "roster"
+    message(sprintf("Loaded %d row(s) for genderization from data frame.", nrow(gender_Physicians)))
+  } else if (is.character(data_or_path) && length(data_or_path) == 1L && nzchar(data_or_path)) {
+    if (!file.exists(data_or_path)) {
+      stop(sprintf("Input file not found: %s", data_or_path), call. = FALSE)
+    }
+    input_format <- mysterycall_normalize_file_format(path = data_or_path)
+    gender_Physicians <- mysterycall_read_table(data_or_path, format = input_format)
+    input_stem <- tools::file_path_sans_ext(basename(data_or_path))
+    message(sprintf("Loaded %d row(s) for genderization from %s.", nrow(gender_Physicians), data_or_path))
+  } else {
+    stop("`data_or_path` must be a data frame or a single file path (character scalar).", call. = FALSE)
   }
 
-  input_format <- mysterycall_normalize_file_format(path = input_csv)
-
-  # Read the data
-  gender_Physicians <- mysterycall_read_table(input_csv, format = input_format)
   validate_dataframe(gender_Physicians, name = "genderize input", allow_zero_rows = FALSE)
-  message(sprintf("Loaded %d row(s) for genderization from %s.", nrow(gender_Physicians), input_csv))
 
   if (!"first_name" %in% names(gender_Physicians)) {
     stop("Input data must include a 'first_name' column.", call. = FALSE)
@@ -82,7 +91,6 @@ mysterycall_genderize <- function(input_csv, output_dir = NULL, output_format = 
   }
 
   # Create the output filename with timestamp
-  input_stem <- tools::file_path_sans_ext(basename(input_csv))
   output_extension <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
   output_path <- file.path(output_dir, paste0("genderized_", timestamp, "_", input_stem, output_extension))
 
@@ -169,11 +177,19 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
       }
     }
 
-    if (is.null(response)) {
-      stop("Genderize.io request failed: network error after ", max_retries, " attempts.", call. = FALSE)
-    }
-    if (httr::http_error(response)) {
-      stop("Genderize.io request failed after ", max_retries, " attempts with status ", httr::status_code(response), call. = FALSE)
+    if (is.null(response) || httr::http_error(response)) {
+      status_str <- if (is.null(response)) "network error" else as.character(httr::status_code(response))
+      warning(sprintf(
+        "Genderize.io batch %d/%d failed after %d attempt(s) (status: %s); returning NA for %d name(s) in this batch.",
+        i, total_batches, max_retries, status_str, length(name_batch)
+      ), call. = FALSE)
+      results[[i]] <- tibble::tibble(
+        first_name = name_batch,
+        gender      = NA_character_,
+        probability = NA_real_,
+        count       = NA_integer_
+      )
+      next
     }
 
     parsed <- httr::content(response, as = "parsed", type = "application/json", encoding = "UTF-8")

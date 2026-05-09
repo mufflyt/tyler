@@ -114,7 +114,7 @@ mysterycall_geocode <- function(file_path, google_maps_api_key,
             mysterycall_export_with_backup(failure_tbl, failed_output_path, quiet = quiet)
           }
           if (!is.null(tracker) && inherits(tracker, "mysterycall_progress_tracker")) {
-            mysterycall_progress_fail(tracker, tracker_step, reason = failure_reason)
+            mysterycall_tracker_fail(tracker, tracker_step, reason = failure_reason)
           }
           stop(failure_reason, call. = FALSE)
         }
@@ -151,6 +151,13 @@ mysterycall_geocode <- function(file_path, google_maps_api_key,
     }
   }
 
+  if (nrow(coords) != nrow(unique_add)) {
+    warning(sprintf(
+      "Geocoding returned %d row(s) but %d were expected; setting all coordinates to NA to prevent misassignment.",
+      nrow(coords), nrow(unique_add)
+    ), call. = FALSE)
+    coords <- tibble::tibble(lat = rep(NA_real_, nrow(unique_add)), lon = rep(NA_real_, nrow(unique_add)))
+  }
   unique_add <- dplyr::mutate(unique_add,
                               latitude = coords$lat,
                               longitude = coords$lon)
