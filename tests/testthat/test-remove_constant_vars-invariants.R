@@ -1,6 +1,6 @@
-# test-remove_constant_vars-invariants.R
+# test-tyler_remove_constants-invariants.R
 #
-# Tests remove_constant_vars() against invariants, gold-standard cases,
+# Tests tyler_remove_constants() against invariants, gold-standard cases,
 # boundary conditions, and metamorphic properties.
 #
 # Testing tenets satisfied:
@@ -16,15 +16,15 @@ library(testthat)
 library(tyler)
 
 # ---------------------------------------------------------------------------
-# Helper: suppress the messages from remove_constant_vars
+# Helper: suppress the messages from tyler_remove_constants
 # ---------------------------------------------------------------------------
-quiet_rcv <- function(df) suppressMessages(remove_constant_vars(df))
+quiet_rcv <- function(df) suppressMessages(tyler_remove_constants(df))
 
 # ---------------------------------------------------------------------------
 # 1. Gold standard: exact column preservation
 # ---------------------------------------------------------------------------
 
-test_that("remove_constant_vars removes exactly the constant column and keeps varying columns", {
+test_that("tyler_remove_constants removes exactly the constant column and keeps varying columns", {
   df <- data.frame(
     varying1  = c(1, 2, 3),
     constant  = c(5, 5, 5),
@@ -36,7 +36,7 @@ test_that("remove_constant_vars removes exactly the constant column and keeps va
   expect_equal(ncol(result), 2L)
 })
 
-test_that("remove_constant_vars preserves exact column names of varying columns", {
+test_that("tyler_remove_constants preserves exact column names of varying columns", {
   df <- data.frame(
     alpha   = 1:5,
     bravo   = rep("x", 5),
@@ -110,10 +110,10 @@ test_that("output nrow equals input nrow for various sizes", {
 })
 
 # ---------------------------------------------------------------------------
-# 5. Idempotency: remove_constant_vars(remove_constant_vars(df)) == remove_constant_vars(df)
+# 5. Idempotency: tyler_remove_constants(tyler_remove_constants(df)) == tyler_remove_constants(df)
 # ---------------------------------------------------------------------------
 
-test_that("remove_constant_vars is idempotent", {
+test_that("tyler_remove_constants is idempotent", {
   df <- data.frame(
     varying  = 1:5,
     constant = rep("z", 5),

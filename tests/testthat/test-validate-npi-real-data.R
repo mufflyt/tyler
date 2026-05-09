@@ -1,6 +1,6 @@
 # test-validate-npi-real-data.R
 #
-# Tests validate_and_remove_invalid_npi() against ACTUAL physician NPI data
+# Tests tyler_validate_npi() against ACTUAL physician NPI data
 # from tyler::physicians and gold-standard known-valid/invalid NPIs.
 #
 # IMPORTANT IMPLEMENTATION NOTE:
@@ -40,21 +40,21 @@ make_npi_df <- function(npi_val, ...) {
 
 test_that("first physician NPI (1922051358) passes validation", {
   df <- make_npi_df("1922051358", name = "Dr. A")
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   expect_equal(nrow(result), 1L)
   expect_true(result$npi_is_valid[[1]])
 })
 
 test_that("second physician NPI (1750344388) passes validation", {
   df <- make_npi_df("1750344388")
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   expect_equal(nrow(result), 1L)
   expect_true(result$npi_is_valid[[1]])
 })
 
 test_that("third physician NPI (1548520133) passes validation", {
   df <- make_npi_df("1548520133")
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   expect_equal(nrow(result), 1L)
   expect_true(result$npi_is_valid[[1]])
 })
@@ -68,7 +68,7 @@ test_that("all output rows have npi_is_valid == TRUE (property: no invalid rows 
   valid_npis <- c("1922051358", "1750344388", "1548520133")
   for (npi_val in valid_npis) {
     df <- make_npi_df(npi_val)
-    result <- suppressMessages(validate_and_remove_invalid_npi(df))
+    result <- suppressMessages(tyler_validate_npi(df))
     if (nrow(result) > 0) {
       expect_true(all(result$npi_is_valid),
                   info = paste("npi_is_valid not all TRUE for NPI:", npi_val))
@@ -82,7 +82,7 @@ test_that("all output rows have npi_is_valid == TRUE (property: no invalid rows 
 
 test_that("output npi values are all present in the input", {
   df <- make_npi_df("1922051358", extra_col = "extra_value")
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   if (nrow(result) > 0) {
     expect_true(all(result$npi %in% df$npi))
   }
@@ -92,10 +92,10 @@ test_that("output npi values are all present in the input", {
 # 4. Idempotency: running on output of first run gives same result
 # ---------------------------------------------------------------------------
 
-test_that("validate_and_remove_invalid_npi is idempotent", {
+test_that("tyler_validate_npi is idempotent", {
   df <- make_npi_df("1922051358", name = "Dr. Smith")
-  first_run  <- suppressMessages(validate_and_remove_invalid_npi(df))
-  second_run <- suppressMessages(validate_and_remove_invalid_npi(first_run))
+  first_run  <- suppressMessages(tyler_validate_npi(df))
+  second_run <- suppressMessages(tyler_validate_npi(first_run))
   expect_equal(nrow(first_run), nrow(second_run))
   expect_true(all(second_run$npi_is_valid))
 })
@@ -106,14 +106,14 @@ test_that("validate_and_remove_invalid_npi is idempotent", {
 
 test_that("output always has npi_is_valid column of logical type", {
   df <- make_npi_df("1922051358")
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   expect_true("npi_is_valid" %in% names(result))
   expect_type(result$npi_is_valid, "logical")
 })
 
 test_that("output has npi_is_valid column even when all NPIs are invalid", {
   df <- make_npi_df("0000000000")
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   # All-zeros fails Luhn; 0 rows returned, but column should still exist
   expect_true("npi_is_valid" %in% names(result))
 })
@@ -124,7 +124,7 @@ test_that("output has npi_is_valid column even when all NPIs are invalid", {
 
 test_that("NPI '0000000000' (all zeros) is rejected as invalid", {
   df <- make_npi_df("0000000000")
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   expect_equal(nrow(result), 0L,
                info = "All-zeros NPI should fail Luhn checksum and be removed")
 })
@@ -140,7 +140,7 @@ test_that("npi column read as character preserves leading zeros", {
   # The function strips non-digits and checks length; an NPI starting with 0
   # should remain 10 chars as a character string
   # (Whether it passes Luhn is separate — here we test the character preservation)
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   if (nrow(result) > 0) {
     expect_type(result$npi, "character")
     expect_true(nchar(result$npi[[1]]) == 10)
@@ -157,14 +157,14 @@ test_that("npi column read as character preserves leading zeros", {
 
 test_that("all-invalid NPI data returns 0-row data frame with npi_is_valid column", {
   df <- make_npi_df("0000000000")
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   expect_equal(nrow(result), 0L)
   expect_true("npi_is_valid" %in% names(result))
 })
 
 test_that("NPI that is all-blank after stripping returns 0-row output", {
   df <- data.frame(npi = "   ", stringsAsFactors = FALSE)
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   expect_equal(nrow(result), 0L)
 })
 
@@ -174,7 +174,7 @@ test_that("NPI that is all-blank after stripping returns 0-row output", {
 
 test_that("single valid NPI in df returns exactly 1-row output", {
   df <- make_npi_df("1922051358", extra = "some data")
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   expect_equal(nrow(result), 1L)
 })
 
@@ -187,7 +187,7 @@ test_that("output has same row count as valid input rows (no silent duplication)
   valid_npis <- c("1922051358", "1750344388", "1548520133")
   for (npi_val in valid_npis) {
     df     <- make_npi_df(npi_val)
-    result <- suppressMessages(validate_and_remove_invalid_npi(df))
+    result <- suppressMessages(tyler_validate_npi(df))
     expect_lte(nrow(result), 1L)
   }
 })
@@ -198,7 +198,7 @@ test_that("output has same row count as valid input rows (no silent duplication)
 
 test_that("input data frame without 'npi' column produces an error", {
   df <- data.frame(physician_id = "1922051358", name = "Dr. A")
-  expect_error(validate_and_remove_invalid_npi(df),
+  expect_error(tyler_validate_npi(df),
                regexp = "npi")
 })
 
@@ -209,7 +209,7 @@ test_that("input data frame without 'npi' column produces an error", {
 test_that("NPI with dashes is cleaned and validated correctly", {
   # "1922051358" formatted as "192-205-1358" should still validate
   df <- data.frame(npi = "192-205-1358", stringsAsFactors = FALSE)
-  result <- suppressMessages(validate_and_remove_invalid_npi(df))
+  result <- suppressMessages(tyler_validate_npi(df))
   expect_equal(nrow(result), 1L)
   expect_equal(result$npi[[1]], "1922051358")
 })

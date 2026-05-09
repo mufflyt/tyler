@@ -16,7 +16,7 @@
 #'   finishes (requires the optional `beepr` package). Defaults to `TRUE`.
 #' @param quiet Logical flag controlling log verbosity. Defaults to the package
 #'   quiet-mode option.
-#' @param tracker Optional progress tracker created with [progress_tracker()].
+#' @param tracker Optional progress tracker created with [tyler_progress_tracker()].
 #'   When supplied, the step named by `tracker_step` is automatically started and
 #'   marked as complete or failed with an appropriate quality tier.
 #' @param tracker_step Character string describing the step name used when
@@ -27,14 +27,14 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' result <- geocode_unique_addresses("addresses.csv", "my_api_key")
+#' result <- tyler_geocode("addresses.csv", "my_api_key")
 #' }
 #' @importFrom readr read_csv write_csv
 #' @importFrom dplyr left_join distinct mutate
 #' @importFrom tibble tibble
 #' @importFrom stats complete.cases
 #'
-geocode_unique_addresses <- function(file_path, google_maps_api_key,
+tyler_geocode <- function(file_path, google_maps_api_key,
                                      output_file_path = NULL,
                                      failed_output_path = NULL,
                                      notify = TRUE,
@@ -63,7 +63,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   }
 
   if (!requireNamespace("ggmap", quietly = TRUE)) {
-    stop("Package 'ggmap' is required for geocode_unique_addresses(). Install with: install.packages('ggmap')", call. = FALSE)
+    stop("Package 'ggmap' is required for tyler_geocode(). Install with: install.packages('ggmap')", call. = FALSE)
   }
   ggmap::register_google(key = google_maps_api_key)
 
@@ -75,7 +75,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   }
 
   if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
-    progress_tracker_start(tracker, tracker_step, note = sprintf("%d unique address(es)", total_unique))
+    tyler_progress_start(tracker, tracker_step, note = sprintf("%d unique address(es)", total_unique))
   }
 
   extract_status <- function(msg) {
@@ -116,7 +116,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
             tyler_export_with_backup(failure_tbl, failed_output_path, quiet = quiet)
           }
           if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
-            progress_tracker_fail(tracker, tracker_step, reason = failure_reason)
+            tyler_progress_fail(tracker, tracker_step, reason = failure_reason)
           }
           stop(failure_reason, call. = FALSE)
         }
@@ -187,7 +187,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
   }
 
   if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
-    progress_tracker_finish(tracker, tracker_step, score = success_rate, note = sprintf("%d/%d succeeded", total_unique - nrow(failed_rows), total_unique))
+    tyler_progress_finish(tracker, tracker_step, score = success_rate, note = sprintf("%d/%d succeeded", total_unique - nrow(failed_rows), total_unique))
   }
 
   data <- dplyr::left_join(data, unique_add, by = "address")

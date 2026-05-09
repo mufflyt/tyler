@@ -29,7 +29,7 @@
 #'   business_days_until_appointment = c(1.5, 2.1, 2.8, 1.7, 2.3, 2.5, 1.9, 2.6, 3.1)
 #' )
 #'
-#' create_line_plot(
+#' tyler_plot_line(
 #'   plot_data = example_data,
 #'   x_var = "insurance",
 #'   y_var = "business_days_until_appointment",
@@ -41,7 +41,7 @@
 #' )
 #' }
 
-create_line_plot <- function(plot_data,
+tyler_plot_line <- function(plot_data,
                              x_var,
                              y_var,
                              y_transform = "none",

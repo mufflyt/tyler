@@ -2,7 +2,7 @@ library(testthat)
 testthat::skip_if_not_installed("dplyr")
 library(dplyr)
 
-test_that("most_common_gender_training_academic handles empty dataframe correctly", {
+test_that("tyler_most_common_gender handles empty dataframe correctly", {
   # Create empty test data
   df <- data.frame(
     gender = character(0),
@@ -15,11 +15,11 @@ test_that("most_common_gender_training_academic handles empty dataframe correctl
   expected <- "The most common gender in the dataset was  (NaN%). The most common specialty was  (NaN%). The most common training was  (NaN%). The academic affiliation status most frequently occurring was  (NaN%)."
 
   # Run test
-  result <- most_common_gender_training_academic(df)
+  result <- tyler_most_common_gender(df)
   expect_equal(result, expected)
 })
 
-test_that("most_common_gender_training_academic handles large datasets correctly", {
+test_that("tyler_most_common_gender handles large datasets correctly", {
   # Create a large test dataset
   set.seed(123)
   df <- data.frame(
@@ -55,7 +55,7 @@ test_that("most_common_gender_training_academic handles large datasets correctly
   )
 
   # Run test
-  result <- most_common_gender_training_academic(df)
+  result <- tyler_most_common_gender(df)
   expect_equal(result, expected)
 })
 

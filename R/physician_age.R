@@ -12,22 +12,22 @@
 #' @examples
 #' # Example 1: Basic usage with a small dataset
 #' data <- data.frame(age = c(30, 40, 50, 60, 35, 45, 55, 65))
-#' summary_sentence <- physician_age(data, "age")
+#' summary_sentence <- tyler_physician_age(data, "age")
 #' print(summary_sentence)
 #'
 #' # Example 2: Handling missing data
 #' df_with_na <- data.frame(age = c(30, 40, NA, 60, 35, NA, 55, 65))
-#' summary_sentence <- physician_age(df_with_na, "age")
+#' summary_sentence <- tyler_physician_age(df_with_na, "age")
 #' print(summary_sentence)
 #'
 #' # Example 3: Different age distribution
 #' df_large <- data.frame(age = c(rep(30, 70), rep(40, 30), rep(50, 20), rep(60, 10)))
-#' summary_sentence <- physician_age(df_large, "age")
+#' summary_sentence <- tyler_physician_age(df_large, "age")
 #' print(summary_sentence)
 #'
 #' @family summary
 #' @export
-physician_age <- function(data, age_column) {
+tyler_physician_age <- function(data, age_column) {
   if (!is.data.frame(data)) {
     stop("`data` must be a data frame.", call. = FALSE)
   }

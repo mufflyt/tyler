@@ -4,7 +4,7 @@
 #' user-friendly output for long-running workflows.
 #'
 #' @name logging-utils
-#' @seealso [run_mystery_caller_workflow_with_logging()],
+#' @seealso [tyler_run_workflow_logged()],
 #'   [tyler_preflight_check()], [tyler_multi_progress()]
 NULL
 

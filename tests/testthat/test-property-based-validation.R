@@ -73,7 +73,7 @@ test_that("PROPERTY: Gender standardization produces valid categories", {
     stringsAsFactors = FALSE
   )
 
-  # This should work with actual genderize_physicians if available
+  # This should work with actual tyler_genderize if available
   # For now we simulate the expected behavior
   results <- test_data %>%
     mutate(gender = c("M", "F", NA_character_))
@@ -125,7 +125,7 @@ test_that("PROPERTY: State codes are valid for census data joins", {
 })
 
 test_that("PROPERTY: State codes standardized for downstream joins", {
-  # Simulate clean_phase_1_results output
+  # Simulate tyler_clean_phase1 output
   results <- data.frame(
     state_name = c("CA", "TX", "NY", "FL", "PA"),
     practice_name = paste("Practice", 1:5),

@@ -2,7 +2,7 @@ library(testthat)
 testthat::skip_if_not_installed("dplyr")
 library(dplyr)
 
-test_that("remove_near_zero_var removes near-zero variance variables correctly", {
+test_that("tyler_remove_near_zero removes near-zero variance variables correctly", {
   # Create a sample data frame
   data_frame <- data.frame(
     A = rep(1, 10),
@@ -14,7 +14,7 @@ test_that("remove_near_zero_var removes near-zero variance variables correctly",
   expected_data_frame <- data_frame[, c("B", "C"), drop = FALSE]
 
   # Apply the function
-  result_data_frame <- remove_near_zero_var(data_frame)
+  result_data_frame <- tyler_remove_near_zero(data_frame)
 
   # Check the structure and content of the resulting data frame
   expect_equal(nrow(result_data_frame), nrow(expected_data_frame))

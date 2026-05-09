@@ -117,7 +117,7 @@ test_that("Data validation: NPI format validation", {
   test_data <- create_validation_test_data()
 
   # Test NPI validation function
-  result <- validate_and_remove_invalid_npi(test_data)
+  result <- tyler_validate_npi(test_data)
 
   if (nrow(result) > 0 && "npi" %in% names(result)) {
     # All remaining NPIs should be valid format
@@ -126,7 +126,7 @@ test_that("Data validation: NPI format validation", {
       expect_true(all(grepl(DATA_VALIDATION_RULES$npi$pattern, valid_npis)),
                   info = "Invalid NPI formats found in validated data")
 
-      # validate_and_remove_invalid_npi validates format only, not uniqueness
+      # tyler_validate_npi validates format only, not uniqueness
     }
   }
 })
@@ -135,7 +135,7 @@ test_that("Data validation: Phone number format validation", {
   test_data <- create_validation_test_data()
   temp_dir <- tempdir()
 
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -165,7 +165,7 @@ test_that("Data validation: State code/name validation", {
   test_data <- create_validation_test_data()
   temp_dir <- tempdir()
 
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -190,7 +190,7 @@ test_that("Data validation: Name field validation", {
   test_data <- create_validation_test_data()
   temp_dir <- tempdir()
 
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -233,14 +233,14 @@ test_that("Data validation: Gender value validation", {
 
   # Process through pipeline
   temp_dir <- tempdir()
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = test_data_with_gender,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
   )
 
-  # clean_phase_1_results does not standardize gender values; just verify the column passes through
+  # tyler_clean_phase1 does not standardize gender values; just verify the column passes through
   if ("basic_gender" %in% names(result)) {
     expect_true(is.character(result$basic_gender) || is.na(result$basic_gender[1]))
   }
@@ -251,7 +251,7 @@ test_that("Data validation: Cross-field consistency", {
   test_data <- create_validation_test_data(include_issues = FALSE)
   temp_dir <- tempdir()
 
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -328,7 +328,7 @@ test_that("Data validation: Boundary value testing", {
 
   # Should handle boundary cases gracefully
   expect_no_error(
-    result <- clean_phase_1_results(
+    result <- tyler_clean_phase1(
       phase1_data = boundary_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -368,7 +368,7 @@ test_that("Data validation: Unicode and encoding handling", {
   temp_dir <- tempdir()
 
   # Should handle Unicode characters without corruption
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = unicode_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -418,7 +418,7 @@ test_that("Data validation: SQL injection and security", {
 
   # Should handle malicious input safely
   expect_no_error(
-    result <- clean_phase_1_results(
+    result <- tyler_clean_phase1(
       phase1_data = malicious_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -465,7 +465,7 @@ test_that("Data validation: Large field value handling", {
 
   # Should handle large fields without crashing
   expect_no_error(
-    result <- clean_phase_1_results(
+    result <- tyler_clean_phase1(
       phase1_data = large_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -503,7 +503,7 @@ test_that("Data validation: Property-based data quality", {
 
     temp_dir <- tempdir()
 
-    result <- clean_phase_1_results(
+    result <- tyler_clean_phase1(
       phase1_data = random_data,
       output_directory = temp_dir,
       verbose = FALSE,

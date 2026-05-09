@@ -8,11 +8,11 @@
 #' @export
 #' @examples
 #' \donttest{
-#' map <- map_create_leaflet_base()
+#' map <- tyler_map_leaflet()
 #' }
-map_create_leaflet_base <- function() {
+tyler_map_leaflet <- function() {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for map_create_leaflet_base(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for tyler_map_leaflet(). Install with: install.packages('leaflet')", call. = FALSE)
   }
   # Create a new Leaflet map object
   map <- leaflet::leaflet() %>%

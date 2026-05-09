@@ -18,12 +18,12 @@
 #' @export
 #' @examples
 #' \donttest{
-#' map_create_base()
-#' map_create_base("<strong>Custom title</strong>")
+#' tyler_map_base()
+#' tyler_map_base("<strong>Custom title</strong>")
 #' }
-map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
+tyler_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for map_create_base(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for tyler_map_base(). Install with: install.packages('leaflet')", call. = FALSE)
   }
   map <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = TRUE)) %>%
     leaflet::addProviderTiles("CartoDB.Voyager", group = "CartoDB Voyager") %>%
@@ -86,17 +86,17 @@ map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
 #' )
 #'
 #' # Create and save the dot map
-#' map_create_physician_dot(physician_data)
+#' tyler_map_physicians(physician_data)
 #' }
 #'
 #' @family mapping
 #' @export
-map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name", output_dir = NULL) {
+tyler_map_physicians <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name", output_dir = NULL) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for map_create_physician_dot(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for tyler_map_physicians(). Install with: install.packages('leaflet')", call. = FALSE)
   }
   if (!requireNamespace("webshot", quietly = TRUE)) {
-    stop("Package 'webshot' is required for map_create_physician_dot(). Install with: install.packages('webshot')", call. = FALSE)
+    stop("Package 'webshot' is required for tyler_map_physicians(). Install with: install.packages('webshot')", call. = FALSE)
   }
   if (!requireNamespace("viridis", quietly = TRUE)) {
     stop("Package 'viridis' is required for this function. Install with: install.packages('viridis')", call. = FALSE)
@@ -116,11 +116,11 @@ map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_
   )
 
   cat("Setting up the base map...\n")
-  base_map <- map_create_base("Physician Dot Map")
+  base_map <- tyler_map_base("Physician Dot Map")
   cat("Map setup complete.\n")
 
   cat("Generating the ACOG district boundaries...\n")
-  acog_districts <- map_create_acog_districts_sf()
+  acog_districts <- tyler_map_acog_districts()
   cat("ACOG district boundaries generated.\n")
 
   num_acog_districts <- dplyr::n_distinct(acog_districts$ACOG_District)

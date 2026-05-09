@@ -19,7 +19,7 @@
 #'
 #' The physician count is derived from the first available identifier among
 #' `npi`, `name`, `physician_info`, and `physician_information`.
-#' @seealso [summarize_census_data()], [retrieve_clinician_data()], [clean_phase_1_results()]
+#' @seealso [tyler_summarize_census()], [tyler_get_clinician_data()], [tyler_clean_phase1()]
 #' @family summary
 #' @export
 #'
@@ -40,13 +40,13 @@
 #'                  "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
 #'                  "Washington", "West Virginia", "Wisconsin", "Wyoming",
 #'                  "District of Columbia")
-#' states_where_physicians_were_NOT_contacted(filtered_data, all_states)
+#' tyler_not_contacted_states(filtered_data, all_states)
 #'
 #' # Example with default all_states
 #' filtered_data <- data.frame(state = c("California", "New York", "Texas", "Nevada"))
-#' states_where_physicians_were_NOT_contacted(filtered_data)
+#' tyler_not_contacted_states(filtered_data)
 #'
-states_where_physicians_were_NOT_contacted <- function(filtered_data, all_states = NULL) {
+tyler_not_contacted_states <- function(filtered_data, all_states = NULL) {
 
   # Helper to coerce character responses such as "Yes"/"No" into logical
   as_positive_logical <- function(x) {
@@ -148,4 +148,4 @@ states_where_physicians_were_NOT_contacted <- function(filtered_data, all_states
 
 # Example usage:
 # filtered_data <- data.frame(state = c("California", "New York", "Texas"))
-# states_where_physicians_were_NOT_contacted(filtered_data)
+# tyler_not_contacted_states(filtered_data)

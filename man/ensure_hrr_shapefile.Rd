@@ -7,7 +7,7 @@
 ensure_hrr_shapefile(quiet = TRUE)
 }
 \arguments{
-\item{quiet}{Logical flag passed to \code{\link[=download_large_file]{download_large_file()}} to silence the
+\item{quiet}{Logical flag passed to \code{\link[=tyler_download_file]{tyler_download_file()}} to silence the
 underlying download tooling.}
 }
 \value{

@@ -5,7 +5,7 @@
 #' tracker keeps a method-by-method breakdown, surfaces estimated completion
 #' times, and exposes convenience helpers for recording failures.
 #'
-#' @name progress_tracker
+#' @name tyler_progress_tracker
 NULL
 
 #' Create a progress tracker instance
@@ -21,11 +21,11 @@ NULL
 #' @family logging utilities
 #' @export
 #' @examples
-#' tracker <- progress_tracker(c("Geocode", "Validate", "Export"))
-#' progress_tracker_start(tracker, "Geocode")
+#' tracker <- tyler_progress_tracker(c("Geocode", "Validate", "Export"))
+#' tyler_progress_start(tracker, "Geocode")
 #' Sys.sleep(1)
-#' progress_tracker_finish(tracker, "Geocode", score = 0.95)
-progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler.quiet", FALSE)) {
+#' tyler_progress_finish(tracker, "Geocode", score = 0.95)
+tyler_progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler.quiet", FALSE)) {
   if (!is.character(steps) || !length(steps)) {
     stop("`steps` must be a non-empty character vector.", call. = FALSE)
   }
@@ -51,7 +51,7 @@ progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler
 # Internal helper to retrieve the record index for a step
 .tracker_index <- function(tracker, step) {
   if (!inherits(tracker, "tyler_progress_tracker")) {
-    stop("`tracker` must be created with progress_tracker().", call. = FALSE)
+    stop("`tracker` must be created with tyler_progress_tracker().", call. = FALSE)
   }
   env <- tracker$env
   idx <- match(step, env$records$step)
@@ -102,13 +102,13 @@ progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler
 
 #' Mark a step as started
 #'
-#' @param tracker Object created by [progress_tracker()].
+#' @param tracker Object created by [tyler_progress_tracker()].
 #' @param step Step name.
 #' @param note Optional note stored alongside the step.
 #'
 #' @family logging utilities
 #' @export
-progress_tracker_start <- function(tracker, step, note = NULL) {
+tyler_progress_start <- function(tracker, step, note = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
 
@@ -130,7 +130,7 @@ progress_tracker_start <- function(tracker, step, note = NULL) {
 
 #' Mark a step as completed
 #'
-#' @param tracker Object created by [progress_tracker()].
+#' @param tracker Object created by [tyler_progress_tracker()].
 #' @param step Step name.
 #' @param score Optional numeric score between 0 and 1 used to derive a
 #'   quality tier.
@@ -140,7 +140,7 @@ progress_tracker_start <- function(tracker, step, note = NULL) {
 #'
 #' @family logging utilities
 #' @export
-progress_tracker_finish <- function(tracker, step, score = NULL, quality = NULL, note = NULL) {
+tyler_progress_finish <- function(tracker, step, score = NULL, quality = NULL, note = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
   env$records$status[idx] <- "completed"
@@ -157,13 +157,13 @@ progress_tracker_finish <- function(tracker, step, score = NULL, quality = NULL,
 
 #' Mark a step as failed
 #'
-#' @param tracker Object created by [progress_tracker()].
+#' @param tracker Object created by [tyler_progress_tracker()].
 #' @param step Step name.
 #' @param reason Optional string describing why the step failed.
 #'
 #' @family logging utilities
 #' @export
-progress_tracker_fail <- function(tracker, step, reason = NULL) {
+tyler_progress_fail <- function(tracker, step, reason = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
   env$records$status[idx] <- "failed"
@@ -178,27 +178,27 @@ progress_tracker_fail <- function(tracker, step, reason = NULL) {
 
 #' Emit a manual progress update
 #'
-#' @param tracker Object created by [progress_tracker()].
+#' @param tracker Object created by [tyler_progress_tracker()].
 #'
 #' @param force Logical flag indicating whether the update should be emitted
 #'   even if the configured interval has not elapsed.
 #'
 #' @family logging utilities
 #' @export
-progress_tracker_update <- function(tracker, force = FALSE) {
+tyler_progress_update <- function(tracker, force = FALSE) {
   .tracker_emit_update(tracker, force = force)
   invisible(tracker)
 }
 
 #' Return a tibble describing step-by-step progress
 #'
-#' @param tracker Object created by [progress_tracker()].
+#' @param tracker Object created by [tyler_progress_tracker()].
 #'
 #' @return Tibble with per-step status, timestamps, and quality tiers.
 #' @importFrom tibble as_tibble
 #' @family logging utilities
 #' @export
-progress_tracker_summary <- function(tracker) {
+tyler_progress_summary <- function(tracker) {
   env <- tracker$env
   tibble::as_tibble(env$records)
 }

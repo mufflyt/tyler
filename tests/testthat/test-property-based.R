@@ -65,7 +65,7 @@ test_that("Property: Data frame input always produces data frame output", {
     temp_dir <- tempdir()
 
     tryCatch({
-      result <- clean_phase_1_results(
+      result <- tyler_clean_phase1(
         phase1_data = test_data,
         output_directory = temp_dir,
         verbose = FALSE,
@@ -97,10 +97,10 @@ test_that("Property: NPI validation is idempotent", {
     test_data <- generate_test_dataframe(sample(10:50, 1))
 
     # Apply validation once
-    result1 <- validate_and_remove_invalid_npi(test_data)
+    result1 <- tyler_validate_npi(test_data)
 
     # Apply validation again to the result
-    result2 <- validate_and_remove_invalid_npi(result1)
+    result2 <- tyler_validate_npi(result1)
 
     # Property: Applying validation twice should yield same result
     if (nrow(result1) > 0 && nrow(result2) > 0) {
@@ -120,7 +120,7 @@ test_that("Property: Column contains valid categorical values for case_when", {
     test_data <- generate_test_dataframe(sample(20:100, 1))
     temp_dir <- tempdir()
 
-    result <- clean_phase_1_results(
+    result <- tyler_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -184,7 +184,7 @@ test_that("Property: Data transformations preserve referential integrity", {
 
     temp_dir <- tempdir()
 
-    result <- clean_phase_1_results(
+    result <- tyler_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -245,7 +245,7 @@ test_that("Property: Search operations return consistent data types", {
     npi_flatten = mock_npi_flatten,
     {
       for (taxonomy in taxonomies) {
-        result <- search_by_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
+        result <- tyler_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
 
         # Property: Always returns a data frame
         expect_s3_class(result, "data.frame")
@@ -276,7 +276,7 @@ test_that("Property: Data aggregations are mathematically consistent", {
     test_data <- generate_test_dataframe(sample(50:200, 1), valid_only = TRUE)
     temp_dir <- tempdir()
 
-    result <- clean_phase_1_results(
+    result <- tyler_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -331,7 +331,7 @@ test_that("Property: String operations preserve UTF-8 encoding", {
 
   temp_dir <- tempdir()
 
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -354,7 +354,7 @@ test_that("Property: Function calls are deterministic with same input", {
   temp_dir2 <- tempdir()
 
   # Run same operation twice
-  result1 <- clean_phase_1_results(
+  result1 <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir1,
     verbose = FALSE,
@@ -363,7 +363,7 @@ test_that("Property: Function calls are deterministic with same input", {
     duplicate_rows = FALSE
   )
 
-  result2 <- clean_phase_1_results(
+  result2 <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir2,
     verbose = FALSE,
@@ -397,7 +397,7 @@ test_that("Property: Memory usage is bounded for given input size", {
     gc()
     mem_before <- sum(gc()[, 2])
 
-    result <- clean_phase_1_results(
+    result <- tyler_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -438,7 +438,7 @@ test_that("Property: Error conditions are consistent and informative", {
 
     # Property: All error conditions should throw informative errors
     expect_error(
-      clean_phase_1_results(condition_data, output_directory = temp_dir),
+      tyler_clean_phase1(condition_data, output_directory = temp_dir),
       regexp = paste0("(data frame|names|practice_name|at least one row)"),
       info = paste("Error condition", condition_name, "should throw informative error")
     )
@@ -465,7 +465,7 @@ test_that("Property: Data validation rules are internally consistent", {
   temp_dir <- tempdir()
 
   # Process through full pipeline
-  cleaned_data <- clean_phase_1_results(
+  cleaned_data <- tyler_clean_phase1(
     phase1_data = perfect_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -473,7 +473,7 @@ test_that("Property: Data validation rules are internally consistent", {
     duplicate_rows = FALSE
   )
 
-  validated_data <- validate_and_remove_invalid_npi(cleaned_data)
+  validated_data <- tyler_validate_npi(cleaned_data)
 
   # Property: Perfect data should pass all validation steps
   expect_s3_class(validated_data, "data.frame")

@@ -37,7 +37,7 @@ that lose data.
 \dontrun{
 # Expect no data loss in cleaning
 before <- nrow(raw_data)
-clean_data <- clean_phase_1_results(raw_data)
+clean_data <- tyler_clean_phase1(raw_data)
 tyler_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
 
 # Expect deduplication to remove ~10 rows, allow +/-5
@@ -50,11 +50,11 @@ tyler_check_no_data_loss(before, dedup_data, "Deduplication",
 }
 \seealso{
 Other utilities: 
-\code{\link{download_large_file}()},
-\code{\link{format_pct}()},
-\code{\link{remove_constant_vars}()},
-\code{\link{remove_near_zero_var}()},
-\code{\link{save_quality_check_table}()},
+\code{\link{tyler_download_file}()},
+\code{\link{tyler_format_pct}()},
+\code{\link{tyler_remove_constants}()},
+\code{\link{tyler_remove_near_zero}()},
+\code{\link{tyler_save_quality_table}()},
 \code{\link{tyler_assess_data_quality}()},
 \code{\link{tyler_check_api_response}()},
 \code{\link{tyler_check_data_completeness}()},

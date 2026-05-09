@@ -10,16 +10,16 @@
 #'
 #' @examples
 #' \dontrun{
-#' new_data <- remove_near_zero_var(data_frame)
+#' new_data <- tyler_remove_near_zero(data_frame)
 #' }
 #'
 #' @importFrom dplyr select
 #'
 #' @family utilities
 #' @export
-remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
+tyler_remove_near_zero <- function(data_frame, freqCut = 19, uniqueCut = 10) {
   if (!requireNamespace("caret", quietly = TRUE)) {
-    stop("Package 'caret' is required for remove_near_zero_var(). Install with: install.packages('caret')", call. = FALSE)
+    stop("Package 'caret' is required for tyler_remove_near_zero(). Install with: install.packages('caret')", call. = FALSE)
   }
   # Log: Starting the function
   message("Starting the function to remove near-zero variance variables.")
@@ -55,4 +55,4 @@ remove_near_zero_var <- function(data_frame, freqCut = 19, uniqueCut = 10) {
 }
 
 # Example usage:
-# new_data <- remove_near_zero_var(d)
+# new_data <- tyler_remove_near_zero(d)

@@ -11,10 +11,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' table_write_pdf(overall_summary, "table.pdf")
+#' tyler_write_table_pdf(overall_summary, "table.pdf")
 #' }
 #' @export
-table_write_pdf <- function(object, filename) {
+tyler_write_table_pdf <- function(object, filename) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
     stop("Package 'arsenal' is required for this function. Install with: install.packages('arsenal')", call. = FALSE)
   }
@@ -47,9 +47,9 @@ table_write_pdf <- function(object, filename) {
 #' @examples
 #' \dontrun{
 #' # Generate the overall table
-#' table_generate_overall("data/Table1.rds", "output_tables")
+#' tyler_table_overall("data/Table1.rds", "output_tables")
 #' }
-table_generate_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
+tyler_table_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
     stop("Package 'arsenal' is required for this function. Install with: install.packages('arsenal')", call. = FALSE)
   }
@@ -142,7 +142,7 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
 
   # Save the overall table as a PDF
   message("Saving the overall table as PDF: ", filename)
-  output_path <- table_write_pdf(overall_summary, filename)
+  output_path <- tyler_write_table_pdf(overall_summary, filename)
 
   # Log function end
   message("Overall table generation completed.")

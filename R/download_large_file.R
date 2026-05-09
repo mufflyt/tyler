@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' download_large_file(
+#' tyler_download_file(
 #'   "https://example.org/big-file.zip",
 #'   file.path(tempdir(), "big-file.zip")
 #' )
@@ -28,7 +28,7 @@
 #' @importFrom httr HEAD headers timeout
 #' @family utilities
 #' @seealso [utils::download.file()]
-download_large_file <- function(url, dest, overwrite = FALSE, quiet = TRUE) {
+tyler_download_file <- function(url, dest, overwrite = FALSE, quiet = TRUE) {
   if (!is.character(url) || length(url) != 1L || !nzchar(url)) {
     stop("`url` must be a non-empty character string.", call. = FALSE)
   }

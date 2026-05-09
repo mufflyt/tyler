@@ -2,7 +2,7 @@
 #'
 #' This function splits the data based on provided lab assistant names and saves each part as a separate Excel file.
 #' It allows the arrangement of calls by insurance type to prioritize Medicaid in the first two days and Blue Cross/Blue Shield in the last two days.
-#' @name split_and_save
+#' @name tyler_split_and_save
 #' @param data_or_path Either a dataframe containing the input data or a path to the input data file (RDS, CSV, Parquet, or XLS/XLSX).
 #' @param output_directory Directory where output Excel files will be saved.
 #' @param lab_assistant_names Vector of lab assistant names to name the output files.
@@ -24,7 +24,7 @@
 #' output_directory <- "/path/to/your/output/directory"
 #' lab_assistant_names <- c("Label1", "Label2", "Label3")
 #' insurance_order <- c("Medicaid", "Blue Cross/Blue Shield")
-#' split_and_save(
+#' tyler_split_and_save(
 #'   data_or_path = input_data,
 #'   output_directory = output_directory,
 #'   lab_assistant_names = lab_assistant_names,
@@ -32,7 +32,7 @@
 #' )
 #' }
 
-split_and_save <- function(data_or_path, output_directory, lab_assistant_names, seed = 1978,
+tyler_split_and_save <- function(data_or_path, output_directory, lab_assistant_names, seed = 1978,
                            complete_file_prefix = "complete_non_split_version_", split_file_prefix = "",
                            recursive_create = TRUE, insurance_order = c("Medicaid", "Blue Cross/Blue Shield")) {
   if (!requireNamespace("openxlsx", quietly = TRUE)) {

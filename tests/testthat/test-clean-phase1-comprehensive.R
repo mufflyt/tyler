@@ -1,4 +1,4 @@
-# Comprehensive tests for clean_phase_1_results function
+# Comprehensive tests for tyler_clean_phase1 function
 library(testthat)
 library(tyler)
 library(dplyr)
@@ -25,11 +25,11 @@ create_test_phase1_data <- function(n = 5, include_npi = TRUE, include_required 
   base_data
 }
 
-test_that("clean_phase_1_results: Basic functionality", {
+test_that("tyler_clean_phase1: Basic functionality", {
   test_data <- create_test_phase1_data(3)
   temp_dir <- tempdir()
 
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -46,11 +46,11 @@ test_that("clean_phase_1_results: Basic functionality", {
   expect_true("state_name" %in% names(result))
 })
 
-test_that("clean_phase_1_results: Missing NPI handling", {
+test_that("tyler_clean_phase1: Missing NPI handling", {
   test_data <- create_test_phase1_data(3, include_npi = FALSE)
   temp_dir <- tempdir()
 
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -69,12 +69,12 @@ test_that("clean_phase_1_results: Missing NPI handling", {
   }
 })
 
-test_that("clean_phase_1_results: Duplicate row functionality", {
+test_that("tyler_clean_phase1: Duplicate row functionality", {
   test_data <- create_test_phase1_data(2)
   temp_dir <- tempdir()
 
   # Test with duplicate_rows = TRUE
-  result_dup <- clean_phase_1_results(
+  result_dup <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -83,7 +83,7 @@ test_that("clean_phase_1_results: Duplicate row functionality", {
   )
 
   # Test with duplicate_rows = FALSE
-  result_no_dup <- clean_phase_1_results(
+  result_no_dup <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -95,30 +95,30 @@ test_that("clean_phase_1_results: Duplicate row functionality", {
   expect_equal(nrow(result_no_dup), nrow(test_data))
 })
 
-test_that("clean_phase_1_results: Input validation", {
+test_that("tyler_clean_phase1: Input validation", {
   temp_dir <- tempdir()
 
   # Test with NULL input
   expect_error(
-    clean_phase_1_results(NULL, output_directory = temp_dir),
+    tyler_clean_phase1(NULL, output_directory = temp_dir),
     "must be a data frame"
   )
 
   # Test with non-data.frame input
   expect_error(
-    clean_phase_1_results(list(a = 1, b = 2), output_directory = temp_dir),
+    tyler_clean_phase1(list(a = 1, b = 2), output_directory = temp_dir),
     "must be a data frame"
   )
 
   # Test with empty data frame
   empty_df <- data.frame()
   expect_error(
-    clean_phase_1_results(empty_df, output_directory = temp_dir),
+    tyler_clean_phase1(empty_df, output_directory = temp_dir),
     "must contain at least one row"
   )
 })
 
-test_that("clean_phase_1_results: Missing required columns", {
+test_that("tyler_clean_phase1: Missing required columns", {
   temp_dir <- tempdir()
 
   # Missing 'names' column
@@ -130,17 +130,17 @@ test_that("clean_phase_1_results: Missing required columns", {
   )
 
   expect_error(
-    clean_phase_1_results(incomplete_data, output_directory = temp_dir),
+    tyler_clean_phase1(incomplete_data, output_directory = temp_dir),
     "names"
   )
 })
 
-test_that("clean_phase_1_results: Output format options", {
+test_that("tyler_clean_phase1: Output format options", {
   test_data <- create_test_phase1_data(2)
   temp_dir <- tempdir()
 
   # Test CSV output
-  result_csv <- clean_phase_1_results(
+  result_csv <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -153,7 +153,7 @@ test_that("clean_phase_1_results: Output format options", {
 
   # Test parquet output (if arrow is available)
   if (requireNamespace("arrow", quietly = TRUE)) {
-    result_parquet <- clean_phase_1_results(
+    result_parquet <- tyler_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -166,7 +166,7 @@ test_that("clean_phase_1_results: Output format options", {
   }
 })
 
-test_that("clean_phase_1_results: Data cleaning operations", {
+test_that("tyler_clean_phase1: Data cleaning operations", {
   # Create test data with messy names
   messy_data <- data.frame(
     id = 1:3,
@@ -181,7 +181,7 @@ test_that("clean_phase_1_results: Data cleaning operations", {
 
   temp_dir <- tempdir()
 
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = messy_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -195,12 +195,12 @@ test_that("clean_phase_1_results: Data cleaning operations", {
   expect_true(all(names(result) == janitor::make_clean_names(names(result))))
 })
 
-test_that("clean_phase_1_results: Random ID reproducibility", {
+test_that("tyler_clean_phase1: Random ID reproducibility", {
   test_data <- create_test_phase1_data(3, include_npi = FALSE)
   temp_dir <- tempdir()
 
   # Generate with same seed twice
-  result1 <- clean_phase_1_results(
+  result1 <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -208,7 +208,7 @@ test_that("clean_phase_1_results: Random ID reproducibility", {
     id_seed = 42
   )
 
-  result2 <- clean_phase_1_results(
+  result2 <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -225,13 +225,13 @@ test_that("clean_phase_1_results: Random ID reproducibility", {
   }
 })
 
-test_that("clean_phase_1_results: Performance with large dataset", {
+test_that("tyler_clean_phase1: Performance with large dataset", {
   # Create larger dataset
   large_data <- create_test_phase1_data(1000)
   temp_dir <- tempdir()
 
   start_time <- Sys.time()
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = large_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -246,14 +246,14 @@ test_that("clean_phase_1_results: Performance with large dataset", {
   expect_lt(as.numeric(end_time - start_time, units = "secs"), 10)
 })
 
-test_that("clean_phase_1_results: Property-based testing", {
+test_that("tyler_clean_phase1: Property-based testing", {
   temp_dir <- tempdir()
 
   # Test with various dataset sizes
   for (n in c(1, 5, 10, 50)) {
     test_data <- create_test_phase1_data(n)
 
-    result <- clean_phase_1_results(
+    result <- tyler_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -271,7 +271,7 @@ test_that("clean_phase_1_results: Property-based testing", {
   }
 })
 
-test_that("clean_phase_1_results: Data validation tests", {
+test_that("tyler_clean_phase1: Data validation tests", {
   temp_dir <- tempdir()
 
   # Test data with various edge cases
@@ -286,7 +286,7 @@ test_that("clean_phase_1_results: Data validation tests", {
     stringsAsFactors = FALSE
   )
 
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = edge_case_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -306,7 +306,7 @@ test_that("clean_phase_1_results: Data validation tests", {
 })
 
 # End-to-end test
-test_that("clean_phase_1_results: End-to-end workflow", {
+test_that("tyler_clean_phase1: End-to-end workflow", {
   # Simulate a realistic Phase 1 dataset
   realistic_data <- data.frame(
     id = 1:10,
@@ -325,7 +325,7 @@ test_that("clean_phase_1_results: End-to-end workflow", {
   temp_dir <- tempdir()
 
   # Full workflow test
-  result <- clean_phase_1_results(
+  result <- tyler_clean_phase1(
     phase1_data = realistic_data,
     output_directory = temp_dir,
     verbose = FALSE,

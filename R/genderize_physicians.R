@@ -23,12 +23,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' result <- genderize_physicians("sample.csv")
+#' result <- tyler_genderize("sample.csv")
 #' }
 #'
 #' @family gender
 #' @export
-genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c("csv", "parquet")) {
+tyler_genderize <- function(input_csv, output_dir = NULL, output_format = c("csv", "parquet")) {
   output_format <- match.arg(output_format)
   if (!file.exists(input_csv)) {
     stop(sprintf("Input file not found: %s", input_csv), call. = FALSE)
@@ -78,7 +78,7 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
   timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
 
   if (is.null(output_dir)) {
-    output_dir <- tyler_tempdir("genderize_physicians", create = TRUE)
+    output_dir <- tyler_tempdir("tyler_genderize", create = TRUE)
   } else if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }

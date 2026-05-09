@@ -48,7 +48,7 @@ test_that("Processes data frame input correctly", {
     npi_flatten = mock_npi_flatten,
     .package = "npi",
     code = {
-      result <- search_and_process_npi(sample_data, notify = FALSE)
+      result <- tyler_search_and_process_npi(sample_data, notify = FALSE)
       expect_true(nrow(result) >= 3)
       expect_true("first_name" %in% colnames(result))
       expect_true("last_name" %in% colnames(result))
@@ -59,12 +59,12 @@ test_that("Processes data frame input correctly", {
 
 test_that("Handles empty input data frame", {
   empty_data <- data.frame(first = character(), last = character(), stringsAsFactors = FALSE)
-  result <- search_and_process_npi(empty_data, notify = FALSE)
+  result <- tyler_search_and_process_npi(empty_data, notify = FALSE)
   expect_equal(nrow(result), 0)
 })
 
 test_that("validates required columns", {
-  expect_error(search_and_process_npi(data.frame(first = "A"), notify = FALSE), "last")
+  expect_error(tyler_search_and_process_npi(data.frame(first = "A"), notify = FALSE), "last")
 })
 
 test_that("Handles invalid NPIs gracefully", {
@@ -74,7 +74,7 @@ test_that("Handles invalid NPIs gracefully", {
     .package = "npi",
     code = {
       invalid_data <- data.frame(first = "Invalid", last = "Name", stringsAsFactors = FALSE)
-      result <- search_and_process_npi(invalid_data, notify = FALSE)
+      result <- tyler_search_and_process_npi(invalid_data, notify = FALSE)
       expect_equal(nrow(result), 0)
     }
   )
@@ -97,7 +97,7 @@ test_that("Accumulates results and resumes processing", {
     npi_flatten = mock_npi_flatten,
     .package = "npi",
     code = {
-      result_1 <- search_and_process_npi(
+      result_1 <- tyler_search_and_process_npi(
         data,
         accumulate_path = temp_accumulate,
         progress_log = temp_log,
@@ -108,7 +108,7 @@ test_that("Accumulates results and resumes processing", {
       accumulated <- readr::read_csv(temp_accumulate, show_col_types = FALSE)
       expect_true(nrow(accumulated) >= 2)
 
-      result_2 <- search_and_process_npi(
+      result_2 <- tyler_search_and_process_npi(
         data[1, , drop = FALSE],
         accumulate_path = temp_accumulate,
         resume = TRUE,
@@ -135,7 +135,7 @@ test_that("Processes various names correctly", {
     code = {
       for (tc in test_cases) {
         data <- data.frame(first = tc$first, last = tc$last, stringsAsFactors = FALSE)
-        result <- search_and_process_npi(data, notify = FALSE)
+        result <- tyler_search_and_process_npi(data, notify = FALSE)
         if (tc$first == "Invalid") {
           expect_equal(nrow(result), 0)
         } else {
@@ -162,7 +162,7 @@ test_that("Handles large datasets efficiently", {
     .package = "npi",
     code = {
       start_time <- Sys.time()
-      result <- search_and_process_npi(large_data, notify = FALSE)
+      result <- tyler_search_and_process_npi(large_data, notify = FALSE)
       expect_true(nrow(result) >= 300)
       expect_true("first_name" %in% colnames(result))
       expect_true("last_name" %in% colnames(result))

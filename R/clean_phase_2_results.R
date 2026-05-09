@@ -16,7 +16,7 @@
 #'   patient_contact_data = 6:10
 #' )
 #' # Renaming 'doctor_info' to 'physician_info'
-#' df <- rename_columns_by_substring(df,
+#' df <- tyler_rename_columns(df,
 #'                                   target_strings = c("doctor"),
 #'                                   new_names = c("physician_info"))
 #' print(df)
@@ -28,11 +28,11 @@
 #'   doctor_notes = 11:15
 #' )
 #' # Renaming 'doc_information' to 'doctor_info' and 'doctor_notes' to 'notes'
-#' df <- rename_columns_by_substring(df,
+#' df <- tyler_rename_columns(df,
 #'                                   target_strings = c("doc_information", "doctor_notes"),
 #'                                   new_names = c("doctor_info", "notes"))
 #' print(df)
-rename_columns_by_substring <- function(data, target_strings, new_names) {
+tyler_rename_columns <- function(data, target_strings, new_names) {
   # Initial checks and setup
   validate_dataframe(data, name = "data")
   if (!length(target_strings) && !length(new_names)) {
@@ -147,7 +147,7 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' input_path <- "path_to_your_data.csv"
 #' required_strings <- c("physician_information", "able_to_contact_office")
 #' standard_names <- c("physician_info", "contact_office")
-#' cleaned_data <- clean_phase_2_data(input_path, required_strings, standard_names)
+#' cleaned_data <- tyler_clean_phase2(input_path, required_strings, standard_names)
 #' }
 #'
 #' # Directly using a data frame
@@ -157,9 +157,9 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
 #' )
 #' required_strings <- c("doc_info", "contact_data")
 #' standard_names <- c("doctor_info", "patient_contact_info")
-#' cleaned_df <- clean_phase_2_data(df, required_strings, standard_names)
+#' cleaned_df <- tyler_clean_phase2(df, required_strings, standard_names)
 #' print(cleaned_df)
-clean_phase_2_data <- function(
+tyler_clean_phase2 <- function(
   data_or_path,
   required_strings,
   standard_names,
@@ -203,7 +203,7 @@ clean_phase_2_data <- function(
   message("Converted column names to snake_case format.")
 
   # Apply the renaming function with detailed logging
-  data <- rename_columns_by_substring(data, required_strings, standard_names)
+  data <- tyler_rename_columns(data, required_strings, standard_names)
   rename_log <- attr(data, "rename_log")
   if (!is.null(rename_log)) {
     message("Summary of applied renames:")
@@ -248,4 +248,4 @@ clean_phase_2_data <- function(
 
 # Assuming an input path, you would run it like this:
 # input_file <- "/path/to/your/data.csv"
-# cleaned_data <- clean_phase_2_data(input_file, required_strings, standard_names)
+# cleaned_data <- tyler_clean_phase2(input_file, required_strings, standard_names)

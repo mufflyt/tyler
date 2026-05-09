@@ -1,6 +1,6 @@
 library(sf)
 
-test_that("calculate_intersection_overlap_and_save enforces alignment and records area method", {
+test_that("tyler_calculate_overlap enforces alignment and records area method", {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))
   bg <- sf::st_sf(
     GEOID = "000000000000",
@@ -16,7 +16,7 @@ test_that("calculate_intersection_overlap_and_save enforces alignment and record
   out_dir <- tempfile("iso_test_match_")
   dir.create(out_dir)
 
-  calculate_intersection_overlap_and_save(
+  tyler_calculate_overlap(
     bg,
     iso,
     drive_time_minutes = 30,
@@ -34,7 +34,7 @@ test_that("calculate_intersection_overlap_and_save enforces alignment and record
   expect_equal(unique(res[[area_col[1]]]), "projected:EPSG:5070")
 })
 
-test_that("calculate_intersection_overlap_and_save blocks unsupported vintage mismatches", {
+test_that("tyler_calculate_overlap blocks unsupported vintage mismatches", {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))
   bg <- sf::st_sf(
     GEOID = "000000000000",
@@ -48,7 +48,7 @@ test_that("calculate_intersection_overlap_and_save blocks unsupported vintage mi
   )
 
   expect_error(
-    calculate_intersection_overlap_and_save(
+    tyler_calculate_overlap(
       bg,
       iso,
       drive_time_minutes = 30,
@@ -59,7 +59,7 @@ test_that("calculate_intersection_overlap_and_save blocks unsupported vintage mi
   )
 })
 
-test_that("calculate_intersection_overlap_and_save accepts crosswalk function for 2010/2020", {
+test_that("tyler_calculate_overlap accepts crosswalk function for 2010/2020", {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))
   bg <- sf::st_sf(
     GEOID = "000000000000",
@@ -82,7 +82,7 @@ test_that("calculate_intersection_overlap_and_save accepts crosswalk function fo
   out_dir <- tempfile("iso_test_crosswalk_")
   dir.create(out_dir)
 
-  calculate_intersection_overlap_and_save(
+  tyler_calculate_overlap(
     bg,
     iso,
     drive_time_minutes = 30,
@@ -94,7 +94,7 @@ test_that("calculate_intersection_overlap_and_save accepts crosswalk function fo
   expect_true(file.exists(file.path(out_dir, "intersect_30_minutes.shp")))
 })
 
-test_that("calculate_intersection_overlap_and_save reports available drive times when requested value is missing", {
+test_that("tyler_calculate_overlap reports available drive times when requested value is missing", {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))
   bg <- sf::st_sf(
     GEOID = "000000000000",
@@ -108,7 +108,7 @@ test_that("calculate_intersection_overlap_and_save reports available drive times
   )
 
   expect_error(
-    calculate_intersection_overlap_and_save(
+    tyler_calculate_overlap(
       bg,
       iso,
       drive_time_minutes = 45,

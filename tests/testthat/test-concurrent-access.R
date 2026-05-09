@@ -35,7 +35,7 @@ test_that("CONCURRENT: Multiple processes can write to different directories", {
   start_time <- Sys.time()
 
   for (i in 1:5) {
-    results <- clean_phase_1_results(
+    results <- tyler_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dirs[[i]],
       verbose = FALSE,
@@ -79,7 +79,7 @@ test_that("CONCURRENT: Multiple writes to same directory with unique filenames",
   expect_no_error({
     for (i in 1:3) {
       # Each writes with potentially unique output names
-      results <- clean_phase_1_results(
+      results <- tyler_clean_phase1(
         phase1_data = test_data,
         output_directory = temp_dir,
         verbose = FALSE,
@@ -114,7 +114,7 @@ test_that("CONCURRENT: Can read existing files while writing new ones", {
   dir.create(temp_dir)
 
   # First write
-  results1 <- clean_phase_1_results(
+  results1 <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -135,7 +135,7 @@ test_that("CONCURRENT: Can read existing files while writing new ones", {
     }
 
     # Write again
-    results2 <- clean_phase_1_results(
+    results2 <- tyler_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -168,7 +168,7 @@ test_that("CONCURRENT: Handles temp file conflicts gracefully", {
   # Run 10 times rapidly
   expect_no_error({
     for (i in 1:10) {
-      results <- clean_phase_1_results(
+      results <- tyler_clean_phase1(
         phase1_data = test_data,
         output_directory = temp_dir,
         verbose = FALSE,
@@ -208,14 +208,14 @@ test_that("CONCURRENT: Functions don't share mutable state", {
   dir.create(temp_dir2)
 
   # Process both
-  results1 <- clean_phase_1_results(
+  results1 <- tyler_clean_phase1(
     phase1_data = test_data1,
     output_directory = temp_dir1,
     verbose = FALSE,
     notify = FALSE
   )
 
-  results2 <- clean_phase_1_results(
+  results2 <- tyler_clean_phase1(
     phase1_data = test_data2,
     output_directory = temp_dir2,
     verbose = FALSE,
@@ -262,7 +262,7 @@ test_that("CONCURRENT: Handles concurrent directory creation", {
         dir.create(subdir, recursive = TRUE)
       }
 
-      results <- clean_phase_1_results(
+      results <- tyler_clean_phase1(
         phase1_data = test_data,
         output_directory = subdir,
         verbose = FALSE,
@@ -293,7 +293,7 @@ test_that("CONCURRENT: Gracefully handles cleanup of temp files", {
   dir.create(temp_dir)
 
   # Process data
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -338,14 +338,14 @@ test_that("CONCURRENT: Handles multiple data source reads", {
   dir.create(temp_dir)
 
   # Process from different "sources"
-  results1 <- clean_phase_1_results(
+  results1 <- tyler_clean_phase1(
     phase1_data = source1,
     output_directory = temp_dir,
     verbose = FALSE,
     notify = FALSE
   )
 
-  results2 <- clean_phase_1_results(
+  results2 <- tyler_clean_phase1(
     phase1_data = source2,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -381,7 +381,7 @@ test_that("CONCURRENT: Handles interruption gracefully", {
   # Long-running operation that could be interrupted
   # Should clean up temp files on interrupt
   expect_no_error({
-    results <- clean_phase_1_results(
+    results <- tyler_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -413,7 +413,7 @@ test_that("CONCURRENT: Global state remains consistent", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,

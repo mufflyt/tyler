@@ -10,11 +10,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' arsenal_tables_write2word(my_table, "output_table")
+#' tyler_write_arsenal_table(my_table, "output_table")
 #' }
-arsenal_tables_write2word <- function(object, filename, output_dir = NULL) {
+tyler_write_arsenal_table <- function(object, filename, output_dir = NULL) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
-    stop("Package 'arsenal' is required for arsenal_tables_write2word(). Install with: install.packages('arsenal')", call. = FALSE)
+    stop("Package 'arsenal' is required for tyler_write_arsenal_table(). Install with: install.packages('arsenal')", call. = FALSE)
   }
   if (!is.data.frame(object)) {
     stop("Error: 'object' must be a data frame object.", call. = FALSE)

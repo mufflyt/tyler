@@ -112,7 +112,7 @@ test_that("genderize_fetch batches requests to improve performance", {
   )
 })
 
-# Helper: run genderize_physicians with genderize_fetch and beepr::beep mocked
+# Helper: run tyler_genderize with genderize_fetch and beepr::beep mocked
 with_genderize_mocks <- function(fake_genderize, expr) {
   with_mocked_bindings(
     genderize_fetch = fake_genderize,
@@ -125,7 +125,7 @@ with_genderize_mocks <- function(fake_genderize, expr) {
   )
 }
 
-test_that("genderize_physicians produces enriched output and preserves original data", {
+test_that("tyler_genderize produces enriched output and preserves original data", {
   input <- tibble::tibble(
     first_name = c("Ada", "Grace", "Ada", "Edsger", NA_character_),
     last_name  = c("Lovelace", "Hopper", "Smith", "Dijkstra", "Unknown")
@@ -143,7 +143,7 @@ test_that("genderize_physicians produces enriched output and preserves original 
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- genderize_physicians(input_path, temp_dir)
+    result <- tyler_genderize(input_path, temp_dir)
     expect_equal(nrow(result), nrow(input))
     expect_setequal(colnames(result), c(colnames(input), colnames(predictions)[-1]))
     expect_equal(sum(!is.na(result$gender)), 4L)
@@ -155,7 +155,7 @@ test_that("genderize_physicians produces enriched output and preserves original 
   })
 })
 
-test_that("genderize_physicians maintains historical match rates", {
+test_that("tyler_genderize maintains historical match rates", {
   input <- tibble::tibble(first_name = c("Alan", "Barbara", "Charlie", "Dana"))
   predictions <- tibble::tibble(
     first_name  = c("Alan", "Barbara", "Charlie"),
@@ -170,12 +170,12 @@ test_that("genderize_physicians maintains historical match rates", {
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- genderize_physicians(input_path, temp_dir)
+    result <- tyler_genderize(input_path, temp_dir)
     expect_gte(mean(!is.na(result$gender)), 0.5)
   })
 })
 
-test_that("genderize_physicians enforces data validation on blank or malformed names", {
+test_that("tyler_genderize enforces data validation on blank or malformed names", {
   input <- tibble::tibble(
     first_name = c("", "  ", "Lynn", NA_character_),
     last_name  = c("One", "Two", "Three", "Four")
@@ -190,7 +190,7 @@ test_that("genderize_physicians enforces data validation on blank or malformed n
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- genderize_physicians(input_path, temp_dir)
+    result <- tyler_genderize(input_path, temp_dir)
     trimmed <- trimws(result$first_name)
     blank_or_missing <- is.na(trimmed) | trimmed == ""
     expect_equal(sum(blank_or_missing), 3L)
@@ -199,7 +199,7 @@ test_that("genderize_physicians enforces data validation on blank or malformed n
   })
 })
 
-test_that("genderize_physicians output remains compatible with downstream case_when logic", {
+test_that("tyler_genderize output remains compatible with downstream case_when logic", {
   input <- tibble::tibble(first_name = paste0("Name", 1:10))
   predictions <- tibble::tibble(
     first_name  = paste0("Name", 1:10),
@@ -214,13 +214,13 @@ test_that("genderize_physicians output remains compatible with downstream case_w
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- genderize_physicians(input_path, temp_dir)
+    result <- tyler_genderize(input_path, temp_dir)
     genders <- na.omit(unique(result$gender))
     expect_true(all(genders %in% c("male", "female")))
   })
 })
 
-test_that("genderize_physicians provides required columns for handoff workflows", {
+test_that("tyler_genderize provides required columns for handoff workflows", {
   input <- tibble::tibble(first_name = c("Ruth", "Ida"), external_id = c("X1", "X2"))
   predictions <- tibble::tibble(
     first_name  = c("Ruth", "Ida"),
@@ -235,7 +235,7 @@ test_that("genderize_physicians provides required columns for handoff workflows"
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- genderize_physicians(input_path, temp_dir)
+    result <- tyler_genderize(input_path, temp_dir)
     expect_true(all(c("probability", "count") %in% colnames(result)))
     expect_equal(result$external_id, input$external_id)
     expect_equal(result$gender, predictions$gender)

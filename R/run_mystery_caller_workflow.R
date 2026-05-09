@@ -6,39 +6,39 @@
 #' hygiene checks so teams can focus on execution instead of plumbing.
 #'
 #' @param taxonomy_terms Character vector of taxonomy descriptions to pass to
-#'   [search_by_taxonomy()]. Set to `NULL` to skip taxonomy-based searches.
+#'   [tyler_search_taxonomy()]. Set to `NULL` to skip taxonomy-based searches.
 #' @param name_data Optional data frame containing `first` and `last` columns to
-#'   use with [search_and_process_npi()]. Provide `NULL` to skip name-based
+#'   use with [tyler_search_and_process_npi()]. Provide `NULL` to skip name-based
 #'   searches.
 #' @param phase1_data Data frame holding Phase 1 calling roster information to
-#'   pass to [clean_phase_1_results()].
+#'   pass to [tyler_clean_phase1()].
 #' @param lab_assistant_names Character vector of caller names used when splitting
-#'   the cleaned roster via [split_and_save()]. Must contain at least two
+#'   the cleaned roster via [tyler_split_and_save()]. Must contain at least two
 #'   entries.
-#' @param output_directory Directory where [split_and_save()] should write the
+#' @param output_directory Directory where [tyler_split_and_save()] should write the
 #'   complete and per-caller workbooks.
 #' @param phase2_data Data frame or file path consumed by
-#'   [clean_phase_2_data()].
+#'   [tyler_clean_phase2()].
 #' @param phase2_output_directory Directory where Phase 2 exports should be
 #'   written. Defaults to `output_directory`.
-#' @param quality_check_path File path where [save_quality_check_table()] should
+#' @param quality_check_path File path where [tyler_save_quality_table()] should
 #'   write the quality check CSV.
-#' @param phase1_output_directory Directory where [clean_phase_1_results()]
+#' @param phase1_output_directory Directory where [tyler_clean_phase1()]
 #'   should write the cleaned Phase 1 CSV. Defaults to `output_directory`.
-#' @param split_insurance_order Ordering passed to [split_and_save()]'s
+#' @param split_insurance_order Ordering passed to [tyler_split_and_save()]'s
 #'   `insurance_order` argument. Defaults to `c("Medicaid", "Blue Cross/Blue Shield")`.
 #' @param phase2_required_strings Character vector of substrings used when
-#'   standardizing Phase 2 column names via [clean_phase_2_data()].
+#'   standardizing Phase 2 column names via [tyler_clean_phase2()].
 #' @param phase2_standard_names Replacement names corresponding to
 #'   `phase2_required_strings`.
 #' @param npi_search_args Named list of additional arguments forwarded to
-#'   [search_and_process_npi()].
+#'   [tyler_search_and_process_npi()].
 #' @param all_states Optional character vector of all states to supply to
-#'   [states_where_physicians_were_NOT_contacted()].
+#'   [tyler_not_contacted_states()].
 #' @param verbose Logical. When `TRUE`, print stage updates to the console while
 #'   running the workflow. Defaults to `interactive()`.
 #' @param npi_progress_observer Optional callback that receives progress updates
-#'   from [search_and_process_npi()]. It is invoked with the same payload as the
+#'   from [tyler_search_and_process_npi()]. It is invoked with the same payload as the
 #'   `progress_callback` argument for that function.
 #'
 #' @return A list containing intermediate artifacts from each workflow stage:
@@ -52,7 +52,7 @@
 #' @importFrom dplyr bind_rows distinct
 #' @importFrom tibble tibble
 #' @importFrom utils modifyList
-run_mystery_caller_workflow <- function(
+tyler_run_workflow <- function(
   taxonomy_terms = NULL,
   name_data = NULL,
   phase1_data,
@@ -137,7 +137,7 @@ run_mystery_caller_workflow <- function(
   }
   roster_taxonomy <- if (!is.null(taxonomy_terms) && length(taxonomy_terms)) {
     announce("Searching NPIs by taxonomy")
-    search_by_taxonomy(taxonomy_terms)
+    tyler_search_taxonomy(taxonomy_terms)
   } else {
     tibble::tibble()
   }
@@ -203,7 +203,7 @@ run_mystery_caller_workflow <- function(
           invisible(NULL)
         }
       }
-      roster_names <- do.call(search_and_process_npi, args)
+      roster_names <- do.call(tyler_search_and_process_npi, args)
     }
   }
 
@@ -215,17 +215,17 @@ run_mystery_caller_workflow <- function(
   validated_roster <- combined_roster
   if ("npi" %in% names(combined_roster) && nrow(combined_roster)) {
     announce("Validating NPI roster")
-    validated_roster <- validate_and_remove_invalid_npi(combined_roster)
+    validated_roster <- tyler_validate_npi(combined_roster)
   }
 
   announce("Cleaning Phase 1 results")
-  cleaned_phase1 <- clean_phase_1_results(
+  cleaned_phase1 <- tyler_clean_phase1(
     phase1_data,
     output_directory = phase1_output_directory,
     notify = TRUE
   )
   announce("Splitting Phase 1 workbooks for callers")
-  split_and_save(
+  tyler_split_and_save(
     cleaned_phase1,
     output_directory = output_directory,
     lab_assistant_names = lab_assistant_names,
@@ -233,7 +233,7 @@ run_mystery_caller_workflow <- function(
   )
 
   announce("Cleaning Phase 2 results")
-  cleaned_phase2 <- clean_phase_2_data(
+  cleaned_phase2 <- tyler_clean_phase2(
     data_or_path = phase2_data,
     required_strings = phase2_required_strings,
     standard_names = phase2_standard_names,
@@ -243,7 +243,7 @@ run_mystery_caller_workflow <- function(
   coverage_summary <- NULL
   if ("state" %in% names(cleaned_phase2)) {
     announce("Summarising coverage gaps")
-    coverage_summary <- states_where_physicians_were_NOT_contacted(cleaned_phase2, all_states = all_states)
+    coverage_summary <- tyler_not_contacted_states(cleaned_phase2, all_states = all_states)
   }
 
   if (!dir.exists(dirname(quality_check_path))) {
@@ -253,7 +253,7 @@ run_mystery_caller_workflow <- function(
   quality_check_table <- NULL
   if (all(c("npi", "name") %in% names(cleaned_phase2))) {
     announce("Saving quality check table")
-    quality_check_table <- save_quality_check_table(cleaned_phase2, quality_check_path)
+    quality_check_table <- tyler_save_quality_table(cleaned_phase2, quality_check_path)
   }
 
   workflow_summary <- tibble::tibble(

@@ -1,6 +1,6 @@
-# test-physician_age-comprehensive.R
+# test-tyler_physician_age-comprehensive.R
 #
-# Comprehensive gold-standard tests for physician_age().
+# Comprehensive gold-standard tests for tyler_physician_age().
 # Replaces lightweight smoke tests with semantics-first validation.
 #
 # Testing tenets satisfied:
@@ -27,9 +27,9 @@ gold_ages <- c(34, 50, 45, 60, 36, 29, 54, 43, 38, 48)
 # 1. Primary gold standard: exact string output
 # ---------------------------------------------------------------------------
 
-test_that("physician_age produces exact gold-standard string for known data", {
+test_that("tyler_physician_age produces exact gold-standard string for known data", {
   df <- data.frame(age = gold_ages)
-  result <- physician_age(df, "age")
+  result <- tyler_physician_age(df, "age")
   expected <- "The median age of the dataset was 44 (IQR 25th percentile 36.5 to 75th percentile 49.5)."
   expect_equal(result, expected)
 })
@@ -38,9 +38,9 @@ test_that("physician_age produces exact gold-standard string for known data", {
 # 2. Gold standard: all-same age
 # ---------------------------------------------------------------------------
 
-test_that("physician_age handles all-same age correctly", {
+test_that("tyler_physician_age handles all-same age correctly", {
   df <- data.frame(age = c(50, 50, 50, 50))
-  result <- physician_age(df, "age")
+  result <- tyler_physician_age(df, "age")
   expected <- "The median age of the dataset was 50 (IQR 25th percentile 50 to 75th percentile 50)."
   expect_equal(result, expected)
 })
@@ -49,12 +49,12 @@ test_that("physician_age handles all-same age correctly", {
 # 3. NA handling: NAs in column should be ignored (na.rm=TRUE)
 # ---------------------------------------------------------------------------
 
-test_that("physician_age gives same result when NAs are added to gold data", {
+test_that("tyler_physician_age gives same result when NAs are added to gold data", {
   df_gold <- data.frame(age = gold_ages)
   df_with_na <- data.frame(age = c(gold_ages, NA, NA, NA))
 
-  result_gold <- physician_age(df_gold, "age")
-  result_na   <- physician_age(df_with_na, "age")
+  result_gold <- tyler_physician_age(df_gold, "age")
+  result_na   <- tyler_physician_age(df_with_na, "age")
 
   # NAs must be silently ignored; result must be identical
   expect_equal(result_na, result_gold,
@@ -65,9 +65,9 @@ test_that("physician_age gives same result when NAs are added to gold data", {
 # 4. Schema: output is always length-1 character
 # ---------------------------------------------------------------------------
 
-test_that("physician_age always returns a length-1 character vector", {
+test_that("tyler_physician_age always returns a length-1 character vector", {
   df <- data.frame(age = gold_ages)
-  result <- physician_age(df, "age")
+  result <- tyler_physician_age(df, "age")
   expect_type(result, "character")
   expect_length(result, 1L)
 })
@@ -76,35 +76,35 @@ test_that("physician_age always returns a length-1 character vector", {
 # 5. Schema: output always contains required substrings
 # ---------------------------------------------------------------------------
 
-test_that("physician_age output always contains 'median age'", {
+test_that("tyler_physician_age output always contains 'median age'", {
   df <- data.frame(age = gold_ages)
-  expect_true(grepl("median age", physician_age(df, "age")))
+  expect_true(grepl("median age", tyler_physician_age(df, "age")))
 })
 
-test_that("physician_age output always contains 'IQR'", {
+test_that("tyler_physician_age output always contains 'IQR'", {
   df <- data.frame(age = gold_ages)
-  expect_true(grepl("IQR", physician_age(df, "age")))
+  expect_true(grepl("IQR", tyler_physician_age(df, "age")))
 })
 
-test_that("physician_age output always contains '25th percentile'", {
+test_that("tyler_physician_age output always contains '25th percentile'", {
   df <- data.frame(age = gold_ages)
-  expect_true(grepl("25th percentile", physician_age(df, "age")))
+  expect_true(grepl("25th percentile", tyler_physician_age(df, "age")))
 })
 
-test_that("physician_age output always contains '75th percentile'", {
+test_that("tyler_physician_age output always contains '75th percentile'", {
   df <- data.frame(age = gold_ages)
-  expect_true(grepl("75th percentile", physician_age(df, "age")))
+  expect_true(grepl("75th percentile", tyler_physician_age(df, "age")))
 })
 
 # ---------------------------------------------------------------------------
 # 6. Property: median value in output is between min and max of input
 # ---------------------------------------------------------------------------
 
-test_that("median in physician_age output is between input min and max", {
+test_that("median in tyler_physician_age output is between input min and max", {
   set.seed(42)
   ages <- round(runif(20, 25, 80))
   df <- data.frame(age = ages)
-  result <- physician_age(df, "age")
+  result <- tyler_physician_age(df, "age")
 
   # Parse median from output: "was {median} (IQR..."
   median_str <- regmatches(result, regexpr("was ([0-9.]+) \\(IQR", result))
@@ -118,20 +118,20 @@ test_that("median in physician_age output is between input min and max", {
 # 7. Boundary: single value → median equals that value
 # ---------------------------------------------------------------------------
 
-test_that("physician_age with single value errors (requires >= 2 values)", {
+test_that("tyler_physician_age with single value errors (requires >= 2 values)", {
   df <- data.frame(age = 42)
-  expect_error(physician_age(df, "age"), "at least 2 non-missing values")
+  expect_error(tyler_physician_age(df, "age"), "at least 2 non-missing values")
 })
 
 # ---------------------------------------------------------------------------
 # 8. Domain invariant: Q25 <= median <= Q75 (parsed from output)
 # ---------------------------------------------------------------------------
 
-test_that("physician_age output satisfies Q25 <= median <= Q75", {
+test_that("tyler_physician_age output satisfies Q25 <= median <= Q75", {
   set.seed(99)
   ages <- round(runif(30, 28, 75))
   df <- data.frame(age = ages)
-  result <- physician_age(df, "age")
+  result <- tyler_physician_age(df, "age")
 
   # Parse: "was {med} (IQR 25th percentile {q25} to 75th percentile {q75})."
   # String contains embedded numbers from labels ("25th", "75th"), so use indices [1], [3], [5]
@@ -150,12 +150,12 @@ test_that("physician_age output satisfies Q25 <= median <= Q75", {
 # 9. Silent failure check: empty column
 # ---------------------------------------------------------------------------
 
-test_that("physician_age errors or warns gracefully on all-NA column", {
+test_that("tyler_physician_age errors or warns gracefully on all-NA column", {
   df <- data.frame(age = c(NA_real_, NA_real_, NA_real_))
   # The function uses median(..., na.rm=TRUE) so with all NA this should produce NaN/NA/error
   # We test that it either errors or returns something (not silently producing wrong output)
   result <- tryCatch(
-    physician_age(df, "age"),
+    tyler_physician_age(df, "age"),
     error = function(e) NULL,
     warning = function(w) invokeRestart("muffleWarning")
   )
@@ -167,22 +167,22 @@ test_that("physician_age errors or warns gracefully on all-NA column", {
                 info = paste("All-NA input produced:", result))
   } else {
     # Errored out — that is acceptable
-    succeed("physician_age errored gracefully on all-NA input")
+    succeed("tyler_physician_age errored gracefully on all-NA input")
   }
 })
 
-test_that("physician_age errors informatively when age column does not exist", {
+test_that("tyler_physician_age errors informatively when age column does not exist", {
   df <- data.frame(x = 1:5)
-  expect_error(physician_age(df, "age"))
+  expect_error(tyler_physician_age(df, "age"))
 })
 
 # ---------------------------------------------------------------------------
 # 10. Alternate column name: function uses the provided column name
 # ---------------------------------------------------------------------------
 
-test_that("physician_age works with non-default column name 'years'", {
+test_that("tyler_physician_age works with non-default column name 'years'", {
   df <- data.frame(years = gold_ages)
-  result <- physician_age(df, "years")
+  result <- tyler_physician_age(df, "years")
   expected <- "The median age of the dataset was 44 (IQR 25th percentile 36.5 to 75th percentile 49.5)."
   expect_equal(result, expected)
 })
@@ -191,13 +191,13 @@ test_that("physician_age works with non-default column name 'years'", {
 # 11. Two-decimal precision on median, one-decimal on IQR
 # ---------------------------------------------------------------------------
 
-test_that("physician_age rounds median to 2 decimal places and IQR to 1", {
+test_that("tyler_physician_age rounds median to 2 decimal places and IQR to 1", {
   # Ages where median and quartiles have fractional parts
   df <- data.frame(age = c(30, 31, 33, 37, 41))
   # median = 33, q25 = 31, q75 = 37 — all integers, good starting point
   # Use values with fractional quartiles:
   df2 <- data.frame(age = c(30, 31, 35, 39, 41, 45))
-  result <- physician_age(df2, "age")
+  result <- tyler_physician_age(df2, "age")
   # Just verify the function returns a valid-looking string
   expect_true(grepl("The median age", result))
   expect_true(grepl("IQR 25th percentile", result))

@@ -2,22 +2,22 @@
 % Please edit documentation in R/deprecated.R
 \name{tyler-deprecated}
 \alias{tyler-deprecated}
-\alias{search_npi}
-\alias{test_and_process_isochrones}
-\alias{process_and_save_isochrones}
+\alias{tyler_search_npi}
+\alias{tyler_test_isochrones}
+\alias{tyler_process_isochrones}
 \title{Deprecated functions in tyler}
 \usage{
-search_npi(input_data, ...)
+tyler_search_npi(input_data, ...)
 
-test_and_process_isochrones(input_file, ...)
+tyler_test_isochrones(input_file, ...)
 
-process_and_save_isochrones(input_file, chunk_size = 25, ...)
+tyler_process_isochrones(input_file, chunk_size = 25, ...)
 }
 \arguments{
 \item{input_data}{A data frame or CSV path containing \code{first} and \code{last}
 columns.}
 
-\item{...}{Additional arguments passed to \code{\link[=search_and_process_npi]{search_and_process_npi()}}.}
+\item{...}{Additional arguments passed to \code{\link[=tyler_search_and_process_npi]{tyler_search_and_process_npi()}}.}
 
 \item{input_file}{Deprecated. Previously accepted a data frame with \code{lat}
 and \code{long} columns.}
@@ -26,9 +26,9 @@ and \code{long} columns.}
 }
 \value{
 \itemize{
-\item \code{search_npi()} returns the tibble produced by
-\code{\link[=search_and_process_npi]{search_and_process_npi()}}.
-\item \code{test_and_process_isochrones()} and \code{process_and_save_isochrones()} do
+\item \code{tyler_search_npi()} returns the tibble produced by
+\code{\link[=tyler_search_and_process_npi]{tyler_search_and_process_npi()}}.
+\item \code{tyler_test_isochrones()} and \code{tyler_process_isochrones()} do
 not return a value and instead stop with a deprecation error.
 }
 }

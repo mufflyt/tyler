@@ -51,14 +51,14 @@ test_that("process_and_save_isochrones - chunk_size argument is accepted silentl
 
 test_that("search_npi - emits deprecation warning when called", {
   skip_on_cran()
-  # search_npi delegates to search_and_process_npi, which makes API calls.
+  # search_npi delegates to tyler_search_and_process_npi, which makes API calls.
   # Test only that the deprecation warning fires before any downstream work.
   df <- data.frame(first = "Jane", last = "Smith")
   # The deprecation warning fires immediately; the subsequent error (missing NPI
   # or network) is irrelevant — we just need the warning.
   expect_warning(
     tryCatch(search_npi(df), error = function(e) NULL),
-    regexp = "deprecated|search_and_process_npi",
+    regexp = "deprecated|tyler_search_and_process_npi",
     ignore.case = TRUE
   )
 })
@@ -83,7 +83,7 @@ test_that("test_and_process_isochrones - error message names the replacement fun
     suppressWarnings(test_and_process_isochrones(data.frame())),
     error = function(e) e$message
   )
-  expect_true(grepl("create_isochrones_for_dataframe", err))
+  expect_true(grepl("tyler_isochrones_for_df", err))
 })
 
 test_that("process_and_save_isochrones - error message names the replacement function", {
@@ -91,5 +91,5 @@ test_that("process_and_save_isochrones - error message names the replacement fun
     suppressWarnings(process_and_save_isochrones(data.frame())),
     error = function(e) e$message
   )
-  expect_true(grepl("create_isochrones_for_dataframe", err))
+  expect_true(grepl("tyler_isochrones_for_df", err))
 })

@@ -18,7 +18,7 @@
 #' data <- read_csv("providers.csv")
 #' tyler_check_no_limits(data, "provider input")
 #'
-#' npi_results <- search_and_process_npi(data)
+#' npi_results <- tyler_search_and_process_npi(data)
 #' tyler_check_no_limits(npi_results, "NPI search results", min_expected = 100)
 #' }
 #'
@@ -334,7 +334,7 @@ tyler_check_api_response <- function(result,
 #' \dontrun{
 #' # Expect no data loss in cleaning
 #' before <- nrow(raw_data)
-#' clean_data <- clean_phase_1_results(raw_data)
+#' clean_data <- tyler_clean_phase1(raw_data)
 #' tyler_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
 #'
 #' # Expect deduplication to remove ~10 rows, allow +/-5

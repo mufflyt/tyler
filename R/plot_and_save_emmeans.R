@@ -19,7 +19,7 @@
 #' \dontrun{
 #' # Example 1: Comparing Appointment Wait Times Between Scenarios
 #' # Assume 'model' is a fitted GLM object with appointment wait time as the outcome
-#' result <- plot_and_save_emmeans(
+#' result <- tyler_plot_emmeans(
 #'   model_object = model,
 #'   specs = "scenario",
 #'   variable_of_interest = "scenario",
@@ -29,7 +29,7 @@
 #'
 #' # Example 2: Comparing EMMs Across Different Insurance Types
 #' # Assume 'model' is a fitted GLM object
-#' result <- plot_and_save_emmeans(
+#' result <- tyler_plot_emmeans(
 #'   model_object = model,
 #'   specs = "insurance",
 #'   variable_of_interest = "insurance",
@@ -39,7 +39,7 @@
 #'
 #' # Example 3: Visualizing EMMs for Different Age Groups in a Mystery Caller Study
 #' # Assume 'model' is a fitted GLM object with age groups as a factor
-#' result <- plot_and_save_emmeans(
+#' result <- tyler_plot_emmeans(
 #'   model_object = model,
 #'   specs = "age_group",
 #'   variable_of_interest = "age_group",
@@ -49,7 +49,7 @@
 #'
 #' # Example 4: Interaction Effects Between Gender and Insurance Type
 #' # Assume 'model' is a fitted GLM object
-#' result <- plot_and_save_emmeans(
+#' result <- tyler_plot_emmeans(
 #'   model_object = model,
 #'   specs = c("gender", "insurance"),
 #'   variable_of_interest = "gender",
@@ -60,7 +60,7 @@
 #'
 #' @family modeling helpers
 #' @export
-plot_and_save_emmeans <- function(model_object, specs, variable_of_interest, color_by = NULL, output_dir = NULL) {
+tyler_plot_emmeans <- function(model_object, specs, variable_of_interest, color_by = NULL, output_dir = NULL) {
   # Load necessary packages
   if (!requireNamespace("emmeans", quietly = TRUE)) {
     stop("Package 'emmeans' is required but not installed.", call. = FALSE)

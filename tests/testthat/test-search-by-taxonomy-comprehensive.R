@@ -1,4 +1,4 @@
-# Comprehensive tests for search_by_taxonomy function
+# Comprehensive tests for tyler_search_taxonomy function
 library(testthat)
 library(tyler)
 library(tibble)
@@ -32,14 +32,14 @@ mock_npi_flatten <- function(x) {
 }
 
 # Unit Tests
-test_that("search_by_taxonomy: Basic functionality", {
+test_that("tyler_search_taxonomy: Basic functionality", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
     {
-      result <- search_by_taxonomy("Gynecologic Oncology",
+      result <- tyler_search_taxonomy("Gynecologic Oncology",
                                    write_snapshot = FALSE,
                                    notify = FALSE)
       expect_s3_class(result, "data.frame")
@@ -52,31 +52,31 @@ test_that("search_by_taxonomy: Basic functionality", {
   )
 })
 
-test_that("search_by_taxonomy: Input validation", {
+test_that("tyler_search_taxonomy: Input validation", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
-  expect_s3_class(search_by_taxonomy(write_snapshot = FALSE, notify = FALSE),
+  expect_s3_class(tyler_search_taxonomy(write_snapshot = FALSE, notify = FALSE),
                   "data.frame")
-  expect_equal(nrow(search_by_taxonomy(write_snapshot = FALSE, notify = FALSE)), 0)
-  expect_s3_class(search_by_taxonomy(NULL, write_snapshot = FALSE, notify = FALSE),
+  expect_equal(nrow(tyler_search_taxonomy(write_snapshot = FALSE, notify = FALSE)), 0)
+  expect_s3_class(tyler_search_taxonomy(NULL, write_snapshot = FALSE, notify = FALSE),
                   "data.frame")
-  expect_equal(nrow(search_by_taxonomy(NULL, write_snapshot = FALSE, notify = FALSE)), 0)
-  expect_s3_class(search_by_taxonomy(character(0), write_snapshot = FALSE, notify = FALSE),
+  expect_equal(nrow(tyler_search_taxonomy(NULL, write_snapshot = FALSE, notify = FALSE)), 0)
+  expect_s3_class(tyler_search_taxonomy(character(0), write_snapshot = FALSE, notify = FALSE),
                   "data.frame")
-  expect_equal(nrow(search_by_taxonomy(character(0), write_snapshot = FALSE, notify = FALSE)), 0)
-  expect_s3_class(search_by_taxonomy(c(NA, NA), write_snapshot = FALSE, notify = FALSE),
+  expect_equal(nrow(tyler_search_taxonomy(character(0), write_snapshot = FALSE, notify = FALSE)), 0)
+  expect_s3_class(tyler_search_taxonomy(c(NA, NA), write_snapshot = FALSE, notify = FALSE),
                   "data.frame")
-  expect_equal(nrow(search_by_taxonomy(c(NA, NA), write_snapshot = FALSE, notify = FALSE)), 0)
+  expect_equal(nrow(tyler_search_taxonomy(c(NA, NA), write_snapshot = FALSE, notify = FALSE)), 0)
 })
 
-test_that("search_by_taxonomy: Data quality validation", {
+test_that("tyler_search_taxonomy: Data quality validation", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
     {
-      result <- search_by_taxonomy("Gynecologic Oncology",
+      result <- tyler_search_taxonomy("Gynecologic Oncology",
                                    write_snapshot = FALSE,
                                    notify = FALSE)
       if (nrow(result) > 0) {
@@ -96,7 +96,7 @@ test_that("search_by_taxonomy: Data quality validation", {
   )
 })
 
-test_that("search_by_taxonomy: Error handling", {
+test_that("tyler_search_taxonomy: Error handling", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
   with_mocked_bindings(
@@ -104,21 +104,21 @@ test_that("search_by_taxonomy: Error handling", {
     npi_flatten = mock_npi_flatten,
     {
       expect_s3_class(
-        search_by_taxonomy("Invalid Taxonomy", write_snapshot = FALSE, notify = FALSE),
+        tyler_search_taxonomy("Invalid Taxonomy", write_snapshot = FALSE, notify = FALSE),
         "data.frame"
       )
     }
   )
 })
 
-test_that("search_by_taxonomy: Multiple taxonomies", {
+test_that("tyler_search_taxonomy: Multiple taxonomies", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
     {
-      result <- search_by_taxonomy(
+      result <- tyler_search_taxonomy(
         c("Gynecologic Oncology", "Maternal & Fetal Medicine"),
         write_snapshot = FALSE,
         notify = FALSE
@@ -128,7 +128,7 @@ test_that("search_by_taxonomy: Multiple taxonomies", {
   )
 })
 
-test_that("search_by_taxonomy: Performance test", {
+test_that("tyler_search_taxonomy: Performance test", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
   with_mocked_bindings(
@@ -136,7 +136,7 @@ test_that("search_by_taxonomy: Performance test", {
     npi_flatten = mock_npi_flatten,
     {
       start_time <- Sys.time()
-      result <- search_by_taxonomy("Gynecologic Oncology",
+      result <- tyler_search_taxonomy("Gynecologic Oncology",
                                    write_snapshot = FALSE,
                                    notify = FALSE)
       end_time <- Sys.time()
@@ -145,7 +145,7 @@ test_that("search_by_taxonomy: Performance test", {
   )
 })
 
-test_that("search_by_taxonomy: Snapshot functionality", {
+test_that("tyler_search_taxonomy: Snapshot functionality", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
   temp_dir <- tempdir()
@@ -153,7 +153,7 @@ test_that("search_by_taxonomy: Snapshot functionality", {
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
     {
-      result <- search_by_taxonomy("Gynecologic Oncology",
+      result <- tyler_search_taxonomy("Gynecologic Oncology",
                                    write_snapshot = TRUE,
                                    snapshot_dir = temp_dir,
                                    notify = FALSE)
@@ -164,7 +164,7 @@ test_that("search_by_taxonomy: Snapshot functionality", {
 })
 
 # Integration Tests
-test_that("search_by_taxonomy: Integration with real taxonomy data", {
+test_that("tyler_search_taxonomy: Integration with real taxonomy data", {
   skip_if_not_installed("npi")
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
@@ -173,7 +173,7 @@ test_that("search_by_taxonomy: Integration with real taxonomy data", {
       grepl("Obstetrics|Gynecol", tyler::taxonomy$Classification, ignore.case = TRUE)
     ][1:2]
     if (length(obgyn_codes) > 0) {
-      result <- search_by_taxonomy(obgyn_codes[1],
+      result <- tyler_search_taxonomy(obgyn_codes[1],
                                    write_snapshot = FALSE,
                                    notify = FALSE)
       expect_s3_class(result, "data.frame")
@@ -182,7 +182,7 @@ test_that("search_by_taxonomy: Integration with real taxonomy data", {
 })
 
 # Property-Based Tests
-test_that("search_by_taxonomy: Property-based testing", {
+test_that("tyler_search_taxonomy: Property-based testing", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
   with_mocked_bindings(
@@ -198,7 +198,7 @@ test_that("search_by_taxonomy: Property-based testing", {
         "Taxonomy with Special !@#$%"
       )
       for (input in test_inputs) {
-        result <- search_by_taxonomy(input, write_snapshot = FALSE, notify = FALSE)
+        result <- tyler_search_taxonomy(input, write_snapshot = FALSE, notify = FALSE)
         expect_s3_class(result, "data.frame")
         expect_true(is.data.frame(result))
         expect_gte(nrow(result), 0)
@@ -208,7 +208,7 @@ test_that("search_by_taxonomy: Property-based testing", {
 })
 
 # Regression Tests
-test_that("search_by_taxonomy: Regression tests for known issues", {
+test_that("tyler_search_taxonomy: Regression tests for known issues", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
   special_chars <- c("Obstetrics & Gynecology", "Maternal & Fetal Medicine")
@@ -217,21 +217,21 @@ test_that("search_by_taxonomy: Regression tests for known issues", {
     npi_flatten = mock_npi_flatten,
     {
       expect_no_error(
-        search_by_taxonomy(special_chars, write_snapshot = FALSE, notify = FALSE)
+        tyler_search_taxonomy(special_chars, write_snapshot = FALSE, notify = FALSE)
       )
     }
   )
 })
 
 # Data Validation Tests
-test_that("search_by_taxonomy: Data validation and cleaning", {
+test_that("tyler_search_taxonomy: Data validation and cleaning", {
   skip_on_cran()
   skip_if_offline("npiregistry.cms.hhs.gov")
   with_mocked_bindings(
     npi_search = mock_npi_search,
     npi_flatten = mock_npi_flatten,
     {
-      result <- search_by_taxonomy("Gynecologic Oncology",
+      result <- tyler_search_taxonomy("Gynecologic Oncology",
                                    write_snapshot = FALSE,
                                    notify = FALSE)
       if (nrow(result) > 0) {

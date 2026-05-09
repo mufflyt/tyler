@@ -1,7 +1,7 @@
 #' Get isochrones for each point in a dataframe
 #'
 #' This function retrieves isochrones for each point in a given dataframe by looping
-#' over the rows and calling the create_isochrones function for each point.
+#' over the rows and calling the tyler_create_isochrones function for each point.
 #'
 #' @param input_file A path to the input file containing points for which isochrones are to be retrieved.
 #' @param breaks A numeric vector specifying the breaks for categorizing drive times (default is c(1800, 3600, 7200, 10800)).
@@ -18,9 +18,9 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' isochrones_data <- create_isochrones_for_dataframe("points.csv")
+#' isochrones_data <- tyler_isochrones_for_df("points.csv")
 #' }
-create_isochrones_for_dataframe <- function(
+tyler_isochrones_for_df <- function(
     input_file,
     breaks = c(1800, 3600, 7200, 10800),
     api_key = Sys.getenv("HERE_API_KEY"),
@@ -30,10 +30,10 @@ create_isochrones_for_dataframe <- function(
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 
   if (!requireNamespace("hereR", quietly = TRUE)) {
-    stop("Package 'hereR' is required for create_isochrones_for_dataframe(). Install with: install.packages('hereR')", call. = FALSE)
+    stop("Package 'hereR' is required for tyler_isochrones_for_df(). Install with: install.packages('hereR')", call. = FALSE)
   }
   if (!requireNamespace("easyr", quietly = TRUE)) {
-    stop("Package 'easyr' is required for create_isochrones_for_dataframe(). Install with: install.packages('easyr')", call. = FALSE)
+    stop("Package 'easyr' is required for tyler_isochrones_for_df(). Install with: install.packages('easyr')", call. = FALSE)
   }
   if (is.na(api_key) || !nzchar(api_key)) stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
 
@@ -152,7 +152,7 @@ create_isochrones_for_dataframe <- function(
 
     # Get isochrones for that point
     Sys.sleep(0.4)
-    point_isochrones <- create_isochrones(location = point_temp, range = breaks)
+    point_isochrones <- tyler_create_isochrones(location = point_temp, range = breaks)
     if (is.list(point_isochrones) && length(point_isochrones) && !is.null(point_isochrones$error)) {
       next
     }
@@ -209,4 +209,4 @@ create_isochrones_for_dataframe <- function(
 }
 
 # Usage example:
-#isochrones_data <- create_isochrones_for_dataframe(input_file, breaks = c(1800, 3600, 7200, 10800))
+#isochrones_data <- tyler_isochrones_for_df(input_file, breaks = c(1800, 3600, 7200, 10800))

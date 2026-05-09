@@ -68,7 +68,7 @@ BASELINE_METRICS <- list(
 
   # Performance Benchmarks
   performance = list(
-    # Rows per second for clean_phase_1_results
+    # Rows per second for tyler_clean_phase1
     phase1_rows_per_sec = 50,
     phase1_tolerance = 0.30,     # Allow 30% slower
 

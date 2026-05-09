@@ -38,7 +38,7 @@ tyler_cache_dir <- function(...) {
 #' not already present in the user's cache directory. The archive is expanded
 #' in-place and the path to the `.shp` file is returned.
 #'
-#' @param quiet Logical flag passed to [download_large_file()] to silence the
+#' @param quiet Logical flag passed to [tyler_download_file()] to silence the
 #'   underlying download tooling.
 #'
 #' @return The absolute path to the HRR boundary shapefile.
@@ -48,13 +48,13 @@ ensure_hrr_shapefile <- function(quiet = TRUE) {
   shapefile_path <- file.path(
     cache_root,
     "HRR_Bdry__AK_HI_unmodified",
-    "hrr-shapefile",
+    "tyler_hrr-shapefile",
     "Hrr98Bdry_AK_HI_unmodified.shp"
   )
 
   if (!file.exists(shapefile_path)) {
     message("Downloading HRR boundary shapefile (~8 MB). This is a one-time operation.")
-    download_large_file(
+    tyler_download_file(
       "https://data.dartmouthatlas.org/downloads/geography/HRR_Bdry__AK_HI_unmodified.zip",
       archive_path,
       overwrite = TRUE,

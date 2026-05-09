@@ -12,21 +12,21 @@
 #'
 #' @examples
 #' # Example 1: Format a single numeric value
-#' result <- format_pct(0.12345)
+#' result <- tyler_format_pct(0.12345)
 #' print(result)  # Output: "12.3%"
 #'
 #' # Example 2: Format a vector of numeric values with 2 decimal places
 #' values <- c(0.12345, 0.6789, 0.54321)
-#' formatted_values <- format_pct(values, my_digits = 2)
+#' formatted_values <- tyler_format_pct(values, my_digits = 2)
 #' print(formatted_values)  # Output: "12.35%", "67.89%", "54.32%"
 #'
 #' # Example 3: Format a value with no decimal places
-#' no_decimal <- format_pct(0.5, my_digits = 0)
+#' no_decimal <- tyler_format_pct(0.5, my_digits = 0)
 #' print(no_decimal)  # Output: "50%"
 #'
 #' @family utilities
 #' @export
-format_pct <- function(x, my_digits = 1) {
+tyler_format_pct <- function(x, my_digits = 1) {
   formatted <- formatC(100 * x, format = "f", digits = my_digits)
   paste0(formatted, "%")
 }

@@ -18,7 +18,7 @@ test_that("Missing required columns handling", {
 
   # Testing if the function throws the correct error when required columns are missing
   expect_error(
-    split_and_save(data_or_path = test_data, output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
+    tyler_split_and_save(data_or_path = test_data, output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
     "The input data is missing the following columns: for_redcap, id, doctor_id",
     fixed = TRUE  # Ensures that the error message matches exactly
   )
@@ -46,7 +46,7 @@ test_that("Correct assignment of lab assistants", {
 
   # Run function
   suppressMessages(suppressWarnings({
-    split_and_save(
+    tyler_split_and_save(
       data_or_path = data,
       output_directory = output_dir,
       lab_assistant_names = lab_assistant_names
@@ -77,7 +77,7 @@ test_that("Correct assignment of lab assistants", {
 
 test_that("Invalid file path handling", {
   expect_error(
-    split_and_save(data_or_path = "nonexistent/path/data.csv", output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
+    tyler_split_and_save(data_or_path = "nonexistent/path/data.csv", output_directory = tempdir(), lab_assistant_names = c("Alice", "Bob")),
     "File does not exist at the specified path",
     fixed = TRUE
   )
@@ -88,7 +88,7 @@ test_that("Insufficient lab assistant names handling", {
                      insurance = rep(c("Medicaid", "Blue Cross/Blue Shield"), 2),
                      stringsAsFactors = FALSE)
   expect_error(
-    split_and_save(data_or_path = data, output_directory = tempdir(), lab_assistant_names = c("Alice")),
+    tyler_split_and_save(data_or_path = data, output_directory = tempdir(), lab_assistant_names = c("Alice")),
     "Please provide at least two lab assistant names for the splits.",
     fixed = TRUE
   )

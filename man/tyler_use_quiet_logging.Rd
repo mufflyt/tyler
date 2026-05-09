@@ -24,11 +24,11 @@ Toggle quiet logging for helper functions
 }
 \seealso{
 Other utilities: 
-\code{\link{download_large_file}()},
-\code{\link{format_pct}()},
-\code{\link{remove_constant_vars}()},
-\code{\link{remove_near_zero_var}()},
-\code{\link{save_quality_check_table}()},
+\code{\link{tyler_download_file}()},
+\code{\link{tyler_format_pct}()},
+\code{\link{tyler_remove_constants}()},
+\code{\link{tyler_remove_near_zero}()},
+\code{\link{tyler_save_quality_table}()},
 \code{\link{tyler_assess_data_quality}()},
 \code{\link{tyler_check_api_response}()},
 \code{\link{tyler_check_data_completeness}()},

@@ -56,7 +56,7 @@
 #' library(tyler)
 #' file_path <- "/path/to/your/input/file.xls"
 #' phase1_data <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
-#' clean_phase_1_results(phase1_data)
+#' tyler_clean_phase1(phase1_data)
 #' }
 #'
 #' @importFrom dplyr arrange mutate select filter bind_rows
@@ -74,7 +74,7 @@
 # library(openxlsx)
 # library(fs)
 
-clean_phase_1_results <- function(phase1_data,
+tyler_clean_phase1 <- function(phase1_data,
                                   output_directory = tempdir(),
                                   verbose = TRUE,
                                   notify = TRUE,
@@ -102,7 +102,7 @@ clean_phase_1_results <- function(phase1_data,
   # Capture processing start time and metadata
   processing_start_time <- Sys.time()
   audit_trail <- list(
-    function_name = "clean_phase_1_results",
+    function_name = "tyler_clean_phase1",
     start_time = processing_start_time,
     r_version = R.version.string,
     platform = .Platform$OS.type,
@@ -468,4 +468,4 @@ format_phone_number <- function(phone_values) {
 
 # file_path <- "ortho_sports_med/data/phase1/Late_Phase_1_Mystery caller - Sports med Only.xlsx"
 # phase1_data <- read_xls(file_path)
-# clean_phase_1_results(phase1_data)
+# tyler_clean_phase1(phase1_data)

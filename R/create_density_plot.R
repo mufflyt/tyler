@@ -28,7 +28,7 @@
 #'   business_days_until_appointment = c(1.5, 2.2, 3.1, 1.8, 2.5, 2.9)
 #' )
 #'
-#' create_density_plot(
+#' tyler_plot_density(
 #'   data = example_data,
 #'   x_var = "business_days_until_appointment",
 #'   fill_var = "insurance",
@@ -43,7 +43,7 @@
 #' )
 #' }
 
-create_density_plot <- function(data,
+tyler_plot_density <- function(data,
                                 x_var,
                                 fill_var,
                                 x_transform = "none",

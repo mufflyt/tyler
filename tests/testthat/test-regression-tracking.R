@@ -162,7 +162,7 @@ test_that("REGRESSION: Pipeline doesn't lose too much data", {
 })
 
 test_that("REGRESSION: Clean phase 1 doesn't drop too many records", {
-  # Create test data in the correct format for clean_phase_1_results
+  # Create test data in the correct format for tyler_clean_phase1
   test_data <- data.frame(
     names = paste("Dr.", c("John", "Mary", "Michael", "Sarah", "Lisa",
                           "David", "Emily", "James", "Amanda", "Christopher")[rep(1:10, length.out = 100)],
@@ -181,7 +181,7 @@ test_that("REGRESSION: Clean phase 1 doesn't drop too many records", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -195,7 +195,7 @@ test_that("REGRESSION: Clean phase 1 doesn't drop too many records", {
   # Should retain at least 85% (allowing for duplicates and filtering)
   expect_gte(retention_rate, 0.85,
             label = sprintf(
-              "❌ clean_phase_1_results dropped too many rows: %.0f -> %.0f (%.1f%% lost)",
+              "❌ tyler_clean_phase1 dropped too many rows: %.0f -> %.0f (%.1f%% lost)",
               input_n, output_n, (1 - retention_rate) * 100
             ))
 
@@ -325,7 +325,7 @@ test_that("REGRESSION: Critical columns don't have excessive NAs", {
 })
 
 test_that("REGRESSION: No widespread NAs across all columns", {
-  # Create test data in the correct format for clean_phase_1_results
+  # Create test data in the correct format for tyler_clean_phase1
   test_data <- data.frame(
     names = paste("Dr.", c("John", "Mary", "Michael", "Sarah", "Lisa",
                           "David", "Emily", "James", "Amanda", "Christopher")[rep(1:10, length.out = 100)],
@@ -342,7 +342,7 @@ test_that("REGRESSION: No widespread NAs across all columns", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -396,7 +396,7 @@ test_that("REGRESSION: Duplicate NPI rate acceptable", {
 test_that("REGRESSION: Performance hasn't degraded significantly", {
   baseline <- BASELINE_METRICS$performance
 
-  # Create test data in the correct format for clean_phase_1_results
+  # Create test data in the correct format for tyler_clean_phase1
   test_data <- data.frame(
     names = paste("Dr.", c("John", "Mary", "Michael", "Sarah", "Lisa",
                           "David", "Emily", "James", "Amanda", "Christopher")[rep(1:10, length.out = 100)],
@@ -415,7 +415,7 @@ test_that("REGRESSION: Performance hasn't degraded significantly", {
 
   # Measure performance
   start_time <- Sys.time()
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -487,7 +487,7 @@ test_that("REGRESSION: Geocoded coordinates are plausible", {
 
 test_that("REGRESSION: Overall pipeline quality maintained", {
   # This is a high-level sanity check
-  # Create test data in the correct format for clean_phase_1_results
+  # Create test data in the correct format for tyler_clean_phase1
   test_data <- data.frame(
     names = paste("Dr.", c("John", "Mary", "Michael", "Sarah", "Lisa")[rep(1:5, length.out = 50)],
                 c("Doe", "Smith", "Jones", "Williams", "Brown")[rep(1:5, length.out = 50)]),
@@ -502,7 +502,7 @@ test_that("REGRESSION: Overall pipeline quality maintained", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,

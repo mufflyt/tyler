@@ -1,6 +1,6 @@
 # test-states-not-contacted-gold-standard.R
 #
-# Gold-standard tests for states_where_physicians_were_NOT_contacted().
+# Gold-standard tests for tyler_not_contacted_states().
 #
 # NOTE: The function calls beepr::beep(2) unconditionally. Tests require beepr
 # to be installed, or the sound call will error. beepr is listed as a dependency
@@ -35,7 +35,7 @@ ten_states <- c(
 test_that("3 states contacted of 10 → output mentions exactly 7 excluded states", {
   df <- data.frame(state = c("California", "Colorado", "Arizona"),
                    stringsAsFactors = FALSE)
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result <- tyler_not_contacted_states(df, all_states = ten_states)
 
   # States NOT contacted: Alabama, Alaska, Arkansas, Connecticut, Delaware, Florida, Georgia
   not_contacted <- setdiff(ten_states, c("California", "Colorado", "Arizona"))
@@ -51,7 +51,7 @@ test_that("3 states contacted of 10 → output mentions exactly 7 excluded state
 test_that("contacted states are NOT mentioned as excluded in the output", {
   df <- data.frame(state = c("California", "Colorado", "Arizona"),
                    stringsAsFactors = FALSE)
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result <- tyler_not_contacted_states(df, all_states = ten_states)
 
   # Contacted states should not appear in the excluded list section
   # The format is "...excluded states include {list}."
@@ -68,7 +68,7 @@ test_that("contacted states are NOT mentioned as excluded in the output", {
 
 test_that("all states contacted → output contains 'No states' as excluded", {
   df <- data.frame(state = ten_states, stringsAsFactors = FALSE)
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result <- tyler_not_contacted_states(df, all_states = ten_states)
   expect_true(grepl("No states", result),
               info = paste("Output:", result))
 })
@@ -80,7 +80,7 @@ test_that("all states contacted → output contains 'No states' as excluded", {
 test_that("no states contacted → all 10 states listed as excluded", {
   # Pass empty data frame (no state column contact info means no states contacted)
   df <- data.frame(state = character(0), stringsAsFactors = FALSE)
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result <- tyler_not_contacted_states(df, all_states = ten_states)
 
   # All 10 states must appear in the excluded section
   for (state in ten_states) {
@@ -93,16 +93,16 @@ test_that("no states contacted → all 10 states listed as excluded", {
 # 4. Schema: output is always a length-1 character string
 # ---------------------------------------------------------------------------
 
-test_that("states_where_physicians_were_NOT_contacted always returns length-1 character", {
+test_that("tyler_not_contacted_states always returns length-1 character", {
   df <- data.frame(state = c("California", "Colorado"), stringsAsFactors = FALSE)
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result <- tyler_not_contacted_states(df, all_states = ten_states)
   expect_type(result, "character")
   expect_length(result, 1L)
 })
 
 test_that("output is length-1 character even with NULL all_states", {
   df <- data.frame(state = c("California", "Texas"), stringsAsFactors = FALSE)
-  result <- states_where_physicians_were_NOT_contacted(df)
+  result <- tyler_not_contacted_states(df)
   expect_type(result, "character")
   expect_length(result, 1L)
 })
@@ -114,7 +114,7 @@ test_that("output is length-1 character even with NULL all_states", {
 test_that("excluded + contacted state count equals total all_states count", {
   contacted_states <- c("California", "Colorado", "Arizona")
   df <- data.frame(state = contacted_states, stringsAsFactors = FALSE)
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result <- tyler_not_contacted_states(df, all_states = ten_states)
 
   n_contacted <- length(contacted_states)
   n_excluded  <- length(setdiff(ten_states, contacted_states))
@@ -131,7 +131,7 @@ test_that("contact_office='Yes' rows are treated as contacted states", {
     contact_office = c("Yes", "No", "Yes", "No", "Yes"),
     stringsAsFactors = FALSE
   )
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result <- tyler_not_contacted_states(df, all_states = ten_states)
 
   # Only Alabama, Arizona, California had "Yes" → those are contacted
   # Alabama, Arizona, California should NOT appear in excluded section
@@ -150,7 +150,7 @@ test_that("mixed-case contact_office values ('yes', 'YES', 'Yes') all treated as
     contact_office = c("yes", "YES", "Yes"),
     stringsAsFactors = FALSE
   )
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result <- tyler_not_contacted_states(df, all_states = ten_states)
 
   # All three states should be treated as contacted, so they should NOT be in the excluded section
   excluded_section <- sub(".*excluded states include ", "", result)
@@ -167,7 +167,7 @@ test_that("mixed-case contact_office values ('yes', 'YES', 'Yes') all treated as
 test_that("NULL all_states uses default 51-state list internally", {
   df <- data.frame(state = c("California", "Texas", "New York"),
                    stringsAsFactors = FALSE)
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = NULL)
+  result <- tyler_not_contacted_states(df, all_states = NULL)
 
   # With 51 default states and 3 contacted, there should be 48 excluded
   # We can't enumerate all 48, but the result should mention many states
@@ -179,10 +179,10 @@ test_that("NULL all_states uses default 51-state list internally", {
 # 9. Idempotency: calling twice with same data gives same string
 # ---------------------------------------------------------------------------
 
-test_that("states_where_physicians_were_NOT_contacted is idempotent", {
+test_that("tyler_not_contacted_states is idempotent", {
   df <- data.frame(state = c("California", "Colorado"), stringsAsFactors = FALSE)
-  result1 <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
-  result2 <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result1 <- tyler_not_contacted_states(df, all_states = ten_states)
+  result2 <- tyler_not_contacted_states(df, all_states = ten_states)
   expect_equal(result1, result2)
 })
 
@@ -192,7 +192,7 @@ test_that("states_where_physicians_were_NOT_contacted is idempotent", {
 
 test_that("output string always contains 'unique physicians' phrase", {
   df <- data.frame(state = c("California", "Colorado"), stringsAsFactors = FALSE)
-  result <- states_where_physicians_were_NOT_contacted(df, all_states = ten_states)
+  result <- tyler_not_contacted_states(df, all_states = ten_states)
   expect_true(grepl("unique physicians", result),
               info = paste("Output:", result))
 })

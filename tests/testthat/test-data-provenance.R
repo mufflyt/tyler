@@ -28,7 +28,7 @@ test_that("PROVENANCE: ID columns preserved through Phase 1", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -64,7 +64,7 @@ test_that("PROVENANCE: Can trace output rows back to input rows", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -104,7 +104,7 @@ test_that("PROVENANCE: Track row count changes through pipeline", {
 
   input_rows <- nrow(test_data)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -152,7 +152,7 @@ test_that("PROVENANCE: Document which rows were filtered and why", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -196,7 +196,7 @@ test_that("PROVENANCE: Track field modifications through pipeline", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -239,7 +239,7 @@ test_that("PROVENANCE: Identify when data quality changes", {
   # Check initial completeness
   input_complete_coords <- sum(!is.na(test_data$lat) & !is.na(test_data$lon))
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -284,7 +284,7 @@ test_that("PROVENANCE: Generate audit log of processing steps", {
   # Track processing timestamp
   start_time <- Sys.time()
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -300,7 +300,7 @@ test_that("PROVENANCE: Generate audit log of processing steps", {
     duration_sec = as.numeric(end_time - start_time, units = "secs"),
     input_rows = nrow(test_data),
     output_rows = nrow(results),
-    function_called = "clean_phase_1_results",
+    function_called = "tyler_clean_phase1",
     parameters = list(
       verbose = FALSE,
       notify = FALSE
@@ -336,7 +336,7 @@ test_that("PROVENANCE: Record processing metadata for debugging", {
     processing_date = Sys.Date()
   )
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -417,7 +417,7 @@ test_that("PROVENANCE: Identify where NA values were introduced", {
   # Count NAs before
   na_counts_before <- sapply(test_data, function(x) sum(is.na(x)))
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -462,7 +462,7 @@ test_that("PROVENANCE: Track data completeness at each stage", {
   # Calculate initial completeness
   completeness_before <- (sum(!is.na(test_data$npi)) / nrow(test_data)) * 100
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -505,7 +505,7 @@ test_that("PROVENANCE: Can reconstruct processing decisions", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -573,7 +573,7 @@ test_that("PROVENANCE: Attach processing flags to each record", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -634,7 +634,7 @@ test_that("PROVENANCE: Validate data consistency across stages", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -684,7 +684,7 @@ test_that("PROVENANCE: Detect unexpected data mutations", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  results <- clean_phase_1_results(
+  results <- tyler_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,

@@ -43,9 +43,9 @@
 #' @examples
 #' \dontrun{
 #' df <- data.frame(first = "John", last = "Doe")
-#' results <- search_and_process_npi(df)
+#' results <- tyler_search_and_process_npi(df)
 #' }
-search_and_process_npi <- function(data,
+tyler_search_and_process_npi <- function(data,
                                    enumeration_type = "ind",
                                    limit = NULL,
                                    country_code = "US",
@@ -281,7 +281,7 @@ search_and_process_npi <- function(data,
   max_attempts <- 3L
   base_delay <- 1
 
-  search_npi <- function(first_name, last_name, index) {
+  tyler_search_npi <- function(first_name, last_name, index) {
     attempt <- 1L
     search_term <- trimws(paste(first_name, last_name))
 
@@ -424,7 +424,7 @@ search_and_process_npi <- function(data,
       next
     }
 
-    result <- search_npi(first_name, last_name, i)
+    result <- tyler_search_npi(first_name, last_name, i)
 
     if (is.null(result) || !nrow(result)) {
       dispatch_progress(

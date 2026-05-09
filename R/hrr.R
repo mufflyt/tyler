@@ -6,7 +6,7 @@
 #'
 #' @param remove_HI_AK Logical, should Hawaii and Alaska be removed? Default is TRUE.
 #' @return An sf object containing the hospital referral region data.
-#' @seealso [ensure_hrr_shapefile()], [hrr_generate_maps()], [map_create_base()]
+#' @seealso [ensure_hrr_shapefile()], [tyler_hrr_maps()], [tyler_map_base()]
 #' @family geospatial helpers
 #' @importFrom sf read_sf st_transform
 #' @importFrom dplyr filter
@@ -14,20 +14,20 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' hrr()
+#' tyler_hrr()
 #' }
-hrr <- function(remove_HI_AK = TRUE) {
+tyler_hrr <- function(remove_HI_AK = TRUE) {
   message("Loading necessary packages...")
 
   # Load the hospital referral region shapefile
   message("Getting the hospital referral region shapefile...")
   hrr_path <- ensure_hrr_shapefile()
-  hrr <- sf::read_sf(hrr_path)
-  hrr <- sf::st_transform(hrr, 4326)
+  tyler_hrr <- sf::read_sf(hrr_path)
+  tyler_hrr <- sf::st_transform(tyler_hrr, 4326)
 
   # Optionally remove Hawaii and Alaska (all HRRs, not just the largest cities)
   if (remove_HI_AK) {
-    hrr <- hrr %>%
+    tyler_hrr <- tyler_hrr %>%
       dplyr::filter(!stringr::str_detect(.data$hrrcity, "^(AK|HI)"))
   }
 
@@ -36,7 +36,7 @@ hrr <- function(remove_HI_AK = TRUE) {
   message("This function creates an sf file of hospital referral regions.")
   message("For more information: https://data.dartmouthatlas.org/supplemental/")
 
-  return(hrr)
+  return(tyler_hrr)
 }
 
 #' Generate Hexagon Maps for Hospital Referral Regions (HRR)
@@ -53,7 +53,7 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @param height Final figure height in inches for journal submission (default is 5).
 #' @return Invisibly returns the arranged grob object containing the contiguous
 #'   US map and Alaska/Hawaii/Puerto Rico inset maps.
-#' @seealso [hrr()], [map_create_base()], [map_create_block_group_overlap()]
+#' @seealso [tyler_hrr()], [tyler_map_base()], [tyler_map_block_group()]
 #' @family geospatial plotting
 #' @importFrom sf sf_use_s2 st_transform st_make_grid st_sf st_intersection st_join st_filter
 #' @importFrom dplyr mutate group_by summarize filter n
@@ -63,9 +63,9 @@ hrr <- function(remove_HI_AK = TRUE) {
 #' @export
 #' @examples
 #' \dontrun{
-#' hrr_generate_maps(physician_sf)
+#' tyler_hrr_maps(physician_sf)
 #' }
-hrr_generate_maps <- function(
+tyler_hrr_maps <- function(
     physician_sf,
     trait_map = "all",
     honey_map = "all",
@@ -75,10 +75,10 @@ hrr_generate_maps <- function(
     height = 5
 ) {
   if (!requireNamespace("ggspatial", quietly = TRUE)) {
-    stop("Package 'ggspatial' is required for hrr_generate_maps(). Install with: install.packages('ggspatial')", call. = FALSE)
+    stop("Package 'ggspatial' is required for tyler_hrr_maps(). Install with: install.packages('ggspatial')", call. = FALSE)
   }
   if (!requireNamespace("rnaturalearth", quietly = TRUE)) {
-    stop("Package 'rnaturalearth' is required for hrr_generate_maps(). Install with: install.packages('rnaturalearth')", call. = FALSE)
+    stop("Package 'rnaturalearth' is required for tyler_hrr_maps(). Install with: install.packages('rnaturalearth')", call. = FALSE)
   }
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
     stop("Package 'gridExtra' is required for this function. Install with: install.packages('gridExtra')", call. = FALSE)
@@ -94,7 +94,7 @@ hrr_generate_maps <- function(
   usa <- sf::st_transform(usa, 4326)
 
   # Generate the HRR map (retain AK, HI, and PR for insets)
-  hrr_map <- hrr(remove_HI_AK = FALSE)
+  hrr_map <- tyler_hrr(remove_HI_AK = FALSE)
 
   # Intersect honeycomb grid with physician data to get physician counts
   message("Intersecting honeycomb grid with physician data...")

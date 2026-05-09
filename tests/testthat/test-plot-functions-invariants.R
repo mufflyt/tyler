@@ -15,11 +15,11 @@ WAIT_DATA <- data.frame(
 OUT_DIR <- file.path(tempdir(), paste0("tyler_plot_tests_", Sys.getpid()))
 dir.create(OUT_DIR, recursive = TRUE, showWarnings = FALSE)
 
-# ── create_density_plot ───────────────────────────────────────────────────────
+# ── tyler_plot_density ───────────────────────────────────────────────────────
 
-test_that("create_density_plot - returns a ggplot object", {
+test_that("tyler_plot_density - returns a ggplot object", {
   result <- suppressMessages(
-    create_density_plot(
+    tyler_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -33,9 +33,9 @@ test_that("create_density_plot - returns a ggplot object", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("create_density_plot - log transform returns ggplot", {
+test_that("tyler_plot_density - log transform returns ggplot", {
   result <- suppressMessages(
-    create_density_plot(
+    tyler_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -49,9 +49,9 @@ test_that("create_density_plot - log transform returns ggplot", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("create_density_plot - sqrt transform returns ggplot", {
+test_that("tyler_plot_density - sqrt transform returns ggplot", {
   result <- suppressMessages(
-    create_density_plot(
+    tyler_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -65,10 +65,10 @@ test_that("create_density_plot - sqrt transform returns ggplot", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("create_density_plot - saves PNG and TIFF files", {
+test_that("tyler_plot_density - saves PNG and TIFF files", {
   prefix <- paste0("density_save_", Sys.getpid())
   suppressMessages(
-    create_density_plot(
+    tyler_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -84,17 +84,17 @@ test_that("create_density_plot - saves PNG and TIFF files", {
   expect_true(length(tiff_files) >= 1L, info = "No TIFF file saved")
 })
 
-test_that("create_density_plot - filters out zero/negative x values without error", {
+test_that("tyler_plot_density - filters out zero/negative x values without error", {
   df_with_zeros <- rbind(WAIT_DATA, data.frame(insurance = "Medicaid", days = 0))
   expect_no_error(suppressMessages(
-    create_density_plot(df_with_zeros, "days", "insurance",
+    tyler_plot_density(df_with_zeros, "days", "insurance",
                         dpi = 50, output_dir = OUT_DIR, verbose = FALSE)
   ))
 })
 
-test_that("create_density_plot - custom axis labels are accepted", {
+test_that("tyler_plot_density - custom axis labels are accepted", {
   result <- suppressMessages(
-    create_density_plot(
+    tyler_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -109,11 +109,11 @@ test_that("create_density_plot - custom axis labels are accepted", {
   expect_s3_class(result, "ggplot")
 })
 
-# ── create_scatter_plot ───────────────────────────────────────────────────────
+# ── tyler_plot_scatter ───────────────────────────────────────────────────────
 
-test_that("create_scatter_plot - returns a ggplot object", {
+test_that("tyler_plot_scatter - returns a ggplot object", {
   result <- suppressMessages(
-    create_scatter_plot(
+    tyler_plot_scatter(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -127,9 +127,9 @@ test_that("create_scatter_plot - returns a ggplot object", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("create_scatter_plot - log transform returns ggplot", {
+test_that("tyler_plot_scatter - log transform returns ggplot", {
   result <- suppressMessages(
-    create_scatter_plot(
+    tyler_plot_scatter(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -143,10 +143,10 @@ test_that("create_scatter_plot - log transform returns ggplot", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("create_scatter_plot - saves PNG and TIFF to output_dir", {
+test_that("tyler_plot_scatter - saves PNG and TIFF to output_dir", {
   prefix <- paste0("scatter_save_", Sys.getpid())
   suppressMessages(
-    create_scatter_plot(
+    tyler_plot_scatter(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -162,9 +162,9 @@ test_that("create_scatter_plot - saves PNG and TIFF to output_dir", {
   expect_true(length(tiff_files) >= 1L)
 })
 
-test_that("create_scatter_plot - jitter_width and point_alpha are accepted", {
+test_that("tyler_plot_scatter - jitter_width and point_alpha are accepted", {
   expect_no_error(suppressMessages(
-    create_scatter_plot(
+    tyler_plot_scatter(
       plot_data    = WAIT_DATA,
       x_var        = "insurance",
       y_var        = "days",
@@ -177,9 +177,9 @@ test_that("create_scatter_plot - jitter_width and point_alpha are accepted", {
   ))
 })
 
-test_that("create_scatter_plot - sqrt transform returns ggplot", {
+test_that("tyler_plot_scatter - sqrt transform returns ggplot", {
   result <- suppressMessages(
-    create_scatter_plot(
+    tyler_plot_scatter(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -193,11 +193,11 @@ test_that("create_scatter_plot - sqrt transform returns ggplot", {
   expect_s3_class(result, "ggplot")
 })
 
-# ── create_line_plot ──────────────────────────────────────────────────────────
+# ── tyler_plot_line ──────────────────────────────────────────────────────────
 
-test_that("create_line_plot - returns a ggplot object", {
+test_that("tyler_plot_line - returns a ggplot object", {
   result <- suppressMessages(
-    create_line_plot(
+    tyler_plot_line(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -211,9 +211,9 @@ test_that("create_line_plot - returns a ggplot object", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("create_line_plot - log transform accepted without error", {
+test_that("tyler_plot_line - log transform accepted without error", {
   expect_no_error(suppressMessages(
-    create_line_plot(
+    tyler_plot_line(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -225,10 +225,10 @@ test_that("create_line_plot - log transform accepted without error", {
   ))
 })
 
-test_that("create_line_plot - saves PNG and TIFF to output_dir", {
+test_that("tyler_plot_line - saves PNG and TIFF to output_dir", {
   prefix <- paste0("line_save_", Sys.getpid())
   suppressMessages(
-    create_line_plot(
+    tyler_plot_line(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -244,11 +244,11 @@ test_that("create_line_plot - saves PNG and TIFF to output_dir", {
   expect_true(length(tiff_files) >= 1L)
 })
 
-test_that("create_line_plot - use_geom_line with group column does not error", {
+test_that("tyler_plot_line - use_geom_line with group column does not error", {
   df <- WAIT_DATA
   df$group_col <- rep(c("Group1", "Group2", "Group3"), 10)
   expect_no_error(suppressMessages(
-    create_line_plot(
+    tyler_plot_line(
       plot_data       = df,
       x_var           = "insurance",
       y_var           = "days",

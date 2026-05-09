@@ -10,6 +10,8 @@ scrape_physicians_data_with_tor(
   torPort,
   wrong_ids_path = NULL,
   timeout_sec = 30,
+  delay_sec = 1,
+  output_dir = tempdir(),
   output_format = c("csv", "parquet")
 )
 }
@@ -26,12 +28,18 @@ integer \code{WrongIDs} column listing IDs to skip.}
 \item{timeout_sec}{Number of seconds before an individual HTTP request times
 out. Defaults to 30.}
 
+\item{delay_sec}{Seconds to pause between successive requests. Defaults to 1.}
+
+\item{output_dir}{Directory where result files are written. Defaults to
+\code{tempdir()}. Pass \code{NULL} to skip all file I/O and only return the data.}
+
 \item{output_format}{File format for saving results: \code{"csv"} (default) or
 \code{"parquet"}.}
 }
 \value{
-A data frame containing scraped physician records, invisibly. Output
-files are written to \code{tempdir()} and their paths printed via \code{message()}.
+A data frame containing scraped physician records, invisibly. When
+\code{output_dir} is not \code{NULL}, result files are also written there and their
+paths reported via \code{message()}.
 }
 \description{
 Scrapes board-certification data for physicians within a specified ID range
@@ -46,8 +54,8 @@ scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 91
 }
 \seealso{
 Other npi: 
-\code{\link{retrieve_clinician_data}()},
-\code{\link{search_and_process_npi}()},
-\code{\link{search_by_taxonomy}()}
+\code{\link{tyler_get_clinician_data}()},
+\code{\link{tyler_search_and_process_npi}()},
+\code{\link{tyler_search_taxonomy}()}
 }
 \concept{npi}

@@ -1,6 +1,6 @@
 # test-create-formula-gold-standard.R
 #
-# Gold-standard tests for create_formula().
+# Gold-standard tests for tyler_create_formula().
 # Tests exact formula string output, schema contracts, and metamorphic properties.
 #
 # Testing tenets satisfied:
@@ -15,17 +15,17 @@ library(testthat)
 library(tyler)
 
 # ---------------------------------------------------------------------------
-# Helper: suppress messages from create_formula
+# Helper: suppress messages from tyler_create_formula
 # ---------------------------------------------------------------------------
 quiet_cf <- function(data, response_var, random_effect = NULL) {
-  suppressMessages(create_formula(data, response_var, random_effect))
+  suppressMessages(tyler_create_formula(data, response_var, random_effect))
 }
 
 # ---------------------------------------------------------------------------
 # 1. Gold standard: formula without random effect
 # ---------------------------------------------------------------------------
 
-test_that("create_formula produces correct formula for age + name ~ days [gold standard]", {
+test_that("tyler_create_formula produces correct formula for age + name ~ days [gold standard]", {
   df <- data.frame(
     days = c(5, 10, 15),
     age  = c(30, 40, 50),
@@ -58,7 +58,7 @@ test_that("create_formula produces correct formula for age + name ~ days [gold s
 # 2. Gold standard with random effect
 # ---------------------------------------------------------------------------
 
-test_that("create_formula with random_effect contains '(1 | name)' term", {
+test_that("tyler_create_formula with random_effect contains '(1 | name)' term", {
   df <- data.frame(
     days = c(5, 10, 15),
     age  = c(30, 40, 50),
@@ -71,7 +71,7 @@ test_that("create_formula with random_effect contains '(1 | name)' term", {
               info = paste("Formula:", f_str))
 })
 
-test_that("create_formula with random_effect also includes the RE variable as a regular predictor", {
+test_that("tyler_create_formula with random_effect also includes the RE variable as a regular predictor", {
   df <- data.frame(
     days = c(5, 10, 15),
     age  = c(30, 40, 50),
@@ -92,13 +92,13 @@ test_that("create_formula with random_effect also includes the RE variable as a 
 # 3. Schema: output is always a formula object
 # ---------------------------------------------------------------------------
 
-test_that("create_formula output inherits 'formula' class", {
+test_that("tyler_create_formula output inherits 'formula' class", {
   df <- data.frame(outcome = 1:3, predictor = 4:6)
   f <- quiet_cf(df, "outcome")
   expect_true(inherits(f, "formula"))
 })
 
-test_that("create_formula output is a formula regardless of random_effect presence", {
+test_that("tyler_create_formula output is a formula regardless of random_effect presence", {
   df <- data.frame(y = 1:4, x = 5:8, grp = c("a", "b", "a", "b"))
 
   f_no_re <- quiet_cf(df, "y")
