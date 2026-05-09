@@ -3,6 +3,15 @@ destination: docs
 
 template:
   bootstrap: 5
+  params:
+    search: true
+  opengraph:
+    image:
+      src: https://github.com/mufflyt/mysterycall/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57
+      alt: "mysterycall hex logo"
+    twitter:
+      creator: "@mufflyt"
+      card: summary_large_image
 
 home:
   strip_header: true
@@ -11,16 +20,33 @@ navbar:
   structure:
     left:
       - home
+      - get-started
       - reference
       - articles
       - datasets
       - news
     right:
+      - search
       - github
   components:
+    get-started:
+      text: Get Started
+      href: articles/my-vignette.html
     datasets:
       text: Datasets
-      href: reference/index.html#datasets
+      href: reference/index.html#data-and-datasets
+
+footer:
+  structure:
+    left: developed_by
+    right: [built_with, repo_links]
+  components:
+    repo_links: |
+      <a href="https://github.com/mufflyt/mysterycall/issues">Report a bug</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/mufflyt/mysterycall/blob/main/NEWS.md">Changelog</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/mufflyt/mysterycall/blob/main/LICENSE">MIT License</a>
 
 reference:
   - title: "Data and Datasets"
@@ -179,14 +205,30 @@ reference:
       - mysterycall_process_isochrones
 
 articles:
-  - title: "Vignettes"
-    navbar: true
+  - title: "Getting Started"
+    navbar: Getting Started
     contents:
-      - create_isochrones
-      - geocode
-      - get_census_data
-      - imotive-news
-      - mapping
       - my-vignette
-      - search_and_process_npi
       - aggregating_provider_data
+
+  - title: "Data Collection"
+    navbar: Data Collection
+    contents:
+      - search_and_process_npi
+
+  - title: "Geospatial"
+    navbar: Geospatial
+    contents:
+      - geocode
+      - create_isochrones
+      - mapping
+
+  - title: "Demographics"
+    navbar: Demographics
+    contents:
+      - get_census_data
+
+  - title: "News"
+    navbar: ~
+    contents:
+      - imotive-news
