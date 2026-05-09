@@ -113,5 +113,5 @@ create_individual_isochrone_plots <- function(isochrones, drive_times, output_di
   }
 
   message("Individual isochrone plots and shapefiles creation completed.")
-  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
+  if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
 }

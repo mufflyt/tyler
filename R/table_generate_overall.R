@@ -146,7 +146,7 @@ table_generate_overall <- function(input_file_path, output_directory, title = "O
 
   # Log function end
   message("Overall table generation completed.")
-  if (requireNamespace("beepr", quietly = TRUE)) {
+  if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
 

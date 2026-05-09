@@ -108,7 +108,7 @@ search_by_taxonomy <- function(taxonomy_to_search,
       .save_taxonomy_snapshot(npi_data, snapshot_dir)
     }
 
-    if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
+    if (isTRUE(interactive()) && isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
       beepr::beep(2)
     }
 
@@ -127,7 +127,7 @@ search_by_taxonomy <- function(taxonomy_to_search,
     .save_taxonomy_snapshot(npi_data, snapshot_dir)
   }
 
-  if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
+  if (isTRUE(interactive()) && isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
 

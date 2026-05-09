@@ -106,7 +106,7 @@ genderize_physicians <- function(input_csv, output_dir = NULL, output_format = c
   message(sprintf("Genderized roster saved to: %s", output_path))
 
   # Return the result
-  if (requireNamespace("beepr", quietly = TRUE)) {
+  if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
 

@@ -418,7 +418,7 @@ clean_phase_1_results <- function(phase1_data,
   })
   # === END: SAVE AUDIT TRAIL ===
 
-  if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
+  if (isTRUE(interactive()) && isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
 

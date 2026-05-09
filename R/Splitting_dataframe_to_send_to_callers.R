@@ -173,6 +173,6 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
     split_paths[[i]] <- output_file
   }
   message(sprintf("Split run complete: generated %d workbook(s).", length(splits)))
-  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
+  if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   invisible(c(complete_output_file, split_paths))
 }

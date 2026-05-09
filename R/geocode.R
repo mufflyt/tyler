@@ -199,7 +199,7 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
     }
   }
 
-  if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
+  if (isTRUE(interactive()) && isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
   data

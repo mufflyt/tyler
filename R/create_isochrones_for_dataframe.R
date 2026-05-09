@@ -198,7 +198,7 @@ create_isochrones_for_dataframe <- function(
   }
 
   save_snapshot(force = TRUE)
-  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
+  if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
 
   if (!length(processed_isochrones)) {
     return(data.frame())

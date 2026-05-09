@@ -11,11 +11,15 @@
 #'   integer `WrongIDs` column listing IDs to skip.
 #' @param timeout_sec Number of seconds before an individual HTTP request times
 #'   out. Defaults to 30.
+#' @param delay_sec Seconds to pause between successive requests. Defaults to 1.
+#' @param output_dir Directory where result files are written. Defaults to
+#'   `tempdir()`. Pass `NULL` to skip all file I/O and only return the data.
 #' @param output_format File format for saving results: `"csv"` (default) or
 #'   `"parquet"`.
 #'
-#' @return A data frame containing scraped physician records, invisibly. Output
-#'   files are written to `tempdir()` and their paths printed via `message()`.
+#' @return A data frame containing scraped physician records, invisibly. When
+#'   `output_dir` is not `NULL`, result files are also written there and their
+#'   paths reported via `message()`.
 #'
 #' @importFrom httr GET content use_proxy timeout
 #' @importFrom dplyr bind_rows
@@ -30,6 +34,8 @@
 scrape_physicians_data_with_tor <- function(startID, endID, torPort,
                                             wrong_ids_path = NULL,
                                             timeout_sec = 30,
+                                            delay_sec = 1,
+                                            output_dir = tempdir(),
                                             output_format = c("csv", "parquet")) {
   output_format <- match.arg(output_format)
   if (!requireNamespace("jsonlite", quietly = TRUE)) {
@@ -97,22 +103,23 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort,
       WrongIDs <- c(WrongIDs, id)
     }
 
-    Sys.sleep(1)
+    Sys.sleep(delay_sec)
   }
 
-  timestamp       <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
-  ext             <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
-  temp_dir        <- tempdir()
-  physicians_file <- file.path(temp_dir, paste0("Physicians_", startID, "-", endID, "_", timestamp, ext))
-  wrong_tail      <- if (length(WrongIDs)) tail(WrongIDs, 1) else endID
-  wrong_ids_file  <- file.path(temp_dir, paste0("Wrong_IDs_", startID, "-", wrong_tail, "_", timestamp, ext))
+  if (!is.null(output_dir)) {
+    timestamp       <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
+    ext             <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
+    physicians_file <- file.path(output_dir, paste0("Physicians_", startID, "-", endID, "_", timestamp, ext))
+    wrong_tail      <- if (length(WrongIDs)) tail(WrongIDs, 1) else endID
+    wrong_ids_file  <- file.path(output_dir, paste0("Wrong_IDs_", startID, "-", wrong_tail, "_", timestamp, ext))
 
-  tyler_write_table(Physicians, physicians_file, format = output_format)
-  tyler_write_table(data.frame(WrongIDs = WrongIDs), wrong_ids_file, format = output_format)
+    tyler_write_table(Physicians, physicians_file, format = output_format)
+    tyler_write_table(data.frame(WrongIDs = WrongIDs), wrong_ids_file, format = output_format)
 
-  message("Roster saved to: ", physicians_file)
-  message("Wrong ID log saved to: ", wrong_ids_file)
+    message("Roster saved to: ", physicians_file)
+    message("Wrong ID log saved to: ", wrong_ids_file)
+  }
 
-  if (requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
+  if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
   invisible(Physicians)
 }

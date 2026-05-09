@@ -195,7 +195,7 @@ search_and_process_npi <- function(data,
         "No names provided; skipping search."
       }
     )
-    if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
+    if (isTRUE(interactive()) && isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
       beepr::beep(2)
     }
     return(final_result)
@@ -472,7 +472,7 @@ search_and_process_npi <- function(data,
     detail = "Finished processing all names"
   )
 
-  if (isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
+  if (isTRUE(interactive()) && isTRUE(notify) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
   }
 
