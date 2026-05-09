@@ -1,4 +1,4 @@
-# Extracted from test-tyler_clean_phase1.R:16
+# Extracted from test-mysterycall_clean_phase1.R:16
 
 # prequel ----------------------------------------------------------------------
 library(testthat)
@@ -15,4 +15,4 @@ library(humaniformat)
 
 # test -------------------------------------------------------------------------
 df_empty <- data.frame()
-expect_error(tyler_clean_phase1(df_empty, verbose = TRUE), "Required columns are missing")
+expect_error(mysterycall_clean_phase1(df_empty, verbose = TRUE), "Required columns are missing")

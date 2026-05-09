@@ -8,7 +8,7 @@
 # - ❌ Silent data corruption during handoffs
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 library(dplyr)
 
 # ==============================================================================
@@ -79,7 +79,7 @@ test_that("HANDOFF: Raw input handles optional columns", {
 # ==============================================================================
 
 test_that("HANDOFF: Phase 1 output meets Phase 2 requirements", {
-  # Simulate tyler_clean_phase1 output
+  # Simulate mysterycall_clean_phase1 output
   phase1_output <- data.frame(
     names = c("Dr. John Doe", "Dr. Mary Smith", "Dr. Robert Garcia"),
     npi = c("1234567890", "0987654321", "1111111111"),

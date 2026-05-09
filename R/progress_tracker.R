@@ -5,7 +5,7 @@
 #' tracker keeps a method-by-method breakdown, surfaces estimated completion
 #' times, and exposes convenience helpers for recording failures.
 #'
-#' @name tyler_progress_tracker
+#' @name mysterycall_progress_tracker
 NULL
 
 #' Create a progress tracker instance
@@ -16,16 +16,16 @@ NULL
 #' @param quiet Logical flag controlling console output. When `TRUE`, suppresses
 #'   status messages.
 #'
-#' @return An object of class `tyler_progress_tracker`.
+#' @return An object of class `mysterycall_progress_tracker`.
 #' @importFrom tibble tibble
 #' @family logging utilities
 #' @export
 #' @examples
-#' tracker <- tyler_progress_tracker(c("Geocode", "Validate", "Export"))
-#' tyler_progress_start(tracker, "Geocode")
+#' tracker <- mysterycall_progress_tracker(c("Geocode", "Validate", "Export"))
+#' mysterycall_progress_start(tracker, "Geocode")
 #' Sys.sleep(1)
-#' tyler_progress_finish(tracker, "Geocode", score = 0.95)
-tyler_progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler.quiet", FALSE)) {
+#' mysterycall_progress_finish(tracker, "Geocode", score = 0.95)
+mysterycall_progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler.quiet", FALSE)) {
   if (!is.character(steps) || !length(steps)) {
     stop("`steps` must be a non-empty character vector.", call. = FALSE)
   }
@@ -45,13 +45,13 @@ tyler_progress_tracker <- function(steps, update_every = 300, quiet = getOption(
   env$quiet <- quiet
   env$update_every <- update_every
 
-  structure(list(env = env), class = "tyler_progress_tracker")
+  structure(list(env = env), class = "mysterycall_progress_tracker")
 }
 
 # Internal helper to retrieve the record index for a step
 .tracker_index <- function(tracker, step) {
-  if (!inherits(tracker, "tyler_progress_tracker")) {
-    stop("`tracker` must be created with tyler_progress_tracker().", call. = FALSE)
+  if (!inherits(tracker, "mysterycall_progress_tracker")) {
+    stop("`tracker` must be created with mysterycall_progress_tracker().", call. = FALSE)
   }
   env <- tracker$env
   idx <- match(step, env$records$step)
@@ -102,13 +102,13 @@ tyler_progress_tracker <- function(steps, update_every = 300, quiet = getOption(
 
 #' Mark a step as started
 #'
-#' @param tracker Object created by [tyler_progress_tracker()].
+#' @param tracker Object created by [mysterycall_progress_tracker()].
 #' @param step Step name.
 #' @param note Optional note stored alongside the step.
 #'
 #' @family logging utilities
 #' @export
-tyler_progress_start <- function(tracker, step, note = NULL) {
+mysterycall_progress_start <- function(tracker, step, note = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
 
@@ -130,7 +130,7 @@ tyler_progress_start <- function(tracker, step, note = NULL) {
 
 #' Mark a step as completed
 #'
-#' @param tracker Object created by [tyler_progress_tracker()].
+#' @param tracker Object created by [mysterycall_progress_tracker()].
 #' @param step Step name.
 #' @param score Optional numeric score between 0 and 1 used to derive a
 #'   quality tier.
@@ -140,7 +140,7 @@ tyler_progress_start <- function(tracker, step, note = NULL) {
 #'
 #' @family logging utilities
 #' @export
-tyler_progress_finish <- function(tracker, step, score = NULL, quality = NULL, note = NULL) {
+mysterycall_progress_finish <- function(tracker, step, score = NULL, quality = NULL, note = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
   env$records$status[idx] <- "completed"
@@ -148,7 +148,7 @@ tyler_progress_finish <- function(tracker, step, score = NULL, quality = NULL, n
   if (!is.null(note)) {
     env$records$note[idx] <- note
   }
-  resolved_quality <- if (!is.null(quality)) quality else tyler_quality_tier(score)
+  resolved_quality <- if (!is.null(quality)) quality else mysterycall_quality_tier(score)
   env$records$quality[idx] <- resolved_quality
   .tracker_log(tracker, sprintf("Completed %s (%s)", step, if (!is.null(resolved_quality) && !is.na(resolved_quality)) resolved_quality else "no tier"))
   .tracker_emit_update(tracker, force = TRUE)
@@ -157,13 +157,13 @@ tyler_progress_finish <- function(tracker, step, score = NULL, quality = NULL, n
 
 #' Mark a step as failed
 #'
-#' @param tracker Object created by [tyler_progress_tracker()].
+#' @param tracker Object created by [mysterycall_progress_tracker()].
 #' @param step Step name.
 #' @param reason Optional string describing why the step failed.
 #'
 #' @family logging utilities
 #' @export
-tyler_progress_fail <- function(tracker, step, reason = NULL) {
+mysterycall_progress_fail <- function(tracker, step, reason = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
   env$records$status[idx] <- "failed"
@@ -178,27 +178,27 @@ tyler_progress_fail <- function(tracker, step, reason = NULL) {
 
 #' Emit a manual progress update
 #'
-#' @param tracker Object created by [tyler_progress_tracker()].
+#' @param tracker Object created by [mysterycall_progress_tracker()].
 #'
 #' @param force Logical flag indicating whether the update should be emitted
 #'   even if the configured interval has not elapsed.
 #'
 #' @family logging utilities
 #' @export
-tyler_progress_update <- function(tracker, force = FALSE) {
+mysterycall_progress_update <- function(tracker, force = FALSE) {
   .tracker_emit_update(tracker, force = force)
   invisible(tracker)
 }
 
 #' Return a tibble describing step-by-step progress
 #'
-#' @param tracker Object created by [tyler_progress_tracker()].
+#' @param tracker Object created by [mysterycall_progress_tracker()].
 #'
 #' @return Tibble with per-step status, timestamps, and quality tiers.
 #' @importFrom tibble as_tibble
 #' @family logging utilities
 #' @export
-tyler_progress_summary <- function(tracker) {
+mysterycall_progress_summary <- function(tracker) {
   env <- tracker$env
   tibble::as_tibble(env$records)
 }

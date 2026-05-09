@@ -16,7 +16,7 @@
 #'   patient_contact_data = 6:10
 #' )
 #' # Renaming 'doctor_info' to 'physician_info'
-#' df <- tyler_rename_columns(df,
+#' df <- mysterycall_rename_columns(df,
 #'                                   target_strings = c("doctor"),
 #'                                   new_names = c("physician_info"))
 #' print(df)
@@ -28,11 +28,11 @@
 #'   doctor_notes = 11:15
 #' )
 #' # Renaming 'doc_information' to 'doctor_info' and 'doctor_notes' to 'notes'
-#' df <- tyler_rename_columns(df,
+#' df <- mysterycall_rename_columns(df,
 #'                                   target_strings = c("doc_information", "doctor_notes"),
 #'                                   new_names = c("doctor_info", "notes"))
 #' print(df)
-tyler_rename_columns <- function(data, target_strings, new_names) {
+mysterycall_rename_columns <- function(data, target_strings, new_names) {
   # Initial checks and setup
   validate_dataframe(data, name = "data")
   if (!length(target_strings) && !length(new_names)) {
@@ -147,7 +147,7 @@ tyler_rename_columns <- function(data, target_strings, new_names) {
 #' input_path <- "path_to_your_data.csv"
 #' required_strings <- c("physician_information", "able_to_contact_office")
 #' standard_names <- c("physician_info", "contact_office")
-#' cleaned_data <- tyler_clean_phase2(input_path, required_strings, standard_names)
+#' cleaned_data <- mysterycall_clean_phase2(input_path, required_strings, standard_names)
 #' }
 #'
 #' # Directly using a data frame
@@ -157,9 +157,9 @@ tyler_rename_columns <- function(data, target_strings, new_names) {
 #' )
 #' required_strings <- c("doc_info", "contact_data")
 #' standard_names <- c("doctor_info", "patient_contact_info")
-#' cleaned_df <- tyler_clean_phase2(df, required_strings, standard_names)
+#' cleaned_df <- mysterycall_clean_phase2(df, required_strings, standard_names)
 #' print(cleaned_df)
-tyler_clean_phase2 <- function(
+mysterycall_clean_phase2 <- function(
   data_or_path,
   required_strings,
   standard_names,
@@ -172,8 +172,8 @@ tyler_clean_phase2 <- function(
     if (!file.exists(data_or_path)) {
       stop("File does not exist at the specified path: ", data_or_path, call. = FALSE)
     }
-    input_format <- tyler_normalize_file_format(path = data_or_path)
-    data <- tyler_read_table(data_or_path, format = input_format)
+    input_format <- mysterycall_normalize_file_format(path = data_or_path)
+    data <- mysterycall_read_table(data_or_path, format = input_format)
     message(sprintf("Loaded Phase 2 data from %s with %d row(s) and %d column(s).", data_or_path, nrow(data), ncol(data)))
   } else if (is.data.frame(data_or_path)) {
     data <- data_or_path
@@ -203,7 +203,7 @@ tyler_clean_phase2 <- function(
   message("Converted column names to snake_case format.")
 
   # Apply the renaming function with detailed logging
-  data <- tyler_rename_columns(data, required_strings, standard_names)
+  data <- mysterycall_rename_columns(data, required_strings, standard_names)
   rename_log <- attr(data, "rename_log")
   if (!is.null(rename_log)) {
     message("Summary of applied renames:")
@@ -222,7 +222,7 @@ tyler_clean_phase2 <- function(
 
   # Saving the cleaned data
   if (is.null(output_directory)) {
-    output_directory <- tyler_tempdir("phase2", create = TRUE)
+    output_directory <- mysterycall_tempdir("phase2", create = TRUE)
   } else if (!dir.exists(output_directory)) {
     dir.create(output_directory, recursive = TRUE, showWarnings = FALSE)
   }
@@ -230,7 +230,7 @@ tyler_clean_phase2 <- function(
   current_datetime <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")
   output_extension <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
   output_file_path <- file.path(output_directory, paste0("cleaned_phase_2_data_", current_datetime, output_extension))
-  tyler_write_table(data, output_file_path, format = output_format)
+  mysterycall_write_table(data, output_file_path, format = output_format)
   message(sprintf("Cleaned Phase 2 data (%d row(s), %d column(s)) saved to: %s", nrow(data), ncol(data), output_file_path))
 
   attr(data, "output_path") <- output_file_path
@@ -248,4 +248,4 @@ tyler_clean_phase2 <- function(
 
 # Assuming an input path, you would run it like this:
 # input_file <- "/path/to/your/data.csv"
-# cleaned_data <- tyler_clean_phase2(input_file, required_strings, standard_names)
+# cleaned_data <- mysterycall_clean_phase2(input_file, required_strings, standard_names)

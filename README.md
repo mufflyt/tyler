@@ -2,12 +2,12 @@
 # tyler
 
 <!-- badges: start -->
-<img src="https://github.com/mufflyt/tyler/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57" width="15%" align="right">
+<img src="https://github.com/mufflyt/mysterycall/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57" width="15%" align="right">
 
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
-[![Codecov test coverage](https://codecov.io/gh/mufflyt/tyler/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mufflyt/tyler?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/mufflyt/mysterycall/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mufflyt/mysterycall?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/tyler)](https://CRAN.R-project.org/package=tyler)
-[![R-CMD-check](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/tyler/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **tyler** provides a toolkit for mystery caller and audit studies that evaluate
@@ -20,7 +20,7 @@ tables and maps.
 
 ```r
 # install.packages("devtools")
-devtools::install_github("mufflyt/tyler")
+devtools::install_github("mufflyt/mysterycall")
 ```
 
 The package loads quickly with a small footprint. Geospatial and modelling
@@ -41,7 +41,7 @@ A typical mystery caller study moves through four stages. Here is a minimal
 end-to-end example for gynecologic oncology:
 
 ```r
-library(tyler)
+library(mysterycall)
 library(dplyr)
 
 # ── 1. Build a provider roster ────────────────────────────────────────────────
@@ -79,7 +79,7 @@ isochrones <- create_isochrones_for_dataframe(
 )
 
 # Free the in-memory isochrone cache after a large batch
-tyler_clear_isochrone_cache()
+mysterycall_clear_isochrone_cache()
 
 # ── 4. Map ────────────────────────────────────────────────────────────────────
 
@@ -97,7 +97,7 @@ map_create_physician_dot(geocoded, popup_var = "name")
 | | `genderize_physicians()` | Estimate physician gender via the Genderize.io API |
 | **Geocode** | `geocode_unique_addresses()` | Convert addresses to lat/lon via Google Maps |
 | **Isochrones** | `create_isochrones_for_dataframe()` | Drive-time polygons for every row using the HERE API |
-| | `tyler_clear_isochrone_cache()` | Release the in-session memoization cache |
+| | `mysterycall_clear_isochrone_cache()` | Release the in-session memoization cache |
 | **Census** | `get_census_data()` | ACS block-group demographics by state FIPS |
 | | `calculate_intersection_overlap_and_save()` | Overlap area between isochrones and block groups |
 | **Maps** | `map_create_physician_dot()` | Interactive Leaflet dot map coloured by ACOG district |
@@ -119,7 +119,7 @@ map_create_physician_dot(geocoded, popup_var = "name")
 
 ```r
 # Example: find all OBGYN taxonomy codes
-library(tyler)
+library(mysterycall)
 library(dplyr)
 library(stringr)
 
@@ -157,7 +157,7 @@ citation("tyler")
 
 > Muffly, T. (2026). *tyler: Common Functions for Mystery Caller or Audit
 > Studies Evaluating Patient Access to Care* (R package version 1.2.2).
-> <https://github.com/mufflyt/tyler>
+> <https://github.com/mufflyt/mysterycall>
 
 ## Code of conduct
 

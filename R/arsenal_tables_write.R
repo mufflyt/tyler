@@ -10,11 +10,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' tyler_write_arsenal_table(my_table, "output_table")
+#' mysterycall_write_arsenal_table(my_table, "output_table")
 #' }
-tyler_write_arsenal_table <- function(object, filename, output_dir = NULL) {
+mysterycall_write_arsenal_table <- function(object, filename, output_dir = NULL) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
-    stop("Package 'arsenal' is required for tyler_write_arsenal_table(). Install with: install.packages('arsenal')", call. = FALSE)
+    stop("Package 'arsenal' is required for mysterycall_write_arsenal_table(). Install with: install.packages('arsenal')", call. = FALSE)
   }
   if (!is.data.frame(object)) {
     stop("Error: 'object' must be a data frame object.", call. = FALSE)
@@ -24,7 +24,7 @@ tyler_write_arsenal_table <- function(object, filename, output_dir = NULL) {
   }
 
   if (is.null(output_dir)) {
-    output_dir <- tyler_tempdir("tables", create = TRUE)
+    output_dir <- mysterycall_tempdir("tables", create = TRUE)
   } else if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }

@@ -47,8 +47,8 @@ run_with_mocks <- function(expr) {
     clinicians = mock_clinicians,
     .package = "provider",
     code = with_mocked_bindings(
-      tyler_validate_npi = mock_validate_and_remove_invalid_npi,
-      .package = "tyler",
+      mysterycall_validate_npi = mock_validate_and_remove_invalid_npi,
+      .package = "mysterycall",
       code = expr
     )
   )
@@ -57,7 +57,7 @@ run_with_mocks <- function(expr) {
 test_that("Retrieves clinician data for valid NPIs", {
   temp_csv <- create_temp_csv(sample_data_valid)
   run_with_mocks({
-    result <- tyler_get_clinician_data(temp_csv)
+    result <- mysterycall_get_clinician_data(temp_csv)
     expect_equal(nrow(result), 2)
     expect_true("name" %in% colnames(result))
     expect_true("specialty" %in% colnames(result))
@@ -68,7 +68,7 @@ test_that("Retrieves clinician data for valid NPIs", {
 test_that("Handles invalid NPIs", {
   temp_csv <- create_temp_csv(sample_data_invalid)
   run_with_mocks({
-    result <- tyler_get_clinician_data(temp_csv)
+    result <- mysterycall_get_clinician_data(temp_csv)
     expect_equal(nrow(result), 0)
   })
 })
@@ -76,7 +76,7 @@ test_that("Handles invalid NPIs", {
 test_that("Handles mixed valid and invalid NPIs", {
   temp_csv <- create_temp_csv(sample_data_mixed)
   run_with_mocks({
-    result <- tyler_get_clinician_data(temp_csv)
+    result <- mysterycall_get_clinician_data(temp_csv)
     expect_equal(nrow(result), 2)
     expect_true("name" %in% colnames(result))
     expect_true("specialty" %in% colnames(result))
@@ -86,7 +86,7 @@ test_that("Handles mixed valid and invalid NPIs", {
 
 test_that("Handles dataframe input correctly", {
   run_with_mocks({
-    result <- tyler_get_clinician_data(sample_data_mixed)
+    result <- mysterycall_get_clinician_data(sample_data_mixed)
     expect_equal(nrow(result), 2)
     expect_true("name" %in% colnames(result))
     expect_true("specialty" %in% colnames(result))

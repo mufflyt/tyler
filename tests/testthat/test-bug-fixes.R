@@ -2,7 +2,7 @@
 # Testing all bug fixes implemented in this session
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 
 # ==============================================================================
 # Bug #5: Phone Number Validation
@@ -81,7 +81,7 @@ test_that("Bug #5: invalid phone lengths are converted to NA in phase 1 cleaning
   )
 
   expect_warning(
-    cleaned <- tyler_clean_phase1(df, duplicate_rows = FALSE, verbose = FALSE),
+    cleaned <- mysterycall_clean_phase1(df, duplicate_rows = FALSE, verbose = FALSE),
     "invalid length"
   )
   expect_true(is.na(cleaned$phone_number[cleaned$names == "John Doe"]))

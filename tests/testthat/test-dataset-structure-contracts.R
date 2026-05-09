@@ -7,7 +7,7 @@ library(testthat)
 # ── Helper ────────────────────────────────────────────────────────────────────
 load_dataset <- function(name) {
   e <- new.env(parent = emptyenv())
-  data(list = name, package = "tyler", envir = e)
+  data(list = name, package = "mysterycall", envir = e)
   get(name, envir = e)
 }
 

@@ -23,21 +23,21 @@
 #'
 #' @examples
 #' \dontrun{
-#' result <- tyler_genderize("sample.csv")
+#' result <- mysterycall_genderize("sample.csv")
 #' }
 #'
 #' @family gender
 #' @export
-tyler_genderize <- function(input_csv, output_dir = NULL, output_format = c("csv", "parquet")) {
+mysterycall_genderize <- function(input_csv, output_dir = NULL, output_format = c("csv", "parquet")) {
   output_format <- match.arg(output_format)
   if (!file.exists(input_csv)) {
     stop(sprintf("Input file not found: %s", input_csv), call. = FALSE)
   }
 
-  input_format <- tyler_normalize_file_format(path = input_csv)
+  input_format <- mysterycall_normalize_file_format(path = input_csv)
 
   # Read the data
-  gender_Physicians <- tyler_read_table(input_csv, format = input_format)
+  gender_Physicians <- mysterycall_read_table(input_csv, format = input_format)
   validate_dataframe(gender_Physicians, name = "genderize input", allow_zero_rows = FALSE)
   message(sprintf("Loaded %d row(s) for genderization from %s.", nrow(gender_Physicians), input_csv))
 
@@ -78,7 +78,7 @@ tyler_genderize <- function(input_csv, output_dir = NULL, output_format = c("csv
   timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
 
   if (is.null(output_dir)) {
-    output_dir <- tyler_tempdir("tyler_genderize", create = TRUE)
+    output_dir <- mysterycall_tempdir("mysterycall_genderize", create = TRUE)
   } else if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
@@ -89,7 +89,7 @@ tyler_genderize <- function(input_csv, output_dir = NULL, output_format = c("csv
   output_path <- file.path(output_dir, paste0("genderized_", timestamp, "_", input_stem, output_extension))
 
   # Write the result to disk
-  tyler_write_table(y, output_path, format = output_format)
+  mysterycall_write_table(y, output_path, format = output_format)
 
   # Print the number of missing genders in both datasets using plain-language summaries
   message(sprintf(

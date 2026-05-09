@@ -16,15 +16,15 @@
 #' @examples
 #' \dontrun{
 #' data <- read_csv("providers.csv")
-#' tyler_check_no_limits(data, "provider input")
+#' mysterycall_check_no_limits(data, "provider input")
 #'
-#' npi_results <- tyler_search_and_process_npi(data)
-#' tyler_check_no_limits(npi_results, "NPI search results", min_expected = 100)
+#' npi_results <- mysterycall_search_and_process_npi(data)
+#' mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 100)
 #' }
 #'
 #' @family utilities
 #' @export
-tyler_check_no_limits <- function(data,
+mysterycall_check_no_limits <- function(data,
                                    context = "dataset",
                                    min_expected = NULL,
                                    max_expected = NULL) {
@@ -116,15 +116,15 @@ tyler_check_no_limits <- function(data,
 #' @examples
 #' \dontrun{
 #' # Scan all R files in package
-#' issues <- tyler_scan_for_limits("R/")
+#' issues <- mysterycall_scan_for_limits("R/")
 #'
 #' # Scan with exclusions
-#' issues <- tyler_scan_for_limits("R/", exclude_pattern = "deprecated")
+#' issues <- mysterycall_scan_for_limits("R/", exclude_pattern = "deprecated")
 #' }
 #'
 #' @family utilities
 #' @export
-tyler_scan_for_limits <- function(path = "R",
+mysterycall_scan_for_limits <- function(path = "R",
                                    recursive = TRUE,
                                    exclude_pattern = NULL) {
   if (!dir.exists(path)) {
@@ -274,17 +274,17 @@ tyler_scan_for_limits <- function(path = "R",
 #' \dontrun{
 #' # Expect exactly 100 geocoding results
 #' coords <- geocode(addresses)
-#' tyler_check_api_response(coords, expected = 100, api_name = "Google Geocoding")
+#' mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding")
 #'
 #' # Allow up to 5% missing
 #' coords <- geocode(addresses)
-#' tyler_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
+#' mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
 #'                         tolerance = 5)
 #' }
 #'
 #' @family utilities
 #' @export
-tyler_check_api_response <- function(result,
+mysterycall_check_api_response <- function(result,
                                      expected,
                                      api_name = "API",
                                      tolerance = 0) {
@@ -334,19 +334,19 @@ tyler_check_api_response <- function(result,
 #' \dontrun{
 #' # Expect no data loss in cleaning
 #' before <- nrow(raw_data)
-#' clean_data <- tyler_clean_phase1(raw_data)
-#' tyler_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
+#' clean_data <- mysterycall_clean_phase1(raw_data)
+#' mysterycall_check_no_data_loss(before, clean_data, "Phase 1 cleaning")
 #'
 #' # Expect deduplication to remove ~10 rows, allow +/-5
 #' before <- nrow(data)
 #' dedup_data <- deduplicate(data)
-#' tyler_check_no_data_loss(before, dedup_data, "Deduplication",
+#' mysterycall_check_no_data_loss(before, dedup_data, "Deduplication",
 #'                         expected_change = -10, tolerance = 5)
 #' }
 #'
 #' @family utilities
 #' @export
-tyler_check_no_data_loss <- function(before,
+mysterycall_check_no_data_loss <- function(before,
                                      after,
                                      operation = "operation",
                                      expected_change = 0,

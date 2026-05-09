@@ -16,7 +16,7 @@
 #'   Provider.Credential.Text = c("MD", "MD", "DO", "MD", "DO"),
 #'   academic_affiliation = c("Yes", "No", "Yes", "No", "Yes")
 #' )
-#' result <- tyler_most_common_gender(data)
+#' result <- mysterycall_most_common_gender(data)
 #' print(result)
 #'
 #' # Example 2: Handling missing data
@@ -26,7 +26,7 @@
 #'   Provider.Credential.Text = c("MD", "MD", "DO", "MD", "DO"),
 #'   academic_affiliation = c("Yes", "No", "Yes", "No", NA)
 #' )
-#' result <- tyler_most_common_gender(df_with_na)
+#' result <- mysterycall_most_common_gender(df_with_na)
 #' print(result)
 #'
 #' # Example 3: Different proportions with a larger dataset
@@ -36,14 +36,14 @@
 #'   Provider.Credential.Text = c(rep("MD", 60), rep("DO", 40)),
 #'   academic_affiliation = c(rep("Yes", 40), rep("No", 60))
 #' )
-#' result <- tyler_most_common_gender(df_large)
+#' result <- mysterycall_most_common_gender(df_large)
 #' print(result)
 #'
 #' @importFrom dplyr filter count arrange desc slice
 #' @importFrom rlang sym
 #' @family gender
 #' @export
-tyler_most_common_gender <- function(data) {
+mysterycall_most_common_gender <- function(data) {
   required_cols <- c("gender", "specialty", "Provider.Credential.Text", "academic_affiliation")
   missing_cols <- setdiff(required_cols, names(data))
   if (length(missing_cols)) {

@@ -15,23 +15,23 @@
 #' @examples
 #' # Example 1: Basic usage with a simple dataset
 #' data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
-#' result <- tyler_table_percentages(data_frame, "category")
+#' result <- mysterycall_table_percentages(data_frame, "category")
 #' print(result)
 #'
 #' # Example 2: Using a dataset with multiple most common values
 #' df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
-#' result <- tyler_table_percentages(df_tie, "category")
+#' result <- mysterycall_table_percentages(df_tie, "category")
 #' print(result)
 #'
 #' # Example 3: Handling a dataset with missing values
 #' df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
-#' result <- tyler_table_percentages(df_na, "category")
+#' result <- mysterycall_table_percentages(df_na, "category")
 #' print(result)
 #'
 #' @importFrom rlang sym
 #' @family table
 #' @export
-tyler_table_percentages <- function(data_frame, variable) {
+mysterycall_table_percentages <- function(data_frame, variable) {
   variable <- as.character(variable)  # Ensure the variable name is a string
 
   summary_df <- data_frame %>%

@@ -9,7 +9,7 @@ test_that("Handles no matching data", {
     npi_flatten = function(result, ...) result,
     .package = "npi",
     code = {
-      result <- tyler_search_taxonomy("Nonexistent Taxonomy", write_snapshot = FALSE, notify = FALSE)
+      result <- mysterycall_search_taxonomy("Nonexistent Taxonomy", write_snapshot = FALSE, notify = FALSE)
       expect_equal(nrow(result), 0)
     }
   )
@@ -31,7 +31,7 @@ test_that("Filters and renames taxonomy results", {
     ),
     .package = "npi",
     code = {
-      result <- tyler_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
+      result <- mysterycall_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
       expect_true(nrow(result) >= 1)
       expect_true("first_name" %in% names(result))
       expect_true("Ada" %in% result$first_name)
@@ -55,7 +55,7 @@ test_that("Handles saboteur payload missing optional columns", {
     },
     .package = "npi",
     code = {
-      result <- tyler_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
+      result <- mysterycall_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
       expect_equal(nrow(result), 1)
       expect_true("first_name" %in% names(result))
       expect_true("middle_name" %in% names(result))
@@ -81,7 +81,7 @@ test_that("Handles saboteur taxonomy strings containing regex metacharacters", {
     },
     .package = "npi",
     code = {
-      result <- tyler_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
+      result <- mysterycall_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
       expect_equal(nrow(result), 1)
       expect_equal(result$search_term, taxonomy)
     }

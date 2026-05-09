@@ -31,7 +31,7 @@
 #' @examples
 #' \dontrun{
 #' # National search (limited to 1200 records per taxonomy):
-#' go_data <- tyler_search_taxonomy("Gynecologic Oncology")
+#' go_data <- mysterycall_search_taxonomy("Gynecologic Oncology")
 #'
 #' # Full national search by looping over every state:
 #' all_states <- c(
@@ -41,7 +41,7 @@
 #'   "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
 #'   "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
 #' )
-#' fpmrs_data <- tyler_search_taxonomy(
+#' fpmrs_data <- mysterycall_search_taxonomy(
 #'   "Female Pelvic Medicine and Reconstructive Surgery",
 #'   states = all_states
 #' )
@@ -54,7 +54,7 @@
 #' @importFrom tibble tibble
 #' @family npi
 #' @export
-tyler_search_taxonomy <- function(taxonomy_to_search,
+mysterycall_search_taxonomy <- function(taxonomy_to_search,
                                states = NULL,
                                city = NULL,
                                limit = 1200L,
@@ -294,7 +294,7 @@ tyler_search_taxonomy <- function(taxonomy_to_search,
 
 .save_taxonomy_snapshot <- function(npi_data, snapshot_dir) {
   if (is.null(snapshot_dir)) {
-    snapshot_dir <- tyler_tempdir("tyler_search_taxonomy", create = TRUE)
+    snapshot_dir <- mysterycall_tempdir("mysterycall_search_taxonomy", create = TRUE)
   } else if (!dir.exists(snapshot_dir)) {
     dir.create(snapshot_dir, showWarnings = FALSE, recursive = TRUE)
   }

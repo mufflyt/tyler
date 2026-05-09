@@ -8,6 +8,6 @@ Provides plain-language logging with progress tracking, timing, and
 user-friendly output for long-running workflows.
 }
 \seealso{
-\code{\link[=tyler_run_workflow_logged]{tyler_run_workflow_logged()}},
-\code{\link[=tyler_preflight_check]{tyler_preflight_check()}}, \code{\link[=tyler_multi_progress]{tyler_multi_progress()}}
+\code{\link[=mysterycall_run_workflow_logged]{mysterycall_run_workflow_logged()}},
+\code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}}, \code{\link[=mysterycall_multi_progress]{mysterycall_multi_progress()}}
 }

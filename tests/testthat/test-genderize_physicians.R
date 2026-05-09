@@ -41,7 +41,7 @@ test_that("genderize_fetch deduplicates exact first names and trims whitespace",
     GET = fake_get,
     .package = "httr",
     code = {
-      result <- tyler:::genderize_fetch(c(" Alice ", "Bob", "Alice", NA))
+      result <- mysterycall:::genderize_fetch(c(" Alice ", "Bob", "Alice", NA))
       expect_prediction_columns(result)
       expect_equal(nrow(result), 2L)
       expect_equal(sort(result$first_name), sort(c("Alice", "Bob")))
@@ -63,7 +63,7 @@ test_that("genderize_fetch handles single-object responses", {
     GET = fake_get,
     .package = "httr",
     code = {
-      result <- tyler:::genderize_fetch("Eve")
+      result <- mysterycall:::genderize_fetch("Eve")
       expect_prediction_columns(result)
       expect_equal(result$first_name, "Eve")
       expect_equal(result$gender, "female")
@@ -77,13 +77,13 @@ test_that("genderize_fetch surfaces HTTP and API errors", {
   with_mocked_bindings(
     GET = function(url, query, ...) make_genderize_response(list(error = "Too Many Requests"), status = 429L),
     .package = "httr",
-    code = expect_error(tyler:::genderize_fetch("Ava"), "Genderize.io request failed")
+    code = expect_error(mysterycall:::genderize_fetch("Ava"), "Genderize.io request failed")
   )
 
   with_mocked_bindings(
     GET = function(url, query, ...) make_genderize_response(list(error = "Daily limit reached")),
     .package = "httr",
-    code = expect_error(tyler:::genderize_fetch("Mia"), "Genderize.io error: Daily limit reached")
+    code = expect_error(mysterycall:::genderize_fetch("Mia"), "Genderize.io error: Daily limit reached")
   )
 })
 
@@ -104,7 +104,7 @@ test_that("genderize_fetch batches requests to improve performance", {
     .package = "httr",
     code = {
       first_names <- sprintf("Name%02d", 1:25)
-      result <- tyler:::genderize_fetch(first_names)
+      result <- mysterycall:::genderize_fetch(first_names)
       expect_equal(call_count, 3L)
       expect_equal(length(result$first_name), 25L)
       expect_true(all(vapply(requested, length, integer(1)) <= 10L))
@@ -112,11 +112,11 @@ test_that("genderize_fetch batches requests to improve performance", {
   )
 })
 
-# Helper: run tyler_genderize with genderize_fetch and beepr::beep mocked
+# Helper: run mysterycall_genderize with genderize_fetch and beepr::beep mocked
 with_genderize_mocks <- function(fake_genderize, expr) {
   with_mocked_bindings(
     genderize_fetch = fake_genderize,
-    .package = "tyler",
+    .package = "mysterycall",
     code = with_mocked_bindings(
       beep = function(...) NULL,
       .package = "beepr",
@@ -125,7 +125,7 @@ with_genderize_mocks <- function(fake_genderize, expr) {
   )
 }
 
-test_that("tyler_genderize produces enriched output and preserves original data", {
+test_that("mysterycall_genderize produces enriched output and preserves original data", {
   input <- tibble::tibble(
     first_name = c("Ada", "Grace", "Ada", "Edsger", NA_character_),
     last_name  = c("Lovelace", "Hopper", "Smith", "Dijkstra", "Unknown")
@@ -143,7 +143,7 @@ test_that("tyler_genderize produces enriched output and preserves original data"
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- tyler_genderize(input_path, temp_dir)
+    result <- mysterycall_genderize(input_path, temp_dir)
     expect_equal(nrow(result), nrow(input))
     expect_setequal(colnames(result), c(colnames(input), colnames(predictions)[-1]))
     expect_equal(sum(!is.na(result$gender)), 4L)
@@ -155,7 +155,7 @@ test_that("tyler_genderize produces enriched output and preserves original data"
   })
 })
 
-test_that("tyler_genderize maintains historical match rates", {
+test_that("mysterycall_genderize maintains historical match rates", {
   input <- tibble::tibble(first_name = c("Alan", "Barbara", "Charlie", "Dana"))
   predictions <- tibble::tibble(
     first_name  = c("Alan", "Barbara", "Charlie"),
@@ -170,12 +170,12 @@ test_that("tyler_genderize maintains historical match rates", {
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- tyler_genderize(input_path, temp_dir)
+    result <- mysterycall_genderize(input_path, temp_dir)
     expect_gte(mean(!is.na(result$gender)), 0.5)
   })
 })
 
-test_that("tyler_genderize enforces data validation on blank or malformed names", {
+test_that("mysterycall_genderize enforces data validation on blank or malformed names", {
   input <- tibble::tibble(
     first_name = c("", "  ", "Lynn", NA_character_),
     last_name  = c("One", "Two", "Three", "Four")
@@ -190,7 +190,7 @@ test_that("tyler_genderize enforces data validation on blank or malformed names"
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- tyler_genderize(input_path, temp_dir)
+    result <- mysterycall_genderize(input_path, temp_dir)
     trimmed <- trimws(result$first_name)
     blank_or_missing <- is.na(trimmed) | trimmed == ""
     expect_equal(sum(blank_or_missing), 3L)
@@ -199,7 +199,7 @@ test_that("tyler_genderize enforces data validation on blank or malformed names"
   })
 })
 
-test_that("tyler_genderize output remains compatible with downstream case_when logic", {
+test_that("mysterycall_genderize output remains compatible with downstream case_when logic", {
   input <- tibble::tibble(first_name = paste0("Name", 1:10))
   predictions <- tibble::tibble(
     first_name  = paste0("Name", 1:10),
@@ -214,13 +214,13 @@ test_that("tyler_genderize output remains compatible with downstream case_when l
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- tyler_genderize(input_path, temp_dir)
+    result <- mysterycall_genderize(input_path, temp_dir)
     genders <- na.omit(unique(result$gender))
     expect_true(all(genders %in% c("male", "female")))
   })
 })
 
-test_that("tyler_genderize provides required columns for handoff workflows", {
+test_that("mysterycall_genderize provides required columns for handoff workflows", {
   input <- tibble::tibble(first_name = c("Ruth", "Ida"), external_id = c("X1", "X2"))
   predictions <- tibble::tibble(
     first_name  = c("Ruth", "Ida"),
@@ -235,7 +235,7 @@ test_that("tyler_genderize provides required columns for handoff workflows", {
   readr::write_csv(input, input_path)
 
   with_genderize_mocks(function(first_names, ...) predictions, {
-    result <- tyler_genderize(input_path, temp_dir)
+    result <- mysterycall_genderize(input_path, temp_dir)
     expect_true(all(c("probability", "count") %in% colnames(result)))
     expect_equal(result$external_id, input$external_id)
     expect_equal(result$gender, predictions$gender)

@@ -1,6 +1,6 @@
 # Integration tests with test databases
 library(testthat)
-library(tyler)
+library(mysterycall)
 library(dplyr)
 
 # Helper function to create a mock census database
@@ -80,7 +80,7 @@ test_that("Integration: NPI search and data cleaning pipeline", {
     npi_flatten = mock_npi_flatten,
     {
       # Test the full pipeline
-      result <- tyler_search_taxonomy(
+      result <- mysterycall_search_taxonomy(
         "Gynecologic Oncology",
         write_snapshot = FALSE,
         notify = FALSE
@@ -128,7 +128,7 @@ test_that("Integration: Census data retrieval and summarization", {
     getCensus = mock_get_census,
     {
       # Test census data pipeline
-      result <- tyler_get_census_data(
+      result <- mysterycall_get_census_data(
         geography = "county",
         state = "all",
         vintage = 2021,
@@ -139,7 +139,7 @@ test_that("Integration: Census data retrieval and summarization", {
       expect_gt(nrow(result), 0)
 
       # Test summarization
-      summary_result <- tyler_summarize_census(result)
+      summary_result <- mysterycall_summarize_census(result)
       expect_s3_class(summary_result, "data.frame")
       expect_true("total_population" %in% names(summary_result) ||
                   "B01001_001E" %in% names(summary_result))
@@ -165,7 +165,7 @@ test_that("Integration: Full mystery caller workflow", {
   temp_dir <- tempdir()
 
   # Test full workflow
-  cleaned_data <- tyler_clean_phase1(
+  cleaned_data <- mysterycall_clean_phase1(
     phase1_data = phase1_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -182,7 +182,7 @@ test_that("Integration: Full mystery caller workflow", {
   }
 
   # Test data quality validation
-  validated_data <- tyler_validate_npi(cleaned_data)
+  validated_data <- mysterycall_validate_npi(cleaned_data)
   expect_s3_class(validated_data, "data.frame")
 })
 
@@ -227,7 +227,7 @@ test_that("Integration: Data validation across pipeline stages", {
   temp_dir <- tempdir()
 
   # Process through cleaning pipeline
-  result <- tyler_clean_phase1(
+  result <- mysterycall_clean_phase1(
     phase1_data = problematic_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -271,7 +271,7 @@ test_that("Integration: Performance with realistic dataset sizes", {
 
   # Test performance
   start_time <- Sys.time()
-  result <- tyler_clean_phase1(
+  result <- mysterycall_clean_phase1(
     phase1_data = realistic_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -305,7 +305,7 @@ test_that("Integration: Cross-function data compatibility", {
   temp_dir <- tempdir()
 
   # Stage 1: Clean the data
-  cleaned_data <- tyler_clean_phase1(
+  cleaned_data <- mysterycall_clean_phase1(
     phase1_data = initial_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -313,7 +313,7 @@ test_that("Integration: Cross-function data compatibility", {
   )
 
   # Stage 2: Validate NPIs
-  validated_data <- tyler_validate_npi(cleaned_data)
+  validated_data <- mysterycall_validate_npi(cleaned_data)
 
   # Verify compatibility
   expect_s3_class(validated_data, "data.frame")

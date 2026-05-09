@@ -14,23 +14,23 @@
 #' @examples
 #' # Example 1: Basic usage with a simple dataset
 #' data <- data.frame(gender = c("Male", "Female", "Female", "Male", "Male", "Female"))
-#' result <- tyler_table_proportion(data, gender)
+#' result <- mysterycall_table_proportion(data, gender)
 #' print(result)
 #'
 #' # Example 2: Handling a dataset with missing values
 #' df_na <- data.frame(gender = c("Male", NA, "Female", "Female", "Male", "Female", NA))
-#' result <- tyler_table_proportion(df_na, gender)
+#' result <- mysterycall_table_proportion(df_na, gender)
 #' print(result)
 #'
 #' # Example 3: Using a variable with multiple levels
 #' df_multi <- data.frame(grade = c("A", "B", "A", "C", "B", "A", "C", "B"))
-#' result <- tyler_table_proportion(df_multi, grade)
+#' result <- mysterycall_table_proportion(df_multi, grade)
 #' print(result)
 #'
 #' @importFrom dplyr count mutate across where
 #' @family table
 #' @export
-tyler_table_proportion <- function(data, variable_name) {
+mysterycall_table_proportion <- function(data, variable_name) {
   tabyl_result <- data %>%
     count({{ variable_name }}, name = "n") %>%
     mutate(percent = n / sum(n) * 100)

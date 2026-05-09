@@ -36,8 +36,8 @@ sample_census <- tibble::tibble(
   B01001_049E = c(64, 69, 57)
 )
 
-test_that("tyler_summarize_census aggregates by grouping variables", {
-  result <- tyler_summarize_census(sample_census, group_vars = "statefp")
+test_that("mysterycall_summarize_census aggregates by grouping variables", {
+  result <- mysterycall_summarize_census(sample_census, group_vars = "statefp")
   expect_s3_class(result, "tbl_df")
   expect_equal(nrow(result), 2L)
 
@@ -51,8 +51,8 @@ test_that("tyler_summarize_census aggregates by grouping variables", {
   expect_equal(state01$reproductive_age_female_share, 927 / 1150)
 })
 
-test_that("tyler_summarize_census can summarise without grouping", {
-  result <- tyler_summarize_census(sample_census, group_vars = character(0))
+test_that("mysterycall_summarize_census can summarise without grouping", {
+  result <- mysterycall_summarize_census(sample_census, group_vars = character(0))
   expect_equal(nrow(result), 1L)
   expect_equal(result$total_population, sum(sample_census$B01001_001E))
   expect_equal(result$female_population, sum(sample_census$B01001_026E))
@@ -60,20 +60,20 @@ test_that("tyler_summarize_census can summarise without grouping", {
   expect_equal(result$reproductive_age_female, 927 + 378)
 })
 
-test_that("tyler_summarize_census validates required columns", {
+test_that("mysterycall_summarize_census validates required columns", {
   expect_error(
-    tyler_summarize_census(sample_census[, setdiff(names(sample_census), "B01001_026E")]),
+    mysterycall_summarize_census(sample_census[, setdiff(names(sample_census), "B01001_026E")]),
     "Missing required columns"
   )
 })
 
-test_that("tyler_plot_census_age returns a ggplot and saves files", {
+test_that("mysterycall_plot_census_age returns a ggplot and saves files", {
   output_dir <- file.path(tempdir(), "census_plot_test")
   if (dir.exists(output_dir)) {
     unlink(output_dir, recursive = TRUE)
   }
 
-  plot_obj <- tyler_plot_census_age(
+  plot_obj <- mysterycall_plot_census_age(
     sample_census,
     group_var = "statefp",
     output_dir = output_dir,

@@ -20,31 +20,31 @@
 #' location <- sf::st_point(c(-73.987, 40.757))
 #'
 #' # Calculate isolines for the location with a 30-minute, 60-minute, 120-minute, and 180-minute range
-#' isolines <- tyler_create_isochrones(location = location, range = c(1800, 3600, 7200, 10800))
+#' isolines <- mysterycall_create_isochrones(location = location, range = c(1800, 3600, 7200, 10800))
 #'
 #' # Print the isolines
 #' print(isolines)
 #'
 #' # Free the in-memory cache when done with a batch
-#' tyler_clear_isochrone_cache()
+#' mysterycall_clear_isochrone_cache()
 #' }
 #'
 #' @family mapping
 #' @export
 #' @importFrom dplyr mutate row_number
-tyler_create_isochrones <- function(location,
+mysterycall_create_isochrones <- function(location,
                               range,
                               posix_time = as.POSIXct("2023-10-20 08:00:00",
                                                       format = "%Y-%m-%d %H:%M:%S"),
                               api_key = Sys.getenv("HERE_API_KEY")) {
   if (!requireNamespace("hereR", quietly = TRUE)) {
-    stop("Package 'hereR' is required for tyler_create_isochrones(). Install with: install.packages('hereR')", call. = FALSE)
+    stop("Package 'hereR' is required for mysterycall_create_isochrones(). Install with: install.packages('hereR')", call. = FALSE)
   }
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop("Package 'sf' is required for tyler_create_isochrones(). Install with: install.packages('sf')", call. = FALSE)
+    stop("Package 'sf' is required for mysterycall_create_isochrones(). Install with: install.packages('sf')", call. = FALSE)
   }
   if (!requireNamespace("lwgeom", quietly = TRUE)) {
-    stop("Package 'lwgeom' is required for tyler_create_isochrones(). Install with: install.packages('lwgeom')", call. = FALSE)
+    stop("Package 'lwgeom' is required for mysterycall_create_isochrones(). Install with: install.packages('lwgeom')", call. = FALSE)
   }
 
   if (is.null(.isochrone_memo)) {
@@ -99,7 +99,7 @@ tyler_create_isochrones <- function(location,
 
     return(isolines_list)
   }, error = function(e) {
-    message("Error in tyler_create_isochrones: ", e$message)
+    message("Error in mysterycall_create_isochrones: ", e$message)
     return(list(error = e$message))
   })
 
@@ -107,8 +107,8 @@ tyler_create_isochrones <- function(location,
 }
 
 # Internal memoized worker - stored in the package namespace so
-# tyler_clear_isochrone_cache() can call memoise::forget() on it.
-# If memoise is not installed, .isochrone_memo is NULL and tyler_create_isochrones()
+# mysterycall_clear_isochrone_cache() can call memoise::forget() on it.
+# If memoise is not installed, .isochrone_memo is NULL and mysterycall_create_isochrones()
 # falls back to calling .isochrone_worker() directly.
 .isochrone_memo <- if (requireNamespace("memoise", quietly = TRUE)) {
   memoise::memoise(.isochrone_worker)
@@ -118,13 +118,13 @@ tyler_create_isochrones <- function(location,
 
 #' Clear the isochrone memoization cache
 #'
-#' The [tyler_create_isochrones()] function caches every result in memory for the
+#' The [mysterycall_create_isochrones()] function caches every result in memory for the
 #' duration of the R session. Call this after processing a large batch to
 #' release that memory.
 #'
 #' @return Invisibly `NULL`.
 #' @export
-tyler_clear_isochrone_cache <- function() {
+mysterycall_clear_isochrone_cache <- function() {
   if (!is.null(.isochrone_memo) && requireNamespace("memoise", quietly = TRUE)) {
     memoise::forget(.isochrone_memo)
   }

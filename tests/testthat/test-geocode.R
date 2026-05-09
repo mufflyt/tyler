@@ -32,7 +32,7 @@ test_that("Reads input file correctly", {
 test_that("Handles missing file correctly", {
   # Use a path that truly does not exist — no stub needed
   expect_error(
-    tyler_geocode(
+    mysterycall_geocode(
       file.path(tempdir(), "does_not_exist_xyz123.csv"),
       "fake_api_key",
       notify = FALSE
@@ -44,7 +44,7 @@ test_that("Handles missing file correctly", {
 test_that("Handles missing address column correctly", {
   temp_csv <- create_temp_csv(sample_data %>% select(-"address"))
   expect_error(
-    tyler_geocode(temp_csv, "fake_api_key", notify = FALSE),
+    mysterycall_geocode(temp_csv, "fake_api_key", notify = FALSE),
     "The dataset must have a column named 'address' for geocoding."
   )
 })
@@ -55,7 +55,7 @@ test_that("Processes data correctly", {
     geocode = mock_geocode,
     .package = "ggmap",
     code = {
-      result <- tyler_geocode(temp_csv, "fake_api_key", notify = FALSE)
+      result <- mysterycall_geocode(temp_csv, "fake_api_key", notify = FALSE)
       expect_equal(ncol(result), ncol(sample_data) + 2)
       expect_true("latitude" %in% colnames(result))
       expect_true("longitude" %in% colnames(result))
@@ -70,7 +70,7 @@ test_that("Saves output file correctly", {
     geocode = mock_geocode,
     .package = "ggmap",
     code = {
-      tyler_geocode(temp_csv, "fake_api_key", output_csv, notify = FALSE)
+      mysterycall_geocode(temp_csv, "fake_api_key", output_csv, notify = FALSE)
       expect_true(file.exists(output_csv))
       output_data <- suppressMessages(read_csv(output_csv))
       expect_equal(ncol(output_data), ncol(sample_data) + 2)

@@ -33,7 +33,7 @@
 #' @examples
 #' \dontrun{
 #' # Example 1: Analyzing the effect of gender and appointment center on wait times
-#' result <- tyler_plot_interaction(
+#' result <- mysterycall_plot_interaction(
 #'   data_path = "Ari/data/Phase2/late_phase_2_ENT_analysis_3.rds",
 #'   response_variable = "business_days_until_appointment",
 #'   variable_of_interest = "central_number_e_g_appointment_center",
@@ -44,7 +44,7 @@
 #' )
 #'
 #' # Example 2: Examining the interaction between insurance type and scenario on appointment delays
-#' result <- tyler_plot_interaction(
+#' result <- mysterycall_plot_interaction(
 #'   data_path = "data/healthcare_calls.rds",
 #'   response_variable = "business_days_until_appointment",
 #'   variable_of_interest = "insurance_type",
@@ -55,7 +55,7 @@
 #' )
 #'
 #' # Example 3: Studying the interaction between gender and subspecialty in wait times
-#' result <- tyler_plot_interaction(
+#' result <- mysterycall_plot_interaction(
 #'   data_path = "data/mystery_caller_study.rds",
 #'   response_variable = "waiting_time_days",
 #'   variable_of_interest = "subspecialty",
@@ -68,12 +68,12 @@
 #'
 #' @importFrom dplyr rename mutate group_by summarize
 #' @importFrom ggplot2 ggplot aes geom_point geom_line labs theme_minimal ggsave
-#' @seealso [tyler_plot_emmeans()], [tyler_create_formula()]
+#' @seealso [mysterycall_plot_emmeans()], [mysterycall_create_formula()]
 #' @family modeling helpers
 #' @export
-tyler_plot_interaction <- function(data_path, response_variable, variable_of_interest, interaction_variable, random_intercept, output_path, resolution = 100) {
+mysterycall_plot_interaction <- function(data_path, response_variable, variable_of_interest, interaction_variable, random_intercept, output_path, resolution = 100) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' is required for tyler_plot_interaction(). Install with: install.packages('lme4')", call. = FALSE)
+    stop("Package 'lme4' is required for mysterycall_plot_interaction(). Install with: install.packages('lme4')", call. = FALSE)
   }
   # Read the data
   data <- readRDS(data_path)

@@ -29,7 +29,7 @@
 #'   business_days_until_appointment = c(1.5, 2.1, 2.8, 1.7, 2.3, 2.5, 1.9, 2.6, 3.1)
 #' )
 #'
-#' tyler_plot_line(
+#' mysterycall_plot_line(
 #'   plot_data = example_data,
 #'   x_var = "insurance",
 #'   y_var = "business_days_until_appointment",
@@ -41,7 +41,7 @@
 #' )
 #' }
 
-tyler_plot_line <- function(plot_data,
+mysterycall_plot_line <- function(plot_data,
                              x_var,
                              y_var,
                              y_transform = "none",
@@ -111,7 +111,7 @@ tyler_plot_line <- function(plot_data,
     )
 
   if (is.null(output_dir)) {
-    output_dir <- tyler_tempdir("line_plots", create = TRUE)
+    output_dir <- mysterycall_tempdir("line_plots", create = TRUE)
   } else if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }

@@ -20,7 +20,7 @@ test_that("validate_sf_inputs repairs invalid geometries and enforces expectatio
   }
   polygons$bg$geometry <- sf::st_sfc(invalid_poly, crs = 4326)
 
-  validated <- tyler:::validate_sf_inputs(
+  validated <- mysterycall:::validate_sf_inputs(
     block_groups = polygons$bg,
     isochrones = polygons$iso,
     expected_types = list(
@@ -40,7 +40,7 @@ test_that("validate_sf_inputs flags unexpected geometry types", {
   polygons$iso$geometry <- sf::st_sfc(point_geom, crs = 4326)
 
   expect_error(
-    tyler:::validate_sf_inputs(
+    mysterycall:::validate_sf_inputs(
       block_groups = polygons$bg,
       isochrones = polygons$iso,
       expected_types = list(
@@ -60,7 +60,7 @@ test_that("validate_sf_inputs requires overlapping bounding boxes", {
   sf::st_geometry(polygons$iso) <- shifted
 
   expect_error(
-    tyler:::validate_sf_inputs(
+    mysterycall:::validate_sf_inputs(
       block_groups = polygons$bg,
       isochrones = polygons$iso,
       expected_types = list(
@@ -79,7 +79,7 @@ test_that("validate_sf_inputs catches empty geometries", {
   polygons$bg$geometry <- sf::st_sfc(empty_multi, crs = 4326)
 
   expect_error(
-    tyler:::validate_sf_inputs(
+    mysterycall:::validate_sf_inputs(
       block_groups = polygons$bg,
       isochrones = polygons$iso,
       expected_types = list(

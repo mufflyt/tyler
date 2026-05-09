@@ -7,7 +7,7 @@
 #'   the score is missing).
 #' @family utilities
 #' @export
-tyler_quality_tier <- function(score, thresholds = c(high = 0.9, medium = 0.75)) {
+mysterycall_quality_tier <- function(score, thresholds = c(high = 0.9, medium = 0.75)) {
   if (is.null(score) || is.na(score)) {
     return(NA_character_)
   }
@@ -47,8 +47,8 @@ tyler_quality_tier <- function(score, thresholds = c(high = 0.9, medium = 0.75))
 #' @export
 #' @examples
 #' df <- tibble::tibble(id = 1:3, value = c(1, NA, 3))
-#' tyler_check_data_completeness(df, required = c("id", "value"))
-tyler_check_data_completeness <- function(data, required = NULL, id_cols = NULL, thresholds = c(high = 0.9, medium = 0.75)) {
+#' mysterycall_check_data_completeness(df, required = c("id", "value"))
+mysterycall_check_data_completeness <- function(data, required = NULL, id_cols = NULL, thresholds = c(high = 0.9, medium = 0.75)) {
   validate_dataframe(data, name = "data", allow_zero_rows = FALSE)
   validate_required_columns(data, required, name = "data")
 
@@ -80,7 +80,7 @@ tyler_check_data_completeness <- function(data, required = NULL, id_cols = NULL,
   }
 
   overall_score <- mean(summary$completeness, na.rm = TRUE)
-  quality <- tyler_quality_tier(overall_score, thresholds = thresholds)
+  quality <- mysterycall_quality_tier(overall_score, thresholds = thresholds)
 
   list(summary = summary, quality = quality, score = overall_score)
 }
@@ -88,12 +88,12 @@ tyler_check_data_completeness <- function(data, required = NULL, id_cols = NULL,
 #' Toggle quiet logging for helper functions
 #'
 #' @param quiet Logical flag. When `TRUE`, suppress messages emitted by
-#'   [tyler_log_info()].
+#'   [mysterycall_log_info()].
 #'
 #' @return The previous quiet value (invisibly).
 #' @family utilities
 #' @export
-tyler_use_quiet_logging <- function(quiet = TRUE) {
+mysterycall_use_quiet_logging <- function(quiet = TRUE) {
   old <- getOption("tyler.quiet", FALSE)
   options(tyler.quiet = quiet)
   invisible(old)

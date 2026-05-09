@@ -10,17 +10,17 @@ library(readr)
 library(stringr)
 library(humaniformat)
 
-test_that("tyler_clean_phase1 handles empty data frames correctly", {
+test_that("mysterycall_clean_phase1 handles empty data frames correctly", {
   df_empty <- data.frame()
-  expect_error(tyler_clean_phase1(df_empty, verbose = TRUE), "must contain at least one row")
+  expect_error(mysterycall_clean_phase1(df_empty, verbose = TRUE), "must contain at least one row")
 })
 
-test_that("tyler_clean_phase1 stops if required columns are missing", {
+test_that("mysterycall_clean_phase1 stops if required columns are missing", {
   df_missing_cols <- data.frame(names = c("John Doe", "Jane Doe"), stringsAsFactors = FALSE)
-  expect_error(tyler_clean_phase1(df_missing_cols), "Required columns are missing")
+  expect_error(mysterycall_clean_phase1(df_missing_cols), "Required columns are missing")
 })
 
-test_that("tyler_clean_phase1 processes data correctly", {
+test_that("mysterycall_clean_phase1 processes data correctly", {
   df_normal <- data.frame(
     names = c("John Doe", "Jane Doe"),
     practice_name = c("Univ Hospital", "Private Clinic"),
@@ -29,13 +29,13 @@ test_that("tyler_clean_phase1 processes data correctly", {
     npi = c(123456, 654321),
     stringsAsFactors = FALSE
   )
-  result <- tyler_clean_phase1(df_normal)
+  result <- mysterycall_clean_phase1(df_normal)
 
   expect_equal(nrow(result), nrow(df_normal) * 2)
   expect_true(all(c("id", "for_redcap") %in% names(result)))
 })
 
-test_that("tyler_clean_phase1 adds insurance correctly", {
+test_that("mysterycall_clean_phase1 adds insurance correctly", {
   df_with_insurance <- data.frame(
     names = c("John Doe", "Jane Doe"),
     practice_name = c("Univ Hospital", "Private Clinic"),
@@ -44,11 +44,11 @@ test_that("tyler_clean_phase1 adds insurance correctly", {
     npi = c(123456, 654321),
     stringsAsFactors = FALSE
   )
-  result <- tyler_clean_phase1(df_with_insurance, duplicate_rows = FALSE, verbose = FALSE)
+  result <- mysterycall_clean_phase1(df_with_insurance, duplicate_rows = FALSE, verbose = FALSE)
   expect_setequal(result$insurance, c("Blue Cross/Blue Shield", "Medicaid"))
 })
 
-test_that("tyler_clean_phase1 removes duplicates correctly", {
+test_that("mysterycall_clean_phase1 removes duplicates correctly", {
   df_dups <- data.frame(
     names = c("John Doe", "Jane Doe", "John Doe"),
     practice_name = c("Univ Hospital", "Private Clinic", "Univ Hospital"),
@@ -57,11 +57,11 @@ test_that("tyler_clean_phase1 removes duplicates correctly", {
     npi = c(123456, 654321, 123456),
     stringsAsFactors = FALSE
   )
-  result <- tyler_clean_phase1(df_dups, duplicate_rows = FALSE, verbose = FALSE)
+  result <- mysterycall_clean_phase1(df_dups, duplicate_rows = FALSE, verbose = FALSE)
   expect_equal(nrow(result), nrow(df_dups))
 })
 
-test_that("tyler_clean_phase1 random IDs are reproducible with a seed", {
+test_that("mysterycall_clean_phase1 random IDs are reproducible with a seed", {
   df_seed <- data.frame(
     names = "John Doe",
     practice_name = "Univ Hospital",
@@ -71,8 +71,8 @@ test_that("tyler_clean_phase1 random IDs are reproducible with a seed", {
     stringsAsFactors = FALSE
   )
 
-  result_1 <- tyler_clean_phase1(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42)
-  result_2 <- tyler_clean_phase1(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42)
+  result_1 <- mysterycall_clean_phase1(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42)
+  result_2 <- mysterycall_clean_phase1(df_seed, duplicate_rows = FALSE, verbose = FALSE, id_seed = 42)
 
   expect_equal(result_1$random_id, result_2$random_id)
 })

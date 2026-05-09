@@ -1,12 +1,12 @@
 library(testthat)
 
-test_that("tyler_rename_columns renames case-insensitive exact matches", {
+test_that("mysterycall_rename_columns renames case-insensitive exact matches", {
   raw <- data.frame(
     PhysicianInformation = c("Jane"),
     stringsAsFactors = FALSE
   )
 
-  renamed <- tyler_rename_columns(
+  renamed <- mysterycall_rename_columns(
     raw,
     target_strings = "physicianinformation",
     new_names = "physician_info"
@@ -16,13 +16,13 @@ test_that("tyler_rename_columns renames case-insensitive exact matches", {
   expect_false("PhysicianInformation" %in% names(renamed))
 })
 
-test_that("tyler_rename_columns falls back to substring matches", {
+test_that("mysterycall_rename_columns falls back to substring matches", {
   raw <- data.frame(
     physician_information_notes = c("Jane"),
     stringsAsFactors = FALSE
   )
 
-  renamed <- tyler_rename_columns(
+  renamed <- mysterycall_rename_columns(
     raw,
     target_strings = "physician_information",
     new_names = "physician_info"
@@ -31,7 +31,7 @@ test_that("tyler_rename_columns falls back to substring matches", {
   expect_true("physician_info" %in% names(renamed))
 })
 
-test_that("tyler_rename_columns errors on ambiguous substring matches", {
+test_that("mysterycall_rename_columns errors on ambiguous substring matches", {
   raw <- data.frame(
     physician_information_1 = c("A"),
     physician_information_2 = c("B"),
@@ -39,7 +39,7 @@ test_that("tyler_rename_columns errors on ambiguous substring matches", {
   )
 
   expect_error(
-    tyler_rename_columns(
+    mysterycall_rename_columns(
       raw,
       target_strings = "physician_information",
       new_names = "physician_info"

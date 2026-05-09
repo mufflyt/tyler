@@ -15,16 +15,16 @@
 #' @export
 #' @examples
 #' \donttest{
-#' tyler_check_dependencies(c("dplyr", "sf"), install = FALSE)
+#' mysterycall_check_dependencies(c("dplyr", "sf"), install = FALSE)
 #' }
-tyler_check_dependencies <- function(packages, install = FALSE, repos = getOption("repos"), quietly = FALSE) {
+mysterycall_check_dependencies <- function(packages, install = FALSE, repos = getOption("repos"), quietly = FALSE) {
   if (!is.character(packages)) {
     stop("`packages` must be a character vector of package names.", call. = FALSE)
   }
 
   packages <- unique(packages[nzchar(packages)])
   if (!length(packages)) {
-    stop("No packages supplied to `tyler_check_dependencies()`.", call. = FALSE)
+    stop("No packages supplied to `mysterycall_check_dependencies()`.", call. = FALSE)
   }
 
   installed <- utils::installed.packages()[, c("Package", "Version"), drop = FALSE]

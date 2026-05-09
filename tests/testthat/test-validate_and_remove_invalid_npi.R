@@ -8,7 +8,7 @@ sample_df <- data.frame(
 )
 
 test_that("validates numeric and character NPIs", {
-  result <- tyler_validate_npi(sample_df)
+  result <- mysterycall_validate_npi(sample_df)
   expect_equal(nrow(result), 2)
   expect_true(all(result$npi == c("1234567893", "1234567893")))
   expect_true(all(result$npi_is_valid))
@@ -17,18 +17,18 @@ test_that("validates numeric and character NPIs", {
 test_that("reads from csv with preserved digits", {
   temp_file <- tempfile(fileext = ".csv")
   write_csv(sample_df, temp_file)
-  result <- tyler_validate_npi(temp_file)
+  result <- mysterycall_validate_npi(temp_file)
   expect_equal(result$npi, rep("1234567893", 2))
 })
 
 test_that("errors when npi column missing", {
   df <- data.frame(id = 1:2)
-  expect_error(tyler_validate_npi(df), "required column")
+  expect_error(mysterycall_validate_npi(df), "required column")
 })
 
 test_that("returns empty tibble when no valid NPIs", {
   df <- data.frame(npi = c("111", "ABC"))
-  result <- tyler_validate_npi(df)
+  result <- mysterycall_validate_npi(df)
   expect_equal(nrow(result), 0)
   expect_true("npi_is_valid" %in% names(result))
 })

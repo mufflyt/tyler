@@ -47,7 +47,7 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort,
   id_list <- seq(startID, endID)
   message("ID range: ", startID, " to ", endID, " (", length(id_list), " IDs)")
 
-  wrongs1 <- if (!is.null(wrong_ids_path)) tyler_read_table(wrong_ids_path) else data.frame(WrongIDs = integer())
+  wrongs1 <- if (!is.null(wrong_ids_path)) mysterycall_read_table(wrong_ids_path) else data.frame(WrongIDs = integer())
   wrong_ids <- wrongs1$WrongIDs
   if (length(wrong_ids)) message("Skipping ", length(wrong_ids), " known bad IDs.")
 
@@ -113,8 +113,8 @@ scrape_physicians_data_with_tor <- function(startID, endID, torPort,
     wrong_tail      <- if (length(WrongIDs)) tail(WrongIDs, 1) else endID
     wrong_ids_file  <- file.path(output_dir, paste0("Wrong_IDs_", startID, "-", wrong_tail, "_", timestamp, ext))
 
-    tyler_write_table(Physicians, physicians_file, format = output_format)
-    tyler_write_table(data.frame(WrongIDs = WrongIDs), wrong_ids_file, format = output_format)
+    mysterycall_write_table(Physicians, physicians_file, format = output_format)
+    mysterycall_write_table(data.frame(WrongIDs = WrongIDs), wrong_ids_file, format = output_format)
 
     message("Roster saved to: ", physicians_file)
     message("Wrong ID log saved to: ", wrong_ids_file)

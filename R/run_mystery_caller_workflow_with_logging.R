@@ -1,21 +1,21 @@
 #' Run the mystery caller workflow with structured logging
 #'
-#' A thin wrapper around [tyler_run_workflow()] that initialises the
-#' `tyler` logging infrastructure before the run and tears it down afterward.
+#' A thin wrapper around [mysterycall_run_workflow()] that initialises the
+#' `mysterycall` logging infrastructure before the run and tears it down afterward.
 #' All substantive workflow logic lives in the underlying function; any bug
 #' fixed there is automatically inherited here.
 #'
-#' @inheritParams tyler_run_workflow
+#' @inheritParams mysterycall_run_workflow
 #' @param log_file Optional path to write a plain-text log file. When `NULL`
 #'   (default), a timestamped file is created inside `output_directory`.
 #' @param skip_preflight Logical. When `TRUE`, skip the preflight validation
 #'   step. Defaults to `FALSE`.
 #'
-#' @return The same list returned by [tyler_run_workflow()].
+#' @return The same list returned by [mysterycall_run_workflow()].
 #'
 #' @examples
 #' \dontrun{
-#' results <- tyler_run_workflow_logged(
+#' results <- mysterycall_run_workflow_logged(
 #'   phase1_data = phase1,
 #'   phase2_data = phase2,
 #'   lab_assistant_names = c("Alice", "Bob"),
@@ -27,7 +27,7 @@
 #'
 #' @family workflow
 #' @export
-tyler_run_workflow_logged <- function(
+mysterycall_run_workflow_logged <- function(
   taxonomy_terms = NULL,
   name_data = NULL,
   phase1_data,
@@ -63,14 +63,14 @@ tyler_run_workflow_logged <- function(
     log_file <- file.path(output_directory, sprintf("workflow_log_%s.txt", timestamp))
   }
 
-  tyler_workflow_start(
+  mysterycall_workflow_start(
     workflow_name = "Mystery Caller Workflow",
     total_steps = 6,
     log_file = log_file
   )
 
   result <- tryCatch(
-    tyler_run_workflow(
+    mysterycall_run_workflow(
       taxonomy_terms = taxonomy_terms,
       name_data = name_data,
       phase1_data = phase1_data,
@@ -89,13 +89,13 @@ tyler_run_workflow_logged <- function(
       npi_progress_observer = npi_progress_observer
     ),
     error = function(e) {
-      tyler_log_error("Workflow failed", cause = e$message, fix = "Check input data and parameters")
-      tyler_workflow_end()
+      mysterycall_log_error("Workflow failed", cause = e$message, fix = "Check input data and parameters")
+      mysterycall_workflow_end()
       stop(e)
     }
   )
 
-  tyler_workflow_end(
+  mysterycall_workflow_end(
     final_n = if (!is.null(result$cleaned_phase2)) nrow(result$cleaned_phase2) else NA_integer_,
     input_n  = nrow(phase1_data)
   )
@@ -107,10 +107,10 @@ tyler_run_workflow_logged <- function(
 #' Print a formatted summary dashboard
 #'
 #' @param results List containing workflow results (as returned by
-#'   [tyler_run_workflow()]).
+#'   [mysterycall_run_workflow()]).
 #' @family workflow
 #' @export
-tyler_print_dashboard <- function(results) {
+mysterycall_print_dashboard <- function(results) {
   message("")
   message("\u256d", strrep("\u2500", 58), "\u256e")
   message("\u2502", "   Mystery Caller Workflow Summary", strrep(" ", 23), "\u2502")

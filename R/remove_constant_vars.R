@@ -10,12 +10,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' new_data <- tyler_remove_constants(data_frame)
+#' new_data <- mysterycall_remove_constants(data_frame)
 #' }
 #'
 #' @family utilities
 #' @export
-tyler_remove_constants <- function(data_frame) {
+mysterycall_remove_constants <- function(data_frame) {
 
   # Log: Starting the function
   message("Starting the function to remove constant variables.")

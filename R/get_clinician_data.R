@@ -11,9 +11,9 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' clinician_df <- tyler_get_clinician_data("clinicians.csv")
+#' clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
 #' }
-tyler_get_clinician_data <- function(input_data) {
+mysterycall_get_clinician_data <- function(input_data) {
   if (is.data.frame(input_data)) {
     clinician_df <- input_data
   } else if (is.character(input_data) && length(input_data) == 1) {
@@ -33,7 +33,7 @@ tyler_get_clinician_data <- function(input_data) {
     stop(sprintf("`input_data` is missing required column `npi`. Available columns: %s", if (length(names(clinician_df))) paste(names(clinician_df), collapse = ", ") else "<none>"), call. = FALSE)
   }
 
-  cleaned_df <- tyler_validate_npi(clinician_df)
+  cleaned_df <- mysterycall_validate_npi(clinician_df)
   if (!nrow(cleaned_df)) {
     cleaned_df$npi_is_valid <- logical()
     return(cleaned_df)

@@ -14,8 +14,8 @@ skip_if_not_installed("fs")
 # writes artefacts inside a temporary working directory to verify integration.
 # nolint end
 
-test_that("tyler_run_workflow orchestrates pipeline without mocks", {
-  work_dir <- tempfile("tyler-e2e-")
+test_that("mysterycall_run_workflow orchestrates pipeline without mocks", {
+  work_dir <- tempfile("mysterycall-e2e-")
   dir.create(work_dir, recursive = TRUE, showWarnings = FALSE)
   on.exit(unlink(work_dir, recursive = TRUE), add = TRUE)
 
@@ -49,7 +49,7 @@ test_that("tyler_run_workflow orchestrates pipeline without mocks", {
     stringsAsFactors = FALSE
   )
 
-  result <- tyler_run_workflow(
+  result <- mysterycall_run_workflow(
     taxonomy_terms = NULL,
     name_data = data.frame(first = character(), last = character(), stringsAsFactors = FALSE),
     phase1_data = phase1_data,

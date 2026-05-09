@@ -11,25 +11,25 @@
 #' @examples
 #' \dontrun{
 #' # Create and export the map with the default output directory
-#' tyler_map_block_group(block_groups, isochrones_joined_map)
+#' mysterycall_map_block_group(block_groups, isochrones_joined_map)
 #'
 #' # Create and export the map with a custom output directory
-#' tyler_map_block_group(block_groups, isochrones_joined_map, "custom_output/")
+#' mysterycall_map_block_group(block_groups, isochrones_joined_map, "custom_output/")
 #' }
 #'
 #' @importFrom sf st_make_valid st_transform st_is_valid st_union st_sf
 #'
 #' @family mapping
 #' @export
-tyler_map_block_group <- function(bg_data, isochrones_data, output_dir = "figures/") {
+mysterycall_map_block_group <- function(bg_data, isochrones_data, output_dir = "figures/") {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for tyler_map_block_group(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for mysterycall_map_block_group(). Install with: install.packages('leaflet')", call. = FALSE)
   }
   if (!requireNamespace("lwgeom", quietly = TRUE)) {
-    stop("Package 'lwgeom' is required for tyler_map_block_group(). Install with: install.packages('lwgeom')", call. = FALSE)
+    stop("Package 'lwgeom' is required for mysterycall_map_block_group(). Install with: install.packages('lwgeom')", call. = FALSE)
   }
   if (!requireNamespace("webshot", quietly = TRUE)) {
-    stop("Package 'webshot' is required for tyler_map_block_group(). Install with: install.packages('webshot')", call. = FALSE)
+    stop("Package 'webshot' is required for mysterycall_map_block_group(). Install with: install.packages('webshot')", call. = FALSE)
   }
   if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
     stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
@@ -48,7 +48,7 @@ tyler_map_block_group <- function(bg_data, isochrones_data, output_dir = "figure
     stop("`isochrones_data$drive_time` must be a numeric column.", call. = FALSE)
   }
   if (!"overlap" %in% names(bg_data)) {
-    stop("`bg_data` must include an `overlap` column (proportion 0-1). Run tyler_calculate_overlap() first.", call. = FALSE)
+    stop("`bg_data` must include an `overlap` column (proportion 0-1). Run mysterycall_calculate_overlap() first.", call. = FALSE)
   }
   if (any(!is.na(bg_data$overlap) & (bg_data$overlap < 0 | bg_data$overlap > 1))) {
     stop("`bg_data$overlap` values must be between 0 and 1.", call. = FALSE)
@@ -62,7 +62,7 @@ tyler_map_block_group <- function(bg_data, isochrones_data, output_dir = "figure
       isochrones_data = c("POLYGON", "MULTIPOLYGON")
     ),
     target_crs = 4326,
-    context = "tyler_map_block_group()"
+    context = "mysterycall_map_block_group()"
   )
   bg_data <- validated$bg_data
   isochrones_data <- validated$isochrones_data
@@ -86,7 +86,7 @@ tyler_map_block_group <- function(bg_data, isochrones_data, output_dir = "figure
   pal <- leaflet::colorNumeric("Purples", domain = bg_data$overlap)
 
   # Create the base map
-  base_map <- tyler_map_base("<h1>Block Group Overlap Map</h1>")
+  base_map <- mysterycall_map_base("<h1>Block Group Overlap Map</h1>")
 
   # Create the map
   map <- base_map %>%

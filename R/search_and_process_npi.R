@@ -43,9 +43,9 @@
 #' @examples
 #' \dontrun{
 #' df <- data.frame(first = "John", last = "Doe")
-#' results <- tyler_search_and_process_npi(df)
+#' results <- mysterycall_search_and_process_npi(df)
 #' }
-tyler_search_and_process_npi <- function(data,
+mysterycall_search_and_process_npi <- function(data,
                                    enumeration_type = "ind",
                                    limit = NULL,
                                    country_code = "US",
@@ -69,7 +69,7 @@ tyler_search_and_process_npi <- function(data,
     allow_null = TRUE
   )
 
-  table_format <- tyler_normalize_file_format(file_format, path = accumulate_path)
+  table_format <- mysterycall_normalize_file_format(file_format, path = accumulate_path)
 
   validate_required_columns(data, required = c("first", "last"), name = "data")
 
@@ -164,7 +164,7 @@ tyler_search_and_process_npi <- function(data,
       return(NULL)
     }
     tryCatch(
-      tyler_read_table(accumulate_path, format = table_format),
+      mysterycall_read_table(accumulate_path, format = table_format),
       error = function(e) {
         dispatch_progress(
           event = "accumulation_error",
@@ -239,7 +239,7 @@ tyler_search_and_process_npi <- function(data,
     timestamp <- format(Sys.time(), "%Y%m%d%H%M%S")
     extension <- if (identical(table_format, "parquet")) ".parquet" else ".csv"
     file_name <- file.path(directory, paste0(file_prefix, "_chunk_", timestamp, extension))
-    tyler_write_table(result, file_name, format = table_format)
+    mysterycall_write_table(result, file_name, format = table_format)
     dispatch_progress(
       event = "chunk_saved",
       search_term = basename(file_name),
@@ -255,7 +255,7 @@ tyler_search_and_process_npi <- function(data,
     dir.create(dirname(accumulate_path), showWarnings = FALSE, recursive = TRUE)
     append_mode <- file.exists(accumulate_path)
     tryCatch({
-      tyler_write_table(result, accumulate_path, format = table_format, append = append_mode, col_names = !append_mode)
+      mysterycall_write_table(result, accumulate_path, format = table_format, append = append_mode, col_names = !append_mode)
       dispatch_progress(
         event = "accumulated",
         rows = nrow(result),
@@ -281,7 +281,7 @@ tyler_search_and_process_npi <- function(data,
   max_attempts <- 3L
   base_delay <- 1
 
-  tyler_search_npi <- function(first_name, last_name, index) {
+  mysterycall_search_npi <- function(first_name, last_name, index) {
     attempt <- 1L
     search_term <- trimws(paste(first_name, last_name))
 
@@ -424,7 +424,7 @@ tyler_search_and_process_npi <- function(data,
       next
     }
 
-    result <- tyler_search_npi(first_name, last_name, i)
+    result <- mysterycall_search_npi(first_name, last_name, i)
 
     if (is.null(result) || !nrow(result)) {
       dispatch_progress(

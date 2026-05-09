@@ -1,10 +1,10 @@
 library(testthat)
 
-if (!exists("tyler_physician_age")) {
-  source(testthat::test_path("..", "..", "R", "tyler_physician_age.R"))
+if (!exists("mysterycall_physician_age")) {
+  source(testthat::test_path("..", "..", "R", "mysterycall_physician_age.R"))
 }
 
-test_that("tyler_physician_age function works correctly", {
+test_that("mysterycall_physician_age function works correctly", {
   # Create test data
   df <- data.frame(age = c(34, 50, 45, 60, 36, 29, 54, 43, 38, 48))
 
@@ -18,11 +18,11 @@ test_that("tyler_physician_age function works correctly", {
   )
 
   # Run test
-  result <- tyler_physician_age(df, "age")
+  result <- mysterycall_physician_age(df, "age")
   expect_equal(result, expected)
 })
 
-test_that("tyler_physician_age handles NA values correctly", {
+test_that("mysterycall_physician_age handles NA values correctly", {
   # Create test data with NA values
   df <- data.frame(age = c(34, 50, 45, 60, NA, 29, 54, 43, 38, 48))
 
@@ -36,12 +36,12 @@ test_that("tyler_physician_age handles NA values correctly", {
   )
 
   # Run test
-  result <- tyler_physician_age(df, "age")
+  result <- mysterycall_physician_age(df, "age")
   expect_equal(result, expected)
 })
 
-test_that("tyler_physician_age handles an empty dataframe correctly", {
+test_that("mysterycall_physician_age handles an empty dataframe correctly", {
   # Empty data frames should error since there are no values to compute statistics
   df <- data.frame(age = numeric(0))
-  expect_error(tyler_physician_age(df, "age"), "at least 2 non-missing values")
+  expect_error(mysterycall_physician_age(df, "age"), "at least 2 non-missing values")
 })

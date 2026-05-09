@@ -1,6 +1,6 @@
 #' Create a Configurable Leaflet Base Map
 #'
-#' Build a Leaflet base map with sensible defaults for the tyler mapping
+#' Build a Leaflet base map with sensible defaults for the mysterycall mapping
 #' helpers. The map includes multiple tile providers, a scale bar, optional
 #' title control, and centers on the continental United States by default.
 #'
@@ -18,12 +18,12 @@
 #' @export
 #' @examples
 #' \donttest{
-#' tyler_map_base()
-#' tyler_map_base("<strong>Custom title</strong>")
+#' mysterycall_map_base()
+#' mysterycall_map_base("<strong>Custom title</strong>")
 #' }
-tyler_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
+mysterycall_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for tyler_map_base(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for mysterycall_map_base(). Install with: install.packages('leaflet')", call. = FALSE)
   }
   map <- leaflet::leaflet(options = leaflet::leafletOptions(zoomControl = TRUE)) %>%
     leaflet::addProviderTiles("CartoDB.Voyager", group = "CartoDB Voyager") %>%
@@ -43,7 +43,7 @@ tyler_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4
     map <- leaflet::addControl(
       map,
       html = htmltools::tags$div(
-        class = "tyler-map-title",
+        class = "mysterycall-map-title",
         htmltools::HTML(title)
       ),
       position = "topleft"
@@ -86,17 +86,17 @@ tyler_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4
 #' )
 #'
 #' # Create and save the dot map
-#' tyler_map_physicians(physician_data)
+#' mysterycall_map_physicians(physician_data)
 #' }
 #'
 #' @family mapping
 #' @export
-tyler_map_physicians <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name", output_dir = NULL) {
+mysterycall_map_physicians <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name", output_dir = NULL) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for tyler_map_physicians(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for mysterycall_map_physicians(). Install with: install.packages('leaflet')", call. = FALSE)
   }
   if (!requireNamespace("webshot", quietly = TRUE)) {
-    stop("Package 'webshot' is required for tyler_map_physicians(). Install with: install.packages('webshot')", call. = FALSE)
+    stop("Package 'webshot' is required for mysterycall_map_physicians(). Install with: install.packages('webshot')", call. = FALSE)
   }
   if (!requireNamespace("viridis", quietly = TRUE)) {
     stop("Package 'viridis' is required for this function. Install with: install.packages('viridis')", call. = FALSE)
@@ -105,7 +105,7 @@ tyler_map_physicians <- function(physician_data, jitter_range = 0.05, color_pale
     stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
   }
   if (is.null(output_dir)) {
-    output_dir <- tyler_tempdir("physician_maps", create = TRUE)
+    output_dir <- mysterycall_tempdir("physician_maps", create = TRUE)
   } else {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
@@ -116,11 +116,11 @@ tyler_map_physicians <- function(physician_data, jitter_range = 0.05, color_pale
   )
 
   cat("Setting up the base map...\n")
-  base_map <- tyler_map_base("Physician Dot Map")
+  base_map <- mysterycall_map_base("Physician Dot Map")
   cat("Map setup complete.\n")
 
   cat("Generating the ACOG district boundaries...\n")
-  acog_districts <- tyler_map_acog_districts()
+  acog_districts <- mysterycall_map_acog_districts()
   cat("ACOG district boundaries generated.\n")
 
   num_acog_districts <- dplyr::n_distinct(acog_districts$ACOG_District)

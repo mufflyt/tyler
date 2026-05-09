@@ -22,7 +22,7 @@ test_that("retrieves Census data for valid FIPS codes", {
     getCensus = mock_getCensus,
     .package = "censusapi",
     code = {
-      result <- tyler_get_census_data(c("01", "02"), api_key = "fake")
+      result <- mysterycall_get_census_data(c("01", "02"), api_key = "fake")
       expect_true(nrow(result) > 0)
       expect_true("name" %in% colnames(result))
     }
@@ -30,7 +30,7 @@ test_that("retrieves Census data for valid FIPS codes", {
 })
 
 test_that("handles empty FIPS list gracefully", {
-  result <- tyler_get_census_data(character(), api_key = "fake")
+  result <- mysterycall_get_census_data(character(), api_key = "fake")
   expect_equal(nrow(result), 0)
 })
 
@@ -39,16 +39,16 @@ test_that("handles invalid FIPS codes gracefully", {
     getCensus = function(...) NULL,
     .package = "censusapi",
     code = {
-      result <- tyler_get_census_data(c("ZZ", "XX"), api_key = "fake")
+      result <- mysterycall_get_census_data(c("ZZ", "XX"), api_key = "fake")
       expect_equal(nrow(result), 0)
     }
   )
 })
 
 test_that("validates input type", {
-  expect_error(tyler_get_census_data(1:2, api_key = "fake"), "character vector")
+  expect_error(mysterycall_get_census_data(1:2, api_key = "fake"), "character vector")
 })
 
 test_that("requires API key", {
-  expect_error(tyler_get_census_data(c("01"), api_key = ""), "Census API key")
+  expect_error(mysterycall_get_census_data(c("01"), api_key = ""), "Census API key")
 })

@@ -54,8 +54,8 @@ scrape_physicians_data_with_tor(startID = 9045999, endID = 9046000, torPort = 91
 }
 \seealso{
 Other npi: 
-\code{\link{tyler_get_clinician_data}()},
-\code{\link{tyler_search_and_process_npi}()},
-\code{\link{tyler_search_taxonomy}()}
+\code{\link{mysterycall_get_clinician_data}()},
+\code{\link{mysterycall_search_and_process_npi}()},
+\code{\link{mysterycall_search_taxonomy}()}
 }
 \concept{npi}

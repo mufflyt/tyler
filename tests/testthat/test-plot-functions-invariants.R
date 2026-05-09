@@ -12,14 +12,14 @@ WAIT_DATA <- data.frame(
     abs(rnorm(10, mean = 20, sd = 7))
   ) + 0.01  # ensure > 0 for log/sqrt transforms
 )
-OUT_DIR <- file.path(tempdir(), paste0("tyler_plot_tests_", Sys.getpid()))
+OUT_DIR <- file.path(tempdir(), paste0("mysterycall_plot_tests_", Sys.getpid()))
 dir.create(OUT_DIR, recursive = TRUE, showWarnings = FALSE)
 
-# ── tyler_plot_density ───────────────────────────────────────────────────────
+# ── mysterycall_plot_density ───────────────────────────────────────────────────────
 
-test_that("tyler_plot_density - returns a ggplot object", {
+test_that("mysterycall_plot_density - returns a ggplot object", {
   result <- suppressMessages(
-    tyler_plot_density(
+    mysterycall_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -33,9 +33,9 @@ test_that("tyler_plot_density - returns a ggplot object", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("tyler_plot_density - log transform returns ggplot", {
+test_that("mysterycall_plot_density - log transform returns ggplot", {
   result <- suppressMessages(
-    tyler_plot_density(
+    mysterycall_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -49,9 +49,9 @@ test_that("tyler_plot_density - log transform returns ggplot", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("tyler_plot_density - sqrt transform returns ggplot", {
+test_that("mysterycall_plot_density - sqrt transform returns ggplot", {
   result <- suppressMessages(
-    tyler_plot_density(
+    mysterycall_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -65,10 +65,10 @@ test_that("tyler_plot_density - sqrt transform returns ggplot", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("tyler_plot_density - saves PNG and TIFF files", {
+test_that("mysterycall_plot_density - saves PNG and TIFF files", {
   prefix <- paste0("density_save_", Sys.getpid())
   suppressMessages(
-    tyler_plot_density(
+    mysterycall_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -84,17 +84,17 @@ test_that("tyler_plot_density - saves PNG and TIFF files", {
   expect_true(length(tiff_files) >= 1L, info = "No TIFF file saved")
 })
 
-test_that("tyler_plot_density - filters out zero/negative x values without error", {
+test_that("mysterycall_plot_density - filters out zero/negative x values without error", {
   df_with_zeros <- rbind(WAIT_DATA, data.frame(insurance = "Medicaid", days = 0))
   expect_no_error(suppressMessages(
-    tyler_plot_density(df_with_zeros, "days", "insurance",
+    mysterycall_plot_density(df_with_zeros, "days", "insurance",
                         dpi = 50, output_dir = OUT_DIR, verbose = FALSE)
   ))
 })
 
-test_that("tyler_plot_density - custom axis labels are accepted", {
+test_that("mysterycall_plot_density - custom axis labels are accepted", {
   result <- suppressMessages(
-    tyler_plot_density(
+    mysterycall_plot_density(
       data        = WAIT_DATA,
       x_var       = "days",
       fill_var    = "insurance",
@@ -109,11 +109,11 @@ test_that("tyler_plot_density - custom axis labels are accepted", {
   expect_s3_class(result, "ggplot")
 })
 
-# ── tyler_plot_scatter ───────────────────────────────────────────────────────
+# ── mysterycall_plot_scatter ───────────────────────────────────────────────────────
 
-test_that("tyler_plot_scatter - returns a ggplot object", {
+test_that("mysterycall_plot_scatter - returns a ggplot object", {
   result <- suppressMessages(
-    tyler_plot_scatter(
+    mysterycall_plot_scatter(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -127,9 +127,9 @@ test_that("tyler_plot_scatter - returns a ggplot object", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("tyler_plot_scatter - log transform returns ggplot", {
+test_that("mysterycall_plot_scatter - log transform returns ggplot", {
   result <- suppressMessages(
-    tyler_plot_scatter(
+    mysterycall_plot_scatter(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -143,10 +143,10 @@ test_that("tyler_plot_scatter - log transform returns ggplot", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("tyler_plot_scatter - saves PNG and TIFF to output_dir", {
+test_that("mysterycall_plot_scatter - saves PNG and TIFF to output_dir", {
   prefix <- paste0("scatter_save_", Sys.getpid())
   suppressMessages(
-    tyler_plot_scatter(
+    mysterycall_plot_scatter(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -162,9 +162,9 @@ test_that("tyler_plot_scatter - saves PNG and TIFF to output_dir", {
   expect_true(length(tiff_files) >= 1L)
 })
 
-test_that("tyler_plot_scatter - jitter_width and point_alpha are accepted", {
+test_that("mysterycall_plot_scatter - jitter_width and point_alpha are accepted", {
   expect_no_error(suppressMessages(
-    tyler_plot_scatter(
+    mysterycall_plot_scatter(
       plot_data    = WAIT_DATA,
       x_var        = "insurance",
       y_var        = "days",
@@ -177,9 +177,9 @@ test_that("tyler_plot_scatter - jitter_width and point_alpha are accepted", {
   ))
 })
 
-test_that("tyler_plot_scatter - sqrt transform returns ggplot", {
+test_that("mysterycall_plot_scatter - sqrt transform returns ggplot", {
   result <- suppressMessages(
-    tyler_plot_scatter(
+    mysterycall_plot_scatter(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -193,11 +193,11 @@ test_that("tyler_plot_scatter - sqrt transform returns ggplot", {
   expect_s3_class(result, "ggplot")
 })
 
-# ── tyler_plot_line ──────────────────────────────────────────────────────────
+# ── mysterycall_plot_line ──────────────────────────────────────────────────────────
 
-test_that("tyler_plot_line - returns a ggplot object", {
+test_that("mysterycall_plot_line - returns a ggplot object", {
   result <- suppressMessages(
-    tyler_plot_line(
+    mysterycall_plot_line(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -211,9 +211,9 @@ test_that("tyler_plot_line - returns a ggplot object", {
   expect_s3_class(result, "ggplot")
 })
 
-test_that("tyler_plot_line - log transform accepted without error", {
+test_that("mysterycall_plot_line - log transform accepted without error", {
   expect_no_error(suppressMessages(
-    tyler_plot_line(
+    mysterycall_plot_line(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -225,10 +225,10 @@ test_that("tyler_plot_line - log transform accepted without error", {
   ))
 })
 
-test_that("tyler_plot_line - saves PNG and TIFF to output_dir", {
+test_that("mysterycall_plot_line - saves PNG and TIFF to output_dir", {
   prefix <- paste0("line_save_", Sys.getpid())
   suppressMessages(
-    tyler_plot_line(
+    mysterycall_plot_line(
       plot_data   = WAIT_DATA,
       x_var       = "insurance",
       y_var       = "days",
@@ -244,11 +244,11 @@ test_that("tyler_plot_line - saves PNG and TIFF to output_dir", {
   expect_true(length(tiff_files) >= 1L)
 })
 
-test_that("tyler_plot_line - use_geom_line with group column does not error", {
+test_that("mysterycall_plot_line - use_geom_line with group column does not error", {
   df <- WAIT_DATA
   df$group_col <- rep(c("Group1", "Group2", "Group3"), 10)
   expect_no_error(suppressMessages(
-    tyler_plot_line(
+    mysterycall_plot_line(
       plot_data       = df,
       x_var           = "insurance",
       y_var           = "days",

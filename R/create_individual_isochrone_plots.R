@@ -18,7 +18,7 @@
 #' # Load required libraries
 #' library(sf)
 #' library(leaflet)
-#' library(tyler)
+#' library(mysterycall)
 #'
 #' # Load isochrone data
 #' isochrones <- readRDS("path_to_isochrones.rds")
@@ -27,21 +27,21 @@
 #' drive_times <- unique(isochrones$drive_time)
 #'
 #' # Create individual isochrone maps and shapefiles
-#' tyler_plot_isochrones(isochrones, drive_times)
+#' mysterycall_plot_isochrones(isochrones, drive_times)
 #' }
 #'
 #' @family mapping
 #' @export
-tyler_plot_isochrones <- function(isochrones, drive_times, output_dir = NULL) {
+mysterycall_plot_isochrones <- function(isochrones, drive_times, output_dir = NULL) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
-    stop("Package 'leaflet' is required for tyler_plot_isochrones(). Install with: install.packages('leaflet')", call. = FALSE)
+    stop("Package 'leaflet' is required for mysterycall_plot_isochrones(). Install with: install.packages('leaflet')", call. = FALSE)
   }
   if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
     stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
   }
 
   if (is.null(output_dir)) {
-    output_dir <- tyler_tempdir("isochrone_plots", create = TRUE)
+    output_dir <- mysterycall_tempdir("isochrone_plots", create = TRUE)
   } else {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }
@@ -50,7 +50,7 @@ tyler_plot_isochrones <- function(isochrones, drive_times, output_dir = NULL) {
   dir.create(map_dir, recursive = TRUE, showWarnings = FALSE)
   dir.create(shp_dir, recursive = TRUE, showWarnings = FALSE)
 
-  message("Usage: load data with readRDS(), get drive times via unique(isochrones$drive_time), then call tyler_plot_isochrones(isochrones, drive_times).")
+  message("Usage: load data with readRDS(), get drive times via unique(isochrones$drive_time), then call mysterycall_plot_isochrones(isochrones, drive_times).")
 
   message("Creating individual isochrone plots and shapefiles...")
 
@@ -81,7 +81,7 @@ tyler_plot_isochrones <- function(isochrones, drive_times, output_dir = NULL) {
     index <- match(time, drive_times)
 
     # Create a base map
-    my_map <- tyler_map_base("")
+    my_map <- mysterycall_map_base("")
 
     message(paste("Creating a Leaflet map of isochrones for", time, "minutes..."))
 

@@ -1,6 +1,6 @@
 # test-clean-phase1-invariants.R
 #
-# Invariant and gold-standard tests for tyler_clean_phase1().
+# Invariant and gold-standard tests for mysterycall_clean_phase1().
 #
 # Testing tenets satisfied:
 #   - Gold-standard manually-verified values (exact output structure for known input)
@@ -12,7 +12,7 @@
 #   - Schema contracts (processing_flag_* cols are logical, id col always present)
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 
 skip_if_not_installed("dplyr")
 skip_if_not_installed("janitor")
@@ -37,7 +37,7 @@ make_phase1 <- function(n = 3) {
 # Wrapper: run with verbose=FALSE and notify=FALSE for cleaner test output
 run_clean <- function(df, duplicate_rows = TRUE, id_seed = NULL, output_format = "csv") {
   suppressMessages(suppressWarnings(
-    tyler_clean_phase1(
+    mysterycall_clean_phase1(
       df,
       output_directory = tempdir(),
       verbose          = FALSE,
@@ -224,7 +224,7 @@ test_that("each insurance type appears exactly nrow(input) times after duplicate
 # 10. Gold standard: known input → exact output column set
 # ---------------------------------------------------------------------------
 
-test_that("tyler_clean_phase1 output includes all required columns", {
+test_that("mysterycall_clean_phase1 output includes all required columns", {
   result <- run_clean(make_phase1(3))
   required_cols <- c(
     "insurance", "id", "for_redcap", "names",

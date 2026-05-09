@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 
-test_check("tyler")
+test_check("mysterycall")

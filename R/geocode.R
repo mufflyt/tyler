@@ -16,7 +16,7 @@
 #'   finishes (requires the optional `beepr` package). Defaults to `TRUE`.
 #' @param quiet Logical flag controlling log verbosity. Defaults to the package
 #'   quiet-mode option.
-#' @param tracker Optional progress tracker created with [tyler_progress_tracker()].
+#' @param tracker Optional progress tracker created with [mysterycall_progress_tracker()].
 #'   When supplied, the step named by `tracker_step` is automatically started and
 #'   marked as complete or failed with an appropriate quality tier.
 #' @param tracker_step Character string describing the step name used when
@@ -27,14 +27,14 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' result <- tyler_geocode("addresses.csv", "my_api_key")
+#' result <- mysterycall_geocode("addresses.csv", "my_api_key")
 #' }
 #' @importFrom readr read_csv write_csv
 #' @importFrom dplyr left_join distinct mutate
 #' @importFrom tibble tibble
 #' @importFrom stats complete.cases
 #'
-tyler_geocode <- function(file_path, google_maps_api_key,
+mysterycall_geocode <- function(file_path, google_maps_api_key,
                                      output_file_path = NULL,
                                      failed_output_path = NULL,
                                      notify = TRUE,
@@ -63,19 +63,19 @@ tyler_geocode <- function(file_path, google_maps_api_key,
   }
 
   if (!requireNamespace("ggmap", quietly = TRUE)) {
-    stop("Package 'ggmap' is required for tyler_geocode(). Install with: install.packages('ggmap')", call. = FALSE)
+    stop("Package 'ggmap' is required for mysterycall_geocode(). Install with: install.packages('ggmap')", call. = FALSE)
   }
   ggmap::register_google(key = google_maps_api_key)
 
   unique_add <- dplyr::distinct(data, address)
   total_unique <- nrow(unique_add)
   if (!isTRUE(quiet)) {
-    tyler_log_info(sprintf("Geocoding %d unique address(es).", total_unique))
-    tyler_log_info(sprintf("Found %d total address records, %d unique", nrow(data), total_unique))
+    mysterycall_log_info(sprintf("Geocoding %d unique address(es).", total_unique))
+    mysterycall_log_info(sprintf("Found %d total address records, %d unique", nrow(data), total_unique))
   }
 
-  if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
-    tyler_progress_start(tracker, tracker_step, note = sprintf("%d unique address(es)", total_unique))
+  if (!is.null(tracker) && inherits(tracker, "mysterycall_progress_tracker")) {
+    mysterycall_progress_start(tracker, tracker_step, note = sprintf("%d unique address(es)", total_unique))
   }
 
   extract_status <- function(msg) {
@@ -100,7 +100,7 @@ tyler_geocode <- function(file_path, google_maps_api_key,
       if (inherits(attempt_result, "error")) {
         reason <- extract_status(attempt_result$message)
         if (!isTRUE(quiet)) {
-          tyler_log_info(sprintf(
+          mysterycall_log_info(sprintf(
             "Attempt %d/%d for address '%s' failed %s.",
             attempt,
             max_attempts,
@@ -113,16 +113,16 @@ tyler_geocode <- function(file_path, google_maps_api_key,
           failure_reason <- sprintf("Geocoding failed after %d attempts: %s", max_attempts, attempt_result$message)
           if (!is.null(failed_output_path)) {
             failure_tbl <- tibble::tibble(address = unique_add$address, reason = failure_reason)
-            tyler_export_with_backup(failure_tbl, failed_output_path, quiet = quiet)
+            mysterycall_export_with_backup(failure_tbl, failed_output_path, quiet = quiet)
           }
-          if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
-            tyler_progress_fail(tracker, tracker_step, reason = failure_reason)
+          if (!is.null(tracker) && inherits(tracker, "mysterycall_progress_tracker")) {
+            mysterycall_progress_fail(tracker, tracker_step, reason = failure_reason)
           }
           stop(failure_reason, call. = FALSE)
         }
 
         delay <- base_delay * 2^(attempt - 1)
-        if (!isTRUE(quiet)) tyler_log_info(sprintf("Retrying geocode request in %.1f seconds...", delay))
+        if (!isTRUE(quiet)) mysterycall_log_info(sprintf("Retrying geocode request in %.1f seconds...", delay))
         Sys.sleep(delay)
       } else {
         coords <- attempt_result
@@ -167,35 +167,35 @@ tyler_geocode <- function(file_path, google_maps_api_key,
   # Comprehensive logging: Report geocoding results
   if (!isTRUE(quiet)) {
     if (success_rate >= 0.95) {
-      tyler_log_success(sprintf("Geocoding complete: %d/%d succeeded (%.1f%%)",
+      mysterycall_log_success(sprintf("Geocoding complete: %d/%d succeeded (%.1f%%)",
                                success_count, total_unique, success_rate * 100),
                        indent = TRUE)
     } else if (success_rate >= 0.80) {
-      tyler_log_warning(sprintf("Geocoding finished with warnings: %d/%d succeeded (%.1f%%)",
+      mysterycall_log_warning(sprintf("Geocoding finished with warnings: %d/%d succeeded (%.1f%%)",
                                success_count, total_unique, success_rate * 100),
                        indent = TRUE)
     } else {
-      tyler_log_error(sprintf("Geocoding had low success rate: %d/%d succeeded (%.1f%%)",
+      mysterycall_log_error(sprintf("Geocoding had low success rate: %d/%d succeeded (%.1f%%)",
                              success_count, total_unique, success_rate * 100),
                      indent = TRUE)
     }
   }
 
   if (nrow(failed_rows) && !is.null(failed_output_path)) {
-    tyler_export_with_backup(failed_rows, failed_output_path, quiet = quiet)
-    if (!isTRUE(quiet)) tyler_log_info(sprintf("Exported %d failed address(es) to %s", nrow(failed_rows), failed_output_path))
+    mysterycall_export_with_backup(failed_rows, failed_output_path, quiet = quiet)
+    if (!isTRUE(quiet)) mysterycall_log_info(sprintf("Exported %d failed address(es) to %s", nrow(failed_rows), failed_output_path))
   }
 
-  if (!is.null(tracker) && inherits(tracker, "tyler_progress_tracker")) {
-    tyler_progress_finish(tracker, tracker_step, score = success_rate, note = sprintf("%d/%d succeeded", total_unique - nrow(failed_rows), total_unique))
+  if (!is.null(tracker) && inherits(tracker, "mysterycall_progress_tracker")) {
+    mysterycall_progress_finish(tracker, tracker_step, score = success_rate, note = sprintf("%d/%d succeeded", total_unique - nrow(failed_rows), total_unique))
   }
 
   data <- dplyr::left_join(data, unique_add, by = "address")
 
   if (!is.null(output_file_path)) {
-    tyler_export_with_backup(data, output_file_path, quiet = quiet, backup = TRUE)
+    mysterycall_export_with_backup(data, output_file_path, quiet = quiet, backup = TRUE)
     if (!quiet) {
-      tyler_log_save(output_file_path, n_rows = nrow(data))
+      mysterycall_log_save(output_file_path, n_rows = nrow(data))
     }
   }
 

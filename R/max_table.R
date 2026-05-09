@@ -8,12 +8,12 @@
 #'         If \code{mult} is TRUE, returns a character vector containing all the levels with the maximum value.
 #' @examples
 #' vec <- factor(c("A", "B", "A", "C", "B", "B"))
-#' tyler_max_table(vec) # Returns "B"
-#' tyler_max_table(vec, mult = TRUE) # Returns "B"
+#' mysterycall_max_table(vec) # Returns "B"
+#' mysterycall_max_table(vec, mult = TRUE) # Returns "B"
 #' @family table
 #' @export
 
-tyler_max_table <- function(InVec, mult = FALSE) {
+mysterycall_max_table <- function(InVec, mult = FALSE) {
   if (length(InVec) == 0) {
     return(character(0))
   }

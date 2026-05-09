@@ -1,4 +1,18 @@
-# tyler 1.2.2
+# mysterycall 1.3.0
+
+Released 2026-05-08.
+
+## Breaking changes (with backward compatibility)
+
+* Package renamed from `tyler` to `mysterycall`. `library(tyler)` will no longer
+  work; use `library(mysterycall)`.
+* All 100 exported functions now carry the `mysterycall_` prefix (e.g.,
+  `mysterycall_geocode()`, `mysterycall_search_and_process_npi()`).
+  The previous `tyler_` prefix names are retained as deprecated shims that
+  emit a warning and forward to the new name. The even-older unprefixed names
+  (e.g., `check_normality()`) continue to work as double-deprecated shims.
+
+# mysterycall 1.2.2
 
 Released 2026-05-04.
 
@@ -37,7 +51,7 @@ Released 2026-05-04.
   now emit a clear `stop()` message with the exact `install.packages()` command
   if the package is not installed.
 
-# tyler 1.2.1
+# mysterycall 1.2.1
 
 * Released on 2025-10-23 to align all metadata artifacts with the
   package website and codemeta specification.
@@ -57,7 +71,7 @@ Released 2026-05-04.
   and `process_and_save_isochrones()`) in favor of the consolidated
   `search_and_process_npi()` and `create_isochrones_for_dataframe()` workflow.
 
-# tyler 0.0.0.9000
+# mysterycall 0.0.0.9000
 
 * Added a `NEWS.md` file to track changes to the package.
 * Verified and tested GitHub Actions workflows:

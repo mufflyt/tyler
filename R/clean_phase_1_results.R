@@ -53,10 +53,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' library(tyler)
+#' library(mysterycall)
 #' file_path <- "/path/to/your/input/file.xls"
 #' phase1_data <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
-#' tyler_clean_phase1(phase1_data)
+#' mysterycall_clean_phase1(phase1_data)
 #' }
 #'
 #' @importFrom dplyr arrange mutate select filter bind_rows
@@ -74,7 +74,7 @@
 # library(openxlsx)
 # library(fs)
 
-tyler_clean_phase1 <- function(phase1_data,
+mysterycall_clean_phase1 <- function(phase1_data,
                                   output_directory = tempdir(),
                                   verbose = TRUE,
                                   notify = TRUE,
@@ -102,11 +102,11 @@ tyler_clean_phase1 <- function(phase1_data,
   # Capture processing start time and metadata
   processing_start_time <- Sys.time()
   audit_trail <- list(
-    function_name = "tyler_clean_phase1",
+    function_name = "mysterycall_clean_phase1",
     start_time = processing_start_time,
     r_version = R.version.string,
     platform = .Platform$OS.type,
-    package_version = tryCatch(as.character(packageVersion("tyler")), error = function(e) "unknown"),
+    package_version = tryCatch(as.character(packageVersion("mysterycall")), error = function(e) "unknown"),
     parameters = list(
       output_directory = output_directory,
       verbose = verbose,
@@ -395,7 +395,7 @@ tyler_clean_phase1 <- function(phase1_data,
   }
   output_extension <- if (identical(output_format, "parquet")) ".parquet" else ".csv"
   output_file <- file.path(output_directory, paste0("clean_phase_1_results_", current_datetime, output_extension))
-  tyler_write_table(phase1_data, output_file, format = output_format)
+  mysterycall_write_table(phase1_data, output_file, format = output_format)
   announce(sprintf(
     "Saved cleaned Phase 1 results dataframe to %s with %d row(s) and %d column(s).",
     output_file,
@@ -468,4 +468,4 @@ format_phone_number <- function(phone_values) {
 
 # file_path <- "ortho_sports_med/data/phase1/Late_Phase_1_Mystery caller - Sports med Only.xlsx"
 # phase1_data <- read_xls(file_path)
-# tyler_clean_phase1(phase1_data)
+# mysterycall_clean_phase1(phase1_data)

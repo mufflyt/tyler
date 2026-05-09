@@ -1,17 +1,17 @@
 # Regression tests for match rates and data quality
 library(testthat)
-library(tyler)
+library(mysterycall)
 library(dplyr)
 
 # Store baseline match rates and quality metrics
 # These represent "known good" performance that should not degrade
 BASELINE_METRICS <- list(
-  tyler_search_taxonomy = list(
+  mysterycall_search_taxonomy = list(
     min_match_rate = 0.8,  # At least 80% of searches should return results
     max_error_rate = 0.1,  # No more than 10% should fail
     min_data_quality = 0.95  # 95% of returned data should be valid
   ),
-  tyler_clean_phase1 = list(
+  mysterycall_clean_phase1 = list(
     min_retention_rate = 0.9,  # Should retain at least 90% of input rows
     max_error_rate = 0.05,     # No more than 5% processing errors
     required_columns_present = 1.0  # 100% of required columns should be present
@@ -50,7 +50,7 @@ create_regression_test_data <- function(scenario = "standard") {
   )
 }
 
-test_that("Regression: tyler_search_taxonomy match rates", {
+test_that("Regression: mysterycall_search_taxonomy match rates", {
   skip_on_cran()
 
   # Test known taxonomy terms that should consistently return results
@@ -102,7 +102,7 @@ test_that("Regression: tyler_search_taxonomy match rates", {
 
       for (taxonomy in known_taxonomies) {
         tryCatch({
-          result <- tyler_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
+          result <- mysterycall_search_taxonomy(taxonomy, write_snapshot = FALSE, notify = FALSE)
           results[[taxonomy]] <- result
         }, error = function(e) {
           errors <<- errors + 1
@@ -117,9 +117,9 @@ test_that("Regression: tyler_search_taxonomy match rates", {
       error_rate <- errors / length(known_taxonomies)
 
       # Regression checks
-      expect_gte(match_rate, BASELINE_METRICS$tyler_search_taxonomy$min_match_rate)
+      expect_gte(match_rate, BASELINE_METRICS$mysterycall_search_taxonomy$min_match_rate)
 
-      expect_lte(error_rate, BASELINE_METRICS$tyler_search_taxonomy$max_error_rate)
+      expect_lte(error_rate, BASELINE_METRICS$mysterycall_search_taxonomy$max_error_rate)
 
       # Data quality checks
       for (result in results) {
@@ -128,14 +128,14 @@ test_that("Regression: tyler_search_taxonomy match rates", {
           valid_npis <- sum(grepl("^[0-9]{10}$", result$npi[!is.na(result$npi)]))
           npi_quality_rate <- valid_npis / nrow(result)
 
-          expect_gte(npi_quality_rate, BASELINE_METRICS$tyler_search_taxonomy$min_data_quality)
+          expect_gte(npi_quality_rate, BASELINE_METRICS$mysterycall_search_taxonomy$min_data_quality)
         }
       }
     }
   )
 })
 
-test_that("Regression: tyler_clean_phase1 retention rates", {
+test_that("Regression: mysterycall_clean_phase1 retention rates", {
   test_scenarios <- c("standard", "challenging")
 
   for (scenario in test_scenarios) {
@@ -145,7 +145,7 @@ test_that("Regression: tyler_clean_phase1 retention rates", {
     temp_dir <- tempdir()
 
     tryCatch({
-      result <- tyler_clean_phase1(
+      result <- mysterycall_clean_phase1(
         phase1_data = test_data,
         output_directory = temp_dir,
         verbose = FALSE,
@@ -157,7 +157,7 @@ test_that("Regression: tyler_clean_phase1 retention rates", {
       retention_rate <- nrow(result) / original_rows
 
       # Check against baseline
-      expect_gte(retention_rate, BASELINE_METRICS$tyler_clean_phase1$min_retention_rate)
+      expect_gte(retention_rate, BASELINE_METRICS$mysterycall_clean_phase1$min_retention_rate)
 
       # Check required columns are present
       required_cols <- c("names", "practice_name", "phone_number", "state_name")
@@ -165,7 +165,7 @@ test_that("Regression: tyler_clean_phase1 retention rates", {
       column_presence_rate <- present_cols / length(required_cols)
 
       expect_equal(column_presence_rate,
-                   BASELINE_METRICS$tyler_clean_phase1$required_columns_present)
+                   BASELINE_METRICS$mysterycall_clean_phase1$required_columns_present)
 
     }, error = function(e) {
       # Should not have processing errors for valid input
@@ -201,7 +201,7 @@ test_that("Regression: NPI validation accuracy", {
   )
 
   # Validate NPIs
-  result <- tyler_validate_npi(test_data)
+  result <- mysterycall_validate_npi(test_data)
 
   # Calculate validation accuracy
   valid_npis_in_result <- if (nrow(result) > 0 && "npi" %in% names(result)) {
@@ -236,8 +236,8 @@ test_that("Regression: NPI validation accuracy", {
 
 test_that("Regression: Taxonomy data completeness", {
   # Test that taxonomy reference data meets quality standards
-  if (exists("taxonomy", envir = asNamespace("tyler"))) {
-    taxonomy_data <- tyler::taxonomy
+  if (exists("taxonomy", envir = asNamespace("mysterycall"))) {
+    taxonomy_data <- mysterycall::taxonomy
 
     expect_s3_class(taxonomy_data, "data.frame")
     expect_gt(nrow(taxonomy_data), 0)
@@ -268,9 +268,9 @@ test_that("Regression: Performance benchmarks", {
   performance_data <- create_regression_test_data("standard")
   temp_dir <- tempdir()
 
-  # Benchmark tyler_clean_phase1
+  # Benchmark mysterycall_clean_phase1
   start_time <- Sys.time()
-  result <- tyler_clean_phase1(
+  result <- mysterycall_clean_phase1(
     phase1_data = performance_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -293,7 +293,7 @@ test_that("Regression: Cross-version data compatibility", {
   test_data <- create_regression_test_data("standard")
   temp_dir <- tempdir()
 
-  result <- tyler_clean_phase1(
+  result <- mysterycall_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -328,19 +328,19 @@ test_that("Regression: Error handling consistency", {
   )
 
   expect_error(
-    tyler_clean_phase1(invalid_data, output_directory = temp_dir),
+    mysterycall_clean_phase1(invalid_data, output_directory = temp_dir),
     "names"  # Should mention missing required column
   )
 
   # Test with NULL input
   expect_error(
-    tyler_clean_phase1(NULL, output_directory = temp_dir),
+    mysterycall_clean_phase1(NULL, output_directory = temp_dir),
     "data frame"
   )
 
   # Test with empty data frame
   expect_error(
-    tyler_clean_phase1(data.frame(), output_directory = temp_dir),
+    mysterycall_clean_phase1(data.frame(), output_directory = temp_dir),
     "at least one row"
   )
 })
@@ -360,7 +360,7 @@ test_that("Regression: State and geographic data validation", {
 
   temp_dir <- tempdir()
 
-  result <- tyler_clean_phase1(
+  result <- mysterycall_clean_phase1(
     phase1_data = test_data,
     output_directory = temp_dir,
     verbose = FALSE,

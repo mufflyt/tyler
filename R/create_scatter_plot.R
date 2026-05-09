@@ -31,7 +31,7 @@
 #'   business_days_until_appointment = c(1.5, 2.0, 2.8, 1.9, 2.4, 2.6, 2.1, 2.7, 3.0)
 #' )
 #'
-#' tyler_plot_scatter(
+#' mysterycall_plot_scatter(
 #'   plot_data = example_data,
 #'   x_var = "insurance",
 #'   y_var = "business_days_until_appointment",
@@ -46,7 +46,7 @@
 #' )
 #' }
 
-tyler_plot_scatter <- function(plot_data,
+mysterycall_plot_scatter <- function(plot_data,
                                 x_var,
                                 y_var,
                                 y_transform = "none",
@@ -101,7 +101,7 @@ tyler_plot_scatter <- function(plot_data,
   print(scatter_plot)
 
   if (is.null(output_dir)) {
-    output_dir <- tyler_tempdir("scatter_plots", create = TRUE)
+    output_dir <- mysterycall_tempdir("scatter_plots", create = TRUE)
   } else if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }

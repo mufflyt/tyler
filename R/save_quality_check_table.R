@@ -13,16 +13,16 @@
 #' This helper is useful for flagging repeated provider entries that may require
 #' manual review.
 #' @importFrom dplyr group_by summarize arrange filter n desc
-#' @seealso [tyler_run_workflow()], [validate_dataframe()],
-#'   [tyler_split_and_save()]
+#' @seealso [mysterycall_run_workflow()], [validate_dataframe()],
+#'   [mysterycall_split_and_save()]
 #' @family utilities
 #' @export
 #' @examples
 #' \dontrun{
-#' tyler_save_quality_table(my_data, "qc.csv")
+#' mysterycall_save_quality_table(my_data, "qc.csv")
 #' }
 
-tyler_save_quality_table <- function(data, filepath) {
+mysterycall_save_quality_table <- function(data, filepath) {
   required_cols <- c("npi", "name")
   missing_cols <- setdiff(required_cols, names(data))
   if (length(missing_cols)) {

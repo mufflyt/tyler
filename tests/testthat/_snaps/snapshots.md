@@ -1,7 +1,7 @@
-# tyler_standard_labels() output is stable
+# mysterycall_standard_labels() output is stable
 
     Code
-      tyler_standard_labels()
+      mysterycall_standard_labels()
     Output
       $npi
       [1] "National Provider Identifier"
@@ -28,55 +28,55 @@
       [1] "Estimated Completion"
       
 
-# tyler_standard_palette() primary palette is stable
+# mysterycall_standard_palette() primary palette is stable
 
     Code
-      tyler_standard_palette("primary")
+      mysterycall_standard_palette("primary")
     Output
       [1] "#0B3C5D" "#328CC1" "#D9B310" "#1D2731"
 
-# tyler_standard_palette() sequential palette is stable
+# mysterycall_standard_palette() sequential palette is stable
 
     Code
-      tyler_standard_palette("sequential")
+      mysterycall_standard_palette("sequential")
     Output
       [1] "#f7fbff" "#c6dbef" "#6baed6" "#2171b5"
 
-# tyler_standard_palette() diverging palette is stable
+# mysterycall_standard_palette() diverging palette is stable
 
     Code
-      tyler_standard_palette("diverging")
+      mysterycall_standard_palette("diverging")
     Output
       [1] "#b30000" "#fdbf6f" "#1b7837"
 
-# tyler_quality_tier() tier boundaries are stable
+# mysterycall_quality_tier() tier boundaries are stable
 
     Code
-      tyler_quality_tier(1)
+      mysterycall_quality_tier(1)
     Output
       [1] "high"
     Code
-      tyler_quality_tier(0.9)
+      mysterycall_quality_tier(0.9)
     Output
       [1] "high"
     Code
-      tyler_quality_tier(0.89)
+      mysterycall_quality_tier(0.89)
     Output
       [1] "medium"
     Code
-      tyler_quality_tier(0.75)
+      mysterycall_quality_tier(0.75)
     Output
       [1] "medium"
     Code
-      tyler_quality_tier(0.74)
+      mysterycall_quality_tier(0.74)
     Output
       [1] "low"
     Code
-      tyler_quality_tier(0)
+      mysterycall_quality_tier(0)
     Output
       [1] "low"
 
-# tyler_check_data_completeness() summary structure is stable
+# mysterycall_check_data_completeness() summary structure is stable
 
     Code
       result$summary

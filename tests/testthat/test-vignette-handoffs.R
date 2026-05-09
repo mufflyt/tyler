@@ -1,6 +1,6 @@
 # Handoff tests for all vignettes - ensuring examples work correctly
 library(testthat)
-library(tyler)
+library(mysterycall)
 library(dplyr)
 
 # Test data generators for vignette examples
@@ -63,7 +63,7 @@ test_that("Vignette handoff: my-vignette.Rmd taxonomy search examples", {
     {
       # Test the exact code from my-vignette.Rmd
       taxonomy_descriptions <- c("Hospice and Palliative Medicine")
-      data <- tyler_search_taxonomy(taxonomy_to_search = taxonomy_descriptions,
+      data <- mysterycall_search_taxonomy(taxonomy_to_search = taxonomy_descriptions,
                                  write_snapshot = FALSE, notify = FALSE)
 
       expect_s3_class(data, "data.frame")
@@ -84,10 +84,10 @@ test_that("Vignette handoff: my-vignette.Rmd taxonomy search examples", {
   )
 })
 
-test_that("Vignette handoff: tyler_search_and_process_npi.Rmd examples", {
+test_that("Vignette handoff: mysterycall_search_and_process_npi.Rmd examples", {
   skip_on_cran()
 
-  # Test data processing from tyler_search_and_process_npi vignette
+  # Test data processing from mysterycall_search_and_process_npi vignette
   test_npi_data <- data.frame(
     npi = c("1234567890", "2345678901", "3456789012", "invalid_npi", ""),
     provider_name = c("Dr. Smith", "Dr. Johnson", "Dr. Williams", "Dr. Invalid", "Dr. Empty"),
@@ -95,7 +95,7 @@ test_that("Vignette handoff: tyler_search_and_process_npi.Rmd examples", {
   )
 
   # Test NPI validation as shown in vignette
-  validated_data <- tyler_validate_npi(test_npi_data)
+  validated_data <- mysterycall_validate_npi(test_npi_data)
 
   expect_s3_class(validated_data, "data.frame")
 
@@ -135,7 +135,7 @@ test_that("Vignette handoff: tyler_search_and_process_npi.Rmd examples", {
   }
 })
 
-test_that("Vignette handoff: tyler_get_census_data.Rmd examples", {
+test_that("Vignette handoff: mysterycall_get_census_data.Rmd examples", {
   skip_on_cran()
 
   # Mock census API for vignette testing
@@ -158,7 +158,7 @@ test_that("Vignette handoff: tyler_get_census_data.Rmd examples", {
     getCensus = mock_get_census,
     {
       # Test census data retrieval as shown in vignette
-      census_data <- tyler_get_census_data(
+      census_data <- mysterycall_get_census_data(
         geography = "county",
         state = "all",
         vintage = 2021,
@@ -170,7 +170,7 @@ test_that("Vignette handoff: tyler_get_census_data.Rmd examples", {
 
       # Test summarization function
       if (nrow(census_data) > 0) {
-        summary_data <- tyler_summarize_census(census_data)
+        summary_data <- mysterycall_summarize_census(census_data)
         expect_s3_class(summary_data, "data.frame")
 
         # Test that required columns exist for analysis
@@ -182,7 +182,7 @@ test_that("Vignette handoff: tyler_get_census_data.Rmd examples", {
   )
 })
 
-test_that("Vignette handoff: tyler_create_isochrones.Rmd examples", {
+test_that("Vignette handoff: mysterycall_create_isochrones.Rmd examples", {
   skip_on_cran()
 
   # Test isochrone creation examples
@@ -208,8 +208,8 @@ test_that("Vignette handoff: tyler_create_isochrones.Rmd examples", {
     with_mocked_bindings(
       isoline = mock_isoline,
       {
-        # Test tyler_create_isochrones function
-        result <- tyler_create_isochrones(
+        # Test mysterycall_create_isochrones function
+        result <- mysterycall_create_isochrones(
           location = test_location_sf,
           range = c(1800, 3600),  # 30 min, 60 min
           api_key = "test_key"
@@ -245,7 +245,7 @@ test_that("Vignette handoff: geocode.Rmd examples", {
     geocode = mock_geocode,
     {
       # Test geocoding workflow
-      geocoded <- tyler_geocode(test_addresses)
+      geocoded <- mysterycall_geocode(test_addresses)
 
       expect_s3_class(geocoded, "data.frame")
       expect_true("lat" %in% names(geocoded) || "latitude" %in% names(geocoded))
@@ -327,14 +327,14 @@ test_that("Vignette handoff: Cross-vignette data compatibility", {
     npi_flatten = mock_npi_flatten,
     {
       # Get provider data
-      provider_data <- tyler_search_taxonomy("Obstetrics & Gynecology",
+      provider_data <- mysterycall_search_taxonomy("Obstetrics & Gynecology",
                                           write_snapshot = FALSE, notify = FALSE)
 
       expect_s3_class(provider_data, "data.frame")
 
       if (nrow(provider_data) > 0) {
-        # Stage 2: Validate NPIs (from tyler_search_and_process_npi.Rmd)
-        validated_providers <- tyler_validate_npi(provider_data)
+        # Stage 2: Validate NPIs (from mysterycall_search_and_process_npi.Rmd)
+        validated_providers <- mysterycall_validate_npi(provider_data)
         expect_s3_class(validated_providers, "data.frame")
 
         # Stage 3: Geographic analysis (from geocode.Rmd concepts)
@@ -380,7 +380,7 @@ test_that("Vignette handoff: Error scenarios in examples", {
     npi_flatten = mock_npi_flatten,
     {
       # Should handle empty results gracefully
-      result <- tyler_search_taxonomy("Nonexistent Specialty",
+      result <- mysterycall_search_taxonomy("Nonexistent Specialty",
                                    write_snapshot = FALSE, notify = FALSE)
 
       expect_s3_class(result, "data.frame")
@@ -400,7 +400,7 @@ test_that("Vignette handoff: Error scenarios in examples", {
   )
 
   # Should handle validation gracefully
-  validated_invalid <- tyler_validate_npi(invalid_provider_data)
+  validated_invalid <- mysterycall_validate_npi(invalid_provider_data)
   expect_s3_class(validated_invalid, "data.frame")
 })
 
@@ -480,16 +480,16 @@ test_that("Vignette handoff: Documentation examples accuracy", {
 
   # Verify that examples in vignettes match actual function signatures
 
-  # Test that tyler_search_taxonomy parameters match vignette usage
+  # Test that mysterycall_search_taxonomy parameters match vignette usage
   expect_no_error(
-    tyler_search_taxonomy(
+    mysterycall_search_taxonomy(
       taxonomy_to_search = "Test Taxonomy",
       write_snapshot = FALSE,
       notify = FALSE
     )
   )
 
-  # Test that tyler_clean_phase1 parameters match usage
+  # Test that mysterycall_clean_phase1 parameters match usage
   test_data <- data.frame(
     id = 1, names = "Dr. Test", practice_name = "Test Practice",
     phone_number = "555-0001", state_name = "CA",
@@ -498,7 +498,7 @@ test_that("Vignette handoff: Documentation examples accuracy", {
   )
 
   expect_no_error(
-    tyler_clean_phase1(
+    mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = tempdir(),
       verbose = FALSE,
@@ -506,8 +506,8 @@ test_that("Vignette handoff: Documentation examples accuracy", {
     )
   )
 
-  # Test tyler_validate_npi usage
+  # Test mysterycall_validate_npi usage
   expect_no_error(
-    tyler_validate_npi(test_data)
+    mysterycall_validate_npi(test_data)
   )
 })

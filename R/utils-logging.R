@@ -4,12 +4,12 @@
 #' user-friendly output for long-running workflows.
 #'
 #' @name logging-utils
-#' @seealso [tyler_run_workflow_logged()],
-#'   [tyler_preflight_check()], [tyler_multi_progress()]
+#' @seealso [mysterycall_run_workflow_logged()],
+#'   [mysterycall_preflight_check()], [mysterycall_multi_progress()]
 NULL
 
 # Global environment for tracking workflow state
-.tyler_workflow <- new.env(parent = emptyenv())
+.mysterycall_workflow <- new.env(parent = emptyenv())
 
 #' Initialize workflow tracking
 #'
@@ -17,21 +17,21 @@ NULL
 #' @param total_steps Total number of major steps
 #' @param log_file Optional path to log file for persistent logging
 #' @return `invisible(NULL)`; initializes internal workflow state in
-#'   `.tyler_workflow` and prints a workflow header.
+#'   `.mysterycall_workflow` and prints a workflow header.
 #' @family logging utilities
 #' @export
-tyler_workflow_start <- function(workflow_name, total_steps = NULL, log_file = NULL) {
-  .tyler_workflow$name <- workflow_name
-  .tyler_workflow$start_time <- Sys.time()
-  .tyler_workflow$total_steps <- total_steps
-  .tyler_workflow$current_step <- 0
-  .tyler_workflow$log_file <- log_file
-  .tyler_workflow$step_results <- list()
+mysterycall_workflow_start <- function(workflow_name, total_steps = NULL, log_file = NULL) {
+  .mysterycall_workflow$name <- workflow_name
+  .mysterycall_workflow$start_time <- Sys.time()
+  .mysterycall_workflow$total_steps <- total_steps
+  .mysterycall_workflow$current_step <- 0
+  .mysterycall_workflow$log_file <- log_file
+  .mysterycall_workflow$step_results <- list()
 
   # Header
   message(strrep("=", 60))
   message(sprintf("  %s", workflow_name))
-  message(sprintf("  Started: %s", format(.tyler_workflow$start_time, "%Y-%m-%d %H:%M:%S")))
+  message(sprintf("  Started: %s", format(.mysterycall_workflow$start_time, "%Y-%m-%d %H:%M:%S")))
   if (!is.null(total_steps)) {
     message(sprintf("  Total Steps: %d", total_steps))
   }
@@ -44,7 +44,7 @@ tyler_workflow_start <- function(workflow_name, total_steps = NULL, log_file = N
     writeLines(c(
       strrep("=", 60),
       sprintf("Workflow: %s", workflow_name),
-      sprintf("Started: %s", format(.tyler_workflow$start_time, "%Y-%m-%d %H:%M:%S")),
+      sprintf("Started: %s", format(.mysterycall_workflow$start_time, "%Y-%m-%d %H:%M:%S")),
       strrep("=", 60),
       ""
     ), log_file)
@@ -62,15 +62,15 @@ tyler_workflow_start <- function(workflow_name, total_steps = NULL, log_file = N
 #'   formatted step header.
 #' @family logging utilities
 #' @export
-tyler_log_step <- function(step_name, detail = NULL, n_items = NULL) {
-  if (exists("current_step", envir = .tyler_workflow)) {
-    .tyler_workflow$current_step <- .tyler_workflow$current_step + 1
+mysterycall_log_step <- function(step_name, detail = NULL, n_items = NULL) {
+  if (exists("current_step", envir = .mysterycall_workflow)) {
+    .mysterycall_workflow$current_step <- .mysterycall_workflow$current_step + 1
   } else {
-    .tyler_workflow$current_step <- 1
+    .mysterycall_workflow$current_step <- 1
   }
 
-  step_num <- .tyler_workflow$current_step
-  total_steps <- .tyler_workflow$total_steps
+  step_num <- .mysterycall_workflow$current_step
+  total_steps <- .mysterycall_workflow$total_steps
 
   # Format step header
   if (!is.null(total_steps)) {
@@ -90,14 +90,14 @@ tyler_log_step <- function(step_name, detail = NULL, n_items = NULL) {
   }
 
   # Store step start time
-  .tyler_workflow$step_results[[as.character(step_num)]] <- list(
+  .mysterycall_workflow$step_results[[as.character(step_num)]] <- list(
     name = step_name,
     start_time = Sys.time(),
     n_items = n_items
   )
 
-  tyler_log_to_file(header)
-  if (!is.null(detail)) tyler_log_to_file(sprintf("  %s", detail))
+  mysterycall_log_to_file(header)
+  if (!is.null(detail)) mysterycall_log_to_file(sprintf("  %s", detail))
 
   invisible(NULL)
 }
@@ -109,10 +109,10 @@ tyler_log_step <- function(step_name, detail = NULL, n_items = NULL) {
 #' @return `invisible(NULL)`.
 #' @family logging utilities
 #' @export
-tyler_log_info <- function(msg, indent = TRUE) {
+mysterycall_log_info <- function(msg, indent = TRUE) {
   formatted <- if (indent) sprintf("  \u2139 %s", msg) else sprintf("\u2139 %s", msg)
   message(formatted)
-  tyler_log_to_file(formatted)
+  mysterycall_log_to_file(formatted)
   invisible(NULL)
 }
 
@@ -124,16 +124,16 @@ tyler_log_info <- function(msg, indent = TRUE) {
 #' @return `invisible(NULL)`.
 #' @family logging utilities
 #' @export
-tyler_log_success <- function(msg, details = NULL, indent = TRUE) {
+mysterycall_log_success <- function(msg, details = NULL, indent = TRUE) {
   formatted <- if (indent) sprintf("  \u2713 %s", msg) else sprintf("\u2713 %s", msg)
   message(formatted)
-  tyler_log_to_file(formatted)
+  mysterycall_log_to_file(formatted)
 
   if (!is.null(details)) {
     for (name in names(details)) {
       detail_line <- sprintf("    - %s: %s", name, details[[name]])
       message(detail_line)
-      tyler_log_to_file(detail_line)
+      mysterycall_log_to_file(detail_line)
     }
   }
 
@@ -148,15 +148,15 @@ tyler_log_success <- function(msg, details = NULL, indent = TRUE) {
 #' @return `invisible(NULL)`.
 #' @family logging utilities
 #' @export
-tyler_log_warning <- function(msg, fix = NULL, indent = TRUE) {
+mysterycall_log_warning <- function(msg, fix = NULL, indent = TRUE) {
   formatted <- if (indent) sprintf("  \u26A0 WARNING: %s", msg) else sprintf("\u26A0 WARNING: %s", msg)
   message(formatted)
-  tyler_log_to_file(formatted)
+  mysterycall_log_to_file(formatted)
 
   if (!is.null(fix)) {
     fix_line <- sprintf("    Fix: %s", fix)
     message(fix_line)
-    tyler_log_to_file(fix_line)
+    mysterycall_log_to_file(fix_line)
   }
 
   invisible(NULL)
@@ -171,21 +171,21 @@ tyler_log_warning <- function(msg, fix = NULL, indent = TRUE) {
 #' @return `invisible(NULL)`.
 #' @family logging utilities
 #' @export
-tyler_log_error <- function(msg, cause = NULL, fix = NULL, indent = TRUE) {
+mysterycall_log_error <- function(msg, cause = NULL, fix = NULL, indent = TRUE) {
   formatted <- if (indent) sprintf("  \u2717 ERROR: %s", msg) else sprintf("\u2717 ERROR: %s", msg)
   message(formatted)
-  tyler_log_to_file(formatted)
+  mysterycall_log_to_file(formatted)
 
   if (!is.null(cause)) {
     cause_line <- sprintf("    Cause: %s", cause)
     message(cause_line)
-    tyler_log_to_file(cause_line)
+    mysterycall_log_to_file(cause_line)
   }
 
   if (!is.null(fix)) {
     fix_line <- sprintf("    Fix: %s", fix)
     message(fix_line)
-    tyler_log_to_file(fix_line)
+    mysterycall_log_to_file(fix_line)
   }
 
   invisible(NULL)
@@ -200,7 +200,7 @@ tyler_log_error <- function(msg, cause = NULL, fix = NULL, indent = TRUE) {
 #' @return Invisible NULL
 #' @family logging utilities
 #' @export
-tyler_log_progress <- function(current, total, status = NULL, show_percent = TRUE) {
+mysterycall_log_progress <- function(current, total, status = NULL, show_percent = TRUE) {
   pct <- if (total > 0) round(current / total * 100, 1) else 0
 
   if (show_percent) {
@@ -218,7 +218,7 @@ tyler_log_progress <- function(current, total, status = NULL, show_percent = TRU
   }
 
   message(msg)
-  tyler_log_to_file(msg)
+  mysterycall_log_to_file(msg)
   invisible(NULL)
 }
 
@@ -229,12 +229,12 @@ tyler_log_progress <- function(current, total, status = NULL, show_percent = TRU
 #' @return `invisible(NULL)`.
 #' @family logging utilities
 #' @export
-tyler_log_cache_hit <- function(what, n_items) {
+mysterycall_log_cache_hit <- function(what, n_items) {
   msg <- sprintf("  \u21BB Loaded %s from cache (%s item(s))",
                  what,
                  format(n_items, big.mark = ","))
   message(msg)
-  tyler_log_to_file(msg)
+  mysterycall_log_to_file(msg)
   invisible(NULL)
 }
 
@@ -245,7 +245,7 @@ tyler_log_cache_hit <- function(what, n_items) {
 #' @return Invisible NULL
 #' @family logging utilities
 #' @export
-tyler_log_save <- function(path, n_rows = NULL) {
+mysterycall_log_save <- function(path, n_rows = NULL) {
   if (!is.null(n_rows)) {
     msg <- sprintf("  \U0001F4BE Saved to: %s (%s rows)",
                    path,
@@ -254,7 +254,7 @@ tyler_log_save <- function(path, n_rows = NULL) {
     msg <- sprintf("  \U0001F4BE Saved to: %s", path)
   }
   message(msg)
-  tyler_log_to_file(msg)
+  mysterycall_log_to_file(msg)
   invisible(NULL)
 }
 
@@ -267,13 +267,13 @@ tyler_log_save <- function(path, n_rows = NULL) {
 #'   metrics for the current step.
 #' @family logging utilities
 #' @export
-tyler_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_total = NULL) {
-  step_num <- .tyler_workflow$current_step
-  step_info <- .tyler_workflow$step_results[[as.character(step_num)]]
+mysterycall_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_total = NULL) {
+  step_num <- .mysterycall_workflow$current_step
+  step_info <- .mysterycall_workflow$step_results[[as.character(step_num)]]
 
   if (!is.null(step_info)) {
     duration <- as.numeric(difftime(Sys.time(), step_info$start_time, units = "secs"))
-    duration_str <- tyler_format_duration(duration)
+    duration_str <- mysterycall_format_duration(duration)
 
     if (!is.null(success_rate)) {
       pct <- round(success_rate * 100, 1)
@@ -288,8 +288,8 @@ tyler_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_tot
 
     message(msg)
     message("")  # Blank line after step
-    tyler_log_to_file(msg)
-    tyler_log_to_file("")
+    mysterycall_log_to_file(msg)
+    mysterycall_log_to_file("")
 
     # Store completion info
     step_info$end_time <- Sys.time()
@@ -297,7 +297,7 @@ tyler_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_tot
     step_info$success_rate <- success_rate
     step_info$n_success <- n_success
     step_info$n_total <- n_total
-    .tyler_workflow$step_results[[as.character(step_num)]] <- step_info
+    .mysterycall_workflow$step_results[[as.character(step_num)]] <- step_info
   }
 
   invisible(NULL)
@@ -309,14 +309,14 @@ tyler_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_tot
 #' @param input_n Number of input rows
 #' @return Invisible NULL
 #' @export
-tyler_workflow_end <- function(final_n = NULL, input_n = NULL) {
+mysterycall_workflow_end <- function(final_n = NULL, input_n = NULL) {
   end_time <- Sys.time()
-  duration <- as.numeric(difftime(end_time, .tyler_workflow$start_time, units = "secs"))
-  duration_str <- tyler_format_duration(duration)
+  duration <- as.numeric(difftime(end_time, .mysterycall_workflow$start_time, units = "secs"))
+  duration_str <- mysterycall_format_duration(duration)
 
   message("")
   message(strrep("=", 60))
-  message(sprintf("  %s - COMPLETE", .tyler_workflow$name))
+  message(sprintf("  %s - COMPLETE", .mysterycall_workflow$name))
   message(strrep("=", 60))
   message("")
 
@@ -328,12 +328,12 @@ tyler_workflow_end <- function(final_n = NULL, input_n = NULL) {
   }
 
   # Print step summary
-  if (length(.tyler_workflow$step_results) > 0) {
+  if (length(.mysterycall_workflow$step_results) > 0) {
     message("  Step Summary:")
-    for (step_num in seq_along(.tyler_workflow$step_results)) {
-      step <- .tyler_workflow$step_results[[step_num]]
+    for (step_num in seq_along(.mysterycall_workflow$step_results)) {
+      step <- .mysterycall_workflow$step_results[[step_num]]
       if (!is.null(step$duration)) {
-        step_dur <- tyler_format_duration(step$duration)
+        step_dur <- mysterycall_format_duration(step$duration)
         if (!is.null(step$success_rate)) {
           pct <- round(step$success_rate * 100, 1)
           message(sprintf("    %d. %s: %.1f%% success in %s",
@@ -356,7 +356,7 @@ tyler_workflow_end <- function(final_n = NULL, input_n = NULL) {
   message(strrep("=", 60))
 
   # Write to log file
-  if (!is.null(.tyler_workflow$log_file)) {
+  if (!is.null(.mysterycall_workflow$log_file)) {
     log_lines <- c(
       "",
       strrep("=", 60),
@@ -366,7 +366,7 @@ tyler_workflow_end <- function(final_n = NULL, input_n = NULL) {
       sprintf("Completed: %s", format(end_time, "%Y-%m-%d %H:%M:%S")),
       strrep("=", 60)
     )
-    write(log_lines, file = .tyler_workflow$log_file, append = TRUE)
+    write(log_lines, file = .mysterycall_workflow$log_file, append = TRUE)
   }
 
   invisible(NULL)
@@ -377,7 +377,7 @@ tyler_workflow_end <- function(final_n = NULL, input_n = NULL) {
 #' @param seconds Duration in seconds
 #' @return Formatted string (e.g., "2h 34m 15s")
 #' @export
-tyler_format_duration <- function(seconds) {
+mysterycall_format_duration <- function(seconds) {
   if (seconds < 60) {
     return(sprintf("%.1fs", seconds))
   } else if (seconds < 3600) {
@@ -396,11 +396,11 @@ tyler_format_duration <- function(seconds) {
 #'
 #' @param msg Message to write
 #' @keywords internal
-tyler_log_to_file <- function(msg) {
-  if (!is.null(.tyler_workflow$log_file)) {
+mysterycall_log_to_file <- function(msg) {
+  if (!is.null(.mysterycall_workflow$log_file)) {
     # Remove ANSI codes and special characters for file logging
     clean_msg <- gsub("\u2713|\u2717|\u26A0|\u2139|\u25B6|\u25B8|\u21BB|\U0001F4BE", "", msg)
-    lock_path <- paste0(.tyler_workflow$log_file, ".lock")
+    lock_path <- paste0(.mysterycall_workflow$log_file, ".lock")
     lock_acquired <- FALSE
     for (i in seq_len(100)) {
       lock_acquired <- dir.create(lock_path, showWarnings = FALSE)
@@ -408,10 +408,10 @@ tyler_log_to_file <- function(msg) {
       Sys.sleep(0.01)
     }
     if (!lock_acquired) {
-      stop("Unable to acquire log file lock: ", .tyler_workflow$log_file, call. = FALSE)
+      stop("Unable to acquire log file lock: ", .mysterycall_workflow$log_file, call. = FALSE)
     }
     on.exit(unlink(lock_path, recursive = TRUE, force = TRUE), add = TRUE)
-    write(clean_msg, file = .tyler_workflow$log_file, append = TRUE)
+    write(clean_msg, file = .mysterycall_workflow$log_file, append = TRUE)
   }
   invisible(NULL)
 }
@@ -425,13 +425,13 @@ tyler_log_to_file <- function(msg) {
 #'
 #' @examples
 #' \donttest{
-#' progress <- tyler_progress_callback(100, "Processing")
+#' progress <- mysterycall_progress_callback(100, "Processing")
 #' for (i in 1:100) {
 #'   # do work
 #'   progress(i)
 #' }
 #' }
-tyler_progress_callback <- function(total, label = "Processing") {
+mysterycall_progress_callback <- function(total, label = "Processing") {
   last_reported <- 0
   start_time <- Sys.time()
 
@@ -446,10 +446,10 @@ tyler_progress_callback <- function(total, label = "Processing") {
       rate <- current / elapsed
       remaining <- (total - current) / rate
 
-      tyler_log_progress(
+      mysterycall_log_progress(
         current,
         total,
-        sprintf("%s | ETA: %s", label, tyler_format_duration(remaining))
+        sprintf("%s | ETA: %s", label, mysterycall_format_duration(remaining))
       )
 
       last_reported <<- pct
@@ -461,11 +461,11 @@ tyler_progress_callback <- function(total, label = "Processing") {
 #' Toggle quiet logging for helper functions
 #'
 #' @param quiet Logical flag. When `TRUE`, suppress messages emitted by
-#'   `tyler_log_info()` when using quiet-aware wrappers.
+#'   `mysterycall_log_info()` when using quiet-aware wrappers.
 #'
 #' @return The previous quiet value (invisibly).
 #' @export
-tyler_use_quiet_logging <- function(quiet = TRUE) {
+mysterycall_use_quiet_logging <- function(quiet = TRUE) {
   old <- getOption("tyler.quiet", FALSE)
   options(tyler.quiet = quiet)
   invisible(old)

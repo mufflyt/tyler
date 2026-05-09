@@ -8,12 +8,12 @@
 #'         If \code{mult} is TRUE, returns a character vector containing all the levels with the minimum value.
 #' @examples
 #' vec <- factor(c("A", "B", "A", "C", "B", "B"))
-#' tyler_min_table(vec) # Returns "C"
-#' tyler_min_table(vec, mult = TRUE) # Returns "C"
+#' mysterycall_min_table(vec) # Returns "C"
+#' mysterycall_min_table(vec, mult = TRUE) # Returns "C"
 #' @family table
 #' @export
 
-tyler_min_table <- function(InVec, mult = FALSE) {
+mysterycall_min_table <- function(InVec, mult = FALSE) {
   if (length(InVec) == 0) {
     return(character(0))
   }

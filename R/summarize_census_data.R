@@ -1,7 +1,7 @@
 #' Summarize Census Block Group Demographics
 #'
 #' These helpers aggregate American Community Survey (ACS) estimates returned by
-#' [tyler_get_census_data()] to produce tidy summary tables and visualizations. They
+#' [mysterycall_get_census_data()] to produce tidy summary tables and visualizations. They
 #' focus on the sex-by-age table (B01001) so that analysts can quickly spot the
 #' distribution of female populations across block groups or higher-level
 #' geographies.
@@ -11,7 +11,7 @@ NULL
 
 #' Produce summary statistics from Census block group data
 #'
-#' @param census_df A data frame produced by [tyler_get_census_data()] (or another
+#' @param census_df A data frame produced by [mysterycall_get_census_data()] (or another
 #'   table containing equivalent columns).
 #' @param group_vars Character vector of column names used to group the
 #'   summaries. Defaults to `"statefp"`. Supply `character(0)` to receive a
@@ -43,8 +43,8 @@ NULL
 #'   B01001_038E = c(56, 57, 37)
 #' )
 #'
-#' tyler_summarize_census(census_example, group_vars = c("statefp"))
-tyler_summarize_census <- function(census_df,
+#' mysterycall_summarize_census(census_example, group_vars = c("statefp"))
+mysterycall_summarize_census <- function(census_df,
                                   group_vars = "statefp",
                                   reproductive_age_vars = sprintf("B01001_%03dE", 30:38)) {
 
@@ -136,13 +136,13 @@ tyler_summarize_census <- function(census_df,
 
 #' Plot the distribution of female age groups
 #'
-#' @inheritParams tyler_summarize_census
+#' @inheritParams mysterycall_summarize_census
 #' @param group_var Optional single column name used to facet the distribution.
 #'   When supplied, stacked bars are produced for each value of `group_var`. Set
 #'   to `NULL` (the default) to visualize the aggregate distribution across all
 #'   rows in `census_df`.
 #' @param output_dir Directory where image files should be written. Defaults to a
-#'   session-specific directory from [tyler_tempdir()].
+#'   session-specific directory from [mysterycall_tempdir()].
 #' @param file_prefix Prefix used when writing plot files. Defaults to
 #'   "census_age_distribution".
 #' @param dpi Resolution used when saving the plots (defaults to 600 DPI).
@@ -153,9 +153,9 @@ tyler_summarize_census <- function(census_df,
 #' @family census
 #' @examples
 #' \dontrun{
-#'   tyler_plot_census_age(census_example, group_var = "statefp", verbose = FALSE)
+#'   mysterycall_plot_census_age(census_example, group_var = "statefp", verbose = FALSE)
 #' }
-tyler_plot_census_age <- function(census_df,
+mysterycall_plot_census_age <- function(census_df,
                                           group_var = NULL,
                                           output_dir = NULL,
                                           file_prefix = "census_age_distribution",
@@ -299,7 +299,7 @@ tyler_plot_census_age <- function(census_df,
   print(plot)
 
   if (is.null(output_dir)) {
-    output_dir <- tyler_tempdir("census_age_plots", create = TRUE)
+    output_dir <- mysterycall_tempdir("census_age_plots", create = TRUE)
   } else if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }

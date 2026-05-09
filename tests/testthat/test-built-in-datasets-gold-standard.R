@@ -3,7 +3,7 @@
 # Tests the built-in datasets against ACTUAL data loaded from the package.
 #
 # Testing tenets satisfied:
-#   - Test against ACTUAL data (loads real .rda files from tyler)
+#   - Test against ACTUAL data (loads real .rda files from mysterycall)
 #   - Verify data SEMANTICS, not just that code runs
 #   - Gold-standard manually-verified values (row/col counts, ranges, exact sets)
 #   - Enforce domain invariants (lat/lon bounds, NPI uniqueness, district list)
@@ -11,7 +11,7 @@
 #   - Cross-file referential integrity (physicians subspecialties vs taxonomy)
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -24,17 +24,17 @@ both_cols <- function(df, col1, col2) unique(c(df[[col1]], df[[col2]]))
 # ---------------------------------------------------------------------------
 
 test_that("physicians has 4659 rows and exactly 5 columns", {
-  expect_equal(nrow(tyler::physicians), 4659L)
-  expect_equal(ncol(tyler::physicians), 5L)
+  expect_equal(nrow(mysterycall::physicians), 4659L)
+  expect_equal(ncol(mysterycall::physicians), 5L)
 })
 
 test_that("physicians has correct column names", {
-  expect_named(tyler::physicians, c("NPI", "name", "subspecialty", "lat", "long"),
+  expect_named(mysterycall::physicians, c("NPI", "name", "subspecialty", "lat", "long"),
                ignore.order = FALSE)
 })
 
 test_that("physicians column types are correct", {
-  p <- tyler::physicians
+  p <- mysterycall::physicians
   expect_true(is.numeric(p$NPI))
   expect_true(is.character(p$name))
   expect_true(is.character(p$subspecialty))
@@ -43,48 +43,48 @@ test_that("physicians column types are correct", {
 })
 
 test_that("taxonomy has 862 rows and exactly 3 columns", {
-  expect_equal(nrow(tyler::taxonomy), 862L)
-  expect_equal(ncol(tyler::taxonomy), 3L)
+  expect_equal(nrow(mysterycall::taxonomy), 862L)
+  expect_equal(ncol(mysterycall::taxonomy), 3L)
 })
 
 test_that("taxonomy has correct column names", {
-  expect_named(tyler::taxonomy, c("Code", "Classification", "Specialization"),
+  expect_named(mysterycall::taxonomy, c("Code", "Classification", "Specialization"),
                ignore.order = FALSE)
 })
 
 test_that("ACOG_Districts has 52 rows and exactly 4 columns", {
-  expect_equal(nrow(tyler::ACOG_Districts), 52L)
-  expect_equal(ncol(tyler::ACOG_Districts), 4L)
+  expect_equal(nrow(mysterycall::ACOG_Districts), 52L)
+  expect_equal(ncol(mysterycall::ACOG_Districts), 4L)
 })
 
 test_that("ACOG_Districts has correct column names", {
-  expect_named(tyler::ACOG_Districts,
+  expect_named(mysterycall::ACOG_Districts,
                c("State", "ACOG_District", "Subregion", "State_Abbreviations"),
                ignore.order = FALSE)
 })
 
 test_that("acgme has 318 rows and 142 columns", {
-  expect_equal(nrow(tyler::acgme), 318L)
-  expect_equal(ncol(tyler::acgme), 142L)
+  expect_equal(nrow(mysterycall::acgme), 318L)
+  expect_equal(ncol(mysterycall::acgme), 142L)
 })
 
 test_that("fips has 51 rows and exactly 3 columns", {
-  expect_equal(nrow(tyler::fips), 51L)
-  expect_equal(ncol(tyler::fips), 3L)
+  expect_equal(nrow(mysterycall::fips), 51L)
+  expect_equal(ncol(mysterycall::fips), 3L)
 })
 
 test_that("fips has correct column names", {
-  expect_named(tyler::fips, c("state", "state_code", "state_name"),
+  expect_named(mysterycall::fips, c("state", "state_code", "state_name"),
                ignore.order = FALSE)
 })
 
 test_that("cityStateToLatLong has 31909 rows", {
-  expect_equal(nrow(tyler::cityStateToLatLong), 31909L)
+  expect_equal(nrow(mysterycall::cityStateToLatLong), 31909L)
 })
 
 test_that("cityStateToLatLong has expected columns (state, city, latitude, longitude)", {
   expect_true(all(c("state", "city", "latitude", "longitude") %in%
-                    names(tyler::cityStateToLatLong)))
+                    names(mysterycall::cityStateToLatLong)))
 })
 
 # ---------------------------------------------------------------------------
@@ -92,7 +92,7 @@ test_that("cityStateToLatLong has expected columns (state, city, latitude, longi
 # ---------------------------------------------------------------------------
 
 test_that("physicians lat is within US mainland + Hawaii + Alaska bounds (18 to 72 N)", {
-  lats <- tyler::physicians$lat
+  lats <- mysterycall::physicians$lat
   non_na_lats <- lats[!is.na(lats)]
   expect_true(all(non_na_lats >= 18),
               info = paste("Min lat:", min(non_na_lats)))
@@ -101,7 +101,7 @@ test_that("physicians lat is within US mainland + Hawaii + Alaska bounds (18 to 
 })
 
 test_that("physicians lon is within US bounds (-180 to -65 W)", {
-  lons <- tyler::physicians$long
+  lons <- mysterycall::physicians$long
   non_na_lons <- lons[!is.na(lons)]
   expect_true(all(non_na_lons >= -180),
               info = paste("Min lon:", min(non_na_lons)))
@@ -110,20 +110,20 @@ test_that("physicians lon is within US bounds (-180 to -65 W)", {
 })
 
 test_that("physicians lat gold-standard range: 18.03865 to 47.75458", {
-  lats <- tyler::physicians$lat
+  lats <- mysterycall::physicians$lat
   expect_equal(round(min(lats, na.rm = TRUE), 5), 18.03865)
   expect_equal(round(max(lats, na.rm = TRUE), 5), 47.75458)
 })
 
 test_that("physicians lon gold-standard range: -157.8557 to -66.05314", {
-  lons <- tyler::physicians$long
+  lons <- mysterycall::physicians$long
   expect_equal(round(min(lons, na.rm = TRUE), 4), -157.8557)
   expect_equal(round(max(lons, na.rm = TRUE), 5), -66.05314)
 })
 
 test_that("physicians has 171 NA latitudes and 171 NA longitudes", {
-  expect_equal(sum(is.na(tyler::physicians$lat)),  171L)
-  expect_equal(sum(is.na(tyler::physicians$long)), 171L)
+  expect_equal(sum(is.na(mysterycall::physicians$lat)),  171L)
+  expect_equal(sum(is.na(mysterycall::physicians$long)), 171L)
 })
 
 test_that("all physician subspecialties are from the known set of 7", {
@@ -136,14 +136,14 @@ test_that("all physician subspecialties are from the known set of 7", {
     "Pediatric and Adolescent Gynecology",
     "Reproductive Endocrinology and Infertility"
   )
-  actual <- unique(tyler::physicians$subspecialty)
+  actual <- unique(mysterycall::physicians$subspecialty)
   unexpected <- setdiff(actual, known_subspecialties)
   expect_equal(length(unexpected), 0L,
                info = paste("Unexpected subspecialties:", paste(unexpected, collapse = "; ")))
 })
 
 test_that("physicians has exactly 7 distinct subspecialties", {
-  expect_equal(length(unique(tyler::physicians$subspecialty)), 7L)
+  expect_equal(length(unique(mysterycall::physicians$subspecialty)), 7L)
 })
 
 # ---------------------------------------------------------------------------
@@ -151,16 +151,16 @@ test_that("physicians has exactly 7 distinct subspecialties", {
 # ---------------------------------------------------------------------------
 
 test_that("physicians NPI column has no duplicate values", {
-  npis <- tyler::physicians$NPI
+  npis <- mysterycall::physicians$NPI
   expect_equal(sum(duplicated(npis)), 0L)
 })
 
 test_that("physicians NPI column has no NA values", {
-  expect_equal(sum(is.na(tyler::physicians$NPI)), 0L)
+  expect_equal(sum(is.na(mysterycall::physicians$NPI)), 0L)
 })
 
 test_that("physicians name column has no NA values", {
-  expect_equal(sum(is.na(tyler::physicians$name)), 0L)
+  expect_equal(sum(is.na(mysterycall::physicians$name)), 0L)
 })
 
 # ---------------------------------------------------------------------------
@@ -168,8 +168,8 @@ test_that("physicians name column has no NA values", {
 # ---------------------------------------------------------------------------
 
 test_that("every physician subspecialty appears in taxonomy Classification or Specialization", {
-  subs <- unique(tyler::physicians$subspecialty)
-  tax_vals <- both_cols(tyler::taxonomy, "Classification", "Specialization")
+  subs <- unique(mysterycall::physicians$subspecialty)
+  tax_vals <- both_cols(mysterycall::taxonomy, "Classification", "Specialization")
 
   # At least some subspecialties must appear in taxonomy; document actual coverage.
   # This is a known partial overlap (see ASSUMPTIONS doc), so we check the ones that DO match.
@@ -184,7 +184,7 @@ test_that("every physician subspecialty appears in taxonomy Classification or Sp
 })
 
 test_that("taxonomy Classification column has no completely empty rows", {
-  expect_equal(sum(tyler::taxonomy$Classification == "" | is.na(tyler::taxonomy$Classification)), 0L)
+  expect_equal(sum(mysterycall::taxonomy$Classification == "" | is.na(mysterycall::taxonomy$Classification)), 0L)
 })
 
 # ---------------------------------------------------------------------------
@@ -192,12 +192,12 @@ test_that("taxonomy Classification column has no completely empty rows", {
 # ---------------------------------------------------------------------------
 
 test_that("ACOG_Districts has exactly 11 unique district values", {
-  districts <- unique(tyler::ACOG_Districts$ACOG_District)
+  districts <- unique(mysterycall::ACOG_Districts$ACOG_District)
   expect_equal(length(districts), 11L)
 })
 
 test_that("ACOG_Districts contains Districts I through XII but NOT District X", {
-  districts <- unique(tyler::ACOG_Districts$ACOG_District)
+  districts <- unique(mysterycall::ACOG_Districts$ACOG_District)
   expected_present <- c(
     "District I", "District II", "District III", "District IV",
     "District V", "District VI", "District VII", "District VIII",
@@ -211,7 +211,7 @@ test_that("ACOG_Districts contains Districts I through XII but NOT District X", 
 })
 
 test_that("ACOG_Districts State column has no NA or empty values", {
-  states <- tyler::ACOG_Districts$State
+  states <- mysterycall::ACOG_Districts$State
   expect_equal(sum(is.na(states)), 0L)
   expect_equal(sum(states == ""), 0L)
 })
@@ -221,8 +221,8 @@ test_that("ACOG_Districts State column has no NA or empty values", {
 # ---------------------------------------------------------------------------
 
 test_that("acgme original_accreditation_date column exists and values are parseable as dates", {
-  expect_true("original_accreditation_date" %in% names(tyler::acgme))
-  dates_raw <- tyler::acgme$original_accreditation_date
+  expect_true("original_accreditation_date" %in% names(mysterycall::acgme))
+  dates_raw <- mysterycall::acgme$original_accreditation_date
   non_na_dates <- dates_raw[!is.na(dates_raw)]
   expect_true(length(non_na_dates) > 0,
               info = "original_accreditation_date should have at least one non-NA value")
@@ -235,7 +235,7 @@ test_that("acgme original_accreditation_date column exists and values are parsea
 })
 
 test_that("acgme director_date_appointed column exists", {
-  expect_true("director_date_appointed" %in% names(tyler::acgme))
+  expect_true("director_date_appointed" %in% names(mysterycall::acgme))
 })
 
 # ---------------------------------------------------------------------------
@@ -243,14 +243,14 @@ test_that("acgme director_date_appointed column exists", {
 # ---------------------------------------------------------------------------
 
 test_that("cityStateToLatLong latitude is within world bounds (-90 to 90)", {
-  lats <- tyler::cityStateToLatLong$latitude
+  lats <- mysterycall::cityStateToLatLong$latitude
   non_na <- lats[!is.na(lats)]
   expect_true(all(non_na >= -90), info = paste("Min lat:", min(non_na)))
   expect_true(all(non_na <=  90), info = paste("Max lat:", max(non_na)))
 })
 
 test_that("cityStateToLatLong longitude is within world bounds (-180 to 180)", {
-  lons <- tyler::cityStateToLatLong$longitude
+  lons <- mysterycall::cityStateToLatLong$longitude
   non_na <- lons[!is.na(lons)]
   expect_true(all(non_na >= -180), info = paste("Min lon:", min(non_na)))
   expect_true(all(non_na <=  180), info = paste("Max lon:", max(non_na)))
@@ -261,7 +261,7 @@ test_that("cityStateToLatLong longitude is within world bounds (-180 to 180)", {
 # ---------------------------------------------------------------------------
 
 test_that("taxonomy Code column is exactly 10 characters for every row", {
-  codes <- tyler::taxonomy$Code
+  codes <- mysterycall::taxonomy$Code
   bad <- codes[nchar(codes) != 10]
   expect_equal(length(bad), 0L,
                info = paste("Codes with wrong length:", paste(head(bad), collapse = ", ")))
@@ -274,14 +274,14 @@ test_that("taxonomy Code column is exactly 10 characters for every row", {
 test_that("fips state_code values are numeric/integer type", {
   # state_code should be numeric FIPS codes
   # state_code is stored as character to preserve leading zeros (e.g. "01" for Alabama)
-  expect_true(is.character(tyler::fips$state_code) || is.numeric(tyler::fips$state_code) || is.integer(tyler::fips$state_code))
+  expect_true(is.character(mysterycall::fips$state_code) || is.numeric(mysterycall::fips$state_code) || is.integer(mysterycall::fips$state_code))
 })
 
 test_that("fips has no duplicate state entries", {
-  states <- tyler::fips$state
+  states <- mysterycall::fips$state
   expect_equal(sum(duplicated(states)), 0L)
 })
 
 test_that("fips covers all 50 states plus DC (51 rows)", {
-  expect_equal(nrow(tyler::fips), 51L)
+  expect_equal(nrow(mysterycall::fips), 51L)
 })

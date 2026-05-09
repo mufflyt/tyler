@@ -2,13 +2,13 @@
 # Comprehensive tests for workflow validation and resource estimation
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 
 # ==============================================================================
-# tyler_assess_data_quality()
+# mysterycall_assess_data_quality()
 # ==============================================================================
 
-test_that("tyler_assess_data_quality calculates perfect score", {
+test_that("mysterycall_assess_data_quality calculates perfect score", {
   # Perfect data
   perfect_data <- data.frame(
     first = c("John", "Jane", "Bob"),
@@ -16,14 +16,14 @@ test_that("tyler_assess_data_quality calculates perfect score", {
     stringsAsFactors = FALSE
   )
 
-  result <- tyler_assess_data_quality(perfect_data, required_columns = c("first", "last"))
+  result <- mysterycall_assess_data_quality(perfect_data, required_columns = c("first", "last"))
 
   expect_equal(result$score, 1.0)
   expect_equal(length(result$issues), 0)
   expect_equal(result$penalties, 0)
 })
 
-test_that("tyler_assess_data_quality detects missing values", {
+test_that("mysterycall_assess_data_quality detects missing values", {
   # Data with high missing values
   data_with_na <- data.frame(
     first = c("John", NA, NA, NA, NA),
@@ -31,7 +31,7 @@ test_that("tyler_assess_data_quality detects missing values", {
     stringsAsFactors = FALSE
   )
 
-  result <- tyler_assess_data_quality(data_with_na, required_columns = c("first", "last"))
+  result <- mysterycall_assess_data_quality(data_with_na, required_columns = c("first", "last"))
 
   # Should have penalties for high NA rate (80%)
   expect_true(result$score < 1.0)
@@ -43,7 +43,7 @@ test_that("tyler_assess_data_quality detects missing values", {
   expect_true(any(grepl("missing values", issue_messages)))
 })
 
-test_that("tyler_assess_data_quality detects duplicates", {
+test_that("mysterycall_assess_data_quality detects duplicates", {
   # Data with duplicates
   dup_data <- data.frame(
     first = c("John", "John", "John", "Jane"),
@@ -51,7 +51,7 @@ test_that("tyler_assess_data_quality detects duplicates", {
     stringsAsFactors = FALSE
   )
 
-  result <- tyler_assess_data_quality(dup_data, required_columns = c("first", "last"))
+  result <- mysterycall_assess_data_quality(dup_data, required_columns = c("first", "last"))
 
   # Should detect duplicates (50% duplicate rate)
   expect_true(result$score < 1.0)
@@ -61,7 +61,7 @@ test_that("tyler_assess_data_quality detects duplicates", {
   expect_true(any(grepl("duplicate", issue_messages)))
 })
 
-test_that("tyler_assess_data_quality checks data types", {
+test_that("mysterycall_assess_data_quality checks data types", {
   # Data with non-character columns
   bad_types <- data.frame(
     first = 1:5,  # Numeric instead of character
@@ -69,14 +69,14 @@ test_that("tyler_assess_data_quality checks data types", {
     stringsAsFactors = FALSE
   )
 
-  result <- tyler_assess_data_quality(bad_types, required_columns = c("first", "last"))
+  result <- mysterycall_assess_data_quality(bad_types, required_columns = c("first", "last"))
 
   expect_true(result$score < 1.0)
   issue_messages <- sapply(result$issues, function(x) x$message)
   expect_true(any(grepl("should be character", issue_messages)))
 })
 
-test_that("tyler_assess_data_quality handles multiple issues", {
+test_that("mysterycall_assess_data_quality handles multiple issues", {
   # Data with multiple problems
   messy_data <- data.frame(
     first = c("John", NA, "John", NA, 5),  # NAs + duplicates + wrong type
@@ -84,7 +84,7 @@ test_that("tyler_assess_data_quality handles multiple issues", {
     stringsAsFactors = FALSE
   )
 
-  result <- tyler_assess_data_quality(messy_data, required_columns = c("first", "last"))
+  result <- mysterycall_assess_data_quality(messy_data, required_columns = c("first", "last"))
 
   # Should have multiple issues
   expect_true(length(result$issues) >= 2)
@@ -92,7 +92,7 @@ test_that("tyler_assess_data_quality handles multiple issues", {
   expect_true(result$score <= 0.8)
 })
 
-test_that("tyler_assess_data_quality severity levels work", {
+test_that("mysterycall_assess_data_quality severity levels work", {
   # High missing rate (> 50%) should be error
   high_na_data <- data.frame(
     first = c(NA, NA, NA, NA, NA, "John"),
@@ -100,7 +100,7 @@ test_that("tyler_assess_data_quality severity levels work", {
     stringsAsFactors = FALSE
   )
 
-  result <- tyler_assess_data_quality(high_na_data, required_columns = c("first", "last"))
+  result <- mysterycall_assess_data_quality(high_na_data, required_columns = c("first", "last"))
 
   severities <- sapply(result$issues, function(x) x$severity)
   expect_true("error" %in% severities)
@@ -108,12 +108,12 @@ test_that("tyler_assess_data_quality severity levels work", {
 })
 
 # ==============================================================================
-# tyler_estimate_resources()
+# mysterycall_estimate_resources()
 # ==============================================================================
 
-test_that("tyler_estimate_resources calculates runtime", {
+test_that("mysterycall_estimate_resources calculates runtime", {
   # Small dataset
-  result_small <- tyler_estimate_resources(10)
+  result_small <- mysterycall_estimate_resources(10)
 
   expect_true("runtime_seconds" %in% names(result_small))
   expect_true("runtime_hours" %in% names(result_small))
@@ -123,8 +123,8 @@ test_that("tyler_estimate_resources calculates runtime", {
   expect_true(result_small$runtime_hours > 0)
 })
 
-test_that("tyler_estimate_resources calculates memory", {
-  result <- tyler_estimate_resources(100)
+test_that("mysterycall_estimate_resources calculates memory", {
+  result <- mysterycall_estimate_resources(100)
 
   expect_true("memory_mb" %in% names(result))
   expect_true("memory_gb" %in% names(result))
@@ -134,9 +134,9 @@ test_that("tyler_estimate_resources calculates memory", {
   expect_true(result$memory_gb > 0)
 })
 
-test_that("tyler_estimate_resources scales correctly", {
-  result_10 <- tyler_estimate_resources(10)
-  result_100 <- tyler_estimate_resources(100)
+test_that("mysterycall_estimate_resources scales correctly", {
+  result_10 <- mysterycall_estimate_resources(10)
+  result_100 <- mysterycall_estimate_resources(100)
 
   # 10x rows = 10x runtime (linear scaling)
   expect_true(result_100$runtime_seconds > result_10$runtime_seconds * 8)
@@ -144,44 +144,44 @@ test_that("tyler_estimate_resources scales correctly", {
   expect_true(result_100$memory_mb > result_10$memory_mb)
 })
 
-test_that("tyler_estimate_resources formats time strings", {
+test_that("mysterycall_estimate_resources formats time strings", {
   # Short runtime (< 1 hour)
-  result_short <- tyler_estimate_resources(10)
+  result_short <- mysterycall_estimate_resources(10)
   expect_match(result_short$runtime_str, "minutes")
 
   # Long runtime (> 1 hour)
-  result_long <- tyler_estimate_resources(1000)
+  result_long <- mysterycall_estimate_resources(1000)
   expect_match(result_long$runtime_str, "h")
 })
 
-test_that("tyler_estimate_resources formats memory strings", {
+test_that("mysterycall_estimate_resources formats memory strings", {
   # Small memory (< 1 GB)
-  result_small <- tyler_estimate_resources(100)
+  result_small <- mysterycall_estimate_resources(100)
   expect_match(result_small$memory_str, "MB")
 
   # Large memory (> 1 GB)
-  result_large <- tyler_estimate_resources(1000)
+  result_large <- mysterycall_estimate_resources(1000)
   # May or may not be GB depending on estimates, just check format
   expect_true(grepl("MB|GB", result_large$memory_str))
 })
 
-test_that("tyler_estimate_resources handles edge cases", {
+test_that("mysterycall_estimate_resources handles edge cases", {
   # Zero rows
-  result_zero <- tyler_estimate_resources(0)
+  result_zero <- mysterycall_estimate_resources(0)
   expect_equal(result_zero$runtime_seconds, 0)
   expect_true(result_zero$memory_mb > 0)  # Base memory
 
   # Very large dataset
-  result_huge <- tyler_estimate_resources(100000)
+  result_huge <- mysterycall_estimate_resources(100000)
   expect_true(result_huge$runtime_hours > 1)
   expect_true(result_huge$memory_gb > 1)
 })
 
 # ==============================================================================
-# tyler_preflight_check() - Data Validation
+# mysterycall_preflight_check() - Data Validation
 # ==============================================================================
 
-test_that("tyler_preflight_check validates data frame input", {
+test_that("mysterycall_preflight_check validates data frame input", {
   test_data <- data.frame(
     first = c("John", "Jane"),
     last = c("Doe", "Smith"),
@@ -191,7 +191,7 @@ test_that("tyler_preflight_check validates data frame input", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = test_data,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -205,7 +205,7 @@ test_that("tyler_preflight_check validates data frame input", {
   unlink(temp_dir, recursive = TRUE)
 })
 
-test_that("tyler_preflight_check validates file input", {
+test_that("mysterycall_preflight_check validates file input", {
   # Create temp file
   test_data <- data.frame(
     first = c("John", "Jane", "Bob"),
@@ -219,7 +219,7 @@ test_that("tyler_preflight_check validates file input", {
 
   write.csv(test_data, temp_file, row.names = FALSE)
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = temp_file,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -233,12 +233,12 @@ test_that("tyler_preflight_check validates file input", {
   unlink(temp_dir, recursive = TRUE)
 })
 
-test_that("tyler_preflight_check detects missing file", {
+test_that("mysterycall_preflight_check detects missing file", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
   expect_error(
-    tyler_preflight_check(
+    mysterycall_preflight_check(
       input_data = "/path/to/nonexistent/file.csv",
       output_dir = temp_dir,
       check_apis = FALSE,
@@ -250,7 +250,7 @@ test_that("tyler_preflight_check detects missing file", {
   unlink(temp_dir, recursive = TRUE)
 })
 
-test_that("tyler_preflight_check detects missing columns", {
+test_that("mysterycall_preflight_check detects missing columns", {
   # Data missing required columns
   bad_data <- data.frame(
     name = c("John Doe", "Jane Smith"),
@@ -262,7 +262,7 @@ test_that("tyler_preflight_check detects missing columns", {
   dir.create(temp_dir)
 
   expect_error(
-    tyler_preflight_check(
+    mysterycall_preflight_check(
       input_data = bad_data,
       output_dir = temp_dir,
       required_columns = c("first", "last"),
@@ -275,12 +275,12 @@ test_that("tyler_preflight_check detects missing columns", {
   unlink(temp_dir, recursive = TRUE)
 })
 
-test_that("tyler_preflight_check handles invalid input type", {
+test_that("mysterycall_preflight_check handles invalid input type", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
   expect_error(
-    tyler_preflight_check(
+    mysterycall_preflight_check(
       input_data = list(first = "John", last = "Doe"),
       output_dir = temp_dir,
       check_apis = FALSE,
@@ -293,10 +293,10 @@ test_that("tyler_preflight_check handles invalid input type", {
 })
 
 # ==============================================================================
-# tyler_preflight_check() - Output Directory
+# mysterycall_preflight_check() - Output Directory
 # ==============================================================================
 
-test_that("tyler_preflight_check creates output directory", {
+test_that("mysterycall_preflight_check creates output directory", {
   test_data <- data.frame(
     first = c("John"),
     last = c("Doe"),
@@ -305,7 +305,7 @@ test_that("tyler_preflight_check creates output directory", {
 
   temp_dir <- tempfile()
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = test_data,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -318,7 +318,7 @@ test_that("tyler_preflight_check creates output directory", {
   unlink(temp_dir, recursive = TRUE)
 })
 
-test_that("tyler_preflight_check validates existing directory is writable", {
+test_that("mysterycall_preflight_check validates existing directory is writable", {
   test_data <- data.frame(
     first = c("John"),
     last = c("Doe"),
@@ -328,7 +328,7 @@ test_that("tyler_preflight_check validates existing directory is writable", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = test_data,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -341,10 +341,10 @@ test_that("tyler_preflight_check validates existing directory is writable", {
 })
 
 # ==============================================================================
-# tyler_preflight_check() - Data Quality Integration
+# mysterycall_preflight_check() - Data Quality Integration
 # ==============================================================================
 
-test_that("tyler_preflight_check fails on poor data quality", {
+test_that("mysterycall_preflight_check fails on poor data quality", {
   # Very poor quality data
   poor_data <- data.frame(
     first = c(NA, NA, NA, NA, NA),
@@ -356,7 +356,7 @@ test_that("tyler_preflight_check fails on poor data quality", {
   dir.create(temp_dir)
 
   expect_error(
-    tyler_preflight_check(
+    mysterycall_preflight_check(
       input_data = poor_data,
       output_dir = temp_dir,
       check_apis = FALSE,
@@ -368,7 +368,7 @@ test_that("tyler_preflight_check fails on poor data quality", {
   unlink(temp_dir, recursive = TRUE)
 })
 
-test_that("tyler_preflight_check warns on mediocre data quality", {
+test_that("mysterycall_preflight_check warns on mediocre data quality", {
   # Mediocre quality (70-80%)
   mediocre_data <- data.frame(
     first = c("John", "Jane", NA, "Bob"),
@@ -380,7 +380,7 @@ test_that("tyler_preflight_check warns on mediocre data quality", {
   dir.create(temp_dir)
 
   # Should pass with warnings
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = mediocre_data,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -394,10 +394,10 @@ test_that("tyler_preflight_check warns on mediocre data quality", {
 })
 
 # ==============================================================================
-# tyler_preflight_check() - Resource Estimation Integration
+# mysterycall_preflight_check() - Resource Estimation Integration
 # ==============================================================================
 
-test_that("tyler_preflight_check includes resource estimates", {
+test_that("mysterycall_preflight_check includes resource estimates", {
   test_data <- data.frame(
     first = rep("John", 100),
     last = rep("Doe", 100),
@@ -407,7 +407,7 @@ test_that("tyler_preflight_check includes resource estimates", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = test_data,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -422,7 +422,7 @@ test_that("tyler_preflight_check includes resource estimates", {
   unlink(temp_dir, recursive = TRUE)
 })
 
-test_that("tyler_preflight_check can skip resource estimation", {
+test_that("mysterycall_preflight_check can skip resource estimation", {
   test_data <- data.frame(
     first = c("John"),
     last = c("Doe"),
@@ -432,7 +432,7 @@ test_that("tyler_preflight_check can skip resource estimation", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = test_data,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -446,10 +446,10 @@ test_that("tyler_preflight_check can skip resource estimation", {
 })
 
 # ==============================================================================
-# tyler_preflight_check() - API Keys
+# mysterycall_preflight_check() - API Keys
 # ==============================================================================
 
-test_that("tyler_preflight_check warns when API keys missing", {
+test_that("mysterycall_preflight_check warns when API keys missing", {
   test_data <- data.frame(
     first = c("John"),
     last = c("Doe"),
@@ -459,7 +459,7 @@ test_that("tyler_preflight_check warns when API keys missing", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = test_data,
     output_dir = temp_dir,
     google_maps_api_key = NULL,
@@ -476,7 +476,7 @@ test_that("tyler_preflight_check warns when API keys missing", {
   unlink(temp_dir, recursive = TRUE)
 })
 
-test_that("tyler_preflight_check acknowledges provided API keys", {
+test_that("mysterycall_preflight_check acknowledges provided API keys", {
   test_data <- data.frame(
     first = c("John"),
     last = c("Doe"),
@@ -487,7 +487,7 @@ test_that("tyler_preflight_check acknowledges provided API keys", {
   dir.create(temp_dir)
 
   # Provide dummy keys but skip actual testing
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = test_data,
     output_dir = temp_dir,
     google_maps_api_key = "dummy_google_key",
@@ -502,10 +502,10 @@ test_that("tyler_preflight_check acknowledges provided API keys", {
 })
 
 # ==============================================================================
-# tyler_preflight_check() - Return Structure
+# mysterycall_preflight_check() - Return Structure
 # ==============================================================================
 
-test_that("tyler_preflight_check returns expected structure", {
+test_that("mysterycall_preflight_check returns expected structure", {
   test_data <- data.frame(
     first = c("John", "Jane"),
     last = c("Doe", "Smith"),
@@ -515,7 +515,7 @@ test_that("tyler_preflight_check returns expected structure", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = test_data,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -557,7 +557,7 @@ test_that("Preflight check complete workflow", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = test_data,
     output_dir = temp_dir,
     google_maps_api_key = "dummy_key",
@@ -596,7 +596,7 @@ test_that("Preflight check handles edge cases", {
   temp_dir <- tempfile()
   dir.create(temp_dir)
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = single_row,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -618,7 +618,7 @@ test_that("Preflight check accumulates multiple errors", {
   )
 
   expect_error(
-    tyler_preflight_check(
+    mysterycall_preflight_check(
       input_data = bad_data,
       output_dir = "/invalid/path/that/cannot/be/created",
       required_columns = c("first", "last"),
@@ -646,7 +646,7 @@ test_that("Preflight checks are performant", {
 
   start_time <- Sys.time()
 
-  result <- tyler_preflight_check(
+  result <- mysterycall_preflight_check(
     input_data = large_data,
     output_dir = temp_dir,
     check_apis = FALSE,
@@ -666,7 +666,7 @@ test_that("Preflight checks are performant", {
 test_that("Resource estimation is fast", {
   start_time <- Sys.time()
 
-  result <- tyler_estimate_resources(10000)
+  result <- mysterycall_estimate_resources(10000)
 
   end_time <- Sys.time()
   elapsed <- as.numeric(difftime(end_time, start_time, units = "secs"))

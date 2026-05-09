@@ -29,12 +29,12 @@ knitr::opts_chunk$set(
 )
 
 if (eval_vignettes) {
-  library(tyler)
+  library(mysterycall)
 }
 ```
 
 ```{r}
-library(tyler)
+library(mysterycall)
 ```
 
 # Example Usage

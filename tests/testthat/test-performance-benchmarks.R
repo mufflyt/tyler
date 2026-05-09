@@ -1,6 +1,6 @@
 # Performance benchmark tests
 library(testthat)
-library(tyler)
+library(mysterycall)
 library(dplyr)
 
 # Performance benchmarks - these represent acceptable performance thresholds
@@ -53,7 +53,7 @@ measure_performance <- function(expr) {
   )
 }
 
-test_that("Performance: tyler_clean_phase1 with small dataset", {
+test_that("Performance: mysterycall_clean_phase1 with small dataset", {
   skip_on_cran()
 
   benchmark <- PERFORMANCE_BENCHMARKS$small_dataset
@@ -61,7 +61,7 @@ test_that("Performance: tyler_clean_phase1 with small dataset", {
   temp_dir <- tempdir()
 
   perf <- measure_performance({
-    tyler_clean_phase1(
+    mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -84,7 +84,7 @@ test_that("Performance: tyler_clean_phase1 with small dataset", {
   expect_gte(nrow(perf$result), benchmark$size)
 })
 
-test_that("Performance: tyler_clean_phase1 with medium dataset", {
+test_that("Performance: mysterycall_clean_phase1 with medium dataset", {
   skip_on_cran()
 
   benchmark <- PERFORMANCE_BENCHMARKS$medium_dataset
@@ -92,7 +92,7 @@ test_that("Performance: tyler_clean_phase1 with medium dataset", {
   temp_dir <- tempdir()
 
   perf <- measure_performance({
-    tyler_clean_phase1(
+    mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -113,7 +113,7 @@ test_that("Performance: tyler_clean_phase1 with medium dataset", {
             info = "Performance doesn't scale linearly - possible algorithmic issue")
 })
 
-test_that("Performance: tyler_clean_phase1 with large dataset", {
+test_that("Performance: mysterycall_clean_phase1 with large dataset", {
   skip_on_cran()
   skip_if_not(identical(Sys.getenv("TEST_PERFORMANCE"), "true"),
               "Set TEST_PERFORMANCE=true to run large dataset tests")
@@ -123,7 +123,7 @@ test_that("Performance: tyler_clean_phase1 with large dataset", {
   temp_dir <- tempdir()
 
   perf <- measure_performance({
-    tyler_clean_phase1(
+    mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -140,7 +140,7 @@ test_that("Performance: tyler_clean_phase1 with large dataset", {
             info = "Memory usage too high for large dataset")
 })
 
-test_that("Performance: tyler_search_taxonomy response time", {
+test_that("Performance: mysterycall_search_taxonomy response time", {
   skip_on_cran()
 
   # Mock fast NPI search for performance testing
@@ -170,7 +170,7 @@ test_that("Performance: tyler_search_taxonomy response time", {
     npi_flatten = mock_npi_flatten,
     {
       perf <- measure_performance({
-        tyler_search_taxonomy("Gynecologic Oncology", write_snapshot = FALSE, notify = FALSE)
+        mysterycall_search_taxonomy("Gynecologic Oncology", write_snapshot = FALSE, notify = FALSE)
       })
 
       expect_lt(perf$execution_time, PERFORMANCE_BENCHMARKS$npi_search_timeout,
@@ -196,7 +196,7 @@ test_that("Performance: Memory efficiency with multiple operations", {
 
   # Perform multiple operations
   for (i in 1:5) {
-    result <- tyler_clean_phase1(
+    result <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -205,7 +205,7 @@ test_that("Performance: Memory efficiency with multiple operations", {
 
     # Process the result further
     if ("npi" %in% names(result)) {
-      validated <- tyler_validate_npi(result)
+      validated <- mysterycall_validate_npi(result)
     }
   }
 
@@ -227,7 +227,7 @@ test_that("Performance: CPU efficiency", {
 
   # Use system.time for more detailed CPU measurements
   timing <- system.time({
-    result <- tyler_clean_phase1(
+    result <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -256,7 +256,7 @@ test_that("Performance: File I/O efficiency", {
 
   # Test CSV output performance
   perf_csv <- measure_performance({
-    tyler_clean_phase1(
+    mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -268,7 +268,7 @@ test_that("Performance: File I/O efficiency", {
   # Test parquet output performance (if available)
   if (requireNamespace("arrow", quietly = TRUE)) {
     perf_parquet <- measure_performance({
-      tyler_clean_phase1(
+      mysterycall_clean_phase1(
         phase1_data = test_data,
         output_directory = temp_dir,
         verbose = FALSE,
@@ -310,7 +310,7 @@ test_that("Performance: Concurrent operations stress test", {
   # Simulate concurrent operations (sequential for reproducibility)
   results <- list()
   for (i in 1:3) {
-    results[[i]] <- tyler_clean_phase1(
+    results[[i]] <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dirs[[i]],
       verbose = FALSE,
@@ -347,7 +347,7 @@ test_that("Performance: Memory scaling characteristics", {
     gc()
     mem_before <- sum(gc()[, 2])
 
-    result <- tyler_clean_phase1(
+    result <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -389,7 +389,7 @@ test_that("Performance: Function call overhead", {
 
   # Measure overhead with minimal data
   perf <- measure_performance({
-    tyler_clean_phase1(
+    mysterycall_clean_phase1(
       phase1_data = simple_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -411,7 +411,7 @@ test_that("Performance: Regression performance comparison", {
   temp_dir <- tempdir()
 
   perf <- measure_performance({
-    tyler_clean_phase1(
+    mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,

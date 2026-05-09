@@ -13,7 +13,7 @@ test_filepath <- tempfile(fileext = ".csv")
 
 # Test to check file creation
 test_that("Output file is created", {
-  tyler_save_quality_table(sample_data, test_filepath)
+  mysterycall_save_quality_table(sample_data, test_filepath)
   expect_true(file.exists(test_filepath))
 })
 

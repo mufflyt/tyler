@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 )
 
 if (eval_vignettes) {
-  library(tyler)
+  library(mysterycall)
 }
 ```
 # Introduction
@@ -123,7 +123,7 @@ Before using the `tyler::get_census_data` function, you need to install and load
 install.packages("censusapi")
 library(censusapi)
 library(dplyr)
-library(tyler)
+library(mysterycall)
 ```
 
 These lists contain metadata about general variables and the variables related to race and ethnicity.

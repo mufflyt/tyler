@@ -16,12 +16,12 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' tyler_map_acog_districts()
-#' tyler_map_acog_districts("inst/extdata/ACOG_Districts.csv")
+#' mysterycall_map_acog_districts()
+#' mysterycall_map_acog_districts("inst/extdata/ACOG_Districts.csv")
 #' }
-tyler_map_acog_districts <- function(acog_districts_file = NULL) {
+mysterycall_map_acog_districts <- function(acog_districts_file = NULL) {
   if (is.null(acog_districts_file)) {
-    acog_districts_file <- system.file("extdata", "ACOG_Districts.csv", package = "tyler")
+    acog_districts_file <- system.file("extdata", "ACOG_Districts.csv", package = "mysterycall")
   }
 
   if (!nzchar(acog_districts_file) || !file.exists(acog_districts_file)) {
@@ -49,7 +49,7 @@ tyler_map_acog_districts <- function(acog_districts_file = NULL) {
   )
 
   if (!requireNamespace("rnaturalearth", quietly = TRUE)) {
-    stop("Package 'rnaturalearth' is required for tyler_map_acog_districts(). Install with: install.packages('rnaturalearth')", call. = FALSE)
+    stop("Package 'rnaturalearth' is required for mysterycall_map_acog_districts(). Install with: install.packages('rnaturalearth')", call. = FALSE)
   }
   states_sf <- rnaturalearth::ne_states(country = "united states of america", returnclass = "sf")
   states_sf <- dplyr::transmute(

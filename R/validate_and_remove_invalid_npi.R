@@ -11,7 +11,7 @@
 #' @importFrom readr read_csv cols col_character col_guess
 #' @importFrom dplyr filter mutate
 #' @export
-tyler_validate_npi <- function(input_data) {
+mysterycall_validate_npi <- function(input_data) {
 
   if (is.data.frame(input_data)) {
     npi_df <- input_data

@@ -1,6 +1,6 @@
 # End-to-end workflow tests with real data samples
 library(testthat)
-library(tyler)
+library(mysterycall)
 library(dplyr)
 library(readr)
 
@@ -99,7 +99,7 @@ test_that("End-to-end: Complete mystery caller workflow", {
   temp_dir <- tempdir()
 
   # Clean Phase 1 results
-  cleaned_data <- tyler_clean_phase1(
+  cleaned_data <- mysterycall_clean_phase1(
     phase1_data = phase1_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -111,7 +111,7 @@ test_that("End-to-end: Complete mystery caller workflow", {
   expect_gte(nrow(cleaned_data), nrow(phase1_data))
 
   # Stage 2: NPI validation
-  validated_data <- tyler_validate_npi(cleaned_data)
+  validated_data <- mysterycall_validate_npi(cleaned_data)
   expect_s3_class(validated_data, "data.frame")
 
   # Stage 3: Geographic analysis (if geographic functions are available)
@@ -181,7 +181,7 @@ test_that("End-to-end: NPI search and provider enrichment workflow", {
     npi_flatten = mock_npi_flatten,
     {
       # Stage 1: Search by taxonomy
-      obgyn_providers <- tyler_search_taxonomy(
+      obgyn_providers <- mysterycall_search_taxonomy(
         "Obstetrics & Gynecology",
         write_snapshot = FALSE,
         notify = FALSE
@@ -191,7 +191,7 @@ test_that("End-to-end: NPI search and provider enrichment workflow", {
       expect_gt(nrow(obgyn_providers), 0)
 
       # Stage 2: Search specialists
-      specialists <- tyler_search_taxonomy(
+      specialists <- mysterycall_search_taxonomy(
         c("Gynecologic Oncology", "Maternal & Fetal Medicine"),
         write_snapshot = FALSE,
         notify = FALSE
@@ -248,7 +248,7 @@ test_that("End-to-end: Census data integration workflow", {
     getCensus = mock_get_census,
     {
       # Stage 1: Retrieve census data
-      census_data <- tyler_get_census_data(
+      census_data <- mysterycall_get_census_data(
         geography = "county",
         state = "all",
         vintage = 2021,
@@ -260,7 +260,7 @@ test_that("End-to-end: Census data integration workflow", {
 
       # Stage 2: Summarize census data
       if (nrow(census_data) > 0) {
-        census_summary <- tyler_summarize_census(census_data)
+        census_summary <- mysterycall_summarize_census(census_data)
         expect_s3_class(census_summary, "data.frame")
 
         # Stage 3: Calculate reproductive age population
@@ -337,7 +337,7 @@ test_that("End-to-end: Data quality and validation pipeline", {
   temp_dir <- tempdir()
 
   # Stage 1: Initial cleaning
-  cleaned_data <- tyler_clean_phase1(
+  cleaned_data <- mysterycall_clean_phase1(
     phase1_data = problematic_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -347,7 +347,7 @@ test_that("End-to-end: Data quality and validation pipeline", {
   expect_s3_class(cleaned_data, "data.frame")
 
   # Stage 2: Validate results
-  validated_data <- tyler_validate_npi(cleaned_data)
+  validated_data <- mysterycall_validate_npi(cleaned_data)
   expect_s3_class(validated_data, "data.frame")
 
   # Stage 3: Quality assessment
@@ -401,7 +401,7 @@ test_that("End-to-end: Geographic analysis workflow", {
   temp_dir <- tempdir()
 
   # Stage 1: Data processing
-  cleaned_data <- tyler_clean_phase1(
+  cleaned_data <- mysterycall_clean_phase1(
     phase1_data = geographic_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -475,18 +475,18 @@ test_that("End-to-end: Error handling and recovery workflow", {
 
   # Test that errors are handled gracefully
   expect_error(
-    tyler_clean_phase1(error_scenarios$empty_data, output_directory = temp_dir),
+    mysterycall_clean_phase1(error_scenarios$empty_data, output_directory = temp_dir),
     "at least one row"
   )
 
   expect_error(
-    tyler_clean_phase1(error_scenarios$missing_columns, output_directory = temp_dir),
+    mysterycall_clean_phase1(error_scenarios$missing_columns, output_directory = temp_dir),
     "names"
   )
 
   # All NA data should be handled without crashing
   expect_error(
-    tyler_clean_phase1(error_scenarios$all_na_data, output_directory = temp_dir),
+    mysterycall_clean_phase1(error_scenarios$all_na_data, output_directory = temp_dir),
     "names"  # Should fail validation due to missing required data
   )
 })
@@ -520,7 +520,7 @@ test_that("End-to-end: Performance and scalability workflow", {
 
     # Measure processing time
     start_time <- Sys.time()
-    result <- tyler_clean_phase1(
+    result <- mysterycall_clean_phase1(
       phase1_data = large_data,
       output_directory = temp_dir,
       verbose = FALSE,

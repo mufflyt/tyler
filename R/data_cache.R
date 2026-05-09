@@ -14,11 +14,11 @@ NULL
 #' @param ... Optional path components appended to the cache directory.
 #'
 #' @return A character string with the cache directory path.
-tyler_cache_dir <- function(...) {
+mysterycall_cache_dir <- function(...) {
   cache_root <- if (getRversion() >= "4.0.0") {
-    tools::R_user_dir("tyler", which = "cache")
+    tools::R_user_dir("mysterycall", which = "cache")
   } else {
-    file.path(path.expand("~"), ".cache", "tyler")
+    file.path(path.expand("~"), ".cache", "mysterycall")
   }
 
   if (!dir.exists(cache_root)) {
@@ -38,23 +38,23 @@ tyler_cache_dir <- function(...) {
 #' not already present in the user's cache directory. The archive is expanded
 #' in-place and the path to the `.shp` file is returned.
 #'
-#' @param quiet Logical flag passed to [tyler_download_file()] to silence the
+#' @param quiet Logical flag passed to [mysterycall_download_file()] to silence the
 #'   underlying download tooling.
 #'
 #' @return The absolute path to the HRR boundary shapefile.
 ensure_hrr_shapefile <- function(quiet = TRUE) {
-  cache_root <- tyler_cache_dir()
+  cache_root <- mysterycall_cache_dir()
   archive_path <- file.path(cache_root, "HRR_Bdry__AK_HI_unmodified.zip")
   shapefile_path <- file.path(
     cache_root,
     "HRR_Bdry__AK_HI_unmodified",
-    "tyler_hrr-shapefile",
+    "mysterycall_hrr-shapefile",
     "Hrr98Bdry_AK_HI_unmodified.shp"
   )
 
   if (!file.exists(shapefile_path)) {
     message("Downloading HRR boundary shapefile (~8 MB). This is a one-time operation.")
-    tyler_download_file(
+    mysterycall_download_file(
       "https://data.dartmouthatlas.org/downloads/geography/HRR_Bdry__AK_HI_unmodified.zip",
       archive_path,
       overwrite = TRUE,

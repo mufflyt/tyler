@@ -8,7 +8,7 @@
 # - ❌ Inefficient algorithms that don't scale
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 library(dplyr)
 
 # ==============================================================================
@@ -39,7 +39,7 @@ test_that("STRESS: Handles 10k row dataset efficiently", {
   start_time <- Sys.time()
   start_mem <- as.numeric(object.size(ls()))
 
-  results <- tyler_clean_phase1(
+  results <- mysterycall_clean_phase1(
     phase1_data = large_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -87,7 +87,7 @@ test_that("STRESS: Memory efficient with repeated operations", {
   mem_sizes <- numeric(5)
 
   for (i in 1:5) {
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -127,7 +127,7 @@ test_that("STRESS: Handles datasets with 90% missing data", {
 
   # Should handle gracefully without crashing
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = sparse_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -166,7 +166,7 @@ test_that("STRESS: Handles wide datasets with 50+ columns", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = wide_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -210,7 +210,7 @@ test_that("STRESS: Efficiently detects duplicates in large datasets", {
 
   start_time <- Sys.time()
 
-  results <- tyler_clean_phase1(
+  results <- mysterycall_clean_phase1(
     phase1_data = large_data,
     output_directory = temp_dir,
     verbose = FALSE,
@@ -249,7 +249,7 @@ test_that("STRESS: Handles very long text fields", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = long_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -285,7 +285,7 @@ test_that("STRESS: Handles multiple file writes efficiently", {
 
   # Write to multiple locations sequentially
   for (temp_dir in temp_dirs) {
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -330,7 +330,7 @@ test_that("STRESS: Gracefully handles memory constraints", {
 
     start_time <- Sys.time()
 
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -373,7 +373,7 @@ test_that("STRESS: Handles rapid repeated function calls", {
   start_time <- Sys.time()
 
   for (i in 1:50) {
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,

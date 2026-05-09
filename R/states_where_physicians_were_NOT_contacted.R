@@ -19,7 +19,7 @@
 #'
 #' The physician count is derived from the first available identifier among
 #' `npi`, `name`, `physician_info`, and `physician_information`.
-#' @seealso [tyler_summarize_census()], [tyler_get_clinician_data()], [tyler_clean_phase1()]
+#' @seealso [mysterycall_summarize_census()], [mysterycall_get_clinician_data()], [mysterycall_clean_phase1()]
 #' @family summary
 #' @export
 #'
@@ -40,13 +40,13 @@
 #'                  "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
 #'                  "Washington", "West Virginia", "Wisconsin", "Wyoming",
 #'                  "District of Columbia")
-#' tyler_not_contacted_states(filtered_data, all_states)
+#' mysterycall_not_contacted_states(filtered_data, all_states)
 #'
 #' # Example with default all_states
 #' filtered_data <- data.frame(state = c("California", "New York", "Texas", "Nevada"))
-#' tyler_not_contacted_states(filtered_data)
+#' mysterycall_not_contacted_states(filtered_data)
 #'
-tyler_not_contacted_states <- function(filtered_data, all_states = NULL) {
+mysterycall_not_contacted_states <- function(filtered_data, all_states = NULL) {
 
   # Helper to coerce character responses such as "Yes"/"No" into logical
   as_positive_logical <- function(x) {
@@ -148,4 +148,4 @@ tyler_not_contacted_states <- function(filtered_data, all_states = NULL) {
 
 # Example usage:
 # filtered_data <- data.frame(state = c("California", "New York", "Texas"))
-# tyler_not_contacted_states(filtered_data)
+# mysterycall_not_contacted_states(filtered_data)

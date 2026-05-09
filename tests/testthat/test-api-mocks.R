@@ -8,7 +8,7 @@
 # - ❌ Data corruption from malformed responses
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 library(dplyr)
 
 # ==============================================================================

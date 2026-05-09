@@ -9,7 +9,7 @@ NULL
 
 # nocov start
 
-tyler_normalize_file_format <- function(format = NULL, path = NULL, default = "csv") {
+mysterycall_normalize_file_format <- function(format = NULL, path = NULL, default = "csv") {
   choices <- c("csv", "parquet")
   if (!is.null(format)) {
     return(match.arg(format, choices))
@@ -23,7 +23,7 @@ tyler_normalize_file_format <- function(format = NULL, path = NULL, default = "c
   default
 }
 
-tyler_require_arrow <- function() {
+mysterycall_require_arrow <- function() {
   if (!requireNamespace("arrow", quietly = TRUE)) {
     stop(
       "The 'arrow' package is required to read or write Parquet files. ",
@@ -33,12 +33,12 @@ tyler_require_arrow <- function() {
   }
 }
 
-tyler_read_table <- function(path, format = NULL, ...) {
-  fmt <- tyler_normalize_file_format(format, path = path)
+mysterycall_read_table <- function(path, format = NULL, ...) {
+  fmt <- mysterycall_normalize_file_format(format, path = path)
   df <- if (identical(fmt, "csv")) {
     readr::read_csv(path, show_col_types = FALSE, ...)
   } else {
-    tyler_require_arrow()
+    mysterycall_require_arrow()
     arrow::read_parquet(path, as_data_frame = TRUE)
   }
   if ("npi" %in% names(df) && is.numeric(df[["npi"]])) {
@@ -47,8 +47,8 @@ tyler_read_table <- function(path, format = NULL, ...) {
   df
 }
 
-tyler_write_table <- function(data, path, format = NULL, append = FALSE, col_names = TRUE, ...) {
-  fmt <- tyler_normalize_file_format(format, path = path)
+mysterycall_write_table <- function(data, path, format = NULL, append = FALSE, col_names = TRUE, ...) {
+  fmt <- mysterycall_normalize_file_format(format, path = path)
   if (identical(fmt, "csv")) {
     # Atomic write for non-append mode to reduce race-condition risk when
     # multiple processes target the same path.
@@ -67,7 +67,7 @@ tyler_write_table <- function(data, path, format = NULL, append = FALSE, col_nam
       readr::write_csv(data, path, append = TRUE, col_names = col_names, ...)
     }
   } else {
-    tyler_require_arrow()
+    mysterycall_require_arrow()
     if (inherits(data, "grouped_df")) {
       data <- dplyr::ungroup(data)
     }

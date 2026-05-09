@@ -8,7 +8,7 @@
 # - ❌ Incorrect handling of special characters
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 library(dplyr)
 
 # ==============================================================================
@@ -28,7 +28,7 @@ test_that("EDGE: Handles empty strings gracefully", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -55,7 +55,7 @@ test_that("EDGE: Handles whitespace-only strings", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -93,7 +93,7 @@ test_that("EDGE: Handles names with apostrophes and hyphens", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -125,7 +125,7 @@ test_that("EDGE: Handles special punctuation in addresses", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -160,7 +160,7 @@ test_that("EDGE: Handles international Unicode characters", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -193,7 +193,7 @@ test_that("EDGE: Handles emoji and symbols", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -227,7 +227,7 @@ test_that("EDGE: Protects against SQL-like injection attempts", {
 
   # Should not execute any injected code
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -301,7 +301,7 @@ test_that("EDGE: Handles various phone number formats", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -340,7 +340,7 @@ test_that("EDGE: Handles mixed state name formats", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -394,7 +394,7 @@ test_that("EDGE: Handles NPI with whitespace", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -457,7 +457,7 @@ test_that("EDGE: Handles case variations consistently", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -508,7 +508,7 @@ test_that("EDGE: Handles exactly 1 row", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,
@@ -537,7 +537,7 @@ test_that("EDGE: Handles exactly required columns (no extras)", {
   dir.create(temp_dir)
 
   expect_no_error({
-    results <- tyler_clean_phase1(
+    results <- mysterycall_clean_phase1(
       phase1_data = test_data,
       output_directory = temp_dir,
       verbose = FALSE,

@@ -37,7 +37,7 @@ Before you can harness the power of the `search_by_taxonomy` function, it is ess
 
 ```{r setup, include = FALSE}
 if (eval_vignettes) {
-  library(tyler)
+  library(mysterycall)
 }
 ```
 
@@ -52,7 +52,7 @@ Taxonomy codes can be obtained from the National Uniform Claim Committee (NUCC) 
 ```{r, include = FALSE}
 # Load required packages when evaluating examples
 if (eval_vignettes) {
-  library(tyler)
+  library(mysterycall)
   library(dplyr)
   library(tidyr)
   library(readr)

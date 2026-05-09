@@ -1,49 +1,49 @@
 # Comprehensive tests for validation utilities
 library(testthat)
-library(tyler)
+library(mysterycall)
 
 test_that("validate_dataframe: Basic functionality", {
   # Valid data frame
   df <- data.frame(x = 1:3, y = letters[1:3])
-  expect_identical(tyler:::validate_dataframe(df), df)
-  expect_invisible(tyler:::validate_dataframe(df))
+  expect_identical(mysterycall:::validate_dataframe(df), df)
+  expect_invisible(mysterycall:::validate_dataframe(df))
 
   # Empty data frame (allowed by default)
   empty_df <- data.frame()
-  expect_identical(tyler:::validate_dataframe(empty_df), empty_df)
+  expect_identical(mysterycall:::validate_dataframe(empty_df), empty_df)
 
   # Zero rows but with columns
   zero_row_df <- data.frame(x = integer(0), y = character(0))
-  expect_identical(tyler:::validate_dataframe(zero_row_df), zero_row_df)
+  expect_identical(mysterycall:::validate_dataframe(zero_row_df), zero_row_df)
 })
 
 test_that("validate_dataframe: NULL handling", {
   # NULL not allowed by default
   expect_error(
-    tyler:::validate_dataframe(NULL),
+    mysterycall:::validate_dataframe(NULL),
     "`data` must be a data frame; received NULL.",
     fixed = TRUE
   )
 
   # NULL allowed when specified
-  expect_null(tyler:::validate_dataframe(NULL, allow_null = TRUE))
+  expect_null(mysterycall:::validate_dataframe(NULL, allow_null = TRUE))
 })
 
 test_that("validate_dataframe: Non-data.frame inputs", {
   expect_error(
-    tyler:::validate_dataframe(list(x = 1, y = 2)),
+    mysterycall:::validate_dataframe(list(x = 1, y = 2)),
     "`data` must be a data frame; received an object of class list",
     fixed = TRUE
   )
 
   expect_error(
-    tyler:::validate_dataframe(matrix(1:6, nrow = 2)),
+    mysterycall:::validate_dataframe(matrix(1:6, nrow = 2)),
     "`data` must be a data frame; received an object of class matrix, array",
     fixed = TRUE
   )
 
   expect_error(
-    tyler:::validate_dataframe(1:5),
+    mysterycall:::validate_dataframe(1:5),
     "`data` must be a data frame; received an object of class integer",
     fixed = TRUE
   )
@@ -53,11 +53,11 @@ test_that("validate_dataframe: Zero rows handling", {
   empty_df <- data.frame()
 
   # Zero rows allowed by default
-  expect_identical(tyler:::validate_dataframe(empty_df, allow_zero_rows = TRUE), empty_df)
+  expect_identical(mysterycall:::validate_dataframe(empty_df, allow_zero_rows = TRUE), empty_df)
 
   # Zero rows not allowed when specified
   expect_error(
-    tyler:::validate_dataframe(empty_df, allow_zero_rows = FALSE),
+    mysterycall:::validate_dataframe(empty_df, allow_zero_rows = FALSE),
     "`data` must contain at least one row",
     fixed = TRUE
   )
@@ -65,13 +65,13 @@ test_that("validate_dataframe: Zero rows handling", {
 
 test_that("validate_dataframe: Custom names", {
   expect_error(
-    tyler:::validate_dataframe(NULL, name = "my_dataset"),
+    mysterycall:::validate_dataframe(NULL, name = "my_dataset"),
     "`my_dataset` must be a data frame; received NULL.",
     fixed = TRUE
   )
 
   expect_error(
-    tyler:::validate_dataframe(1:5, name = "user_input"),
+    mysterycall:::validate_dataframe(1:5, name = "user_input"),
     "`user_input` must be a data frame; received an object of class integer",
     fixed = TRUE
   )
@@ -81,13 +81,13 @@ test_that("validate_dataframe: Edge cases", {
   # Tibbles should work
   if (requireNamespace("tibble", quietly = TRUE)) {
     tbl <- tibble::tibble(x = 1:3, y = letters[1:3])
-    expect_identical(tyler:::validate_dataframe(tbl), tbl)
+    expect_identical(mysterycall:::validate_dataframe(tbl), tbl)
   }
 
   # Data tables should work if they inherit from data.frame
   if (requireNamespace("data.table", quietly = TRUE)) {
     dt <- data.table::data.table(x = 1:3, y = letters[1:3])
-    expect_identical(tyler:::validate_dataframe(dt), dt)
+    expect_identical(mysterycall:::validate_dataframe(dt), dt)
   }
 })
 
@@ -99,7 +99,7 @@ test_that("validate_dataframe: Performance with large data", {
   )
 
   start_time <- Sys.time()
-  result <- tyler:::validate_dataframe(large_df)
+  result <- mysterycall:::validate_dataframe(large_df)
   end_time <- Sys.time()
 
   expect_identical(result, large_df)
@@ -113,7 +113,7 @@ test_that("validate_dataframe: Column name preservation", {
     check.names = FALSE
   )
 
-  result <- tyler:::validate_dataframe(df)
+  result <- mysterycall:::validate_dataframe(df)
   expect_equal(names(result), names(df))
   expect_identical(result, df)
 })
@@ -123,7 +123,7 @@ test_that("validate_dataframe: Attribute preservation", {
   attr(df, "custom_attr") <- "test_value"
   class(df) <- c("custom_class", "data.frame")
 
-  result <- tyler:::validate_dataframe(df)
+  result <- mysterycall:::validate_dataframe(df)
   expect_equal(attr(result, "custom_attr"), "test_value")
   expect_equal(class(result), c("custom_class", "data.frame"))
 })
@@ -138,7 +138,7 @@ test_that("validate_dataframe: Property-based test for valid data frames", {
       matrix(runif(n_rows * n_cols), nrow = n_rows, ncol = n_cols)
     )
 
-    expect_identical(tyler:::validate_dataframe(df), df)
-    expect_silent(tyler:::validate_dataframe(df))
+    expect_identical(mysterycall:::validate_dataframe(df), df)
+    expect_silent(mysterycall:::validate_dataframe(df))
   }
 })

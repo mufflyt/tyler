@@ -24,7 +24,7 @@ test_that("Function handles default all_states correctly", {
 
 
 # Run test
-result <- tyler_not_contacted_states(filtered_data)
+result <- mysterycall_not_contacted_states(filtered_data)
 expect_equal(result, expected)
 })
 
@@ -48,6 +48,6 @@ test_that("Function handles no states correctly", {
   )
 
   # Run test
-  result <- tyler_not_contacted_states(filtered_data)
+  result <- mysterycall_not_contacted_states(filtered_data)
   expect_equal(result, expected)
 })

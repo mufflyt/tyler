@@ -1,6 +1,6 @@
-Package: tyler
-Title: Tools for Mystery Caller and Audit Healthcare Studies
-Version: 1.2.2
+Package: mysterycall
+Title: Mystery Caller Study Tools for Healthcare Access Research
+Version: 1.3.0
 Authors@R:
     person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2044-1693"))
@@ -10,8 +10,8 @@ Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 License: MIT + file LICENSE
-URL: https://github.com/mufflyt/tyler
-BugReports: https://github.com/mufflyt/tyler/issues
+URL: https://github.com/mufflyt/mysterycall
+BugReports: https://github.com/mufflyt/mysterycall/issues
 Date: 2026-05-08
 Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:

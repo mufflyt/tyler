@@ -24,22 +24,22 @@ NULL
 #' @examples
 #' \donttest{
 #' # Simple progress bar
-#' pb_id <- tyler_progress_bar("Processing", total = 100)
+#' pb_id <- mysterycall_progress_bar("Processing", total = 100)
 #' for (i in 1:100) {
 #'   Sys.sleep(0.1)
-#'   tyler_progress_update(pb_id)
+#'   mysterycall_progress_update(pb_id)
 #' }
-#' tyler_progress_done(pb_id)
+#' mysterycall_progress_done(pb_id)
 #'
 #' # With custom message
-#' pb_id <- tyler_progress_bar("Geocoding addresses", total = 500)
+#' pb_id <- mysterycall_progress_bar("Geocoding addresses", total = 500)
 #' for (i in 1:500) {
 #'   # do work
-#'   tyler_progress_update(pb_id, status = sprintf("Address %d", i))
+#'   mysterycall_progress_update(pb_id, status = sprintf("Address %d", i))
 #' }
-#' tyler_progress_done(pb_id, result = "All addresses geocoded!")
+#' mysterycall_progress_done(pb_id, result = "All addresses geocoded!")
 #' }
-tyler_progress_bar <- function(name,
+mysterycall_progress_bar <- function(name,
                                 total,
                                 format = NULL,
                                 clear = FALSE,
@@ -48,7 +48,7 @@ tyler_progress_bar <- function(name,
 
   make_pb_env <- function(...) {
     env <- list2env(list(...), parent = emptyenv())
-    class(env) <- "tyler_progress"
+    class(env) <- "mysterycall_progress"
     env
   }
 
@@ -100,15 +100,15 @@ tyler_progress_bar <- function(name,
 #'
 #' Increments the progress bar by specified amount and optionally updates status.
 #'
-#' @param pb Progress bar object from tyler_progress_bar()
+#' @param pb Progress bar object from mysterycall_progress_bar()
 #' @param amount Amount to increment (default: 1)
 #' @param status Optional status message to display
 #' @param set Set to specific value instead of incrementing
 #'
 #' @return Invisible NULL
 #' @export
-tyler_progress_update <- function(pb, amount = 1, status = NULL, set = NULL) {
-  if (!inherits(pb, "tyler_progress")) {
+mysterycall_progress_update <- function(pb, amount = 1, status = NULL, set = NULL) {
+  if (!inherits(pb, "mysterycall_progress")) {
     return(invisible(NULL))
   }
 
@@ -137,7 +137,7 @@ tyler_progress_update <- function(pb, amount = 1, status = NULL, set = NULL) {
       elapsed <- as.numeric(difftime(Sys.time(), pb$start_time, units = "secs"))
       rate <- if (elapsed > 0) pb$current / elapsed else pb$current
       remaining_secs <- if (rate > 0) (pb$total - pb$current) / rate else 0
-      eta_str <- tyler_format_duration(remaining_secs)
+      eta_str <- mysterycall_format_duration(remaining_secs)
 
       message(sprintf("  Progress: %d/%d (%d%%) - ETA: %s",
                      pb$current, pb$total, pct, eta_str))
@@ -152,14 +152,14 @@ tyler_progress_update <- function(pb, amount = 1, status = NULL, set = NULL) {
 #'
 #' Marks progress bar as complete with optional success message.
 #'
-#' @param pb Progress bar object from tyler_progress_bar()
+#' @param pb Progress bar object from mysterycall_progress_bar()
 #' @param result Optional result message to display
 #' @param status Final status (default: "done")
 #'
 #' @return Invisible NULL
 #' @export
-tyler_progress_done <- function(pb, result = NULL, status = "done") {
-  if (!inherits(pb, "tyler_progress")) {
+mysterycall_progress_done <- function(pb, result = NULL, status = "done") {
+  if (!inherits(pb, "mysterycall_progress")) {
     return(invisible(NULL))
   }
 
@@ -182,13 +182,13 @@ tyler_progress_done <- function(pb, result = NULL, status = "done") {
 #'
 #' Marks progress bar as failed with error message.
 #'
-#' @param pb Progress bar object from tyler_progress_bar()
+#' @param pb Progress bar object from mysterycall_progress_bar()
 #' @param msg Error message
 #'
 #' @return Invisible NULL
 #' @export
-tyler_progress_fail <- function(pb, msg = NULL) {
-  if (!inherits(pb, "tyler_progress")) {
+mysterycall_progress_fail <- function(pb, msg = NULL) {
+  if (!inherits(pb, "mysterycall_progress")) {
     return(invisible(NULL))
   }
 
@@ -225,25 +225,25 @@ tyler_progress_fail <- function(pb, msg = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' tracker <- tyler_multi_progress(c("Load Data", "Process", "Save"))
+#' tracker <- mysterycall_multi_progress(c("Load Data", "Process", "Save"))
 #'
 #' # Step 1
-#' tyler_multi_step(tracker, 1, total = 100)
+#' mysterycall_multi_step(tracker, 1, total = 100)
 #' for (i in 1:100) {
-#'   tyler_multi_update(tracker)
+#'   mysterycall_multi_update(tracker)
 #' }
-#' tyler_multi_complete(tracker)
+#' mysterycall_multi_complete(tracker)
 #'
 #' # Step 2
-#' tyler_multi_step(tracker, 2, total = 50)
+#' mysterycall_multi_step(tracker, 2, total = 50)
 #' for (i in 1:50) {
-#'   tyler_multi_update(tracker)
+#'   mysterycall_multi_update(tracker)
 #' }
-#' tyler_multi_complete(tracker)
+#' mysterycall_multi_complete(tracker)
 #'
-#' tyler_multi_done(tracker)
+#' mysterycall_multi_done(tracker)
 #' }
-tyler_multi_progress <- function(steps, show_overall = TRUE) {
+mysterycall_multi_progress <- function(steps, show_overall = TRUE) {
   env <- new.env(parent = emptyenv())
   env$steps <- steps
   env$total_steps <- length(steps)
@@ -252,7 +252,7 @@ tyler_multi_progress <- function(steps, show_overall = TRUE) {
   env$overall_pb <- NULL
   env$step_pb <- NULL
   env$use_cli <- requireNamespace("cli", quietly = TRUE)
-  class(env) <- "tyler_multi_progress"
+  class(env) <- "mysterycall_multi_progress"
   env
 }
 
@@ -266,8 +266,8 @@ tyler_multi_progress <- function(steps, show_overall = TRUE) {
 #'
 #' @return Invisible NULL
 #' @export
-tyler_multi_step <- function(tracker, step_num, total, detail = NULL) {
-  if (!inherits(tracker, "tyler_multi_progress")) {
+mysterycall_multi_step <- function(tracker, step_num, total, detail = NULL) {
+  if (!inherits(tracker, "mysterycall_multi_progress")) {
     return(invisible(NULL))
   }
 
@@ -288,7 +288,7 @@ tyler_multi_step <- function(tracker, step_num, total, detail = NULL) {
   }
 
   # Create step progress bar
-  tracker$step_pb <- tyler_progress_bar(
+  tracker$step_pb <- mysterycall_progress_bar(
     name = step_name,
     total = total,
     clear = FALSE
@@ -306,13 +306,13 @@ tyler_multi_step <- function(tracker, step_num, total, detail = NULL) {
 #'
 #' @return Invisible NULL
 #' @export
-tyler_multi_update <- function(tracker, amount = 1, status = NULL) {
-  if (!inherits(tracker, "tyler_multi_progress")) {
+mysterycall_multi_update <- function(tracker, amount = 1, status = NULL) {
+  if (!inherits(tracker, "mysterycall_multi_progress")) {
     return(invisible(NULL))
   }
 
   if (!is.null(tracker$step_pb)) {
-    tyler_progress_update(tracker$step_pb, amount = amount, status = status)
+    mysterycall_progress_update(tracker$step_pb, amount = amount, status = status)
   }
 
   invisible(NULL)
@@ -326,13 +326,13 @@ tyler_multi_update <- function(tracker, amount = 1, status = NULL) {
 #'
 #' @return Invisible NULL
 #' @export
-tyler_multi_complete <- function(tracker, result = NULL) {
-  if (!inherits(tracker, "tyler_multi_progress")) {
+mysterycall_multi_complete <- function(tracker, result = NULL) {
+  if (!inherits(tracker, "mysterycall_multi_progress")) {
     return(invisible(NULL))
   }
 
   if (!is.null(tracker$step_pb)) {
-    tyler_progress_done(tracker$step_pb, result = result)
+    mysterycall_progress_done(tracker$step_pb, result = result)
     tracker$step_pb <- NULL
   }
 
@@ -346,8 +346,8 @@ tyler_multi_complete <- function(tracker, result = NULL) {
 #'
 #' @return Invisible NULL
 #' @export
-tyler_multi_done <- function(tracker) {
-  if (!inherits(tracker, "tyler_multi_progress")) {
+mysterycall_multi_done <- function(tracker) {
+  if (!inherits(tracker, "mysterycall_multi_progress")) {
     return(invisible(NULL))
   }
 
@@ -378,21 +378,21 @@ tyler_multi_done <- function(tracker) {
 #' @examples
 #' \donttest{
 #' # Process items with progress bar
-#' results <- tyler_progress_map(
+#' results <- mysterycall_progress_map(
 #'   items = 1:100,
 #'   fn = function(x) { Sys.sleep(0.1); x^2 },
 #'   name = "Computing squares"
 #' )
 #'
 #' # With custom batch size
-#' results <- tyler_progress_map(
+#' results <- mysterycall_progress_map(
 #'   items = 1:50,
 #'   fn = function(x) x^2,
 #'   name = "Computing squares",
 #'   batch_size = 10  # Update every 10 items
 #' )
 #' }
-tyler_progress_map <- function(items,
+mysterycall_progress_map <- function(items,
                                 fn,
                                 name = "Processing items",
                                 batch_size = NULL,
@@ -406,7 +406,7 @@ tyler_progress_map <- function(items,
   }
 
   # Create progress bar
-  pb <- tyler_progress_bar(name = name, total = n)
+  pb <- mysterycall_progress_bar(name = name, total = n)
 
   # Process items (use single-bracket assignment to preserve NULL elements)
   results <- vector("list", length = n)
@@ -415,12 +415,12 @@ tyler_progress_map <- function(items,
 
     # Update progress bar
     if (i %% batch_size == 0 || i == n) {
-      tyler_progress_update(pb, amount = batch_size, set = i)
+      mysterycall_progress_update(pb, amount = batch_size, set = i)
     }
   }
 
   # Complete
-  tyler_progress_done(pb, result = sprintf("Processed %d items", n))
+  mysterycall_progress_done(pb, result = sprintf("Processed %d items", n))
 
   return(results)
 }
@@ -435,7 +435,7 @@ tyler_progress_map <- function(items,
 #'
 #' @return Spinner ID
 #' @export
-tyler_spinner_start <- function(name, msg = NULL) {
+mysterycall_spinner_start <- function(name, msg = NULL) {
   if (requireNamespace("cli", quietly = TRUE) && cli::is_ansi_tty()) {
     if (is.null(msg)) {
       msg <- sprintf("Working on: %s", name)
@@ -455,12 +455,12 @@ tyler_spinner_start <- function(name, msg = NULL) {
 
 #' Stop a spinner
 #'
-#' @param id Spinner ID from tyler_spinner_start()
+#' @param id Spinner ID from mysterycall_spinner_start()
 #' @param result Result message
 #'
 #' @return Invisible NULL
 #' @export
-tyler_spinner_stop <- function(id, result = "done") {
+mysterycall_spinner_stop <- function(id, result = "done") {
   if (!is.null(id) && requireNamespace("cli", quietly = TRUE)) {
     cli::cli_progress_done(id = id, result = result)
   }

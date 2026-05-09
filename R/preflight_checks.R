@@ -29,7 +29,7 @@ NULL
 #' @examples
 #' \dontrun{
 #' # Basic preflight check
-#' tyler_preflight_check(
+#' mysterycall_preflight_check(
 #'   input_data = "physicians.csv",
 #'   output_dir = "output/",
 #'   google_maps_api_key = Sys.getenv("GOOGLE_API_KEY"),
@@ -37,13 +37,13 @@ NULL
 #' )
 #'
 #' # Non-interactive (for scripts)
-#' tyler_preflight_check(
+#' mysterycall_preflight_check(
 #'   input_data = data,
 #'   output_dir = "output/",
 #'   interactive = FALSE
 #' )
 #' }
-tyler_preflight_check <- function(input_data,
+mysterycall_preflight_check <- function(input_data,
                                    output_dir,
                                    google_maps_api_key = NULL,
                                    here_api_key = NULL,
@@ -84,7 +84,7 @@ tyler_preflight_check <- function(input_data,
         errors <- c(errors, sprintf("Input file not found: %s. Provide an existing CSV/Parquet path or pass a data frame directly.", input_data))
         list(success = FALSE, n_rows = 0, data = NULL)
       } else {
-        data <- tyler_read_table(input_data)
+        data <- mysterycall_read_table(input_data)
         checks$data <- TRUE
         message(sprintf("  \u2713 Input file found: %s (%s rows)",
                        basename(input_data),
@@ -133,7 +133,7 @@ tyler_preflight_check <- function(input_data,
     })
   } else {
     # Check if writable
-    test_file <- file.path(output_dir, ".tyler_write_test")
+    test_file <- file.path(output_dir, ".mysterycall_write_test")
     can_write <- tryCatch({
       writeLines("test", test_file)
       file.remove(test_file)
@@ -157,7 +157,7 @@ tyler_preflight_check <- function(input_data,
 
   if (!is.null(google_maps_api_key) && !is.na(google_maps_api_key) && nzchar(google_maps_api_key)) {
     if (check_apis) {
-      google_check <- tyler_validate_google_api(google_maps_api_key)
+      google_check <- mysterycall_validate_google_api(google_maps_api_key)
       if (google_check$valid) {
         message("  \u2713 Google Maps API key valid")
         google_ok <- TRUE
@@ -174,7 +174,7 @@ tyler_preflight_check <- function(input_data,
 
   if (!is.null(here_api_key) && !is.na(here_api_key) && nzchar(here_api_key)) {
     if (check_apis) {
-      here_check <- tyler_validate_here_api(here_api_key)
+      here_check <- mysterycall_validate_here_api(here_api_key)
       if (here_check$valid) {
         message("  \u2713 HERE API key valid")
         here_ok <- TRUE
@@ -196,7 +196,7 @@ tyler_preflight_check <- function(input_data,
   message("\U0001F50D Checking data quality...")
 
   if (data_check$success && !is.null(data_check$data)) {
-    quality_report <- tyler_assess_data_quality(
+    quality_report <- mysterycall_assess_data_quality(
       data_check$data,
       required_columns = required_columns
     )
@@ -231,7 +231,7 @@ tyler_preflight_check <- function(input_data,
     message("")
     message("\U0001F4CA Estimating resources...")
 
-    estimates <- tyler_estimate_resources(data_check$n_rows)
+    estimates <- mysterycall_estimate_resources(data_check$n_rows)
 
     message(sprintf("  \u23F1 Estimated runtime: %s (for %s records)",
                    estimates$runtime_str,
@@ -364,7 +364,7 @@ tyler_preflight_check <- function(input_data,
 #' @param api_key Google Maps API key
 #' @return List with valid (logical) and error (character) fields
 #' @keywords internal
-tyler_validate_google_api <- function(api_key) {
+mysterycall_validate_google_api <- function(api_key) {
   if (!requireNamespace("ggmap", quietly = TRUE)) {
     return(list(valid = FALSE, error = "Package 'ggmap' is required to validate the Google Maps API key. Install with: install.packages('ggmap')"))
   }
@@ -389,7 +389,7 @@ tyler_validate_google_api <- function(api_key) {
 #' @param api_key HERE API key
 #' @return List with valid (logical) and error (character) fields
 #' @keywords internal
-tyler_validate_here_api <- function(api_key) {
+mysterycall_validate_here_api <- function(api_key) {
   tryCatch({
     # Try a simple isochrone request
     url <- sprintf(
@@ -422,7 +422,7 @@ tyler_validate_here_api <- function(api_key) {
 #' @return List with score (0-1) and issues
 #' @family utilities
 #' @export
-tyler_assess_data_quality <- function(data, required_columns = c("first", "last")) {
+mysterycall_assess_data_quality <- function(data, required_columns = c("first", "last")) {
   issues <- list()
   penalties <- 0
   max_penalties <- 10
@@ -495,7 +495,7 @@ tyler_assess_data_quality <- function(data, required_columns = c("first", "last"
 #' @return List with runtime and memory estimates
 #' @family utilities
 #' @export
-tyler_estimate_resources <- function(n_rows) {
+mysterycall_estimate_resources <- function(n_rows) {
   # Rough estimates based on typical performance
   # These should be calibrated with real-world data
 

@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' tyler_calculate_overlap(block_groups, isochrones_joined, 30L, "data/shp/")
+#' mysterycall_calculate_overlap(block_groups, isochrones_joined, 30L, "data/shp/")
 #' }
 #'
 #' @importFrom sf st_intersection st_write st_area st_transform st_make_valid st_is_valid st_union st_sf
@@ -32,7 +32,7 @@
 #' @family geospatial helpers
 #' @export
 #'
-tyler_calculate_overlap <- function(block_groups,
+mysterycall_calculate_overlap <- function(block_groups,
                                                     isochrones_joined,
                                                     drive_time_minutes,
                                                     output_dir,
@@ -72,7 +72,7 @@ tyler_calculate_overlap <- function(block_groups,
       block_groups = c("POLYGON", "MULTIPOLYGON"),
       isochrones_joined = c("POLYGON", "MULTIPOLYGON")
     ),
-    context = "tyler_calculate_overlap()"
+    context = "mysterycall_calculate_overlap()"
   )
   block_groups <- validated$block_groups
   isochrones_joined <- validated$isochrones_joined
@@ -143,7 +143,7 @@ tyler_calculate_overlap <- function(block_groups,
         block_groups = c("POLYGON", "MULTIPOLYGON"),
         isochrones_joined = c("POLYGON", "MULTIPOLYGON")
       ),
-      context = "tyler_calculate_overlap(): post-crosswalk"
+      context = "mysterycall_calculate_overlap(): post-crosswalk"
     )
     block_groups <- validated_crosswalk$block_groups
     isochrones_joined <- validated_crosswalk$isochrones_joined
@@ -288,5 +288,5 @@ tyler_calculate_overlap <- function(block_groups,
 #
 # # Loop through unique drive times and calculate intersection for each
 # for (drive_time in unique_drive_times) {
-#   tyler_calculate_overlap(block_groups, isochrones_joined, drive_time, output_dir)
+#   mysterycall_calculate_overlap(block_groups, isochrones_joined, drive_time, output_dir)
 # }

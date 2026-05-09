@@ -13,8 +13,8 @@
 #' @family utilities
 #' @export
 #' @examples
-#' tyler_resolve_path("output.csv", type = "tables", create = FALSE)
-tyler_resolve_path <- function(..., type = NULL, base_dir = getOption("tyler.base_dir", getwd()), create = FALSE) {
+#' mysterycall_resolve_path("output.csv", type = "tables", create = FALSE)
+mysterycall_resolve_path <- function(..., type = NULL, base_dir = getOption("tyler.base_dir", getwd()), create = FALSE) {
   if (!dir.exists(base_dir)) {
     stop(sprintf("Base directory '%s' does not exist.", base_dir), call. = FALSE)
   }
@@ -25,7 +25,7 @@ tyler_resolve_path <- function(..., type = NULL, base_dir = getOption("tyler.bas
     tables = "tables",
     figures = file.path("tables", "figures"),
     docs = "docs",
-    cache = tyler_tempdir("cache")
+    cache = mysterycall_tempdir("cache")
   )
 
   base <- base_dir
@@ -67,8 +67,8 @@ tyler_resolve_path <- function(..., type = NULL, base_dir = getOption("tyler.bas
 #' @export
 #' @examples
 #' tmp <- tempfile(fileext = ".csv")
-#' tyler_export_with_backup(mtcars, tmp)
-tyler_export_with_backup <- function(x, path, backup = TRUE, quiet = getOption("tyler.quiet", FALSE)) {
+#' mysterycall_export_with_backup(mtcars, tmp)
+mysterycall_export_with_backup <- function(x, path, backup = TRUE, quiet = getOption("tyler.quiet", FALSE)) {
   if (missing(path) || !nzchar(path)) {
     stop("`path` must be a non-empty string.", call. = FALSE)
   }

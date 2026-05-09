@@ -1,6 +1,6 @@
 # test-search-by-taxonomy-semantics.R
 #
-# Tests tyler_search_taxonomy() for input validation, return-type contracts,
+# Tests mysterycall_search_taxonomy() for input validation, return-type contracts,
 # and output schema. No real API calls are made; API-dependent tests
 # use skip_if_offline() to avoid CI failures.
 #
@@ -11,7 +11,7 @@
 #   - Idempotency-adjacent (write_snapshot=FALSE doesn't pollute filesystem)
 
 library(testthat)
-library(tyler)
+library(mysterycall)
 
 skip_if_not_installed("tibble")
 skip_if_not_installed("dplyr")
@@ -28,8 +28,8 @@ count_files <- function(dir) {
 # 1. NULL input → returns 0-row tibble (no error)
 # ---------------------------------------------------------------------------
 
-test_that("tyler_search_taxonomy(NULL) returns a 0-row tibble without error", {
-  result <- expect_no_error(tyler_search_taxonomy(NULL))
+test_that("mysterycall_search_taxonomy(NULL) returns a 0-row tibble without error", {
+  result <- expect_no_error(mysterycall_search_taxonomy(NULL))
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 0L)
 })
@@ -38,14 +38,14 @@ test_that("tyler_search_taxonomy(NULL) returns a 0-row tibble without error", {
 # 2. NA input → returns 0-row tibble
 # ---------------------------------------------------------------------------
 
-test_that("tyler_search_taxonomy(NA_character_) returns a 0-row tibble", {
-  result <- expect_no_error(tyler_search_taxonomy(NA_character_))
+test_that("mysterycall_search_taxonomy(NA_character_) returns a 0-row tibble", {
+  result <- expect_no_error(mysterycall_search_taxonomy(NA_character_))
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 0L)
 })
 
-test_that("tyler_search_taxonomy(NA) returns a 0-row tibble", {
-  result <- expect_no_error(tyler_search_taxonomy(NA))
+test_that("mysterycall_search_taxonomy(NA) returns a 0-row tibble", {
+  result <- expect_no_error(mysterycall_search_taxonomy(NA))
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 0L)
 })
@@ -54,16 +54,16 @@ test_that("tyler_search_taxonomy(NA) returns a 0-row tibble", {
 # 3. Empty character vector → returns 0-row tibble
 # ---------------------------------------------------------------------------
 
-test_that("tyler_search_taxonomy(character(0)) returns a 0-row tibble", {
-  result <- expect_no_error(tyler_search_taxonomy(character(0)))
+test_that("mysterycall_search_taxonomy(character(0)) returns a 0-row tibble", {
+  result <- expect_no_error(mysterycall_search_taxonomy(character(0)))
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 0L)
 })
 
-test_that("tyler_search_taxonomy('') returns a 0-row tibble or no error", {
+test_that("mysterycall_search_taxonomy('') returns a 0-row tibble or no error", {
   # Empty string may or may not be treated as valid input; must not crash
   result <- tryCatch(
-    tyler_search_taxonomy(""),
+    mysterycall_search_taxonomy(""),
     error = function(e) NULL
   )
   if (!is.null(result)) {
@@ -77,18 +77,18 @@ test_that("tyler_search_taxonomy('') returns a 0-row tibble or no error", {
 # 4. Property: return type is always a data.frame/tibble
 # ---------------------------------------------------------------------------
 
-test_that("tyler_search_taxonomy always returns a data.frame for NULL input", {
-  result <- tyler_search_taxonomy(NULL)
+test_that("mysterycall_search_taxonomy always returns a data.frame for NULL input", {
+  result <- mysterycall_search_taxonomy(NULL)
   expect_true(is.data.frame(result))
 })
 
-test_that("tyler_search_taxonomy always returns a data.frame for empty input", {
-  result <- tyler_search_taxonomy(character(0))
+test_that("mysterycall_search_taxonomy always returns a data.frame for empty input", {
+  result <- mysterycall_search_taxonomy(character(0))
   expect_true(is.data.frame(result))
 })
 
 test_that("return type is a tibble (tbl_df) for NULL input", {
-  result <- tyler_search_taxonomy(NULL)
+  result <- mysterycall_search_taxonomy(NULL)
   expect_true(inherits(result, "tbl_df") || inherits(result, "data.frame"))
 })
 
@@ -110,7 +110,7 @@ test_that("states parameter triggers state-loop logic [skips if offline]", {
 
   # If online, verify that passing states causes loop (result is a data.frame)
   result <- tryCatch(
-    tyler_search_taxonomy(
+    mysterycall_search_taxonomy(
       "Gynecologic Oncology",
       states = c("CO"),
       write_snapshot = FALSE,
@@ -133,7 +133,7 @@ test_that("states parameter triggers state-loop logic [skips if offline]", {
 test_that("limit parameter defaults to 1200L", {
   # We can't call the API here, but we can verify the function signature
   # by checking the formals
-  args <- formals(tyler_search_taxonomy)
+  args <- formals(mysterycall_search_taxonomy)
   expect_true("limit" %in% names(args))
   default_limit <- eval(args$limit)
   expect_equal(default_limit, 1200L)
@@ -150,7 +150,7 @@ test_that("write_snapshot=FALSE with NULL input doesn't create files in tempdir"
   on.exit(unlink(tmp, recursive = TRUE))
 
   before_count <- count_files(tmp)
-  tyler_search_taxonomy(NULL, write_snapshot = FALSE, notify = FALSE)
+  mysterycall_search_taxonomy(NULL, write_snapshot = FALSE, notify = FALSE)
   after_count <- count_files(tmp)
 
   # No files should be written when result is empty tibble
@@ -166,7 +166,7 @@ test_that("notify=FALSE doesn't cause an error even if beepr is absent", {
   # The function checks requireNamespace("beepr") before calling beep
   # This test verifies the guard works correctly with NULL input
   result <- expect_no_error(
-    tyler_search_taxonomy(NULL, notify = FALSE)
+    mysterycall_search_taxonomy(NULL, notify = FALSE)
   )
   expect_s3_class(result, "data.frame")
 })
@@ -177,7 +177,7 @@ test_that("notify=FALSE doesn't cause an error even if beepr is absent", {
 # ---------------------------------------------------------------------------
 
 test_that("0-row tibble from NULL has correct structure (no required cols in empty result)", {
-  result <- tyler_search_taxonomy(NULL)
+  result <- mysterycall_search_taxonomy(NULL)
   # The empty tibble may or may not have columns; it must at minimum be a data.frame
   expect_true(is.data.frame(result))
   # It is acceptable for an empty result to have 0 columns
@@ -190,8 +190,8 @@ test_that("required column schema documented: first_name, last_name, npi, search
   # by checking the code path via formals (not the actual API call).
   # The real assertion would be: if (nrow(result) > 0) expect_true("npi" %in% names(result))
   # We assert the function exists and accepts the right arguments.
-  expect_true(is.function(tyler_search_taxonomy))
-  args <- names(formals(tyler_search_taxonomy))
+  expect_true(is.function(mysterycall_search_taxonomy))
+  args <- names(formals(mysterycall_search_taxonomy))
   expect_true("taxonomy_to_search" %in% args)
   expect_true("states"             %in% args)
   expect_true("write_snapshot"     %in% args)
@@ -205,7 +205,7 @@ test_that("required column schema documented: first_name, last_name, npi, search
 
 test_that("vector with a single NA among valid terms returns 0-row tibble", {
   # A vector of only NA should be treated as empty
-  result <- tyler_search_taxonomy(c(NA_character_, NA_character_))
+  result <- mysterycall_search_taxonomy(c(NA_character_, NA_character_))
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 0L)
 })

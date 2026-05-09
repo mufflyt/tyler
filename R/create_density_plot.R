@@ -28,7 +28,7 @@
 #'   business_days_until_appointment = c(1.5, 2.2, 3.1, 1.8, 2.5, 2.9)
 #' )
 #'
-#' tyler_plot_density(
+#' mysterycall_plot_density(
 #'   data = example_data,
 #'   x_var = "business_days_until_appointment",
 #'   fill_var = "insurance",
@@ -43,7 +43,7 @@
 #' )
 #' }
 
-tyler_plot_density <- function(data,
+mysterycall_plot_density <- function(data,
                                 x_var,
                                 fill_var,
                                 x_transform = "none",
@@ -92,7 +92,7 @@ tyler_plot_density <- function(data,
   print(density_plot)
 
   if (is.null(output_dir)) {
-    output_dir <- tyler_tempdir("density_plots", create = TRUE)
+    output_dir <- mysterycall_tempdir("density_plots", create = TRUE)
   } else if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   }

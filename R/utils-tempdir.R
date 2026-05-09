@@ -10,8 +10,8 @@
 #'
 #' @return A character vector containing the resolved path.
 #' @keywords internal
-tyler_tempdir <- function(..., create = FALSE) {
-  path <- file.path(tempdir(), "tyler", ...)
+mysterycall_tempdir <- function(..., create = FALSE) {
+  path <- file.path(tempdir(), "mysterycall", ...)
   if (isTRUE(create) && !dir.exists(path)) {
     dir.create(path, recursive = TRUE, showWarnings = FALSE)
   }

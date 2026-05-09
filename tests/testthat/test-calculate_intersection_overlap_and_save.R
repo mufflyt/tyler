@@ -1,6 +1,6 @@
 library(sf)
 
-test_that("tyler_calculate_overlap enforces alignment and records area method", {
+test_that("mysterycall_calculate_overlap enforces alignment and records area method", {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))
   bg <- sf::st_sf(
     GEOID = "000000000000",
@@ -16,7 +16,7 @@ test_that("tyler_calculate_overlap enforces alignment and records area method", 
   out_dir <- tempfile("iso_test_match_")
   dir.create(out_dir)
 
-  tyler_calculate_overlap(
+  mysterycall_calculate_overlap(
     bg,
     iso,
     drive_time_minutes = 30,
@@ -34,7 +34,7 @@ test_that("tyler_calculate_overlap enforces alignment and records area method", 
   expect_equal(unique(res[[area_col[1]]]), "projected:EPSG:5070")
 })
 
-test_that("tyler_calculate_overlap blocks unsupported vintage mismatches", {
+test_that("mysterycall_calculate_overlap blocks unsupported vintage mismatches", {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))
   bg <- sf::st_sf(
     GEOID = "000000000000",
@@ -48,7 +48,7 @@ test_that("tyler_calculate_overlap blocks unsupported vintage mismatches", {
   )
 
   expect_error(
-    tyler_calculate_overlap(
+    mysterycall_calculate_overlap(
       bg,
       iso,
       drive_time_minutes = 30,
@@ -59,7 +59,7 @@ test_that("tyler_calculate_overlap blocks unsupported vintage mismatches", {
   )
 })
 
-test_that("tyler_calculate_overlap accepts crosswalk function for 2010/2020", {
+test_that("mysterycall_calculate_overlap accepts crosswalk function for 2010/2020", {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))
   bg <- sf::st_sf(
     GEOID = "000000000000",
@@ -82,7 +82,7 @@ test_that("tyler_calculate_overlap accepts crosswalk function for 2010/2020", {
   out_dir <- tempfile("iso_test_crosswalk_")
   dir.create(out_dir)
 
-  tyler_calculate_overlap(
+  mysterycall_calculate_overlap(
     bg,
     iso,
     drive_time_minutes = 30,
@@ -94,7 +94,7 @@ test_that("tyler_calculate_overlap accepts crosswalk function for 2010/2020", {
   expect_true(file.exists(file.path(out_dir, "intersect_30_minutes.shp")))
 })
 
-test_that("tyler_calculate_overlap reports available drive times when requested value is missing", {
+test_that("mysterycall_calculate_overlap reports available drive times when requested value is missing", {
   square <- sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0))))
   bg <- sf::st_sf(
     GEOID = "000000000000",
@@ -108,7 +108,7 @@ test_that("tyler_calculate_overlap reports available drive times when requested 
   )
 
   expect_error(
-    tyler_calculate_overlap(
+    mysterycall_calculate_overlap(
       bg,
       iso,
       drive_time_minutes = 45,

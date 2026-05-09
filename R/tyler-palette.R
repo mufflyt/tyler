@@ -1,9 +1,9 @@
-#' Retrieve the standard label dictionary used in `tyler`
+#' Retrieve the standard label dictionary used in `mysterycall`
 #'
 #' @return A named list of canonical labels for common columns.
 #' @family utilities
 #' @export
-tyler_standard_labels <- function() {
+mysterycall_standard_labels <- function() {
   list(
     npi = "National Provider Identifier",
     state = "State",
@@ -24,7 +24,7 @@ tyler_standard_labels <- function() {
 #' @return A character vector of hex colors.
 #' @family utilities
 #' @export
-tyler_standard_palette <- function(name = c("primary", "sequential", "diverging")) {
+mysterycall_standard_palette <- function(name = c("primary", "sequential", "diverging")) {
   name <- match.arg(name)
   palettes <- list(
     primary = c("#0B3C5D", "#328CC1", "#D9B310", "#1D2731"),

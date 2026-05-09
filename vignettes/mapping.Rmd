@@ -35,7 +35,7 @@ optional `title` argument accepts an HTML string that is placed in a control
 panel at the top-left of the map.
 
 ```{r base-map, eval=FALSE}
-library(tyler)
+library(mysterycall)
 library(leaflet)
 
 # Default view: continental United States, zoom 4
@@ -67,7 +67,7 @@ returns a dissolved `sf` polygon object — one row per district — that is rea
 for mapping or spatial joins.
 
 ```{r acog-districts, eval=FALSE}
-library(tyler)
+library(mysterycall)
 
 # Build the sf object (requires rnaturalearth)
 districts_sf <- map_create_acog_districts_sf()
@@ -87,7 +87,7 @@ The bundled `ACOG_Districts` data frame contains the underlying state-to-distric
 mapping and can be inspected without building the sf object:
 
 ```{r acog-data, eval=TRUE}
-library(tyler)
+library(mysterycall)
 
 data(ACOG_Districts)
 head(ACOG_Districts)
@@ -103,7 +103,7 @@ their district using the viridis `"magma"` palette (configurable via
 the result as a self-contained HTML file plus a PNG screenshot to `output_dir`.
 
 ```{r physician-dot, eval=FALSE}
-library(tyler)
+library(mysterycall)
 
 # Synthetic provider data — replace with your own data frame
 physician_data <- data.frame(
@@ -143,7 +143,7 @@ returns an `sf` object in CRS 4326. By default Hawaii and Alaska are excluded;
 set `remove_HI_AK = FALSE` to retain all regions.
 
 ```{r hrr-sf, eval=FALSE}
-library(tyler)
+library(mysterycall)
 library(ggplot2)
 
 hrr_sf <- hrr(remove_HI_AK = TRUE)
@@ -193,7 +193,7 @@ shades block groups by their overlap proportion and draws each isochrone
 HTML file and a PNG screenshot to `output_dir`.
 
 ```{r block-group-overlap, eval=FALSE}
-library(tyler)
+library(mysterycall)
 
 # bg_data and isochrones_data are sf objects produced by the isochrone workflow
 map_create_block_group_overlap(
