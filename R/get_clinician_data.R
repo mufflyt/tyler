@@ -9,10 +9,8 @@
 #' @importFrom dplyr mutate bind_rows
 #' @family npi
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
-#' }
 mysterycall_get_clinician_data <- function(input_data) {
   if (is.data.frame(input_data)) {
     clinician_df <- input_data

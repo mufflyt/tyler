@@ -89,7 +89,7 @@ mysterycall_plot_density <- function(data,
     )
 
   # Display the plot
-  print(density_plot)
+  invisible(density_plot)
 
   if (is.null(output_dir)) {
     output_dir <- mysterycall_tempdir("density_plots", create = TRUE)

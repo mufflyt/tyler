@@ -10,8 +10,7 @@
 #' @return A named list of sf isolines keyed by range in seconds, or a list
 #'   with an `error` element if the calculation fails.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Set your HERE API key in your Renviron file using the following steps:
 #' # 1. Add key to .Renviron
 #' # 2. Reload .Renviron
@@ -27,7 +26,6 @@
 #'
 #' # Free the in-memory cache when done with a batch
 #' mysterycall_clear_isochrone_cache()
-#' }
 #'
 #' @family mapping
 #' @export
@@ -37,6 +35,11 @@ mysterycall_create_isochrones <- function(location,
                               posix_time = as.POSIXct("2023-10-20 08:00:00",
                                                       format = "%Y-%m-%d %H:%M:%S"),
                               api_key = Sys.getenv("HERE_API_KEY")) {
+  if (!requireNamespace("sf", quietly = TRUE)) {
+    stop('Package \'sf\' is required for this function. '
+         'Install with: install.packages("sf")', call. = FALSE)
+  }
+
   if (!requireNamespace("hereR", quietly = TRUE)) {
     stop("Package 'hereR' is required for mysterycall_create_isochrones(). Install with: install.packages('hereR')", call. = FALSE)
   }

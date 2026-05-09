@@ -72,8 +72,8 @@ mysterycall_check_normality <- function(data, variable) {
   message("Q-Q Plot created.")
 
   # Print plots
-  print(hist_plot)
-  print(qq_plot)
+  invisible(hist_plot)
+  invisible(qq_plot)
 
   # Determine summary statistic based on normality
   if (p_value > 0.05) {
@@ -91,7 +91,7 @@ mysterycall_check_normality <- function(data, variable) {
   }
 
   # Output results
-  print(summary_stats)
+  message(capture.output(summary_stats))
   message("Summary calculation completed for variable: ", variable)
 
   return(summary_stats)

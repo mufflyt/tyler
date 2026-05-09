@@ -8,15 +8,18 @@
 #' @return An sf object containing the hospital referral region data.
 #' @seealso [ensure_hrr_shapefile()], [mysterycall_hrr_maps()], [mysterycall_map_base()]
 #' @family geospatial helpers
-#' @importFrom sf read_sf st_transform
+
 #' @importFrom dplyr filter
 #'
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_hrr()
-#' }
 mysterycall_hrr <- function(remove_HI_AK = TRUE) {
+  if (!requireNamespace("sf", quietly = TRUE)) {
+    stop('Package \'sf\' is required for this function. '
+         'Install with: install.packages("sf")', call. = FALSE)
+  }
+
   message("Loading necessary packages...")
 
   # Load the hospital referral region shapefile
@@ -55,16 +58,14 @@ mysterycall_hrr <- function(remove_HI_AK = TRUE) {
 #'   US map and Alaska/Hawaii/Puerto Rico inset maps.
 #' @seealso [mysterycall_hrr()], [mysterycall_map_base()], [mysterycall_map_block_group()]
 #' @family geospatial plotting
-#' @importFrom sf sf_use_s2 st_transform st_make_grid st_sf st_intersection st_join st_filter
+
 #' @importFrom dplyr mutate group_by summarize filter n
 #' @importFrom ggplot2 geom_sf scale_fill_viridis_c guide_colorbar element_text theme_minimal theme labs
 #' @importFrom stringr str_detect
 #' @importFrom scales pretty_breaks label_number squish
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_hrr_maps(physician_sf)
-#' }
 mysterycall_hrr_maps <- function(
     physician_sf,
     trait_map = "all",
@@ -74,6 +75,11 @@ mysterycall_hrr_maps <- function(
     width = 7,
     height = 5
 ) {
+  if (!requireNamespace("sf", quietly = TRUE)) {
+    stop('Package \'sf\' is required for this function. '
+         'Install with: install.packages("sf")', call. = FALSE)
+  }
+
   if (!requireNamespace("ggspatial", quietly = TRUE)) {
     stop("Package 'ggspatial' is required for mysterycall_hrr_maps(). Install with: install.packages('ggspatial')", call. = FALSE)
   }

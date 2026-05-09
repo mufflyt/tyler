@@ -21,10 +21,8 @@
 #' @importFrom httr GET content http_error status_code timeout
 #' @importFrom tibble tibble
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' result <- mysterycall_genderize("sample.csv")
-#' }
 #'
 #' @family gender
 #' @export

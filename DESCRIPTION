@@ -13,9 +13,8 @@ License: MIT + file LICENSE
 URL: https://github.com/mufflyt/mysterycall
 BugReports: https://github.com/mufflyt/mysterycall/issues
 Date: 2026-05-08
-Maintainer: Tyler Muffly <tyler.muffly@dhha.org>
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Imports:
     checkmate,
     dplyr,
@@ -29,7 +28,6 @@ Imports:
     readr,
     rlang,
     scales,
-    sf,
     stats,
     stringr,
     tibble,
@@ -74,6 +72,7 @@ Suggests:
     tigris,
     tmap,
     covr,
+    sf,
     viridis,
     webshot
 VignetteBuilder: knitr

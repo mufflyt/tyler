@@ -8,10 +8,8 @@
 #'
 #' @return A data frame with near-zero variance variables removed.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' new_data <- mysterycall_remove_near_zero(data_frame)
-#' }
 #'
 #' @importFrom dplyr select
 #'

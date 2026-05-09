@@ -8,20 +8,23 @@
 #'
 #' @return Called for its side effects of saving the block group overlap map as HTML and PNG inside `output_dir`. Returns `NULL` invisibly.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Create and export the map with the default output directory
 #' mysterycall_map_block_group(block_groups, isochrones_joined_map)
 #'
 #' # Create and export the map with a custom output directory
 #' mysterycall_map_block_group(block_groups, isochrones_joined_map, "custom_output/")
-#' }
 #'
-#' @importFrom sf st_make_valid st_transform st_is_valid st_union st_sf
+
 #'
 #' @family mapping
 #' @export
 mysterycall_map_block_group <- function(bg_data, isochrones_data, output_dir = "figures/") {
+  if (!requireNamespace("sf", quietly = TRUE)) {
+    stop('Package \'sf\' is required for this function. '
+         'Install with: install.packages("sf")', call. = FALSE)
+  }
+
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for mysterycall_map_block_group(). Install with: install.packages('leaflet')", call. = FALSE)
   }

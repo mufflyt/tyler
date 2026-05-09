@@ -151,10 +151,8 @@ mysterycall_summarize_census <- function(census_df,
 #' @return Invisibly returns the generated ggplot object.
 #' @export
 #' @family census
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #'   mysterycall_plot_census_age(census_example, group_var = "statefp", verbose = FALSE)
-#' }
 mysterycall_plot_census_age <- function(census_df,
                                           group_var = NULL,
                                           output_dir = NULL,
@@ -296,7 +294,7 @@ mysterycall_plot_census_age <- function(census_df,
       )
   }
 
-  print(plot)
+  invisible(plot)
 
   if (is.null(output_dir)) {
     output_dir <- mysterycall_tempdir("census_age_plots", create = TRUE)

@@ -14,12 +14,15 @@
 #'
 #' @family mapping
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_map_acog_districts()
 #' mysterycall_map_acog_districts("inst/extdata/ACOG_Districts.csv")
-#' }
 mysterycall_map_acog_districts <- function(acog_districts_file = NULL) {
+  if (!requireNamespace("sf", quietly = TRUE)) {
+    stop('Package \'sf\' is required for this function. '
+         'Install with: install.packages("sf")', call. = FALSE)
+  }
+
   if (is.null(acog_districts_file)) {
     acog_districts_file <- system.file("extdata", "ACOG_Districts.csv", package = "mysterycall")
   }

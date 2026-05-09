@@ -1,16 +1,17 @@
 
-# tyler
+# mysterycall
 
 <!-- badges: start -->
 <img src="https://github.com/mufflyt/mysterycall/assets/44621942/3c4faeb4-7fe5-42e8-b2bf-7832588c6f57" width="15%" align="right">
 
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
-[![Codecov test coverage](https://codecov.io/gh/mufflyt/mysterycall/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mufflyt/mysterycall?branch=master)
-[![CRAN status](https://www.r-pkg.org/badges/version/tyler)](https://CRAN.R-project.org/package=tyler)
+[![Codecov test coverage](https://codecov.io/gh/mufflyt/mysterycall/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mufflyt/mysterycall?branch=main)
+[![CRAN status](https://www.r-pkg.org/badges/version/mysterycall)](https://CRAN.R-project.org/package=mysterycall)
 [![R-CMD-check](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mufflyt/mysterycall/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-**tyler** provides a toolkit for mystery caller and audit studies that evaluate
+**mysterycall** provides a toolkit for mystery caller and audit studies that evaluate
 patient access to healthcare. It handles the full workflow: finding providers
 in the NPI registry, validating and geocoding their addresses, generating
 drive-time isochrones, overlaying Census demographics, and producing publication-ready

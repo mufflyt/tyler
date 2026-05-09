@@ -8,10 +8,8 @@
 #'
 #' @importFrom dplyr select where all_of
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' new_data <- mysterycall_remove_constants(data_frame)
-#' }
 #'
 #' @family utilities
 #' @export

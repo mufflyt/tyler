@@ -51,13 +51,11 @@
 #'   \item `processing_flag_no_last_name`: TRUE if last name could not be extracted
 #' }
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' library(mysterycall)
 #' file_path <- "/path/to/your/input/file.xls"
 #' phase1_data <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
 #' mysterycall_clean_phase1(phase1_data)
-#' }
 #'
 #' @importFrom dplyr arrange mutate select filter bind_rows
 #' @importFrom janitor clean_names

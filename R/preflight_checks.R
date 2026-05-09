@@ -26,8 +26,7 @@ NULL
 #' @family utilities
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Basic preflight check
 #' mysterycall_preflight_check(
 #'   input_data = "physicians.csv",
@@ -42,7 +41,6 @@ NULL
 #'   output_dir = "output/",
 #'   interactive = FALSE
 #' )
-#' }
 mysterycall_preflight_check <- function(input_data,
                                    output_dir,
                                    google_maps_api_key = NULL,

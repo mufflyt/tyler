@@ -9,16 +9,14 @@
 #'
 #' @return Invisibly returns the file path.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_write_table_pdf(overall_summary, "table.pdf")
-#' }
 #' @export
 mysterycall_write_table_pdf <- function(object, filename) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
     stop("Package 'arsenal' is required for this function. Install with: install.packages('arsenal')", call. = FALSE)
   }
-  print("Function Sanity Check: Creating Arsenal Table as a PDF")
+  message("Function Sanity Check: Creating Arsenal Table as a PDF")
   output_file <- if (grepl("\\.pdf$", filename, ignore.case = TRUE)) {
     filename
   } else {
@@ -44,11 +42,9 @@ mysterycall_write_table_pdf <- function(object, filename) {
 #' @family table
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Generate the overall table
 #' mysterycall_table_overall("data/Table1.rds", "output_tables")
-#' }
 mysterycall_table_overall <- function(input_file_path, output_directory, title = "Overall Table Summary", selected_columns = NULL, label_translations = NULL) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
     stop("Package 'arsenal' is required for this function. Install with: install.packages('arsenal')", call. = FALSE)
@@ -85,7 +81,7 @@ mysterycall_table_overall <- function(input_file_path, output_directory, title =
 
   # Log data summary
   message("Data summary:")
-  print(str(selected_data))
+  message(capture.output(str(selected_data)))
 
   # Generate the overall table using arsenal::tableby
   message("Generating the overall table using arsenal::tableby...")
@@ -132,7 +128,7 @@ mysterycall_table_overall <- function(input_file_path, output_directory, title =
 
   # Log the overall summary
   message("Overall table summary:")
-  print(overall_summary)
+  message(capture.output(overall_summary))
 
   # Access the current date and time
   date_time <- format(Sys.time(), "%Y-%m-%d_%H-%M-%S")

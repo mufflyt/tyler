@@ -17,10 +17,8 @@
 #'   [mysterycall_split_and_save()]
 #' @family utilities
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_save_quality_table(my_data, "qc.csv")
-#' }
 
 mysterycall_save_quality_table <- function(data, filepath) {
   required_cols <- c("npi", "name")

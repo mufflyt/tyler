@@ -28,8 +28,7 @@
 #' @return A data frame with filtered NPI data based on the specified taxonomy
 #'   description.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # National search (limited to 1200 records per taxonomy):
 #' go_data <- mysterycall_search_taxonomy("Gynecologic Oncology")
 #'
@@ -45,7 +44,6 @@
 #'   "Female Pelvic Medicine and Reconstructive Surgery",
 #'   states = all_states
 #' )
-#' }
 #'
 #' @importFrom npi npi_search npi_flatten
 #' @importFrom dplyr bind_rows arrange filter select distinct mutate rename

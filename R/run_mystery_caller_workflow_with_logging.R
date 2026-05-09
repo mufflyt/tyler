@@ -13,8 +13,7 @@
 #'
 #' @return The same list returned by [mysterycall_run_workflow()].
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' results <- mysterycall_run_workflow_logged(
 #'   phase1_data = phase1,
 #'   phase2_data = phase2,
@@ -23,7 +22,6 @@
 #'   quality_check_path = "output/qc.csv",
 #'   log_file = "output/run.log"
 #' )
-#' }
 #'
 #' @family workflow
 #' @export

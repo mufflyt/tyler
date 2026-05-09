@@ -13,14 +13,12 @@
 #'
 #' @return Invisible TRUE if passes all checks
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' data <- read_csv("providers.csv")
 #' mysterycall_check_no_limits(data, "provider input")
 #'
 #' npi_results <- mysterycall_search_and_process_npi(data)
 #' mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 100)
-#' }
 #'
 #' @family utilities
 #' @export
@@ -113,14 +111,12 @@ mysterycall_check_no_limits <- function(data,
 #'   \item \code{LIMIT n} (SQL)
 #' }
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Scan all R files in package
 #' issues <- mysterycall_scan_for_limits("R/")
 #'
 #' # Scan with exclusions
 #' issues <- mysterycall_scan_for_limits("R/", exclude_pattern = "deprecated")
-#' }
 #'
 #' @family utilities
 #' @export
@@ -248,7 +244,7 @@ mysterycall_scan_for_limits <- function(path = "R",
       sum(issues$severity == "MEDIUM")
     ), call. = FALSE)
 
-    print(issues, row.names = FALSE)
+    message(capture.output(print(issues, row.names = FALSE)))
   } else {
     message(sprintf("No artificial data limits found in %d files", length(files)))
   }
@@ -270,8 +266,7 @@ mysterycall_scan_for_limits <- function(path = "R",
 #'
 #' @return Invisible TRUE if within tolerance, errors otherwise
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Expect exactly 100 geocoding results
 #' coords <- geocode(addresses)
 #' mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding")
@@ -280,7 +275,6 @@ mysterycall_scan_for_limits <- function(path = "R",
 #' coords <- geocode(addresses)
 #' mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
 #'                         tolerance = 5)
-#' }
 #'
 #' @family utilities
 #' @export
@@ -330,8 +324,7 @@ mysterycall_check_api_response <- function(result,
 #'
 #' @return Invisible TRUE if within expected change +/- tolerance
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Expect no data loss in cleaning
 #' before <- nrow(raw_data)
 #' clean_data <- mysterycall_clean_phase1(raw_data)
@@ -342,7 +335,6 @@ mysterycall_check_api_response <- function(result,
 #' dedup_data <- deduplicate(data)
 #' mysterycall_check_no_data_loss(before, dedup_data, "Deduplication",
 #'                         expected_change = -10, tolerance = 5)
-#' }
 #'
 #' @family utilities
 #' @export

@@ -9,12 +9,11 @@
 #'   Defaults to a session-specific folder inside [tempdir()].
 #' @return Called for its side effect of writing per-drive-time map HTML files and shapefiles to disk. Returns `NULL` invisibly.
 #'
-#' @importFrom sf st_union st_sf st_transform st_write
+
 #' @importFrom dplyr filter tibble
 #' @importFrom grDevices rainbow
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Load required libraries
 #' library(sf)
 #' library(leaflet)
@@ -28,11 +27,15 @@
 #'
 #' # Create individual isochrone maps and shapefiles
 #' mysterycall_plot_isochrones(isochrones, drive_times)
-#' }
 #'
 #' @family mapping
 #' @export
 mysterycall_plot_isochrones <- function(isochrones, drive_times, output_dir = NULL) {
+  if (!requireNamespace("sf", quietly = TRUE)) {
+    stop('Package \'sf\' is required for this function. '
+         'Install with: install.packages("sf")', call. = FALSE)
+  }
+
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for mysterycall_plot_isochrones(). Install with: install.packages('leaflet')", call. = FALSE)
   }

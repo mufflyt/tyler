@@ -12,20 +12,23 @@
 #'   Defaults to 240 seconds (~4 minutes).
 #' @return A dataframe containing the isochrones data with added 'name' column.
 #' @importFrom readr write_rds
-#' @importFrom sf st_as_sf st_drop_geometry write_sf
+
 #' @importFrom janitor clean_names
 #' @family mapping
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' isochrones_data <- mysterycall_isochrones_for_df("points.csv")
-#' }
 mysterycall_isochrones_for_df <- function(
     input_file,
     breaks = c(1800, 3600, 7200, 10800),
     api_key = Sys.getenv("HERE_API_KEY"),
     output_dir = NULL,
     save_interval = 240) {
+  if (!requireNamespace("sf", quietly = TRUE)) {
+    stop('Package \'sf\' is required for this function. '
+         'Install with: install.packages("sf")', call. = FALSE)
+  }
+
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 

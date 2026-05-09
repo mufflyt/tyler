@@ -25,10 +25,8 @@
 #' @return A data frame with latitude and longitude columns added.
 #' @family geospatial helpers
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' result <- mysterycall_geocode("addresses.csv", "my_api_key")
-#' }
 #' @importFrom readr read_csv write_csv
 #' @importFrom dplyr left_join distinct mutate
 #' @importFrom tibble tibble

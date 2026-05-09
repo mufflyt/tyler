@@ -293,7 +293,7 @@ mysterycall_run_workflow <- function(
 
   if (isTRUE(verbose)) {
     message("Workflow summary (rows and retention):")
-    print(workflow_summary)
+    message(capture.output(workflow_summary))
     message(sprintf("[%s] Mystery caller workflow complete", format(Sys.time(), "%H:%M:%S")))
   }
 

@@ -18,12 +18,10 @@
 #'
 #' @return Called for its side effect of saving the intersection overlap shapefile and CSV.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_calculate_overlap(block_groups, isochrones_joined, 30L, "data/shp/")
-#' }
 #'
-#' @importFrom sf st_intersection st_write st_area st_transform st_make_valid st_is_valid st_union st_sf
+
 #' @importFrom dplyr mutate select left_join coalesce
 #' @importFrom checkmate assert_class assert_number assert_string assert_function
 #' @importFrom dplyr .data
@@ -38,6 +36,11 @@ mysterycall_calculate_overlap <- function(block_groups,
                                                     output_dir,
                                                     crosswalk = NULL,
                                                     notify = TRUE) {
+  if (!requireNamespace("sf", quietly = TRUE)) {
+    stop('Package \'sf\' is required for this function. '
+         'Install with: install.packages("sf")', call. = FALSE)
+  }
+
   orient_geometries <- function(x) {
     if (!requireNamespace("lwgeom", quietly = TRUE)) {
       return(x)
@@ -263,7 +266,7 @@ mysterycall_calculate_overlap <- function(block_groups,
 
   # Print the summary
   message("Summary of Overlap Percentages for ", drive_time_minutes, " minutes:")
-  print(summary_bg)
+  message(capture.output(summary_bg))
 
   # Calculate and print the 50th percentile of overlap percentages
   median <- round(stats::quantile(non_missing_overlap, probs = 0.5), 4) * 100

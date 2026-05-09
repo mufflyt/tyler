@@ -17,13 +17,11 @@
 #' @return The path to the downloaded file (i.e. `dest`).
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_download_file(
 #'   "https://example.org/big-file.zip",
 #'   file.path(tempdir(), "big-file.zip")
 #' )
-#' }
 #'
 #' @importFrom httr HEAD headers timeout
 #' @family utilities

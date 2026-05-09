@@ -71,8 +71,7 @@ mysterycall_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zo
 #'
 #' @importFrom dplyr mutate
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Load required libraries
 #' library(viridis)
 #' library(leaflet)
@@ -87,7 +86,6 @@ mysterycall_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zo
 #'
 #' # Create and save the dot map
 #' mysterycall_map_physicians(physician_data)
-#' }
 #'
 #' @family mapping
 #' @export

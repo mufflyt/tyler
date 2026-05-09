@@ -30,8 +30,7 @@
 #' Use this helper when comparing how two categorical predictors jointly relate
 #' to a count-like outcome (for example, business days until appointment).
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Example 1: Analyzing the effect of gender and appointment center on wait times
 #' result <- mysterycall_plot_interaction(
 #'   data_path = "Ari/data/Phase2/late_phase_2_ENT_analysis_3.rds",
@@ -64,7 +63,6 @@
 #'   output_path = "results/waiting_times",
 #'   resolution = 300
 #' )
-#' }
 #'
 #' @importFrom dplyr rename mutate group_by summarize
 #' @importFrom ggplot2 ggplot aes geom_point geom_line labs theme_minimal ggsave
@@ -122,7 +120,7 @@ mysterycall_plot_interaction <- function(data_path, response_variable, variable_
   cat("Data summary after renaming and type conversion:\n")
   cat("Rows:", nrow(data), "Columns:", ncol(data), "\n")
   cat("Column classes:\n")
-  print(vapply(data, function(x) paste(class(x), collapse = ", "), character(1)))
+
   cat("\n\n")
 
   # Construct the model formula
@@ -143,7 +141,7 @@ mysterycall_plot_interaction <- function(data_path, response_variable, variable_
 
   # Log model summary
   cat("Model summary:\n")
-  print(summary(glmer_model))
+  message(capture.output(summary(glmer_model)))
   cat("\n\n")
 
   # Create the effects plot manually
@@ -168,11 +166,8 @@ mysterycall_plot_interaction <- function(data_path, response_variable, variable_
   ggsave(plot_filename, plot = p, width = 6, height = 4, dpi = resolution)
   cat("Effects plot saved successfully.\n\n")
 
-  # Log outputs
-  cat("Outputs:\n")
-  print(glmer_model)
-  print("Effects plot object:\n")
-  print(plot_data)
+  message(capture.output(glmer_model))
+  message("Effects plot object computed.")
 
   # Return the model and effects plot data
   return(list(model = glmer_model, effects_plot_data = plot_data))

@@ -23,6 +23,11 @@ validate_sf_inputs <- function(...,
                                auto_fix = TRUE,
                                target_crs = NULL,
                                context = "geospatial operation") {
+  if (!requireNamespace("sf", quietly = TRUE)) {
+    stop('Package \'sf\' is required for this function. '
+         'Install with: install.packages("sf")', call. = FALSE)
+  }
+
   objects <- list(...)
   if (!length(objects)) {
     stop("No sf objects supplied for validation.", call. = FALSE)

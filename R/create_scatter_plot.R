@@ -98,7 +98,7 @@ mysterycall_plot_scatter <- function(plot_data,
     )
 
   # Display the plot
-  print(scatter_plot)
+  invisible(scatter_plot)
 
   if (is.null(output_dir)) {
     output_dir <- mysterycall_tempdir("scatter_plots", create = TRUE)

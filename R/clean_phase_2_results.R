@@ -141,14 +141,12 @@ mysterycall_rename_columns <- function(data, target_strings, new_names) {
 #' @importFrom readr read_csv write_csv
 #' @importFrom dplyr filter mutate
 #' @importFrom janitor clean_names
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Assuming an input path to a CSV file
 #' input_path <- "path_to_your_data.csv"
 #' required_strings <- c("physician_information", "able_to_contact_office")
 #' standard_names <- c("physician_info", "contact_office")
 #' cleaned_data <- mysterycall_clean_phase2(input_path, required_strings, standard_names)
-#' }
 #'
 #' # Directly using a data frame
 #' df <- data.frame(

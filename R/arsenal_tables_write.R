@@ -8,10 +8,8 @@
 #' @family table
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_write_arsenal_table(my_table, "output_table")
-#' }
 mysterycall_write_arsenal_table <- function(object, filename, output_dir = NULL) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
     stop("Package 'arsenal' is required for mysterycall_write_arsenal_table(). Install with: install.packages('arsenal')", call. = FALSE)
