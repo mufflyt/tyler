@@ -1,0 +1,7 @@
+# Summarize Census Block Group Demographics
+
+These helpers aggregate American Community Survey (ACS) estimates
+returned by `mysterycall_get_census_data()` to produce tidy summary
+tables and visualizations. They focus on the sex-by-age table (B01001)
+so that analysts can quickly spot the distribution of female populations
+across block groups or higher-level geographies.

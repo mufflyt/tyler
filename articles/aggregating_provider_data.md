@@ -1,0 +1,160 @@
+# Aggregating Provider Data for Analysis
+
+## Overview
+
+Most mystery caller projects do not end with a provider roster. The
+analytical work starts when you combine several layers of information
+into one table:
+
+- provider identity and specialty
+- validated NPI values
+- clinician enrichment from external sources
+- geography and travel-time metrics
+- call outcomes and payer-specific access measures
+
+This vignette outlines a practical structure for that aggregation step.
+
+### Preserve a stable key
+
+Use `npi` as the primary key whenever it is available. Names and
+addresses can change; NPI is usually the most stable identifier across
+roster creation, enrichment, and call outcome files.
+
+``` r
+
+roster <- search_by_taxonomy(
+  "Gynecologic Oncology",
+  states = c("CO", "WY"),
+  write_snapshot = FALSE,
+  notify = FALSE
+) |>
+  validate_and_remove_invalid_npi()
+```
+
+### Add clinician enrichment
+
+Once you have a validated roster, enrich it with clinician-level
+attributes such as demographics or training metadata. In the current
+API, the exported function for this step is `retrieve_clinician_data()`.
+
+``` r
+
+clinician_data <- retrieve_clinician_data(roster)
+
+analysis_base <- roster |>
+  dplyr::left_join(
+    clinician_data,
+    by = "npi",
+    suffix = c("_roster", "_clinician")
+  )
+```
+
+### Keep site-level geography separate from clinician-level attributes
+
+Geocoding and isochrone generation happen at the practice-site level,
+not strictly at the person level. If multiple clinicians share one
+address, it is more efficient to geocode the unique site once and join
+the coordinates back.
+
+``` r
+
+site_table <- analysis_base |>
+  dplyr::distinct(npi, address, .keep_all = TRUE)
+```
+
+After geocoding and travel-time modelling, join the geography back onto
+the analysis table using the columns you preserved upstream.
+
+``` r
+
+analysis_with_geo <- analysis_base |>
+  dplyr::left_join(
+    site_geography,
+    by = c("npi", "address")
+  )
+```
+
+### Join call outcomes late
+
+Operational call files often contain repeated contacts, reschedules, or
+payer scenarios. It is usually easier to clean those files first and
+join them late in the pipeline.
+
+``` r
+
+phase2_clean <- clean_phase_2_data("phase2_results.xlsx")
+
+analysis_ready <- analysis_with_geo |>
+  dplyr::left_join(
+    phase2_clean,
+    by = c("npi", "name")
+  )
+```
+
+### Example aggregation patterns
+
+Once the core joins are complete, the same table can support several
+summary layers.
+
+#### Count providers by subspecialty
+
+``` r
+
+mysterycall::physicians |>
+  dplyr::count(subspecialty, sort = TRUE)
+#> # A tibble: 7 × 2
+#>   subspecialty                                          n
+#>   <chr>                                             <int>
+#> 1 Maternal-Fetal Medicine                            1757
+#> 2 Gynecologic Oncology                                904
+#> 3 Female Pelvic Medicine and Reconstructive Surgery   682
+#> 4 Reproductive Endocrinology and Infertility          629
+#> 5 Minimally Invasive Gynecologic Surgery              435
+#> 6 Complex Family Planning                             163
+#> 7 Pediatric and Adolescent Gynecology                  89
+```
+
+#### Summarize access outcomes
+
+``` r
+
+analysis_ready |>
+  dplyr::count(subspecialty, medicaid_accepted)
+```
+
+#### Build publication tables
+
+``` r
+
+table_generate_overall(
+  analysis_ready,
+  vars = c("subspecialty", "medicaid_accepted", "appointment_offered")
+)
+```
+
+### Recommended table structure
+
+In practice, an analysis-ready table works best when it has one row per
+unit of analysis. Decide that unit explicitly:
+
+- one row per clinician
+- one row per clinician-site pair
+- one row per call attempt
+
+Do not mix these units casually in the same final table or downstream
+percentages will be hard to interpret.
+
+### Practical guidance
+
+- Keep raw roster creation outputs separate from analysis-ready outputs.
+- Join on `npi` whenever possible.
+- Distinguish clinician-level and site-level variables.
+- Clean repeated call attempts before calculating proportions.
+- Save intermediate tables so you can audit merges and row counts.
+
+## Next step
+
+Once the unified table exists, the remaining tyler helpers for
+manuscript outputs are mostly summarization and visualization:
+`table_generate_overall()`, `table_calculate_percentages()`, and the
+mapping functions for geographic presentation.

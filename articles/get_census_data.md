@@ -1,0 +1,414 @@
+# Getting Data from the US Census Bureau for Isochrones
+
+## Introduction
+
+This vignette demonstrates the usage of the `get_census_data` function,
+which is designed to retrieve Census data for all states’ block groups.
+It leverages the `censusapi` package to query the U.S. Census Bureau’s
+API and collect demographic information for specified state FIPS codes.
+We’ll get the population in each block group using the
+[censusapi](https://www.hrecht.com/censusapi/) library and this relies
+heavily on her vignette.
+
+#### Centers for Medicare and Medicaid Services Doctors and Clinicians Downloadable file
+
+The Downloadable File is housed in the CMS Medicare Compare (aka
+Physician Compare site): [CMS Medicare
+Compare](https://data.cms.gov/provider-data/dataset/mj5m-pzi6). We could
+have downloaded the full data set file and do a left join but that runs
+the risk of being out of date give the data is update monthly. Here is
+the data dictionary for the file: [CMS Medicare Compare Data
+Dictionar](https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/physician/DOC_Data_Dictionary.pdf).
+The Doctors and Clinicians national downloadable file is organized at
+the individual clinician level; each line is unique at the
+clinicianenrollment record-group-address
+(NPI-Ind_enrl_ID-Org_PAC_ID-adrs_id) level. Clinicians with multiple
+Medicare enrollment records and/or single enrollments linking to
+multiple practice locations are listed on multiple lines.
+
+#### State Federal Information Processing Standards Codes
+
+This function retrieves Census data using censusapi for all states’
+block groups by looping over the specified list of state FIPS codes.
+This only brings back data on females from “B01001_01, 26, 33:49E”. FIPS
+codes, or Federal Information Processing Standards codes, are a
+standardized set of codes used to uniquely identify geographic areas in
+the United States. These codes are assigned to various administrative
+and geographical entities, such as states, counties, cities, and more.
+We used block groups for the analysis.
+
+The GEOID for block groups in the United States can be constructed using
+the following format: STATECOUNTYTRACTBLOCK_GROUP. Specifically: \*
+STATE is a 2-digit code for the state. \* COUNTY is a 3-digit code for
+the county. \* TRACT is a 6-digit code for the census tract. \*
+BLOCK_GROUP is a 1-digit code for the block group within the tract.
+
+#### Block Group as the Unit of Measurement
+
+In the United States Census Bureau’s geographic hierarchy, a “block
+group” is a smaller and more detailed geographic unit used for
+collecting and reporting demographic and statistical data. Block groups
+are subdivisions of census tracts and are typically designed to contain
+between 600 and 3,000 people, although this can vary depending on the
+population density of the area. Census block group borders are defined
+based on visible and easily identifiable features such as roads, rivers,
+streets, or natural boundaries like mountains and parks. The Census
+Bureau aims to create block group boundaries that follow these features
+to make them easily distinguishable.
+
+Block groups are used as the primary units for collecting detailed
+demographic and socioeconomic data during the decennial census and the
+American Community Survey (ACS). Census enumerators visit households
+within each block group to collect information on population, housing,
+employment, income, education, and more. In a densely populated urban
+area, a block group might represent a city block or a small neighborhood
+within a larger city. For example, a block group could cover a few city
+blocks in downtown Manhattan, New York City.
+
+## Data From the US Census Bureau
+
+These variables are part of a dataset obtained from the U.S. Census
+Bureau’s American Community Survey (ACS). The U.S. Census Bureau’s
+American Community Survey (ACS) is an ongoing nationwide survey
+conducted by the United States Census Bureau. It is designed to collect
+and provide detailed demographic, social, economic, and housing
+information about the American population. Here are some key features
+and aspects of the ACS:
+
+- Continuous Survey: The ACS is conducted continuously throughout the
+  year, providing updated and current data. Unlike the decennial census,
+  which occurs every ten years, the ACS is conducted annually, allowing
+  for more frequent and timely information.
+
+- Sampling: The ACS uses a sample-based approach to collect data from a
+  representative subset of the U.S. population. The sample includes
+  households and individuals from all 50 states, the District of
+  Columbia, and Puerto Rico.
+
+- Questionnaire: Respondents are asked to complete a detailed
+  questionnaire that covers a wide range of topics, including
+  demographics (age, sex, race, etc.), housing characteristics,
+  education, employment, income, health insurance, and more.
+
+- Geographic Coverage: The ACS provides data at various geographic
+  levels, including national, state, county, city, town, and even census
+  tract or block group. This allows for detailed analysis of communities
+  and regions.
+
+- Data Release: The ACS releases data in various forms, including
+  one-year estimates, three-year estimates, and five-year estimates.
+  One-year estimates are available for areas with larger populations,
+  while three-year and five-year estimates are designed for smaller
+  areas and subpopulations. The five-year estimates provide the most
+  reliable data for small geographic areas and specific demographic
+  groups.
+
+- Accessibility: ACS data is publicly accessible and can be accessed
+  through the Census Bureau’s website, data.census.gov, and other data
+  dissemination platforms. Researchers, policymakers, businesses, and
+  the general public use ACS data for various purposes, including policy
+  development, market research, and community planning.
+
+- Importance: The ACS is a critical tool for understanding the changing
+  demographics and socio-economic characteristics of the U.S.
+  population. It is used for congressional apportionment, resource
+  allocation, grant distribution, and various research purposes.
+
+- Privacy and Confidentiality: The Census Bureau takes privacy and
+  confidentiality seriously. Personal information collected in the ACS
+  questionnaire is protected by law, and responses are aggregated to
+  ensure that individual respondents cannot be identified.
+
+- Census Long Form Replacement: The ACS was introduced to replace the
+  long-form questionnaire that was part of the decennial census. The
+  long-form collected detailed demographic and housing information, and
+  the ACS continues to provide this valuable data on an ongoing basis.
+
+They represent demographic information for block groups within various
+states. Here’s an explanation of each variable:
+
+- `name`: This variable represents the name or label of the block group.
+- `total_females`: It represents the total number of females in the
+  block group.
+- `female_21_yo`: This variable represents the number of females aged 21
+  years and older in the block group.
+- `female_22_to_24_years`: It represents the number of females aged 22
+  to 24 years in the block group.
+- `female_25_to_29_years`: This variable represents the number of
+  females aged 25 to 29 years in the block group.
+- `female_30_to_34_years`: It represents the number of females aged 30
+  to 34 years in the block group.
+- etc.
+
+&nbsp;
+
+        name = NAME,
+        total_females = B01001_026E,
+        female_21_yo = B01001_033E,
+        female_22_to_24_years = B01001_034E,
+        female_25_to_29_years = B01001_035E,
+        female_30_to_34_years = B01001_036E,
+        female_35_to_39_years = B01001_037E,
+        female_40_to_44_years = B01001_038E,
+        female_45_to_49_years = B01001_039E,
+        female_50_to_54_years = B01001_040E,
+        female_55_to_59_years = B01001_041E,
+        female_60_to_61_years = B01001_042E,
+        female_62_to_64_years = B01001_043E,
+        female_65_to_66_years = B01001_044E,
+        female_67_to_69_years = B01001_045E,
+        female_70_to_74_years = B01001_046E,
+        female_75_to_79_years = B01001_047E,
+        female_80_to_84_years = B01001_048E,
+        female_85_years_and_older = B01001_049E,
+        fips_state = state
+
+Eventually these data will be matched onto the Block Groups. The block
+group shapefile is from the 2021 ACS via [National Historical Geographic
+Information System (NHGIS)](https://www.nhgis.org/). To calculate how
+many people live within and outside of the drive time isochrones, we’ll
+need to identify the percent of each Census block group that lies within
+the isochrones.
+
+## Function Description
+
+The get_census_data function retrieves Census data for all states’ block
+groups. Here’s a brief description of its parameters:
+
+`us_fips`: A vector of state FIPS (Federal Information Processing
+Standards) codes. Each code uniquely identifies a U.S. state. For
+example, Colorado is represented by the FIPS code 08.
+
+The resulting data is combined into a single dataframe for analysis.
+
+### Step 1
+
+#### Installation
+
+Before using the `mysterycall::get_census_data` function, you need to
+install and load the required packages. You can do this by running the
+following code:
+
+``` r
+
+# Install and load the necessary packages
+install.packages("censusapi")
+library(censusapi)
+library(dplyr)
+library(mysterycall)
+```
+
+These lists contain metadata about general variables and the variables
+related to race and ethnicity.
+
+##### All Variables
+
+    acs_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
+          vintage = 2019, group = "B01001") %>% 
+          readr::write_csv("data/acs_vars.csv")
+          
+    # This code cleans it up a bit
+    acs_vars <- acs_vars %>%
+      dplyr::select(-predicateType, -group, -limit, -predicateOnly) %>%
+      dplyr::filter(!stringr::str_detect(label, fixed("!!Male:!!", ignore_case = TRUE))) %>%
+      dplyr::filter(!stringr::str_detect(label, fixed("Annotation of Margin of Error", ignore_case = TRUE))) %>%
+      dplyr::mutate(label = stringr::str_remove(label, regex("^Annotation of Estimate!!Total:!!Female:!!", ignore_case = TRUE))) %>%
+      dplyr::filter(!stringr::str_detect(label, fixed("Margin of Error!!", ignore_case = TRUE))) %>%
+      dplyr::mutate(label = stringr::str_remove(label, regex("^Annotation of Estimate!!Total:!!Female:!!", ignore_case = TRUE))) %>%
+      dplyr::mutate(label = stringr::str_remove(label, regex("^Estimate!!Total:!!Female:!!", ignore_case = TRUE))) %>%
+      dplyr::filter(!stringr::str_detect(name, fixed("EA")) & !str_detect(label, fixed("!!Male:"))) %>%
+      dplyr::mutate(numbers = purrr::map_chr(str_extract_all(label, "^[:digit:]+"), ~ ifelse(length(.) == 0, NA_character_, paste(.x, collapse = "")))) %>%
+      dplyr::mutate(numbers = as.numeric(numbers)) %>%
+      dplyr::mutate(numbers = tidyr::replace_na(numbers, 0)) %>%
+      dplyr::mutate(numbers = as.numeric(numbers)) %>%
+      dplyr::arrange(numbers)
+      
+    > acs_vars
+              name                     label    concept numbers
+    1  B01001_026E Estimate!!Total:!!Female: SEX BY AGE       0
+    2  B01001_027E             Under 5 years SEX BY AGE       0
+    3  B01001_001E          Estimate!!Total: SEX BY AGE       0
+    4  B01001_028E              5 to 9 years SEX BY AGE       5
+    5  B01001_029E            10 to 14 years SEX BY AGE      10
+
+##### Race Variables
+
+    acs_race_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
+          vintage = 2019, group = "B02001") %>%
+          readr::write_csv("data/acs_race_vars.csv")
+
+    #output:
+    > acs_race_vars
+    # A tibble: 40 × 7
+       name         label                                                      concept predicateType group limit predicateOnly
+       <chr>        <chr>                                                      <chr>   <chr>         <chr> <dbl> <lgl>        
+     1 B02001_010EA Annotation of Estimate!!Total:!!Two or more races:!!Two r… RACE    string        B020…     0 TRUE         
+     2 B02001_010MA Annotation of Margin of Error!!Total:!!Two or more races:… RACE    string        B020…     0 TRUE         
+     3 B02001_001EA Annotation of Estimate!!Total:                             RACE    string        B020…     0 TRUE         
+     4 B02001_001MA Annotation of Margin of Error!!Total:                      RACE    string        B020…     0 TRUE         
+     5 B02001_004EA Annotation of Estimate!!Total:!!American Indian and Alask… RACE    string        B020…     0 TRUE         
+     6 B02001_004MA Annotation of Margin of Error!!Total:!!American Indian an… RACE    string        B020…     0 TRUE         
+     7 B02001_005EA Annotation of Estimate!!Total:!!Asian alone                RACE    string        B020…     0 TRUE         
+     8 B02001_005MA Annotation of Margin of Error!!Total:!!Asian alone         RACE    string        B020…     0 TRUE         
+     9 B02001_002EA Annotation of Estimate!!Total:!!White alone                RACE    string        B020…     0 TRUE         
+    10 B02001_002MA Annotation of Margin of Error!!Total:!!White alone         RACE    string        B020…     0 TRUE  
+
+##### Race and Ethnicity Variables
+
+    acs_raceeth_vars <- censusapi::listCensusMetadata(name = "acs/acs5", 
+          vintage = 2019, group = "B03002") %>%
+          readr::write_csv("data/acs_raceeth_vars.csv")
+
+### Step 2: Prepare Your Data
+
+Define a vector of state FIPS codes. For example, you can use the tigris
+package to obtain FIPS codes for all U.S. states:
+
+    us_fips_list <- tigris::fips_codes %>%
+        dplyr::select(state_code, state_name) %>%
+        dplyr::distinct(state_code, .keep_all = TRUE) %>%
+        filter(state_code < 56) %>%                         #state_codes over 56 are territories
+        dplyr::select(state_code) %>%
+        dplyr::pull()                                              
+
+    # All US State FIPS Codes
+    us_fips_list <- c("01", "02", "04", "05", "06", "08", "09", "10", "11", "12", "13", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "44", "45", "46", "47", "48", "49", "50", "51", "53", "54", "55")
+
+### Step 3: Gather the Data from the US Census Bureau API
+
+Call the `get_census_data` function with the `us_fips_list` vector. The
+helper adds 2020 Federal Information Processing Standard (FIPS)
+identifiers for every geography plus the Census vintage so you always
+know which release supplied the estimates. For example:
+
+    all_census_data <- get_census_data(us_fips_list = us_fips_list)
+
+    ##########################################################################
+    # Get Census data by block group in relevant states
+    # Construct: for=block group:*&in=state:01&in=county:*&in=tract:*
+    ###########################################################################
+
+    #output GOES HERE!!!!
+
+### Step 4: The function will retrieve Census data for all specified states and combine it into a single dataframe, which you can use for further analysis.
+
+    demographics_bg <- acs_block_group %>%
+      rename(
+        total_females = B01001_026E,
+        female_21_yo = B01001_033E,
+        female_22_to_24_years = B01001_034E,
+        female_25_to_29_years = B01001_035E,
+        female_30_to_34_years = B01001_036E,
+        female_35_to_39_years = B01001_037E,
+        female_40_to_44_years = B01001_038E,
+        female_45_to_49_years = B01001_039E,
+        female_50_to_54_years = B01001_040E,
+        female_55_to_59_years = B01001_041E,
+        female_60_to_61_years = B01001_042E,
+        female_62_to_64_years = B01001_043E,
+        female_65_to_66_years = B01001_044E,
+        female_67_to_69_years = B01001_045E,
+        female_70_to_74_years = B01001_046E,
+        female_75_to_79_years = B01001_047E,
+        female_80_to_84_years = B01001_048E,
+        female_85_years_and_older = B01001_049E
+      ) %>%
+      mutate(
+        population = female_21_yo + female_22_to_24_years + female_25_to_29_years +
+          female_30_to_34_years + female_35_to_39_years + female_40_to_44_years +
+          female_45_to_49_years +
+          female_50_to_54_years +
+          female_55_to_59_years +
+          female_60_to_61_years +
+          female_62_to_64_years +
+          female_65_to_66_years +
+          female_67_to_69_years +
+          female_70_to_74_years +
+          female_75_to_79_years +
+          female_80_to_84_years +
+          female_85_years_and_older
+      ) %>% #total of reproductive age women
+      arrange(statefp, countyfp, tractce, block_group) %>%
+      select(
+        geoid,
+        statefp,
+        countyfp,
+        tractce,
+        block_group,
+        vintage,
+        name,
+        population,
+        everything()
+      ) %>%
+      select(-starts_with("B"), -contains("universe"))
+
+    colnames(demographics_bg)
+
+    demographics_bg <- demographics_bg %>% arrange(geoid)
+    readr::write.csv(demographics_bg, "data/acs-block-group-demographics.csv", na = "", row.names = F)
+    readr::write_rds(demographics_bg, "data/acs-block-group-demographics.rds")
+
+### Step 5: Join the Data to the Block Groups
+
+The code starts by loading a block group shapefile using the
+[`sf::st_read()`](https://r-spatial.github.io/sf/reference/st_read.html)
+function. The shapefile path should be replaced with the actual file
+path. A left join is performed between the “demographics_bg” dataset and
+the “bg_shape” dataset using
+[`dplyr::left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html).
+The join is based on matching the “`geoid`” column from
+“`demographics_bg`” and the “`GEOID`” column from “`bg_shape`”. Always
+join on the GEOID rather than the human-readable name to avoid
+mismatches across vintages.
+
+    # Load the block group shapefile using sf::st_read() function
+    # Replace "/data/shp/block_group/" with the actual file path to the shapefile
+    bg_shape <- sf::st_read(/data/shp/block_group/") %>%
+
+      # Select only the GEOID and geometry columns from the shapefile
+      dplyr::select(GEOID, geometry)
+
+    # Write the block group shapefile with selected columns to a CSV file
+    # This will create a CSV file with GEOID and geometry information
+    bg_shape %>%
+      readr::write_csv("bg_shape_with_geometry.csv")
+
+
+    # Ensure the GEOID columns are character for the join
+    demographics_bg$geoid <- as.character(demographics_bg$geoid)
+
+
+    # Perform a left join between the demographics dataset and the block group shapefile
+    # Join the datasets using the "fips_block_group" column from demographics_bg
+    # and the "GEOID" column from bg_shape
+
+    geometry <- dplyr::left_join(x = demographics_bg, 
+              y = bg_shape, 
+              by = c("fips_block_group" = "GEOID"))
+
+    # Write the resulting dataset with geometry information to a CSV file
+    # This will create a CSV file containing demographic data and geometry information
+    readr::write_csv(geometry, "block_groups_with_geometry.csv")
+
+### Step 6: Get Data regarding Race and Ethnicity
+
+## Usage Tips
+
+- Ensure that you have a valid Census API key to access the data.
+  Replace `"your_census_api_key_here"` with your actual API key in the
+  function call.
+
+- We included a one second pause in the function loop to be mindful of
+  rate limiting and API usage policies when making multiple requests to
+  the Census Bureau’s API.
+
+## Conclusion
+
+The `get_census_data` function simplifies the process of obtaining
+Census data for all states’ block groups.
+
+## Features and bugs
+
+If you have ideas for other features that would make name handling
+easier, or find a bug, the best approach is to either report it or add
+it!

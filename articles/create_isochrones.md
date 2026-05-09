@@ -1,0 +1,129 @@
+# Create Drive-Time Isochrones
+
+## Overview
+
+`create_isochrones_for_dataframe()` builds drive-time polygons from
+geocoded practice locations using the HERE API. The function is designed
+for batch processing: it reads a file of point locations, validates the
+coordinates, requests isochrones for each row, and periodically writes
+checkpoint files to disk while it runs.
+
+### Before you start
+
+You will need:
+
+- A HERE API key.
+- An input file with `lat` and `long` columns in decimal degrees.
+- Coordinates in WGS84 longitude/latitude space.
+
+Store the key in `HERE_API_KEY` or pass it directly.
+
+``` r
+
+Sys.setenv(HERE_API_KEY = "your-here-key")
+```
+
+### Input requirements
+
+The current exported function expects a file path via `input_file`. The
+file is read with
+[`easyr::read.any()`](https://rdrr.io/pkg/easyr/man/read.any.html), so
+CSV, Excel, and several other tabular formats are supported. The
+important requirement is that the data include:
+
+- `lat`
+- `long`
+
+Rows outside valid WGS84 bounds are rejected before any API request is
+made.
+
+### Minimal workflow
+
+The typical pattern is:
+
+1.  Geocode practice addresses.
+2.  Rename the coordinate columns to `lat` and `long`.
+3.  Write the result to a file.
+4.  Pass that file into `create_isochrones_for_dataframe()`.
+
+``` r
+
+iso_input <- geocoded |>
+  dplyr::rename(
+    lat = latitude,
+    long = longitude
+  )
+
+input_csv <- tempfile(fileext = ".csv")
+readr::write_csv(iso_input, input_csv)
+
+isochrones <- create_isochrones_for_dataframe(
+  input_file = input_csv,
+  breaks = c(30 * 60, 60 * 60, 120 * 60, 180 * 60),
+  api_key = Sys.getenv("HERE_API_KEY"),
+  output_dir = tempfile(),
+  save_interval = 240
+)
+```
+
+### Understanding the arguments
+
+- `breaks`: travel-time cut points in seconds.
+- `api_key`: HERE API key. Defaults to `HERE_API_KEY`.
+- `output_dir`: directory for intermediate checkpoint files.
+- `save_interval`: how often checkpoint files should be refreshed during
+  long runs.
+
+For example, `c(1800, 3600)` means 30-minute and 60-minute drive-time
+isochrones.
+
+### What gets returned
+
+The function returns a combined `sf` object containing every generated
+isochrone. It also keeps the non-geometry attributes from the source row
+so that the polygons remain traceable back to the originating practice
+site.
+
+Useful added columns include:
+
+- `point_index`
+- `travel_time_minutes`
+- `name`
+- `column_label`
+
+``` r
+
+names(isochrones)
+
+isochrones |>
+  dplyr::count(travel_time_minutes)
+```
+
+### Checkpoint files
+
+Long runs can take time, so the function writes intermediate results to
+`output_dir` as both:
+
+- `.rds`
+- `.gpkg`
+
+That design is intentional. If a long run is interrupted, you still have
+recently saved spatial output on disk rather than losing the entire
+batch.
+
+### Practical guidance
+
+- Use street-level geocoding first; do not build isochrones from
+  ZIP-code centroids when practice-level access matters.
+- Start with a small subset of rows to confirm your pipeline and API
+  key.
+- Keep `output_dir` for auditing and recovery on long production runs.
+- Treat `breaks` as a design decision tied to your study question.
+  Common cutoffs are 30, 60, 120, and 180 minutes.
+
+## Next step
+
+After generating isochrones, a common next stage is
+`calculate_intersection_overlap_and_save()` to overlay Census block
+groups and summarize the reachable population inside each travel-time
+band.
