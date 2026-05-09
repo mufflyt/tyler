@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 ```
 
 # Overview
-The `tyler::taxonomy` data and `tyler::search_by_taxonomy` function in the R package offers a convenient and efficient way to query the NPI Database for healthcare providers based on their taxonomy descriptions. This vignette provides a comprehensive guide on how to effectively utilize this function, explores its various capabilities, and offers illustrative use cases.
+The `mysterycall::taxonomy` data and `mysterycall::search_by_taxonomy` function in the R package offers a convenient and efficient way to query the NPI Database for healthcare providers based on their taxonomy descriptions. This vignette provides a comprehensive guide on how to effectively utilize this function, explores its various capabilities, and offers illustrative use cases.
 
 ## Installation
 
@@ -45,7 +45,7 @@ if (eval_vignettes) {
 ## Understanding Taxonomy Descriptions
 Taxonomy descriptions, derived from the National Physician Taxonomy Codes and the NPPES (National Plan and Provider Enumeration System) database, are fundamental components of the United States healthcare system. They play a pivotal role in the identification and categorization of healthcare providers for various purposes, including billing, insurance, and regulatory compliance.
 
-In particular, the `tyler::taxonomy` data frame contains NUCC taxonomy codes utilized in NPPES data files. Each Taxonomy Code comprises a unique ten-character identifier that aids in the identification of healthcare provider types and their areas of expertise. Notably, the OBGYN taxonomy codes are sourced from Version 23.1 dated July 1, 2023.
+In particular, the `mysterycall::taxonomy` data frame contains NUCC taxonomy codes utilized in NPPES data files. Each Taxonomy Code comprises a unique ten-character identifier that aids in the identification of healthcare provider types and their areas of expertise. Notably, the OBGYN taxonomy codes are sourced from Version 23.1 dated July 1, 2023.
 
 Taxonomy codes can be obtained from the National Uniform Claim Committee (NUCC) website here. You can employ these codes to pinpoint specific taxonomy descriptions for your search. For instance, if you are interested in finding taxonomy codes that include the string `"GYN"` you can use this code to facilitate your search in the search_by_taxonomy function.
 
@@ -62,7 +62,7 @@ if (eval_vignettes) {
 ```
 
 ```{r}
-obgyn_taxonomy <- tyler::taxonomy %>% 
+obgyn_taxonomy <- mysterycall::taxonomy %>% 
   dplyr::filter(str_detect(`Classification`, fixed("GYN", ignore_case = TRUE))) %>% 
   dplyr::select(Code, Specialization)
 ```

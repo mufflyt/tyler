@@ -116,7 +116,7 @@ The resulting data is combined into a single dataframe for analysis.
 ## Step 1
 ### Installation
 
-Before using the `tyler::get_census_data` function, you need to install and load the required packages. You can do this by running the following code:
+Before using the `mysterycall::get_census_data` function, you need to install and load the required packages. You can do this by running the following code:
 
 ```{r, eval = FALSE}
 # Install and load the necessary packages
