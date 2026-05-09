@@ -357,9 +357,16 @@ mysterycall_clean_phase1 <- function(phase1_data,
     phase1_data <- dplyr::arrange(phase1_data, .data$names)
 
     announce("Adding insurance information...")
+    # Assign insurance via processing_flag_is_duplicate rather than positional
+    # alternation: original rows → Blue Cross/Blue Shield, duplicate rows →
+    # Medicaid. This is invariant to sort order and row additions.
     phase1_data <- dplyr::mutate(
       phase1_data,
-      insurance = rep(c("Blue Cross/Blue Shield", "Medicaid"), length.out = nrow(phase1_data))
+      insurance = dplyr::if_else(
+        .data$processing_flag_is_duplicate,
+        "Medicaid",
+        "Blue Cross/Blue Shield"
+      )
     )
 
     announce("Adding a numbered 'id' column...")

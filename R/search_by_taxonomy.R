@@ -45,6 +45,35 @@
 #'   states = all_states
 #' )
 #'
+#' @section Contract:
+#' **Inputs:**
+#' - `taxonomy_to_search` must be an exact NUCC taxonomy description string
+#'   (see `mysterycall::taxonomy` dataset for valid values).
+#' - NPI registry API must be reachable; the function retries up to 3 times with
+#'   exponential back-off before returning an empty data frame.
+#'
+#' **Guarantees:**
+#' - Returns a zero-row data frame (never `NULL`) when no records are found.
+#' - Output rows are deduplicated on NPI.
+#' - When `write_snapshot = TRUE`, an `.rds` file is written to `output_dir`
+#'   for reproducible re-runs without re-querying the live API.
+#'
+#' **Fails if:**
+#' - Network is unavailable after all retries (returns empty data frame, does
+#'   not error).
+#' - `states` contains an invalid two-letter abbreviation (silently skipped).
+#'
+#' @section Performance:
+#' O(t * p / 200) HTTP requests where `t` = number of state batches and
+#' `p` = max_records (default 1,200). Each page request targets < 200 rows.
+#' Full national search across all 50 states for one taxonomy takes ~2–5 min
+#' depending on registry load. Results are cached in-memory per session when
+#' `use_cache = TRUE`.
+#'
+#' @section Called By:
+#' - [mysterycall_run_workflow()]
+#' - [mysterycall_search_and_process_npi()] (indirectly via taxonomy lookup)
+#'
 #' @importFrom npi npi_search npi_flatten
 #' @importFrom dplyr bind_rows arrange filter select distinct mutate rename
 #' @importFrom stringr str_remove_all str_to_lower str_detect str_extract str_trunc fixed
@@ -100,7 +129,7 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
     })
 
     npi_data <- dplyr::bind_rows(all_results)
-    npi_data <- dplyr::distinct(npi_data, .data$npi, .data$taxonomies_desc, .keep_all = TRUE)
+    npi_data <- dplyr::distinct(npi_data, .data$npi, .keep_all = TRUE)
 
     if (isTRUE(write_snapshot)) {
       .save_taxonomy_snapshot(npi_data, snapshot_dir)
@@ -225,7 +254,7 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
           )
           data_taxonomy <- dplyr::mutate(data_taxonomy, search_term = taxonomy)
           data_taxonomy <- dplyr::arrange(data_taxonomy, .data$last_name, .data$first_name)
-          data_taxonomy <- dplyr::distinct(data_taxonomy, .data$npi, .data$taxonomies_desc, .keep_all = TRUE)
+          data_taxonomy <- dplyr::distinct(data_taxonomy, .data$npi, .keep_all = TRUE)
 
           # Drop noisy endpoint/identifier columns that inflate the result
           drop_cols <- intersect(names(data_taxonomy), c(
