@@ -24,7 +24,11 @@ reference:
     contents:
       - ACOG_Districts
       - acgme
+      - acog_presidents
+      - census_summaries
+      - cityStateToLatLong
       - fips
+      - physicians
       - taxonomy
 
   - title: "Provider Search"
@@ -34,6 +38,7 @@ reference:
       - mysterycall_validate_npi
       - mysterycall_get_clinician_data
       - mysterycall_genderize
+      - scrape_physicians_data_with_tor
 
   - title: "Geocoding"
     contents:
@@ -53,6 +58,7 @@ reference:
       - mysterycall_calculate_overlap
       - mysterycall_hrr
       - mysterycall_hrr_maps
+      - ensure_hrr_shapefile
 
   - title: "Census and Demographics"
     contents:
@@ -98,9 +104,55 @@ reference:
       - mysterycall_check_data_completeness
       - mysterycall_assess_data_quality
       - mysterycall_preflight_check
+      - mysterycall_check_api_response
+      - mysterycall_check_no_data_loss
+      - mysterycall_check_no_limits
+      - mysterycall_estimate_resources
+      - mysterycall_scan_for_limits
       - mysterycall_not_contacted_states
       - mysterycall_physician_age
       - mysterycall_most_common_gender
+      - preflight-checks
+
+  - title: "Workflow Helpers"
+    contents:
+      - mysterycall_workflow_start
+      - mysterycall_workflow_end
+      - mysterycall_print_dashboard
+
+  - title: "Logging"
+    contents:
+      - logging-utils
+      - mysterycall_log_info
+      - mysterycall_log_error
+      - mysterycall_log_warning
+      - mysterycall_log_success
+      - mysterycall_log_progress
+      - mysterycall_log_step
+      - mysterycall_log_step_complete
+      - mysterycall_log_cache_hit
+      - mysterycall_log_save
+
+  - title: "Progress and Spinners"
+    contents:
+      - progress-bars
+      - mysterycall_progress_tracker
+      - mysterycall_progress_start
+      - mysterycall_progress_finish
+      - mysterycall_progress_fail
+      - mysterycall_progress_update
+      - mysterycall_progress_summary
+      - mysterycall_progress_bar
+      - mysterycall_progress_callback
+      - mysterycall_progress_done
+      - mysterycall_progress_map
+      - mysterycall_multi_step
+      - mysterycall_multi_update
+      - mysterycall_multi_progress
+      - mysterycall_multi_done
+      - mysterycall_multi_complete
+      - mysterycall_spinner_start
+      - mysterycall_spinner_stop
 
   - title: "Utilities"
     contents:
@@ -112,16 +164,16 @@ reference:
       - mysterycall_standard_palette
       - mysterycall_quality_tier
       - mysterycall_download_file
-      - mysterycall_progress_tracker
-      - mysterycall_progress_start
-      - mysterycall_progress_finish
-      - mysterycall_progress_fail
-      - mysterycall_progress_update
-      - mysterycall_progress_summary
+      - mysterycall_cache_dir
+      - mysterycall_format_duration
+      - utility_library
 
   - title: "Deprecated"
     contents:
       - mysterycall-deprecated
+      - mysterycall_search_npi
+      - mysterycall_test_isochrones
+      - mysterycall_process_isochrones
 
 articles:
   - title: "Vignettes"
@@ -131,6 +183,7 @@ articles:
       - geocode
       - get_census_data
       - imotive-news
+      - mapping
       - my-vignette
       - search_and_process_npi
       - aggregating_provider_data
