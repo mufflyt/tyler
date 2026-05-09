@@ -138,21 +138,21 @@ search_by_taxonomy <- function(taxonomy_to_search) {
 ## Example Usage
 In this illustrative example, we employ the `search_by_taxonomy` function to identify healthcare providers specializing in "Hospice and Palliative Medicine" based on taxonomy descriptions. The resulting output is a dataframe containing information about physicians with either an MD or DO qualification, practicing in the United States as individuals, and self-identifying with a taxonomy of "Hospice and Palliative Medicine." 
 
-```{r, include=TRUE, message=TRUE, warning=TRUE, echo=TRUE}
+```{r, include=TRUE, message=TRUE, warning=TRUE, echo=TRUE, eval=FALSE}
 # Search for providers based on taxonomy descriptions
 taxonomy_descriptions <- c("Hospice and Palliative Medicine")
 
 data <- search_by_taxonomy(taxonomy_to_search = taxonomy_descriptions)
 ```
 
-```{r, include=TRUE, message=FALSE, warning=FALSE}
+```{r, include=TRUE, message=FALSE, warning=FALSE, eval=FALSE}
 # Note: basic_credential was removed in the select() statement above
 # So we'll count by basic_gender and state instead
 dplyr::count(data, basic_gender, addresses_state)
 ```
 
 You can easily summarize the resulting data frame in a user-friendly format.
-```{r, include=TRUE}
+```{r, include=TRUE, eval=FALSE}
 # Summarize the resulting data frame by state
 data %>%
   dplyr::count(addresses_state)

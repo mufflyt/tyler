@@ -204,4 +204,4 @@ map_create_block_group_overlap(
 ```
 
 For details on generating `bg_data` and `isochrones_data`, see the
-`vignette("create_isochrones", package = "tyler")` vignette.
+`vignette("create_isochrones", package = "mysterycall")` vignette.
