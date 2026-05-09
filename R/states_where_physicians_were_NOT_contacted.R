@@ -133,12 +133,18 @@ mysterycall_not_contacted_states <- function(filtered_data, all_states = NULL) {
     ""
   }
 
+  exclusion_sentence <- if (length(excluded_states) == 0) {
+    "No states were excluded."
+  } else {
+    paste0("The excluded states include ", excluded_states_series, ".")
+  }
+
   output_string <- paste0(
     "A total of ", unique_physicians,
     " unique physicians were identified in the dataset and were successfully contacted",
     " (i.e., with a recorded wait time for an appointment) in ",
     num_included_states, " state(s)", dc_phrase,
-    ". The excluded states include ", excluded_states_series, "."
+    ". ", exclusion_sentence
   )
 
   # Return a data frame (one row per state) so workflow_summary can record

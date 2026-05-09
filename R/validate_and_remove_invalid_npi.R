@@ -75,7 +75,7 @@ mysterycall_validate_npi <- function(input_data) {
     return(npi_df[, unique(c("npi", "npi_is_valid", names(npi_df))), drop = FALSE])
   }
 
-  valid_format <- nchar(npi_df$npi) == 10 & !grepl("\\D", npi_df$npi)
+  valid_format <- nchar(npi_df$npi) == 10
   npi_df$npi_is_valid <- FALSE
 
   if (any(valid_format)) {

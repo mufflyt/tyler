@@ -178,7 +178,7 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
 
   max_attempts <- 3L
   base_delay <- 1
-  npi_data <- tibble::tibble()
+  result_list <- vector("list", length(taxonomy_to_search))
   total_taxonomies <- length(taxonomy_to_search)
 
   for (index in seq_along(taxonomy_to_search)) {
@@ -313,7 +313,7 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
       }
 
       if (!is.null(result) && nrow(result)) {
-        npi_data <- dplyr::bind_rows(npi_data, result)
+        result_list[[index]] <- result
         message(sprintf("Retrieved %d record(s) for taxonomy '%s'.", nrow(result), taxonomy))
       } else {
         message(sprintf("No records returned for taxonomy '%s'.", taxonomy))
@@ -322,7 +322,7 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
     }
   }
 
-  npi_data
+  dplyr::bind_rows(result_list)
 }
 
 .save_taxonomy_snapshot <- function(npi_data, snapshot_dir) {

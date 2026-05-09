@@ -63,8 +63,8 @@ mysterycall_genderize <- function(data_or_path, output_dir = NULL, output_format
   resolved_genders <- genderize_fetch(first_names)
 
   x <- resolved_genders %>%
-    dplyr::distinct(.data$first_name, .keep_all = TRUE) %>%
     dplyr::mutate(join_first_name = tolower(.data$first_name)) %>%
+    dplyr::distinct(.data$join_first_name, .keep_all = TRUE) %>%
     dplyr::select(-"first_name")
 
   # Bug #1 fix: Drop overlapping columns before join to prevent .x/.y suffixes
@@ -171,7 +171,7 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
 
       retry_count <- retry_count + 1
       if (retry_count < max_retries) {
-        wait_time <- retry_count * 2  # Exponential backoff
+        wait_time <- 2^retry_count
         message(sprintf("Request failed, retrying in %d seconds (attempt %d/%d)...", wait_time, retry_count, max_retries))
         Sys.sleep(wait_time)
       }

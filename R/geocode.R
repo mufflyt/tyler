@@ -138,14 +138,6 @@ mysterycall_geocode <- function(file_path, google_maps_api_key,
         checkmate::assert_true(length(coords$lat) == nrow(coords), .var.name = "lat length")
         checkmate::assert_true(length(coords$lon) == nrow(coords), .var.name = "lon length")
 
-        if (nrow(coords) != total_unique) {
-          warning(sprintf(
-            "Geocoding returned %d rows but expected %d. Some addresses may be missing results.",
-            nrow(coords),
-            total_unique
-          ))
-        }
-
         break
       }
     }
