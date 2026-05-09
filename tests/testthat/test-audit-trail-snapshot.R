@@ -358,3 +358,111 @@ test_that("Snapshot: schema_version value is locked", {
 
   expect_snapshot_value(audit$schema_version, style = "json2")
 })
+
+# ---------------------------------------------------------------------------
+# 8. Provenance replay verification
+# ---------------------------------------------------------------------------
+
+test_that("Replay: mysterycall_verify_artifact() passes on a freshly written audit file", {
+  skip_on_cran()
+  skip_if_not_installed("jsonlite")
+
+  tmp <- tempfile()
+  dir.create(tmp)
+  suppressMessages(
+    mysterycall_clean_phase1(
+      phase1_data      = canonical_input,
+      output_directory = tmp,
+      verbose          = FALSE,
+      notify           = FALSE,
+      duplicate_rows   = FALSE
+    )
+  )
+  audit_files <- list.files(tmp, pattern = "audit_trail.*\\.json", full.names = TRUE)
+  if (!length(audit_files)) skip("No audit file written")
+
+  expect_true(mysterycall_verify_artifact(audit_files[1]),
+              label = "verify_artifact must return TRUE for an unmodified audit file")
+})
+
+test_that("Replay: verify_artifact detects manual tampering with a required field", {
+  skip_on_cran()
+  skip_if_not_installed("jsonlite")
+
+  tmp <- tempfile()
+  dir.create(tmp)
+  suppressMessages(
+    mysterycall_clean_phase1(
+      phase1_data      = canonical_input,
+      output_directory = tmp,
+      verbose          = FALSE,
+      notify           = FALSE,
+      duplicate_rows   = FALSE
+    )
+  )
+  audit_files <- list.files(tmp, pattern = "audit_trail.*\\.json", full.names = TRUE)
+  if (!length(audit_files)) skip("No audit file written")
+
+  # Tamper: change a stable field and rewrite the file
+  audit <- jsonlite::fromJSON(audit_files[1], simplifyVector = FALSE)
+  audit$input_rows <- audit$input_rows + 99L        # modify a stable field
+  jsonlite::write_json(audit, audit_files[1], pretty = TRUE, auto_unbox = TRUE)
+
+  expect_error(
+    mysterycall_verify_artifact(audit_files[1]),
+    regexp = "Artifact verification FAILED",
+    label  = "verify_artifact must throw on a tampered audit file"
+  )
+})
+
+test_that("Replay: verify_artifact errors on pre-1.2.0 audit file (no artifact_id)", {
+  skip_on_cran()
+  skip_if_not_installed("jsonlite")
+
+  # Write a minimal audit JSON that has no artifact_id (simulating a legacy file)
+  tmp_file <- tempfile(fileext = ".json")
+  jsonlite::write_json(
+    list(schema_version = "1.0.0", function_name = "mysterycall_clean_phase1",
+         input_rows = 4L, output_rows = 4L),
+    tmp_file, auto_unbox = TRUE
+  )
+
+  expect_error(
+    mysterycall_verify_artifact(tmp_file),
+    regexp = "schema version < 1.2.0",
+    label  = "verify_artifact must error informatively on pre-1.2.0 files"
+  )
+})
+
+test_that("Replay: volatile-field changes do not invalidate artifact_id", {
+  skip_on_cran()
+  skip_if_not_installed("jsonlite")
+
+  tmp <- tempfile()
+  dir.create(tmp)
+  suppressMessages(
+    mysterycall_clean_phase1(
+      phase1_data      = canonical_input,
+      output_directory = tmp,
+      verbose          = FALSE,
+      notify           = FALSE,
+      duplicate_rows   = FALSE
+    )
+  )
+  audit_files <- list.files(tmp, pattern = "audit_trail.*\\.json", full.names = TRUE)
+  if (!length(audit_files)) skip("No audit file written")
+
+  # Simulate volatile drift: update timestamps and platform as if re-run on
+  # different hardware — artifact_id must still verify correctly
+  audit <- jsonlite::fromJSON(audit_files[1], simplifyVector = FALSE)
+  audit$start_time       <- "1970-01-01T00:00:00"
+  audit$end_time         <- "1970-01-01T00:00:01"
+  audit$duration_seconds <- 1.0
+  audit$r_version        <- "R version 0.0.0 (simulated)"
+  audit$platform         <- "simulated-platform"
+  jsonlite::write_json(audit, audit_files[1], pretty = TRUE, auto_unbox = TRUE)
+
+  # Must still pass — volatile fields are excluded from artifact_id computation
+  expect_true(mysterycall_verify_artifact(audit_files[1]),
+              label = "verify_artifact must pass even when volatile fields are altered")
+})

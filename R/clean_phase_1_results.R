@@ -454,12 +454,16 @@ mysterycall_clean_phase1 <- function(phase1_data,
   )
   audit_trail$quality_metrics <- quality_metrics
 
-  # Content-addressable artifact identity: hash of stable (non-volatile) payload.
-  # Volatile fields excluded: same artifact always produces the same artifact_id.
-  volatile_fields <- c("start_time", "end_time", "duration_seconds",
-                       "r_version", "platform", "package_version", "parameters")
-  stable_payload  <- audit_trail[setdiff(names(audit_trail), volatile_fields)]
-  audit_trail$artifact_id <- digest::digest(stable_payload, algo = "sha256", serialize = TRUE)
+  # Content-addressable artifact identity.
+  # Hash the JSON string (not the R object) so that integer/double coercion
+  # during JSON round-trip does not change the digest. Keys are sorted before
+  # serialisation to guarantee order-independent stability.
+  # .audit_volatile_fields is defined in R/audit-verify.R and shared with
+  # mysterycall_verify_artifact() to guarantee identical canonicalization.
+  stable_keys     <- sort(setdiff(names(audit_trail), .audit_volatile_fields))
+  stable_json     <- jsonlite::toJSON(audit_trail[stable_keys], auto_unbox = TRUE, digits = NA)
+  audit_trail$artifact_id <- digest::digest(as.character(stable_json),
+                                            algo = "sha256", serialize = FALSE)
 
   announce(sprintf(
     "Processing complete: %d -> %d rows (%.1f%%) in %.2f seconds",
