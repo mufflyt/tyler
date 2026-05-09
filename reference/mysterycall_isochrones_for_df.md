@@ -30,7 +30,7 @@ mysterycall_isochrones_for_df(
 
 - api_key:
 
-  HERE API key for authenticating isochrone requests. Defaults to the
+  routing API key for authenticating isochrone requests. Defaults to the
   `HERE_API_KEY` environment variable.
 
 - output_dir:

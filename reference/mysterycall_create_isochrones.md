@@ -1,7 +1,7 @@
 # Memoized function to try a location with isoline calculations
 
-This function calculates isolines for a given location using the hereR
-package.
+This function calculates isolines for a given location using a
+drive-time routing package.
 
 ## Usage
 
@@ -32,7 +32,7 @@ mysterycall_create_isochrones(
 
 - api_key:
 
-  HERE API key. Defaults to the `HERE_API_KEY` environment variable.
+  routing API key. Defaults to the `HERE_API_KEY` environment variable.
 
 ## Value
 
@@ -57,7 +57,7 @@ Other mapping:
 
 ``` r
 if (FALSE) { # \dontrun{
-# Set your HERE API key in your Renviron file using the following steps:
+# Set your routing API key in your Renviron file using the following steps:
 # 1. Add key to .Renviron
 # 2. Reload .Renviron
 

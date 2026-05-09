@@ -36,7 +36,7 @@ mysterycall_preflight_check(
 
 - here_api_key:
 
-  HERE API key (optional if not creating isochrones)
+  Routing API key (optional if not creating isochrones)
 
 - check_apis:
 

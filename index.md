@@ -35,8 +35,8 @@ deduplicating so each unique address is only looked up once.
 
 #### Drive-time isochrones
 
-Generate drive-time polygons (30 / 60 / 120 / 180 min) using the HERE
-API, with built-in memoization for large batches.
+Generate drive-time polygons (30 / 60 / 120 / 180 min) using the
+drive-time routing service, with built-in memoization for large batches.
 
 4
 
@@ -99,7 +99,7 @@ Learn more
 
 | Vignette | Topic |
 |----|----|
-| [Create Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md) | Drive-time polygons with the HERE API |
+| [Create Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md) | Drive-time polygons from geocoded addresses |
 | [Geocoding](https://mufflyt.github.io/mysterycall/articles/geocode.md) | Address → lat/lon with Google Maps |
 | [Get Census Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.md) | ACS block-group demographics |
 | [Search & Process NPI](https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.md) | Name-based provider lookup |

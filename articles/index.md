@@ -31,8 +31,7 @@
 - [Create Drive-Time
   Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md):
 
-  Generate HERE drive-time isochrones from geocoded practice
-  coordinates.
+  Generate drive-time isochrones from geocoded practice coordinates.
 
 - [Visualizing Provider Geographic
   Data](https://mufflyt.github.io/mysterycall/articles/mapping.md):

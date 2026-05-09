@@ -3,16 +3,16 @@
 ## Overview
 
 `create_isochrones_for_dataframe()` builds drive-time polygons from
-geocoded practice locations using the HERE API. The function is designed
-for batch processing: it reads a file of point locations, validates the
-coordinates, requests isochrones for each row, and periodically writes
-checkpoint files to disk while it runs.
+geocoded practice locations using a drive-time routing service. The
+function is designed for batch processing: it reads a file of point
+locations, validates the coordinates, requests isochrones for each row,
+and periodically writes checkpoint files to disk while it runs.
 
 ### Before you start
 
 You will need:
 
-- A HERE API key.
+- A routing API key.
 - An input file with `lat` and `long` columns in decimal degrees.
 - Coordinates in WGS84 longitude/latitude space.
 
@@ -69,7 +69,7 @@ isochrones <- create_isochrones_for_dataframe(
 ### Understanding the arguments
 
 - `breaks`: travel-time cut points in seconds.
-- `api_key`: HERE API key. Defaults to `HERE_API_KEY`.
+- `api_key`: routing API key. Defaults to `HERE_API_KEY`.
 - `output_dir`: directory for intermediate checkpoint files.
 - `save_interval`: how often checkpoint files should be refreshed during
   long runs.

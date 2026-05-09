@@ -1,6 +1,6 @@
-# Validate HERE API key
+# Validate routing API key
 
-Validate HERE API key
+Validate routing API key
 
 ## Usage
 
@@ -12,7 +12,7 @@ mysterycall_validate_here_api(api_key)
 
 - api_key:
 
-  HERE API key
+  routing API key
 
 ## Value
 
