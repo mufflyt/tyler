@@ -3,6 +3,7 @@
   "required": {
     "schema_version":      "string — semantic version (MAJOR.MINOR.PATCH) of the audit JSON schema; bump MINOR on new required fields, MAJOR on breaking renames",
     "cohort_hash":         "string — SHA-256 hex digest of the input phase1_data object; same input always produces the same hash, enabling cache invalidation and drift detection",
+    "artifact_id":         "string — SHA-256 hex digest of the stable (non-volatile) audit payload; content-addressable output identity; same run always produces the same artifact_id; enables lineage chain immutability and cache corruption detection",
     "function_name":       "string — always 'mysterycall_clean_phase1'",
     "input_rows":          "integer — number of rows in the input data frame",
     "input_cols":          "integer — number of columns in the input data frame",
@@ -50,10 +51,11 @@
       "Change a conditional field to required without a compatible default",
       "Change the hash algorithm used for cohort_hash"
     ],
-    "current_version": "1.1.0",
+    "current_version": "1.2.0",
     "history": [
       { "version": "1.0.0", "change": "Initial versioned schema with required, volatile, and conditional sections" },
-      { "version": "1.1.0", "change": "Added schema_version and cohort_hash as required fields (MINOR: both have safe defaults for callers reading older artifacts)" }
+      { "version": "1.1.0", "change": "Added schema_version and cohort_hash as required fields (MINOR: both have safe defaults for callers reading older artifacts)" },
+      { "version": "1.2.0", "change": "Added artifact_id as required field: SHA-256 of stable audit payload; enables content-addressable provenance and lineage chain immutability (MINOR: additive)" }
     ]
   }
 }

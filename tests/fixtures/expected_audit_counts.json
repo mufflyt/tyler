@@ -1,0 +1,14 @@
+{
+  "_comment": "Expected audit trail values when mysterycall_clean_phase1() is run on the canonical 4-row test fixture defined in test-audit-trail-snapshot.R. Any change to these numbers means the cleaning logic changed for the canonical input. Input: 4 rows, 6 columns. Row 3 has empty name + NA npi. Row 4 is single-word name ('Carol') which also has no extractable last name. duplicate_rows = FALSE.",
+  "schema_version":       "1.2.0",
+  "function_name":        "mysterycall_clean_phase1",
+  "input_rows":           4,
+  "input_cols":           6,
+  "input_colnames":       ["names", "practice_name", "phone_number", "state_name", "npi", "for_redcap"],
+  "output_rows":          4,
+  "empty_names_count":    1,
+  "no_last_name_count":   2,
+  "rows_retained_pct":    100,
+  "rows_duplicated":      false,
+  "original_npi_preserved": true
+}

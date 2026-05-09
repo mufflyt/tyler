@@ -167,7 +167,7 @@ mysterycall_clean_phase1 <- function(phase1_data,
   # === START: AUDIT TRAIL AND PROVENANCE ===
   # Capture processing start time and metadata
   processing_start_time <- Sys.time()
-  schema_version <- "1.1.0"
+  schema_version <- "1.2.0"
   cohort_hash <- digest::digest(object = phase1_data, algo = "sha256", serialize = TRUE)
   valid_parent_hash <- is.character(parent_cohort_hash) &&
     length(parent_cohort_hash) == 1L &&
@@ -453,6 +453,13 @@ mysterycall_clean_phase1 <- function(phase1_data,
     has_processing_flags = any(grepl("^processing_flag_", names(phase1_data)))
   )
   audit_trail$quality_metrics <- quality_metrics
+
+  # Content-addressable artifact identity: hash of stable (non-volatile) payload.
+  # Volatile fields excluded: same artifact always produces the same artifact_id.
+  volatile_fields <- c("start_time", "end_time", "duration_seconds",
+                       "r_version", "platform", "package_version", "parameters")
+  stable_payload  <- audit_trail[setdiff(names(audit_trail), volatile_fields)]
+  audit_trail$artifact_id <- digest::digest(stable_payload, algo = "sha256", serialize = TRUE)
 
   announce(sprintf(
     "Processing complete: %d -> %d rows (%.1f%%) in %.2f seconds",

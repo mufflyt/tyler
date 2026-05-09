@@ -220,7 +220,69 @@ test_that("Audit cohort_hash is deterministic for identical input", {
 })
 
 # ---------------------------------------------------------------------------
-# 6. parent_cohort_hash lineage stub
+# 6. artifact_id — content-addressable output identity
+# ---------------------------------------------------------------------------
+
+test_that("Artifact: artifact_id is present and SHA-256 shaped", {
+  skip_on_cran()
+  audit <- run_canonical_audit()
+
+  expect_true("artifact_id" %in% names(audit),
+              label = paste("artifact_id missing. Available fields:",
+                            paste(names(audit), collapse = ", ")))
+  expect_type(audit$artifact_id, "character")
+  expect_match(audit$artifact_id, "^[a-f0-9]{64}$",
+               label = "artifact_id must be a 64-character lowercase hex SHA-256 digest")
+})
+
+test_that("Artifact: artifact_id is deterministic for identical input", {
+  skip_on_cran()
+  audit1 <- run_canonical_audit()
+  audit2 <- run_canonical_audit()
+
+  expect_identical(audit1$artifact_id, audit2$artifact_id,
+                   label = "Same input must always produce the same artifact_id")
+})
+
+test_that("Artifact: artifact_id differs from cohort_hash (distinct identity layers)", {
+  skip_on_cran()
+  audit <- run_canonical_audit()
+
+  expect_false(identical(audit$artifact_id, audit$cohort_hash),
+               label = "artifact_id (output identity) must differ from cohort_hash (input identity)")
+})
+
+test_that("Artifact: artifact_id changes when processing output changes", {
+  skip_on_cran()
+  skip_if_not_installed("jsonlite")
+
+  input_a <- canonical_input
+  input_b <- canonical_input
+  input_b$names[1] <- "Different Name Entirely"
+
+  tmp_a <- tempfile(); tmp_b <- tempfile()
+  dir.create(tmp_a); dir.create(tmp_b)
+
+  suppressMessages({
+    mysterycall_clean_phase1(input_a, tmp_a, verbose = FALSE, notify = FALSE, duplicate_rows = FALSE)
+    mysterycall_clean_phase1(input_b, tmp_b, verbose = FALSE, notify = FALSE, duplicate_rows = FALSE)
+  })
+
+  files_a <- list.files(tmp_a, pattern = "audit_trail.*\\.json", full.names = TRUE)
+  files_b <- list.files(tmp_b, pattern = "audit_trail.*\\.json", full.names = TRUE)
+  if (!length(files_a) || !length(files_b)) skip("Audit files not written")
+
+  audit_a <- jsonlite::fromJSON(files_a[1], simplifyVector = FALSE)
+  audit_b <- jsonlite::fromJSON(files_b[1], simplifyVector = FALSE)
+
+  expect_false(identical(audit_a$artifact_id, audit_b$artifact_id),
+               label = "Different inputs must produce different artifact_ids")
+  expect_false(identical(audit_a$cohort_hash, audit_b$cohort_hash),
+               label = "Different inputs must produce different cohort_hashes")
+})
+
+# ---------------------------------------------------------------------------
+# 7. parent_cohort_hash lineage stub
 # ---------------------------------------------------------------------------
 
 test_that("Lineage: parent_cohort_hash is NULL when no upstream hash supplied", {
