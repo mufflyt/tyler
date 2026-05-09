@@ -19,7 +19,7 @@ NULL
 #' @param here_api_key Routing API key (optional if not creating isochrones)
 #' @param check_apis Whether to validate API keys with test calls (default: TRUE)
 #' @param estimate_resources Whether to estimate runtime and memory (default: TRUE)
-#' @param interactive Whether to prompt user for confirmation (default: TRUE)
+#' @param prompt_user Whether to prompt user for confirmation (default: TRUE)
 #' @param required_columns Required column names in input data
 #'
 #' @return Invisible list with check results, or stops with error if checks fail
@@ -47,12 +47,12 @@ mysterycall_preflight_check <- function(input_data,
                                    here_api_key = NULL,
                                    check_apis = TRUE,
                                    estimate_resources = TRUE,
-                                   interactive = interactive(),
+                                   prompt_user = interactive(),
                                    required_columns = c("first", "last")) {
 
   checkmate::assert_flag(check_apis)
   checkmate::assert_flag(estimate_resources)
-  checkmate::assert_flag(interactive)
+  checkmate::assert_flag(prompt_user)
   checkmate::assert_character(required_columns, any.missing = FALSE)
 
   message("")
@@ -187,7 +187,12 @@ mysterycall_preflight_check <- function(input_data,
     warnings <- c(warnings, "No routing API key provided; isochrone generation will fail unless `here_api_key` is supplied.")
   }
 
-  checks$api_keys <- google_ok && here_ok
+  # api_keys is TRUE when every *provided* optional key is valid.
+  # An absent key is not a failure — it only becomes one if the downstream
+  # step that needs it is actually invoked.
+  google_provided <- !is.null(google_maps_api_key) && !is.na(google_maps_api_key) && nzchar(google_maps_api_key)
+  here_provided   <- !is.null(here_api_key)        && !is.na(here_api_key)        && nzchar(here_api_key)
+  checks$api_keys <- (!google_provided || google_ok) && (!here_provided || here_ok)
 
   # ==================== Check 5: Data Quality ====================
   message("")
@@ -315,7 +320,7 @@ mysterycall_preflight_check <- function(input_data,
   }
 
   # ==================== User Confirmation ====================
-  if (interactive && all_passed) {
+  if (prompt_user && all_passed) {
     message(strrep("\u2500", 60))
     message("")
     if (data_check$success) {
@@ -389,13 +394,19 @@ mysterycall_validate_google_api <- function(api_key) {
 #' @keywords internal
 mysterycall_validate_here_api <- function(api_key) {
   tryCatch({
-    # Try a simple isochrone request
-    url <- sprintf(
-      "https://isoline.router.hereapi.com/v8/isolines?transportMode=car&origin=40.7128,-74.0060&range[type]=time&range[values]=300&apiKey=%s",
-      api_key
+    # Use query parameters so the key is never embedded in the URL string and
+    # cannot leak into logs, error messages, or httr verbose output.
+    response <- httr::GET(
+      "https://isoline.router.hereapi.com/v8/isolines",
+      query = list(
+        transportMode    = "car",
+        origin           = "40.7128,-74.0060",
+        "range[type]"   = "time",
+        "range[values]" = "300",
+        apiKey           = api_key
+      ),
+      httr::timeout(10)
     )
-
-    response <- httr::GET(url, httr::timeout(10))
 
     if (httr::status_code(response) == 200) {
       list(valid = TRUE, error = NULL)
@@ -414,12 +425,21 @@ mysterycall_validate_here_api <- function(api_key) {
 
 #' Assess data quality
 #'
+#' Scores a data frame for completeness and validity and returns a list of
+#' issues that may affect downstream workflow steps.
+#'
 #' @param data Data frame to assess.
 #' @param required_columns Character vector of column names that must be present
-#'   and sufficiently complete. Defaults to `c("first", "last")`.
-#' @return List with score (0-1) and issues
+#'   and sufficiently complete. Defaults to \code{c("first", "last")}.
+#'
+#' @return A named list with elements \code{score} (numeric 0–1) and
+#'   \code{issues} (list of issue records with \code{severity} and
+#'   \code{message} fields).
 #' @family utilities
 #' @export
+#' @examples
+#' df <- data.frame(first = c("Jane", NA), last = c("Doe", "Smith"))
+#' mysterycall_assess_data_quality(df)
 mysterycall_assess_data_quality <- function(data, required_columns = c("first", "last")) {
   issues <- list()
   penalties <- 0
@@ -488,11 +508,18 @@ mysterycall_assess_data_quality <- function(data, required_columns = c("first", 
 
 #' Estimate workflow resources
 #'
-#' @param n_rows Integer number of input rows used to project runtime and
-#'   memory requirements.
-#' @return List with runtime and memory estimates
+#' Projects the approximate runtime and memory requirements for a mystery caller
+#' workflow based on the number of input rows.
+#'
+#' @param n_rows Integer number of input rows.
+#'
+#' @return A named list with elements \code{total_time_hours} (estimated wall
+#'   time), \code{peak_memory_gb} (estimated peak RAM in GB), and
+#'   \code{api_calls} (estimated number of external API requests).
 #' @family utilities
 #' @export
+#' @examples
+#' mysterycall_estimate_resources(500)
 mysterycall_estimate_resources <- function(n_rows) {
   # Rough estimates based on typical performance
   # These should be calibrated with real-world data

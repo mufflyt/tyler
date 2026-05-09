@@ -175,11 +175,23 @@ mysterycall_search_and_process_npi <- function(data,
   }
 
   existing_accumulated <- NULL
-  processed_terms <- character(0)
+  processed_resume_keys <- character(0)
   if (isTRUE(resume)) {
     existing_accumulated <- read_existing_accumulation()
-    if (!is.null(existing_accumulated) && "search_term" %in% names(existing_accumulated)) {
-      processed_terms <- unique(existing_accumulated$search_term[!is.na(existing_accumulated$search_term)])
+    if (!is.null(existing_accumulated) &&
+        all(c("search_term", "resume_row_index") %in% names(existing_accumulated))) {
+      processed_resume_keys <- unique(paste(
+        existing_accumulated$resume_row_index,
+        existing_accumulated$search_term,
+        sep = ""
+      ))
+    } else if (!is.null(existing_accumulated) && "search_term" %in% names(existing_accumulated)) {
+      # Legacy accumulation file without resume_row_index: fall back to name-only matching
+      processed_resume_keys <- paste(
+        NA_integer_,
+        unique(existing_accumulated$search_term[!is.na(existing_accumulated$search_term)]),
+        sep = ""
+      )
     }
   }
 
@@ -415,11 +427,14 @@ mysterycall_search_and_process_npi <- function(data,
       }
     }
     search_term <- trimws(paste(first_name, last_name))
-    if (isTRUE(resume) && length(processed_terms) && search_term %in% processed_terms) {
+    # Resume key = row index + name so two rows with the same name at different
+    # positions are treated as distinct lookups (different practices / providers).
+    resume_key <- paste0(i, search_term)
+    if (isTRUE(resume) && length(processed_resume_keys) && resume_key %in% processed_resume_keys) {
       dispatch_progress(
         event = "skipped",
         search_term = search_term,
-        detail = "Already present in accumulation",
+        detail = "Already present in accumulation (row index matched)",
         index = i
       )
       next
@@ -436,6 +451,10 @@ mysterycall_search_and_process_npi <- function(data,
       )
       next
     }
+
+    # Stamp the source row index so resume logic can match by (index, name)
+    # rather than name alone, preventing duplicate-name providers from being skipped.
+    result$resume_row_index <- i
 
     should_save <- is.numeric(save_chunk_size) && !is.na(save_chunk_size) && save_chunk_size > 0 && nrow(result) >= save_chunk_size
     if (should_save) {

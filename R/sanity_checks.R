@@ -32,28 +32,29 @@ mysterycall_check_no_limits <- function(data,
 
   n <- nrow(data)
 
-  # Check for suspiciously round numbers that suggest artificial limits
-  suspicious_counts <- c(5, 10, 25, 50, 100, 500, 1000, 5000, 10000, 50000, 100000)
+  # Check for suspiciously round numbers that suggest artificial limits.
+  # 1000 is intentionally absent — legitimate NPI searches return 1000 rows.
+  # 1200 replaces it: that is the hard NPI API cap and a reliable signal that
+  # the result was truncated rather than complete.
+  suspicious_counts <- c(5, 10, 25, 50, 100, 500, 1200, 5000, 10000, 50000, 100000)
 
   if (n %in% suspicious_counts) {
-    warning(sprintf(
-      paste(
-        "Dataset '%s' has exactly %d rows - SUSPICIOUS!",
-        "This may indicate artificial limiting via:",
-        "  - head(%d)",
-        "  - slice_head(n = %d)",
-        "  - sample_n(%d)",
-        "  - SQL LIMIT %d",
-        "Verify this is the complete dataset, not a sample."
-      ),
-      context, n, n, n, n, n
-    ), call. = FALSE)
+    detail <- if (n == 1200L) {
+      "1200 is the NPI registry API hard cap; results may be truncated. Re-run with state-by-state looping to bypass."
+    } else {
+      sprintf(
+        "May indicate artificial limiting via head(%d), slice_head(n=%d), sample_n(%d), or SQL LIMIT %d. Verify this is the complete dataset.",
+        n, n, n, n
+      )
+    }
+    warning(sprintf("Dataset '%s' has exactly %d rows - SUSPICIOUS! %s", context, n, detail),
+            call. = FALSE)
   }
 
-  # Check if data is an exact power of 10
-  if (n > 0 && n %% 1000 == 0 && n <= 100000) {
+  # Check if data is an exact multiple of 1000 (separate from the 1200 cap check)
+  if (n > 0 && n %% 1000 == 0 && n <= 100000 && !n %in% suspicious_counts) {
     message(sprintf(
-      "NOTE: Dataset '%s' has %d rows (exact multiple of 1000). If this is unexpected, check for max_records or n_max parameters.",
+      "NOTE: Dataset '%s' has %d rows (exact multiple of 1000). If unexpected, check for max_records or n_max parameters.",
       context, n
     ))
   }
@@ -184,19 +185,10 @@ mysterycall_scan_for_limits <- function(path = "R",
     files <- files[!grepl(exclude_pattern, files)]
   }
 
-  # Initialize results
-  issues <- data.frame(
-    file = character(),
-    line = integer(),
-    severity = character(),
-    pattern = character(),
-    code = character(),
-    stringsAsFactors = FALSE
-  )
+  # Collect hits in a list to avoid O(n²) rbind-in-loop growth.
+  issue_list <- list()
 
-  # Scan each file
   for (file in files) {
-    # Skip if file is empty or can't be read
     if (!file.exists(file)) next
 
     tryCatch(
@@ -204,21 +196,19 @@ mysterycall_scan_for_limits <- function(path = "R",
         lines <- readLines(file, warn = FALSE)
 
         for (i in seq_along(lines)) {
-          # Skip comments
           line_trimmed <- trimws(lines[i])
           if (grepl("^#", line_trimmed)) next
 
-          # Check each pattern
           for (p in patterns) {
             if (grepl(p$regex, lines[i], ignore.case = FALSE)) {
-              issues <- rbind(issues, data.frame(
-                file = basename(file),
-                line = i,
+              issue_list[[length(issue_list) + 1L]] <- data.frame(
+                file     = basename(file),
+                line     = i,
                 severity = p$severity,
-                pattern = p$desc,
-                code = trimws(lines[i]),
+                pattern  = p$desc,
+                code     = trimws(lines[i]),
                 stringsAsFactors = FALSE
-              ))
+              )
             }
           }
         }
@@ -229,22 +219,30 @@ mysterycall_scan_for_limits <- function(path = "R",
     )
   }
 
+  issues <- if (length(issue_list)) {
+    do.call(rbind, issue_list)
+  } else {
+    data.frame(
+      file = character(), line = integer(), severity = character(),
+      pattern = character(), code = character(), stringsAsFactors = FALSE
+    )
+  }
+
   # Report findings
   if (nrow(issues) > 0) {
-    # Sort by severity
     severity_order <- c("CRITICAL", "HIGH", "MEDIUM", "LOW")
     issues$severity <- factor(issues$severity, levels = severity_order)
     issues <- issues[order(issues$severity, issues$file, issues$line), ]
 
     warning(sprintf(
-      "\n\nFound %d potential artificial limits in code:\n\nCRITICAL: %d | HIGH: %d | MEDIUM: %d\n\nReview each occurrence carefully!",
+      "Found %d potential artificial limits in code: CRITICAL: %d | HIGH: %d | MEDIUM: %d — review each occurrence carefully.",
       nrow(issues),
       sum(issues$severity == "CRITICAL"),
       sum(issues$severity == "HIGH"),
       sum(issues$severity == "MEDIUM")
     ), call. = FALSE)
 
-    message(capture.output(print(issues, row.names = FALSE)))
+    for (line in capture.output(print(issues, row.names = FALSE))) message(line)
   } else {
     message(sprintf("No artificial data limits found in %d files", length(files)))
   }
