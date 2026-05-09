@@ -1,0 +1,58 @@
+{
+  "_comment": "Canonical schema for the audit trail JSON written by mysterycall_clean_phase1(). All fields listed under 'required' must be present in every audit file. Fields under 'volatile' are present but excluded from snapshot comparisons because they change between runs. Field names here are the actual JSON keys, not the idealized names from early docs.",
+  "required": {
+    "schema_version":      "string — semantic version (MAJOR.MINOR.PATCH) of the audit JSON schema; bump MINOR on new required fields, MAJOR on breaking renames",
+    "cohort_hash":         "string — SHA-256 hex digest of the input phase1_data object; same input always produces the same hash, enabling cache invalidation and drift detection",
+    "function_name":       "string — always 'mysterycall_clean_phase1'",
+    "input_rows":          "integer — number of rows in the input data frame",
+    "input_cols":          "integer — number of columns in the input data frame",
+    "input_colnames":      "array of strings — column names of the input data frame",
+    "output_rows":         "integer — number of rows in the output data frame",
+    "output_cols":         "integer — number of columns in the output data frame (>= input_cols due to processing_flag_* additions)",
+    "empty_names_count":   "integer — rows where names column was NA or whitespace-only",
+    "no_last_name_count":  "integer — rows where last name could not be extracted",
+    "rows_retained_pct":   "number — (output_rows / input_rows) * 100",
+    "rows_duplicated":     "boolean — TRUE if duplicate_rows argument was TRUE",
+    "original_npi_preserved": "boolean — TRUE if input contained an npi column",
+    "quality_metrics":     "object — completeness and flag summary metrics"
+  },
+  "volatile": {
+    "start_time":       "ISO-8601 timestamp — excluded from snapshots",
+    "end_time":         "ISO-8601 timestamp — excluded from snapshots",
+    "duration_seconds": "number — excluded from snapshots",
+    "r_version":        "string — excluded from snapshots",
+    "platform":         "string — excluded from snapshots",
+    "package_version":  "string — excluded from snapshots",
+    "parameters":       "object containing output_directory path — excluded from snapshots"
+  },
+  "conditional": {
+    "generated_ids_count":  "integer — present only when NPI column exists and rows lacked an NPI",
+    "input_npi_count":      "integer — present only when NPI column exists",
+    "rows_after_duplication": "integer — present only when duplicate_rows = TRUE"
+  },
+  "migration_policy": {
+    "_comment": "Rules governing when schema_version must be bumped. Follow semantic versioning: MAJOR.MINOR.PATCH. Downstream tooling that reads audit JSON must pin to a MAJOR version.",
+    "PATCH": [
+      "Fix a documentation string or _comment in this file",
+      "Add a new volatile field (does not affect snapshot comparisons)",
+      "Add a new conditional field that is absent by default"
+    ],
+    "MINOR": [
+      "Add a new required field with a non-breaking default (e.g. NULL or empty string)",
+      "Add a new conditional field that may become required in a future MAJOR release",
+      "Expand the set of values accepted by an existing field"
+    ],
+    "MAJOR": [
+      "Rename an existing required field",
+      "Remove an existing required field",
+      "Change the type of an existing field (e.g. integer → string)",
+      "Change a conditional field to required without a compatible default",
+      "Change the hash algorithm used for cohort_hash"
+    ],
+    "current_version": "1.1.0",
+    "history": [
+      { "version": "1.0.0", "change": "Initial versioned schema with required, volatile, and conditional sections" },
+      { "version": "1.1.0", "change": "Added schema_version and cohort_hash as required fields (MINOR: both have safe defaults for callers reading older artifacts)" }
+    ]
+  }
+}
