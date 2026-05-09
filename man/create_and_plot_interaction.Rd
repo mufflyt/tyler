@@ -91,9 +91,9 @@ result <- create_and_plot_interaction(
 
 }
 \seealso{
-\code{\link[=plot_and_save_emmeans]{plot_and_save_emmeans()}}, \code{\link[=create_formula]{create_formula()}}, \code{\link[=poisson_formula_maker]{poisson_formula_maker()}}
+\code{\link[=plot_and_save_emmeans]{plot_and_save_emmeans()}}, \code{\link[=create_formula]{create_formula()}}
 
-Other modeling helpers: 
+Other modeling helpers:
 \code{\link{check_normality}()},
 \code{\link{create_formula}()},
 \code{\link{plot_and_save_emmeans}()}
