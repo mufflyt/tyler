@@ -16,8 +16,7 @@
 #' mysterycall_hrr()
 mysterycall_hrr <- function(remove_HI_AK = TRUE) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop('Package \'sf\' is required for this function. '
-         'Install with: install.packages("sf")', call. = FALSE)
+    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
   }
 
   message("Loading necessary packages...")
@@ -76,8 +75,7 @@ mysterycall_hrr_maps <- function(
     height = 5
 ) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop('Package \'sf\' is required for this function. '
-         'Install with: install.packages("sf")', call. = FALSE)
+    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
   }
 
   if (!requireNamespace("ggspatial", quietly = TRUE)) {

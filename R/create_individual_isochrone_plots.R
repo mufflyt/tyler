@@ -32,8 +32,7 @@
 #' @export
 mysterycall_plot_isochrones <- function(isochrones, drive_times, output_dir = NULL) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop('Package \'sf\' is required for this function. '
-         'Install with: install.packages("sf")', call. = FALSE)
+    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
   }
 
   if (!requireNamespace("leaflet", quietly = TRUE)) {

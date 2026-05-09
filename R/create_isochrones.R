@@ -36,8 +36,7 @@ mysterycall_create_isochrones <- function(location,
                                                       format = "%Y-%m-%d %H:%M:%S"),
                               api_key = Sys.getenv("HERE_API_KEY")) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop('Package \'sf\' is required for this function. '
-         'Install with: install.packages("sf")', call. = FALSE)
+    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
   }
 
   if (!requireNamespace("hereR", quietly = TRUE)) {

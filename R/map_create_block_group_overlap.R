@@ -21,8 +21,7 @@
 #' @export
 mysterycall_map_block_group <- function(bg_data, isochrones_data, output_dir = "figures/") {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop('Package \'sf\' is required for this function. '
-         'Install with: install.packages("sf")', call. = FALSE)
+    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
   }
 
   if (!requireNamespace("leaflet", quietly = TRUE)) {

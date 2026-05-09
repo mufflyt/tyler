@@ -25,8 +25,7 @@ mysterycall_isochrones_for_df <- function(
     output_dir = NULL,
     save_interval = 240) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop('Package \'sf\' is required for this function. '
-         'Install with: install.packages("sf")', call. = FALSE)
+    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
   }
 
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;

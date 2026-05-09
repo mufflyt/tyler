@@ -37,8 +37,7 @@ mysterycall_calculate_overlap <- function(block_groups,
                                                     crosswalk = NULL,
                                                     notify = TRUE) {
   if (!requireNamespace("sf", quietly = TRUE)) {
-    stop('Package \'sf\' is required for this function. '
-         'Install with: install.packages("sf")', call. = FALSE)
+    stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
   }
 
   orient_geometries <- function(x) {
