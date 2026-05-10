@@ -90,16 +90,16 @@ reference:
       state codes, ZIP extraction, and full data-frame normalization.
     contents:
       - address_normalizer
-      - ascii_norm
-      - caps
-      - is_po_box
-      - has_street_number
-      - normalize_state
-      - normalize_directionals
-      - normalize_suffix
-      - normalize_units
-      - normalize_zip5
-      - strip_suite
+      - mysterycall_ascii_norm
+      - mysterycall_caps
+      - mysterycall_is_po_box
+      - mysterycall_has_street_number
+      - mysterycall_normalize_state
+      - mysterycall_normalize_directionals
+      - mysterycall_normalize_suffix
+      - mysterycall_normalize_units
+      - mysterycall_normalize_zip5
+      - mysterycall_strip_suite
       - normalize_address_df
 
   - title: "Academic Classification"
@@ -108,9 +108,9 @@ reference:
       using tiered confidence scoring and institution name patterns.
     contents:
       - academic_indicators
-      - classify_academic_affiliation
-      - check_academic_name_patterns
-      - get_academic_indicators_summary
+      - mysterycall_classify_academic_affiliation
+      - mysterycall_check_academic_name_patterns
+      - mysterycall_get_academic_indicators_summary
       - KNOWN_ACADEMIC_INSTITUTIONS
       - ACADEMIC_HOSPITAL_PATTERNS
       - ACGME_PROGRAM_INDICATORS
@@ -151,8 +151,8 @@ reference:
       - mysterycall_get_census_data
       - mysterycall_summarize_census
       - mysterycall_plot_census_age
-      - get_acs_adults_18_90
-      - get_acs_women_18_90
+      - mysterycall_get_acs_adults_18_90
+      - mysterycall_get_acs_women_18_90
 
   - title: "Data Cleaning and Processing"
     desc: >
@@ -362,10 +362,10 @@ reference:
       - scale_color_green_journal
       - scale_fill_green_journal
       - save_green_journal_figure
-      - crs_albers_conus
-      - winsorize
-      - truncate_for_viz
-      - compose_map_density
+      - mysterycall_crs_albers_conus
+      - mysterycall_winsorize
+      - mysterycall_truncate_for_viz
+      - mysterycall_compose_map_density
       - theme_publication
       - theme_publication_map
       - theme_publication_faceted
