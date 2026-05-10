@@ -10,7 +10,7 @@ Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 License: MIT + file LICENSE
-URL: https://github.com/mufflyt/mysterycall
+URL: https://mufflyt.github.io/mysterycall/, https://github.com/mufflyt/mysterycall
 BugReports: https://github.com/mufflyt/mysterycall/issues
 Date: 2026-05-08
 Depends:
