@@ -79,6 +79,42 @@ reference:
       - caller_management
       - specialty_utils
 
+  - title: "Address Normalization"
+    desc: >
+      USPS-standard address normalization: directionals, suffixes, units,
+      state codes, ZIP extraction, and full data-frame normalization.
+    contents:
+      - address_normalizer
+      - ascii_norm
+      - caps
+      - is_po_box
+      - has_street_number
+      - normalize_state
+      - normalize_directionals
+      - normalize_suffix
+      - normalize_units
+      - normalize_zip5
+      - strip_suite
+      - normalize_address_df
+
+  - title: "Academic Classification"
+    desc: >
+      Classify physician practice settings as academic vs. non-academic
+      using tiered confidence scoring and institution name patterns.
+    contents:
+      - academic_indicators
+      - classify_academic_affiliation
+      - check_academic_name_patterns
+      - get_academic_indicators_summary
+      - KNOWN_ACADEMIC_INSTITUTIONS
+      - ACADEMIC_HOSPITAL_PATTERNS
+      - ACGME_PROGRAM_INDICATORS
+      - COTH_TEACHING_INDICATORS
+      - MEDICAL_SCHOOL_INDICATORS
+      - NIH_CTSA_HUBS
+      - NCI_CANCER_CENTERS
+      - MEDICARE_GME_INDICATORS
+
   - title: "Geocoding and Mapping"
     desc: >
       Geocode addresses, build isochrones, and produce publication maps.
@@ -110,6 +146,8 @@ reference:
       - mysterycall_get_census_data
       - mysterycall_summarize_census
       - mysterycall_plot_census_age
+      - get_acs_adults_18_90
+      - get_acs_women_18_90
 
   - title: "Data Cleaning and Processing"
     desc: >
