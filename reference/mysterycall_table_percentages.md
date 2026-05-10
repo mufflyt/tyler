@@ -49,16 +49,18 @@ data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
 result <- mysterycall_table_percentages(data_frame, "category")
 print(result)
 #>   category n percent
-#> 1        A 4      50
+#> 1        A 4    50.0
+#> 2        B 3    37.5
+#> 3        C 1    12.5
 
 # Example 2: Using a dataset with multiple most common values
 df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
 result <- mysterycall_table_percentages(df_tie, "category")
 print(result)
-#>   category n  percent
-#> 1        A 3 33.33333
-#> 2        B 3 33.33333
-#> 3        C 3 33.33333
+#>   category n percent
+#> 1        A 3    33.3
+#> 2        B 3    33.3
+#> 3        C 3    33.3
 
 # Example 3: Handling a dataset with missing values
 df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
@@ -66,4 +68,7 @@ result <- mysterycall_table_percentages(df_na, "category")
 print(result)
 #>   category n percent
 #> 1        A 3    37.5
+#> 2        B 2    25.0
+#> 3     <NA> 2    25.0
+#> 4        C 1    12.5
 ```

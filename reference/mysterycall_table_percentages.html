@@ -103,16 +103,18 @@ with its count and percentage.</p>
 <span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_table_percentages</span><span class="op">(</span><span class="va">data_frame</span>, <span class="st">"category"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   category n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 4      50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 4    50.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        B 3    37.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        C 1    12.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: Using a dataset with multiple most common values</span></span></span>
 <span class="r-in"><span><span class="va">df_tie</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"C"</span>, <span class="st">"C"</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_table_percentages</span><span class="op">(</span><span class="va">df_tie</span>, <span class="st">"category"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   category n  percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 3 33.33333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        B 3 33.33333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        C 3 33.33333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   category n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 3    33.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        B 3    33.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        C 3    33.3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 3: Handling a dataset with missing values</span></span></span>
 <span class="r-in"><span><span class="va">df_na</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="cn">NA</span>, <span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -120,6 +122,9 @@ with its count and percentage.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   category n percent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 3    37.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        B 2    25.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     &lt;NA&gt; 2    25.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        C 1    12.5</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
