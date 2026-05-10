@@ -85,81 +85,226 @@ Key functions
 
 Example figures
 
-**Provider roster** — subspecialist counts from `physicians`
-(`mysterycall_search_taxonomy`)
-
 ![OBGYN subspecialist counts bar
 chart](reference/figures/fig-subspecialty-counts.png)
 
-**Geographic distribution** — dot map of 4,659 providers across the US
-(`mysterycall_map_physicians`)
+**Provider roster** — subspecialist counts from the built-in
+`physicians` dataset
+
+``` mc-gallery-code
+library(mysterycall)
+
+# Search NPI registry by taxonomy
+providers <- mysterycall_search_taxonomy(
+  "Gynecologic Oncology",
+  states = c("CA", "TX", "NY", "FL")
+)
+
+# Built-in dataset has 4,659 providers
+count(physicians, subspecialty)
+```
 
 ![US map of OBGYN
 subspecialists](reference/figures/fig-physician-map.png)
 
-**100% stacked bar** — acceptance vs. rejection with call counts
-(`mysterycall_plot_stacked_bar`)
+**Geographic distribution** — dot map of providers coloured by
+subspecialty
 
-![Stacked bar chart of acceptance
+``` mc-gallery-code
+# physicians dataset includes lat/long
+mysterycall_map_physicians(
+  physicians,
+  popup_var = "name"
+)
+```
+
+![100% stacked bar of acceptance
 rates](reference/figures/fig-stacked-bar.png)
 
+**100% stacked bar** — acceptance vs. rejection proportions with call
+counts
+
+``` mc-gallery-code
+mysterycall_plot_stacked_bar(
+  data          = call_data,
+  outcome_col   = "accepted",
+  group_col     = "subspecialty",
+  fill_labels   = c("Not Accepted", "Accepted"),
+  order_by_rate = TRUE
+)
+```
+
+![Grouped bar chart of acceptance rates by
+insurance](reference/figures/fig-acceptance-rates.png)
+
 **Acceptance rates** — Medicaid vs. private insurance by subspecialty
-(`mysterycall_map_acceptance_rate`)
 
-![Grouped bar chart of acceptance
-rates](reference/figures/fig-acceptance-rates.png)
+``` mc-gallery-code
+call_data |>
+  group_by(subspecialty, insurance) |>
+  summarise(rate = mean(accepted)) |>
+  ggplot(aes(subspecialty, rate * 100,
+             fill = insurance)) +
+  geom_col(position = "dodge") +
+  coord_flip()
+```
 
-**Choropleth map** — acceptance rate by state
-(`mysterycall_map_acceptance_rate`)
+![US choropleth of acceptance rates by
+state](reference/figures/fig-acceptance-map.png)
 
-![US choropleth of acceptance
-rates](reference/figures/fig-acceptance-map.png)
+**Choropleth map** — appointment acceptance rate by state
 
-**Insurance disparity** — Wilson 95% CIs by insurance type
-(`mysterycall_disparities_table`)
+``` mc-gallery-code
+state_rates <- call_data |>
+  group_by(state) |>
+  summarise(rate = mean(accepted))
 
-![CI plot of insurance disparity](reference/figures/fig-disparities.png)
+mysterycall_map_acceptance_rate(
+  state_rates,
+  region_col = "state",
+  rate_col   = "rate",
+  palette    = "viridis"
+)
+```
+
+![Wilson CI disparity plot](reference/figures/fig-disparities.png)
+
+**Insurance disparity** — Wilson 95% CIs via
+`mysterycall_disparities_table`
+
+``` mc-gallery-code
+disp <- mysterycall_disparities_table(
+  call_data,
+  outcome_col = "accepted",
+  group_col   = "insurance",
+  ref_group   = "Private",
+  ci_method   = "wilson"
+)
+print(disp)
+```
+
+![IRR forest plot from Poisson
+GLMM](reference/figures/fig-irr-forest.png)
 
 **IRR forest plot** — incidence rate ratios from a Poisson GLMM
-(`mysterycall_irr_plot`)
 
-![Forest plot of IRRs](reference/figures/fig-irr-forest.png)
+``` mc-gallery-code
+model <- mysterycall_poisson_model(
+  call_data,
+  outcome       = "wait_days",
+  predictors    = c("insurance", "subspecialty"),
+  random_effect = "physician"
+)
+mysterycall_irr_plot(model, x_log = TRUE)
+```
 
-**Estimated marginal means** — Medicaid vs. private wait days by
-subspecialty (`mysterycall_plot_emmeans_interaction`)
-
-![Emmeans interaction
+![Estimated marginal means interaction
 plot](reference/figures/fig-emmeans-interaction.png)
 
-**Wait-time density** — overlapping distributions with group medians
-(`mysterycall_plot_density`)
+**Estimated marginal means** — Medicaid vs. private wait days by
+subspecialty
 
-![Density plot of wait times](reference/figures/fig-wait-density.png)
+``` mc-gallery-code
+m <- lm(
+  wait_days ~ insurance * subspecialty,
+  data = call_data
+)
+mysterycall_plot_emmeans_interaction(
+  model    = m,
+  specs    = c("subspecialty", "insurance"),
+  variable = "Estimated Wait Days"
+)
+```
+
+![Overlapping density curves by insurance
+type](reference/figures/fig-wait-density.png)
+
+**Wait-time density** — overlapping distributions with group medians
+
+``` mc-gallery-code
+mysterycall_plot_density(
+  data       = call_data,
+  x_var      = "wait_days",
+  fill_var   = "insurance",
+  plot_title = "Days Until Appointment",
+  output_dir = NULL
+)
+```
+
+![Jittered scatter plot of wait days by
+subspecialty](reference/figures/fig-scatter.png)
 
 **Jittered scatter** — raw wait-day observations by subspecialty
-(`mysterycall_plot_scatter`)
 
-![Jittered scatter plot](reference/figures/fig-scatter.png)
+``` mc-gallery-code
+mysterycall_plot_scatter(
+  plot_data  = call_data,
+  x_var      = "subspecialty",
+  y_var      = "wait_days",
+  output_dir = NULL,
+  verbose    = FALSE
+)
+```
+
+![Sqrt-scaled histogram of wait
+times](reference/figures/fig-distribution.png)
 
 **Wait-time histogram** — sqrt-scaled count distribution
-(`mysterycall_plot_distribution`)
 
-![Histogram of wait times](reference/figures/fig-distribution.png)
-
-**Power curve** — providers per arm needed to detect a given IRR
-(`mysterycall_equation_figure`)
+``` mc-gallery-code
+mysterycall_plot_distribution(
+  x     = call_data$wait_days,
+  title = "Appointment Wait Time (days)",
+  bins  = 25L
+)
+```
 
 ![Sample size vs IRR power curve](reference/figures/fig-power-curve.png)
 
-**CONSORT flowchart** — sequential inclusion/exclusion diagram
-(`mysterycall_flowchart`)
+**Power curve** — providers per arm needed to detect a given IRR
+
+``` mc-gallery-code
+mysterycall_equation_figure(
+  lambda0   = 14,        # baseline wait (days)
+  irr_seq   = seq(1.1, 1.8, by = 0.05),
+  power     = 0.80,
+  both_arms = TRUE
+)
+```
 
 ![CONSORT flow diagram](reference/figures/fig-flowchart.png)
 
-**Residual diagnostics** — three-panel model check for Poisson GLMM
-(`mysterycall_plot_residuals`)
+**CONSORT flowchart** — sequential inclusion/exclusion for audit studies
 
-![Residual diagnostic plots](reference/figures/fig-residuals.png)
+``` mc-gallery-code
+mysterycall_flowchart(
+  steps = c(
+    "NPI Registry"     = "4,659",
+    "Valid phone"      = "4,201",
+    "Call completed"   = "3,872",
+    "Final sample"     = "3,547"
+  ),
+  exclusions = c(
+    "Valid phone"    = "458: no valid phone",
+    "Call completed" = "329: unanswered",
+    "Final sample"   = "325: incomplete data"
+  )
+)
+```
+
+![Three-panel residual diagnostics](reference/figures/fig-residuals.png)
+
+**Residual diagnostics** — three-panel model check for Poisson GLMM fit
+
+``` mc-gallery-code
+model <- mysterycall_poisson_model(
+  call_data,
+  outcome       = "wait_days",
+  predictors    = c("insurance", "subspecialty"),
+  random_effect = "physician"
+)
+mysterycall_plot_residuals(model)
+```
 
 Built-in datasets
 
