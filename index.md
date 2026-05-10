@@ -113,143 +113,223 @@ install.packages(c("hereR", "sf", "leaflet", "censusapi", "lme4"))
 <div class="mc-gallery">
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Provider roster</strong> —
-      subspecialist counts from <code>physicians</code>
-      (<code>mysterycall_search_taxonomy</code>)
-    </p>
     <img src="reference/figures/fig-subspecialty-counts.png"
          alt="OBGYN subspecialist counts bar chart">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Provider roster</strong> — subspecialist counts from the built-in <code>physicians</code> dataset</p>
+      <pre class="mc-gallery-code">library(mysterycall)
+
+# Search NPI registry by taxonomy
+providers &lt;- mysterycall_search_taxonomy(
+  "Gynecologic Oncology",
+  states = c("CA", "TX", "NY", "FL")
+)
+
+# Built-in dataset has 4,659 providers
+count(physicians, subspecialty)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Geographic distribution</strong> —
-      dot map of 4,659 providers across the US
-      (<code>mysterycall_map_physicians</code>)
-    </p>
     <img src="reference/figures/fig-physician-map.png"
          alt="US map of OBGYN subspecialists">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Geographic distribution</strong> — dot map of providers coloured by subspecialty</p>
+      <pre class="mc-gallery-code"># physicians dataset includes lat/long
+mysterycall_map_physicians(
+  physicians,
+  popup_var = "name"
+)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>100% stacked bar</strong> —
-      acceptance vs. rejection with call counts
-      (<code>mysterycall_plot_stacked_bar</code>)
-    </p>
     <img src="reference/figures/fig-stacked-bar.png"
-         alt="Stacked bar chart of acceptance rates">
+         alt="100% stacked bar of acceptance rates">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>100% stacked bar</strong> — acceptance vs. rejection proportions with call counts</p>
+      <pre class="mc-gallery-code">mysterycall_plot_stacked_bar(
+  data          = call_data,
+  outcome_col   = "accepted",
+  group_col     = "subspecialty",
+  fill_labels   = c("Not Accepted", "Accepted"),
+  order_by_rate = TRUE
+)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Acceptance rates</strong> —
-      Medicaid vs. private insurance by subspecialty
-      (<code>mysterycall_map_acceptance_rate</code>)
-    </p>
     <img src="reference/figures/fig-acceptance-rates.png"
-         alt="Grouped bar chart of acceptance rates">
+         alt="Grouped bar chart of acceptance rates by insurance">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Acceptance rates</strong> — Medicaid vs. private insurance by subspecialty</p>
+      <pre class="mc-gallery-code">call_data |&gt;
+  group_by(subspecialty, insurance) |&gt;
+  summarise(rate = mean(accepted)) |&gt;
+  ggplot(aes(subspecialty, rate * 100,
+             fill = insurance)) +
+  geom_col(position = "dodge") +
+  coord_flip()</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Choropleth map</strong> —
-      acceptance rate by state
-      (<code>mysterycall_map_acceptance_rate</code>)
-    </p>
     <img src="reference/figures/fig-acceptance-map.png"
-         alt="US choropleth of acceptance rates">
+         alt="US choropleth of acceptance rates by state">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Choropleth map</strong> — appointment acceptance rate by state</p>
+      <pre class="mc-gallery-code">state_rates &lt;- call_data |&gt;
+  group_by(state) |&gt;
+  summarise(rate = mean(accepted))
+
+mysterycall_map_acceptance_rate(
+  state_rates,
+  region_col = "state",
+  rate_col   = "rate",
+  palette    = "viridis"
+)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Insurance disparity</strong> —
-      Wilson 95% CIs by insurance type
-      (<code>mysterycall_disparities_table</code>)
-    </p>
     <img src="reference/figures/fig-disparities.png"
-         alt="CI plot of insurance disparity">
+         alt="Wilson CI disparity plot">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Insurance disparity</strong> — Wilson 95% CIs via <code>mysterycall_disparities_table</code></p>
+      <pre class="mc-gallery-code">disp &lt;- mysterycall_disparities_table(
+  call_data,
+  outcome_col = "accepted",
+  group_col   = "insurance",
+  ref_group   = "Private",
+  ci_method   = "wilson"
+)
+print(disp)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>IRR forest plot</strong> —
-      incidence rate ratios from a Poisson GLMM
-      (<code>mysterycall_irr_plot</code>)
-    </p>
     <img src="reference/figures/fig-irr-forest.png"
-         alt="Forest plot of IRRs">
+         alt="IRR forest plot from Poisson GLMM">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>IRR forest plot</strong> — incidence rate ratios from a Poisson GLMM</p>
+      <pre class="mc-gallery-code">model &lt;- mysterycall_poisson_model(
+  call_data,
+  outcome       = "wait_days",
+  predictors    = c("insurance", "subspecialty"),
+  random_effect = "physician"
+)
+mysterycall_irr_plot(model, x_log = TRUE)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Estimated marginal means</strong> —
-      Medicaid vs. private wait days by subspecialty
-      (<code>mysterycall_plot_emmeans_interaction</code>)
-    </p>
     <img src="reference/figures/fig-emmeans-interaction.png"
-         alt="Emmeans interaction plot">
+         alt="Estimated marginal means interaction plot">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Estimated marginal means</strong> — Medicaid vs. private wait days by subspecialty</p>
+      <pre class="mc-gallery-code">m &lt;- lm(
+  wait_days ~ insurance * subspecialty,
+  data = call_data
+)
+mysterycall_plot_emmeans_interaction(
+  model    = m,
+  specs    = c("subspecialty", "insurance"),
+  variable = "Estimated Wait Days"
+)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Wait-time density</strong> —
-      overlapping distributions with group medians
-      (<code>mysterycall_plot_density</code>)
-    </p>
     <img src="reference/figures/fig-wait-density.png"
-         alt="Density plot of wait times">
+         alt="Overlapping density curves by insurance type">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Wait-time density</strong> — overlapping distributions with group medians</p>
+      <pre class="mc-gallery-code">mysterycall_plot_density(
+  data       = call_data,
+  x_var      = "wait_days",
+  fill_var   = "insurance",
+  plot_title = "Days Until Appointment",
+  output_dir = NULL
+)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Jittered scatter</strong> —
-      raw wait-day observations by subspecialty
-      (<code>mysterycall_plot_scatter</code>)
-    </p>
     <img src="reference/figures/fig-scatter.png"
-         alt="Jittered scatter plot">
+         alt="Jittered scatter plot of wait days by subspecialty">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Jittered scatter</strong> — raw wait-day observations by subspecialty</p>
+      <pre class="mc-gallery-code">mysterycall_plot_scatter(
+  plot_data  = call_data,
+  x_var      = "subspecialty",
+  y_var      = "wait_days",
+  output_dir = NULL,
+  verbose    = FALSE
+)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Wait-time histogram</strong> —
-      sqrt-scaled count distribution
-      (<code>mysterycall_plot_distribution</code>)
-    </p>
     <img src="reference/figures/fig-distribution.png"
-         alt="Histogram of wait times">
+         alt="Sqrt-scaled histogram of wait times">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Wait-time histogram</strong> — sqrt-scaled count distribution</p>
+      <pre class="mc-gallery-code">mysterycall_plot_distribution(
+  x     = call_data$wait_days,
+  title = "Appointment Wait Time (days)",
+  bins  = 25L
+)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Power curve</strong> —
-      providers per arm needed to detect a given IRR
-      (<code>mysterycall_equation_figure</code>)
-    </p>
     <img src="reference/figures/fig-power-curve.png"
          alt="Sample size vs IRR power curve">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Power curve</strong> — providers per arm needed to detect a given IRR</p>
+      <pre class="mc-gallery-code">mysterycall_equation_figure(
+  lambda0   = 14,        # baseline wait (days)
+  irr_seq   = seq(1.1, 1.8, by = 0.05),
+  power     = 0.80,
+  both_arms = TRUE
+)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>CONSORT flowchart</strong> —
-      sequential inclusion/exclusion diagram
-      (<code>mysterycall_flowchart</code>)
-    </p>
     <img src="reference/figures/fig-flowchart.png"
          alt="CONSORT flow diagram">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>CONSORT flowchart</strong> — sequential inclusion/exclusion for audit studies</p>
+      <pre class="mc-gallery-code">mysterycall_flowchart(
+  steps = c(
+    "NPI Registry"     = "4,659",
+    "Valid phone"      = "4,201",
+    "Call completed"   = "3,872",
+    "Final sample"     = "3,547"
+  ),
+  exclusions = c(
+    "Valid phone"    = "458: no valid phone",
+    "Call completed" = "329: unanswered",
+    "Final sample"   = "325: incomplete data"
+  )
+)</pre>
+    </div>
   </div>
 
   <div class="mc-gallery-item">
-    <p class="mc-gallery-caption">
-      <strong>Residual diagnostics</strong> —
-      three-panel model check for Poisson GLMM
-      (<code>mysterycall_plot_residuals</code>)
-    </p>
     <img src="reference/figures/fig-residuals.png"
-         alt="Residual diagnostic plots">
+         alt="Three-panel residual diagnostics">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Residual diagnostics</strong> — three-panel model check for Poisson GLMM fit</p>
+      <pre class="mc-gallery-code">model &lt;- mysterycall_poisson_model(
+  call_data,
+  outcome       = "wait_days",
+  predictors    = c("insurance", "subspecialty"),
+  random_effect = "physician"
+)
+mysterycall_plot_residuals(model)</pre>
+    </div>
   </div>
 
 </div>
