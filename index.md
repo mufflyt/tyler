@@ -336,6 +336,114 @@ mysterycall_plot_residuals(model)</pre>
 ```
 
 ```{=html}
+<p class="mc-section-title">Example tables</p>
+
+<div class="mc-gallery">
+
+  <div class="mc-gallery-item">
+    <img src="reference/figures/tbl-table1.png"
+         alt="gtsummary Table 1 by insurance type">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Table 1 — Provider characteristics</strong> stratified by insurance type via <code>mysterycall_table1_gtsummary()</code></p>
+      <pre class="mc-gallery-code">tbl1 &lt;- mysterycall_table1_gtsummary(
+  data       = call_data,
+  vars       = c("subspecialty", "gender",
+                 "academic", "wait_days", "accepted"),
+  strata_col = "insurance",
+  label_list = list(
+    subspecialty = "Subspecialty",
+    wait_days    = "Wait days (median [IQR])",
+    accepted     = "Appointment accepted, n (%)"
+  )
+)
+tbl1 |&gt;
+  gtsummary::bold_labels() |&gt;
+  gtsummary::as_gt()</pre>
+    </div>
+  </div>
+
+  <div class="mc-gallery-item">
+    <img src="reference/figures/tbl-disparities.png"
+         alt="Appointment acceptance disparity table by insurance">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Disparities table</strong> — acceptance rates, Wilson CIs, absolute difference, and relative risk via <code>mysterycall_disparities_table()</code></p>
+      <pre class="mc-gallery-code">disp &lt;- mysterycall_disparities_table(
+  call_data,
+  outcome_col = "accepted",
+  group_col   = "insurance",
+  ref_group   = "Private",
+  ci_method   = "wilson"
+)
+print(disp)</pre>
+    </div>
+  </div>
+
+  <div class="mc-gallery-item">
+    <img src="reference/figures/tbl-model.png"
+         alt="Poisson GLMM incidence rate ratio table">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Model table — Incidence rate ratios</strong> from a Poisson GLMM via <code>mysterycall_model_table()</code></p>
+      <pre class="mc-gallery-code">model &lt;- mysterycall_poisson_model(
+  call_data,
+  outcome          = "wait_days",
+  predictors       = c("insurance", "subspecialty"),
+  random_intercept = "physician"
+)
+
+# Extract print-ready IRR table
+mysterycall_model_table(model)</pre>
+    </div>
+  </div>
+
+  <div class="mc-gallery-item">
+    <img src="reference/figures/tbl-wait-time.png"
+         alt="Wait-time summary statistics by insurance type">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Wait-time summary</strong> — median, IQR, min/max, and Wilcoxon test via <code>mysterycall_wait_time_summary()</code></p>
+      <pre class="mc-gallery-code">wts &lt;- mysterycall_wait_time_summary(
+  call_data,
+  wait_col = "wait_days",
+  group_by = "insurance"
+)
+
+# Summary statistics data frame
+wts$summary
+
+# Test result
+wts$interpretation</pre>
+    </div>
+  </div>
+
+  <div class="mc-gallery-item">
+    <img src="reference/figures/tbl-frequency.png"
+         alt="Subspecialty frequency and percentage table">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Frequency table</strong> — counts and column percentages for a categorical variable via <code>mysterycall_table_percentages()</code></p>
+      <pre class="mc-gallery-code">freq_df &lt;- mysterycall_table_percentages(
+  call_data,
+  "subspecialty"
+)
+print(freq_df)</pre>
+    </div>
+  </div>
+
+  <div class="mc-gallery-item">
+    <img src="reference/figures/tbl-proportion.png"
+         alt="Subspecialty proportion table">
+    <div class="mc-gallery-body">
+      <p class="mc-gallery-caption"><strong>Proportion table</strong> — n and % of total calls per group via <code>mysterycall_table_proportion()</code></p>
+      <pre class="mc-gallery-code">prop_df &lt;- mysterycall_table_proportion(
+  call_data,
+  subspecialty        # unquoted column name
+)
+print(prop_df)</pre>
+    </div>
+  </div>
+
+</div>
+```
+
+```{=html}
 <p class="mc-section-title">Built-in datasets</p>
 
 <table class="table mc-datasets">
