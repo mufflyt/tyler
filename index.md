@@ -306,6 +306,114 @@ model <- mysterycall_poisson_model(
 mysterycall_plot_residuals(model)
 ```
 
+Example tables
+
+![gtsummary Table 1 by insurance type](reference/figures/tbl-table1.png)
+
+**Table 1 — Provider characteristics** stratified by insurance type via
+[`mysterycall_table1_gtsummary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1_gtsummary.md)
+
+``` mc-gallery-code
+tbl1 <- mysterycall_table1_gtsummary(
+  data       = call_data,
+  vars       = c("subspecialty", "gender",
+                 "academic", "wait_days", "accepted"),
+  strata_col = "insurance",
+  label_list = list(
+    subspecialty = "Subspecialty",
+    wait_days    = "Wait days (median [IQR])",
+    accepted     = "Appointment accepted, n (%)"
+  )
+)
+tbl1 |>
+  gtsummary::bold_labels() |>
+  gtsummary::as_gt()
+```
+
+![Appointment acceptance disparity table by
+insurance](reference/figures/tbl-disparities.png)
+
+**Disparities table** — acceptance rates, Wilson CIs, absolute
+difference, and relative risk via
+[`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md)
+
+``` mc-gallery-code
+disp <- mysterycall_disparities_table(
+  call_data,
+  outcome_col = "accepted",
+  group_col   = "insurance",
+  ref_group   = "Private",
+  ci_method   = "wilson"
+)
+print(disp)
+```
+
+![Poisson GLMM incidence rate ratio
+table](reference/figures/tbl-model.png)
+
+**Model table — Incidence rate ratios** from a Poisson GLMM via
+[`mysterycall_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_table.md)
+
+``` mc-gallery-code
+model <- mysterycall_poisson_model(
+  call_data,
+  outcome          = "wait_days",
+  predictors       = c("insurance", "subspecialty"),
+  random_intercept = "physician"
+)
+
+# Extract print-ready IRR table
+mysterycall_model_table(model)
+```
+
+![Wait-time summary statistics by insurance
+type](reference/figures/tbl-wait-time.png)
+
+**Wait-time summary** — median, IQR, min/max, and Wilcoxon test via
+[`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md)
+
+``` mc-gallery-code
+wts <- mysterycall_wait_time_summary(
+  call_data,
+  wait_col = "wait_days",
+  group_by = "insurance"
+)
+
+# Summary statistics data frame
+wts$summary
+
+# Test result
+wts$interpretation
+```
+
+![Subspecialty frequency and percentage
+table](reference/figures/tbl-frequency.png)
+
+**Frequency table** — counts and column percentages for a categorical
+variable via
+[`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md)
+
+``` mc-gallery-code
+freq_df <- mysterycall_table_percentages(
+  call_data,
+  "subspecialty"
+)
+print(freq_df)
+```
+
+![Subspecialty proportion table](reference/figures/tbl-proportion.png)
+
+**Proportion table** — n and % of total calls per group via
+[`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md)
+
+``` mc-gallery-code
+prop_df <- mysterycall_table_proportion(
+  call_data,
+  subspecialty        # unquoted column name
+)
+print(prop_df)
+```
+
 Built-in datasets
 
 | Dataset | Description | Rows |
