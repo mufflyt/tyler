@@ -93,13 +93,15 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 <td width="50%">
 
 **Provider roster** — subspecialist counts from the built-in `physicians` dataset
+(`mysterycall_search_taxonomy`)
 
 <img src="man/figures/fig-subspecialty-counts.png" width="100%">
 
 </td>
 <td width="50%">
 
-**Geographic distribution** — dot map of 4,659 OBGYN subspecialists
+**Geographic distribution** — dot map of 4,659 OBGYN subspecialists across the US
+(`mysterycall_map_physicians`)
 
 <img src="man/figures/fig-physician-map.png" width="100%">
 
@@ -109,16 +111,71 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 <td width="50%">
 
 **Acceptance rates** — Medicaid vs. private insurance by subspecialty
-(`mysterycall_plot_stacked_bar`-style output)
+(`mysterycall_plot_stacked_bar`)
 
 <img src="man/figures/fig-acceptance-rates.png" width="100%">
 
 </td>
 <td width="50%">
 
-**Insurance disparity** — Wilson 95% CIs via `mysterycall_disparities_table`
+**Insurance disparity** — Wilson 95% CIs by insurance type
+(`mysterycall_disparities_table`)
 
 <img src="man/figures/fig-disparities.png" width="100%">
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Choropleth map** — appointment acceptance rate by state
+(`mysterycall_map_acceptance_rate`)
+
+<img src="man/figures/fig-acceptance-map.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Wait-time distribution** — overlapping densities with group medians
+(`mysterycall_plot_density`)
+
+<img src="man/figures/fig-wait-density.png" width="100%">
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**IRR forest plot** — incidence rate ratios from a Poisson GLMM
+(`mysterycall_irr_plot`)
+
+<img src="man/figures/fig-irr-forest.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Power curve** — providers per arm needed to detect a given IRR
+(`mysterycall_equation_figure`)
+
+<img src="man/figures/fig-power-curve.png" width="100%">
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**CONSORT flowchart** — sequential inclusion/exclusion for audit studies
+(`mysterycall_flowchart`)
+
+<img src="man/figures/fig-flowchart.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Residual diagnostics** — three-panel model check for Poisson GLMM fit
+(`mysterycall_plot_residuals`)
+
+<img src="man/figures/fig-residuals.png" width="100%">
 
 </td>
 </tr>
