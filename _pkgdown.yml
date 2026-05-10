@@ -74,6 +74,10 @@ reference:
       - mysterycall_extract_physician_name
       - mysterycall_parse_certification_subspecialty
       - mysterycall_check_generalist_presence
+      - npi_utils
+      - address_utils
+      - caller_management
+      - specialty_utils
 
   - title: "Geocoding and Mapping"
     desc: >
@@ -93,6 +97,7 @@ reference:
       - mysterycall_hrr
       - mysterycall_hrr_maps
       - mysterycall_assign_region
+      - ensure_hrr_shapefile
 
   - title: "Acceptance Rate Maps"
     desc: >
@@ -132,6 +137,11 @@ reference:
       - mysterycall_check_duplicates
       - mysterycall_prepare_table1_vars
       - mysterycall_assign_scenarios
+      - data_utils
+      - factor_utils
+      - mysterycall_academic_patterns
+      - mysterycall_government_patterns
+      - mysterycall_age
 
   - title: "Business Days"
     desc: >
@@ -153,6 +163,7 @@ reference:
       - mysterycall_model_metrics
       - mysterycall_select_best_model
       - mysterycall_screen_interactions
+      - mysterycall_outcomes
 
   - title: "Statistical Analysis"
     desc: >
@@ -169,6 +180,7 @@ reference:
       - mysterycall_plot_emmeans_interaction
       - mysterycall_plot_effect
       - mysterycall_plot_sjplot_interaction
+      - print.mysterycall_disparities_table
 
   - title: "Sample Size and Power"
     desc: >
@@ -178,6 +190,7 @@ reference:
       - mysterycall_cochran_n
       - mysterycall_equation_figure
       - mysterycall_sample_size_text
+      - mysterycall_power
 
   - title: "Caller Quality Control"
     desc: >
@@ -185,6 +198,7 @@ reference:
     contents:
       - mysterycall_caller_reliability
       - mysterycall_call_productivity
+      - print.mysterycall_reliability
 
   - title: "Visualization"
     desc: >
@@ -200,6 +214,7 @@ reference:
       - mysterycall_plot_inclexcl
       - mysterycall_flowchart
       - mysterycall_save_plot
+      - plot_effects
 
   - title: "Tables and Reports"
     contents:
@@ -223,6 +238,7 @@ reference:
       - mysterycall_write_results_paragraph
       - mysterycall_methods_paragraph
       - mysterycall_summarize_demographics
+      - manuscript_helpers
 
   - title: "Quality and Validation"
     contents:
@@ -238,6 +254,9 @@ reference:
       - mysterycall_physician_age
       - mysterycall_most_common_gender
       - mysterycall_verify_artifact
+      - preflight-checks
+      - mysterycall_validate_google_api
+      - mysterycall_validate_here_api
 
   - title: "Workflow"
     contents:
@@ -250,7 +269,7 @@ reference:
       - mysterycall_tracker_update
       - mysterycall_export_with_backup
       - mysterycall_resolve_path
-      - mysterycall_split_and_save
+      - mysterycall_cache_dir
 
   - title: "Logging"
     contents:
@@ -263,6 +282,8 @@ reference:
       - mysterycall_log_step_complete
       - mysterycall_log_cache_hit
       - mysterycall_log_save
+      - logging-utils
+      - mysterycall_log_to_file
 
   - title: "Progress and Spinners"
     contents:
@@ -283,6 +304,7 @@ reference:
       - mysterycall_multi_complete
       - mysterycall_spinner_start
       - mysterycall_spinner_stop
+      - progress-bars
 
   - title: "Utilities"
     contents:
@@ -293,6 +315,8 @@ reference:
       - mysterycall_quality_tier
       - mysterycall_download_file
       - mysterycall_format_duration
+      - utility_library
+      - mysterycall_tempdir
 
   - title: "Deprecated"
     contents:
