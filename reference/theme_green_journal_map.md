@@ -7,7 +7,7 @@ Removes all axis elements, centers the title, and adds a framed legend.
 Use with
 [`ggplot2::coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)
 and
-[`crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/crs_albers_conus.md)
+[`crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md)
 for equal-area projection.
 
 ## Usage
@@ -37,8 +37,8 @@ object.
 
 ## See also
 
-[`crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/crs_albers_conus.md),
-[`compose_map_density()`](https://mufflyt.github.io/mysterycall/reference/compose_map_density.md)
+[`mysterycall_crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md),
+[`mysterycall_compose_map_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compose_map_density.md)
 
 Other green-journal-themes:
 [`theme_green_journal()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal.md),
@@ -47,11 +47,11 @@ Other green-journal-themes:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 library(ggplot2)
 ggplot(counties_sf) +
   geom_sf(aes(fill = rate)) +
-  coord_sf(crs = crs_albers_conus()) +
+  coord_sf(crs = mysterycall_crs_albers_conus()) +
   theme_green_journal_map()
-} # }
+}
 ```

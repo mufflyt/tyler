@@ -56,6 +56,7 @@ error if verification fails or the file cannot be parsed.
 ## See also
 
 Other workflow:
+[`mysterycall_call_productivity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_call_productivity.md),
 [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md),
 [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md),
 [`mysterycall_print_dashboard()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_print_dashboard.md),
@@ -67,8 +68,8 @@ Other workflow:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 # Verify an audit file written by clean_phase1
 mysterycall_verify_artifact("path/to/audit_trail_2026-05-09.json")
-} # }
+}
 ```

@@ -80,21 +80,34 @@ It returns a data frame with the counts and percentages of each level.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with two columns: <code>n</code> (the count of each level) and <code>percent</code> (the percentage of the total count represented by each level).</p>
+    <p>A data frame with one row per unique non-missing level of
+<code>variable_name</code>. Columns: the variable itself, <code>n</code> (count), and <code>percent</code>
+(percentage of total, rounded to 2 decimal places).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The function counts the occurrences of each unique value in the specified variable and calculates the percentage each value represents of the total count.
-The percentages are rounded to two decimal places.</p>
+    <p><code>variable_name</code> uses tidy evaluation (<code>{{ }}</code>), so pass the column
+name unquoted (e.g. <code>mysterycall_table_proportion(df, gender)</code>). Use
+<code><a href="mysterycall_table_percentages.html">mysterycall_table_percentages()</a></code> when you have the column name as a
+string.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other table:
+    <div class="dont-index"><p><code><a href="mysterycall_table_percentages.html">mysterycall_table_percentages()</a></code></p>
+<p>Other table:
+<code><a href="mysterycall_disparities_table.html">mysterycall_disparities_table()</a></code>,
+<code><a href="mysterycall_format_pct.html">mysterycall_format_pct()</a></code>,
 <code><a href="mysterycall_max_table.html">mysterycall_max_table()</a></code>,
 <code><a href="mysterycall_min_table.html">mysterycall_min_table()</a></code>,
+<code><a href="mysterycall_model_table.html">mysterycall_model_table()</a></code>,
+<code><a href="mysterycall_table1.html">mysterycall_table1()</a></code>,
+<code><a href="mysterycall_table1_gtsummary.html">mysterycall_table1_gtsummary()</a></code>,
 <code><a href="mysterycall_table_overall.html">mysterycall_table_overall()</a></code>,
 <code><a href="mysterycall_table_percentages.html">mysterycall_table_percentages()</a></code>,
-<code><a href="mysterycall_write_arsenal_table.html">mysterycall_write_arsenal_table()</a></code></p></div>
+<code><a href="mysterycall_write_arsenal_table.html">mysterycall_write_arsenal_table()</a></code>,
+<code><a href="mysterycall_write_table_pdf.html">mysterycall_write_table_pdf()</a></code>,
+<code><a href="print.mysterycall_disparities_table.html">print.mysterycall_disparities_table()</a></code>,
+<code><a href="print.mysterycall_table1.html">print.mysterycall_table1()</a></code></p></div>
     </div>
 
     <div class="section level2">

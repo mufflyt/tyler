@@ -98,8 +98,8 @@ MD</h4>
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This vignette demonstrates the usage of the
-<code>get_census_data</code> function, which is designed to retrieve
-Census data for all states’ block groups. It leverages the
+<code>mysterycall_get_census_data</code> function, which is designed to
+retrieve Census data for all states’ block groups. It leverages the
 <code>censusapi</code> package to query the U.S. Census Bureau’s API and
 collect demographic information for specified state FIPS codes. We’ll
 get the population in each block group using the <a href="https://www.hrecht.com/censusapi/" class="external-link">censusapi</a> library and this
@@ -278,15 +278,16 @@ analysis.</p>
 <div class="section level4">
 <h4 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h4>
-<p>Before using the <code><a href="../reference/mysterycall-deprecated.html">mysterycall::get_census_data</a></code> function,
-you need to install and load the required packages. You can do this by
-running the following code:</p>
+<p>Before using the
+<code><a href="../reference/mysterycall_get_census_data.html">mysterycall::mysterycall_get_census_data</a></code> function, you need
+to install and load the required packages. You can do this by running
+the following code:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install and load the necessary packages</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"censusapi"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.hrecht.com/censusapi/" class="external-link">censusapi</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span></code></pre></div>
 <p>These lists contain metadata about general variables and the
 variables related to race and ethnicity.</p>
 <div class="section level5">
@@ -370,7 +371,7 @@ tigris package to obtain FIPS codes for all U.S. states:</p>
 <div class="section level3">
 <h3 id="step-3-gather-the-data-from-the-us-census-bureau-api">Step 3: Gather the Data from the US Census Bureau API<a class="anchor" aria-label="anchor" href="#step-3-gather-the-data-from-the-us-census-bureau-api"></a>
 </h3>
-<p>Call the <code>get_census_data</code> function with the
+<p>Call the <code>mysterycall_get_census_data</code> function with the
 <code>us_fips_list</code> vector. The helper adds 2020 Federal
 Information Processing Standard (FIPS) identifiers for every geography
 plus the Census vintage so you always know which release supplied the
@@ -505,8 +506,8 @@ the Census Bureau’s API.</p></li>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>The <code>get_census_data</code> function simplifies the process of
-obtaining Census data for all states’ block groups.</p>
+<p>The <code>mysterycall_get_census_data</code> function simplifies the
+process of obtaining Census data for all states’ block groups.</p>
 </div>
 <div class="section level2">
 <h2 id="features-and-bugs">Features and bugs<a class="anchor" aria-label="anchor" href="#features-and-bugs"></a>

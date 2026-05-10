@@ -22,13 +22,13 @@ roster creation, enrichment, and call outcome files.
 
 ``` r
 
-roster <- search_by_taxonomy(
+roster <- mysterycall_search_by_taxonomy(
   "Gynecologic Oncology",
   states = c("CO", "WY"),
   write_snapshot = FALSE,
   notify = FALSE
 ) |>
-  validate_and_remove_invalid_npi()
+  mysterycall_validate_npi()
 ```
 
 ### Add clinician enrichment
@@ -36,11 +36,11 @@ roster <- search_by_taxonomy(
 Once you have a validated roster, enrich it with clinician-level
 attributes such as demographics or training metadata. In the current
 API, the exported function for this step is
-[`retrieve_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md).
+[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md).
 
 ``` r
 
-clinician_data <- retrieve_clinician_data(roster)
+clinician_data <- mysterycall_get_clinician_data(roster)
 
 analysis_base <- roster |>
   dplyr::left_join(

@@ -64,7 +64,7 @@ ggplot2::coord_sf() and crs_albers_conus() for equal-area projection."><meta pro
     <p>Variant of <code><a href="theme_green_journal.html">theme_green_journal()</a></code> for choropleth maps, isochrone
 coverage maps, and other spatial figures. Removes all axis elements,
 centers the title, and adds a framed legend. Use with
-<code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::coord_sf()</a></code> and <code><a href="crs_albers_conus.html">crs_albers_conus()</a></code> for equal-area projection.</p>
+<code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::coord_sf()</a></code> and <code><a href="mysterycall_crs_albers_conus.html">crs_albers_conus()</a></code> for equal-area projection.</p>
     </div>
 
     <div class="section level2">
@@ -93,7 +93,7 @@ centers the title, and adds a framed legend. Use with
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="crs_albers_conus.html">crs_albers_conus()</a></code>, <code><a href="compose_map_density.html">compose_map_density()</a></code></p>
+    <div class="dont-index"><p><code><a href="mysterycall_crs_albers_conus.html">mysterycall_crs_albers_conus()</a></code>, <code><a href="mysterycall_compose_map_density.html">mysterycall_compose_map_density()</a></code></p>
 <p>Other green-journal-themes:
 <code><a href="theme_green_journal.html">theme_green_journal()</a></code>,
 <code><a href="theme_green_journal_faceted.html">theme_green_journal_faceted()</a></code></p></div>
@@ -101,13 +101,13 @@ centers the title, and adds a framed legend. Use with
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">counties_sf</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">rate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="fu"><a href="crs_albers_conus.html">crs_albers_conus</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="fu"><a href="mysterycall_crs_albers_conus.html">mysterycall_crs_albers_conus</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu">theme_green_journal_map</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

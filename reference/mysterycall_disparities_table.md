@@ -25,34 +25,34 @@ mysterycall_disparities_table(
 
 - outcome_col:
 
-  Character scalar. Name of the binary outcome column (values must be 0
-  or 1, NAs are dropped).
+  Character scalar. Name of the binary outcome column (values must be
+  0/1; NAs are dropped before calculations).
 
 - group_col:
 
-  Character scalar. Name of the grouping column (e.g., insurance type).
+  Character scalar. Name of the grouping column.
 
 - ref_group:
 
-  Character scalar or NULL. The reference group label. If NULL, the
-  first factor level is used when `group_col` is a factor, otherwise the
-  most frequent level.
+  Character scalar or NULL. Reference group label. If NULL, uses the
+  first factor level when `group_col` is a factor, otherwise the
+  alphabetically first level.
 
 - ci_method:
 
-  Character. Method for computing the rate confidence interval. One of
-  `"wilson"` (default), `"exact"`, or `"wald"`.
+  One of `"wilson"` (default), `"exact"`, or `"wald"`.
 
 - alpha:
 
-  Numeric in (0, 1). Significance level; CIs use `1 - alpha` confidence.
-  Default 0.05.
+  Numeric in (0, 1). Significance level. Default 0.05 yields 95% CIs.
 
 ## Value
 
 A data.frame with class
-`c("mysterycall_disparities_table", "data.frame")` sorted by rate
-descending, with the reference group printed first. Columns:
+`c("mysterycall_disparities_table", "data.frame")` sorted with the
+reference group first, then remaining groups by descending acceptance
+rate. Attributes `ref_group`, `ci_method`, and `alpha` are attached.
+Columns:
 
 - group:
 
@@ -64,7 +64,7 @@ descending, with the reference group printed first. Columns:
 
 - n_accepted:
 
-  Sum of outcome_col (excluding NAs).
+  Sum of `outcome_col` (excluding NAs).
 
 - rate:
 
@@ -80,20 +80,19 @@ descending, with the reference group printed first. Columns:
 
 - abs_diff:
 
-  Absolute difference in percentage points from ref_group rate (0 for
-  reference).
+  Difference in percentage points from ref group (0 for reference).
 
 - rel_risk:
 
-  Rate relative to ref_group rate (1 for reference).
+  Rate relative to ref group rate (1 for reference).
 
 - rr_lower:
 
-  Lower bound of RR 95% CI (NA for reference).
+  Lower bound of RR CI via log method (NA for reference).
 
 - rr_upper:
 
-  Upper bound of RR 95% CI (NA for reference).
+  Upper bound of RR CI via log method (NA for reference).
 
 - p_value:
 
@@ -105,9 +104,29 @@ descending, with the reference group printed first. Columns:
 
 ## Details
 
-Relative risk confidence intervals are computed via the log method:
-`SE_log_rr = sqrt(1/n_accepted - 1/n + 1/ref_n_accepted - 1/ref_n)`. A
-continuity correction of 0.5 is added when `n_accepted` is 0.
+Relative-risk CIs use the log method with a 0.5 continuity correction
+when `n_accepted` is 0: \\SE(\log RR) = \sqrt{1/n\_+ - 1/n +
+1/n\_{ref,+} - 1/n\_{ref}}\\.
+
+## See also
+
+[`mysterycall_table1_gtsummary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1_gtsummary.md),
+[`mysterycall_bootstrap_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_ci.md)
+
+Other table:
+[`mysterycall_format_pct()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_pct.md),
+[`mysterycall_max_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_max_table.md),
+[`mysterycall_min_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_min_table.md),
+[`mysterycall_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_table.md),
+[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md),
+[`mysterycall_table1_gtsummary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1_gtsummary.md),
+[`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md),
+[`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md),
+[`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md),
+[`mysterycall_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_arsenal_table.md),
+[`mysterycall_write_table_pdf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_table_pdf.md),
+[`print.mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_disparities_table.md),
+[`print.mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table1.md)
 
 ## Examples
 
@@ -118,10 +137,10 @@ df <- data.frame(
   accepted  = rbinom(120, 1, 0.5)
 )
 mysterycall_disparities_table(df, "accepted", "insurance")
-#> Disparity table (3 groups)
-#> Group                     n  n_acc     Rate   95% CI           Abs.Diff  RR (95% CI)           p-value
+#> Disparity table — 3 groups | ref: 'Medicaid' | wilson 95% CI
+#> Group                       n  n_acc     Rate  95% CI            Abs.Diff  RR (95% CI)             p-value
 #> ---------------------------------------------------------------------------------------------------- 
-#> Private                  44     21    47.7%   33.8%-62.1%         (ref)  1.00 (ref)            (ref)
-#> Medicaid                 38     18    47.4%   32.5%-62.7%       -0.4 pp  0.99 (0.63-1.57)      0.974
-#> Medicare                 38     18    47.4%   32.5%-62.7%       -0.4 pp  0.99 (0.63-1.57)      0.974
+#> Medicaid                   38     18    47.4%  32.5%-62.7%          (ref)  1.00 (ref)              (ref)
+#> Private                    44     21    47.7%  33.8%-62.1%        +0.4 pp  1.01 (0.64-1.59)        0.974
+#> Medicare                   38     18    47.4%  32.5%-62.7%        +0.0 pp  1.00 (0.62-1.61)        1.000
 ```

@@ -1,0 +1,33 @@
+# Medical School Affiliation Patterns
+
+String patterns indicating medical school affiliation. Confidence: 0.97.
+
+## Usage
+
+``` r
+MEDICAL_SCHOOL_INDICATORS
+```
+
+## Format
+
+Character vector of medical school text patterns.
+
+## See also
+
+[`classify_academic_affiliation`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)
+
+Other academic-indicators:
+[`ACADEMIC_HOSPITAL_PATTERNS`](https://mufflyt.github.io/mysterycall/reference/ACADEMIC_HOSPITAL_PATTERNS.md),
+[`ACGME_PROGRAM_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/ACGME_PROGRAM_INDICATORS.md),
+[`COTH_TEACHING_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/COTH_TEACHING_INDICATORS.md),
+[`KNOWN_ACADEMIC_INSTITUTIONS`](https://mufflyt.github.io/mysterycall/reference/KNOWN_ACADEMIC_INSTITUTIONS.md),
+[`MEDICARE_GME_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/MEDICARE_GME_INDICATORS.md),
+[`NCI_CANCER_CENTERS`](https://mufflyt.github.io/mysterycall/reference/NCI_CANCER_CENTERS.md),
+[`NIH_CTSA_HUBS`](https://mufflyt.github.io/mysterycall/reference/NIH_CTSA_HUBS.md)
+
+## Examples
+
+``` r
+length(MEDICAL_SCHOOL_INDICATORS)
+#> [1] 6
+```

@@ -2,11 +2,12 @@
 
 ## Introduction
 
-This vignette demonstrates the usage of the `get_census_data` function,
-which is designed to retrieve Census data for all states’ block groups.
-It leverages the `censusapi` package to query the U.S. Census Bureau’s
-API and collect demographic information for specified state FIPS codes.
-We’ll get the population in each block group using the
+This vignette demonstrates the usage of the
+`mysterycall_get_census_data` function, which is designed to retrieve
+Census data for all states’ block groups. It leverages the `censusapi`
+package to query the U.S. Census Bureau’s API and collect demographic
+information for specified state FIPS codes. We’ll get the population in
+each block group using the
 [censusapi](https://www.hrecht.com/censusapi/) library and this relies
 heavily on her vignette.
 
@@ -186,7 +187,7 @@ The resulting data is combined into a single dataframe for analysis.
 #### Installation
 
 Before using the
-[`mysterycall::get_census_data`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+[`mysterycall::mysterycall_get_census_data`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md)
 function, you need to install and load the required packages. You can do
 this by running the following code:
 
@@ -277,10 +278,10 @@ package to obtain FIPS codes for all U.S. states:
 
 ### Step 3: Gather the Data from the US Census Bureau API
 
-Call the `get_census_data` function with the `us_fips_list` vector. The
-helper adds 2020 Federal Information Processing Standard (FIPS)
-identifiers for every geography plus the Census vintage so you always
-know which release supplied the estimates. For example:
+Call the `mysterycall_get_census_data` function with the `us_fips_list`
+vector. The helper adds 2020 Federal Information Processing Standard
+(FIPS) identifiers for every geography plus the Census vintage so you
+always know which release supplied the estimates. For example:
 
     all_census_data <- get_census_data(us_fips_list = us_fips_list)
 
@@ -405,8 +406,8 @@ mismatches across vintages.
 
 ## Conclusion
 
-The `get_census_data` function simplifies the process of obtaining
-Census data for all states’ block groups.
+The `mysterycall_get_census_data` function simplifies the process of
+obtaining Census data for all states’ block groups.
 
 ## Features and bugs
 

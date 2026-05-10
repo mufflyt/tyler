@@ -16,14 +16,13 @@ wrapper continues to be the recommended entry point for Imotive
 projects. Recent documentation improvements clarify how it:
 
 - Pulls and deduplicates provider rosters via
-  [`search_by_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-  and
-  [`search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md).
+  `mysterycall_search_by_taxonomy()` and
+  [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md).
 - Validates NPIs with
-  [`validate_and_remove_invalid_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  [`mysterycall_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_npi.md)
   before call prep begins.
 - Produces Phase 1 workbooks by pairing
-  [`clean_phase_1_results()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md)
   with
   [`split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
   so teams can distribute assignments quickly.
@@ -40,12 +39,12 @@ so callers can drill into the underlying helpers when needed.
 To support richer reporting downstream, the vignette highlights
 companion tools that pair naturally with the workflow:
 
-- [`retrieve_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+- [`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)
   for importing CMS Care Compare demographics and practice affiliations.
-- [`genderize_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+- [`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md)
   for backfilling gender information from the Genderize.io API while
   respecting daily rate limits.
-- [`geocode_unique_addresses()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+- [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
   to convert deduplicated practice locations into latitude/longitude for
   mapping or travel-time modeling.
 

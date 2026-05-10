@@ -18,3 +18,12 @@ print(x, ...)
 - ...:
 
   Ignored.
+
+## Value
+
+Invisibly returns `x`.
+
+## See also
+
+Other caller-management:
+[`mysterycall_caller_reliability()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_reliability.md)

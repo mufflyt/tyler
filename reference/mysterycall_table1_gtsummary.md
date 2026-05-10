@@ -3,9 +3,8 @@
 Wraps
 [`gtsummary::tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
 with opinionated defaults suitable for mystery-caller study
-demographics: no "Unknown" in missing-data reporting (use the `missing`
-argument to change), bold labels, an overall column, and optional
-p-values for stratified tables.
+demographics: no "Unknown" rows (use `missing = "ifany"` to re-enable),
+bold row labels, an overall column and p-values when stratified.
 
 ## Usage
 
@@ -16,6 +15,8 @@ mysterycall_table1_gtsummary(
   strata_col = NULL,
   label_list = NULL,
   missing = "no",
+  percent = c("column", "row", "cell"),
+  overall_last = FALSE,
   ...
 )
 ```
@@ -28,24 +29,37 @@ mysterycall_table1_gtsummary(
 
 - vars:
 
-  Character vector of variable names to include in the table. Must all
-  be present in `data`.
+  Non-empty character vector of column names to include as rows. All
+  names must be present in `data`. If `strata_col` appears here it is
+  silently removed with a warning.
 
 - strata_col:
 
-  Optional character scalar naming a stratification column (e.g.
-  `"gender"`, `"insurance"`). When supplied, an overall column and
-  p-values are added automatically.
+  Optional single character column name to stratify by (e.g.
+  `"insurance"`). When provided, an Overall column and p-values are
+  added automatically.
 
 - label_list:
 
-  Optional named list mapping variable names to display labels, passed
-  to `gtsummary::tbl_summary(label = ...)`.
+  Optional named list mapping column names to display labels, forwarded
+  to
+  [`gtsummary::tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html).
 
 - missing:
 
-  One of `"no"` (default), `"ifany"`, or `"always"`. Passed directly to
+  One of `"no"` (default), `"ifany"`, or `"always"`. Controls
+  missing-data reporting. Forwarded to
   [`gtsummary::tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html).
+
+- percent:
+
+  One of `"column"` (default), `"row"`, or `"cell"`. Controls the
+  denominator used for categorical-variable percentages.
+
+- overall_last:
+
+  Logical. When `strata_col` is provided, should the Overall column
+  appear last (`TRUE`) or first (`FALSE`, default)?
 
 - ...:
 
@@ -54,28 +68,43 @@ mysterycall_table1_gtsummary(
 
 ## Value
 
-A `gtsummary` `tbl_summary` object. Print it directly or export with
-[`gtsummary::as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.html)
-/
-[`gtsummary::as_gt()`](https://www.danieldsjoberg.com/gtsummary/reference/as_gt.html).
+A `gtsummary` `tbl_summary` object. Chain additional modifiers (e.g.
+[`gtsummary::modify_caption()`](https://www.danieldsjoberg.com/gtsummary/reference/modify_caption.html),
+[`gtsummary::modify_spanning_header()`](https://www.danieldsjoberg.com/gtsummary/reference/modify.html))
+before converting with
+[`gtsummary::as_gt()`](https://www.danieldsjoberg.com/gtsummary/reference/as_gt.html)
+or
+[`gtsummary::as_flex_table()`](https://www.danieldsjoberg.com/gtsummary/reference/as_flex_table.html).
 
 ## See also
 
-Other manuscript:
-[`mysterycall_format_results_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_results_table.md),
-[`mysterycall_methods_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_methods_paragraph.md),
-[`mysterycall_sample_size_text()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sample_size_text.md),
-[`mysterycall_summarize_demographics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_demographics.md)
+[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md),
+[`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md)
+
+Other table:
+[`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md),
+[`mysterycall_format_pct()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_pct.md),
+[`mysterycall_max_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_max_table.md),
+[`mysterycall_min_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_min_table.md),
+[`mysterycall_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_table.md),
+[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md),
+[`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md),
+[`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md),
+[`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md),
+[`mysterycall_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_arsenal_table.md),
+[`mysterycall_write_table_pdf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_table_pdf.md),
+[`print.mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_disparities_table.md),
+[`print.mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table1.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive() && requireNamespace("gtsummary", quietly = TRUE)
 df <- data.frame(
-  gender   = sample(c("Male","Female"), 100, replace = TRUE),
-  setting  = sample(c("Academic","Private"), 100, replace = TRUE),
-  age_cat  = sample(c("30-39","40-49","50-59"), 100, replace = TRUE),
-  insurance = sample(c("BCBS","Medicaid"), 100, replace = TRUE)
+  gender    = sample(c("Male", "Female"), 100, replace = TRUE),
+  setting   = sample(c("Academic", "Private"), 100, replace = TRUE),
+  age_cat   = sample(c("30-39", "40-49", "50-59"), 100, replace = TRUE),
+  insurance = sample(c("BCBS", "Medicaid"), 100, replace = TRUE)
 )
 tbl <- mysterycall_table1_gtsummary(
   df,
@@ -83,5 +112,5 @@ tbl <- mysterycall_table1_gtsummary(
   strata_col = "insurance"
 )
 tbl
-} # }
+}
 ```

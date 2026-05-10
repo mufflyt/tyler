@@ -73,10 +73,10 @@ Output directories are created recursively as needed.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 p <- ggplot(mtcars, aes(wt, mpg)) + geom_point() + theme_green_journal()
 save_green_journal_figure(p, "figures/fig1", layout = "double_column")
 # Creates: figures/fig1.tiff  figures/fig1.pdf  figures/fig1.png
 #          figures/fig1_data.csv
-} # }
+}
 ```

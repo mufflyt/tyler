@@ -1,7 +1,8 @@
-# Calculate the Percentage of the Most Common Value in a Categorical Variable
+# Frequency counts and percentages for a categorical variable
 
-This function calculates the percentage of the most common value in a
-specified categorical variable from a data frame.
+Counts each level of a categorical variable and computes its share of
+all non-missing rows, returning all levels sorted from most to least
+common.
 
 ## Usage
 
@@ -17,55 +18,55 @@ mysterycall_table_percentages(data_frame, variable)
 
 - variable:
 
-  A character string representing the name of the categorical variable
+  A character string giving the column name of the categorical variable
   within `data_frame`.
 
 ## Value
 
-A data frame containing the most common value and its count, along with
-the percentage of the total count that it represents.
-
-## Details
-
-The function converts the variable name to a character string, then
-counts the occurrences of each unique value in the specified column. It
-calculates the percentage each value represents of the total and returns
-the most common value with its count and percentage.
+A data frame with one row per unique non-missing value of `variable`,
+sorted by descending count. Columns: the variable itself, `n` (count),
+and `percent` (percentage of total, rounded to 1 decimal place).
 
 ## See also
 
+[`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md)
+
 Other table:
+[`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md),
+[`mysterycall_format_pct()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_pct.md),
 [`mysterycall_max_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_max_table.md),
 [`mysterycall_min_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_min_table.md),
+[`mysterycall_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_table.md),
+[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md),
+[`mysterycall_table1_gtsummary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1_gtsummary.md),
 [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md),
 [`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md),
-[`mysterycall_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_arsenal_table.md)
+[`mysterycall_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_arsenal_table.md),
+[`mysterycall_write_table_pdf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_table_pdf.md),
+[`print.mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_disparities_table.md),
+[`print.mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table1.md)
 
 ## Examples
 
 ``` r
-# Example 1: Basic usage with a simple dataset
 data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
-result <- mysterycall_table_percentages(data_frame, "category")
-print(result)
+mysterycall_table_percentages(data_frame, "category")
 #>   category n percent
 #> 1        A 4    50.0
 #> 2        B 3    37.5
 #> 3        C 1    12.5
 
-# Example 2: Using a dataset with multiple most common values
+# Ties are all included, sorted alphabetically within the tied rank
 df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
-result <- mysterycall_table_percentages(df_tie, "category")
-print(result)
+mysterycall_table_percentages(df_tie, "category")
 #>   category n percent
 #> 1        A 3    33.3
 #> 2        B 3    33.3
 #> 3        C 3    33.3
 
-# Example 3: Handling a dataset with missing values
+# NAs are excluded from counts and the denominator
 df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
-result <- mysterycall_table_percentages(df_na, "category")
-print(result)
+mysterycall_table_percentages(df_na, "category")
 #>   category n percent
 #> 1        A 3    37.5
 #> 2        B 2    25.0

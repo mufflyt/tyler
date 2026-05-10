@@ -117,13 +117,13 @@ Names and addresses can change; NPI is usually the most stable
 identifier across roster creation, enrichment, and call outcome
 files.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">roster</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">search_by_taxonomy</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">roster</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_search_by_taxonomy</span><span class="op">(</span></span>
 <span>  <span class="st">"Gynecologic Oncology"</span>,</span>
 <span>  states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"WY"</span><span class="op">)</span>,</span>
 <span>  write_snapshot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  notify <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/mysterycall-deprecated.html">validate_and_remove_invalid_npi</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/mysterycall_validate_npi.html">mysterycall_validate_npi</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="add-clinician-enrichment">Add clinician enrichment<a class="anchor" aria-label="anchor" href="#add-clinician-enrichment"></a>
@@ -131,9 +131,9 @@ files.</p>
 <p>Once you have a validated roster, enrich it with clinician-level
 attributes such as demographics or training metadata. In the current
 API, the exported function for this step is
-<code><a href="../reference/mysterycall-deprecated.html">retrieve_clinician_data()</a></code>.</p>
+<code><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data()</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">clinician_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">retrieve_clinician_data</a></span><span class="op">(</span><span class="va">roster</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">clinician_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data</a></span><span class="op">(</span><span class="va">roster</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">analysis_base</span> <span class="op">&lt;-</span> <span class="va">roster</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>

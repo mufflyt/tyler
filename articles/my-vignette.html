@@ -96,7 +96,7 @@ MD</h4>
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p>The <code><a href="../reference/taxonomy.html">mysterycall::taxonomy</a></code> data and
-<code><a href="../reference/mysterycall-deprecated.html">mysterycall::search_by_taxonomy</a></code> function in the R package
+<code>mysterycall_search_by_taxonomy</code> function in the R package
 offers a convenient and efficient way to query the NPI Database for
 healthcare providers based on their taxonomy descriptions. This vignette
 provides a comprehensive guide on how to effectively utilize this
@@ -106,9 +106,9 @@ cases.</p>
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
 <p>Before you can harness the power of the
-<code>search_by_taxonomy</code> function, it is essential to ensure that
-you have the <code>tyler</code> package installed. You can effortlessly
-install it using the following command:</p>
+<code>mysterycall_search_by_taxonomy</code> function, it is essential to
+ensure that you have the <code>mysterycall</code> package installed. You
+can effortlessly install it using the following command:</p>
 </div>
 </div>
 <div class="section level2">
@@ -134,7 +134,7 @@ Committee (NUCC) website here. You can employ these codes to pinpoint
 specific taxonomy descriptions for your search. For instance, if you are
 interested in finding taxonomy codes that include the string
 <code>"GYN"</code> you can use this code to facilitate your search in
-the search_by_taxonomy function.</p>
+the <code>mysterycall_search_by_taxonomy</code> function.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obgyn_taxonomy</span> <span class="op">&lt;-</span> <span class="fu">mysterycall</span><span class="fu">::</span><span class="va"><a href="../reference/taxonomy.html">taxonomy</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">`Classification`</span>, <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/modifiers.html" class="external-link">fixed</a></span><span class="op">(</span><span class="st">"GYN"</span>, ignore_case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -156,14 +156,14 @@ the search_by_taxonomy function.</p>
 <div class="section level3">
 <h3 id="search-by-taxonomy-description">Search by Taxonomy Description<a class="anchor" aria-label="anchor" href="#search-by-taxonomy-description"></a>
 </h3>
-<p>The <code>search_by_taxonomy</code> function excels at searching the
-NPI Database for healthcare providers based on taxonomy descriptions.
-This functionality proves invaluable when verifying external data
-regarding subspecialist provider counts and filling in gaps for
-providers who may not be board-certified but are actively practicing
-(board-eligible). This data can be seamlessly integrated with other
-databases, enhancing its utility. For internal use, you can refer to
-<code>"Exploratory/Workforce/subspecialists_only"</code>. One
+<p>The <code>mysterycall_search_by_taxonomy</code> function excels at
+searching the NPI Database for healthcare providers based on taxonomy
+descriptions. This functionality proves invaluable when verifying
+external data regarding subspecialist provider counts and filling in
+gaps for providers who may not be board-certified but are actively
+practicing (board-eligible). This data can be seamlessly integrated with
+other databases, enhancing its utility. For internal use, you can refer
+to <code>"Exploratory/Workforce/subspecialists_only"</code>. One
 significant advantage is that all search results include a National
 Provider Identifier (NPI).</p>
 </div>
@@ -171,17 +171,18 @@ Provider Identifier (NPI).</p>
 <h3 id="example-usage-1">Example Usage<a class="anchor" aria-label="anchor" href="#example-usage-1"></a>
 </h3>
 <p>In this illustrative example, we employ the
-<code>search_by_taxonomy</code> function to identify healthcare
-providers specializing in “Hospice and Palliative Medicine” based on
-taxonomy descriptions. The resulting output is a dataframe containing
-information about physicians with either an MD or DO qualification,
-practicing in the United States as individuals, and self-identifying
-with a taxonomy of “Hospice and Palliative Medicine.”</p>
+<code>mysterycall_search_by_taxonomy</code> function to identify
+healthcare providers specializing in “Hospice and Palliative Medicine”
+based on taxonomy descriptions. The resulting output is a dataframe
+containing information about physicians with either an MD or DO
+qualification, practicing in the United States as individuals, and
+self-identifying with a taxonomy of “Hospice and Palliative
+Medicine.”</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Search for providers based on taxonomy descriptions</span></span>
 <span><span class="va">taxonomy_descriptions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Hospice and Palliative Medicine"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">search_by_taxonomy</a></span><span class="op">(</span>taxonomy_to_search <span class="op">=</span> <span class="va">taxonomy_descriptions</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_search_by_taxonomy</span><span class="op">(</span>taxonomy_to_search <span class="op">=</span> <span class="va">taxonomy_descriptions</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Note: basic_credential was removed in the select() statement above</span></span>
 <span><span class="co"># So we'll count by basic_gender and state instead</span></span>
@@ -211,7 +212,7 @@ to the <code>get_clinicians</code> data.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>basic_middle_name <span class="op">=</span> <span class="fu">str_sub</span><span class="op">(</span><span class="va">basic_middle_name</span>,<span class="fl">1</span> ,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">basic_first_name</span>, <span class="va">basic_last_name</span>, <span class="va">basic_middle_name</span><span class="op">)</span>, .fns <span class="op">=</span> <span class="op">~</span><span class="fu">str_remove_all</span><span class="op">(</span><span class="va">.</span>, <span class="st">"[[\\p{P}][\\p{S}]]"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  </span>
-<span>  <span class="co"># Get data ready to add these taxonomy rows to the `search_and_process_npi`/GOBA data set.</span></span>
+<span>  <span class="co"># Get data ready to add these taxonomy rows to the `mysterycall_search_and_process_npi`/GOBA data set.</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>NPI <span class="op">=</span> <span class="va">npi</span>, first_name <span class="op">=</span> <span class="va">basic_first_name</span>, last_name <span class="op">=</span> <span class="va">basic_last_name</span>, middle_name <span class="op">=</span> <span class="va">basic_middle_name</span>, GenderPhysicianCompare <span class="op">=</span> <span class="va">basic_gender</span>, sub1 <span class="op">=</span> <span class="va">taxonomies_desc</span>, city <span class="op">=</span> <span class="va">addresses_city</span>, state <span class="op">=</span> <span class="va">addresses_state</span>, name.x <span class="op">=</span> <span class="va">full_name</span>, `Zip CodePhysicianCompare` <span class="op">=</span> <span class="va">addresses_postal_code</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>GenderPhysicianCompare <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html" class="external-link">recode</a></span><span class="op">(</span><span class="va">GenderPhysicianCompare</span>, <span class="st">"F"</span> <span class="op">=</span> <span class="st">"Female"</span>, <span class="st">"M"</span> <span class="op">=</span> <span class="st">"Male"</span>, type_convert <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  </span>
@@ -239,11 +240,11 @@ NPI data matching the specified taxonomy description(s).</p>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>The <code>search_by_taxonomy</code> function stands as a wrapper for
-exploring the NPI Database through taxonomy descriptions. It empowers
-users to identify healthcare providers with precise specializations,
-rendering it a resource for healthcare-related research and in-depth
-analysis.</p>
+<p>The <code>mysterycall_search_by_taxonomy</code> function stands as a
+wrapper for exploring the NPI Database through taxonomy descriptions. It
+empowers users to identify healthcare providers with precise
+specializations, rendering it a resource for healthcare-related research
+and in-depth analysis.</p>
 </div>
 <div class="section level2">
 <h2 id="features-and-bugs">Features and bugs<a class="anchor" aria-label="anchor" href="#features-and-bugs"></a>

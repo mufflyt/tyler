@@ -2,7 +2,7 @@
 
 ## Overview
 
-[`search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+[`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
 is the name-based entry point for roster creation. Use it when you
 already have clinician first and last names from a patient directory,
 credentialing list, or manually curated study roster and need to recover
@@ -38,7 +38,7 @@ The simplest call looks like this:
 
 ``` r
 
-results <- search_and_process_npi(
+results <- mysterycall_search_and_process_npi(
   data = sample_names,
   notify = FALSE
 )
@@ -54,7 +54,7 @@ explicitly, especially if the roster is large.
 
 ``` r
 
-results <- search_and_process_npi(
+results <- mysterycall_search_and_process_npi(
   data = sample_names,
   enumeration_type = "ind",
   limit = 10,
@@ -71,7 +71,7 @@ logs, chunked saves, and resumable accumulation files.
 
 ``` r
 
-results <- search_and_process_npi(
+results <- mysterycall_search_and_process_npi(
   data = sample_names,
   limit = 10,
   dest_dir = "npi_chunks",
@@ -117,11 +117,11 @@ results_unique |>
 ```
 
 If the next step is clinician enrichment, pass the cleaned result into
-[`retrieve_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md).
+[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md).
 
 ``` r
 
-clinician_data <- retrieve_clinician_data(results_unique)
+clinician_data <- mysterycall_get_clinician_data(results_unique)
 ```
 
 ### Practical guidance
@@ -135,5 +135,4 @@ clinician_data <- retrieve_clinician_data(results_unique)
 ## Next step
 
 If your project begins from a specialty rather than a name list, see the
-taxonomy-search vignette for
-[`search_by_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md).
+taxonomy-search vignette for `mysterycall_search_by_taxonomy()`.

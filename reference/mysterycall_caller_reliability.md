@@ -83,6 +83,11 @@ A named list with elements:
   Landis & Koch label for kappa ("poor", "fair", "moderate", "good",
   "excellent"); NA for other types.
 
+## See also
+
+Other caller-management:
+[`print.mysterycall_reliability()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_reliability.md)
+
 ## Examples
 
 ``` r

@@ -9,9 +9,9 @@ containing addresses and change them to latitude and longitude.
 
 #### Installation
 
-Before you can harness the power of the `search_by_taxonomy` function,
-it is essential to ensure that you have the `tyler` package installed.
-You can effortlessly install it using the following command:
+Before you can harness the power of the `mysterycall_search_by_taxonomy`
+function, it is essential to ensure that you have the `tyler` package
+installed. You can effortlessly install it using the following command:
 
 ``` r
 
@@ -113,7 +113,7 @@ program AHRQ uses.
 
 ``` r
 
-output_data <- geocode_unique_addresses(
+output_data <- mysterycall_geocode(
     file_path ="address_for_geocoding.csv",
     google_maps_api_key = "123",
     output_file_path = "data/geocoded_unique_addresses.csv")
@@ -187,10 +187,10 @@ output_data <- geocode_unique_addresses(
 
 ## Conclusion
 
-The validate_and_remove_invalid_npi function is a handy tool for
-cleaning and validating datasets with NPI numbers. By following the
-steps outlined in this vignette, you can ensure that your data contains
-only valid NPIs for further analysis and processing.
+The `mysterycall_validate_npi` function is a handy tool for cleaning and
+validating datasets with NPI numbers. By following the steps outlined in
+this vignette, you can ensure that your data contains only valid NPIs
+for further analysis and processing.
 
 ## Features and bugs
 

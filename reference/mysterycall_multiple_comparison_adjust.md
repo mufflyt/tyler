@@ -72,6 +72,11 @@ A data.frame with columns:
   Significance stars: `"***"` (p\<0.001), `"**"` (p\<0.01), `"*"`
   (p\<0.05), `"ns"` otherwise.
 
+## See also
+
+Other inference:
+[`mysterycall_bootstrap_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_ci.md)
+
 ## Examples
 
 ``` r

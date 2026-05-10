@@ -13,7 +13,7 @@ node is a `mysterycall_*` function; arrows show data flow.
 
     taxonomy_terms ──► mysterycall_search_taxonomy()
                               │
-    name_data ──────► mysterycall_search_and_process_npi()
+    name_data ──────► mysterycall_mysterycall_search_and_process_npi()
                               │
                               ▼
     phase1_data ──────► mysterycall_clean_phase1()

@@ -4,19 +4,19 @@
 
 The
 [`mysterycall::taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
-data and
-[`mysterycall::search_by_taxonomy`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
-function in the R package offers a convenient and efficient way to query
-the NPI Database for healthcare providers based on their taxonomy
-descriptions. This vignette provides a comprehensive guide on how to
-effectively utilize this function, explores its various capabilities,
-and offers illustrative use cases.
+data and `mysterycall_search_by_taxonomy` function in the R package
+offers a convenient and efficient way to query the NPI Database for
+healthcare providers based on their taxonomy descriptions. This vignette
+provides a comprehensive guide on how to effectively utilize this
+function, explores its various capabilities, and offers illustrative use
+cases.
 
 ### Installation
 
-Before you can harness the power of the `search_by_taxonomy` function,
-it is essential to ensure that you have the `tyler` package installed.
-You can effortlessly install it using the following command:
+Before you can harness the power of the `mysterycall_search_by_taxonomy`
+function, it is essential to ensure that you have the `mysterycall`
+package installed. You can effortlessly install it using the following
+command:
 
 ## Example Usage
 
@@ -41,8 +41,8 @@ Taxonomy codes can be obtained from the National Uniform Claim Committee
 (NUCC) website here. You can employ these codes to pinpoint specific
 taxonomy descriptions for your search. For instance, if you are
 interested in finding taxonomy codes that include the string `"GYN"` you
-can use this code to facilitate your search in the search_by_taxonomy
-function.
+can use this code to facilitate your search in the
+`mysterycall_search_by_taxonomy` function.
 
 ``` r
 
@@ -69,32 +69,32 @@ Code       Specialization
 
 ### Search by Taxonomy Description
 
-The `search_by_taxonomy` function excels at searching the NPI Database
-for healthcare providers based on taxonomy descriptions. This
-functionality proves invaluable when verifying external data regarding
-subspecialist provider counts and filling in gaps for providers who may
-not be board-certified but are actively practicing (board-eligible).
-This data can be seamlessly integrated with other databases, enhancing
-its utility. For internal use, you can refer to
+The `mysterycall_search_by_taxonomy` function excels at searching the
+NPI Database for healthcare providers based on taxonomy descriptions.
+This functionality proves invaluable when verifying external data
+regarding subspecialist provider counts and filling in gaps for
+providers who may not be board-certified but are actively practicing
+(board-eligible). This data can be seamlessly integrated with other
+databases, enhancing its utility. For internal use, you can refer to
 `"Exploratory/Workforce/subspecialists_only"`. One significant advantage
 is that all search results include a National Provider Identifier (NPI).
 
 ### Example Usage
 
-In this illustrative example, we employ the `search_by_taxonomy`
-function to identify healthcare providers specializing in “Hospice and
-Palliative Medicine” based on taxonomy descriptions. The resulting
-output is a dataframe containing information about physicians with
-either an MD or DO qualification, practicing in the United States as
-individuals, and self-identifying with a taxonomy of “Hospice and
-Palliative Medicine.”
+In this illustrative example, we employ the
+`mysterycall_search_by_taxonomy` function to identify healthcare
+providers specializing in “Hospice and Palliative Medicine” based on
+taxonomy descriptions. The resulting output is a dataframe containing
+information about physicians with either an MD or DO qualification,
+practicing in the United States as individuals, and self-identifying
+with a taxonomy of “Hospice and Palliative Medicine.”
 
 ``` r
 
 # Search for providers based on taxonomy descriptions
 taxonomy_descriptions <- c("Hospice and Palliative Medicine")
 
-data <- search_by_taxonomy(taxonomy_to_search = taxonomy_descriptions)
+data <- mysterycall_search_by_taxonomy(taxonomy_to_search = taxonomy_descriptions)
 ```
 
 ``` r
@@ -133,7 +133,7 @@ structure and names similar to the `get_clinicians` data.
       mutate(basic_middle_name = str_sub(basic_middle_name,1 ,1)) %>%
       mutate(across(c(basic_first_name, basic_last_name, basic_middle_name), .fns = ~str_remove_all(., "[[\\p{P}][\\p{S}]]"))) %>%
       
-      # Get data ready to add these taxonomy rows to the `search_and_process_npi`/GOBA data set.
+      # Get data ready to add these taxonomy rows to the `mysterycall_search_and_process_npi`/GOBA data set.
       rename(NPI = npi, first_name = basic_first_name, last_name = basic_last_name, middle_name = basic_middle_name, GenderPhysicianCompare = basic_gender, sub1 = taxonomies_desc, city = addresses_city, state = addresses_state, name.x = full_name, `Zip CodePhysicianCompare` = addresses_postal_code) %>%
       mutate(GenderPhysicianCompare = recode(GenderPhysicianCompare, "F" = "Female", "M" = "Male", type_convert = TRUE)) %>%
       
@@ -154,10 +154,11 @@ data matching the specified taxonomy description(s).
 
 ## Conclusion
 
-The `search_by_taxonomy` function stands as a wrapper for exploring the
-NPI Database through taxonomy descriptions. It empowers users to
-identify healthcare providers with precise specializations, rendering it
-a resource for healthcare-related research and in-depth analysis.
+The `mysterycall_search_by_taxonomy` function stands as a wrapper for
+exploring the NPI Database through taxonomy descriptions. It empowers
+users to identify healthcare providers with precise specializations,
+rendering it a resource for healthcare-related research and in-depth
+analysis.
 
 ## Features and bugs
 

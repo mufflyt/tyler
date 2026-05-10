@@ -9,7 +9,7 @@ Released 2026-05-08.
 - Package renamed from `tyler` to `mysterycall`.
   [`library(tyler)`](https://rdrr.io/r/base/library.html) will no longer
   work; use
-  [`library(mysterycall)`](https://github.com/mufflyt/mysterycall).
+  [`library(mysterycall)`](https://mufflyt.github.io/mysterycall/).
 - All 100 exported functions now carry the `mysterycall_` prefix (e.g.,
   [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md),
   [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)).

@@ -83,6 +83,11 @@ A data.frame with columns:
 
   Number of bootstrap replicates used.
 
+## See also
+
+Other inference:
+[`mysterycall_multiple_comparison_adjust()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multiple_comparison_adjust.md)
+
 ## Examples
 
 ``` r

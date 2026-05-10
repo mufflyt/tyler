@@ -107,7 +107,7 @@ bar is added at the bottom-left. An optional <code>title</code> argument
 accepts an HTML string that is placed in a control panel at the top-left
 of the map.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/leaflet/" class="external-link">leaflet</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default view: continental United States, zoom 4</span></span>
@@ -138,7 +138,7 @@ regional governance and continuing-education activities.
 geometries and returns a dissolved <code>sf</code> polygon object — one
 row per district — that is ready for mapping or spatial joins.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Build the sf object (requires rnaturalearth)</span></span>
 <span><span class="va">districts_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">map_create_acog_districts_sf</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -156,7 +156,7 @@ row per district — that is ready for mapping or spatial joins.</p>
 underlying state-to-district mapping and can be inspected without
 building the sf object:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ACOG_Districts</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ACOG_Districts</span><span class="op">)</span></span>
@@ -183,7 +183,7 @@ physician dot according to their district using the viridis
 points, and saves the result as a self-contained HTML file plus a PNG
 screenshot to <code>output_dir</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Synthetic provider data — replace with your own data frame</span></span>
 <span><span class="va">physician_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -223,7 +223,7 @@ the user’s R cache directory, and returns an <code>sf</code> object in
 CRS 4326. By default Hawaii and Alaska are excluded; set
 <code>remove_HI_AK = FALSE</code> to retain all regions.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">hrr_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">hrr</a></span><span class="op">(</span>remove_HI_AK <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -269,7 +269,7 @@ draws each isochrone (30 / 60 / 120 / 180 minutes) in a distinct color.
 The map is exported as an HTML file and a PNG screenshot to
 <code>output_dir</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># bg_data and isochrones_data are sf objects produced by the isochrone workflow</span></span>
 <span><span class="fu"><a href="../reference/mysterycall-deprecated.html">map_create_block_group_overlap</a></span><span class="op">(</span></span>

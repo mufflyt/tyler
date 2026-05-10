@@ -9,12 +9,14 @@ or
 ## Usage
 
 ``` r
-compose_map_density(
+mysterycall_compose_map_density(
   map_plot,
   density_plot,
   map_weight = 7L,
   density_weight = 2L
 )
+
+compose_map_density(...)
 ```
 
 ## Arguments
@@ -46,21 +48,21 @@ A `gridExtra` grob (gtable). Pass to `ggsave(plot = result)` or
 [`theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_map.md)
 
 Other green-journal-spatial:
-[`crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/crs_albers_conus.md),
-[`truncate_for_viz()`](https://mufflyt.github.io/mysterycall/reference/truncate_for_viz.md),
-[`winsorize()`](https://mufflyt.github.io/mysterycall/reference/winsorize.md)
+[`mysterycall_crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md),
+[`mysterycall_truncate_for_viz()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_truncate_for_viz.md),
+[`mysterycall_winsorize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_winsorize.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 library(ggplot2)
 p_map <- ggplot(tracts) + geom_sf(aes(fill = access)) +
   theme_green_journal_map()
 p_den <- ggplot(tracts, aes(access)) +
   geom_density(fill = "#56B4E9", alpha = 0.6) +
   theme_green_journal()
-composite <- compose_map_density(p_map, p_den)
+composite <- mysterycall_compose_map_density(p_map, p_den)
 save_green_journal_figure(composite, "figures/fig3")
-} # }
+}
 ```

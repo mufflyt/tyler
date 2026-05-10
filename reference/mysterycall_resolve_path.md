@@ -8,7 +8,7 @@ Resolve project-relative paths from standard aliases
 mysterycall_resolve_path(
   ...,
   type = NULL,
-  base_dir = getOption("tyler.base_dir", getwd()),
+  base_dir = getOption("mysterycall.base_dir", getwd()),
   create = FALSE
 )
 ```
@@ -28,7 +28,7 @@ mysterycall_resolve_path(
 - base_dir:
 
   Base directory to resolve paths from. Defaults to the value stored in
-  `getOption("tyler.base_dir")` or the current working directory.
+  `getOption("mysterycall.base_dir")` or the current working directory.
 
 - create:
 
@@ -40,7 +40,7 @@ A normalized path as a character string.
 
 ## See also
 
-Other utilities:
+Other utilities: `%>%()`,
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),
 [`mysterycall_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_api_response.md),
 [`mysterycall_check_data_completeness()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_data_completeness.md),
@@ -50,7 +50,6 @@ Other utilities:
 [`mysterycall_download_file()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_download_file.md),
 [`mysterycall_estimate_resources()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_estimate_resources.md),
 [`mysterycall_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_with_backup.md),
-[`mysterycall_format_pct()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_pct.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
 [`mysterycall_remove_constants()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_constants.md),

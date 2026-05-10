@@ -35,11 +35,11 @@ Other green-journal-themes:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 library(ggplot2)
 ggplot(tracts_sf) +
   geom_sf(aes(fill = rate)) +
   facet_wrap(~year) +
   theme_green_journal_faceted()
-} # }
+}
 ```

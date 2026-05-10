@@ -225,6 +225,192 @@
         </dt>
         <dd>Specialty parsing and physician name extraction utilities</dd>
       </dl></div><div class="section level2">
+      <h2 id="address-normalization">Address Normalization<a class="anchor" aria-label="anchor" href="#address-normalization"></a></h2>
+
+      <div class="section-desc"><p>USPS-standard address normalization: directionals, suffixes, units, state codes, ZIP extraction, and full data-frame normalization.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="address_normalizer.html">address_normalizer</a></code>
+
+        </dt>
+        <dd>USPS Address Normalization Utilities</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_ascii_norm.html">mysterycall_ascii_norm()</a></code> <code><a href="mysterycall_ascii_norm.html">ascii_norm()</a></code>
+
+        </dt>
+        <dd>Normalize ASCII Characters and Whitespace</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_caps.html">mysterycall_caps()</a></code> <code><a href="mysterycall_caps.html">caps()</a></code>
+
+        </dt>
+        <dd>Convert to Canonical Uppercase</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_is_po_box.html">mysterycall_is_po_box()</a></code> <code><a href="mysterycall_is_po_box.html">is_po_box()</a></code>
+
+        </dt>
+        <dd>Detect PO Box Addresses</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_has_street_number.html">mysterycall_has_street_number()</a></code> <code><a href="mysterycall_has_street_number.html">has_street_number()</a></code>
+
+        </dt>
+        <dd>Detect Addresses with Street Numbers</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_normalize_state.html">mysterycall_normalize_state()</a></code> <code><a href="mysterycall_normalize_state.html">normalize_state()</a></code>
+
+        </dt>
+        <dd>Normalize State Names to USPS Codes</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_normalize_directionals.html">mysterycall_normalize_directionals()</a></code> <code><a href="mysterycall_normalize_directionals.html">normalize_directionals()</a></code>
+
+        </dt>
+        <dd>Normalize Directional Prefixes and Suffixes</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_normalize_suffix.html">mysterycall_normalize_suffix()</a></code> <code><a href="mysterycall_normalize_suffix.html">normalize_suffix()</a></code>
+
+        </dt>
+        <dd>Normalize Street Suffixes</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_normalize_units.html">mysterycall_normalize_units()</a></code> <code><a href="mysterycall_normalize_units.html">normalize_units()</a></code>
+
+        </dt>
+        <dd>Normalize Unit Designators</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_normalize_zip5.html">mysterycall_normalize_zip5()</a></code> <code><a href="mysterycall_normalize_zip5.html">normalize_zip5()</a></code>
+
+        </dt>
+        <dd>Extract 5-Digit ZIP Code</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_strip_suite.html">mysterycall_strip_suite()</a></code> <code><a href="mysterycall_strip_suite.html">strip_suite()</a></code>
+
+        </dt>
+        <dd>Remove Unit Designators from Address</dd>
+
+        <dt>
+
+          <code><a href="normalize_address_df.html">normalize_address_df()</a></code>
+
+        </dt>
+        <dd>Normalize All Address Fields in a Data Frame</dd>
+      </dl></div><div class="section level2">
+      <h2 id="academic-classification">Academic Classification<a class="anchor" aria-label="anchor" href="#academic-classification"></a></h2>
+
+      <div class="section-desc"><p>Classify physician practice settings as academic vs. non-academic using tiered confidence scoring and institution name patterns.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="academic_indicators.html">academic_indicators</a></code>
+
+        </dt>
+        <dd>Academic Practice Indicators for Institution Classification</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_classify_academic_affiliation.html">mysterycall_classify_academic_affiliation()</a></code> <code><a href="mysterycall_classify_academic_affiliation.html">classify_academic_affiliation()</a></code>
+
+        </dt>
+        <dd>Classify Academic vs. Non-Academic Practice Setting</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code> <code><a href="mysterycall_check_academic_name_patterns.html">check_academic_name_patterns()</a></code>
+
+        </dt>
+        <dd>Check if Organization Name Suggests Academic Affiliation</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_get_academic_indicators_summary.html">mysterycall_get_academic_indicators_summary()</a></code> <code><a href="mysterycall_get_academic_indicators_summary.html">get_academic_indicators_summary()</a></code>
+
+        </dt>
+        <dd>Export Academic Indicator Summary</dd>
+
+        <dt>
+
+          <code><a href="KNOWN_ACADEMIC_INSTITUTIONS.html">KNOWN_ACADEMIC_INSTITUTIONS</a></code>
+
+        </dt>
+        <dd>Known Academic Medical Centers</dd>
+
+        <dt>
+
+          <code><a href="ACADEMIC_HOSPITAL_PATTERNS.html">ACADEMIC_HOSPITAL_PATTERNS</a></code>
+
+        </dt>
+        <dd>Academic Hospital Name Patterns</dd>
+
+        <dt>
+
+          <code><a href="ACGME_PROGRAM_INDICATORS.html">ACGME_PROGRAM_INDICATORS</a></code>
+
+        </dt>
+        <dd>ACGME Program Indicators</dd>
+
+        <dt>
+
+          <code><a href="COTH_TEACHING_INDICATORS.html">COTH_TEACHING_INDICATORS</a></code>
+
+        </dt>
+        <dd>COTH (Council of Teaching Hospitals) Indicators</dd>
+
+        <dt>
+
+          <code><a href="MEDICAL_SCHOOL_INDICATORS.html">MEDICAL_SCHOOL_INDICATORS</a></code>
+
+        </dt>
+        <dd>Medical School Affiliation Patterns</dd>
+
+        <dt>
+
+          <code><a href="NIH_CTSA_HUBS.html">NIH_CTSA_HUBS</a></code>
+
+        </dt>
+        <dd>NIH CTSA Hub Patterns</dd>
+
+        <dt>
+
+          <code><a href="NCI_CANCER_CENTERS.html">NCI_CANCER_CENTERS</a></code>
+
+        </dt>
+        <dd>NCI-Designated Cancer Center Patterns</dd>
+
+        <dt>
+
+          <code><a href="MEDICARE_GME_INDICATORS.html">MEDICARE_GME_INDICATORS</a></code>
+
+        </dt>
+        <dd>Medicare GME Payment Indicators</dd>
+      </dl></div><div class="section level2">
       <h2 id="geocoding-and-mapping">Geocoding and Mapping<a class="anchor" aria-label="anchor" href="#geocoding-and-mapping"></a></h2>
 
       <div class="section-desc"><p>Geocode addresses, build isochrones, and produce publication maps.</p></div>
@@ -384,6 +570,20 @@
 
         </dt>
         <dd>Plot the distribution of female age groups</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_get_acs_adults_18_90.html">mysterycall_get_acs_adults_18_90()</a></code> <code><a href="mysterycall_get_acs_adults_18_90.html">get_acs_adults_18_90()</a></code>
+
+        </dt>
+        <dd>Get ACS Adult Population (Ages 18-90, Both Sexes) by Census Tract</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_get_acs_women_18_90.html">mysterycall_get_acs_women_18_90()</a></code> <code><a href="mysterycall_get_acs_women_18_90.html">get_acs_women_18_90()</a></code>
+
+        </dt>
+        <dd>Get ACS Female Population (Ages 18-90) by Census Tract</dd>
       </dl></div><div class="section level2">
       <h2 id="data-cleaning-and-processing">Data Cleaning and Processing<a class="anchor" aria-label="anchor" href="#data-cleaning-and-processing"></a></h2>
 
@@ -684,6 +884,13 @@
 
         </dt>
         <dd>Primary outcome analysis for mystery caller studies</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_poisson_model.html">print(<i>&lt;mysterycall_poisson_model&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_poisson_model objects</dd>
       </dl></div><div class="section level2">
       <h2 id="statistical-analysis">Statistical Analysis<a class="anchor" aria-label="anchor" href="#statistical-analysis"></a></h2>
 
@@ -973,14 +1180,14 @@
           <code><a href="mysterycall_write_arsenal_table.html">mysterycall_write_arsenal_table()</a></code>
 
         </dt>
-        <dd>Writes an Arsenal table object to a Word document.</dd>
+        <dd>Writes an Arsenal summary table to a Word document</dd>
 
         <dt>
 
           <code><a href="mysterycall_table_percentages.html">mysterycall_table_percentages()</a></code>
 
         </dt>
-        <dd>Calculate the Percentage of the Most Common Value in a Categorical Variable</dd>
+        <dd>Frequency counts and percentages for a categorical variable</dd>
 
         <dt>
 
@@ -1023,6 +1230,13 @@
 
         </dt>
         <dd>Format an IRR table for manuscript display</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_table1.html">print(<i>&lt;mysterycall_table1&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a mysterycall_table1 object</dd>
       </dl></div><div class="section level2">
       <h2 id="manuscript-writing">Manuscript Writing<a class="anchor" aria-label="anchor" href="#manuscript-writing"></a></h2>
 
@@ -1331,7 +1545,7 @@
           <code><a href="logging-utils.html">logging-utils</a></code>
 
         </dt>
-        <dd>Comprehensive Logging Utilities for Tyler Package</dd>
+        <dd>Comprehensive Logging Utilities for mysterycall</dd>
 
         <dt>
 
@@ -1473,7 +1687,7 @@
           <code><a href="progress-bars.html">progress-bars</a></code>
 
         </dt>
-        <dd>Beautiful Progress Bars for Tyler Package</dd>
+        <dd>Beautiful Progress Bars for mysterycall</dd>
       </dl></div><div class="section level2">
       <h2 id="green-journal-publication-utilities">Green Journal Publication Utilities<a class="anchor" aria-label="anchor" href="#green-journal-publication-utilities"></a></h2>
 
@@ -1535,28 +1749,28 @@
 
         <dt>
 
-          <code><a href="crs_albers_conus.html">crs_albers_conus()</a></code>
+          <code><a href="mysterycall_crs_albers_conus.html">mysterycall_crs_albers_conus()</a></code> <code><a href="mysterycall_crs_albers_conus.html">crs_albers_conus()</a></code>
 
         </dt>
         <dd>Albers Equal-Area CRS for the continental United States</dd>
 
         <dt>
 
-          <code><a href="winsorize.html">winsorize()</a></code>
+          <code><a href="mysterycall_winsorize.html">mysterycall_winsorize()</a></code> <code><a href="mysterycall_winsorize.html">winsorize()</a></code>
 
         </dt>
         <dd>Winsorize extreme values</dd>
 
         <dt>
 
-          <code><a href="truncate_for_viz.html">truncate_for_viz()</a></code>
+          <code><a href="mysterycall_truncate_for_viz.html">mysterycall_truncate_for_viz()</a></code> <code><a href="mysterycall_truncate_for_viz.html">truncate_for_viz()</a></code>
 
         </dt>
         <dd>Truncate values to fixed bounds</dd>
 
         <dt>
 
-          <code><a href="compose_map_density.html">compose_map_density()</a></code>
+          <code><a href="mysterycall_compose_map_density.html">mysterycall_compose_map_density()</a></code> <code><a href="mysterycall_compose_map_density.html">compose_map_density()</a></code>
 
         </dt>
         <dd>Composite map + density figure</dd>

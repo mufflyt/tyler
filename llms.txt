@@ -502,6 +502,79 @@ Find, validate, and enrich physician records via the NPI registry.
 - [`specialty_utils`](https://mufflyt.github.io/mysterycall/reference/specialty_utils.md)
   : Specialty parsing and physician name extraction utilities
 
+## Address Normalization
+
+USPS-standard address normalization: directionals, suffixes, units,
+state codes, ZIP extraction, and full data-frame normalization.
+
+- [`address_normalizer`](https://mufflyt.github.io/mysterycall/reference/address_normalizer.md)
+  : USPS Address Normalization Utilities
+- [`mysterycall_ascii_norm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ascii_norm.md)
+  [`ascii_norm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ascii_norm.md)
+  : Normalize ASCII Characters and Whitespace
+- [`mysterycall_caps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caps.md)
+  [`caps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caps.md)
+  : Convert to Canonical Uppercase
+- [`mysterycall_is_po_box()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_is_po_box.md)
+  [`is_po_box()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_is_po_box.md)
+  : Detect PO Box Addresses
+- [`mysterycall_has_street_number()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_has_street_number.md)
+  [`has_street_number()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_has_street_number.md)
+  : Detect Addresses with Street Numbers
+- [`mysterycall_normalize_state()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_state.md)
+  [`normalize_state()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_state.md)
+  : Normalize State Names to USPS Codes
+- [`mysterycall_normalize_directionals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_directionals.md)
+  [`normalize_directionals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_directionals.md)
+  : Normalize Directional Prefixes and Suffixes
+- [`mysterycall_normalize_suffix()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_suffix.md)
+  [`normalize_suffix()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_suffix.md)
+  : Normalize Street Suffixes
+- [`mysterycall_normalize_units()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_units.md)
+  [`normalize_units()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_units.md)
+  : Normalize Unit Designators
+- [`mysterycall_normalize_zip5()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_zip5.md)
+  [`normalize_zip5()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_zip5.md)
+  : Extract 5-Digit ZIP Code
+- [`mysterycall_strip_suite()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strip_suite.md)
+  [`strip_suite()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strip_suite.md)
+  : Remove Unit Designators from Address
+- [`normalize_address_df()`](https://mufflyt.github.io/mysterycall/reference/normalize_address_df.md)
+  : Normalize All Address Fields in a Data Frame
+
+## Academic Classification
+
+Classify physician practice settings as academic vs. non-academic using
+tiered confidence scoring and institution name patterns.
+
+- [`academic_indicators`](https://mufflyt.github.io/mysterycall/reference/academic_indicators.md)
+  : Academic Practice Indicators for Institution Classification
+- [`mysterycall_classify_academic_affiliation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)
+  [`classify_academic_affiliation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)
+  : Classify Academic vs. Non-Academic Practice Setting
+- [`mysterycall_check_academic_name_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md)
+  [`check_academic_name_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md)
+  : Check if Organization Name Suggests Academic Affiliation
+- [`mysterycall_get_academic_indicators_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.md)
+  [`get_academic_indicators_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.md)
+  : Export Academic Indicator Summary
+- [`KNOWN_ACADEMIC_INSTITUTIONS`](https://mufflyt.github.io/mysterycall/reference/KNOWN_ACADEMIC_INSTITUTIONS.md)
+  : Known Academic Medical Centers
+- [`ACADEMIC_HOSPITAL_PATTERNS`](https://mufflyt.github.io/mysterycall/reference/ACADEMIC_HOSPITAL_PATTERNS.md)
+  : Academic Hospital Name Patterns
+- [`ACGME_PROGRAM_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/ACGME_PROGRAM_INDICATORS.md)
+  : ACGME Program Indicators
+- [`COTH_TEACHING_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/COTH_TEACHING_INDICATORS.md)
+  : COTH (Council of Teaching Hospitals) Indicators
+- [`MEDICAL_SCHOOL_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/MEDICAL_SCHOOL_INDICATORS.md)
+  : Medical School Affiliation Patterns
+- [`NIH_CTSA_HUBS`](https://mufflyt.github.io/mysterycall/reference/NIH_CTSA_HUBS.md)
+  : NIH CTSA Hub Patterns
+- [`NCI_CANCER_CENTERS`](https://mufflyt.github.io/mysterycall/reference/NCI_CANCER_CENTERS.md)
+  : NCI-Designated Cancer Center Patterns
+- [`MEDICARE_GME_INDICATORS`](https://mufflyt.github.io/mysterycall/reference/MEDICARE_GME_INDICATORS.md)
+  : Medicare GME Payment Indicators
+
 ## Geocoding and Mapping
 
 Geocode addresses, build isochrones, and produce publication maps.
@@ -570,6 +643,12 @@ Choropleth maps of appointment acceptance rates by state.
   : Produce summary statistics from Census block group data
 - [`mysterycall_plot_census_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_census_age.md)
   : Plot the distribution of female age groups
+- [`mysterycall_get_acs_adults_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_adults_18_90.md)
+  [`get_acs_adults_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_adults_18_90.md)
+  : Get ACS Adult Population (Ages 18-90, Both Sexes) by Census Tract
+- [`mysterycall_get_acs_women_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_women_18_90.md)
+  [`get_acs_women_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_women_18_90.md)
+  : Get ACS Female Population (Ages 18-90) by Census Tract
 
 ## Data Cleaning and Processing
 
@@ -667,6 +746,8 @@ Poisson modeling.
   : Screen candidate variables for interaction with a primary exposure
 - [`mysterycall_outcomes`](https://mufflyt.github.io/mysterycall/reference/mysterycall_outcomes.md)
   : Primary outcome analysis for mystery caller studies
+- [`print(`*`<mysterycall_poisson_model>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_poisson_model.md)
+  : Print method for mysterycall_poisson_model objects
 
 ## Statistical Analysis
 
@@ -768,10 +849,9 @@ stacked bars.
   : Calculate the Minimum Value(s) and Corresponding Level(s) of a
   Factor Variable
 - [`mysterycall_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_arsenal_table.md)
-  : Writes an Arsenal table object to a Word document.
+  : Writes an Arsenal summary table to a Word document
 - [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md)
-  : Calculate the Percentage of the Most Common Value in a Categorical
-  Variable
+  : Frequency counts and percentages for a categorical variable
 - [`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md)
   : Calculate the Proportion of Each Level in a Categorical Variable
 - [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md)
@@ -784,6 +864,8 @@ stacked bars.
   : Format a Numeric Value as a Percentage
 - [`mysterycall_format_results_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_results_table.md)
   : Format an IRR table for manuscript display
+- [`print(`*`<mysterycall_table1>`*`)`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table1.md)
+  : Print a mysterycall_table1 object
 
 ## Manuscript Writing
 
@@ -877,7 +959,7 @@ output tables.
 - [`mysterycall_log_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_save.md)
   : Log file save
 - [`logging-utils`](https://mufflyt.github.io/mysterycall/reference/logging-utils.md)
-  : Comprehensive Logging Utilities for Tyler Package
+  : Comprehensive Logging Utilities for mysterycall
 - [`mysterycall_log_to_file()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_to_file.md)
   : Write to log file if configured
 
@@ -918,7 +1000,7 @@ output tables.
 - [`mysterycall_spinner_stop()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_spinner_stop.md)
   : Stop a spinner
 - [`progress-bars`](https://mufflyt.github.io/mysterycall/reference/progress-bars.md)
-  : Beautiful Progress Bars for Tyler Package
+  : Beautiful Progress Bars for mysterycall
 
 ## Green Journal Publication Utilities
 
@@ -945,13 +1027,17 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
 - [`save_green_journal_figure()`](https://mufflyt.github.io/mysterycall/reference/save_green_journal_figure.md)
   [`save_publication_figure()`](https://mufflyt.github.io/mysterycall/reference/save_green_journal_figure.md)
   : Save a figure in Green Journal submission format
-- [`crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/crs_albers_conus.md)
+- [`mysterycall_crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md)
+  [`crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md)
   : Albers Equal-Area CRS for the continental United States
-- [`winsorize()`](https://mufflyt.github.io/mysterycall/reference/winsorize.md)
+- [`mysterycall_winsorize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_winsorize.md)
+  [`winsorize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_winsorize.md)
   : Winsorize extreme values
-- [`truncate_for_viz()`](https://mufflyt.github.io/mysterycall/reference/truncate_for_viz.md)
+- [`mysterycall_truncate_for_viz()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_truncate_for_viz.md)
+  [`truncate_for_viz()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_truncate_for_viz.md)
   : Truncate values to fixed bounds
-- [`compose_map_density()`](https://mufflyt.github.io/mysterycall/reference/compose_map_density.md)
+- [`mysterycall_compose_map_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compose_map_density.md)
+  [`compose_map_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compose_map_density.md)
   : Composite map + density figure
 
 ## Utilities
@@ -1166,7 +1252,7 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
   Numbers](https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.md):
 
   Search the NPI registry from clinician first and last names using the
-  current tyler interface.
+  current mysterycall interface.
 
 ### Geospatial
 

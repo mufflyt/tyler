@@ -1,4 +1,4 @@
-# Comprehensive Logging Utilities for Tyler Package
+# Comprehensive Logging Utilities for mysterycall
 
 Provides plain-language logging with progress tracking, timing, and
 user-friendly output for long-running workflows.

@@ -102,13 +102,14 @@ be the recommended entry point for Imotive projects. Recent
 documentation improvements clarify how it:</p>
 <ul>
 <li>Pulls and deduplicates provider rosters via
-<code><a href="../reference/mysterycall-deprecated.html">search_by_taxonomy()</a></code> and
-<code><a href="../reference/mysterycall-deprecated.html">search_and_process_npi()</a></code>.</li>
-<li>Validates NPIs with <code><a href="../reference/mysterycall-deprecated.html">validate_and_remove_invalid_npi()</a></code>
-before call prep begins.</li>
+<code>mysterycall_search_by_taxonomy()</code> and
+<code><a href="../reference/mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code>.</li>
+<li>Validates NPIs with <code><a href="../reference/mysterycall_validate_npi.html">mysterycall_validate_npi()</a></code> before
+call prep begins.</li>
 <li>Produces Phase 1 workbooks by pairing
-<code><a href="../reference/mysterycall-deprecated.html">clean_phase_1_results()</a></code> with <code><a href="../reference/mysterycall-deprecated.html">split_and_save()</a></code>
-so teams can distribute assignments quickly.</li>
+<code><a href="../reference/mysterycall_clean_phase1.html">mysterycall_clean_phase1()</a></code> with
+<code><a href="../reference/mysterycall-deprecated.html">split_and_save()</a></code> so teams can distribute assignments
+quickly.</li>
 <li>Normalizes follow-up logs through <code><a href="../reference/mysterycall-deprecated.html">clean_phase_2_data()</a></code>
 and saves QA snapshots using
 <code><a href="../reference/mysterycall-deprecated.html">save_quality_check_table()</a></code>.</li>
@@ -124,15 +125,15 @@ needed.</p>
 companion tools that pair naturally with the workflow:</p>
 <ul>
 <li>
-<code><a href="../reference/mysterycall-deprecated.html">retrieve_clinician_data()</a></code> for importing CMS Care
+<code><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data()</a></code> for importing CMS Care
 Compare demographics and practice affiliations.</li>
 <li>
-<code><a href="../reference/mysterycall-deprecated.html">genderize_physicians()</a></code> for backfilling gender
+<code><a href="../reference/mysterycall_genderize.html">mysterycall_genderize()</a></code> for backfilling gender
 information from the Genderize.io API while respecting daily rate
 limits.</li>
 <li>
-<code><a href="../reference/mysterycall-deprecated.html">geocode_unique_addresses()</a></code> to convert deduplicated
-practice locations into latitude/longitude for mapping or travel-time
+<code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code> to convert deduplicated practice
+locations into latitude/longitude for mapping or travel-time
 modeling.</li>
 </ul>
 <p>Surfacing these touchpoints alongside the workflow helps teams decide

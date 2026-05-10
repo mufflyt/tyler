@@ -23,7 +23,7 @@
   Numbers](https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.md):
 
   Search the NPI registry from clinician first and last names using the
-  current tyler interface.
+  current mysterycall interface.
 
 ### Geospatial
 
