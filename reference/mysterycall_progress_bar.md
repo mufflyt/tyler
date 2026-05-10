@@ -61,7 +61,7 @@ for (i in 1:100) {
 #>   Progress: 10/100 (10%) - ETA: 9.0s
 #>   Progress: 20/100 (20%) - ETA: 8.0s
 #>   Progress: 30/100 (30%) - ETA: 7.0s
-#>   Progress: 40/100 (40%) - ETA: 6.1s
+#>   Progress: 40/100 (40%) - ETA: 6.0s
 #>   Progress: 50/100 (50%) - ETA: 5.0s
 #>   Progress: 60/100 (60%) - ETA: 4.0s
 #>   Progress: 70/100 (70%) - ETA: 3.0s
