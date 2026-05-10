@@ -26,16 +26,15 @@ single \code{"lower-upper"} column (en-dash separator), and formats p-values.
 Optionally excludes the intercept row.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 tbl <- mysterycall_format_results_table(model_result)
 knitr::kable(tbl)
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other manuscript: 
 \code{\link{mysterycall_methods_paragraph}()},
 \code{\link{mysterycall_sample_size_text}()},
-\code{\link{mysterycall_summarize_demographics}()},
-\code{\link{mysterycall_table1_gtsummary}()}
+\code{\link{mysterycall_summarize_demographics}()}
 }
 \concept{manuscript}

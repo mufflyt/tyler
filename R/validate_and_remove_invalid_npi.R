@@ -34,6 +34,7 @@
 #' @importFrom npi npi_is_valid
 #' @importFrom readr read_csv cols col_character col_guess
 #' @importFrom dplyr filter mutate
+#' @family data-quality
 #' @export
 #' @examplesIf interactive()
 #' df <- data.frame(npi = c("1234567893", "0000000000", NA_character_))

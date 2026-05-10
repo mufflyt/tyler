@@ -57,11 +57,11 @@ Geometry columns (\code{sfc}) are automatically dropped from the CSV export.
 Output directories are created recursively as needed.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 p <- ggplot(mtcars, aes(wt, mpg)) + geom_point() + theme_green_journal()
 save_green_journal_figure(p, "figures/fig1", layout = "double_column")
 # Creates: figures/fig1.tiff  figures/fig1.pdf  figures/fig1.png
 #          figures/fig1_data.csv
-}
+\dontshow{\}) # examplesIf}
 }
 \concept{green-journal-output}

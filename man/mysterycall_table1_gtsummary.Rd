@@ -10,44 +10,53 @@ mysterycall_table1_gtsummary(
   strata_col = NULL,
   label_list = NULL,
   missing = "no",
+  percent = c("column", "row", "cell"),
+  overall_last = FALSE,
   ...
 )
 }
 \arguments{
 \item{data}{A data frame.}
 
-\item{vars}{Character vector of variable names to include in the table.
-Must all be present in \code{data}.}
+\item{vars}{Non-empty character vector of column names to include as rows.
+All names must be present in \code{data}. If \code{strata_col} appears here it is
+silently removed with a warning.}
 
-\item{strata_col}{Optional character scalar naming a stratification column
-(e.g. \code{"gender"}, \code{"insurance"}). When supplied, an overall column and
-p-values are added automatically.}
+\item{strata_col}{Optional single character column name to stratify by
+(e.g. \code{"insurance"}). When provided, an Overall column and p-values are
+added automatically.}
 
-\item{label_list}{Optional named list mapping variable names to display
-labels, passed to \code{gtsummary::tbl_summary(label = ...)}.}
+\item{label_list}{Optional named list mapping column names to display
+labels, forwarded to \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}.}
 
-\item{missing}{One of \code{"no"} (default), \code{"ifany"}, or \code{"always"}. Passed
-directly to \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}.}
+\item{missing}{One of \code{"no"} (default), \code{"ifany"}, or \code{"always"}. Controls
+missing-data reporting. Forwarded to \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}.}
+
+\item{percent}{One of \code{"column"} (default), \code{"row"}, or \code{"cell"}. Controls
+the denominator used for categorical-variable percentages.}
+
+\item{overall_last}{Logical. When \code{strata_col} is provided, should the
+Overall column appear last (\code{TRUE}) or first (\code{FALSE}, default)?}
 
 \item{...}{Additional arguments forwarded to \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}.}
 }
 \value{
-A \code{gtsummary} \code{tbl_summary} object. Print it directly or export
-with \code{\link[gtsummary:as_flex_table]{gtsummary::as_flex_table()}} / \code{\link[gtsummary:as_gt]{gtsummary::as_gt()}}.
+A \code{gtsummary} \code{tbl_summary} object. Chain additional modifiers
+(e.g. \code{\link[gtsummary:modify_caption]{gtsummary::modify_caption()}}, \code{\link[gtsummary:modify]{gtsummary::modify_spanning_header()}})
+before converting with \code{\link[gtsummary:as_gt]{gtsummary::as_gt()}} or \code{\link[gtsummary:as_flex_table]{gtsummary::as_flex_table()}}.
 }
 \description{
 Wraps \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}} with opinionated defaults suitable for
-mystery-caller study demographics: no "Unknown" in missing-data reporting
-(use the \code{missing} argument to change), bold labels, an overall column,
-and optional p-values for stratified tables.
+mystery-caller study demographics: no "Unknown" rows (use \code{missing = "ifany"} to re-enable), bold row labels, an overall column and p-values
+when stratified.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive() && requireNamespace("gtsummary", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 df <- data.frame(
-  gender   = sample(c("Male","Female"), 100, replace = TRUE),
-  setting  = sample(c("Academic","Private"), 100, replace = TRUE),
-  age_cat  = sample(c("30-39","40-49","50-59"), 100, replace = TRUE),
-  insurance = sample(c("BCBS","Medicaid"), 100, replace = TRUE)
+  gender    = sample(c("Male", "Female"), 100, replace = TRUE),
+  setting   = sample(c("Academic", "Private"), 100, replace = TRUE),
+  age_cat   = sample(c("30-39", "40-49", "50-59"), 100, replace = TRUE),
+  insurance = sample(c("BCBS", "Medicaid"), 100, replace = TRUE)
 )
 tbl <- mysterycall_table1_gtsummary(
   df,
@@ -55,13 +64,24 @@ tbl <- mysterycall_table1_gtsummary(
   strata_col = "insurance"
 )
 tbl
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
-Other manuscript: 
-\code{\link{mysterycall_format_results_table}()},
-\code{\link{mysterycall_methods_paragraph}()},
-\code{\link{mysterycall_sample_size_text}()},
-\code{\link{mysterycall_summarize_demographics}()}
+\code{\link[=mysterycall_table1]{mysterycall_table1()}}, \code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}}
+
+Other table: 
+\code{\link{mysterycall_disparities_table}()},
+\code{\link{mysterycall_format_pct}()},
+\code{\link{mysterycall_max_table}()},
+\code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_model_table}()},
+\code{\link{mysterycall_table1}()},
+\code{\link{mysterycall_table_overall}()},
+\code{\link{mysterycall_table_percentages}()},
+\code{\link{mysterycall_table_proportion}()},
+\code{\link{mysterycall_write_arsenal_table}()},
+\code{\link{mysterycall_write_table_pdf}()},
+\code{\link{print.mysterycall_disparities_table}()},
+\code{\link{print.mysterycall_table1}()}
 }
-\concept{manuscript}
+\concept{table}

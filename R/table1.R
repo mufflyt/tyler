@@ -11,12 +11,13 @@
 NULL
 
 # -- Internal formatters -------------------------------------------------------
-
+#' @noRd
 .t1_fmt_pct <- function(k, n, digits) {
   if (n == 0L) return("0 (--%)")
   sprintf(paste0("%d (%.", digits, "f%%)"), k, k / n * 100)
 }
 
+#' @noRd
 .t1_fmt_median_iqr <- function(x, digits) {
   x <- x[!is.na(x)]
   if (!length(x)) return(NA_character_)
@@ -26,6 +27,7 @@ NULL
           stats::median(x), qs[[1L]], qs[[2L]])
 }
 
+#' @noRd
 .t1_fmt_mean_sd <- function(x, digits) {
   x <- x[!is.na(x)]
   if (!length(x)) return(NA_character_)
@@ -33,13 +35,14 @@ NULL
   sprintf(paste0(fmt, " (", fmt, ")"), mean(x), stats::sd(x))
 }
 
+#' @noRd
 .t1_fmt_pval <- function(p) {
   if (is.na(p)) return(NA_character_)
   if (p < 0.001) "<0.001" else sprintf("%.3f", p)
 }
 
 # -- Internal tests ------------------------------------------------------------
-
+#' @noRd
 .t1_cont_pvalue <- function(x, g) {
   groups <- sort(unique(g[!is.na(g)]))
   if (length(groups) < 2L) return(NA_real_)
@@ -57,6 +60,7 @@ NULL
   if (is.null(res)) NA_real_ else res$p.value
 }
 
+#' @noRd
 .t1_cat_pvalue <- function(x, g, min_cell = 5L) {
   ct <- table(x, g, useNA = "no")
   if (nrow(ct) < 2L || ncol(ct) < 2L) return(NA_real_)
@@ -73,7 +77,7 @@ NULL
 }
 
 # -- One-variable row builder --------------------------------------------------
-
+#' @noRd
 .t1_rows_continuous <- function(x, label, group_vec, groups, group_col_names,
                                 include_overall, cont_stats, digits,
                                 emit_pvalue, min_cell) {
@@ -104,6 +108,7 @@ NULL
   do.call(rbind, stat_rows)
 }
 
+#' @noRd
 .t1_rows_categorical <- function(x, label, group_vec, groups, group_col_names,
                                   include_overall, digits, emit_pvalue, min_cell) {
   x_chr <- as.character(x)
@@ -180,8 +185,9 @@ NULL
 #'
 #' @importFrom stats wilcox.test kruskal.test chisq.test fisher.test sd median quantile
 #' @importFrom tibble as_tibble
-#' @family outcomes
-#' @seealso [mysterycall_wait_time_summary()], [mysterycall_acceptance_rate()]
+#' @family table
+#' @seealso [mysterycall_table1_gtsummary()], [mysterycall_wait_time_summary()],
+#'   [mysterycall_acceptance_rate()]
 #' @export
 #'
 #' @examples
@@ -290,6 +296,12 @@ mysterycall_table1 <- function(data,
   )
 }
 
+#' Print a mysterycall_table1 object
+#'
+#' @param x A `mysterycall_table1` object returned by [mysterycall_table1()].
+#' @param ... Additional arguments passed to [print.tbl_df()].
+#' @return Invisibly returns `x`.
+#' @family table
 #' @export
 print.mysterycall_table1 <- function(x, ...) {
   ns_str <- paste(sprintf("%s N=%d", names(x$column_ns), x$column_ns),

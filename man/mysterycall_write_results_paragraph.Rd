@@ -57,3 +57,4 @@ irr_tbl <- data.frame(
 mysterycall_write_results_paragraph(irr_tbl, "commercial insurance", "insurance")
 
 }
+\concept{reporting}

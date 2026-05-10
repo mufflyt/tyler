@@ -33,6 +33,7 @@ NULL
 #'
 #' @seealso \code{\link{check_academic_name_patterns}},
 #'   \code{\link{ACADEMIC_HOSPITAL_PATTERNS}}
+#' @family academic-indicators
 #' @export
 KNOWN_ACADEMIC_INSTITUTIONS <- c(
   "JOHNS HOPKINS", "MAYO CLINIC", "CLEVELAND CLINIC", "MASSACHUSETTS GENERAL",
@@ -62,6 +63,7 @@ KNOWN_ACADEMIC_INSTITUTIONS <- c(
 #'
 #' @seealso \code{\link{check_academic_name_patterns}},
 #'   \code{\link{KNOWN_ACADEMIC_INSTITUTIONS}}
+#' @family academic-indicators
 #' @export
 ACADEMIC_HOSPITAL_PATTERNS <- list(
   very_high = c(
@@ -88,6 +90,7 @@ ACADEMIC_HOSPITAL_PATTERNS <- list(
 #' length(ACGME_PROGRAM_INDICATORS)
 #'
 #' @seealso \code{\link{classify_academic_affiliation}}
+#' @family academic-indicators
 #' @export
 ACGME_PROGRAM_INDICATORS <- c(
   "RESIDENCY PROGRAM", "FELLOWSHIP PROGRAM", "GRADUATE MEDICAL EDUCATION",
@@ -105,6 +108,7 @@ ACGME_PROGRAM_INDICATORS <- c(
 #' length(COTH_TEACHING_INDICATORS)
 #'
 #' @seealso \code{\link{classify_academic_affiliation}}
+#' @family academic-indicators
 #' @export
 COTH_TEACHING_INDICATORS <- c(
   "TEACHING HOSPITAL", "COUNCIL OF TEACHING HOSPITALS",
@@ -121,6 +125,7 @@ COTH_TEACHING_INDICATORS <- c(
 #' length(MEDICAL_SCHOOL_INDICATORS)
 #'
 #' @seealso \code{\link{classify_academic_affiliation}}
+#' @family academic-indicators
 #' @export
 MEDICAL_SCHOOL_INDICATORS <- c(
   "SCHOOL OF MEDICINE", "MEDICAL SCHOOL", "COLLEGE OF MEDICINE",
@@ -140,6 +145,7 @@ MEDICAL_SCHOOL_INDICATORS <- c(
 #' NIH_CTSA_HUBS
 #'
 #' @seealso \code{\link{classify_academic_affiliation}}
+#' @family academic-indicators
 #' @export
 NIH_CTSA_HUBS <- c(
   "CTSA HUB",
@@ -158,6 +164,7 @@ NIH_CTSA_HUBS <- c(
 #' NCI_CANCER_CENTERS
 #'
 #' @seealso \code{\link{classify_academic_affiliation}}
+#' @family academic-indicators
 #' @export
 NCI_CANCER_CENTERS <- c(
   "NCI-DESIGNATED", "COMPREHENSIVE CANCER CENTER",
@@ -175,6 +182,7 @@ NCI_CANCER_CENTERS <- c(
 #' MEDICARE_GME_INDICATORS
 #'
 #' @seealso \code{\link{classify_academic_affiliation}}
+#' @family academic-indicators
 #' @export
 MEDICARE_GME_INDICATORS <- c(
   "GME PAYMENTS", "GRADUATE MEDICAL EDUCATION PAYMENTS",
@@ -205,9 +213,10 @@ MEDICARE_GME_INDICATORS <- c(
 #'                                "Community Hospital",
 #'                                "University of Michigan Medical Center"))
 #'
-#' @seealso \code{\link{classify_academic_affiliation}}
+#' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
+#' @family classification
 #' @export
-check_academic_name_patterns <- function(org_name, confidence_threshold = 0.85) {
+mysterycall_check_academic_name_patterns <- function(org_name, confidence_threshold = 0.85) {
   if (is.null(org_name) || length(org_name) == 0) {
     return(data.frame(
       academic_indicator = logical(0),
@@ -276,6 +285,10 @@ check_academic_name_patterns <- function(org_name, confidence_threshold = 0.85) 
   results
 }
 
+#' @rdname mysterycall_check_academic_name_patterns
+#' @export
+check_academic_name_patterns <- function(...) { .Deprecated("mysterycall_check_academic_name_patterns"); mysterycall_check_academic_name_patterns(...) }
+
 #' Classify Academic vs. Non-Academic Practice Setting
 #'
 #' Combines organization name patterns, optional hospital affiliation data,
@@ -301,16 +314,17 @@ check_academic_name_patterns <- function(org_name, confidence_threshold = 0.85) 
 #' classify_academic_affiliation("University of Michigan Medical Center")
 #' classify_academic_affiliation("Community Regional Hospital")
 #'
-#' @seealso \code{\link{check_academic_name_patterns}},
-#'   \code{\link{get_academic_indicators_summary}}
+#' @seealso \code{\link{mysterycall_check_academic_name_patterns}},
+#'   \code{\link{mysterycall_get_academic_indicators_summary}}
+#' @family classification
 #' @export
-classify_academic_affiliation <- function(org_name,
+mysterycall_classify_academic_affiliation <- function(org_name,
                                           hospital_affiliation = NULL,
                                           specialty = NULL) {
-  name_results <- check_academic_name_patterns(org_name, confidence_threshold = 0.85)
+  name_results <- mysterycall_check_academic_name_patterns(org_name, confidence_threshold = 0.85)
 
   if (!is.null(hospital_affiliation) && length(hospital_affiliation) > 0) {
-    hospital_results <- check_academic_name_patterns(hospital_affiliation,
+    hospital_results <- mysterycall_check_academic_name_patterns(hospital_affiliation,
                                                      confidence_threshold = 0.85)
     name_results$confidence_score <- pmax(name_results$confidence_score,
                                           hospital_results$confidence_score)
@@ -341,6 +355,10 @@ classify_academic_affiliation <- function(org_name,
   )
 }
 
+#' @rdname mysterycall_classify_academic_affiliation
+#' @export
+classify_academic_affiliation <- function(...) { .Deprecated("mysterycall_classify_academic_affiliation"); mysterycall_classify_academic_affiliation(...) }
+
 #' Export Academic Indicator Summary
 #'
 #' Creates a comprehensive summary report of all available academic indicators,
@@ -352,14 +370,15 @@ classify_academic_affiliation <- function(org_name,
 #'   and \code{usage_notes}.
 #'
 #' @examples
-#' summary <- get_academic_indicators_summary()
+#' summary <- mysterycall_get_academic_indicators_summary()
 #' summary$total_known_institutions
 #' names(summary$indicators)
 #'
-#' @seealso \code{\link{classify_academic_affiliation}},
-#'   \code{\link{check_academic_name_patterns}}
+#' @seealso \code{\link{mysterycall_classify_academic_affiliation}},
+#'   \code{\link{mysterycall_check_academic_name_patterns}}
+#' @family classification
 #' @export
-get_academic_indicators_summary <- function() {
+mysterycall_get_academic_indicators_summary <- function() {
   list(
     module_version = "1.0.0",
     created_date   = "2025-10-06",
@@ -403,3 +422,7 @@ get_academic_indicators_summary <- function() {
     )
   )
 }
+
+#' @rdname mysterycall_get_academic_indicators_summary
+#' @export
+get_academic_indicators_summary <- function(...) { .Deprecated("mysterycall_get_academic_indicators_summary"); mysterycall_get_academic_indicators_summary(...) }

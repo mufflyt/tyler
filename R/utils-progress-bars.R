@@ -1,4 +1,4 @@
-#' Beautiful Progress Bars for Tyler Package
+#' Beautiful Progress Bars for mysterycall
 #'
 #' Provides animated progress bars with ETA calculations using the cli package.
 #' Integrates seamlessly with the logging framework for a modern CLI experience.
@@ -19,6 +19,7 @@ NULL
 #' @param force Whether to force progress bar even if not in terminal (default: FALSE)
 #'
 #' @return Progress bar ID (invisible)
+#' @family progress-bars
 #' @export
 #'
 #' @examples
@@ -107,6 +108,7 @@ mysterycall_progress_bar <- function(name,
 #' @param set Set to a specific absolute value instead of incrementing.
 #'
 #' @return Invisible NULL.
+#' @family progress-bars
 #' @export
 #' @examples
 #' pb <- mysterycall_progress_bar("Processing", total = 10)
@@ -163,6 +165,7 @@ mysterycall_progress_update <- function(pb, amount = 1, status = NULL, set = NUL
 #' @param status Final status label (default: \code{"done"}).
 #'
 #' @return Invisible NULL.
+#' @family progress-bars
 #' @export
 #' @examples
 #' pb <- mysterycall_progress_bar("Processing", total = 5)
@@ -196,6 +199,7 @@ mysterycall_progress_done <- function(pb, result = NULL, status = "done") {
 #' @param msg Optional error message string displayed alongside the failure.
 #'
 #' @return Invisible NULL.
+#' @family progress-bars
 #' @export
 #' @examples
 #' pb <- mysterycall_progress_bar("Processing", total = 10)
@@ -234,6 +238,7 @@ mysterycall_progress_fail <- function(pb, msg = NULL) {
 #' @param show_overall Whether to show overall progress bar (default: TRUE)
 #'
 #' @return Multi-progress tracker object
+#' @family progress-bars
 #' @export
 #'
 #' @examples
@@ -282,6 +287,7 @@ mysterycall_multi_progress <- function(steps, show_overall = TRUE) {
 #' @param detail Optional detail message shown beneath the step header.
 #'
 #' @return Invisible NULL.
+#' @family progress-bars
 #' @export
 #' @examples
 #' tr <- mysterycall_multi_progress(c("Geocode", "Validate"))
@@ -332,6 +338,7 @@ mysterycall_multi_step <- function(tracker, step_num, total, detail = NULL) {
 #' @param status Optional status message to display.
 #'
 #' @return Invisible NULL.
+#' @family progress-bars
 #' @export
 #' @examples
 #' tr <- mysterycall_multi_progress(c("Geocode", "Validate"))
@@ -362,6 +369,7 @@ mysterycall_multi_update <- function(tracker, amount = 1, status = NULL) {
 #' mysterycall_multi_update(tracker, amount = 10)
 #' mysterycall_multi_complete(tracker, result = "ok")
 #' }
+#' @family progress-bars
 #' @export
 mysterycall_multi_complete <- function(tracker, result = NULL) {
   if (!inherits(tracker, "mysterycall_multi_progress")) {
@@ -387,6 +395,7 @@ mysterycall_multi_complete <- function(tracker, result = NULL) {
 #' tracker <- mysterycall_multi_step(c("Geocode", "Validate"), 10)
 #' mysterycall_multi_done(tracker)
 #' }
+#' @family progress-bars
 #' @export
 mysterycall_multi_done <- function(tracker) {
   if (!inherits(tracker, "mysterycall_multi_progress")) {
@@ -415,6 +424,7 @@ mysterycall_multi_done <- function(tracker) {
 #' @param parallel Whether processing is parallel (affects ETA calculation)
 #'
 #' @return List of results from fn
+#' @family progress-bars
 #' @export
 #'
 #' @examples
@@ -476,6 +486,7 @@ mysterycall_progress_map <- function(items,
 #' @param msg Optional message to display
 #'
 #' @return Spinner ID
+#' @family progress-bars
 #' @examples
 #' \donttest{
 #' id <- mysterycall_spinner_start("Loading data")
@@ -507,6 +518,7 @@ mysterycall_spinner_start <- function(name, msg = NULL) {
 #' @param result Result message
 #'
 #' @return Invisible NULL
+#' @family progress-bars
 #' @examples
 #' \donttest{
 #' id <- mysterycall_spinner_start("Loading data")

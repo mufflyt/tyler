@@ -25,16 +25,16 @@ centers the title, and adds a framed legend. Use with
 \code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}} and \code{\link[=crs_albers_conus]{crs_albers_conus()}} for equal-area projection.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 ggplot(counties_sf) +
   geom_sf(aes(fill = rate)) +
-  coord_sf(crs = crs_albers_conus()) +
+  coord_sf(crs = mysterycall_crs_albers_conus()) +
   theme_green_journal_map()
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=crs_albers_conus]{crs_albers_conus()}}, \code{\link[=compose_map_density]{compose_map_density()}}
+\code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}}, \code{\link[=mysterycall_compose_map_density]{mysterycall_compose_map_density()}}
 
 Other green-journal-themes: 
 \code{\link{theme_green_journal}()},

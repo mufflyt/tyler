@@ -11,6 +11,7 @@
 #' mysterycall_max_table(vec) # Returns "B"
 #' mysterycall_max_table(vec, mult = TRUE) # Returns "B"
 #' @family table
+#' @seealso [mysterycall_min_table()]
 #' @export
 
 mysterycall_max_table <- function(InVec, mult = FALSE) {

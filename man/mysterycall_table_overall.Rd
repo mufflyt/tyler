@@ -19,12 +19,14 @@ mysterycall_table_overall(
 
 \item{title}{The title for the overall table summary (default is "Overall Table Summary").}
 
-\item{selected_columns}{Optional vector of selected columns to include in the table.}
+\item{selected_columns}{Optional character vector of column names to include.
+When \code{NULL} (default) all columns are used.}
 
-\item{label_translations}{Optional named list for label translations.}
+\item{label_translations}{Optional named list mapping column names to display
+labels, passed to \code{\link[arsenal:summary.tableby]{arsenal::summary.tableby()}}.}
 }
 \value{
-Path to the generated PDF file
+Invisibly returns the path to the generated PDF file.
 }
 \description{
 Generate an overall table summarizing the demographics of the Table 1.
@@ -36,11 +38,21 @@ mysterycall_table_overall("data/Table1.rds", "output_tables")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_write_table_pdf]{mysterycall_write_table_pdf()}}
+
 Other table: 
+\code{\link{mysterycall_disparities_table}()},
+\code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_max_table}()},
 \code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_model_table}()},
+\code{\link{mysterycall_table1}()},
+\code{\link{mysterycall_table1_gtsummary}()},
 \code{\link{mysterycall_table_percentages}()},
 \code{\link{mysterycall_table_proportion}()},
-\code{\link{mysterycall_write_arsenal_table}()}
+\code{\link{mysterycall_write_arsenal_table}()},
+\code{\link{mysterycall_write_table_pdf}()},
+\code{\link{print.mysterycall_disparities_table}()},
+\code{\link{print.mysterycall_table1}()}
 }
 \concept{table}

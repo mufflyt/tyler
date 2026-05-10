@@ -24,3 +24,18 @@ pb <- mysterycall_progress_bar("Processing", total = 5)
 for (i in seq_len(5)) mysterycall_progress_update(pb)
 mysterycall_progress_done(pb, result = "5 items processed")
 }
+\seealso{
+Other progress-bars: 
+\code{\link{mysterycall_multi_complete}()},
+\code{\link{mysterycall_multi_done}()},
+\code{\link{mysterycall_multi_progress}()},
+\code{\link{mysterycall_multi_step}()},
+\code{\link{mysterycall_multi_update}()},
+\code{\link{mysterycall_progress_bar}()},
+\code{\link{mysterycall_progress_fail}()},
+\code{\link{mysterycall_progress_map}()},
+\code{\link{mysterycall_progress_update}()},
+\code{\link{mysterycall_spinner_start}()},
+\code{\link{mysterycall_spinner_stop}()}
+}
+\concept{progress-bars}

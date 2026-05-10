@@ -1,4 +1,4 @@
-#' Comprehensive Logging Utilities for Tyler Package
+#' Comprehensive Logging Utilities for mysterycall
 #'
 #' Provides plain-language logging with progress tracking, timing, and
 #' user-friendly output for long-running workflows.
@@ -286,12 +286,10 @@ mysterycall_log_save <- function(path, n_rows = NULL) {
 #' @return `invisible(NULL)` after printing duration and optional success
 #'   metrics for the current step.
 #' @family logging utilities
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_workflow_start("Demo", total_steps = 1)
 #' mysterycall_log_step("Step 1")
 #' mysterycall_log_step_complete(n_success = 90, n_total = 100)
-#' }
 #' @export
 mysterycall_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_total = NULL) {
   step_num <- .mysterycall_workflow$current_step
@@ -334,11 +332,10 @@ mysterycall_log_step_complete <- function(success_rate = NULL, n_success = NULL,
 #' @param final_n Number of final output rows
 #' @param input_n Number of input rows
 #' @return Invisible NULL
-#' @examples
-#' \dontrun{
+#' @family logging utilities
+#' @examplesIf interactive()
 #' mysterycall_workflow_start("Demo", total_steps = 1)
 #' mysterycall_workflow_end(final_n = 80, input_n = 100)
-#' }
 #' @export
 mysterycall_workflow_end <- function(final_n = NULL, input_n = NULL) {
   if (is.null(.mysterycall_workflow$start_time)) {
@@ -411,6 +408,7 @@ mysterycall_workflow_end <- function(final_n = NULL, input_n = NULL) {
 #'
 #' @param seconds Duration in seconds
 #' @return Formatted string (e.g., "2h 34m 15s")
+#' @family logging utilities
 #' @examples
 #' mysterycall_format_duration(45)
 #' mysterycall_format_duration(125)
@@ -472,6 +470,7 @@ mysterycall_log_to_file <- function(msg) {
 #' @param total Total number of items
 #' @param label Label for progress messages
 #' @return A function that updates progress
+#' @family logging utilities
 #' @export
 #'
 #' @examples
@@ -514,13 +513,14 @@ mysterycall_progress_callback <- function(total, label = "Processing") {
 #'   `mysterycall_log_info()` when using quiet-aware wrappers.
 #'
 #' @return The previous quiet value (invisibly).
+#' @family logging utilities
 #' @examples
 #' old <- mysterycall_use_quiet_logging(TRUE)
 #' # ... run operations silently ...
 #' mysterycall_use_quiet_logging(old)
 #' @export
 mysterycall_use_quiet_logging <- function(quiet = TRUE) {
-  old <- getOption("tyler.quiet", FALSE)
-  options(tyler.quiet = quiet)
+  old <- getOption("mysterycall.quiet", FALSE)
+  options(mysterycall.quiet = quiet)
   invisible(old)
 }

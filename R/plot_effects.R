@@ -26,11 +26,9 @@ NULL
 #' @family outcomes
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' m <- glm(mpg ~ wt + hp, data = mtcars, family = gaussian())
 #' mysterycall_plot_effect(m, "wt")
-#' }
 mysterycall_plot_effect <- function(model,
                                      term,
                                      type    = c("response", "link"),
@@ -89,13 +87,11 @@ mysterycall_plot_effect <- function(model,
 #' @family outcomes
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_plot_sjplot_interaction(fit,
 #'   terms = c("insurance", "gender"),
 #'   title = "Insurance x Gender interaction"
 #' )
-#' }
 mysterycall_plot_sjplot_interaction <- function(model, terms, title = NULL, ...) {
   if (!requireNamespace("sjPlot", quietly = TRUE)) {
     stop("sjPlot is required. Install with install.packages('sjPlot').", call. = FALSE)

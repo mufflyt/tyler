@@ -21,13 +21,13 @@ Variant of \code{\link[=theme_green_journal_map]{theme_green_journal_map()}} for
 to eliminate white gaps between tightly tiled map panels.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 ggplot(tracts_sf) +
   geom_sf(aes(fill = rate)) +
   facet_wrap(~year) +
   theme_green_journal_faceted()
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other green-journal-themes: 

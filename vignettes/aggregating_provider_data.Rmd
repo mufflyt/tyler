@@ -50,23 +50,23 @@ change; NPI is usually the most stable identifier across roster creation,
 enrichment, and call outcome files.
 
 ```{r eval=FALSE}
-roster <- search_by_taxonomy(
+roster <- mysterycall_search_by_taxonomy(
   "Gynecologic Oncology",
   states = c("CO", "WY"),
   write_snapshot = FALSE,
   notify = FALSE
 ) |>
-  validate_and_remove_invalid_npi()
+  mysterycall_validate_npi()
 ```
 
 ## Add clinician enrichment
 
 Once you have a validated roster, enrich it with clinician-level attributes
 such as demographics or training metadata. In the current API, the exported
-function for this step is `retrieve_clinician_data()`.
+function for this step is `mysterycall_get_clinician_data()`.
 
 ```{r eval=FALSE}
-clinician_data <- retrieve_clinician_data(roster)
+clinician_data <- mysterycall_get_clinician_data(roster)
 
 analysis_base <- roster |>
   dplyr::left_join(

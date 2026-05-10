@@ -48,8 +48,7 @@ NULL
 #' @family outcomes
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' res <- mysterycall_plot_emmeans_full(
 #'   model    = fit,
 #'   specs    = ~ insurance | gender,
@@ -58,7 +57,6 @@ NULL
 #'   save_path = "figures/emmeans_gender.png"
 #' )
 #' res$plot
-#' }
 mysterycall_plot_emmeans_full <- function(model,
                                            specs,
                                            variable,

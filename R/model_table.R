@@ -26,7 +26,7 @@ NULL
 #' @return A data frame (tibble) with columns `term_col`, `irr_col`, and
 #'   `p_col`. One row per fixed-effect term.
 #'
-#' @family outcomes
+#' @family table
 #' @seealso [mysterycall_poisson_model()], [mysterycall_irr_plot()]
 #' @export
 #'

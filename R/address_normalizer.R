@@ -88,11 +88,15 @@ NULL
 #' @importFrom stringr str_replace_all str_squish
 #' @family address-normalization
 #' @export
-ascii_norm <- function(x) {
+mysterycall_ascii_norm <- function(x) {
   x |>
     stringr::str_replace_all("[^\\x20-\\x7E]", " ") |>
     stringr::str_squish()
 }
+
+#' @rdname mysterycall_ascii_norm
+#' @export
+ascii_norm <- function(...) { .Deprecated("mysterycall_ascii_norm"); mysterycall_ascii_norm(...) }
 
 #' Convert to Canonical Uppercase
 #'
@@ -109,7 +113,11 @@ ascii_norm <- function(x) {
 #'
 #' @family address-normalization
 #' @export
-caps <- function(x) toupper(ascii_norm(x))
+mysterycall_caps <- function(x) toupper(mysterycall_ascii_norm(x))
+
+#' @rdname mysterycall_caps
+#' @export
+caps <- function(...) { .Deprecated("mysterycall_caps"); mysterycall_caps(...) }
 
 #' Map Token Replacements Using Word Boundaries
 #'
@@ -148,10 +156,14 @@ map_token <- function(x, map) {
 #' @importFrom stringr str_detect
 #' @family address-normalization
 #' @export
-is_po_box <- function(x) {
-  y <- toupper(ascii_norm(x))
+mysterycall_is_po_box <- function(x) {
+  y <- toupper(mysterycall_ascii_norm(x))
   stringr::str_detect(y, "\\bP\\s*O\\s*BOX\\b|\\bPO\\s*BOX\\b|\\bPOST\\s*OFFICE\\s*BOX\\b")
 }
+
+#' @rdname mysterycall_is_po_box
+#' @export
+is_po_box <- function(...) { .Deprecated("mysterycall_is_po_box"); mysterycall_is_po_box(...) }
 
 #' Detect Addresses with Street Numbers
 #'
@@ -168,10 +180,14 @@ is_po_box <- function(x) {
 #' @importFrom stringr str_detect
 #' @family address-normalization
 #' @export
-has_street_number <- function(x) {
-  y <- ascii_norm(x)
+mysterycall_has_street_number <- function(x) {
+  y <- mysterycall_ascii_norm(x)
   stringr::str_detect(y, "^\\s*\\d+\\b")
 }
+
+#' @rdname mysterycall_has_street_number
+#' @export
+has_street_number <- function(...) { .Deprecated("mysterycall_has_street_number"); mysterycall_has_street_number(...) }
 
 #' Normalize State Names to USPS Codes
 #'
@@ -190,10 +206,14 @@ has_street_number <- function(x) {
 #' @importFrom dplyr if_else
 #' @family address-normalization
 #' @export
-normalize_state <- function(state) {
-  s <- caps(state)
+mysterycall_normalize_state <- function(state) {
+  s <- mysterycall_caps(state)
   dplyr::if_else(stringr::str_detect(s, "^[A-Z]{2}$"), s, map_token(s, .state_map))
 }
+
+#' @rdname mysterycall_normalize_state
+#' @export
+normalize_state <- function(...) { .Deprecated("mysterycall_normalize_state"); mysterycall_normalize_state(...) }
 
 #' Normalize Directional Prefixes and Suffixes
 #'
@@ -211,14 +231,18 @@ normalize_state <- function(state) {
 #' @importFrom stringr str_replace_all
 #' @family address-normalization
 #' @export
-normalize_directionals <- function(addr) {
-  a <- caps(addr)
+mysterycall_normalize_directionals <- function(addr) {
+  a <- mysterycall_caps(addr)
   a <- stringr::str_replace_all(a, .dir_alias)
   for (k in names(.dir_map)) {
     a <- stringr::str_replace_all(a, paste0("\\b", k, "\\b"), .dir_map[[k]])
   }
   a
 }
+
+#' @rdname mysterycall_normalize_directionals
+#' @export
+normalize_directionals <- function(...) { .Deprecated("mysterycall_normalize_directionals"); mysterycall_normalize_directionals(...) }
 
 #' Normalize Street Suffixes
 #'
@@ -236,13 +260,17 @@ normalize_directionals <- function(addr) {
 #' @importFrom stringr str_replace_all
 #' @family address-normalization
 #' @export
-normalize_suffix <- function(addr) {
-  a <- caps(addr)
+mysterycall_normalize_suffix <- function(addr) {
+  a <- mysterycall_caps(addr)
   for (k in names(.suffix_map)) {
     a <- stringr::str_replace_all(a, paste0("\\b", k, "\\b"), .suffix_map[[k]])
   }
   a
 }
+
+#' @rdname mysterycall_normalize_suffix
+#' @export
+normalize_suffix <- function(...) { .Deprecated("mysterycall_normalize_suffix"); mysterycall_normalize_suffix(...) }
 
 #' Normalize Unit Designators
 #'
@@ -267,9 +295,9 @@ normalize_suffix <- function(addr) {
 #' @importFrom stringr str_replace_all
 #' @family address-normalization
 #' @export
-normalize_units <- function(addr1, addr2 = NA_character_) {
-  a1 <- caps(addr1)
-  a2 <- if (is.na(addr2)) NA_character_ else caps(addr2)
+mysterycall_normalize_units <- function(addr1, addr2 = NA_character_) {
+  a1 <- mysterycall_caps(addr1)
+  a2 <- if (is.na(addr2)) NA_character_ else mysterycall_caps(addr2)
   a1 <- stringr::str_replace_all(a1, "\\bSUITE\\s*#?\\s*(\\w+)\\b", "STE \\1")
   a1 <- stringr::str_replace_all(a1, "\\bAPT\\.?\\s*#?\\s*(\\w+)\\b", "APT \\1")
   a1 <- stringr::str_replace_all(a1, "\\bUNIT\\s*#?\\s*(\\w+)\\b", "UNIT \\1")
@@ -282,6 +310,10 @@ normalize_units <- function(addr1, addr2 = NA_character_) {
   }
   list(addr1 = a1, addr2 = a2)
 }
+
+#' @rdname mysterycall_normalize_units
+#' @export
+normalize_units <- function(...) { .Deprecated("mysterycall_normalize_units"); mysterycall_normalize_units(...) }
 
 #' Extract 5-Digit ZIP Code
 #'
@@ -299,12 +331,16 @@ normalize_units <- function(addr1, addr2 = NA_character_) {
 #' @importFrom stringr str_extract
 #' @family address-normalization
 #' @export
-normalize_zip5 <- function(zip) {
+mysterycall_normalize_zip5 <- function(zip) {
   if (is.null(zip)) return(NA_character_)
   if (length(zip) == 0L) return(character(0))
   z <- stringr::str_extract(as.character(zip), "\\d{5}")
   ifelse(is.na(z), NA_character_, z)
 }
+
+#' @rdname mysterycall_normalize_zip5
+#' @export
+normalize_zip5 <- function(...) { .Deprecated("mysterycall_normalize_zip5"); mysterycall_normalize_zip5(...) }
 
 #' Remove Unit Designators from Address
 #'
@@ -323,11 +359,15 @@ normalize_zip5 <- function(zip) {
 #' @importFrom stringr str_replace_all str_squish
 #' @family address-normalization
 #' @export
-strip_suite <- function(addr) {
-  a <- caps(addr)
+mysterycall_strip_suite <- function(addr) {
+  a <- mysterycall_caps(addr)
   a <- stringr::str_replace_all(a, "\\b(STE|SUITE|APT|UNIT|FL|RM|#)\\s*\\w+\\b", "")
   stringr::str_squish(a)
 }
+
+#' @rdname mysterycall_strip_suite
+#' @export
+strip_suite <- function(...) { .Deprecated("mysterycall_strip_suite"); mysterycall_strip_suite(...) }
 
 #' Normalize All Address Fields in a Data Frame
 #'
@@ -370,7 +410,6 @@ strip_suite <- function(addr) {
 #' normalize_address_df(df)
 #'
 #' @importFrom dplyr mutate across all_of
-#' @importFrom tidyr unnest_wider
 #' @family address-normalization
 #' @export
 normalize_address_df <- function(df,
@@ -387,34 +426,37 @@ normalize_address_df <- function(df,
 
   df <- dplyr::mutate(
     df,
-    !!addr1_col := ascii_norm(.data[[addr1_col]]),
-    !!city_col  := caps(.data[[city_col]]),
-    !!state_col := normalize_state(.data[[state_col]]),
-    !!zip_col   := normalize_zip5(.data[[zip_col]])
+    !!addr1_col := mysterycall_ascii_norm(.data[[addr1_col]]),
+    !!city_col  := mysterycall_caps(.data[[city_col]]),
+    !!state_col := mysterycall_normalize_state(.data[[state_col]]),
+    !!zip_col   := mysterycall_normalize_zip5(.data[[zip_col]])
   )
   if (addr2_present) {
-    df <- dplyr::mutate(df, !!addr2_col := ascii_norm(.data[[addr2_col]]))
+    df <- dplyr::mutate(df, !!addr2_col := mysterycall_ascii_norm(.data[[addr2_col]]))
   }
 
   df <- dplyr::mutate(df,
-    addr1_dir = normalize_directionals(.data[[addr1_col]]),
-    addr1_suf = normalize_suffix(addr1_dir)
+    addr1_dir = mysterycall_normalize_directionals(.data[[addr1_col]]),
+    addr1_suf = mysterycall_normalize_suffix(addr1_dir)
   )
   df <- dplyr::rowwise(df)
   df <- dplyr::mutate(df,
-    tmp_units = list(normalize_units(
+    tmp_units = list(mysterycall_normalize_units(
       addr1_suf,
       if (addr2_present) .data[[addr2_col]] else NA_character_
     ))
   )
   df <- dplyr::ungroup(df)
+  if (!requireNamespace("tidyr", quietly = TRUE)) {
+    stop("Package 'tidyr' is required for normalize_address_df(). Install with: install.packages('tidyr')", call. = FALSE)
+  }
   df <- tidyr::unnest_wider(df, tmp_units, names_sep = "_")
   df <- dplyr::mutate(df,
     address1_norm    = tmp_units_addr1,
     address2_norm    = tmp_units_addr2,
-    address1_no_unit = strip_suite(address1_norm),
-    is_po_box        = is_po_box(.data[[addr1_col]]),
-    has_num          = has_street_number(.data[[addr1_col]])
+    address1_no_unit = mysterycall_strip_suite(address1_norm),
+    is_po_box        = mysterycall_is_po_box(.data[[addr1_col]]),
+    has_num          = mysterycall_has_street_number(.data[[addr1_col]])
   )
   dplyr::select(df, -addr1_dir, -addr1_suf, -tmp_units_addr1, -tmp_units_addr2)
 }

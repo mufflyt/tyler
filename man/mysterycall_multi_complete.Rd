@@ -24,3 +24,18 @@ mysterycall_multi_update(tracker, amount = 10)
 mysterycall_multi_complete(tracker, result = "ok")
 }
 }
+\seealso{
+Other progress-bars: 
+\code{\link{mysterycall_multi_done}()},
+\code{\link{mysterycall_multi_progress}()},
+\code{\link{mysterycall_multi_step}()},
+\code{\link{mysterycall_multi_update}()},
+\code{\link{mysterycall_progress_bar}()},
+\code{\link{mysterycall_progress_done}()},
+\code{\link{mysterycall_progress_fail}()},
+\code{\link{mysterycall_progress_map}()},
+\code{\link{mysterycall_progress_update}()},
+\code{\link{mysterycall_spinner_start}()},
+\code{\link{mysterycall_spinner_stop}()}
+}
+\concept{progress-bars}

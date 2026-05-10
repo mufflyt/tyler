@@ -1,35 +1,31 @@
-#' Calculate the Percentage of the Most Common Value in a Categorical Variable
+#' Frequency counts and percentages for a categorical variable
 #'
-#' This function calculates the percentage of the most common value in a specified categorical variable from a data frame.
+#' Counts each level of a categorical variable and computes its share of all
+#' non-missing rows, returning all levels sorted from most to least common.
 #'
 #' @param data_frame A data frame containing the categorical variable.
-#' @param variable A character string representing the name of the categorical variable within `data_frame`.
+#' @param variable A character string giving the column name of the categorical
+#'   variable within `data_frame`.
 #'
-#' @return A data frame containing the most common value and its count, along with the percentage of the total count that it represents.
-#'
-#' @details The function converts the variable name to a character string, then counts
-#'   the occurrences of each unique value in the specified column. It calculates the
-#'   percentage each value represents of the total and returns the most common value
-#'   with its count and percentage.
+#' @return A data frame with one row per unique non-missing value of `variable`,
+#'   sorted by descending count. Columns: the variable itself, `n` (count), and
+#'   `percent` (percentage of total, rounded to 1 decimal place).
 #'
 #' @examples
-#' # Example 1: Basic usage with a simple dataset
 #' data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
-#' result <- mysterycall_table_percentages(data_frame, "category")
-#' print(result)
+#' mysterycall_table_percentages(data_frame, "category")
 #'
-#' # Example 2: Using a dataset with multiple most common values
+#' # Ties are all included, sorted alphabetically within the tied rank
 #' df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
-#' result <- mysterycall_table_percentages(df_tie, "category")
-#' print(result)
+#' mysterycall_table_percentages(df_tie, "category")
 #'
-#' # Example 3: Handling a dataset with missing values
+#' # NAs are excluded from counts and the denominator
 #' df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
-#' result <- mysterycall_table_percentages(df_na, "category")
-#' print(result)
+#' mysterycall_table_percentages(df_na, "category")
 #'
 #' @importFrom rlang sym
 #' @family table
+#' @seealso [mysterycall_table_proportion()]
 #' @export
 mysterycall_table_percentages <- function(data_frame, variable) {
   variable <- as.character(variable)  # Ensure the variable name is a string

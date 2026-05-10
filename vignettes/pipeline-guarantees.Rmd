@@ -25,7 +25,7 @@ The mystery caller pipeline is a directed acyclic graph. Every major node is a
 ```
 taxonomy_terms ──► mysterycall_search_taxonomy()
                           │
-name_data ──────► mysterycall_search_and_process_npi()
+name_data ──────► mysterycall_mysterycall_search_and_process_npi()
                           │
                           ▼
 phase1_data ──────► mysterycall_clean_phase1()

@@ -27,6 +27,7 @@ mysterycall_remove_near_zero(df)
 }
 \seealso{
 Other utilities: 
+\code{\link{\%>\%}()},
 \code{\link{mysterycall_assess_data_quality}()},
 \code{\link{mysterycall_check_api_response}()},
 \code{\link{mysterycall_check_data_completeness}()},
@@ -36,7 +37,6 @@ Other utilities:
 \code{\link{mysterycall_download_file}()},
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_export_with_backup}()},
-\code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
 \code{\link{mysterycall_remove_constants}()},

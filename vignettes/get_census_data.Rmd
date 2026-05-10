@@ -30,7 +30,7 @@ if (eval_vignettes) {
 ```
 # Introduction
 
-This vignette demonstrates the usage of the `get_census_data` function, which is designed to retrieve Census data for all states' block groups. It leverages the `censusapi` package to query the U.S. Census Bureau's API and collect demographic information for specified state FIPS codes. We'll get the population in each block group using the [censusapi](https://www.hrecht.com/censusapi/) library and this relies heavily on her vignette.  
+This vignette demonstrates the usage of the `mysterycall_get_census_data` function, which is designed to retrieve Census data for all states' block groups. It leverages the `censusapi` package to query the U.S. Census Bureau's API and collect demographic information for specified state FIPS codes. We'll get the population in each block group using the [censusapi](https://www.hrecht.com/censusapi/) library and this relies heavily on her vignette.  
 
 ### Centers for Medicare and Medicaid Services Doctors and Clinicians Downloadable file
 The Downloadable File is housed in the CMS Medicare Compare (aka Physician Compare site): [CMS Medicare Compare](https://data.cms.gov/provider-data/dataset/mj5m-pzi6).  We could have downloaded the full data set file and do a left join but that runs the risk of being out of date give the data is update monthly. Here is the data dictionary for the file: [CMS Medicare Compare Data Dictionar](https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/physician/DOC_Data_Dictionary.pdf).  The Doctors and Clinicians national downloadable file is organized at the individual clinician level; each line is unique at the clinicianenrollment record-group-address (NPI-Ind_enrl_ID-Org_PAC_ID-adrs_id) level. Clinicians with multiple Medicare enrollment records and/or single enrollments linking to multiple practice locations are listed on multiple lines. 
@@ -116,7 +116,7 @@ The resulting data is combined into a single dataframe for analysis.
 ## Step 1
 ### Installation
 
-Before using the `mysterycall::get_census_data` function, you need to install and load the required packages. You can do this by running the following code:
+Before using the `mysterycall::mysterycall_get_census_data` function, you need to install and load the required packages. You can do this by running the following code:
 
 ```{r, eval = FALSE}
 # Install and load the necessary packages
@@ -206,7 +206,7 @@ us_fips_list <- c("01", "02", "04", "05", "06", "08", "09", "10", "11", "12", "1
 ```
 
 ## Step 3: Gather the Data from the US Census Bureau API
-Call the `get_census_data` function with the `us_fips_list` vector. The helper
+Call the `mysterycall_get_census_data` function with the `us_fips_list` vector. The helper
 adds 2020 Federal Information Processing Standard (FIPS) identifiers for every
 geography plus the Census vintage so you always know which release supplied the
 estimates. For example:
@@ -330,7 +330,7 @@ readr::write_csv(geometry, "block_groups_with_geometry.csv")
 
 # Conclusion
 
-The `get_census_data` function simplifies the process of obtaining Census data for all states' block groups. 
+The `mysterycall_get_census_data` function simplifies the process of obtaining Census data for all states' block groups. 
 
 # Features and bugs
 If you have ideas for other features that would make name handling easier, or find a bug, the best approach is to either report it or add it!

@@ -38,6 +38,7 @@
 #' )
 #' mysterycall_bootstrap_ci(df, "accepted", group_col = "insurance", seed = 1)
 #'
+#' @family inference
 #' @export
 mysterycall_bootstrap_ci <- function(
     data,

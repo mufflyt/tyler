@@ -23,38 +23,38 @@
 #'
 #' @note MOE propagation follows Census Bureau ACS Handbook Appendix 3.
 #'   All MOE values are at 90\% confidence level (Census standard).
-#'   For both sexes in one call, use \code{\link{get_acs_adults_18_90}}.
+#'   For both sexes in one call, use \code{\link{mysterycall_get_acs_adults_18_90}}.
 #'
-#' @examples
-#' \dontrun{
-#' co_women <- get_acs_women_18_90(year = 2022, states = "CO")
-#' west_coast <- get_acs_women_18_90(year = 2022, states = c("CA", "OR", "WA"))
-#' }
+#' @examplesIf interactive()
+#' co_women <- mysterycall_get_acs_women_18_90(year = 2022, states = "CO")
+#' west_coast <- mysterycall_get_acs_women_18_90(year = 2022, states = c("CA", "OR", "WA"))
 #'
-#' @importFrom tidycensus load_variables get_acs
 #' @importFrom dplyr filter mutate select across all_of
 #' @importFrom stringr str_detect
 #' @family census
 #' @export
-get_acs_women_18_90 <- function(year = 2022, states = NULL, verbose = TRUE) {
+mysterycall_get_acs_women_18_90 <- function(year = 2022, states = NULL, verbose = TRUE) {
+  if (!requireNamespace("tidycensus", quietly = TRUE)) {
+    stop("Package 'tidycensus' is required. Install with: install.packages('tidycensus')", call. = FALSE)
+  }
   if (year < 2009 || year > 2023) {
     stop(sprintf("Invalid year: %d. ACS 5-year data available for 2009-2023.", year))
   }
 
   if (verbose) {
-    cat("\n")
-    cat("=========================================================\n")
-    cat("ACS FEMALE POPULATION DATA DOWNLOAD (AGES 18-90)\n")
-    cat("=========================================================\n")
-    cat(sprintf("Year:       ACS %d (5-year estimates)\n", year))
-    cat(sprintf("Geography:  Census tracts\n"))
-    cat(sprintf("States:     %s\n", ifelse(is.null(states), "All US (50 states + DC + PR)",
+    message("")
+    message("=========================================================")
+    message("ACS FEMALE POPULATION DATA DOWNLOAD (AGES 18-90)")
+    message("=========================================================")
+    message(sprintf("Year:       ACS %d (5-year estimates)", year))
+    message(sprintf("Geography:  Census tracts"))
+    message(sprintf("States:     %s", ifelse(is.null(states), "All US (50 states + DC + PR)",
                                            paste(states, collapse = ", "))))
-    cat(sprintf("Variables:  B01001 (Sex by Age) - Female 18-89 years\n"))
-    cat("\n")
+    message(sprintf("Variables:  B01001 (Sex by Age) - Female 18-89 years"))
+    message("")
   }
 
-  if (verbose) cat("Loading Census variable dictionary...\n")
+  if (verbose) message("Loading Census variable dictionary...")
   vars <- tryCatch(
     tidycensus::load_variables(year = year, dataset = "acs5", cache = TRUE),
     error = function(e) stop(sprintf(
@@ -77,8 +77,8 @@ get_acs_women_18_90 <- function(year = 2022, states = NULL, verbose = TRUE) {
   var_ids <- female_vars$name
 
   if (verbose) {
-    cat(sprintf("Identified %d age group variables\n", length(var_ids)))
-    cat("Calling Census API (this may take a few minutes)...\n")
+    message(sprintf("Identified %d age group variables", length(var_ids)))
+    message("Calling Census API (this may take a few minutes)...")
   }
 
   acs <- tryCatch(
@@ -120,12 +120,19 @@ get_acs_women_18_90 <- function(year = 2022, states = NULL, verbose = TRUE) {
     } else {
       NA_real_
     }
-    cat(sprintf("Tracts: %s | Total women 18-90: %s | Avg MOE: %.2f%%\n",
+    message(sprintf("Tracts: %s | Total women 18-90: %s | Avg MOE: %.2f%%",
       format(nrow(result), big.mark = ","),
       format(sum(result$women_18_90, na.rm = TRUE), big.mark = ","),
       ifelse(is.na(moe_pct), 0, moe_pct)))
-    cat("Download complete.\n\n")
+    message("Download complete.\n")
   }
 
   result
+}
+
+#' @rdname mysterycall_get_acs_women_18_90
+#' @export
+get_acs_women_18_90 <- function(...) {
+  .Deprecated("mysterycall_get_acs_women_18_90")
+  mysterycall_get_acs_women_18_90(...)
 }

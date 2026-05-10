@@ -58,3 +58,4 @@ df <- data.frame(npi = c("1234567893", "0000000000", NA_character_))
 mysterycall_validate_npi(df)
 \dontshow{\}) # examplesIf}
 }
+\concept{data-quality}

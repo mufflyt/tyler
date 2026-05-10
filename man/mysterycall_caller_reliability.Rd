@@ -63,3 +63,8 @@ df <- data.frame(
 mysterycall_caller_reliability(df, "caller", "outcome", gold_col = "gold")
 
 }
+\seealso{
+Other caller-management: 
+\code{\link{print.mysterycall_reliability}()}
+}
+\concept{caller-management}

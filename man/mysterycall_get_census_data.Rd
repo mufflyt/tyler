@@ -35,6 +35,8 @@ census_df <- mysterycall_get_census_data(us_fips_list)
 }
 \seealso{
 Other census: 
+\code{\link{mysterycall_get_acs_adults_18_90}()},
+\code{\link{mysterycall_get_acs_women_18_90}()},
 \code{\link{mysterycall_plot_census_age}()},
 \code{\link{mysterycall_summarize_census}()}
 }

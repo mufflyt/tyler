@@ -39,6 +39,7 @@ isochrones_data <- mysterycall_isochrones_for_df("points.csv")
 }
 \seealso{
 Other mapping: 
+\code{\link{mysterycall_clear_isochrone_cache}()},
 \code{\link{mysterycall_create_isochrones}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_acog_districts}()},

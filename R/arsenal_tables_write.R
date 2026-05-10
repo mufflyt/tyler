@@ -1,11 +1,14 @@
-#' Writes an Arsenal table object to a Word document.
+#' Writes an Arsenal summary table to a Word document
 #'
-#' @param object An object to be written to Word, typically an Arsenal table.
-#' @param filename The filename (without extension) for the Word document.
+#' @param object A data frame (e.g. the output of [arsenal::summary.tableby()])
+#'   to write. Must be a data frame — the function will error otherwise.
+#' @param filename The filename without extension for the Word document.
 #' @param output_dir Directory where the Word document should be written.
 #'   Defaults to a session-specific folder inside [tempdir()].
-#' @return Called for its side effect of saving a Word document to `word_path`. Returns `NULL` invisibly.
+#' @return Invisibly returns `NULL`. Called for the side effect of writing
+#'   `<filename>.docx` to `output_dir`.
 #' @family table
+#' @seealso [mysterycall_write_table_pdf()], [mysterycall_table_overall()]
 #' @export
 #'
 #' @examplesIf interactive()

@@ -48,11 +48,9 @@
 #' @family workflow
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Verify an audit file written by clean_phase1
 #' mysterycall_verify_artifact("path/to/audit_trail_2026-05-09.json")
-#' }
 mysterycall_verify_artifact <- function(audit_path) {
   if (!requireNamespace("jsonlite", quietly = TRUE)) {
     stop("Package 'jsonlite' is required. Install with install.packages('jsonlite').",

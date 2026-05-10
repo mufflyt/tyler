@@ -31,6 +31,7 @@
 #' )
 #' mysterycall_write_results_paragraph(irr_tbl, "commercial insurance", "insurance")
 #'
+#' @family reporting
 #' @export
 mysterycall_write_results_paragraph <- function(
     model_result,

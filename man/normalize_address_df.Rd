@@ -62,15 +62,15 @@ normalize_address_df(df)
 }
 \seealso{
 Other address-normalization: 
-\code{\link{ascii_norm}()},
-\code{\link{caps}()},
-\code{\link{has_street_number}()},
-\code{\link{is_po_box}()},
-\code{\link{normalize_directionals}()},
-\code{\link{normalize_state}()},
-\code{\link{normalize_suffix}()},
-\code{\link{normalize_units}()},
-\code{\link{normalize_zip5}()},
-\code{\link{strip_suite}()}
+\code{\link{mysterycall_ascii_norm}()},
+\code{\link{mysterycall_caps}()},
+\code{\link{mysterycall_has_street_number}()},
+\code{\link{mysterycall_is_po_box}()},
+\code{\link{mysterycall_normalize_directionals}()},
+\code{\link{mysterycall_normalize_state}()},
+\code{\link{mysterycall_normalize_suffix}()},
+\code{\link{mysterycall_normalize_units}()},
+\code{\link{mysterycall_normalize_zip5}()},
+\code{\link{mysterycall_strip_suite}()}
 }
 \concept{address-normalization}

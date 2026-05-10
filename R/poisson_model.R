@@ -295,6 +295,13 @@ mysterycall_poisson_model <- function(data,
   )
 }
 
+#' Print method for mysterycall_poisson_model objects
+#'
+#' @param x A \code{mysterycall_poisson_model} object.
+#' @param digits Integer decimal places for coefficient display. Default \code{3}.
+#' @param ... Ignored.
+#' @return Invisibly returns \code{x}.
+#' @family outcomes
 #' @export
 print.mysterycall_poisson_model <- function(x, digits = 3, ...) {
   cat(sprintf(

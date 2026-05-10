@@ -30,6 +30,7 @@
 #' )
 #' mysterycall_compare_waves(df, "wave", "outcome")
 #'
+#' @family outcomes
 #' @export
 mysterycall_compare_waves <- function(
     data,
@@ -43,17 +44,17 @@ mysterycall_compare_waves <- function(
   stopifnot(is.data.frame(data))
   stopifnot(is.character(wave_col),    length(wave_col)    == 1)
   stopifnot(is.character(outcome_col), length(outcome_col) == 1)
-  if (!wave_col    %in% names(data)) stop("wave_col '",    wave_col,    "' not found in data.")
-  if (!outcome_col %in% names(data)) stop("outcome_col '", outcome_col, "' not found in data.")
+  if (!wave_col    %in% names(data)) stop("wave_col '",    wave_col,    "' not found in data.", call. = FALSE)
+  if (!outcome_col %in% names(data)) stop("outcome_col '", outcome_col, "' not found in data.", call. = FALSE)
   if (!is.null(group_col)) {
     stopifnot(is.character(group_col), length(group_col) == 1)
-    if (!group_col %in% names(data)) stop("group_col '", group_col, "' not found in data.")
+    if (!group_col %in% names(data)) stop("group_col '", group_col, "' not found in data.", call. = FALSE)
   }
 
   type <- match.arg(type)
 
   waves <- sort(unique(data[[wave_col]]))
-  if (length(waves) < 2) stop("At least 2 unique waves are required.")
+  if (length(waves) < 2) stop("At least 2 unique waves are required.", call. = FALSE)
 
   # ---- auto-detect type -------------------------------------------------------
   if (type == "auto") {
@@ -66,7 +67,7 @@ mysterycall_compare_waves <- function(
     ref_wave <- waves[1]
   } else {
     if (!ref_wave %in% waves) {
-      stop("ref_wave '", ref_wave, "' not found among wave values.")
+      stop("ref_wave '", ref_wave, "' not found among wave values.", call. = FALSE)
     }
   }
 

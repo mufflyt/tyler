@@ -18,8 +18,9 @@ A character vector representing the formatted percentage(s) with the specified n
 This function formats a numeric value as a percentage with a specified number of decimal places.
 }
 \details{
-The function converts a numeric value to a percentage format with the specified number of decimal places.
-This is useful for consistent display of percentage values in reports or visualizations.
+Uses \code{formatC(format = "f")} so trailing zeros are always
+preserved, ensuring values like \verb{10.0\%} align correctly in fixed-width
+output.
 }
 \examples{
 # Example 1: Format a single numeric value
@@ -37,24 +38,19 @@ print(no_decimal)  # Output: "50\%"
 
 }
 \seealso{
-Other utilities: 
-\code{\link{mysterycall_assess_data_quality}()},
-\code{\link{mysterycall_check_api_response}()},
-\code{\link{mysterycall_check_data_completeness}()},
-\code{\link{mysterycall_check_dependencies}()},
-\code{\link{mysterycall_check_no_data_loss}()},
-\code{\link{mysterycall_check_no_limits}()},
-\code{\link{mysterycall_download_file}()},
-\code{\link{mysterycall_estimate_resources}()},
-\code{\link{mysterycall_export_with_backup}()},
-\code{\link{mysterycall_preflight_check}()},
-\code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
-\code{\link{mysterycall_resolve_path}()},
-\code{\link{mysterycall_save_quality_table}()},
-\code{\link{mysterycall_scan_for_limits}()},
-\code{\link{mysterycall_standard_labels}()},
-\code{\link{mysterycall_standard_palette}()}
+Other table: 
+\code{\link{mysterycall_disparities_table}()},
+\code{\link{mysterycall_max_table}()},
+\code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_model_table}()},
+\code{\link{mysterycall_table1}()},
+\code{\link{mysterycall_table1_gtsummary}()},
+\code{\link{mysterycall_table_overall}()},
+\code{\link{mysterycall_table_percentages}()},
+\code{\link{mysterycall_table_proportion}()},
+\code{\link{mysterycall_write_arsenal_table}()},
+\code{\link{mysterycall_write_table_pdf}()},
+\code{\link{print.mysterycall_disparities_table}()},
+\code{\link{print.mysterycall_table1}()}
 }
-\concept{utilities}
+\concept{table}

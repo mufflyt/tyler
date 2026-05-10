@@ -17,3 +17,19 @@ release that memory.
 \examples{
 mysterycall_clear_isochrone_cache()
 }
+\seealso{
+Other mapping: 
+\code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_isochrones_for_df}()},
+\code{\link{mysterycall_map_acceptance_rate}()},
+\code{\link{mysterycall_map_acog_districts}()},
+\code{\link{mysterycall_map_base}()},
+\code{\link{mysterycall_map_block_group}()},
+\code{\link{mysterycall_map_leaflet}()},
+\code{\link{mysterycall_map_physicians}()},
+\code{\link{mysterycall_plot_density}()},
+\code{\link{mysterycall_plot_isochrones}()},
+\code{\link{mysterycall_plot_line}()},
+\code{\link{mysterycall_plot_scatter}()}
+}
+\concept{mapping}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils-logging.R
 \name{logging-utils}
 \alias{logging-utils}
-\title{Comprehensive Logging Utilities for Tyler Package}
+\title{Comprehensive Logging Utilities for mysterycall}
 \description{
 Provides plain-language logging with progress tracking, timing, and
 user-friendly output for long-running workflows.

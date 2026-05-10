@@ -125,6 +125,7 @@ mysterycall_create_isochrones <- function(location,
 #' release that memory.
 #'
 #' @return Invisibly `NULL`.
+#' @family mapping
 #' @examples
 #' mysterycall_clear_isochrone_cache()
 #' @export

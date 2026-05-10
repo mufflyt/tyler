@@ -10,7 +10,7 @@ mysterycall_geocode(
   output_file_path = NULL,
   failed_output_path = NULL,
   notify = TRUE,
-  quiet = getOption("tyler.quiet", FALSE),
+  quiet = getOption("mysterycall.quiet", FALSE),
   tracker = NULL,
   tracker_step = "Geocoding"
 )

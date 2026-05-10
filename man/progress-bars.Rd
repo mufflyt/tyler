@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils-progress-bars.R
 \name{progress-bars}
 \alias{progress-bars}
-\title{Beautiful Progress Bars for Tyler Package}
+\title{Beautiful Progress Bars for mysterycall}
 \description{
 Provides animated progress bars with ETA calculations using the cli package.
 Integrates seamlessly with the logging framework for a modern CLI experience.

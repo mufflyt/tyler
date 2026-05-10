@@ -51,13 +51,14 @@ digest. Any other outcome raises an error with a diagnostic message.
 }
 
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Verify an audit file written by clean_phase1
 mysterycall_verify_artifact("path/to/audit_trail_2026-05-09.json")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other workflow: 
+\code{\link{mysterycall_call_productivity}()},
 \code{\link{mysterycall_clean_phase1}()},
 \code{\link{mysterycall_clean_phase2}()},
 \code{\link{mysterycall_print_dashboard}()},

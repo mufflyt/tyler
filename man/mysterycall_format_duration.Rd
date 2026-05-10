@@ -20,3 +20,26 @@ mysterycall_format_duration(45)
 mysterycall_format_duration(125)
 mysterycall_format_duration(3700)
 }
+\seealso{
+Other logging utilities: 
+\code{\link{mysterycall_log_cache_hit}()},
+\code{\link{mysterycall_log_error}()},
+\code{\link{mysterycall_log_info}()},
+\code{\link{mysterycall_log_progress}()},
+\code{\link{mysterycall_log_save}()},
+\code{\link{mysterycall_log_step}()},
+\code{\link{mysterycall_log_step_complete}()},
+\code{\link{mysterycall_log_success}()},
+\code{\link{mysterycall_log_warning}()},
+\code{\link{mysterycall_progress_callback}()},
+\code{\link{mysterycall_progress_finish}()},
+\code{\link{mysterycall_progress_start}()},
+\code{\link{mysterycall_progress_summary}()},
+\code{\link{mysterycall_progress_tracker}()},
+\code{\link{mysterycall_tracker_fail}()},
+\code{\link{mysterycall_tracker_update}()},
+\code{\link{mysterycall_use_quiet_logging}()},
+\code{\link{mysterycall_workflow_end}()},
+\code{\link{mysterycall_workflow_start}()}
+}
+\concept{logging utilities}

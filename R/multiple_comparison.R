@@ -38,6 +38,7 @@
 #' )
 #' mysterycall_multiple_comparison_adjust(df, p_col = "p", label_col = "comparison")
 #'
+#' @family inference
 #' @export
 mysterycall_multiple_comparison_adjust <- function(
     x,

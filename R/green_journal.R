@@ -99,15 +99,13 @@ theme_green_journal <- function(base_size = 10, base_family = "Arial") {
 #' @return A [ggplot2::theme()] object.
 #' @export
 #' @family green-journal-themes
-#' @seealso [crs_albers_conus()], [compose_map_density()]
-#' @examples
-#' \dontrun{
+#' @seealso [mysterycall_crs_albers_conus()], [mysterycall_compose_map_density()]
+#' @examplesIf interactive()
 #' library(ggplot2)
 #' ggplot(counties_sf) +
 #'   geom_sf(aes(fill = rate)) +
-#'   coord_sf(crs = crs_albers_conus()) +
+#'   coord_sf(crs = mysterycall_crs_albers_conus()) +
 #'   theme_green_journal_map()
-#' }
 theme_green_journal_map <- function(base_size = 10, legend_position = "right") {
   theme_green_journal(base_size = base_size) +
     ggplot2::theme(
@@ -144,14 +142,12 @@ theme_green_journal_map <- function(base_size = 10, legend_position = "right") {
 #' @return A [ggplot2::theme()] object.
 #' @export
 #' @family green-journal-themes
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' library(ggplot2)
 #' ggplot(tracts_sf) +
 #'   geom_sf(aes(fill = rate)) +
 #'   facet_wrap(~year) +
 #'   theme_green_journal_faceted()
-#' }
 theme_green_journal_faceted <- function(base_size = 9) {
   theme_green_journal_map(base_size = base_size, legend_position = "bottom") +
     ggplot2::theme(
@@ -283,13 +279,11 @@ scale_fill_green_journal <- function(...) {
 #' @return Invisible character vector of paths written.
 #' @export
 #' @family green-journal-output
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' p <- ggplot(mtcars, aes(wt, mpg)) + geom_point() + theme_green_journal()
 #' save_green_journal_figure(p, "figures/fig1", layout = "double_column")
 #' # Creates: figures/fig1.tiff  figures/fig1.pdf  figures/fig1.png
 #' #          figures/fig1_data.csv
-#' }
 save_green_journal_figure <- function(plot,
                                       path_stem,
                                       layout    = c("double_column", "single_column"),
@@ -376,21 +370,23 @@ save_green_journal_figure <- function(plot,
 #' @export
 #' @family green-journal-spatial
 #' @seealso [theme_green_journal_map()]
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' library(ggplot2)
 #' ggplot(counties_sf) +
 #'   geom_sf(aes(fill = rate)) +
-#'   coord_sf(crs = crs_albers_conus()) +
+#'   coord_sf(crs = mysterycall_crs_albers_conus()) +
 #'   theme_green_journal_map()
-#' }
-crs_albers_conus <- function() {
+mysterycall_crs_albers_conus <- function() {
   if (!requireNamespace("sf", quietly = TRUE)) {
     stop("Package 'sf' is required for crs_albers_conus(). Install with: install.packages('sf')",
          call. = FALSE)
   }
   sf::st_crs(5070)
 }
+
+#' @rdname mysterycall_crs_albers_conus
+#' @export
+crs_albers_conus <- function(...) { .Deprecated("mysterycall_crs_albers_conus"); mysterycall_crs_albers_conus(...) }
 
 
 #' Winsorize extreme values
@@ -409,17 +405,21 @@ crs_albers_conus <- function() {
 #' @return Numeric vector, same length as `x`.
 #' @export
 #' @family green-journal-spatial
-#' @seealso [truncate_for_viz()]
+#' @seealso [mysterycall_truncate_for_viz()]
 #' @examples
 #' x <- c(0, 5, 10, 50, 90, 95, 100)
-#' winsorize(x, lower = 0.1, upper = 0.9)
-winsorize <- function(x, lower = 0.005, upper = 0.995, na.rm = TRUE) {
+#' mysterycall_winsorize(x, lower = 0.1, upper = 0.9)
+mysterycall_winsorize <- function(x, lower = 0.005, upper = 0.995, na.rm = TRUE) {
   stopifnot(is.numeric(x), lower >= 0, upper <= 1, lower < upper)
   bounds      <- stats::quantile(x, probs = c(lower, upper), na.rm = na.rm)
   x[x < bounds[1L]] <- bounds[1L]
   x[x > bounds[2L]] <- bounds[2L]
   x
 }
+
+#' @rdname mysterycall_winsorize
+#' @export
+winsorize <- function(...) { .Deprecated("mysterycall_winsorize"); mysterycall_winsorize(...) }
 
 
 #' Truncate values to fixed bounds
@@ -435,12 +435,16 @@ winsorize <- function(x, lower = 0.005, upper = 0.995, na.rm = TRUE) {
 #' @return Numeric vector clipped to `[floor, ceiling]`.
 #' @export
 #' @family green-journal-spatial
-#' @seealso [winsorize()]
+#' @seealso [mysterycall_winsorize()]
 #' @examples
-#' truncate_for_viz(c(-5, 0, 50, 105), floor = 0, ceiling = 100)
-truncate_for_viz <- function(x, floor = 0, ceiling = 100) {
+#' mysterycall_truncate_for_viz(c(-5, 0, 50, 105), floor = 0, ceiling = 100)
+mysterycall_truncate_for_viz <- function(x, floor = 0, ceiling = 100) {
   pmin(pmax(x, floor, na.rm = TRUE), ceiling, na.rm = TRUE)
 }
+
+#' @rdname mysterycall_truncate_for_viz
+#' @export
+truncate_for_viz <- function(...) { .Deprecated("mysterycall_truncate_for_viz"); mysterycall_truncate_for_viz(...) }
 
 
 #' Composite map + density figure
@@ -459,18 +463,16 @@ truncate_for_viz <- function(x, floor = 0, ceiling = 100) {
 #' @export
 #' @family green-journal-spatial
 #' @seealso [save_green_journal_figure()], [theme_green_journal_map()]
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' library(ggplot2)
 #' p_map <- ggplot(tracts) + geom_sf(aes(fill = access)) +
 #'   theme_green_journal_map()
 #' p_den <- ggplot(tracts, aes(access)) +
 #'   geom_density(fill = "#56B4E9", alpha = 0.6) +
 #'   theme_green_journal()
-#' composite <- compose_map_density(p_map, p_den)
+#' composite <- mysterycall_compose_map_density(p_map, p_den)
 #' save_green_journal_figure(composite, "figures/fig3")
-#' }
-compose_map_density <- function(map_plot, density_plot,
+mysterycall_compose_map_density <- function(map_plot, density_plot,
                                 map_weight = 7L, density_weight = 2L) {
   stopifnot(inherits(map_plot, "ggplot"), inherits(density_plot, "ggplot"))
   if (!requireNamespace("gridExtra", quietly = TRUE)) {
@@ -480,6 +482,10 @@ compose_map_density <- function(map_plot, density_plot,
   layout <- matrix(c(rep(1L, map_weight), rep(2L, density_weight)), ncol = 1L)
   gridExtra::arrangeGrob(map_plot, density_plot, layout_matrix = layout)
 }
+
+#' @rdname mysterycall_compose_map_density
+#' @export
+compose_map_density <- function(...) { .Deprecated("mysterycall_compose_map_density"); mysterycall_compose_map_density(...) }
 
 
 # =============================================================================

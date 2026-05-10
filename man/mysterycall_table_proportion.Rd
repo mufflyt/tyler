@@ -12,15 +12,19 @@ mysterycall_table_proportion(data, variable_name)
 \item{variable_name}{The name of the categorical variable for which proportions are calculated, passed as an unquoted expression.}
 }
 \value{
-A data frame with two columns: \code{n} (the count of each level) and \code{percent} (the percentage of the total count represented by each level).
+A data frame with one row per unique non-missing level of
+\code{variable_name}. Columns: the variable itself, \code{n} (count), and \code{percent}
+(percentage of total, rounded to 2 decimal places).
 }
 \description{
 This function calculates the proportion of each level in a specified categorical variable within a data frame.
 It returns a data frame with the counts and percentages of each level.
 }
 \details{
-The function counts the occurrences of each unique value in the specified variable and calculates the percentage each value represents of the total count.
-The percentages are rounded to two decimal places.
+\code{variable_name} uses tidy evaluation (\code{{{ }}}), so pass the column
+name unquoted (e.g. \code{mysterycall_table_proportion(df, gender)}). Use
+\code{\link[=mysterycall_table_percentages]{mysterycall_table_percentages()}} when you have the column name as a
+string.
 }
 \examples{
 # Example 1: Basic usage with a simple dataset
@@ -40,11 +44,21 @@ print(result)
 
 }
 \seealso{
+\code{\link[=mysterycall_table_percentages]{mysterycall_table_percentages()}}
+
 Other table: 
+\code{\link{mysterycall_disparities_table}()},
+\code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_max_table}()},
 \code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_model_table}()},
+\code{\link{mysterycall_table1}()},
+\code{\link{mysterycall_table1_gtsummary}()},
 \code{\link{mysterycall_table_overall}()},
 \code{\link{mysterycall_table_percentages}()},
-\code{\link{mysterycall_write_arsenal_table}()}
+\code{\link{mysterycall_write_arsenal_table}()},
+\code{\link{mysterycall_write_table_pdf}()},
+\code{\link{print.mysterycall_disparities_table}()},
+\code{\link{print.mysterycall_table1}()}
 }
 \concept{table}

@@ -39,6 +39,7 @@
 #' )
 #' mysterycall_caller_reliability(df, "caller", "outcome", gold_col = "gold")
 #'
+#' @family caller-management
 #' @export
 mysterycall_caller_reliability <- function(
     data,
@@ -53,15 +54,15 @@ mysterycall_caller_reliability <- function(
   stopifnot(is.data.frame(data))
   stopifnot(is.character(caller_col),  length(caller_col)  == 1)
   stopifnot(is.character(outcome_col), length(outcome_col) == 1)
-  if (!caller_col  %in% names(data)) stop("caller_col '",  caller_col,  "' not found in data.")
-  if (!outcome_col %in% names(data)) stop("outcome_col '", outcome_col, "' not found in data.")
+  if (!caller_col  %in% names(data)) stop("caller_col '",  caller_col,  "' not found in data.", call. = FALSE)
+  if (!outcome_col %in% names(data)) stop("outcome_col '", outcome_col, "' not found in data.", call. = FALSE)
   if (!is.null(gold_col)) {
     stopifnot(is.character(gold_col), length(gold_col) == 1)
-    if (!gold_col %in% names(data)) stop("gold_col '", gold_col, "' not found in data.")
+    if (!gold_col %in% names(data)) stop("gold_col '", gold_col, "' not found in data.", call. = FALSE)
   }
   if (!is.null(pair_col)) {
     stopifnot(is.character(pair_col), length(pair_col) == 1)
-    if (!pair_col %in% names(data)) stop("pair_col '", pair_col, "' not found in data.")
+    if (!pair_col %in% names(data)) stop("pair_col '", pair_col, "' not found in data.", call. = FALSE)
   }
   stopifnot(is.numeric(alpha), alpha > 0, alpha < 1)
 
@@ -88,7 +89,7 @@ mysterycall_caller_reliability <- function(
   } else if (!is.null(pair_col)) {
     # Reshape to wide; use first two callers if >2 for kappa / ICC pair logic
     callers <- unique(data[[caller_col]])
-    if (length(callers) < 2) stop("Need at least 2 callers for reliability.")
+    if (length(callers) < 2) stop("Need at least 2 callers for reliability.", call. = FALSE)
 
     # Build wide matrix: rows = pairs, cols = callers
     wide <- lapply(callers, function(cl) {
@@ -111,7 +112,7 @@ mysterycall_caller_reliability <- function(
     # Pair consecutive rows within each caller -- not valid for >1 caller
     # fallback: split by caller and compare first two callers
     callers <- unique(data[[caller_col]])
-    if (length(callers) < 2) stop("Need at least 2 callers or supply gold_col/pair_col.")
+    if (length(callers) < 2) stop("Need at least 2 callers or supply gold_col/pair_col.", call. = FALSE)
     d1 <- data[data[[caller_col]] == callers[1], ]
     d2 <- data[data[[caller_col]] == callers[2], ]
     n  <- min(nrow(d1), nrow(d2))
@@ -123,7 +124,7 @@ mysterycall_caller_reliability <- function(
   }
 
   n_pairs <- length(rater1)
-  if (n_pairs < 2) stop("Too few complete pairs (n = ", n_pairs, ") to compute reliability.")
+  if (n_pairs < 2) stop("Too few complete pairs (n = ", n_pairs, ") to compute reliability.", call. = FALSE)
 
   z_crit <- stats::qnorm(1 - alpha / 2)
 
@@ -230,7 +231,9 @@ mysterycall_caller_reliability <- function(
 #'
 #' @param x A \code{mysterycall_reliability} object.
 #' @param ... Ignored.
+#' @return Invisibly returns \code{x}.
 #' @method print mysterycall_reliability
+#' @family caller-management
 #' @export
 print.mysterycall_reliability <- function(x, ...) {
   cat("-- mysterycall_caller_reliability --\n")

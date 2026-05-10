@@ -15,6 +15,11 @@ template:
 
 home:
   strip_header: true
+  links:
+    - text: Browse source code
+      href: https://github.com/mufflyt/mysterycall
+    - text: Report a bug
+      href: https://github.com/mufflyt/mysterycall/issues
 
 navbar:
   structure:

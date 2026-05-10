@@ -73,6 +73,7 @@ Suggests:
     rnaturalearth,
     sjPlot,
     testthat,
+    tidycensus,
     tidyr,
     tigris,
     tmap,

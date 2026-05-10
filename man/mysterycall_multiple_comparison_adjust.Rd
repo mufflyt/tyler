@@ -58,3 +58,8 @@ df <- data.frame(
 mysterycall_multiple_comparison_adjust(df, p_col = "p", label_col = "comparison")
 
 }
+\seealso{
+Other inference: 
+\code{\link{mysterycall_bootstrap_ci}()}
+}
+\concept{inference}

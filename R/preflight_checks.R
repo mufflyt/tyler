@@ -57,7 +57,7 @@ mysterycall_preflight_check <- function(input_data,
 
   message("")
   message("\u256D", strrep("\u2500", 58), "\u256E")
-  message("\u2502", "   Tyler Package - Preflight Check", strrep(" ", 23), "\u2502")
+  message("\u2502", "   mysterycall - Preflight Check", strrep(" ", 26), "\u2502")
   message("\u2570", strrep("\u2500", 58), "\u256F")
   message("")
 

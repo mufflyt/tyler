@@ -7,7 +7,7 @@ output:
     df_print: kable
 description: >
   Search the NPI registry from clinician first and last names using the current
-  tyler interface.
+  mysterycall interface.
 vignette: >
   %\VignetteIndexEntry{Search and Process NPI Numbers}
   %\VignetteEncoding{UTF-8}
@@ -31,7 +31,7 @@ if (eval_vignettes) {
 
 # Overview
 
-`search_and_process_npi()` is the name-based entry point for roster creation.
+`mysterycall_search_and_process_npi()` is the name-based entry point for roster creation.
 Use it when you already have clinician first and last names from a patient
 directory, credentialing list, or manually curated study roster and need to
 recover likely NPI matches.
@@ -58,7 +58,7 @@ sample_names
 The simplest call looks like this:
 
 ```{r eval=FALSE}
-results <- search_and_process_npi(
+results <- mysterycall_search_and_process_npi(
   data = sample_names,
   notify = FALSE
 )
@@ -73,7 +73,7 @@ For most projects you will want to set a few operational parameters explicitly,
 especially if the roster is large.
 
 ```{r eval=FALSE}
-results <- search_and_process_npi(
+results <- mysterycall_search_and_process_npi(
   data = sample_names,
   enumeration_type = "ind",
   limit = 10,
@@ -89,7 +89,7 @@ Large name-based searches can take time. The function supports progress logs,
 chunked saves, and resumable accumulation files.
 
 ```{r eval=FALSE}
-results <- search_and_process_npi(
+results <- mysterycall_search_and_process_npi(
   data = sample_names,
   limit = 10,
   dest_dir = "npi_chunks",
@@ -132,10 +132,10 @@ results_unique |>
 ```
 
 If the next step is clinician enrichment, pass the cleaned result into
-`retrieve_clinician_data()`.
+`mysterycall_get_clinician_data()`.
 
 ```{r eval=FALSE}
-clinician_data <- retrieve_clinician_data(results_unique)
+clinician_data <- mysterycall_get_clinician_data(results_unique)
 ```
 
 ## Practical guidance
@@ -149,4 +149,4 @@ clinician_data <- retrieve_clinician_data(results_unique)
 # Next step
 
 If your project begins from a specialty rather than a name list, see the
-taxonomy-search vignette for `search_by_taxonomy()`.
+taxonomy-search vignette for `mysterycall_search_by_taxonomy()`.

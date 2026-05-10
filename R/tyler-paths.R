@@ -5,7 +5,7 @@
 #'   `"data"`, `"raw-data"`, `"tables"`, `"figures"`, `"docs"`, and `"cache"`.
 #'   When `NULL`, `...` are treated as relative to `base_dir`.
 #' @param base_dir Base directory to resolve paths from. Defaults to the value
-#'   stored in `getOption("tyler.base_dir")` or the current working directory.
+#'   stored in `getOption("mysterycall.base_dir")` or the current working directory.
 #' @param create Logical. When `TRUE`, ensure the resolved parent directory
 #'   exists.
 #'
@@ -14,7 +14,7 @@
 #' @export
 #' @examples
 #' mysterycall_resolve_path("output.csv", type = "tables", create = FALSE)
-mysterycall_resolve_path <- function(..., type = NULL, base_dir = getOption("tyler.base_dir", getwd()), create = FALSE) {
+mysterycall_resolve_path <- function(..., type = NULL, base_dir = getOption("mysterycall.base_dir", getwd()), create = FALSE) {
   if (!dir.exists(base_dir)) {
     stop(sprintf("Base directory '%s' does not exist.", base_dir), call. = FALSE)
   }
@@ -68,7 +68,7 @@ mysterycall_resolve_path <- function(..., type = NULL, base_dir = getOption("tyl
 #' @examples
 #' tmp <- tempfile(fileext = ".csv")
 #' mysterycall_export_with_backup(mtcars, tmp)
-mysterycall_export_with_backup <- function(x, path, backup = TRUE, quiet = getOption("tyler.quiet", FALSE)) {
+mysterycall_export_with_backup <- function(x, path, backup = TRUE, quiet = getOption("mysterycall.quiet", FALSE)) {
   if (missing(path) || !nzchar(path)) {
     stop("`path` must be a non-empty string.", call. = FALSE)
   }

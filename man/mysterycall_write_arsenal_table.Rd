@@ -2,23 +2,25 @@
 % Please edit documentation in R/arsenal_tables_write.R
 \name{mysterycall_write_arsenal_table}
 \alias{mysterycall_write_arsenal_table}
-\title{Writes an Arsenal table object to a Word document.}
+\title{Writes an Arsenal summary table to a Word document}
 \usage{
 mysterycall_write_arsenal_table(object, filename, output_dir = NULL)
 }
 \arguments{
-\item{object}{An object to be written to Word, typically an Arsenal table.}
+\item{object}{A data frame (e.g. the output of \code{\link[arsenal:summary.tableby]{arsenal::summary.tableby()}})
+to write. Must be a data frame — the function will error otherwise.}
 
-\item{filename}{The filename (without extension) for the Word document.}
+\item{filename}{The filename without extension for the Word document.}
 
 \item{output_dir}{Directory where the Word document should be written.
 Defaults to a session-specific folder inside \code{\link[=tempdir]{tempdir()}}.}
 }
 \value{
-Called for its side effect of saving a Word document to \code{word_path}. Returns \code{NULL} invisibly.
+Invisibly returns \code{NULL}. Called for the side effect of writing
+\verb{<filename>.docx} to \code{output_dir}.
 }
 \description{
-Writes an Arsenal table object to a Word document.
+Writes an Arsenal summary table to a Word document
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
@@ -26,11 +28,21 @@ mysterycall_write_arsenal_table(my_table, "output_table")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_write_table_pdf]{mysterycall_write_table_pdf()}}, \code{\link[=mysterycall_table_overall]{mysterycall_table_overall()}}
+
 Other table: 
+\code{\link{mysterycall_disparities_table}()},
+\code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_max_table}()},
 \code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_model_table}()},
+\code{\link{mysterycall_table1}()},
+\code{\link{mysterycall_table1_gtsummary}()},
 \code{\link{mysterycall_table_overall}()},
 \code{\link{mysterycall_table_percentages}()},
-\code{\link{mysterycall_table_proportion}()}
+\code{\link{mysterycall_table_proportion}()},
+\code{\link{mysterycall_write_table_pdf}()},
+\code{\link{print.mysterycall_disparities_table}()},
+\code{\link{print.mysterycall_table1}()}
 }
 \concept{table}

@@ -28,23 +28,23 @@
 #'
 #' @note MOE propagation follows Census Bureau ACS Handbook Appendix 3.
 #'   All MOE values are at 90\% confidence level (Census standard).
-#'   This function is more efficient than calling \code{get_acs_women_18_90()}
+#'   This function is more efficient than calling \code{mysterycall_get_acs_women_18_90()}
 #'   separately as it makes a single Census API call.
 #'
-#' @examples
-#' \dontrun{
-#' co_adults <- get_acs_adults_18_90(year = 2022, states = "CO")
-#' west_coast <- get_acs_adults_18_90(year = 2022, states = c("CA", "OR", "WA"))
-#' }
+#' @examplesIf interactive()
+#' co_adults <- mysterycall_get_acs_adults_18_90(year = 2022, states = "CO")
+#' west_coast <- mysterycall_get_acs_adults_18_90(year = 2022, states = c("CA", "OR", "WA"))
 #'
-#' @importFrom tidycensus load_variables get_acs
 #' @importFrom dplyr filter mutate select across all_of pull
 #' @importFrom stringr str_detect
 #' @family census
 #' @export
-get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose = TRUE) {
+mysterycall_get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose = TRUE) {
+  if (!requireNamespace("tidycensus", quietly = TRUE)) {
+    stop("Package 'tidycensus' is required. Install with: install.packages('tidycensus')", call. = FALSE)
+  }
   if (is.null(year)) {
-    stop("year parameter is required for get_acs_adults_18_90().\n",
+    stop("year parameter is required for mysterycall_get_acs_adults_18_90().\n",
          "Specify the ACS year explicitly (e.g., year = 2022L).")
   }
   if (year < 2009 || year > 2023) {
@@ -52,19 +52,19 @@ get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose = TRUE) {
   }
 
   if (verbose) {
-    cat("\n")
-    cat("=========================================================\n")
-    cat("ACS ADULT POPULATION DATA DOWNLOAD (AGES 18-90, BOTH SEXES)\n")
-    cat("=========================================================\n")
-    cat(sprintf("Year:       ACS %d (5-year estimates)\n", year))
-    cat(sprintf("Geography:  Census tracts\n"))
-    cat(sprintf("States:     %s\n", ifelse(is.null(states), "All US (50 states + DC + PR)",
+    message("")
+    message("=========================================================")
+    message("ACS ADULT POPULATION DATA DOWNLOAD (AGES 18-90, BOTH SEXES)")
+    message("=========================================================")
+    message(sprintf("Year:       ACS %d (5-year estimates)", year))
+    message(sprintf("Geography:  Census tracts"))
+    message(sprintf("States:     %s", ifelse(is.null(states), "All US (50 states + DC + PR)",
                                            paste(states, collapse = ", "))))
-    cat(sprintf("Variables:  B01001 (Sex by Age) - Male & Female 18-89 years\n"))
-    cat("\n")
+    message(sprintf("Variables:  B01001 (Sex by Age) - Male & Female 18-89 years"))
+    message("")
   }
 
-  if (verbose) cat("Loading Census variable dictionary...\n")
+  if (verbose) message("Loading Census variable dictionary...")
   vars <- tryCatch(
     tidycensus::load_variables(year = year, dataset = "acs5", cache = TRUE),
     error = function(e) stop(sprintf(
@@ -87,11 +87,11 @@ get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose = TRUE) {
   var_ids <- adult_vars$name
 
   if (verbose) {
-    cat(sprintf("Identified %d age group variables (%d male + %d female)\n",
+    message(sprintf("Identified %d age group variables (%d male + %d female)",
       length(var_ids),
       sum(stringr::str_detect(adult_vars$label, "Male")),
       sum(stringr::str_detect(adult_vars$label, "Female"))))
-    cat("Calling Census API (this may take a few minutes)...\n")
+    message("Calling Census API (this may take a few minutes)...")
   }
 
   acs <- tryCatch(
@@ -132,11 +132,18 @@ get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose = TRUE) {
   )
 
   if (verbose) {
-    cat(sprintf("Tracts: %s | Total adults 18-90: %s\n",
+    message(sprintf("Tracts: %s | Total adults 18-90: %s",
       format(nrow(result), big.mark = ","),
       format(sum(result$adults_18_90, na.rm = TRUE), big.mark = ",")))
-    cat("Download complete.\n\n")
+    message("Download complete.\n")
   }
 
   result
+}
+
+#' @rdname mysterycall_get_acs_adults_18_90
+#' @export
+get_acs_adults_18_90 <- function(...) {
+  .Deprecated("mysterycall_get_acs_adults_18_90")
+  mysterycall_get_acs_adults_18_90(...)
 }

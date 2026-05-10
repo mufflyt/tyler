@@ -27,8 +27,7 @@ NULL
 #' @family outcomes
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_screen_interactions(
 #'   data             = df,
 #'   outcome          = "wait_days",
@@ -36,7 +35,6 @@ NULL
 #'   candidates       = c("gender", "practice_setting", "region"),
 #'   random_intercept = "physician"
 #' )
-#' }
 mysterycall_screen_interactions <- function(data,
                                              outcome,
                                              exposure,

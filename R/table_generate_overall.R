@@ -7,10 +7,12 @@
 #' @param filename Path to the output PDF file. A `.pdf` extension is appended
 #'   automatically if not already present.
 #'
-#' @return Invisibly returns the file path.
+#' @return Invisibly returns the output file path (character scalar).
 #'
+#' @seealso [mysterycall_table_overall()]
 #' @examplesIf interactive()
 #' mysterycall_write_table_pdf(overall_summary, "table.pdf")
+#' @family table
 #' @export
 mysterycall_write_table_pdf <- function(object, filename) {
   if (!requireNamespace("arsenal", quietly = TRUE)) {
@@ -34,12 +36,15 @@ mysterycall_write_table_pdf <- function(object, filename) {
 #' @param input_file_path The path to an RDS data file.
 #' @param output_directory The directory where the output table file will be saved.
 #' @param title The title for the overall table summary (default is "Overall Table Summary").
-#' @param selected_columns Optional vector of selected columns to include in the table.
-#' @param label_translations Optional named list for label translations.
-#' @return Path to the generated PDF file
+#' @param selected_columns Optional character vector of column names to include.
+#'   When `NULL` (default) all columns are used.
+#' @param label_translations Optional named list mapping column names to display
+#'   labels, passed to [arsenal::summary.tableby()].
+#' @return Invisibly returns the path to the generated PDF file.
 #'
 #' @importFrom readr read_rds
 #' @family table
+#' @seealso [mysterycall_write_table_pdf()]
 #' @export
 #'
 #' @examplesIf interactive()

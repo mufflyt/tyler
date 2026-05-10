@@ -44,7 +44,6 @@ mysterycall_summarize_demographics(df, female_col = "gender",
 Other manuscript: 
 \code{\link{mysterycall_format_results_table}()},
 \code{\link{mysterycall_methods_paragraph}()},
-\code{\link{mysterycall_sample_size_text}()},
-\code{\link{mysterycall_table1_gtsummary}()}
+\code{\link{mysterycall_sample_size_text}()}
 }
 \concept{manuscript}

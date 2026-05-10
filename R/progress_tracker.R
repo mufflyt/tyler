@@ -25,7 +25,7 @@ NULL
 #' mysterycall_progress_start(tracker, "Geocode")
 #' Sys.sleep(1)
 #' mysterycall_progress_finish(tracker, "Geocode", score = 0.95)
-mysterycall_progress_tracker <- function(steps, update_every = 300, quiet = getOption("tyler.quiet", FALSE)) {
+mysterycall_progress_tracker <- function(steps, update_every = 300, quiet = getOption("mysterycall.quiet", FALSE)) {
   if (!is.character(steps) || !length(steps)) {
     stop("`steps` must be a non-empty character vector.", call. = FALSE)
   }

@@ -7,7 +7,7 @@
 mysterycall_resolve_path(
   ...,
   type = NULL,
-  base_dir = getOption("tyler.base_dir", getwd()),
+  base_dir = getOption("mysterycall.base_dir", getwd()),
   create = FALSE
 )
 }
@@ -19,7 +19,7 @@ mysterycall_resolve_path(
 When \code{NULL}, \code{...} are treated as relative to \code{base_dir}.}
 
 \item{base_dir}{Base directory to resolve paths from. Defaults to the value
-stored in \code{getOption("tyler.base_dir")} or the current working directory.}
+stored in \code{getOption("mysterycall.base_dir")} or the current working directory.}
 
 \item{create}{Logical. When \code{TRUE}, ensure the resolved parent directory
 exists.}
@@ -35,6 +35,7 @@ mysterycall_resolve_path("output.csv", type = "tables", create = FALSE)
 }
 \seealso{
 Other utilities: 
+\code{\link{\%>\%}()},
 \code{\link{mysterycall_assess_data_quality}()},
 \code{\link{mysterycall_check_api_response}()},
 \code{\link{mysterycall_check_data_completeness}()},
@@ -44,7 +45,6 @@ Other utilities:
 \code{\link{mysterycall_download_file}()},
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_export_with_backup}()},
-\code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
 \code{\link{mysterycall_remove_constants}()},

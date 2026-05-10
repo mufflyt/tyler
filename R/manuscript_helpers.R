@@ -182,11 +182,9 @@ mysterycall_methods_paragraph <- function(n_physicians,
 #' @family manuscript
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' tbl <- mysterycall_format_results_table(model_result)
 #' knitr::kable(tbl)
-#' }
 mysterycall_format_results_table <- function(x,
                                               digits            = 2L,
                                               include_intercept = FALSE) {

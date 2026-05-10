@@ -7,8 +7,9 @@
 #'
 #' @return A character vector representing the formatted percentage(s) with the specified number of decimal places.
 #'
-#' @details The function converts a numeric value to a percentage format with the specified number of decimal places.
-#' This is useful for consistent display of percentage values in reports or visualizations.
+#' @details Uses `formatC(format = "f")` so trailing zeros are always
+#'   preserved, ensuring values like `10.0%` align correctly in fixed-width
+#'   output.
 #'
 #' @examples
 #' # Example 1: Format a single numeric value
@@ -24,7 +25,7 @@
 #' no_decimal <- mysterycall_format_pct(0.5, my_digits = 0)
 #' print(no_decimal)  # Output: "50%"
 #'
-#' @family utilities
+#' @family table
 #' @export
 mysterycall_format_pct <- function(x, my_digits = 1) {
   formatted <- formatC(100 * x, format = "f", digits = my_digits)

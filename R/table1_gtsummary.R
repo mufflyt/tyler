@@ -31,8 +31,7 @@ NULL
 #'   (e.g. [gtsummary::modify_caption()], [gtsummary::modify_spanning_header()])
 #'   before converting with [gtsummary::as_gt()] or [gtsummary::as_flex_table()].
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive() && requireNamespace("gtsummary", quietly = TRUE)
 #' df <- data.frame(
 #'   gender    = sample(c("Male", "Female"), 100, replace = TRUE),
 #'   setting   = sample(c("Academic", "Private"), 100, replace = TRUE),
@@ -45,10 +44,9 @@ NULL
 #'   strata_col = "insurance"
 #' )
 #' tbl
-#' }
 #'
-#' @importFrom gtsummary tbl_summary add_overall add_p bold_labels
 #' @family table
+#' @seealso [mysterycall_table1()], [mysterycall_disparities_table()]
 #' @export
 mysterycall_table1_gtsummary <- function(data,
                                           vars,
@@ -58,6 +56,9 @@ mysterycall_table1_gtsummary <- function(data,
                                           percent      = c("column", "row", "cell"),
                                           overall_last = FALSE,
                                           ...) {
+  if (!requireNamespace("gtsummary", quietly = TRUE)) {
+    stop("Package 'gtsummary' is required. Install with: install.packages('gtsummary')", call. = FALSE)
+  }
   # ---- validation ----------------------------------------------------------
   if (!is.data.frame(data)) {
     stop("`data` must be a data frame.", call. = FALSE)

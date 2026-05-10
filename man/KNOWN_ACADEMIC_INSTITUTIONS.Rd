@@ -24,5 +24,15 @@ grepl("STANFORD", "Stanford University Hospital", ignore.case = TRUE)
 \seealso{
 \code{\link{check_academic_name_patterns}},
 \code{\link{ACADEMIC_HOSPITAL_PATTERNS}}
+
+Other academic-indicators: 
+\code{\link{ACADEMIC_HOSPITAL_PATTERNS}},
+\code{\link{ACGME_PROGRAM_INDICATORS}},
+\code{\link{COTH_TEACHING_INDICATORS}},
+\code{\link{MEDICAL_SCHOOL_INDICATORS}},
+\code{\link{MEDICARE_GME_INDICATORS}},
+\code{\link{NCI_CANCER_CENTERS}},
+\code{\link{NIH_CTSA_HUBS}}
 }
+\concept{academic-indicators}
 \keyword{datasets}

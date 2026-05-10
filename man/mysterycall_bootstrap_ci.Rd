@@ -62,3 +62,8 @@ df <- data.frame(
 mysterycall_bootstrap_ci(df, "accepted", group_col = "insurance", seed = 1)
 
 }
+\seealso{
+Other inference: 
+\code{\link{mysterycall_multiple_comparison_adjust}()}
+}
+\concept{inference}

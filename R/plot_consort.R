@@ -31,8 +31,7 @@ NULL
 #' @family outcomes
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_plot_inclexcl(
 #'   counts = c(
 #'     Identified = 612,
@@ -50,7 +49,6 @@ NULL
 #'                               Pediatric = 44, Other = 79),
 #'   title = "Mystery Caller Study -- ENT"
 #' )
-#' }
 mysterycall_plot_inclexcl <- function(counts,
                                        exclusions             = NULL,
                                        subspecialty_breakdown = NULL,

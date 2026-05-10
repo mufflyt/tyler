@@ -27,11 +27,9 @@ NULL
 #' @family outcomes
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' p <- ggplot2::ggplot(mtcars, ggplot2::aes(wt, mpg)) + ggplot2::geom_point()
 #' mysterycall_save_plot(p, "figures/mpg_vs_weight.png")
-#' }
 mysterycall_save_plot <- function(plot,
                                    path,
                                    width  = 8,

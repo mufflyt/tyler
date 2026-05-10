@@ -52,6 +52,7 @@
 #'
 #' @importFrom stats prop.test binom.test qnorm
 #' @family table
+#' @seealso [mysterycall_table1_gtsummary()], [mysterycall_bootstrap_ci()]
 #' @export
 mysterycall_disparities_table <- function(
     data,
@@ -256,9 +257,12 @@ mysterycall_disparities_table <- function(
 
 #' Print a mysterycall_disparities_table
 #'
-#' @param x A `mysterycall_disparities_table` object.
+#' @param x A `mysterycall_disparities_table` object returned by
+#'   [mysterycall_disparities_table()].
 #' @param ... Ignored.
 #' @return Invisibly returns `x`.
+#' @seealso [mysterycall_disparities_table()]
+#' @family table
 #' @export
 print.mysterycall_disparities_table <- function(x, ...) {
   ref    <- attr(x, "ref_group") %||% x$group[[1L]]

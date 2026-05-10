@@ -6,10 +6,14 @@
 #' @param data A data frame containing the categorical variable.
 #' @param variable_name The name of the categorical variable for which proportions are calculated, passed as an unquoted expression.
 #'
-#' @return A data frame with two columns: `n` (the count of each level) and `percent` (the percentage of the total count represented by each level).
+#' @return A data frame with one row per unique non-missing level of
+#'   `variable_name`. Columns: the variable itself, `n` (count), and `percent`
+#'   (percentage of total, rounded to 2 decimal places).
 #'
-#' @details The function counts the occurrences of each unique value in the specified variable and calculates the percentage each value represents of the total count.
-#' The percentages are rounded to two decimal places.
+#' @details `variable_name` uses tidy evaluation (`{{ }}`), so pass the column
+#'   name unquoted (e.g. `mysterycall_table_proportion(df, gender)`). Use
+#'   [mysterycall_table_percentages()] when you have the column name as a
+#'   string.
 #'
 #' @examples
 #' # Example 1: Basic usage with a simple dataset
@@ -29,6 +33,7 @@
 #'
 #' @importFrom dplyr count mutate across where
 #' @family table
+#' @seealso [mysterycall_table_percentages()]
 #' @export
 mysterycall_table_proportion <- function(data, variable_name) {
   tabyl_result <- data %>%

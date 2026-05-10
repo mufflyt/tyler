@@ -52,3 +52,25 @@ df <- data.frame(
 mysterycall_compare_waves(df, "wave", "outcome")
 
 }
+\seealso{
+Other outcomes: 
+\code{\link{mysterycall_acceptance_rate}()},
+\code{\link{mysterycall_irr_plot}()},
+\code{\link{mysterycall_marginal_effects}()},
+\code{\link{mysterycall_model_metrics}()},
+\code{\link{mysterycall_plot_distribution}()},
+\code{\link{mysterycall_plot_effect}()},
+\code{\link{mysterycall_plot_emmeans_full}()},
+\code{\link{mysterycall_plot_emmeans_interaction}()},
+\code{\link{mysterycall_plot_inclexcl}()},
+\code{\link{mysterycall_plot_residuals}()},
+\code{\link{mysterycall_plot_sjplot_interaction}()},
+\code{\link{mysterycall_plot_stacked_bar}()},
+\code{\link{mysterycall_poisson_model}()},
+\code{\link{mysterycall_save_plot}()},
+\code{\link{mysterycall_screen_interactions}()},
+\code{\link{mysterycall_select_best_model}()},
+\code{\link{mysterycall_wait_time_summary}()},
+\code{\link{print.mysterycall_poisson_model}()}
+}
+\concept{outcomes}

@@ -2,50 +2,54 @@
 % Please edit documentation in R/table_calculate_percentages.R
 \name{mysterycall_table_percentages}
 \alias{mysterycall_table_percentages}
-\title{Calculate the Percentage of the Most Common Value in a Categorical Variable}
+\title{Frequency counts and percentages for a categorical variable}
 \usage{
 mysterycall_table_percentages(data_frame, variable)
 }
 \arguments{
 \item{data_frame}{A data frame containing the categorical variable.}
 
-\item{variable}{A character string representing the name of the categorical variable within \code{data_frame}.}
+\item{variable}{A character string giving the column name of the categorical
+variable within \code{data_frame}.}
 }
 \value{
-A data frame containing the most common value and its count, along with the percentage of the total count that it represents.
+A data frame with one row per unique non-missing value of \code{variable},
+sorted by descending count. Columns: the variable itself, \code{n} (count), and
+\code{percent} (percentage of total, rounded to 1 decimal place).
 }
 \description{
-This function calculates the percentage of the most common value in a specified categorical variable from a data frame.
-}
-\details{
-The function converts the variable name to a character string, then counts
-the occurrences of each unique value in the specified column. It calculates the
-percentage each value represents of the total and returns the most common value
-with its count and percentage.
+Counts each level of a categorical variable and computes its share of all
+non-missing rows, returning all levels sorted from most to least common.
 }
 \examples{
-# Example 1: Basic usage with a simple dataset
 data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
-result <- mysterycall_table_percentages(data_frame, "category")
-print(result)
+mysterycall_table_percentages(data_frame, "category")
 
-# Example 2: Using a dataset with multiple most common values
+# Ties are all included, sorted alphabetically within the tied rank
 df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
-result <- mysterycall_table_percentages(df_tie, "category")
-print(result)
+mysterycall_table_percentages(df_tie, "category")
 
-# Example 3: Handling a dataset with missing values
+# NAs are excluded from counts and the denominator
 df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
-result <- mysterycall_table_percentages(df_na, "category")
-print(result)
+mysterycall_table_percentages(df_na, "category")
 
 }
 \seealso{
+\code{\link[=mysterycall_table_proportion]{mysterycall_table_proportion()}}
+
 Other table: 
+\code{\link{mysterycall_disparities_table}()},
+\code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_max_table}()},
 \code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_model_table}()},
+\code{\link{mysterycall_table1}()},
+\code{\link{mysterycall_table1_gtsummary}()},
 \code{\link{mysterycall_table_overall}()},
 \code{\link{mysterycall_table_proportion}()},
-\code{\link{mysterycall_write_arsenal_table}()}
+\code{\link{mysterycall_write_arsenal_table}()},
+\code{\link{mysterycall_write_table_pdf}()},
+\code{\link{print.mysterycall_disparities_table}()},
+\code{\link{print.mysterycall_table1}()}
 }
 \concept{table}

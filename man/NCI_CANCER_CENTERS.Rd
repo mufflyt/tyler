@@ -20,5 +20,15 @@ NCI_CANCER_CENTERS
 }
 \seealso{
 \code{\link{classify_academic_affiliation}}
+
+Other academic-indicators: 
+\code{\link{ACADEMIC_HOSPITAL_PATTERNS}},
+\code{\link{ACGME_PROGRAM_INDICATORS}},
+\code{\link{COTH_TEACHING_INDICATORS}},
+\code{\link{KNOWN_ACADEMIC_INSTITUTIONS}},
+\code{\link{MEDICAL_SCHOOL_INDICATORS}},
+\code{\link{MEDICARE_GME_INDICATORS}},
+\code{\link{NIH_CTSA_HUBS}}
 }
+\concept{academic-indicators}
 \keyword{datasets}

@@ -11,6 +11,14 @@
 
 \item{...}{Ignored.}
 }
+\value{
+Invisibly returns \code{x}.
+}
 \description{
 Print method for mysterycall_reliability objects
 }
+\seealso{
+Other caller-management: 
+\code{\link{mysterycall_caller_reliability}()}
+}
+\concept{caller-management}

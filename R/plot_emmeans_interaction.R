@@ -24,14 +24,12 @@ NULL
 #' @family outcomes
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' mysterycall_plot_emmeans_interaction(
 #'   model    = fit,
 #'   specs    = c("insurance", "gender"),
 #'   variable = "Wait days"
 #' )
-#' }
 mysterycall_plot_emmeans_interaction <- function(model,
                                                   specs,
                                                   variable,

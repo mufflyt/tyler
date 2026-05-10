@@ -36,7 +36,7 @@ mysterycall_geocode <- function(file_path, google_maps_api_key,
                                      output_file_path = NULL,
                                      failed_output_path = NULL,
                                      notify = TRUE,
-                                     quiet = getOption("tyler.quiet", FALSE),
+                                     quiet = getOption("mysterycall.quiet", FALSE),
                                      tracker = NULL,
                                      tracker_step = "Geocoding") {
   if (!file.exists(file_path)) {

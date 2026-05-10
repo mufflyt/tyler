@@ -19,5 +19,15 @@ length(MEDICAL_SCHOOL_INDICATORS)
 }
 \seealso{
 \code{\link{classify_academic_affiliation}}
+
+Other academic-indicators: 
+\code{\link{ACADEMIC_HOSPITAL_PATTERNS}},
+\code{\link{ACGME_PROGRAM_INDICATORS}},
+\code{\link{COTH_TEACHING_INDICATORS}},
+\code{\link{KNOWN_ACADEMIC_INSTITUTIONS}},
+\code{\link{MEDICARE_GME_INDICATORS}},
+\code{\link{NCI_CANCER_CENTERS}},
+\code{\link{NIH_CTSA_HUBS}}
 }
+\concept{academic-indicators}
 \keyword{datasets}

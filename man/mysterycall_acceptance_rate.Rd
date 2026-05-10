@@ -67,10 +67,10 @@ mysterycall_acceptance_rate(df, group_by = "insurance")
 \code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}}, \code{\link[=mysterycall_clean_phase2]{mysterycall_clean_phase2()}}
 
 Other outcomes: 
+\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
-\code{\link{mysterycall_model_table}()},
 \code{\link{mysterycall_plot_distribution}()},
 \code{\link{mysterycall_plot_effect}()},
 \code{\link{mysterycall_plot_emmeans_full}()},
@@ -83,7 +83,7 @@ Other outcomes:
 \code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
-\code{\link{mysterycall_table1}()},
-\code{\link{mysterycall_wait_time_summary}()}
+\code{\link{mysterycall_wait_time_summary}()},
+\code{\link{print.mysterycall_poisson_model}()}
 }
 \concept{outcomes}

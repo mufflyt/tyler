@@ -36,6 +36,7 @@
 #' )
 #' mysterycall_call_productivity(df, "caller", outcome_col = "outcome")
 #'
+#' @family workflow
 #' @export
 mysterycall_call_productivity <- function(
     data,

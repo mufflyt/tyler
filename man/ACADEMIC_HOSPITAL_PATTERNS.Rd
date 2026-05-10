@@ -28,5 +28,15 @@ ACADEMIC_HOSPITAL_PATTERNS$very_high
 \seealso{
 \code{\link{check_academic_name_patterns}},
 \code{\link{KNOWN_ACADEMIC_INSTITUTIONS}}
+
+Other academic-indicators: 
+\code{\link{ACGME_PROGRAM_INDICATORS}},
+\code{\link{COTH_TEACHING_INDICATORS}},
+\code{\link{KNOWN_ACADEMIC_INSTITUTIONS}},
+\code{\link{MEDICAL_SCHOOL_INDICATORS}},
+\code{\link{MEDICARE_GME_INDICATORS}},
+\code{\link{NCI_CANCER_CENTERS}},
+\code{\link{NIH_CTSA_HUBS}}
 }
+\concept{academic-indicators}
 \keyword{datasets}
