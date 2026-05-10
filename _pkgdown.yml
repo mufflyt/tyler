@@ -60,21 +60,26 @@ reference:
       - physicians
       - taxonomy
 
-  - title: "Provider Search"
+  - title: "Provider Search and NPI"
+    desc: >
+      Find, validate, and enrich physician records via the NPI registry.
     contents:
       - mysterycall_search_and_process_npi
       - mysterycall_search_taxonomy
       - mysterycall_validate_npi
       - mysterycall_get_clinician_data
       - mysterycall_genderize
-      - scrape_physicians_data_with_tor
+      - mysterycall_luhn_check
+      - mysterycall_extract_zip5
+      - mysterycall_extract_physician_name
+      - mysterycall_parse_certification_subspecialty
+      - mysterycall_check_generalist_presence
 
-  - title: "Geocoding"
+  - title: "Geocoding and Mapping"
+    desc: >
+      Geocode addresses, build isochrones, and produce publication maps.
     contents:
       - mysterycall_geocode
-
-  - title: "Isochrones and Mapping"
-    contents:
       - mysterycall_create_isochrones
       - mysterycall_isochrones_for_df
       - mysterycall_plot_isochrones
@@ -87,7 +92,13 @@ reference:
       - mysterycall_calculate_overlap
       - mysterycall_hrr
       - mysterycall_hrr_maps
-      - ensure_hrr_shapefile
+      - mysterycall_assign_region
+
+  - title: "Acceptance Rate Maps"
+    desc: >
+      Choropleth maps of appointment acceptance rates by state.
+    contents:
+      - mysterycall_map_acceptance_rate
 
   - title: "Census and Demographics"
     contents:
@@ -95,7 +106,9 @@ reference:
       - mysterycall_summarize_census
       - mysterycall_plot_census_age
 
-  - title: "Data Processing"
+  - title: "Data Cleaning and Processing"
+    desc: >
+      Clean Phase 1/2 data, rename columns, recode variables, and impute missing values.
     contents:
       - mysterycall_clean_phase1
       - mysterycall_clean_phase2
@@ -105,19 +118,93 @@ reference:
       - mysterycall_remove_near_zero
       - mysterycall_check_normality
       - mysterycall_create_formula
-      - mysterycall_run_workflow
-      - mysterycall_run_workflow_logged
+      - mysterycall_recode_credentials
+      - mysterycall_reorder_by_freq
+      - mysterycall_collapse_rare
+      - mysterycall_merge_with_prefix
+      - mysterycall_classify_ruca
+      - mysterycall_classify_medical_school
+      - mysterycall_classify_practice_setting
+      - mysterycall_reconcile_specialty
+      - mysterycall_impute_age
+      - mysterycall_age_category
+      - mysterycall_stratified_sample
+      - mysterycall_check_duplicates
+      - mysterycall_prepare_table1_vars
+      - mysterycall_assign_scenarios
+
+  - title: "Business Days"
+    desc: >
+      Calculate business-day wait times excluding weekends and federal holidays.
+    contents:
+      - mysterycall_business_days
+      - mysterycall_count_business_days
+      - mysterycall_us_federal_calendar
+
+  - title: "Outcomes and Wait Times"
+    desc: >
+      Core outcome functions: acceptance rate, wait-time distribution, and Poisson modeling.
+    contents:
+      - mysterycall_acceptance_rate
+      - mysterycall_wait_time_summary
+      - mysterycall_poisson_model
+      - mysterycall_irr_plot
+      - mysterycall_model_table
+      - mysterycall_model_metrics
+      - mysterycall_select_best_model
+      - mysterycall_screen_interactions
+
+  - title: "Statistical Analysis"
+    desc: >
+      Disparities tables, multiple-comparison correction, bootstrap CIs,
+      marginal effects, and wave-over-wave comparisons.
+    contents:
+      - mysterycall_disparities_table
+      - mysterycall_multiple_comparison_adjust
+      - mysterycall_bootstrap_ci
+      - mysterycall_marginal_effects
+      - mysterycall_compare_waves
+      - mysterycall_plot_emmeans
+      - mysterycall_plot_emmeans_full
+      - mysterycall_plot_emmeans_interaction
+      - mysterycall_plot_effect
+      - mysterycall_plot_sjplot_interaction
+
+  - title: "Sample Size and Power"
+    desc: >
+      Poisson power calculations and sample-size formulas for mystery-caller studies.
+    contents:
+      - mysterycall_poisson_power
+      - mysterycall_cochran_n
+      - mysterycall_equation_figure
+      - mysterycall_sample_size_text
+
+  - title: "Caller Quality Control"
+    desc: >
+      Audit caller performance: inter-rater reliability and per-caller productivity metrics.
+    contents:
+      - mysterycall_caller_reliability
+      - mysterycall_call_productivity
 
   - title: "Visualization"
+    desc: >
+      Publication-ready plots for distributions, interactions, residuals, and stacked bars.
     contents:
+      - mysterycall_plot_stacked_bar
       - mysterycall_plot_interaction
       - mysterycall_plot_density
+      - mysterycall_plot_distribution
+      - mysterycall_plot_residuals
       - mysterycall_plot_line
       - mysterycall_plot_scatter
-      - mysterycall_plot_emmeans
+      - mysterycall_plot_inclexcl
+      - mysterycall_flowchart
+      - mysterycall_save_plot
 
   - title: "Tables and Reports"
     contents:
+      - mysterycall_table1
+      - mysterycall_table1_gtsummary
       - mysterycall_max_table
       - mysterycall_min_table
       - mysterycall_write_arsenal_table
@@ -127,6 +214,15 @@ reference:
       - mysterycall_write_table_pdf
       - mysterycall_save_quality_table
       - mysterycall_format_pct
+      - mysterycall_format_results_table
+
+  - title: "Manuscript Writing"
+    desc: >
+      Auto-generate methods paragraphs, results sentences, and formatted output tables.
+    contents:
+      - mysterycall_write_results_paragraph
+      - mysterycall_methods_paragraph
+      - mysterycall_summarize_demographics
 
   - title: "Quality and Validation"
     contents:
@@ -141,17 +237,23 @@ reference:
       - mysterycall_not_contacted_states
       - mysterycall_physician_age
       - mysterycall_most_common_gender
-      - preflight-checks
+      - mysterycall_verify_artifact
 
-  - title: "Workflow Helpers"
+  - title: "Workflow"
     contents:
+      - mysterycall_run_workflow
+      - mysterycall_run_workflow_logged
       - mysterycall_workflow_start
       - mysterycall_workflow_end
       - mysterycall_print_dashboard
+      - mysterycall_tracker_fail
+      - mysterycall_tracker_update
+      - mysterycall_export_with_backup
+      - mysterycall_resolve_path
+      - mysterycall_split_and_save
 
   - title: "Logging"
     contents:
-      - logging-utils
       - mysterycall_log_info
       - mysterycall_log_error
       - mysterycall_log_warning
@@ -164,7 +266,6 @@ reference:
 
   - title: "Progress and Spinners"
     contents:
-      - progress-bars
       - mysterycall_progress_tracker
       - mysterycall_progress_start
       - mysterycall_progress_finish
@@ -186,23 +287,17 @@ reference:
   - title: "Utilities"
     contents:
       - mysterycall_check_dependencies
-      - mysterycall_resolve_path
-      - mysterycall_export_with_backup
       - mysterycall_use_quiet_logging
       - mysterycall_standard_labels
       - mysterycall_standard_palette
       - mysterycall_quality_tier
       - mysterycall_download_file
-      - mysterycall_cache_dir
       - mysterycall_format_duration
-      - utility_library
 
   - title: "Deprecated"
     contents:
       - mysterycall-deprecated
-      - mysterycall_search_npi
-      - mysterycall_test_isochrones
-      - mysterycall_process_isochrones
+      - tyler-deprecated
 
 articles:
   - title: "Getting Started"
@@ -210,6 +305,7 @@ articles:
     contents:
       - my-vignette
       - aggregating_provider_data
+      - pipeline-guarantees
 
   - title: "Data Collection"
     navbar: Data Collection
