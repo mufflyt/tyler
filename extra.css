@@ -99,3 +99,41 @@
   line-height: 1.7;
 }
 .mc-install .mc-comment { color: #7ca8d4; }
+
+/* ── Figure gallery ───────────────────────────────────────────────────────── */
+.mc-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin: 1rem 0 2rem;
+}
+.mc-gallery-item {
+  border: 1px solid #e0e8f0;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s;
+}
+.mc-gallery-item:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.mc-gallery-item img {
+  width: 100%;
+  display: block;
+  border-bottom: 1px solid #e0e8f0;
+}
+.mc-gallery-caption {
+  font-size: 0.82rem;
+  color: #444;
+  padding: 0.6rem 0.85rem 0.7rem;
+  margin: 0;
+  line-height: 1.4;
+}
+.mc-gallery-caption strong { color: #1a3a5c; }
+.mc-gallery-caption code {
+  font-size: 0.78rem;
+  background: #f0f5fb;
+  padding: 0.1em 0.3em;
+  border-radius: 0.25rem;
+}

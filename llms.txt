@@ -83,6 +83,84 @@ Key functions
 [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md)  
 [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md)
 
+Example figures
+
+**Provider roster** — subspecialist counts from `physicians`
+(`mysterycall_search_taxonomy`)
+
+![OBGYN subspecialist counts bar
+chart](reference/figures/fig-subspecialty-counts.png)
+
+**Geographic distribution** — dot map of 4,659 providers across the US
+(`mysterycall_map_physicians`)
+
+![US map of OBGYN
+subspecialists](reference/figures/fig-physician-map.png)
+
+**100% stacked bar** — acceptance vs. rejection with call counts
+(`mysterycall_plot_stacked_bar`)
+
+![Stacked bar chart of acceptance
+rates](reference/figures/fig-stacked-bar.png)
+
+**Acceptance rates** — Medicaid vs. private insurance by subspecialty
+(`mysterycall_map_acceptance_rate`)
+
+![Grouped bar chart of acceptance
+rates](reference/figures/fig-acceptance-rates.png)
+
+**Choropleth map** — acceptance rate by state
+(`mysterycall_map_acceptance_rate`)
+
+![US choropleth of acceptance
+rates](reference/figures/fig-acceptance-map.png)
+
+**Insurance disparity** — Wilson 95% CIs by insurance type
+(`mysterycall_disparities_table`)
+
+![CI plot of insurance disparity](reference/figures/fig-disparities.png)
+
+**IRR forest plot** — incidence rate ratios from a Poisson GLMM
+(`mysterycall_irr_plot`)
+
+![Forest plot of IRRs](reference/figures/fig-irr-forest.png)
+
+**Estimated marginal means** — Medicaid vs. private wait days by
+subspecialty (`mysterycall_plot_emmeans_interaction`)
+
+![Emmeans interaction
+plot](reference/figures/fig-emmeans-interaction.png)
+
+**Wait-time density** — overlapping distributions with group medians
+(`mysterycall_plot_density`)
+
+![Density plot of wait times](reference/figures/fig-wait-density.png)
+
+**Jittered scatter** — raw wait-day observations by subspecialty
+(`mysterycall_plot_scatter`)
+
+![Jittered scatter plot](reference/figures/fig-scatter.png)
+
+**Wait-time histogram** — sqrt-scaled count distribution
+(`mysterycall_plot_distribution`)
+
+![Histogram of wait times](reference/figures/fig-distribution.png)
+
+**Power curve** — providers per arm needed to detect a given IRR
+(`mysterycall_equation_figure`)
+
+![Sample size vs IRR power curve](reference/figures/fig-power-curve.png)
+
+**CONSORT flowchart** — sequential inclusion/exclusion diagram
+(`mysterycall_flowchart`)
+
+![CONSORT flow diagram](reference/figures/fig-flowchart.png)
+
+**Residual diagnostics** — three-panel model check for Poisson GLMM
+(`mysterycall_plot_residuals`)
+
+![Residual diagnostic plots](reference/figures/fig-residuals.png)
+
 Built-in datasets
 
 | Dataset | Description | Rows |
