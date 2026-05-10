@@ -86,6 +86,44 @@ mysterycall_clear_isochrone_cache()
 mysterycall_map_physicians(geocoded, popup_var = "name")
 ```
 
+## Gallery
+
+<table>
+<tr>
+<td width="50%">
+
+**Provider roster** — subspecialist counts from the built-in `physicians` dataset
+
+<img src="man/figures/fig-subspecialty-counts.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Geographic distribution** — dot map of 4,659 OBGYN subspecialists
+
+<img src="man/figures/fig-physician-map.png" width="100%">
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Acceptance rates** — Medicaid vs. private insurance by subspecialty
+(`mysterycall_plot_stacked_bar`-style output)
+
+<img src="man/figures/fig-acceptance-rates.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Insurance disparity** — Wilson 95% CIs via `mysterycall_disparities_table`
+
+<img src="man/figures/fig-disparities.png" width="100%">
+
+</td>
+</tr>
+</table>
+
 ## Core functions
 
 | Stage | Function | Description |
