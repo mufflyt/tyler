@@ -2,7 +2,6 @@
 % Please edit documentation in R/Splitting_dataframe_to_send_to_callers.R
 \name{mysterycall_split_and_save}
 \alias{mysterycall_split_and_save}
-\alias{mysterycall_split_and_save}
 \title{Split data into multiple parts and save each part as separate Excel files}
 \usage{
 mysterycall_split_and_save(
@@ -40,8 +39,46 @@ Invisible list of file paths to the created Excel files
 This function splits the data based on provided lab assistant names and saves each part as a separate Excel file.
 It allows the arrangement of calls by insurance type to prioritize Medicaid in the first two days and Blue Cross/Blue Shield in the last two days.
 }
+\section{Contract}{
+
+\strong{Inputs:}
+\itemize{
+\item \code{lab_assistant_names} must have \eqn{\geq} 2 entries; function errors if only
+one name is provided.
+\item \code{seed} controls the random assignment of rows to assistants; the same seed
+always produces the same split.
+\item \code{output_directory} is created if absent.
+}
+
+\strong{Guarantees:}
+\itemize{
+\item Every input row appears in exactly one assistant's workbook (no row
+duplication, no silent omission).
+\item Workbooks are sorted by \code{insurance_order} so Medicaid rows appear first.
+\item A combined "all callers" workbook is written in addition to individual files.
+}
+
+\strong{Disaster Prevention:}
+Prevents unequal workload distribution by using round-robin row assignment
+rather than random block sampling, which can produce highly skewed splits
+for small rosters.
+}
+
+\section{Performance}{
+
+O(n log n) due to sorting. Excel I/O via \code{openxlsx} dominates for large
+rosters; expect ~2–5 s for 500 rows.
+}
+
+\section{Called By}{
+
+\itemize{
+\item \code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}}
+}
+}
+
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 input_data <- readr::read_csv("/path/to/your/input/file.csv")
 output_directory <- "/path/to/your/output/directory"
 lab_assistant_names <- c("Label1", "Label2", "Label3")
@@ -52,15 +89,16 @@ mysterycall_split_and_save(
   lab_assistant_names = lab_assistant_names,
   insurance_order = insurance_order
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other workflow: 
 \code{\link{mysterycall_clean_phase1}()},
 \code{\link{mysterycall_clean_phase2}()},
+\code{\link{mysterycall_print_dashboard}()},
 \code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_run_workflow}()},
 \code{\link{mysterycall_run_workflow_logged}()},
-\code{\link{mysterycall_print_dashboard}()}
+\code{\link{mysterycall_verify_artifact}()}
 }
 \concept{workflow}

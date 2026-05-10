@@ -17,3 +17,10 @@ Spinner ID
 \description{
 Shows an animated spinner for operations where total is unknown.
 }
+\examples{
+\donttest{
+id <- mysterycall_spinner_start("Loading data")
+Sys.sleep(0.1)
+mysterycall_spinner_stop(id)
+}
+}

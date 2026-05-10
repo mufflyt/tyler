@@ -2,7 +2,6 @@
 % Please edit documentation in R/geocode.R
 \name{mysterycall_geocode}
 \alias{mysterycall_geocode}
-\alias{mysterycall_geocode}
 \title{Geocode unique addresses from a file}
 \usage{
 mysterycall_geocode(
@@ -51,9 +50,9 @@ data with additional \code{latitude} and \code{longitude} columns. Optionally wr
 result to \code{output_file_path}.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 result <- mysterycall_geocode("addresses.csv", "my_api_key")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other geospatial helpers: 

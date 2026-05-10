@@ -2,7 +2,6 @@
 % Please edit documentation in R/clean_phase_2_results.R
 \name{mysterycall_rename_columns}
 \alias{mysterycall_rename_columns}
-\alias{mysterycall_rename_columns}
 \title{Rename columns based on substring matches}
 \usage{
 mysterycall_rename_columns(data, target_strings, new_names)
@@ -47,9 +46,10 @@ print(df)
 Other workflow: 
 \code{\link{mysterycall_clean_phase1}()},
 \code{\link{mysterycall_clean_phase2}()},
+\code{\link{mysterycall_print_dashboard}()},
 \code{\link{mysterycall_run_workflow}()},
 \code{\link{mysterycall_run_workflow_logged}()},
 \code{\link{mysterycall_split_and_save}()},
-\code{\link{mysterycall_print_dashboard}()}
+\code{\link{mysterycall_verify_artifact}()}
 }
 \concept{workflow}

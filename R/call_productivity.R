@@ -1,0 +1,137 @@
+#' Compute per-caller productivity metrics
+#'
+#' Summarises call volume, scheduling rates, and time metrics for each
+#' caller in a mystery caller dataset.
+#'
+#' @param data A data frame with at least a caller column.
+#' @param caller_col Character scalar: column identifying each caller.
+#' @param date_col Character scalar or NULL. Column containing call dates.
+#'   Accepts \code{Date}, \code{POSIXct}, or character (coerced via
+#'   \code{as.Date()}).
+#' @param outcome_col Character scalar or NULL. Binary (0/1) column indicating
+#'   whether a call resulted in an accepted appointment.
+#' @param hold_time_col Character scalar or NULL. Hold time in seconds
+#'   (numeric) or "MM:SS" format (character).
+#' @param call_time_col Character scalar or NULL. Total call time in seconds
+#'   (numeric) or "MM:SS" format (character).
+#'
+#' @return A data frame with one row per caller, sorted by \code{n_calls}
+#'   descending. Columns:
+#' \describe{
+#'   \item{caller}{Caller identifier.}
+#'   \item{n_calls}{Total calls.}
+#'   \item{n_days}{Unique call dates (NA if \code{date_col} is NULL).}
+#'   \item{calls_per_day}{n_calls / n_days (NA if \code{date_col} is NULL).}
+#'   \item{n_accepted}{Sum of \code{outcome_col} (NA if not provided).}
+#'   \item{acceptance_rate}{Formatted "XX.X\%" (NA if \code{outcome_col} NULL).}
+#'   \item{mean_hold_sec}{Mean hold time in seconds (NA if not provided).}
+#'   \item{mean_call_sec}{Mean call time in seconds (NA if not provided).}
+#' }
+#' The attribute \code{total_calls_all} is set on the returned data frame.
+#'
+#' @examples
+#' df <- data.frame(
+#'   caller  = c("Alice","Alice","Bob"),
+#'   outcome = c(1, 0, 1)
+#' )
+#' mysterycall_call_productivity(df, "caller", outcome_col = "outcome")
+#'
+#' @export
+mysterycall_call_productivity <- function(
+    data,
+    caller_col,
+    date_col      = NULL,
+    outcome_col   = NULL,
+    hold_time_col = NULL,
+    call_time_col = NULL
+) {
+  # ---- input validation -------------------------------------------------------
+  stopifnot(is.data.frame(data))
+  stopifnot(is.character(caller_col), length(caller_col) == 1)
+  if (!caller_col %in% names(data)) {
+    stop("caller_col '", caller_col, "' not found in data.")
+  }
+  n_unique_callers <- length(unique(data[[caller_col]]))
+  if (n_unique_callers < 2) {
+    stop("At least 2 unique callers are required; found ", n_unique_callers, ".")
+  }
+  .check_col <- function(col, label) {
+    if (!is.null(col)) {
+      stopifnot(is.character(col), length(col) == 1)
+      if (!col %in% names(data)) stop(label, " '", col, "' not found in data.")
+    }
+  }
+  .check_col(date_col,      "date_col")
+  .check_col(outcome_col,   "outcome_col")
+  .check_col(hold_time_col, "hold_time_col")
+  .check_col(call_time_col, "call_time_col")
+
+  # ---- helper: convert "MM:SS" or numeric to seconds --------------------------
+  .to_seconds <- function(x) {
+    if (is.numeric(x)) return(x)
+    x <- as.character(x)
+    has_colon <- grepl("^[0-9]+:[0-5][0-9]$", trimws(x))
+    result <- numeric(length(x))
+    result[!has_colon] <- suppressWarnings(as.numeric(x[!has_colon]))
+    if (any(has_colon)) {
+      parts <- strsplit(x[has_colon], ":")
+      result[has_colon] <- vapply(parts, function(p) {
+        as.numeric(p[1]) * 60 + as.numeric(p[2])
+      }, numeric(1))
+    }
+    result
+  }
+
+  # ---- helper: coerce date column ---------------------------------------------
+  .to_date <- function(x) {
+    if (inherits(x, "Date"))   return(x)
+    if (inherits(x, "POSIXt")) return(as.Date(x))
+    as.Date(as.character(x))
+  }
+
+  # ---- prepare columns --------------------------------------------------------
+  callers    <- data[[caller_col]]
+  dates      <- if (!is.null(date_col))      .to_date(data[[date_col]])    else NULL
+  outcomes   <- if (!is.null(outcome_col))   as.numeric(data[[outcome_col]]) else NULL
+  hold_secs  <- if (!is.null(hold_time_col)) .to_seconds(data[[hold_time_col]]) else NULL
+  call_secs  <- if (!is.null(call_time_col)) .to_seconds(data[[call_time_col]]) else NULL
+
+  # ---- compute per-caller metrics ---------------------------------------------
+  unique_callers <- sort(unique(callers))
+
+  rows <- lapply(unique_callers, function(cl) {
+    idx <- callers == cl
+
+    n_calls      <- sum(idx)
+
+    n_days       <- if (!is.null(dates))     length(unique(dates[idx]))  else NA_real_
+    calls_per_day <- if (!is.null(dates))    n_calls / n_days            else NA_real_
+
+    n_accepted   <- if (!is.null(outcomes))  sum(outcomes[idx], na.rm = TRUE) else NA_real_
+    accept_rate  <- if (!is.null(outcomes)) {
+      sprintf("%.1f%%", n_accepted / n_calls * 100)
+    } else NA_character_
+
+    m_hold <- if (!is.null(hold_secs)) mean(hold_secs[idx], na.rm = TRUE) else NA_real_
+    m_call <- if (!is.null(call_secs)) mean(call_secs[idx], na.rm = TRUE) else NA_real_
+
+    data.frame(
+      caller          = cl,
+      n_calls         = n_calls,
+      n_days          = n_days,
+      calls_per_day   = calls_per_day,
+      n_accepted      = n_accepted,
+      acceptance_rate = accept_rate,
+      mean_hold_sec   = m_hold,
+      mean_call_sec   = m_call,
+      stringsAsFactors = FALSE
+    )
+  })
+
+  result <- do.call(rbind, rows)
+  result <- result[order(-result$n_calls), ]
+  rownames(result) <- NULL
+
+  attr(result, "total_calls_all") <- nrow(data)
+  result
+}

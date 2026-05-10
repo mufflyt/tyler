@@ -21,14 +21,11 @@ mysterycall_log_error(msg, cause = NULL, fix = NULL, indent = TRUE)
 \description{
 Log error message with context
 }
+\examples{
+mysterycall_log_error("Geocode failed", cause = "API key missing", fix = "Set google_maps_api_key")
+}
 \seealso{
 Other logging utilities: 
-\code{\link{mysterycall_progress_tracker}()},
-\code{\link{mysterycall_progress_fail}()},
-\code{\link{mysterycall_progress_finish}()},
-\code{\link{mysterycall_progress_start}()},
-\code{\link{mysterycall_progress_summary}()},
-\code{\link{mysterycall_progress_update}()},
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_info}()},
 \code{\link{mysterycall_log_progress}()},
@@ -37,6 +34,12 @@ Other logging utilities:
 \code{\link{mysterycall_log_step_complete}()},
 \code{\link{mysterycall_log_success}()},
 \code{\link{mysterycall_log_warning}()},
+\code{\link{mysterycall_progress_finish}()},
+\code{\link{mysterycall_progress_start}()},
+\code{\link{mysterycall_progress_summary}()},
+\code{\link{mysterycall_progress_tracker}()},
+\code{\link{mysterycall_tracker_fail}()},
+\code{\link{mysterycall_tracker_update}()},
 \code{\link{mysterycall_workflow_start}()}
 }
 \concept{logging utilities}

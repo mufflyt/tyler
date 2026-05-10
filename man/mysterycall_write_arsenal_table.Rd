@@ -2,7 +2,6 @@
 % Please edit documentation in R/arsenal_tables_write.R
 \name{mysterycall_write_arsenal_table}
 \alias{mysterycall_write_arsenal_table}
-\alias{mysterycall_write_arsenal_table}
 \title{Writes an Arsenal table object to a Word document.}
 \usage{
 mysterycall_write_arsenal_table(object, filename, output_dir = NULL)
@@ -22,16 +21,16 @@ Called for its side effect of saving a Word document to \code{word_path}. Return
 Writes an Arsenal table object to a Word document.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 mysterycall_write_arsenal_table(my_table, "output_table")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other table: 
 \code{\link{mysterycall_max_table}()},
 \code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_table_overall}()},
 \code{\link{mysterycall_table_percentages}()},
-\code{\link{mysterycall_table_proportion}()},
-\code{\link{mysterycall_table_overall}()}
+\code{\link{mysterycall_table_proportion}()}
 }
 \concept{table}

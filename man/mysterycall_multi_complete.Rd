@@ -17,3 +17,10 @@ Invisible NULL
 \description{
 Complete current step in multi-progress tracker
 }
+\examples{
+\donttest{
+tracker <- mysterycall_multi_step(c("Geocode", "Validate"), 10)
+mysterycall_multi_update(tracker, amount = 10)
+mysterycall_multi_complete(tracker, result = "ok")
+}
+}

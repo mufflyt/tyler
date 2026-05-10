@@ -2,7 +2,6 @@
 % Please edit documentation in R/clean_phase_2_results.R
 \name{mysterycall_clean_phase2}
 \alias{mysterycall_clean_phase2}
-\alias{mysterycall_clean_phase2}
 \title{Clean and process Phase 2 data}
 \usage{
 mysterycall_clean_phase2(
@@ -33,13 +32,12 @@ A data frame with processed data.
 This function reads data from a file or data frame, cleans column names, and applies renaming based on specified criteria to facilitate data analysis. The function logs each step of the process, including data loading, column cleaning, and renaming for transparency.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Assuming an input path to a CSV file
 input_path <- "path_to_your_data.csv"
 required_strings <- c("physician_information", "able_to_contact_office")
 standard_names <- c("physician_info", "contact_office")
 cleaned_data <- mysterycall_clean_phase2(input_path, required_strings, standard_names)
-}
 
 # Directly using a data frame
 df <- data.frame(
@@ -50,14 +48,16 @@ required_strings <- c("doc_info", "contact_data")
 standard_names <- c("doctor_info", "patient_contact_info")
 cleaned_df <- mysterycall_clean_phase2(df, required_strings, standard_names)
 print(cleaned_df)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other workflow: 
 \code{\link{mysterycall_clean_phase1}()},
+\code{\link{mysterycall_print_dashboard}()},
 \code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_run_workflow}()},
 \code{\link{mysterycall_run_workflow_logged}()},
 \code{\link{mysterycall_split_and_save}()},
-\code{\link{mysterycall_print_dashboard}()}
+\code{\link{mysterycall_verify_artifact}()}
 }
 \concept{workflow}

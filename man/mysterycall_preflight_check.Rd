@@ -11,7 +11,7 @@ mysterycall_preflight_check(
   here_api_key = NULL,
   check_apis = TRUE,
   estimate_resources = TRUE,
-  interactive = interactive(),
+  prompt_user = interactive(),
   required_columns = c("first", "last")
 )
 }
@@ -28,7 +28,7 @@ mysterycall_preflight_check(
 
 \item{estimate_resources}{Whether to estimate runtime and memory (default: TRUE)}
 
-\item{interactive}{Whether to prompt user for confirmation (default: TRUE)}
+\item{prompt_user}{Whether to prompt user for confirmation (default: TRUE)}
 
 \item{required_columns}{Required column names in input data}
 }
@@ -41,7 +41,7 @@ data quality, output directories, estimated resources, and dependencies.
 Provides a go/no-go decision before starting long-running operations.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Basic preflight check
 mysterycall_preflight_check(
   input_data = "physicians.csv",
@@ -56,28 +56,27 @@ mysterycall_preflight_check(
   output_dir = "output/",
   interactive = FALSE
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other utilities: 
-\code{\link{mysterycall_download_file}()},
-\code{\link{mysterycall_format_pct}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
-\code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_assess_data_quality}()},
 \code{\link{mysterycall_check_api_response}()},
 \code{\link{mysterycall_check_data_completeness}()},
 \code{\link{mysterycall_check_dependencies}()},
 \code{\link{mysterycall_check_no_data_loss}()},
 \code{\link{mysterycall_check_no_limits}()},
+\code{\link{mysterycall_download_file}()},
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_export_with_backup}()},
+\code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_quality_tier}()},
+\code{\link{mysterycall_remove_constants}()},
+\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
+\code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_scan_for_limits}()},
 \code{\link{mysterycall_standard_labels}()},
-\code{\link{mysterycall_standard_palette}()},
-\code{\link{mysterycall_use_quiet_logging}()}
+\code{\link{mysterycall_standard_palette}()}
 }
 \concept{utilities}

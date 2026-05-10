@@ -1,0 +1,111 @@
+#' Screen candidate variables for interaction with a primary exposure
+#'
+#' @name mysterycall_screen_interactions
+NULL
+
+#' Fit one model per candidate interaction and return a ranked p-value table
+#'
+#' For each variable in `candidates`, fits a Poisson model with a
+#' `exposure * candidate` interaction term and extracts the p-value(s) for the
+#' interaction. Results are returned sorted by smallest p-value, making it easy
+#' to identify the strongest potential effect modifiers.
+#'
+#' @param data A data frame.
+#' @param outcome Character scalar. Name of the count-outcome column.
+#' @param exposure Character scalar. Name of the primary exposure column.
+#' @param candidates Character vector. Names of candidate effect-modifier
+#'   columns to screen.
+#' @param random_intercept Optional character scalar. When supplied, a
+#'   `(1 | random_intercept)` term is added and `lme4::glmer()` is used;
+#'   otherwise `stats::glm()` is used.
+#'
+#' @return A data frame with one row per candidate and columns:
+#'   `candidate`, `n_terms` (number of interaction coefficients),
+#'   `min_p_value`, `significant` (logical, `min_p_value < 0.05`).
+#'   Models that fail to converge return `NA` for numeric columns.
+#'
+#' @family outcomes
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' mysterycall_screen_interactions(
+#'   data             = df,
+#'   outcome          = "wait_days",
+#'   exposure         = "insurance",
+#'   candidates       = c("gender", "practice_setting", "region"),
+#'   random_intercept = "physician"
+#' )
+#' }
+mysterycall_screen_interactions <- function(data,
+                                             outcome,
+                                             exposure,
+                                             candidates,
+                                             random_intercept = NULL) {
+  if (!is.data.frame(data)) stop("`data` must be a data frame.", call. = FALSE)
+  missing_cols <- setdiff(c(outcome, exposure, candidates), names(data))
+  if (length(missing_cols) > 0L) {
+    stop("Columns not found in data: ", paste(missing_cols, collapse = ", "), call. = FALSE)
+  }
+  if (!is.null(random_intercept)) {
+    if (!requireNamespace("lme4", quietly = TRUE)) {
+      stop("lme4 is required when `random_intercept` is supplied. Install with install.packages('lme4').",
+           call. = FALSE)
+    }
+    if (!random_intercept %in% names(data)) {
+      stop("`random_intercept` column not found in data.", call. = FALSE)
+    }
+  }
+
+  results <- lapply(candidates, function(cand) {
+    tryCatch({
+      if (!is.null(random_intercept)) {
+        fml <- stats::as.formula(
+          sprintf("%s ~ %s * %s + (1|%s)", outcome, exposure, cand, random_intercept)
+        )
+        fit <- lme4::glmer(fml, data = data, family = stats::poisson(), nAGQ = 0L)
+        coef_mat <- as.data.frame(summary(fit)$coefficients)
+      } else {
+        fml <- stats::as.formula(sprintf("%s ~ %s * %s", outcome, exposure, cand))
+        fit <- stats::glm(fml, data = data, family = stats::poisson())
+        coef_mat <- as.data.frame(summary(fit)$coefficients)
+      }
+
+      rnames      <- rownames(coef_mat)
+      p_col       <- ncol(coef_mat)
+      int_pattern <- paste0("(", exposure, ":", cand, "|", cand, ":", exposure, ")")
+      is_int      <- grepl(int_pattern, rnames, perl = TRUE)
+      int_rows    <- coef_mat[is_int, , drop = FALSE]
+
+      if (nrow(int_rows) == 0L) {
+        return(data.frame(
+          candidate   = cand,
+          n_terms     = 0L,
+          min_p_value = NA_real_,
+          significant = NA,
+          stringsAsFactors = FALSE
+        ))
+      }
+
+      p_min <- min(int_rows[[p_col]], na.rm = TRUE)
+      data.frame(
+        candidate   = cand,
+        n_terms     = nrow(int_rows),
+        min_p_value = p_min,
+        significant = p_min < 0.05,
+        stringsAsFactors = FALSE
+      )
+    }, error = function(e) {
+      data.frame(
+        candidate   = cand,
+        n_terms     = NA_integer_,
+        min_p_value = NA_real_,
+        significant = NA,
+        stringsAsFactors = FALSE
+      )
+    })
+  })
+
+  out <- do.call(rbind, results)
+  out[order(out$min_p_value, na.last = TRUE), ]
+}

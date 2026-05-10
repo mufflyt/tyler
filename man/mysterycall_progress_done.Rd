@@ -7,15 +7,20 @@
 mysterycall_progress_done(pb, result = NULL, status = "done")
 }
 \arguments{
-\item{pb}{Progress bar object from mysterycall_progress_bar()}
+\item{pb}{Progress bar object from \code{mysterycall_progress_bar()}.}
 
-\item{result}{Optional result message to display}
+\item{result}{Optional result message to display on completion.}
 
-\item{status}{Final status (default: "done")}
+\item{status}{Final status label (default: \code{"done"}).}
 }
 \value{
-Invisible NULL
+Invisible NULL.
 }
 \description{
-Marks progress bar as complete with optional success message.
+Marks a progress bar as complete with an optional summary message.
+}
+\examples{
+pb <- mysterycall_progress_bar("Processing", total = 5)
+for (i in seq_len(5)) mysterycall_progress_update(pb)
+mysterycall_progress_done(pb, result = "5 items processed")
 }

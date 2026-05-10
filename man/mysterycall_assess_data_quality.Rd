@@ -13,31 +13,37 @@ mysterycall_assess_data_quality(data, required_columns = c("first", "last"))
 and sufficiently complete. Defaults to \code{c("first", "last")}.}
 }
 \value{
-List with score (0-1) and issues
+A named list with elements \code{score} (numeric 0–1) and
+\code{issues} (list of issue records with \code{severity} and
+\code{message} fields).
 }
 \description{
-Assess data quality
+Scores a data frame for completeness and validity and returns a list of
+issues that may affect downstream workflow steps.
+}
+\examples{
+df <- data.frame(first = c("Jane", NA), last = c("Doe", "Smith"))
+mysterycall_assess_data_quality(df)
 }
 \seealso{
 Other utilities: 
-\code{\link{mysterycall_download_file}()},
-\code{\link{mysterycall_format_pct}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
-\code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_check_api_response}()},
 \code{\link{mysterycall_check_data_completeness}()},
 \code{\link{mysterycall_check_dependencies}()},
 \code{\link{mysterycall_check_no_data_loss}()},
 \code{\link{mysterycall_check_no_limits}()},
+\code{\link{mysterycall_download_file}()},
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_export_with_backup}()},
+\code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
+\code{\link{mysterycall_remove_constants}()},
+\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
+\code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_scan_for_limits}()},
 \code{\link{mysterycall_standard_labels}()},
-\code{\link{mysterycall_standard_palette}()},
-\code{\link{mysterycall_use_quiet_logging}()}
+\code{\link{mysterycall_standard_palette}()}
 }
 \concept{utilities}

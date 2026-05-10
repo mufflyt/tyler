@@ -14,7 +14,7 @@
 #' @details
 #' The output table aggregates by `npi` and `name`, keeps combinations with more
 #' than two records, sorts descending by frequency, and writes the result to the
-#' specified format via [mysterycall_write_table()].
+#' specified format via `mysterycall_write_table()`.
 #' This helper is useful for flagging repeated provider entries that may require
 #' manual review.
 #' @importFrom dplyr group_by summarize arrange filter n desc

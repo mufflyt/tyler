@@ -7,17 +7,23 @@
 mysterycall_multi_step(tracker, step_num, total, detail = NULL)
 }
 \arguments{
-\item{tracker}{Multi-progress tracker object}
+\item{tracker}{Multi-progress tracker object from
+\code{mysterycall_multi_progress()}.}
 
-\item{step_num}{Step number (1-based)}
+\item{step_num}{Step number (1-based).}
 
-\item{total}{Total items in this step}
+\item{total}{Total number of items to process in this step.}
 
-\item{detail}{Optional detail message}
+\item{detail}{Optional detail message shown beneath the step header.}
 }
 \value{
-Invisible NULL
+Invisible NULL.
 }
 \description{
-Start a step in multi-progress tracker
+Advances the multi-progress tracker to the given step and creates an inner
+progress bar for that step's items.
+}
+\examples{
+tr <- mysterycall_multi_progress(c("Geocode", "Validate"))
+mysterycall_multi_step(tr, 1, total = 10)
 }

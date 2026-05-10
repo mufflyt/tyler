@@ -17,3 +17,9 @@ Invisible NULL
 \description{
 Stop a spinner
 }
+\examples{
+\donttest{
+id <- mysterycall_spinner_start("Loading data")
+mysterycall_spinner_stop(id, result = "done")
+}
+}

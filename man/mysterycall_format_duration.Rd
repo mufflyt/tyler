@@ -15,3 +15,8 @@ Formatted string (e.g., "2h 34m 15s")
 \description{
 Format duration in human-readable form
 }
+\examples{
+mysterycall_format_duration(45)
+mysterycall_format_duration(125)
+mysterycall_format_duration(3700)
+}

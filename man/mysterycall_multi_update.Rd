@@ -7,15 +7,21 @@
 mysterycall_multi_update(tracker, amount = 1, status = NULL)
 }
 \arguments{
-\item{tracker}{Multi-progress tracker object}
+\item{tracker}{Multi-progress tracker object from
+\code{mysterycall_multi_progress()}.}
 
-\item{amount}{Amount to increment (default: 1)}
+\item{amount}{Amount to increment (default: 1).}
 
-\item{status}{Optional status message}
+\item{status}{Optional status message to display.}
 }
 \value{
-Invisible NULL
+Invisible NULL.
 }
 \description{
-Update current step in multi-progress tracker
+Increments the inner progress bar for the current step.
+}
+\examples{
+tr <- mysterycall_multi_progress(c("Geocode", "Validate"))
+mysterycall_multi_step(tr, 1, total = 5)
+for (i in seq_len(5)) mysterycall_multi_update(tr)
 }

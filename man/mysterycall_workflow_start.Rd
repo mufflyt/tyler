@@ -14,20 +14,17 @@ mysterycall_workflow_start(workflow_name, total_steps = NULL, log_file = NULL)
 \item{log_file}{Optional path to log file for persistent logging}
 }
 \value{
-\code{invisible(NULL)}; initializes internal workflow state in
-\code{.mysterycall_workflow} and prints a workflow header.
+\code{invisible(NULL)}; initializes internal workflow state and prints a
+workflow header to the console.
 }
 \description{
 Initialize workflow tracking
 }
+\examples{
+mysterycall_workflow_start("Demo Workflow", total_steps = 3)
+}
 \seealso{
 Other logging utilities: 
-\code{\link{mysterycall_progress_tracker}()},
-\code{\link{mysterycall_progress_fail}()},
-\code{\link{mysterycall_progress_finish}()},
-\code{\link{mysterycall_progress_start}()},
-\code{\link{mysterycall_progress_summary}()},
-\code{\link{mysterycall_progress_update}()},
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_error}()},
 \code{\link{mysterycall_log_info}()},
@@ -36,6 +33,12 @@ Other logging utilities:
 \code{\link{mysterycall_log_step}()},
 \code{\link{mysterycall_log_step_complete}()},
 \code{\link{mysterycall_log_success}()},
-\code{\link{mysterycall_log_warning}()}
+\code{\link{mysterycall_log_warning}()},
+\code{\link{mysterycall_progress_finish}()},
+\code{\link{mysterycall_progress_start}()},
+\code{\link{mysterycall_progress_summary}()},
+\code{\link{mysterycall_progress_tracker}()},
+\code{\link{mysterycall_tracker_fail}()},
+\code{\link{mysterycall_tracker_update}()}
 }
 \concept{logging utilities}

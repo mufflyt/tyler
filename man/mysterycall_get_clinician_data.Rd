@@ -2,7 +2,6 @@
 % Please edit documentation in R/get_clinician_data.R
 \name{mysterycall_get_clinician_data}
 \alias{mysterycall_get_clinician_data}
-\alias{mysterycall_get_clinician_data}
 \title{Retrieve Clinician Data}
 \usage{
 mysterycall_get_clinician_data(input_data)
@@ -17,13 +16,12 @@ A tibble with clinician data for the provided NPIs.
 This function retrieves clinician data for each valid NPI in the input data frame.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other npi: 
-\code{\link{scrape_physicians_data_with_tor}()},
 \code{\link{mysterycall_search_and_process_npi}()},
 \code{\link{mysterycall_search_taxonomy}()}
 }

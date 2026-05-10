@@ -2,7 +2,6 @@
 % Please edit documentation in R/poisson_formula_maker.R
 \name{mysterycall_create_formula}
 \alias{mysterycall_create_formula}
-\alias{mysterycall_create_formula}
 \title{Create a Formula for Poisson Model}
 \usage{
 mysterycall_create_formula(data, response_var, random_effect = NULL)
@@ -33,7 +32,7 @@ formula
 \seealso{
 Other modeling helpers: 
 \code{\link{mysterycall_check_normality}()},
-\code{\link{mysterycall_plot_interaction}()},
-\code{\link{mysterycall_plot_emmeans}()}
+\code{\link{mysterycall_plot_emmeans}()},
+\code{\link{mysterycall_plot_interaction}()}
 }
 \concept{modeling helpers}

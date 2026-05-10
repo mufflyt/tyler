@@ -1,6 +1,6 @@
 #' @importFrom methods is
-#' @importFrom stats density poisson predict runif sd
-#' @importFrom utils packageVersion str tail write.csv
+#' @importFrom stats coef density fitted model.frame model.response poisson predict runif sd
+#' @importFrom utils capture.output packageVersion str tail write.csv
 NULL
 
 utils::globalVariables(c(
@@ -61,5 +61,18 @@ utils::globalVariables(c(
   "taxonomies_desc",
   "total_population",
   "var_interest",
-  ":="
+  "ci_lower",
+  "ci_upper",
+  "fitted",
+  "irr",
+  "n_per_arm",
+  "residuals",
+  "sqrt_abs_resid",
+  "term",
+  "value",
+  ":=",
+  "group",
+  "rate_pct",
+  "status",
+  "pct"
 ))

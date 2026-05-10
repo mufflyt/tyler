@@ -9,7 +9,7 @@ mysterycall_log_warning(msg, fix = NULL, indent = TRUE)
 \arguments{
 \item{msg}{Warning message}
 
-\item{fix}{Optional suggested fix}
+\item{fix}{Optional one-line suggested remediation.}
 
 \item{indent}{Whether to indent (default TRUE)}
 }
@@ -19,14 +19,11 @@ mysterycall_log_warning(msg, fix = NULL, indent = TRUE)
 \description{
 Log warning message
 }
+\examples{
+mysterycall_log_warning("Missing API key", fix = "Set GOOGLE_API_KEY env var")
+}
 \seealso{
 Other logging utilities: 
-\code{\link{mysterycall_progress_tracker}()},
-\code{\link{mysterycall_progress_fail}()},
-\code{\link{mysterycall_progress_finish}()},
-\code{\link{mysterycall_progress_start}()},
-\code{\link{mysterycall_progress_summary}()},
-\code{\link{mysterycall_progress_update}()},
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_error}()},
 \code{\link{mysterycall_log_info}()},
@@ -35,6 +32,12 @@ Other logging utilities:
 \code{\link{mysterycall_log_step}()},
 \code{\link{mysterycall_log_step_complete}()},
 \code{\link{mysterycall_log_success}()},
+\code{\link{mysterycall_progress_finish}()},
+\code{\link{mysterycall_progress_start}()},
+\code{\link{mysterycall_progress_summary}()},
+\code{\link{mysterycall_progress_tracker}()},
+\code{\link{mysterycall_tracker_fail}()},
+\code{\link{mysterycall_tracker_update}()},
 \code{\link{mysterycall_workflow_start}()}
 }
 \concept{logging utilities}

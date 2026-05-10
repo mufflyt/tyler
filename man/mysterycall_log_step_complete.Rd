@@ -4,7 +4,11 @@
 \alias{mysterycall_log_step_complete}
 \title{Complete current step with timing}
 \usage{
-mysterycall_log_step_complete(success_rate = NULL, n_success = NULL, n_total = NULL)
+mysterycall_log_step_complete(
+  success_rate = NULL,
+  n_success = NULL,
+  n_total = NULL
+)
 }
 \arguments{
 \item{success_rate}{Optional success rate (0-1)}
@@ -20,14 +24,15 @@ metrics for the current step.
 \description{
 Complete current step with timing
 }
+\examples{
+\dontrun{
+mysterycall_workflow_start("Demo", total_steps = 1)
+mysterycall_log_step("Step 1")
+mysterycall_log_step_complete(n_success = 90, n_total = 100)
+}
+}
 \seealso{
 Other logging utilities: 
-\code{\link{mysterycall_progress_tracker}()},
-\code{\link{mysterycall_progress_fail}()},
-\code{\link{mysterycall_progress_finish}()},
-\code{\link{mysterycall_progress_start}()},
-\code{\link{mysterycall_progress_summary}()},
-\code{\link{mysterycall_progress_update}()},
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_error}()},
 \code{\link{mysterycall_log_info}()},
@@ -36,6 +41,12 @@ Other logging utilities:
 \code{\link{mysterycall_log_step}()},
 \code{\link{mysterycall_log_success}()},
 \code{\link{mysterycall_log_warning}()},
+\code{\link{mysterycall_progress_finish}()},
+\code{\link{mysterycall_progress_start}()},
+\code{\link{mysterycall_progress_summary}()},
+\code{\link{mysterycall_progress_tracker}()},
+\code{\link{mysterycall_tracker_fail}()},
+\code{\link{mysterycall_tracker_update}()},
 \code{\link{mysterycall_workflow_start}()}
 }
 \concept{logging utilities}

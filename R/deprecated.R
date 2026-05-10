@@ -457,17 +457,17 @@ progress_tracker_finish <- function(...) {
 #' @rdname mysterycall-deprecated
 #' @export
 progress_tracker_fail <- function(...) {
-  .Deprecated("mysterycall_progress_fail", package = "mysterycall",
-              msg = "progress_tracker_fail() is deprecated. Use mysterycall_progress_fail() instead.")
-  mysterycall_progress_fail(...)
+  .Deprecated("mysterycall_tracker_fail", package = "mysterycall",
+              msg = "progress_tracker_fail() is deprecated. Use mysterycall_tracker_fail() instead.")
+  mysterycall_tracker_fail(...)
 }
 
 #' @rdname mysterycall-deprecated
 #' @export
 progress_tracker_update <- function(...) {
-  .Deprecated("mysterycall_progress_update", package = "mysterycall",
-              msg = "progress_tracker_update() is deprecated. Use mysterycall_progress_update() instead.")
-  mysterycall_progress_update(...)
+  .Deprecated("mysterycall_tracker_update", package = "mysterycall",
+              msg = "progress_tracker_update() is deprecated. Use mysterycall_tracker_update() instead.")
+  mysterycall_tracker_update(...)
 }
 
 #' @rdname mysterycall-deprecated
@@ -479,7 +479,17 @@ progress_tracker_summary <- function(...) {
 }
 
 # ── tyler_ → mysterycall_ shims (package renamed from tyler to mysterycall) ───
-# These allow code written against the tyler_ prefix to keep working.
+
+#' Deprecated tyler_ prefix functions
+#'
+#' @description
+#' These functions existed when the package was named `tyler`. They have been
+#' renamed with the `mysterycall_` prefix. All `tyler_*` wrappers call their
+#' `mysterycall_*` counterpart and emit a deprecation warning.
+#'
+#' @name tyler-deprecated
+#' @keywords internal
+NULL
 
 #' @rdname tyler-deprecated
 #' @export

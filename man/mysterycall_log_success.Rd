@@ -9,7 +9,7 @@ mysterycall_log_success(msg, details = NULL, indent = TRUE)
 \arguments{
 \item{msg}{Message to log}
 
-\item{details}{Optional list of details (name-value pairs)}
+\item{details}{Optional named list of additional key-value details to print.}
 
 \item{indent}{Whether to indent (default TRUE)}
 }
@@ -19,14 +19,11 @@ mysterycall_log_success(msg, details = NULL, indent = TRUE)
 \description{
 Log success message
 }
+\examples{
+mysterycall_log_success("Geocoding complete", details = list(n = 120, skipped = 3))
+}
 \seealso{
 Other logging utilities: 
-\code{\link{mysterycall_progress_tracker}()},
-\code{\link{mysterycall_progress_fail}()},
-\code{\link{mysterycall_progress_finish}()},
-\code{\link{mysterycall_progress_start}()},
-\code{\link{mysterycall_progress_summary}()},
-\code{\link{mysterycall_progress_update}()},
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_error}()},
 \code{\link{mysterycall_log_info}()},
@@ -35,6 +32,12 @@ Other logging utilities:
 \code{\link{mysterycall_log_step}()},
 \code{\link{mysterycall_log_step_complete}()},
 \code{\link{mysterycall_log_warning}()},
+\code{\link{mysterycall_progress_finish}()},
+\code{\link{mysterycall_progress_start}()},
+\code{\link{mysterycall_progress_summary}()},
+\code{\link{mysterycall_progress_tracker}()},
+\code{\link{mysterycall_tracker_fail}()},
+\code{\link{mysterycall_tracker_update}()},
 \code{\link{mysterycall_workflow_start}()}
 }
 \concept{logging utilities}
