@@ -76,3 +76,12 @@ utils::globalVariables(c(
   "status",
   "pct"
 ))
+
+.onAttach <- function(libname, pkgname) {
+  if (interactive() && runif(1) < 0.25) {
+    packageStartupMessage(
+      "If you use mysterycall in published research, please cite it:\n",
+      "  citation(\"mysterycall\")"
+    )
+  }
+}
