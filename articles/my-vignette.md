@@ -46,8 +46,8 @@ function.
 
 ``` r
 
-obgyn_taxonomy <- mysterycall::taxonomy %>% 
-  dplyr::filter(str_detect(`Classification`, fixed("GYN", ignore_case = TRUE))) %>% 
+obgyn_taxonomy <- mysterycall::taxonomy %>%
+  dplyr::filter(stringr::str_detect(`Classification`, stringr::fixed("GYN", ignore_case = TRUE))) %>%
   dplyr::select(Code, Specialization)
 ```
 

@@ -10,14 +10,14 @@
 Source:
 [`inst/CITATION`](https://github.com/mufflyt/mysterycall/blob/main/inst/CITATION)
 
-Muffly T (2026). *tyler: Common Functions for Mystery Caller or Audit
-Studies Evaluating Patient Access to Care*. R package version 1.2.2,
-<https://github.com/mufflyt/tyler>.
+Muffly T (2026). *mysterycall: Mystery Caller Study Tools for Healthcare
+Access Research*. R package version 1.3.0,
+<https://github.com/mufflyt/mysterycall>.
 
     @Manual{,
-      title = {tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care},
+      title = {mysterycall: Mystery Caller Study Tools for Healthcare Access Research},
       author = {Tyler Muffly},
       year = {2026},
-      note = {R package version 1.2.2},
-      url = {https://github.com/mufflyt/tyler},
+      note = {R package version 1.3.0},
+      url = {https://github.com/mufflyt/mysterycall},
     }
