@@ -33,7 +33,7 @@ mysterycall_check_no_limits <- function(data,
   n <- nrow(data)
 
   # Check for suspiciously round numbers that suggest artificial limits.
-  # 1000 is intentionally absent — legitimate NPI searches return 1000 rows.
+  # 1000 is intentionally absent -- legitimate NPI searches return 1000 rows.
   # 1200 replaces it: that is the hard NPI API cap and a reliable signal that
   # the result was truncated rather than complete.
   suspicious_counts <- c(5, 10, 25, 50, 100, 500, 1200, 5000, 10000, 50000, 100000)
@@ -185,7 +185,7 @@ mysterycall_scan_for_limits <- function(path = "R",
     files <- files[!grepl(exclude_pattern, files)]
   }
 
-  # Collect hits in a list to avoid O(n²) rbind-in-loop growth.
+  # Collect hits in a list to avoid O(n^2) rbind-in-loop growth.
   issue_list <- list()
 
   for (file in files) {
@@ -235,7 +235,7 @@ mysterycall_scan_for_limits <- function(path = "R",
     issues <- issues[order(issues$severity, issues$file, issues$line), ]
 
     warning(sprintf(
-      "Found %d potential artificial limits in code: CRITICAL: %d | HIGH: %d | MEDIUM: %d — review each occurrence carefully.",
+      "Found %d potential artificial limits in code: CRITICAL: %d | HIGH: %d | MEDIUM: %d -- review each occurrence carefully.",
       nrow(issues),
       sum(issues$severity == "CRITICAL"),
       sum(issues$severity == "HIGH"),

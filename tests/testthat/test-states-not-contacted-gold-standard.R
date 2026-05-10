@@ -44,7 +44,7 @@ test_that("3 states contacted of 10 → output mentions exactly 7 excluded state
   # Each excluded state must appear in the output string
   for (state in not_contacted) {
     expect_true(grepl(state, result, fixed = TRUE),
-                info = paste("Missing excluded state:", state, "| Output:", result))
+                label = paste("Missing excluded state:", state, "| Output:", result))
   }
 })
 
@@ -58,7 +58,7 @@ test_that("contacted states are NOT mentioned as excluded in the output", {
   excluded_section <- sub(".*excluded states include ", "", result)
   for (state in c("California", "Colorado", "Arizona")) {
     expect_false(grepl(state, excluded_section, fixed = TRUE),
-                 info = paste("Contacted state", state, "incorrectly appears in excluded section"))
+                 label = paste("Contacted state", state, "incorrectly appears in excluded section"))
   }
 })
 
@@ -70,7 +70,7 @@ test_that("all states contacted → output contains 'No states' as excluded", {
   df <- data.frame(state = ten_states, stringsAsFactors = FALSE)
   result <- mysterycall_not_contacted_states(df, all_states = ten_states)
   expect_true(grepl("No states", result),
-              info = paste("Output:", result))
+              label = paste("Output:", result))
 })
 
 # ---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ test_that("no states contacted → all 10 states listed as excluded", {
   # All 10 states must appear in the excluded section
   for (state in ten_states) {
     expect_true(grepl(state, result, fixed = TRUE),
-                info = paste("Missing excluded state:", state))
+                label = paste("Missing excluded state:", state))
   }
 })
 
@@ -136,8 +136,8 @@ test_that("contact_office='Yes' rows are treated as contacted states", {
   # Only Alabama, Arizona, California had "Yes" → those are contacted
   # Alabama, Arizona, California should NOT appear in excluded section
   # Alaska and Arkansas (and the remaining 5) should appear as excluded
-  expect_true(grepl("Alaska",   result), info = "Alaska should be excluded")
-  expect_true(grepl("Arkansas", result), info = "Arkansas should be excluded")
+  expect_true(grepl("Alaska",   result), label = "Alaska should be excluded")
+  expect_true(grepl("Arkansas", result), label = "Arkansas should be excluded")
 })
 
 # ---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ test_that("mixed-case contact_office values ('yes', 'YES', 'Yes') all treated as
   excluded_section <- sub(".*excluded states include ", "", result)
   for (state in c("Alabama", "Alaska", "Arizona")) {
     expect_false(grepl(state, excluded_section, fixed = TRUE),
-                 info = paste(state, "with affirmative contact incorrectly excluded"))
+                 label = paste(state, "with affirmative contact incorrectly excluded"))
   }
 })
 
@@ -172,7 +172,7 @@ test_that("NULL all_states uses default 51-state list internally", {
   # With 51 default states and 3 contacted, there should be 48 excluded
   # We can't enumerate all 48, but the result should mention many states
   expect_true(grepl("Alabama", result) || grepl("Alaska", result) || grepl("Colorado", result),
-              info = "Default states should appear in excluded list")
+              label = "Default states should appear in excluded list")
 })
 
 # ---------------------------------------------------------------------------
@@ -194,5 +194,5 @@ test_that("output string always contains 'unique physicians' phrase", {
   df <- data.frame(state = c("California", "Colorado"), stringsAsFactors = FALSE)
   result <- mysterycall_not_contacted_states(df, all_states = ten_states)
   expect_true(grepl("unique physicians", result),
-              info = paste("Output:", result))
+              label = paste("Output:", result))
 })

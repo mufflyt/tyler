@@ -64,7 +64,7 @@ test_that("mysterycall_format_pct output always ends with '%'", {
   for (x in test_values) {
     result <- mysterycall_format_pct(x, 1)
     expect_true(grepl("%$", result),
-                info = paste("mysterycall_format_pct(", x, ", 1) =", result))
+                label = paste("mysterycall_format_pct(", x, ", 1) =", result))
   }
 })
 
@@ -73,7 +73,7 @@ test_that("mysterycall_format_pct with zero digits always ends with '%'", {
   for (x in test_values) {
     result <- mysterycall_format_pct(x, 0)
     expect_true(grepl("%$", result),
-                info = paste("mysterycall_format_pct(", x, ", 0) =", result))
+                label = paste("mysterycall_format_pct(", x, ", 0) =", result))
   }
 })
 
@@ -105,7 +105,7 @@ test_that("formatting is idempotent: parse back and reformat gives same string",
     reparsed    <- as.numeric(pct_stripped) / 100
     reformatted <- mysterycall_format_pct(reparsed, 1)
     expect_equal(reformatted, formatted,
-                 info = paste("Idempotency failed for v =", v))
+                 label = paste("Idempotency failed for v =", v))
   }
 })
 

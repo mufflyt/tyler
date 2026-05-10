@@ -246,6 +246,7 @@ test_that("End-to-end: Census data integration workflow", {
 
   with_mocked_bindings(
     getCensus = mock_get_census,
+    .package = "censusapi",
     {
       # Stage 1: Retrieve census data
       census_data <- mysterycall_get_census_data(
@@ -511,7 +512,7 @@ test_that("End-to-end: Performance and scalability workflow", {
       phone_number = paste0(sample(200:999, n, replace = TRUE), "-555-",
                            sprintf("%04d", sample(1000:9999, n, replace = TRUE))),
       state_name = sample(state.name, n, replace = TRUE),
-      npi = paste0(sample(100000000:999999999, n), sample(0:9, n)),
+      npi = paste0(sample(100000000:999999999, n), sample(0:9, n, replace = TRUE)),
       for_redcap = sample(c("Yes", "No"), n, replace = TRUE),
       stringsAsFactors = FALSE
     )
@@ -542,7 +543,7 @@ test_that("End-to-end: Performance and scalability workflow", {
 
     # Time should scale sub-quadratically
     expect_lt(time_ratio, size_ratio^1.5,
-              info = paste("Poor scalability detected between size",
+              label = paste("Poor scalability detected between size",
                           dataset_sizes[i-1], "and", dataset_sizes[i]))
   }
 })

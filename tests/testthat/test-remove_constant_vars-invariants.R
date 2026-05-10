@@ -70,7 +70,7 @@ test_that("no varying column is ever removed across 50 random data frames", {
 
     missing_varying <- setdiff(varying_names, names(result))
     expect_equal(length(missing_varying), 0L,
-                 info = paste("Iteration", i, ": varying column(s) removed:", paste(missing_varying, collapse = ", ")))
+                 label = paste("Iteration", i, ": varying column(s) removed:", paste(missing_varying, collapse = ", ")))
   }
 })
 
@@ -143,7 +143,7 @@ test_that("all-NA column is treated as constant and removed", {
   )
   result <- quiet_rcv(df)
   expect_false("all_na" %in% names(result),
-               info = "all-NA column should be removed as constant")
+               label = "all-NA column should be removed as constant")
   expect_true("varying" %in% names(result))
 })
 

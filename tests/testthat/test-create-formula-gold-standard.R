@@ -38,20 +38,20 @@ test_that("mysterycall_create_formula produces correct formula for age + name ~ 
   # so "days ~ `age` + `name`" becomes "days ~ age + name" after as.formula().
   # We therefore check for the column names without backticks in the final deparsed form.
   expect_true(grepl("days", f_str),
-              info = paste("Formula:", f_str))
+              label = paste("Formula:", f_str))
   expect_true(grepl("age", f_str),
-              info = paste("Formula:", f_str))
+              label = paste("Formula:", f_str))
   expect_true(grepl("name", f_str),
-              info = paste("Formula:", f_str))
+              label = paste("Formula:", f_str))
   # Response must be on the left side
   expect_true(grepl("^days ~", f_str),
-              info = paste("days must be LHS. Formula:", f_str))
+              label = paste("days must be LHS. Formula:", f_str))
   # Special-character column names DO retain backticks
   df2 <- data.frame(days = 1:3, "patient age" = 1:3, check.names = FALSE)
   f2 <- quiet_cf(df2, "days")
   f2_str <- deparse(f2)
   expect_true(grepl("`patient age`", f2_str),
-              info = paste("Special-char name must retain backticks. Formula:", f2_str))
+              label = paste("Special-char name must retain backticks. Formula:", f2_str))
 })
 
 # ---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ test_that("mysterycall_create_formula with random_effect contains '(1 | name)' t
   f <- quiet_cf(df, "days", "name")
   f_str <- deparse(f)
   expect_true(grepl("(1 | name)", f_str, fixed = TRUE),
-              info = paste("Formula:", f_str))
+              label = paste("Formula:", f_str))
 })
 
 test_that("mysterycall_create_formula with random_effect also includes the RE variable as a regular predictor", {
@@ -83,9 +83,9 @@ test_that("mysterycall_create_formula with random_effect also includes the RE va
   # 'name' must appear in the RHS (as regular predictor after deparse normalization)
   # and in the RE term (1 | name)
   expect_true(grepl("name", f_str),
-              info = paste("name must appear in formula. Formula:", f_str))
+              label = paste("name must appear in formula. Formula:", f_str))
   expect_true(grepl("(1 | name)", f_str, fixed = TRUE),
-              info = paste("name must be RE term. Formula:", f_str))
+              label = paste("name must be RE term. Formula:", f_str))
 })
 
 # ---------------------------------------------------------------------------
@@ -138,7 +138,7 @@ test_that("response variable does not appear on the RHS of the formula", {
   rhs_str <- deparse(f[[3]])
   # "days" should not appear in the right-hand side
   expect_false(grepl("\\bdays\\b", rhs_str),
-               info = paste("RHS:", rhs_str))
+               label = paste("RHS:", rhs_str))
 })
 
 # ---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ test_that("all non-response columns appear in the RHS of the formula", {
   f_str <- deparse(f)
   for (col in c("predictor1", "predictor2", "predictor3")) {
     expect_true(grepl(col, f_str),
-                info = paste("Missing predictor:", col, "in formula:", f_str))
+                label = paste("Missing predictor:", col, "in formula:", f_str))
   }
 })
 
@@ -171,9 +171,9 @@ test_that("single predictor formula has only that one predictor on RHS", {
   # Must contain `x` and not contain any "+" (only one predictor)
   rhs_str <- deparse(f[[3]])
   expect_false(grepl("+", rhs_str, fixed = TRUE),
-               info = paste("Single-predictor formula should not have '+'. RHS:", rhs_str))
+               label = paste("Single-predictor formula should not have '+'. RHS:", rhs_str))
   expect_true(grepl("x", rhs_str),
-              info = paste("x must be the sole predictor. RHS:", rhs_str))
+              label = paste("x must be the sole predictor. RHS:", rhs_str))
 })
 
 # ---------------------------------------------------------------------------
@@ -192,7 +192,7 @@ test_that("adding a column to data adds exactly one more term to the formula", {
   n_plus_expanded <- nchar(deparse(f_expanded)) - nchar(gsub("+", "", deparse(f_expanded), fixed = TRUE))
 
   expect_equal(n_plus_expanded, n_plus_base + 1L,
-               info = paste("base formula:", deparse(f_base),
+               label = paste("base formula:", deparse(f_base),
                             "| expanded formula:", deparse(f_expanded)))
 })
 
@@ -212,9 +212,9 @@ test_that("special-character predictor names retain backtick-quoting in the form
   f <- quiet_cf(df, "days")
   f_str <- deparse(f)
   expect_true(grepl("`patient age`", f_str),
-              info = paste("Formula:", f_str))
+              label = paste("Formula:", f_str))
   expect_true(grepl("`site-name`", f_str),
-              info = paste("Formula:", f_str))
+              label = paste("Formula:", f_str))
 })
 
 test_that("standard underscore names appear without backticks after deparse normalization", {
@@ -229,7 +229,7 @@ test_that("standard underscore names appear without backticks after deparse norm
   f_str <- deparse(f)
   # After deparse normalization, patient_age and site_name appear without backticks
   expect_true(grepl("patient_age", f_str),
-              info = paste("Formula:", f_str))
+              label = paste("Formula:", f_str))
   expect_true(grepl("site_name", f_str),
-              info = paste("Formula:", f_str))
+              label = paste("Formula:", f_str))
 })

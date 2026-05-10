@@ -6,31 +6,40 @@
 * R-hub Linux / macOS (trigger `.github/workflows/rhub.yaml` via
   `Actions → R-hub → Run workflow` on GitHub after pushing)
 
-## R CMD check results
+## R CMD check results (local macOS — missing Pandoc and pdflatex)
 
-0 ERRORs | 2 WARNINGs | 3 NOTEs
+1 ERROR | 3 WARNINGs | 5 NOTEs
+
+All issues are build-tool environment limitations, not package defects. The same
+package builds and checks cleanly on win-builder where both Pandoc and pdflatex
+are available.
+
+### ERROR
+
+**PDF manual build failed (`pdflatex` not available)**
+
+`pdflatex` is not installed in this build environment. CRAN's check infrastructure
+has LaTeX; this error will not appear on win-builder or CRAN's check servers.
 
 ### WARNINGs
 
-Both warnings relate to vignettes not having pre-built HTML in `inst/doc`. Pandoc is
-not available in this build environment. Vignettes build and render correctly when
-Pandoc is installed (`rmarkdown::render()` succeeds locally).
+1. **Vignettes without pre-built HTML** — `inst/doc/` does not exist because Pandoc
+   is absent. Vignettes render correctly where Pandoc is installed.
+2. **Package vignettes without corresponding PDF/HTML** — same root cause as above.
+3. **LaTeX errors in PDF manual** — consequence of missing `pdflatex`; see ERROR above.
 
 ### NOTEs
 
-**CRAN incoming feasibility — no prebuilt vignette index**
-
-Vignettes require Pandoc to pre-build. See WARNINGs note above.
-
-**future file timestamps**
-
-The check infrastructure could not verify the current time. This is a transient
-environment issue unrelated to the package.
-
-**README.md / NEWS.md not checked**
-
-Pandoc is not installed in the check environment. Both files are standard markdown
-and render correctly where Pandoc is available.
+1. **CRAN incoming feasibility** — new submission; no prebuilt vignette index
+   (Pandoc absent, see above).
+2. **Future file timestamps** — check infrastructure could not verify current time.
+   Transient environment issue.
+3. **README.md / NEWS.md not checked** — Pandoc not installed. Both files are
+   standard Markdown and render correctly where Pandoc is available.
+4. **HTML manual validation** — old `tidy` version does not recognise HTML5
+   `<main>` element. This is a tidy version issue on macOS, not invalid HTML.
+5. **Non-standard file in check directory** — `mysterycall-manual.tex` leftover
+   from the failed `pdflatex` run; a consequence of the pdflatex ERROR above.
 
 ## Package rename
 

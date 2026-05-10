@@ -124,7 +124,7 @@ test_that("Data validation: NPI format validation", {
     valid_npis <- result$npi[!is.na(result$npi)]
     if (length(valid_npis) > 0) {
       expect_true(all(grepl(DATA_VALIDATION_RULES$npi$pattern, valid_npis)),
-                  info = "Invalid NPI formats found in validated data")
+                  label = "Invalid NPI formats found in validated data")
 
       # mysterycall_validate_npi validates format only, not uniqueness
     }
@@ -265,19 +265,19 @@ test_that("Data validation: Cross-field consistency", {
   if (length(present_fields) > 0) {
     for (field in present_fields) {
       expect_true(all(!is.na(result[[field]])),
-                  info = paste("Required field", field, "has missing values"))
+                  label = paste("Required field", field, "has missing values"))
     }
   }
 
   # Check data type consistency
   if ("id" %in% names(result)) {
     expect_true(is.numeric(result$id) || is.integer(result$id),
-                info = "ID field should be numeric")
+                label = "ID field should be numeric")
   }
 
   if ("npi" %in% names(result)) {
     expect_true(is.character(result$npi) || is.numeric(result$npi),
-                info = "NPI field should be character or numeric")
+                label = "NPI field should be character or numeric")
   }
 })
 
@@ -383,7 +383,7 @@ test_that("Data validation: Unicode and encoding handling", {
     # At least some non-ASCII characters should be preserved
     has_unicode <- any(grepl("[^\\x00-\\x7F]", result$names, perl = TRUE))
     expect_true(has_unicode || all(is.na(result$names)),
-                info = "Unicode characters may have been corrupted")
+                label = "Unicode characters may have been corrupted")
   }
 })
 
@@ -518,13 +518,13 @@ test_that("Data validation: Property-based data quality", {
     required_cols <- c("names", "practice_name")
     present_required <- intersect(required_cols, names(result))
     expect_equal(length(present_required), length(required_cols),
-                 info = paste("Missing required columns in iteration", i))
+                 label = paste("Missing required columns in iteration", i))
 
     # No completely empty rows
     if (nrow(result) > 0) {
       empty_rows <- apply(result, 1, function(row) all(is.na(row) | row == ""))
       expect_true(sum(empty_rows) == 0,
-                  info = paste("Empty rows found in iteration", i))
+                  label = paste("Empty rows found in iteration", i))
     }
   }
 })

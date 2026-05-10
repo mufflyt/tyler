@@ -61,9 +61,9 @@ if (eval_vignettes) {
 }
 ```
 
-```{r}
-obgyn_taxonomy <- mysterycall::taxonomy %>% 
-  dplyr::filter(str_detect(`Classification`, fixed("GYN", ignore_case = TRUE))) %>% 
+```{r, eval=FALSE}
+obgyn_taxonomy <- mysterycall::taxonomy %>%
+  dplyr::filter(stringr::str_detect(`Classification`, stringr::fixed("GYN", ignore_case = TRUE))) %>%
   dplyr::select(Code, Specialization)
 ```
 

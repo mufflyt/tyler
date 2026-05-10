@@ -316,7 +316,7 @@ test_that("mysterycall_clean_phase1: End-to-end workflow", {
                          sample(c("Health", "Medical", "Clinic", "Associates"), 10, replace = TRUE)),
     phone_number = paste0(sample(200:999, 10), "-555-", sprintf("%04d", sample(1000:9999, 10))),
     state_name = sample(state.name, 10, replace = TRUE),
-    npi = paste0(sample(100000000:999999999, 10), sample(0:9, 10)),
+    npi = paste0(sample(100000000:999999999, 10), sample(0:9, 10, replace = TRUE)),
     for_redcap = sample(c("Yes", "No"), 10, replace = TRUE),
     additional_notes = sample(c("", "Special case", "Follow up needed"), 10, replace = TRUE),
     stringsAsFactors = FALSE

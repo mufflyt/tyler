@@ -155,7 +155,7 @@ test_that("write_snapshot=FALSE with NULL input doesn't create files in tempdir"
 
   # No files should be written when result is empty tibble
   expect_equal(before_count, after_count,
-               info = "write_snapshot=FALSE with NULL should write no files")
+               label = "write_snapshot=FALSE with NULL should write no files")
 })
 
 # ---------------------------------------------------------------------------

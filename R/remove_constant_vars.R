@@ -8,8 +8,9 @@
 #'
 #' @importFrom dplyr select where all_of
 #'
-#' @examplesIf interactive()
-#' new_data <- mysterycall_remove_constants(data_frame)
+#' @examples
+#' df <- data.frame(a = 1:3, b = c(5, 5, 5), c = c("x", "y", "z"))
+#' mysterycall_remove_constants(df)
 #'
 #' @family utilities
 #' @export

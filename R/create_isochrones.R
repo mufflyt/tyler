@@ -125,6 +125,8 @@ mysterycall_create_isochrones <- function(location,
 #' release that memory.
 #'
 #' @return Invisibly `NULL`.
+#' @examples
+#' mysterycall_clear_isochrone_cache()
 #' @export
 mysterycall_clear_isochrone_cache <- function() {
   if (!is.null(.isochrone_memo) && requireNamespace("memoise", quietly = TRUE)) {

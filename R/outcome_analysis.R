@@ -123,13 +123,13 @@ mysterycall_wait_time_summary <- function(data,
   wait_vec  <- data[[wait_col]]
   n_missing <- sum(is.na(wait_vec))
 
-  # ── No grouping ────────────────────────────────────────────────────────────
+  # -- No grouping ------------------------------------------------------------
   if (is.null(group_by)) {
     s <- .wait_stats(wait_vec)
     s$n_missing <- n_missing
     s <- s[, c("n", "n_missing", "mean", "sd", "median", "q1", "q3", "min", "max")]
     interp <- sprintf(
-      "Median wait time: %g days (IQR %g–%g); mean %g days (SD %g); n = %d, %d missing.",
+      "Median wait time: %g days (IQR %g-%g); mean %g days (SD %g); n = %d, %d missing.",
       s$median, s$q1, s$q3, round(s$mean, 1), round(s$sd, 1), s$n, n_missing
     )
     return(list(
@@ -141,7 +141,7 @@ mysterycall_wait_time_summary <- function(data,
     ))
   }
 
-  # ── Grouped ────────────────────────────────────────────────────────────────
+  # -- Grouped ----------------------------------------------------------------
   group_vec <- data[[group_by]]
   groups    <- sort(unique(group_vec[!is.na(group_vec)]))
   n_groups  <- length(groups)
@@ -156,7 +156,7 @@ mysterycall_wait_time_summary <- function(data,
   })
   summary_tbl <- tibble::as_tibble(do.call(rbind, group_rows))
 
-  # ── Non-parametric test ────────────────────────────────────────────────────
+  # -- Non-parametric test ----------------------------------------------------
   test_obj  <- NULL
   p_value   <- NA_real_
   test_name <- "none"
@@ -197,10 +197,10 @@ mysterycall_wait_time_summary <- function(data,
     }
   }
 
-  # ── Interpretation sentence ────────────────────────────────────────────────
+  # -- Interpretation sentence ------------------------------------------------
   parts <- vapply(groups, function(g) {
     row <- summary_tbl[summary_tbl[[group_by]] == g, , drop = FALSE]
-    sprintf("%s: median %g days (IQR %g–%g, n=%d)",
+    sprintf("%s: median %g days (IQR %g-%g, n=%d)",
             g, row$median, row$q1, row$q3, row$n)
   }, character(1L))
 
@@ -232,8 +232,8 @@ mysterycall_wait_time_summary <- function(data,
 #'
 #' The acceptance column is interpreted generously: logical `TRUE`, non-zero
 #' numerics, and character strings `"yes"`, `"y"`, `"true"`, and `"1"`
-#' (case-insensitive) all count as accepted. Everything else — including
-#' `NA` — counts as not accepted.
+#' (case-insensitive) all count as accepted. Everything else -- including
+#' `NA` -- counts as not accepted.
 #'
 #' @param data A data frame containing at least the column named by
 #'   `accepted_col`.
@@ -300,7 +300,7 @@ mysterycall_acceptance_rate <- function(data,
   non_na_mask  <- !is.na(raw_col)
   accepted_lgl <- .as_positive_logical(raw_col[non_na_mask])
 
-  # ── No grouping ────────────────────────────────────────────────────────────
+  # -- No grouping ------------------------------------------------------------
   if (is.null(group_by)) {
     k    <- sum(accepted_lgl)
     n    <- length(accepted_lgl)   # excludes NAs
@@ -316,7 +316,7 @@ mysterycall_acceptance_rate <- function(data,
       ci_upper   = ci[[2L]]
     )
     interp <- sprintf(
-      "Acceptance rate: %d/%d (%.1f%%, %d%% CI %.1f%%–%.1f%%).",
+      "Acceptance rate: %d/%d (%.1f%%, %d%% CI %.1f%%-%.1f%%).",
       k, n, rate * 100, round(conf_level * 100),
       ci[[1L]] * 100, ci[[2L]] * 100
     )
@@ -329,7 +329,7 @@ mysterycall_acceptance_rate <- function(data,
     ))
   }
 
-  # ── Grouped ────────────────────────────────────────────────────────────────
+  # -- Grouped ----------------------------------------------------------------
   group_vec <- data[[group_by]]
   groups    <- sort(unique(group_vec[!is.na(group_vec)]))
   n_groups  <- length(groups)
@@ -357,7 +357,7 @@ mysterycall_acceptance_rate <- function(data,
   })
   summary_tbl <- tibble::as_tibble(do.call(rbind, group_rows))
 
-  # ── Contingency table ──────────────────────────────────────────────────────
+  # -- Contingency table ------------------------------------------------------
   ct <- matrix(
     0L, nrow = 2L, ncol = n_groups,
     dimnames = list(c("accepted", "rejected"), as.character(groups))
@@ -370,7 +370,7 @@ mysterycall_acceptance_rate <- function(data,
     ct["rejected", i] <- sum(!acc)
   }
 
-  # ── Statistical test ───────────────────────────────────────────────────────
+  # -- Statistical test -------------------------------------------------------
   test_obj  <- NULL
   p_value   <- NA_real_
   test_name <- "none"
@@ -389,7 +389,7 @@ mysterycall_acceptance_rate <- function(data,
         error = function(e) NULL
       )
       test_name <- if (any(ct < min_cell)) {
-        "chi-square (small cells — interpret cautiously)"
+        "chi-square (small cells -- interpret cautiously)"
       } else {
         "chi-square"
       }
@@ -397,10 +397,10 @@ mysterycall_acceptance_rate <- function(data,
     if (!is.null(test_obj)) p_value <- test_obj$p.value
   }
 
-  # ── Interpretation sentence ────────────────────────────────────────────────
+  # -- Interpretation sentence ------------------------------------------------
   parts <- vapply(groups, function(g) {
     row <- summary_tbl[summary_tbl[[group_by]] == g, , drop = FALSE]
-    sprintf("%s: %d/%d (%.1f%%, 95%% CI %.1f%%–%.1f%%)",
+    sprintf("%s: %d/%d (%.1f%%, 95%% CI %.1f%%-%.1f%%)",
             g, row$n_accepted, row$n_total,
             row$rate * 100, row$ci_lower * 100, row$ci_upper * 100)
   }, character(1L))

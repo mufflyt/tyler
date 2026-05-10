@@ -3,6 +3,9 @@
 #' @return A named list of canonical labels for common columns.
 #' @family utilities
 #' @export
+#' @examples
+#' labels <- mysterycall_standard_labels()
+#' labels[["npi"]]
 mysterycall_standard_labels <- function() {
   list(
     npi = "National Provider Identifier",
@@ -24,6 +27,9 @@ mysterycall_standard_labels <- function() {
 #' @return A character vector of hex colors.
 #' @family utilities
 #' @export
+#' @examples
+#' mysterycall_standard_palette("primary")
+#' mysterycall_standard_palette("diverging")
 mysterycall_standard_palette <- function(name = c("primary", "sequential", "diverging")) {
   name <- match.arg(name)
   palettes <- list(

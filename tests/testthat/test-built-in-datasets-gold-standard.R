@@ -95,18 +95,18 @@ test_that("physicians lat is within US mainland + Hawaii + Alaska bounds (18 to 
   lats <- mysterycall::physicians$lat
   non_na_lats <- lats[!is.na(lats)]
   expect_true(all(non_na_lats >= 18),
-              info = paste("Min lat:", min(non_na_lats)))
+              label = paste("Min lat:", min(non_na_lats)))
   expect_true(all(non_na_lats <= 72),
-              info = paste("Max lat:", max(non_na_lats)))
+              label = paste("Max lat:", max(non_na_lats)))
 })
 
 test_that("physicians lon is within US bounds (-180 to -65 W)", {
   lons <- mysterycall::physicians$long
   non_na_lons <- lons[!is.na(lons)]
   expect_true(all(non_na_lons >= -180),
-              info = paste("Min lon:", min(non_na_lons)))
+              label = paste("Min lon:", min(non_na_lons)))
   expect_true(all(non_na_lons <= -65),
-              info = paste("Max lon:", max(non_na_lons)))
+              label = paste("Max lon:", max(non_na_lons)))
 })
 
 test_that("physicians lat gold-standard range: 18.03865 to 47.75458", {
@@ -139,7 +139,7 @@ test_that("all physician subspecialties are from the known set of 7", {
   actual <- unique(mysterycall::physicians$subspecialty)
   unexpected <- setdiff(actual, known_subspecialties)
   expect_equal(length(unexpected), 0L,
-               info = paste("Unexpected subspecialties:", paste(unexpected, collapse = "; ")))
+               label = paste("Unexpected subspecialties:", paste(unexpected, collapse = "; ")))
 })
 
 test_that("physicians has exactly 7 distinct subspecialties", {
@@ -178,9 +178,9 @@ test_that("every physician subspecialty appears in taxonomy Classification or Sp
   go_in_tax    <- "Gynecologic Oncology" %in% tax_vals
 
   expect_true(fpmrs_in_tax,
-              info = "'Female Pelvic Medicine and Reconstructive Surgery' must appear in taxonomy")
+              label = "'Female Pelvic Medicine and Reconstructive Surgery' must appear in taxonomy")
   expect_true(go_in_tax,
-              info = "'Gynecologic Oncology' must appear in taxonomy")
+              label = "'Gynecologic Oncology' must appear in taxonomy")
 })
 
 test_that("taxonomy Classification column has no completely empty rows", {
@@ -205,9 +205,9 @@ test_that("ACOG_Districts contains Districts I through XII but NOT District X", 
   )
   missing_from_data <- setdiff(expected_present, districts)
   expect_equal(length(missing_from_data), 0L,
-               info = paste("Missing districts:", paste(missing_from_data, collapse = ", ")))
+               label = paste("Missing districts:", paste(missing_from_data, collapse = ", ")))
   expect_false("District X" %in% districts,
-               info = "District X should not exist in ACOG_Districts")
+               label = "District X should not exist in ACOG_Districts")
 })
 
 test_that("ACOG_Districts State column has no NA or empty values", {
@@ -225,7 +225,7 @@ test_that("acgme original_accreditation_date column exists and values are parsea
   dates_raw <- mysterycall::acgme$original_accreditation_date
   non_na_dates <- dates_raw[!is.na(dates_raw)]
   expect_true(length(non_na_dates) > 0,
-              info = "original_accreditation_date should have at least one non-NA value")
+              label = "original_accreditation_date should have at least one non-NA value")
   # Attempt to parse; none should produce all NA when using the known format
   parsed <- as.Date(non_na_dates, format = "%B %d, %Y")
   # At least 90% should parse (allowing for format variation)
@@ -245,15 +245,15 @@ test_that("acgme director_date_appointed column exists", {
 test_that("cityStateToLatLong latitude is within world bounds (-90 to 90)", {
   lats <- mysterycall::cityStateToLatLong$latitude
   non_na <- lats[!is.na(lats)]
-  expect_true(all(non_na >= -90), info = paste("Min lat:", min(non_na)))
-  expect_true(all(non_na <=  90), info = paste("Max lat:", max(non_na)))
+  expect_true(all(non_na >= -90), label = paste("Min lat:", min(non_na)))
+  expect_true(all(non_na <=  90), label = paste("Max lat:", max(non_na)))
 })
 
 test_that("cityStateToLatLong longitude is within world bounds (-180 to 180)", {
   lons <- mysterycall::cityStateToLatLong$longitude
   non_na <- lons[!is.na(lons)]
-  expect_true(all(non_na >= -180), info = paste("Min lon:", min(non_na)))
-  expect_true(all(non_na <=  180), info = paste("Max lon:", max(non_na)))
+  expect_true(all(non_na >= -180), label = paste("Min lon:", min(non_na)))
+  expect_true(all(non_na <=  180), label = paste("Max lon:", max(non_na)))
 })
 
 # ---------------------------------------------------------------------------
@@ -264,7 +264,7 @@ test_that("taxonomy Code column is exactly 10 characters for every row", {
   codes <- mysterycall::taxonomy$Code
   bad <- codes[nchar(codes) != 10]
   expect_equal(length(bad), 0L,
-               info = paste("Codes with wrong length:", paste(head(bad), collapse = ", ")))
+               label = paste("Codes with wrong length:", paste(head(bad), collapse = ", ")))
 })
 
 # ---------------------------------------------------------------------------

@@ -5,7 +5,7 @@ library(dplyr)
 
 # Property-based test generators
 generate_valid_npi <- function(n = 1) {
-  paste0(sample(100000000:999999999, n), sample(0:9, n))
+  paste0(sample(100000000:999999999, n), sample(0:9, n, replace = TRUE))
 }
 
 generate_valid_phone <- function(n = 1) {
@@ -415,7 +415,7 @@ test_that("Property: Memory usage is bounded for given input size", {
     memory_ratio <- memory_usage[i] / memory_usage[i-1]
 
     expect_lt(memory_ratio, size_ratio^1.5,
-              info = paste("Memory scaling too steep between size",
+              label = paste("Memory scaling too steep between size",
                           input_sizes[i-1], "and", input_sizes[i]))
   }
 })
@@ -440,7 +440,7 @@ test_that("Property: Error conditions are consistent and informative", {
     expect_error(
       mysterycall_clean_phase1(condition_data, output_directory = temp_dir),
       regexp = paste0("(data frame|names|practice_name|at least one row)"),
-      info = paste("Error condition", condition_name, "should throw informative error")
+      label = paste("Error condition", condition_name, "should throw informative error")
     )
   }
 })

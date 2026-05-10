@@ -9,7 +9,8 @@
 #' @return A data frame with near-zero variance variables removed.
 #'
 #' @examplesIf interactive()
-#' new_data <- mysterycall_remove_near_zero(data_frame)
+#' df <- data.frame(a = 1:20, b = c(rep(1, 19), 2))
+#' mysterycall_remove_near_zero(df)
 #'
 #' @importFrom dplyr select
 #'

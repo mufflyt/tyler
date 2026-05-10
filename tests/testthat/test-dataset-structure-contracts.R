@@ -76,7 +76,7 @@ test_that("acgme - program_name has no completely empty values", {
 test_that("acgme - programs span multiple states (geographic diversity)", {
   d <- load_dataset("acgme")
   n_states <- length(unique(d$state[!is.na(d$state)]))
-  expect_true(n_states >= 30L, info = paste("Only", n_states, "states found"))
+  expect_true(n_states >= 30L, label = paste("Only", n_states, "states found"))
 })
 
 test_that("acgme - zip codes are character (not numeric, to preserve leading zeros)", {
@@ -252,13 +252,13 @@ test_that("physicians - latitude values are in continental US range", {
   d <- load_dataset("physicians")
   lats <- d$lat[!is.na(d$lat)]
   expect_true(all(lats >= 17 & lats <= 72),
-    info = "Latitude outside Hawaii-Alaska range")
+    label = "Latitude outside Hawaii-Alaska range")
 })
 
 test_that("physicians - longitude values span the US (negative for continental)", {
   d <- load_dataset("physicians")
   lons <- d$long[!is.na(d$long)]
-  expect_true(any(lons < 0), info = "No negative longitudes for continental US")
+  expect_true(any(lons < 0), label = "No negative longitudes for continental US")
 })
 
 test_that("physicians - NPI column is numeric type", {

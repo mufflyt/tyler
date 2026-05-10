@@ -70,7 +70,7 @@ test_that("Correct assignment of lab assistants", {
 
       # Test if all entries are assigned to the correct lab assistant
       expect_true(all(sheet_data$lab_assistant_assigned == lab_name),
-                  info = paste("All entries in", file, "should be assigned to", lab_name))
+                  label = paste("All entries in", file, "should be assigned to", lab_name))
     }
   }
 })

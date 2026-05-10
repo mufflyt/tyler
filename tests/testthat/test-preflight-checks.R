@@ -471,7 +471,7 @@ test_that("mysterycall_preflight_check warns when API keys missing", {
   # Should have warnings about missing API keys
   expect_true(length(result$warnings) >= 2)
   expect_true(any(grepl("Google", result$warnings)))
-  expect_true(any(grepl("HERE", result$warnings)))
+  expect_true(any(grepl("routing", result$warnings, ignore.case = TRUE)))
 
   unlink(temp_dir, recursive = TRUE)
 })

@@ -80,8 +80,8 @@ test_that("mysterycall_plot_density - saves PNG and TIFF files", {
   )
   png_files  <- Sys.glob(file.path(OUT_DIR, paste0(prefix, "*.png")))
   tiff_files <- Sys.glob(file.path(OUT_DIR, paste0(prefix, "*.tiff")))
-  expect_true(length(png_files)  >= 1L, info = "No PNG file saved")
-  expect_true(length(tiff_files) >= 1L, info = "No TIFF file saved")
+  expect_true(length(png_files)  >= 1L, label = "No PNG file saved")
+  expect_true(length(tiff_files) >= 1L, label = "No TIFF file saved")
 })
 
 test_that("mysterycall_plot_density - filters out zero/negative x values without error", {

@@ -71,7 +71,7 @@ test_that("all output rows have npi_is_valid == TRUE (property: no invalid rows 
     result <- suppressMessages(mysterycall_validate_npi(df))
     if (nrow(result) > 0) {
       expect_true(all(result$npi_is_valid),
-                  info = paste("npi_is_valid not all TRUE for NPI:", npi_val))
+                  label = paste("npi_is_valid not all TRUE for NPI:", npi_val))
     }
   }
 })
@@ -126,7 +126,7 @@ test_that("NPI '0000000000' (all zeros) is rejected as invalid", {
   df <- make_npi_df("0000000000")
   result <- suppressMessages(mysterycall_validate_npi(df))
   expect_equal(nrow(result), 0L,
-               info = "All-zeros NPI should fail Luhn checksum and be removed")
+               label = "All-zeros NPI should fail Luhn checksum and be removed")
 })
 
 # ---------------------------------------------------------------------------

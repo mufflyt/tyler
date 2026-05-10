@@ -27,7 +27,7 @@ test_that("mysterycall_clear_isochrone_cache() return value is truly invisible (
   # capture.output captures auto-printing; invisible return suppresses it
   printed <- capture.output(mysterycall_clear_isochrone_cache())
   expect_equal(length(printed), 0L,
-               info = paste("Unexpected output:", paste(printed, collapse = "\n")))
+               label = paste("Unexpected output:", paste(printed, collapse = "\n")))
 })
 
 test_that("mysterycall_clear_isochrone_cache() returns NULL on second call too", {
@@ -71,7 +71,7 @@ test_that("mysterycall_clear_isochrone_cache() calls forget on .isochrone_memo w
 test_that("mysterycall_clear_isochrone_cache is accessible (exported)", {
   expect_true(
     is.function(mysterycall::mysterycall_clear_isochrone_cache),
-    info = "mysterycall_clear_isochrone_cache must be an exported function"
+    label = "mysterycall_clear_isochrone_cache must be an exported function"
   )
 })
 
@@ -103,7 +103,7 @@ test_that("mysterycall_clear_isochrone_cache() does not write files to tempdir",
   n_after  <- length(list.files(tmp))
 
   expect_equal(n_before, n_after,
-               info = "Cache clear should not write any files")
+               label = "Cache clear should not write any files")
 })
 
 test_that("mysterycall_clear_isochrone_cache() does not produce warnings", {

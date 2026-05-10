@@ -58,7 +58,7 @@ test_that("insurance column contains only 'Medicaid' and 'Blue Cross/Blue Shield
   allowed <- c("Medicaid", "Blue Cross/Blue Shield")
   unexpected <- setdiff(unique(result$insurance), allowed)
   expect_equal(length(unexpected), 0L,
-               info = paste("Unexpected insurance values:", paste(unexpected, collapse = ", ")))
+               label = paste("Unexpected insurance values:", paste(unexpected, collapse = ", ")))
 })
 
 test_that("both insurance types present after duplicate_rows=TRUE", {
@@ -74,13 +74,13 @@ test_that("both insurance types present after duplicate_rows=TRUE", {
 test_that("output always has an 'id' column", {
   result <- run_clean(make_phase1(3))
   expect_true("id" %in% names(result),
-              info = paste("Columns:", paste(names(result), collapse = ", ")))
+              label = paste("Columns:", paste(names(result), collapse = ", ")))
 })
 
 test_that("id column is numeric/integer type", {
   result <- run_clean(make_phase1(3))
   expect_true(is.numeric(result$id) || is.integer(result$id),
-              info = paste("id class:", class(result$id)))
+              label = paste("id class:", class(result$id)))
 })
 
 # ---------------------------------------------------------------------------
@@ -91,7 +91,7 @@ test_that("duplicate_rows=TRUE produces 2x input rows [gold standard: 3 in → 6
   input  <- make_phase1(3)
   result <- run_clean(input, duplicate_rows = TRUE)
   expect_equal(nrow(result), 2L * nrow(input),
-               info = paste("nrow(input) =", nrow(input), ", nrow(result) =", nrow(result)))
+               label = paste("nrow(input) =", nrow(input), ", nrow(result) =", nrow(result)))
 })
 
 test_that("duplicate_rows=TRUE: 1 row in → 2 rows out", {
@@ -112,7 +112,7 @@ test_that("duplicate_rows=FALSE preserves original row count", {
   input  <- make_phase1(3)
   result <- run_clean(input, duplicate_rows = FALSE)
   expect_equal(nrow(result), nrow(input),
-               info = paste("nrow(input) =", nrow(input), ", nrow(result) =", nrow(result)))
+               label = paste("nrow(input) =", nrow(input), ", nrow(result) =", nrow(result)))
 })
 
 test_that("duplicate_rows=FALSE: 1 row in → 1 row out", {
@@ -180,7 +180,7 @@ test_that("row with empty name gets processing_flag_empty_name == TRUE", {
   df$names[1] <- ""
   result <- run_clean(df, duplicate_rows = FALSE)
   expect_true(any(result$processing_flag_empty_name == TRUE),
-              info = "Empty name row must have processing_flag_empty_name == TRUE")
+              label = "Empty name row must have processing_flag_empty_name == TRUE")
 })
 
 # ---------------------------------------------------------------------------
@@ -192,7 +192,7 @@ test_that("row with all-whitespace name gets processing_flag_empty_name == TRUE"
   df$names[2] <- "   "
   result <- run_clean(df, duplicate_rows = FALSE)
   expect_true(any(result$processing_flag_empty_name == TRUE),
-              info = "Whitespace-only name must have processing_flag_empty_name == TRUE")
+              label = "Whitespace-only name must have processing_flag_empty_name == TRUE")
 })
 
 test_that("empty-named row is NOT silently dropped (it is retained with flag)", {
@@ -201,7 +201,7 @@ test_that("empty-named row is NOT silently dropped (it is retained with flag)", 
   result <- run_clean(df, duplicate_rows = FALSE)
   # Row should still be present (not dropped), just flagged
   expect_equal(nrow(result), 3L,
-               info = "Empty-named row should be retained, not silently dropped")
+               label = "Empty-named row should be retained, not silently dropped")
 })
 
 # ---------------------------------------------------------------------------
@@ -234,7 +234,7 @@ test_that("mysterycall_clean_phase1 output includes all required columns", {
   )
   missing <- setdiff(required_cols, names(result))
   expect_equal(length(missing), 0L,
-               info = paste("Missing columns:", paste(missing, collapse = ", ")))
+               label = paste("Missing columns:", paste(missing, collapse = ", ")))
 })
 
 test_that("for_redcap column is character type", {
@@ -246,7 +246,7 @@ test_that("for_redcap entries contain the phone number", {
   result <- run_clean(make_phase1(3), duplicate_rows = FALSE)
   # The formatted phone number is "(303) 555-0100" after format_phone_number()
   expect_true(all(grepl("555", result$for_redcap)),
-              info = "for_redcap should contain the phone number")
+              label = "for_redcap should contain the phone number")
 })
 
 # ---------------------------------------------------------------------------

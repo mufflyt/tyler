@@ -58,7 +58,7 @@ test_that("mysterycall_physician_age gives same result when NAs are added to gol
 
   # NAs must be silently ignored; result must be identical
   expect_equal(result_na, result_gold,
-               info = "Adding NAs should not change the output when na.rm=TRUE")
+               label = "Adding NAs should not change the output when na.rm=TRUE")
 })
 
 # ---------------------------------------------------------------------------
@@ -164,7 +164,7 @@ test_that("mysterycall_physician_age errors or warns gracefully on all-NA column
   if (!is.null(result)) {
     # If it produced a string, it should contain "NaN" or "NA" — not a fake number
     expect_true(grepl("NA|NaN|Inf", result),
-                info = paste("All-NA input produced:", result))
+                label = paste("All-NA input produced:", result))
   } else {
     # Errored out — that is acceptable
     succeed("mysterycall_physician_age errored gracefully on all-NA input")

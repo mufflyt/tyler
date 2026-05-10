@@ -10,10 +10,10 @@
 #' @name mysterycall_table1
 NULL
 
-# ── Internal formatters ───────────────────────────────────────────────────────
+# -- Internal formatters -------------------------------------------------------
 
 .t1_fmt_pct <- function(k, n, digits) {
-  if (n == 0L) return("0 (—%)")
+  if (n == 0L) return("0 (--%)")
   sprintf(paste0("%d (%.", digits, "f%%)"), k, k / n * 100)
 }
 
@@ -22,7 +22,7 @@ NULL
   if (!length(x)) return(NA_character_)
   qs <- stats::quantile(x, probs = c(0.25, 0.75), na.rm = FALSE)
   fmt <- paste0("%.", digits, "f")
-  sprintf(paste0(fmt, " [", fmt, "–", fmt, "]"),
+  sprintf(paste0(fmt, " [", fmt, "-", fmt, "]"),
           stats::median(x), qs[[1L]], qs[[2L]])
 }
 
@@ -38,7 +38,7 @@ NULL
   if (p < 0.001) "<0.001" else sprintf("%.3f", p)
 }
 
-# ── Internal tests ────────────────────────────────────────────────────────────
+# -- Internal tests ------------------------------------------------------------
 
 .t1_cont_pvalue <- function(x, g) {
   groups <- sort(unique(g[!is.na(g)]))
@@ -72,7 +72,7 @@ NULL
   if (is.null(res)) NA_real_ else res$p.value
 }
 
-# ── One-variable row builder ──────────────────────────────────────────────────
+# -- One-variable row builder --------------------------------------------------
 
 .t1_rows_continuous <- function(x, label, group_vec, groups, group_col_names,
                                 include_overall, cont_stats, digits,
@@ -208,7 +208,7 @@ mysterycall_table1 <- function(data,
                                 min_cell        = 5L,
                                 variable_labels = NULL) {
 
-  # ── Validate ───────────────────────────────────────────────────────────────
+  # -- Validate ---------------------------------------------------------------
   validate_dataframe(data, name = "data", allow_zero_rows = FALSE)
   validate_required_columns(data, covariates, name = "data")
 
@@ -234,7 +234,7 @@ mysterycall_table1 <- function(data,
 
   emit_pvalue <- isTRUE(p_value) && !is.null(stratify_by)
 
-  # ── Group setup ────────────────────────────────────────────────────────────
+  # -- Group setup ------------------------------------------------------------
   if (!is.null(stratify_by)) {
     group_vec      <- data[[stratify_by]]
     groups         <- sort(unique(group_vec[!is.na(group_vec)]))
@@ -249,7 +249,7 @@ mysterycall_table1 <- function(data,
 
   n_overall <- nrow(data)
 
-  # ── Build one block of rows per covariate ─────────────────────────────────
+  # -- Build one block of rows per covariate ---------------------------------
   blocks <- lapply(covariates, function(cv) {
     x     <- data[[cv]]
     label <- if (!is.null(variable_labels) && cv %in% names(variable_labels)) {
@@ -278,7 +278,7 @@ mysterycall_table1 <- function(data,
     tbl[["p_value"]] <- NULL
   }
 
-  # ── Column N metadata ──────────────────────────────────────────────────────
+  # -- Column N metadata ------------------------------------------------------
   col_ns <- c(
     if (include_overall) c(Overall = n_overall) else integer(0L),
     if (!is.null(stratify_by)) setNames(group_ns, groups) else integer(0L)

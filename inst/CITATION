@@ -1,14 +1,13 @@
-# CITATION file for the tyler package
-
-citHeader("To cite the tyler package in publications use:")
+citHeader("To cite the mysterycall package in publications use:")
 
 entry <- bibentry(
   bibtype = "Manual",
-  title = "tyler: Common Functions for Mystery Caller or Audit Studies Evaluating Patient Access to Care",
-  author = person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2044-1693")),
+  title = "mysterycall: Mystery Caller Study Tools for Healthcare Access Research",
+  author = person("Tyler", "Muffly", email = "tyler.muffly@dhha.org", role = c("aut", "cre"),
+                  comment = c(ORCID = "0000-0002-2044-1693")),
   year = "2026",
-  note = "R package version 1.2.2",
-  url = "https://github.com/mufflyt/tyler"
+  note = "R package version 1.3.0",
+  url = "https://github.com/mufflyt/mysterycall"
 )
 
-citFooter("Please use 'citation(\"tyler\")' to generate the BibTeX entry for LaTeX users.")
+citFooter("Please use 'citation(\"mysterycall\")' to generate the BibTeX entry for LaTeX users.")

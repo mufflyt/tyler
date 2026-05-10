@@ -126,6 +126,7 @@ test_that("Integration: Census data retrieval and summarization", {
 
   with_mocked_bindings(
     getCensus = mock_get_census,
+    .package = "censusapi",
     {
       # Test census data pipeline
       result <- mysterycall_get_census_data(
@@ -262,7 +263,7 @@ test_that("Integration: Performance with realistic dataset sizes", {
     phone_number = paste0(sample(200:999, n_providers, replace = TRUE), "-555-",
                          sprintf("%04d", sample(1000:9999, n_providers))),
     state_name = sample(state.name, n_providers, replace = TRUE),
-    npi = paste0(sample(100000000:999999999, n_providers), sample(0:9, n_providers)),
+    npi = paste0(sample(100000000:999999999, n_providers), sample(0:9, n_providers, replace = TRUE)),
     for_redcap = sample(c("Yes", "No"), n_providers, replace = TRUE),
     stringsAsFactors = FALSE
   )
