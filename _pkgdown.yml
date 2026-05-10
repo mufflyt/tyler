@@ -306,6 +306,29 @@ reference:
       - mysterycall_spinner_stop
       - progress-bars
 
+  - title: "Green Journal Publication Utilities"
+    desc: >
+      ggplot2 themes, colorblind-safe palettes, and figure-export helpers
+      conforming to Obstetrics & Gynecology (Green Journal) 2024 author
+      guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
+    contents:
+      - theme_green_journal
+      - theme_green_journal_map
+      - theme_green_journal_faceted
+      - palette_green_journal
+      - scale_color_green_journal
+      - scale_fill_green_journal
+      - save_green_journal_figure
+      - crs_albers_conus
+      - winsorize
+      - truncate_for_viz
+      - compose_map_density
+      - theme_publication
+      - theme_publication_map
+      - theme_publication_faceted
+      - palette_publication
+      - save_publication_figure
+
   - title: "Utilities"
     contents:
       - mysterycall_check_dependencies
