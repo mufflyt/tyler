@@ -81,7 +81,7 @@ mysterycall_progress_tracker <- function(steps, update_every = 300, quiet = getO
   progress <- if (total) completed / total else 0
   elapsed_total <- as.numeric(difftime(Sys.time(), env$start_time, units = "secs"))
   eta <- NA_character_
-  if (completed > 0 && completed < total) {
+  if (completed > 0 && completed < total && elapsed_total > 1) {
     avg_duration <- elapsed_total / completed
     remaining <- total - completed
     eta_time <- Sys.time() + avg_duration * remaining
@@ -106,8 +106,12 @@ mysterycall_progress_tracker <- function(steps, update_every = 300, quiet = getO
 #' @param step Step name.
 #' @param note Optional note stored alongside the step.
 #'
+#' @return The tracker object, invisibly.
 #' @family logging utilities
 #' @export
+#' @examples
+#' tr <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
+#' mysterycall_progress_start(tr, "Geocode")
 mysterycall_progress_start <- function(tracker, step, note = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
@@ -138,8 +142,13 @@ mysterycall_progress_start <- function(tracker, step, note = NULL) {
 #'   provided.
 #' @param note Optional note to store for the step.
 #'
+#' @return The tracker object, invisibly.
 #' @family logging utilities
 #' @export
+#' @examples
+#' tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
+#' mysterycall_progress_start(tr, "Geocode")
+#' mysterycall_progress_finish(tr, "Geocode", score = 0.92)
 mysterycall_progress_finish <- function(tracker, step, score = NULL, quality = NULL, note = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
@@ -155,15 +164,20 @@ mysterycall_progress_finish <- function(tracker, step, score = NULL, quality = N
   invisible(tracker)
 }
 
-#' Mark a step as failed
+#' Mark a tracker step as failed
 #'
 #' @param tracker Object created by [mysterycall_progress_tracker()].
 #' @param step Step name.
 #' @param reason Optional string describing why the step failed.
 #'
+#' @return The tracker object, invisibly.
 #' @family logging utilities
 #' @export
-mysterycall_progress_fail <- function(tracker, step, reason = NULL) {
+#' @examples
+#' tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
+#' mysterycall_progress_start(tr, "Geocode")
+#' mysterycall_tracker_fail(tr, "Geocode", reason = "API timeout")
+mysterycall_tracker_fail <- function(tracker, step, reason = NULL) {
   idx <- .tracker_index(tracker, step)
   env <- tracker$env
   env$records$status[idx] <- "failed"
@@ -176,16 +190,19 @@ mysterycall_progress_fail <- function(tracker, step, reason = NULL) {
   invisible(tracker)
 }
 
-#' Emit a manual progress update
+#' Emit a manual progress heartbeat
 #'
 #' @param tracker Object created by [mysterycall_progress_tracker()].
-#'
 #' @param force Logical flag indicating whether the update should be emitted
 #'   even if the configured interval has not elapsed.
 #'
+#' @return The tracker object, invisibly.
 #' @family logging utilities
 #' @export
-mysterycall_progress_update <- function(tracker, force = FALSE) {
+#' @examples
+#' tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
+#' mysterycall_tracker_update(tr, force = TRUE)
+mysterycall_tracker_update <- function(tracker, force = FALSE) {
   .tracker_emit_update(tracker, force = force)
   invisible(tracker)
 }
@@ -197,6 +214,11 @@ mysterycall_progress_update <- function(tracker, force = FALSE) {
 #' @return Tibble with per-step status, timestamps, and quality tiers.
 #' @importFrom tibble as_tibble
 #' @family logging utilities
+#' @examples
+#' tr <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
+#' mysterycall_progress_start(tr, "Geocode")
+#' mysterycall_progress_finish(tr, "Geocode", score = 0.95)
+#' mysterycall_progress_summary(tr)
 #' @export
 mysterycall_progress_summary <- function(tracker) {
   env <- tracker$env

@@ -7,12 +7,16 @@
 #'   the score is missing).
 #' @family utilities
 #' @export
+#' @examples
+#' mysterycall_quality_tier(0.95)
+#' mysterycall_quality_tier(0.80)
+#' mysterycall_quality_tier(0.50)
 mysterycall_quality_tier <- function(score, thresholds = c(high = 0.9, medium = 0.75)) {
   if (is.null(score) || is.na(score)) {
     return(NA_character_)
   }
-  if (!is.numeric(score) || any(score < 0 | score > 1)) {
-    stop("`score` must be between 0 and 1.", call. = FALSE)
+  if (!is.numeric(score) || length(score) != 1L || score < 0 || score > 1) {
+    stop("`score` must be a single number between 0 and 1.", call. = FALSE)
   }
   if (!all(c("high", "medium") %in% names(thresholds))) {
     stop("`thresholds` must be a named vector with 'high' and 'medium' entries.", call. = FALSE)
@@ -85,16 +89,3 @@ mysterycall_check_data_completeness <- function(data, required = NULL, id_cols =
   list(summary = summary, quality = quality, score = overall_score)
 }
 
-#' Toggle quiet logging for helper functions
-#'
-#' @param quiet Logical flag. When `TRUE`, suppress messages emitted by
-#'   [mysterycall_log_info()].
-#'
-#' @return The previous quiet value (invisibly).
-#' @family utilities
-#' @export
-mysterycall_use_quiet_logging <- function(quiet = TRUE) {
-  old <- getOption("tyler.quiet", FALSE)
-  options(tyler.quiet = quiet)
-  invisible(old)
-}
