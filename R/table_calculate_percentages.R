@@ -36,8 +36,8 @@ mysterycall_table_percentages <- function(data_frame, variable) {
 
   summary_df <- data_frame %>%
     dplyr::count(!!rlang::sym(variable), name = "n") %>%
-    dplyr::mutate(percent = 100 * n / sum(n)) %>%
-    dplyr::filter(n == max(n))  # Return all rows with maximum value, not artificially limited to 1
+    dplyr::mutate(percent = round(100 * n / sum(n), 1)) %>%
+    dplyr::arrange(dplyr::desc(n))
 
   return(summary_df)
 }
