@@ -17,40 +17,39 @@ mysterycall_disparities_table(
 \item{data}{A data.frame containing the study data.}
 
 \item{outcome_col}{Character scalar. Name of the binary outcome column
-(values must be 0 or 1, NAs are dropped).}
+(values must be 0/1; NAs are dropped before calculations).}
 
-\item{group_col}{Character scalar. Name of the grouping column
-(e.g., insurance type).}
+\item{group_col}{Character scalar. Name of the grouping column.}
 
-\item{ref_group}{Character scalar or NULL. The reference group label.
-If NULL, the first factor level is used when \code{group_col} is a factor,
-otherwise the most frequent level.}
+\item{ref_group}{Character scalar or NULL. Reference group label.
+If NULL, uses the first factor level when \code{group_col} is a factor,
+otherwise the alphabetically first level.}
 
-\item{ci_method}{Character. Method for computing the rate confidence
-interval. One of \code{"wilson"} (default), \code{"exact"}, or
-\code{"wald"}.}
+\item{ci_method}{One of \code{"wilson"} (default), \code{"exact"}, or \code{"wald"}.}
 
-\item{alpha}{Numeric in (0, 1). Significance level; CIs use
-\code{1 - alpha} confidence. Default 0.05.}
+\item{alpha}{Numeric in (0, 1). Significance level. Default 0.05 yields
+95\% CIs.}
 }
 \value{
 A data.frame with class
-\code{c("mysterycall_disparities_table", "data.frame")} sorted by rate
-descending, with the reference group printed first. Columns:
+\code{c("mysterycall_disparities_table", "data.frame")} sorted with the
+reference group first, then remaining groups by descending acceptance
+rate. Attributes \code{ref_group}, \code{ci_method}, and \code{alpha} are attached.
+Columns:
 \describe{
 \item{group}{Group label.}
 \item{n}{Total observations in group.}
-\item{n_accepted}{Sum of outcome_col (excluding NAs).}
+\item{n_accepted}{Sum of \code{outcome_col} (excluding NAs).}
 \item{rate}{Acceptance rate (n_accepted / n).}
 \item{lower_ci}{Lower bound of rate CI.}
 \item{upper_ci}{Upper bound of rate CI.}
-\item{abs_diff}{Absolute difference in percentage points from
-ref_group rate (0 for reference).}
-\item{rel_risk}{Rate relative to ref_group rate (1 for reference).}
-\item{rr_lower}{Lower bound of RR 95\% CI (NA for reference).}
-\item{rr_upper}{Upper bound of RR 95\% CI (NA for reference).}
-\item{p_value}{Two-proportion z-test p-value vs. reference (NA for
-reference).}
+\item{abs_diff}{Difference in percentage points from ref group
+(0 for reference).}
+\item{rel_risk}{Rate relative to ref group rate (1 for reference).}
+\item{rr_lower}{Lower bound of RR CI via log method (NA for reference).}
+\item{rr_upper}{Upper bound of RR CI via log method (NA for reference).}
+\item{p_value}{Two-proportion z-test p-value vs. reference
+(NA for reference).}
 \item{p_value_fmt}{Formatted p-value string.}
 }
 }
@@ -60,9 +59,9 @@ acceptance rates, confidence intervals, and disparity metrics relative
 to a reference group.
 }
 \details{
-Relative risk confidence intervals are computed via the log method:
-\code{SE_log_rr = sqrt(1/n_accepted - 1/n + 1/ref_n_accepted - 1/ref_n)}.
-A continuity correction of 0.5 is added when \code{n_accepted} is 0.
+Relative-risk CIs use the log method with a 0.5 continuity correction when
+\code{n_accepted} is 0:
+\eqn{SE(\log RR) = \sqrt{1/n_+ - 1/n + 1/n_{ref,+} - 1/n_{ref}}}.
 }
 \examples{
 set.seed(1)
@@ -73,3 +72,14 @@ df <- data.frame(
 mysterycall_disparities_table(df, "accepted", "insurance")
 
 }
+\seealso{
+Other table: 
+\code{\link{mysterycall_max_table}()},
+\code{\link{mysterycall_min_table}()},
+\code{\link{mysterycall_table1_gtsummary}()},
+\code{\link{mysterycall_table_overall}()},
+\code{\link{mysterycall_table_percentages}()},
+\code{\link{mysterycall_table_proportion}()},
+\code{\link{mysterycall_write_arsenal_table}()}
+}
+\concept{table}
