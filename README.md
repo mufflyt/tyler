@@ -179,6 +179,42 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 
 </td>
 </tr>
+<tr>
+<td width="50%">
+
+**100% stacked bar** — acceptance vs. rejection proportions with call counts
+(`mysterycall_plot_stacked_bar`)
+
+<img src="man/figures/fig-stacked-bar.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Estimated marginal means** — Medicaid vs. private wait days by subspecialty
+(`mysterycall_plot_emmeans_interaction`)
+
+<img src="man/figures/fig-emmeans-interaction.png" width="100%">
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Jittered scatter** — raw wait-day observations by subspecialty
+(`mysterycall_plot_scatter`)
+
+<img src="man/figures/fig-scatter.png" width="100%">
+
+</td>
+<td width="50%">
+
+**Wait-time histogram** — sqrt-scaled count distribution
+(`mysterycall_plot_distribution`)
+
+<img src="man/figures/fig-distribution.png" width="100%">
+
+</td>
+</tr>
 </table>
 
 ## Core functions
