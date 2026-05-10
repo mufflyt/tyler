@@ -359,7 +359,7 @@ mysterycall_search_and_process_npi <- function(data,
           "middle_name" = "basic_middle_name"
         )
 
-        filtered <- dplyr::mutate(filtered, search_term = paste(.data$first_name, .data$last_name))
+        filtered <- dplyr::mutate(filtered, search_term = search_term)
         filtered <- dplyr::select(filtered, -dplyr::all_of(c("credential_clean", "basic_credential")))
         filtered <- dplyr::distinct(filtered, .data$npi, .keep_all = TRUE)
         filtered <- dplyr::arrange(filtered, .data$last_name, .data$first_name)

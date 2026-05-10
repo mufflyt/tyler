@@ -58,9 +58,9 @@ mysterycall_write_table <- function(data, path, format = NULL, append = FALSE, c
         tmpdir = dirname(path),
         fileext = ".tmp"
       )
+      on.exit(if (file.exists(tmp)) unlink(tmp, force = TRUE), add = TRUE)
       readr::write_csv(data, tmp, append = FALSE, col_names = col_names, ...)
       if (!file.rename(tmp, path)) {
-        unlink(tmp, force = TRUE)
         stop("Failed to atomically replace file: ", path, call. = FALSE)
       }
     } else {
@@ -72,7 +72,7 @@ mysterycall_write_table <- function(data, path, format = NULL, append = FALSE, c
       data <- dplyr::ungroup(data)
     }
     if (append && file.exists(path)) {
-      existing <- arrow::read_parquet(path, as_data_frame = TRUE)
+      existing <- mysterycall_read_table(path, format = "parquet")
       data <- dplyr::bind_rows(existing, data)
     }
     arrow::write_parquet(data, sink = path, ...)
