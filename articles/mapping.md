@@ -13,14 +13,14 @@ within a given drive-time catchment area.
 
 ## Base map
 
-`map_create_base()` returns a
-[leaflet](https://rstudio.github.io/leaflet/) map object pre-configured
-for US provider mapping. It includes two tile-layer options — **CartoDB
-Voyager** (a clean, labeled street map) and **Stadia Toner Lite** (a
-minimal black-and-white style) — selectable via a layer-control widget
-in the top-right corner. A scale bar is added at the bottom-left. An
-optional `title` argument accepts an HTML string that is placed in a
-control panel at the top-left of the map.
+[`map_create_base()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+returns a [leaflet](https://rstudio.github.io/leaflet/) map object
+pre-configured for US provider mapping. It includes two tile-layer
+options — **CartoDB Voyager** (a clean, labeled street map) and **Stadia
+Toner Lite** (a minimal black-and-white style) — selectable via a
+layer-control widget in the top-right corner. A scale bar is added at
+the bottom-left. An optional `title` argument accepts an HTML string
+that is placed in a control panel at the top-left of the map.
 
 ``` r
 
@@ -51,10 +51,10 @@ or district boundaries on top of the base tiles.
 The American College of Obstetricians and Gynecologists (ACOG) divides
 the United States into eleven geographic districts that govern regional
 governance and continuing-education activities.
-`map_create_acog_districts_sf()` joins the packaged `ACOG_Districts`
-lookup table to Natural Earth state geometries and returns a dissolved
-`sf` polygon object — one row per district — that is ready for mapping
-or spatial joins.
+[`map_create_acog_districts_sf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+joins the packaged `ACOG_Districts` lookup table to Natural Earth state
+geometries and returns a dissolved `sf` polygon object — one row per
+district — that is ready for mapping or spatial joins.
 
 ``` r
 
@@ -97,13 +97,14 @@ head(ACOG_Districts)
 
 ## Physician dot map
 
-`map_create_physician_dot()` builds an interactive Leaflet dot map from
-a data frame that contains `lat`, `long`, `name`, and `ACOG_District`
-columns. It layers ACOG district boundaries in red, colors each
-physician dot according to their district using the viridis `"magma"`
-palette (configurable via `color_palette`), adds a small random jitter
-to overlapping points, and saves the result as a self-contained HTML
-file plus a PNG screenshot to `output_dir`.
+[`map_create_physician_dot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+builds an interactive Leaflet dot map from a data frame that contains
+`lat`, `long`, `name`, and `ACOG_District` columns. It layers ACOG
+district boundaries in red, colors each physician dot according to their
+district using the viridis `"magma"` palette (configurable via
+`color_palette`), adds a small random jitter to overlapping points, and
+saves the result as a self-contained HTML file plus a PNG screenshot to
+`output_dir`.
 
 ``` r
 
@@ -142,11 +143,12 @@ before the first use.
 
 Hospital Referral Regions (HRRs) are the 306 geographic units defined by
 the Dartmouth Atlas of Health Care to represent regional health care
-markets for tertiary services. `hrr()` downloads the official shapefile
-(~8 MB) from the Dartmouth Atlas on first use, caches it in the user’s R
-cache directory, and returns an `sf` object in CRS 4326. By default
-Hawaii and Alaska are excluded; set `remove_HI_AK = FALSE` to retain all
-regions.
+markets for tertiary services.
+[`hrr()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+downloads the official shapefile (~8 MB) from the Dartmouth Atlas on
+first use, caches it in the user’s R cache directory, and returns an
+`sf` object in CRS 4326. By default Hawaii and Alaska are excluded; set
+`remove_HI_AK = FALSE` to retain all regions.
 
 ``` r
 
@@ -171,10 +173,11 @@ ggplot(hrr_sf) +
   labs(title = "Hospital Referral Regions — Continental United States")
 ```
 
-`hrr_generate_maps()` extends this by overlaying a physician sf object
-onto a hexagonal grid, producing a count-per-cell choropleth with
-Alaska, Hawaii, and Puerto Rico insets. The result is saved as both TIFF
-and PNG at journal-ready resolution (600 dpi by default).
+[`hrr_generate_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+extends this by overlaying a physician sf object onto a hexagonal grid,
+producing a count-per-cell choropleth with Alaska, Hawaii, and Puerto
+Rico insets. The result is saved as both TIFF and PNG at journal-ready
+resolution (600 dpi by default).
 
 ``` r
 
@@ -192,16 +195,19 @@ hrr_generate_maps(
 
 ## Block group overlap maps
 
-After running `create_isochrones_for_dataframe()` and
-`calculate_intersection_overlap_and_save()`, you will have two sf
-objects: one with Census block group polygons (containing an `overlap`
-column — the proportion of each block group within the isochrone) and
-one with drive-time isochrone polygons (containing a `drive_time`
-column). Pass both to `map_create_block_group_overlap()` to produce an
-interactive Leaflet map that shades block groups by their overlap
-proportion and draws each isochrone (30 / 60 / 120 / 180 minutes) in a
-distinct color. The map is exported as an HTML file and a PNG screenshot
-to `output_dir`.
+After running
+[`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+and
+[`calculate_intersection_overlap_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md),
+you will have two sf objects: one with Census block group polygons
+(containing an `overlap` column — the proportion of each block group
+within the isochrone) and one with drive-time isochrone polygons
+(containing a `drive_time` column). Pass both to
+[`map_create_block_group_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+to produce an interactive Leaflet map that shades block groups by their
+overlap proportion and draws each isochrone (30 / 60 / 120 / 180
+minutes) in a distinct color. The map is exported as an HTML file and a
+PNG screenshot to `output_dir`.
 
 ``` r
 

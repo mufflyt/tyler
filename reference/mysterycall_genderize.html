@@ -27,6 +27,7 @@ result to a new CSV file with a timestamp."><meta property="og:image" content="h
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -53,7 +54,7 @@ result to a new CSV file with a timestamp."><meta property="og:image" content="h
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Genderize Physicians Data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_genderize.R" class="external-link"><code>R/mysterycall_genderize.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/genderize_physicians.R" class="external-link"><code>R/genderize_physicians.R</code></a></small>
       <div class="d-none name"><code>mysterycall_genderize.Rd</code></div>
     </div>
 
@@ -65,8 +66,8 @@ result to a new CSV file with a timestamp.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_genderize.html" class="external-link">mysterycall_genderize</a></span><span class="op">(</span></span>
-<span>  <span class="va">input_csv</span>,</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_genderize</span><span class="op">(</span></span>
+<span>  <span class="va">data_or_path</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"csv"</span>, <span class="st">"parquet"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -76,9 +77,9 @@ result to a new CSV file with a timestamp.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-input-csv">input_csv<a class="anchor" aria-label="anchor" href="#arg-input-csv"></a></dt>
-<dd><p>The path to the input roster file. CSV and Parquet sources are
-supported.</p></dd>
+<dl><dt id="arg-data-or-path">data_or_path<a class="anchor" aria-label="anchor" href="#arg-data-or-path"></a></dt>
+<dd><p>A data frame containing physician data, or a path to a
+roster file. CSV and Parquet formats are supported when a path is supplied.</p></dd>
 
 
 <dt id="arg-output-dir">output_dir<a class="anchor" aria-label="anchor" href="#arg-output-dir"></a></dt>
@@ -101,15 +102,15 @@ service to minimize repeated requests.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other gender:
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_most_common_gender.html" class="external-link">mysterycall_most_common_gender()</a></code></p></div>
+<code><a href="mysterycall_most_common_gender.html">mysterycall_most_common_gender()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_genderize.html" class="external-link">mysterycall_genderize</a></span><span class="op">(</span><span class="st">"sample.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_genderize</span><span class="op">(</span><span class="st">"sample.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_genderize</span><span class="op">(</span><span class="va">my_dataframe</span><span class="op">)</span>  <span class="co"># also accepts a data frame directly</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

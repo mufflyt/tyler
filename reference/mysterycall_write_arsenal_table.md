@@ -32,16 +32,16 @@ Returns `NULL` invisibly.
 ## See also
 
 Other table:
-[`mysterycall_max_table()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_max_table.html),
-[`mysterycall_min_table()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_min_table.html),
-[`mysterycall_table_percentages()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_table_percentages.html),
-[`mysterycall_table_proportion()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_table_proportion.html),
-[`mysterycall_table_overall()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_table_overall.html)
+[`mysterycall_max_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_max_table.md),
+[`mysterycall_min_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_min_table.md),
+[`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md),
+[`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md),
+[`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 mysterycall_write_arsenal_table(my_table, "output_table")
-} # }
+}
 ```

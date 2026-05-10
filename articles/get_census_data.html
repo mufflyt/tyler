@@ -48,6 +48,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -277,7 +278,7 @@ analysis.</p>
 <div class="section level4">
 <h4 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h4>
-<p>Before using the <code>mysterycall::get_census_data</code> function,
+<p>Before using the <code><a href="../reference/mysterycall-deprecated.html">mysterycall::get_census_data</a></code> function,
 you need to install and load the required packages. You can do this by
 running the following code:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -374,7 +375,7 @@ tigris package to obtain FIPS codes for all U.S. states:</p>
 Information Processing Standard (FIPS) identifiers for every geography
 plus the Census vintage so you always know which release supplied the
 estimates. For example:</p>
-<pre><code><span><span class="va">all_census_data</span> <span class="op">&lt;-</span> <span class="fu">get_census_data</span><span class="op">(</span>us_fips_list <span class="op">=</span> <span class="va">us_fips_list</span><span class="op">)</span></span>
+<pre><code><span><span class="va">all_census_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">get_census_data</a></span><span class="op">(</span>us_fips_list <span class="op">=</span> <span class="va">us_fips_list</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">##########################################################################</span></span>
 <span><span class="co"># Get Census data by block group in relevant states</span></span>

@@ -550,9 +550,12 @@ Only **3% remaining** to reach 95% production readiness:
 
 ### **Documentation:**
 
-- `?tyler_preflight_check` - Preflight checks
-- `?tyler_workflow_start` - Logging system
-- `?tyler_progress_bar` - Progress bars
+- [`?tyler_preflight_check`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+  Preflight checks
+- [`?tyler_workflow_start`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+  Logging system
+- [`?tyler_progress_bar`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+  Progress bars
 - `LOGGING_GUIDE.md` - Complete logging guide
 - `PROGRESS_BARS_GUIDE.md` - Progress bar guide
 

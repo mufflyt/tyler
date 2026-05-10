@@ -38,14 +38,14 @@ Census vintage that supplied the estimates.
 ## See also
 
 Other census:
-[`mysterycall_plot_census_age()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_census_age.html),
-[`mysterycall_summarize_census()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_summarize_census.html)
+[`mysterycall_plot_census_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_census_age.md),
+[`mysterycall_summarize_census()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_census.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 us_fips_list <- c("01", "02")
 census_df <- mysterycall_get_census_data(us_fips_list)
-} # }
+}
 ```

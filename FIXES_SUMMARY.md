@@ -285,14 +285,19 @@ mutual recursion issues - Codebase forms a proper Directed Acyclic Graph
 
 ### 2. ✅ Deprecated Features Analysis
 
-**Current Deprecated Functions:** - `search_npi()` → Replaced by
-`search_and_process_npi()` - `test_and_process_isochrones()` → Replaced
-by `create_isochrones_for_dataframe()` - `process_and_save_isochrones()`
-→ Replaced by `create_isochrones_for_dataframe()`
+**Current Deprecated Functions:** -
+[`search_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+→ Replaced by
+[`search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md) -
+[`test_and_process_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+→ Replaced by
+[`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md) -
+[`process_and_save_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+→ Replaced by
+[`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
 
-**Candidate for Deprecation:** -
-[`scrape_physicians_data_with_tor()`](https://mufflyt.github.io/mysterycall/reference/scrape_physicians_data_with_tor.md)
-in `R/this_one_works.R` - Uses Tor proxy for web scraping - May be
+**Candidate for Deprecation:** - `scrape_physicians_data_with_tor()` in
+`R/this_one_works.R` - Uses Tor proxy for web scraping - May be
 experimental/debugging code - Should be reviewed for production use
 
 ### 3. ✅ Assumptions Requiring Data Validation

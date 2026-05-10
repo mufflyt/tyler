@@ -21,3 +21,12 @@ mysterycall_workflow_end(final_n = NULL, input_n = NULL)
 ## Value
 
 Invisible NULL
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+mysterycall_workflow_start("Demo", total_steps = 1)
+mysterycall_workflow_end(final_n = 80, input_n = 100)
+} # }
+```

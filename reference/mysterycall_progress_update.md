@@ -1,40 +1,53 @@
-# Emit a manual progress update
+# Update progress bar
 
-Emit a manual progress update
+Increments the progress bar by a specified amount and optionally updates
+the status message.
 
 ## Usage
 
 ``` r
-mysterycall_progress_update(tracker, force = FALSE)
+mysterycall_progress_update(pb, amount = 1, status = NULL, set = NULL)
 ```
 
 ## Arguments
 
-- tracker:
+- pb:
 
-  Object created by
-  [`mysterycall_progress_tracker()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html).
+  Progress bar object from
+  [`mysterycall_progress_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_bar.md).
 
-- force:
+- amount:
 
-  Logical flag indicating whether the update should be emitted even if
-  the configured interval has not elapsed.
+  Amount to increment (default: 1).
 
-## See also
+- status:
 
-Other logging utilities:
-[`mysterycall_progress_tracker()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html),
-[`mysterycall_progress_fail()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_fail.html),
-[`mysterycall_progress_finish()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_finish.html),
-[`mysterycall_progress_start()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_start.html),
-[`mysterycall_progress_summary()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_summary.html),
-[`mysterycall_log_cache_hit()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_cache_hit.md),
-[`mysterycall_log_error()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_error.md),
-[`mysterycall_log_info()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_info.md),
-[`mysterycall_log_progress()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_progress.md),
-[`mysterycall_log_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_save.md),
-[`mysterycall_log_step()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step.md),
-[`mysterycall_log_step_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step_complete.md),
-[`mysterycall_log_success()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_success.md),
-[`mysterycall_log_warning()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_warning.md),
-[`mysterycall_workflow_start()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_workflow_start.md)
+  Optional status message to display.
+
+- set:
+
+  Set to a specific absolute value instead of incrementing.
+
+## Value
+
+Invisible NULL.
+
+## Examples
+
+``` r
+pb <- mysterycall_progress_bar("Processing", total = 10)
+#> Starting: Processing (10 items)
+for (i in seq_len(10)) mysterycall_progress_update(pb)
+#>   Progress: 1/10 (10%) - ETA: 0.0s
+#>   Progress: 2/10 (20%) - ETA: 0.0s
+#>   Progress: 3/10 (30%) - ETA: 0.0s
+#>   Progress: 4/10 (40%) - ETA: 0.0s
+#>   Progress: 5/10 (50%) - ETA: 0.0s
+#>   Progress: 6/10 (60%) - ETA: 0.0s
+#>   Progress: 7/10 (70%) - ETA: 0.0s
+#>   Progress: 8/10 (80%) - ETA: 0.0s
+#>   Progress: 9/10 (90%) - ETA: 0.0s
+#>   Progress: 10/10 (100%) - ETA: 0.0s
+mysterycall_progress_done(pb)
+#>   ✓ Processing complete
+```

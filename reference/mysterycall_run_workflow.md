@@ -33,6 +33,7 @@ mysterycall_run_workflow(
   ),
   npi_search_args = list(),
   all_states = NULL,
+  taxonomy_states = NULL,
   verbose = interactive(),
   npi_progress_observer = NULL
 )
@@ -43,37 +44,37 @@ mysterycall_run_workflow(
 - taxonomy_terms:
 
   Character vector of taxonomy descriptions to pass to
-  [`mysterycall_search_taxonomy`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_taxonomy.html)().
+  [`mysterycall_search_taxonomy`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)().
   Set to `NULL` to skip taxonomy-based searches.
 
 - name_data:
 
   Optional data frame containing `first` and `last` columns to use with
-  [`mysterycall_search_and_process_npi`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html)().
+  [`mysterycall_search_and_process_npi`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)().
   Provide `NULL` to skip name-based searches.
 
 - phase1_data:
 
   Data frame holding Phase 1 calling roster information to pass to
-  [`mysterycall_clean_phase1`](https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase1.html)().
+  [`mysterycall_clean_phase1`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md)().
 
 - lab_assistant_names:
 
   Character vector of caller names used when splitting the cleaned
   roster via
-  [`mysterycall_split_and_save()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html).
+  [`mysterycall_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_split_and_save.md).
   Must contain at least two entries.
 
 - output_directory:
 
   Directory where
-  [`mysterycall_split_and_save()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html)
+  [`mysterycall_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_split_and_save.md)
   should write the complete and per-caller workbooks.
 
 - phase2_data:
 
   Data frame or file path consumed by
-  [`mysterycall_clean_phase2()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase2.html).
+  [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md).
 
 - phase2_output_directory:
 
@@ -83,19 +84,19 @@ mysterycall_run_workflow(
 - quality_check_path:
 
   File path where
-  [`mysterycall_save_quality_table()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_save_quality_table.html)
+  [`mysterycall_save_quality_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_quality_table.md)
   should write the quality check CSV.
 
 - phase1_output_directory:
 
   Directory where
-  [`mysterycall_clean_phase1()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase1.html)
+  [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md)
   should write the cleaned Phase 1 CSV. Defaults to `output_directory`.
 
 - split_insurance_order:
 
   Ordering passed to
-  [`mysterycall_split_and_save()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html)'s
+  [`mysterycall_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_split_and_save.md)'s
   `insurance_order` argument. Defaults to
   `c("Medicaid", "Blue Cross/Blue Shield")`.
 
@@ -103,7 +104,7 @@ mysterycall_run_workflow(
 
   Character vector of substrings used when standardizing Phase 2 column
   names via
-  [`mysterycall_clean_phase2()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase2.html).
+  [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md).
 
 - phase2_standard_names:
 
@@ -112,12 +113,19 @@ mysterycall_run_workflow(
 - npi_search_args:
 
   Named list of additional arguments forwarded to
-  [`mysterycall_search_and_process_npi()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html).
+  [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md).
 
 - all_states:
 
   Optional character vector of all states to supply to
-  [`mysterycall_not_contacted_states()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_not_contacted_states.html).
+  [`mysterycall_not_contacted_states()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_not_contacted_states.md).
+
+- taxonomy_states:
+
+  Optional character vector of two-letter state abbreviations passed to
+  [`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
+  to restrict taxonomy searches to specific states. Set to `NULL` to
+  search all states.
 
 - verbose:
 
@@ -128,7 +136,7 @@ mysterycall_run_workflow(
 - npi_progress_observer:
 
   Optional callback that receives progress updates from
-  [`mysterycall_search_and_process_npi()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html).
+  [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md).
   It is invoked with the same payload as that function's
   `progress_callback` argument.
 

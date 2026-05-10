@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -132,7 +133,7 @@
 <div class="section level3">
 <h3 id="id_3-3rd_place_medal-search_and_process_npir-score-510">3. 🥉 <code>search_and_process_npi.R</code> (Score: 5/10)<a class="anchor" aria-label="anchor" href="#id_3-3rd_place_medal-search_and_process_npir-score-510"></a></h3>
 <p><strong>Why:</strong> 465 lines, complex nested search logic, poor separation of concerns</p>
-<p><strong>Evidence:</strong> - Main function spans lines 50-465 - Nested function <code>search_npi()</code> is 115 lines (lines 269-383) - 4-5 levels of nesting in retry logic - Multiple concerns: API calls, retry logic, progress tracking, file I/O, result accumulation</p>
+<p><strong>Evidence:</strong> - Main function spans lines 50-465 - Nested function <code><a href="reference/mysterycall-deprecated.html">search_npi()</a></code> is 115 lines (lines 269-383) - 4-5 levels of nesting in retry logic - Multiple concerns: API calls, retry logic, progress tracking, file I/O, result accumulation</p>
 <p><strong>Fix Priority:</strong> HIGH <strong>Estimated Fix Time:</strong> 10 hours</p>
 <hr></div>
 <div class="section level3">
@@ -144,7 +145,7 @@
 <div class="section level3">
 <h3 id="id_5-this_one_worksr-score-610">5. <code>this_one_works.R</code> (Score: 6/10)<a class="anchor" aria-label="anchor" href="#id_5-this_one_worksr-score-610"></a></h3>
 <p><strong>Why:</strong> Unclear purpose, uses Tor proxy, may be debugging code</p>
-<p><strong>Evidence:</strong> - Function name <code><a href="reference/scrape_physicians_data_with_tor.html">scrape_physicians_data_with_tor()</a></code> is vague - Uses Tor SOCKS proxy for web scraping - File name “this_one_works” suggests experimentation - Unclear if this is production code or debugging - No deprecation warning despite being questionable</p>
+<p><strong>Evidence:</strong> - Function name <code>scrape_physicians_data_with_tor()</code> is vague - Uses Tor SOCKS proxy for web scraping - File name “this_one_works” suggests experimentation - Unclear if this is production code or debugging - No deprecation warning despite being questionable</p>
 <p><strong>Fix Priority:</strong> MEDIUM (Review for deprecation) <strong>Estimated Fix Time:</strong> 4 hours (to deprecate or document properly)</p>
 <hr></div>
 </div>
@@ -152,7 +153,7 @@
 <h2 id="mag-detailed-weakness-breakdown">🔍 DETAILED WEAKNESS BREAKDOWN<a class="anchor" aria-label="anchor" href="#mag-detailed-weakness-breakdown"></a></h2>
 <div class="section level3">
 <h3 id="a-documentation-gaps-score-310">A. Documentation Gaps (Score: 3/10)<a class="anchor" aria-label="anchor" href="#a-documentation-gaps-score-310"></a></h3>
-<p><strong>Files with Missing Documentation:</strong> 1. <code>genderize_physicians.R</code> - <code>genderize_fetch()</code> helper undocumented 2. <code>search_and_process_npi.R</code> - <code>search_npi()</code> nested function (115 lines) completely undocumented 3. <code>clean_phase_1_results.R</code> - <code>format_phone_number()</code>, <code>generate_random_ids()</code> undocumented 4. <code>clean_phase_2_results.R</code> - <code>rename_columns_by_substring()</code> minimal documentation 5. <code>create_isochrones_for_dataframe.R</code> - <code>save_snapshot()</code> uses <code>&lt;&lt;-</code> operator without explanation</p>
+<p><strong>Files with Missing Documentation:</strong> 1. <code>genderize_physicians.R</code> - <code>genderize_fetch()</code> helper undocumented 2. <code>search_and_process_npi.R</code> - <code><a href="reference/mysterycall-deprecated.html">search_npi()</a></code> nested function (115 lines) completely undocumented 3. <code>clean_phase_1_results.R</code> - <code>format_phone_number()</code>, <code>generate_random_ids()</code> undocumented 4. <code>clean_phase_2_results.R</code> - <code><a href="reference/mysterycall-deprecated.html">rename_columns_by_substring()</a></code> minimal documentation 5. <code>create_isochrones_for_dataframe.R</code> - <code>save_snapshot()</code> uses <code>&lt;&lt;-</code> operator without explanation</p>
 <p><strong>Impact:</strong> New team members will struggle to understand internal logic</p>
 <hr></div>
 <div class="section level3">
@@ -168,12 +169,12 @@
 <code class="sourceCode R"><span><span class="co"># test-genderize_physicians.R</span></span>
 <span><span class="fu">test_that</span><span class="op">(</span><span class="st">"genderize_physicians works"</span>, <span class="op">{</span></span>
 <span>  <span class="co"># Only tests that function doesn't error, not that results are correct</span></span>
-<span>  <span class="fu">expect_no_error</span><span class="op">(</span><span class="fu">genderize_physicians</span><span class="op">(</span><span class="va">sample_data</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">expect_no_error</span><span class="op">(</span><span class="fu"><a href="reference/mysterycall-deprecated.html">genderize_physicians</a></span><span class="op">(</span><span class="va">sample_data</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Should Be:</strong></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">test_that</span><span class="op">(</span><span class="st">"genderize_physicians assigns correct genders"</span>, <span class="op">{</span></span>
-<span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">genderize_physicians</span><span class="op">(</span><span class="va">known_gender_data</span><span class="op">)</span></span>
+<span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall-deprecated.html">genderize_physicians</a></span><span class="op">(</span><span class="va">known_gender_data</span><span class="op">)</span></span>
 <span>  <span class="fu">expect_equal</span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">gender</span><span class="op">[</span><span class="va">result</span><span class="op">$</span><span class="va">first_name</span> <span class="op">==</span> <span class="st">"John"</span><span class="op">]</span>, <span class="st">"male"</span><span class="op">)</span></span>
 <span>  <span class="fu">expect_gt</span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">probability</span><span class="op">[</span><span class="va">result</span><span class="op">$</span><span class="va">first_name</span> <span class="op">==</span> <span class="st">"John"</span><span class="op">]</span>, <span class="fl">0.90</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>

@@ -56,12 +56,14 @@ and CSV.
 
 ## See also
 
-Other geospatial helpers: `mysterycall_geocode()`, `mysterycall_hrr()`
+Other geospatial helpers:
+[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md),
+[`mysterycall_hrr()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 mysterycall_calculate_overlap(block_groups, isochrones_joined, 30L, "data/shp/")
-} # }
+}
 ```

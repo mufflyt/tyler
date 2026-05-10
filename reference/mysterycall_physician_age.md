@@ -36,7 +36,7 @@ constructs a summary sentence describing these statistics.
 ## See also
 
 Other summary:
-[`mysterycall_not_contacted_states()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_not_contacted_states.html)
+[`mysterycall_not_contacted_states()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_not_contacted_states.md)
 
 ## Examples
 

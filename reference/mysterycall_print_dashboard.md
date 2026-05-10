@@ -1,6 +1,7 @@
 # Print a formatted summary dashboard
 
-Print a formatted summary dashboard
+Prints a Unicode-box-drawing summary table showing row counts at each
+stage of the mystery caller workflow.
 
 ## Usage
 
@@ -12,15 +13,29 @@ mysterycall_print_dashboard(results)
 
 - results:
 
-  List containing workflow results (as returned by
-  [`mysterycall_run_workflow()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow.html)).
+  Named list of workflow results as returned by
+  [`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md).
+
+## Value
+
+Invisible NULL.
 
 ## See also
 
 Other workflow:
-[`mysterycall_clean_phase1()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase1.html),
-[`mysterycall_clean_phase2()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase2.html),
-[`mysterycall_rename_columns()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_rename_columns.html),
-[`mysterycall_run_workflow()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow.html),
-[`mysterycall_run_workflow_logged()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow_logged.html),
-[`mysterycall_split_and_save()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html)
+[`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md),
+[`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md),
+[`mysterycall_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_rename_columns.md),
+[`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md),
+[`mysterycall_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow_logged.md),
+[`mysterycall_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_split_and_save.md),
+[`mysterycall_verify_artifact()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_verify_artifact.md)
+
+## Examples
+
+``` r
+if (FALSE) { # interactive()
+results <- mysterycall_run_workflow_logged(phase1_data = my_data)
+mysterycall_print_dashboard(results)
+}
+```

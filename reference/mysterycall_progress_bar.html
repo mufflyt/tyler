@@ -25,6 +25,7 @@ Uses the cli package for cross-platform compatibility and beautiful output."><me
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -113,7 +114,7 @@ Uses the cli package for cross-platform compatibility and beautiful output.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting: Processing (100 items)</span>
 <span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html" class="external-link">mysterycall_progress_update</a></span><span class="op">(</span><span class="va">pb_id</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="mysterycall_progress_update.html">mysterycall_progress_update</a></span><span class="op">(</span><span class="va">pb_id</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 10/100 (10%) - ETA: 9.0s</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 20/100 (20%) - ETA: 8.0s</span>
@@ -133,7 +134,7 @@ Uses the cli package for cross-platform compatibility and beautiful output.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting: Geocoding addresses (500 items)</span>
 <span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">500</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="co"># do work</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html" class="external-link">mysterycall_progress_update</a></span><span class="op">(</span><span class="va">pb_id</span>, status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Address %d"</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="mysterycall_progress_update.html">mysterycall_progress_update</a></span><span class="op">(</span><span class="va">pb_id</span>, status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Address %d"</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 48/500 (10%) - ETA: 0.0s</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 98/500 (20%) - ETA: 0.0s</span>

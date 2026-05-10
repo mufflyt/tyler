@@ -55,14 +55,14 @@ map and Alaska/Hawaii/Puerto Rico inset maps.
 
 ## See also
 
-[`mysterycall_hrr()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_hrr.html),
-[`mysterycall_map_base()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_map_base.html),
-[`mysterycall_map_block_group()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_map_block_group.html)
+[`mysterycall_hrr()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr.md),
+[`mysterycall_map_base()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_base.md),
+[`mysterycall_map_block_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_block_group.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 mysterycall_hrr_maps(physician_sf)
-} # }
+}
 ```

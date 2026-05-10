@@ -1,43 +1,33 @@
-# Mark a step as failed
+# Fail progress bar
 
-Mark a step as failed
+Marks a progress bar as failed with an optional error message.
 
 ## Usage
 
 ``` r
-mysterycall_progress_fail(tracker, step, reason = NULL)
+mysterycall_progress_fail(pb, msg = NULL)
 ```
 
 ## Arguments
 
-- tracker:
+- pb:
 
-  Object created by
-  [`mysterycall_progress_tracker()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html).
+  Progress bar object from
+  [`mysterycall_progress_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_bar.md).
 
-- step:
+- msg:
 
-  Step name.
+  Optional error message string displayed alongside the failure.
 
-- reason:
+## Value
 
-  Optional string describing why the step failed.
+Invisible NULL.
 
-## See also
+## Examples
 
-Other logging utilities:
-[`mysterycall_progress_tracker()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html),
-[`mysterycall_progress_finish()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_finish.html),
-[`mysterycall_progress_start()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_start.html),
-[`mysterycall_progress_summary()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_summary.html),
-[`mysterycall_progress_update()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html),
-[`mysterycall_log_cache_hit()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_cache_hit.md),
-[`mysterycall_log_error()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_error.md),
-[`mysterycall_log_info()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_info.md),
-[`mysterycall_log_progress()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_progress.md),
-[`mysterycall_log_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_save.md),
-[`mysterycall_log_step()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step.md),
-[`mysterycall_log_step_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step_complete.md),
-[`mysterycall_log_success()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_success.md),
-[`mysterycall_log_warning()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_warning.md),
-[`mysterycall_workflow_start()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_workflow_start.md)
+``` r
+pb <- mysterycall_progress_bar("Processing", total = 10)
+#> Starting: Processing (10 items)
+mysterycall_progress_fail(pb, msg = "Geocoding API unreachable")
+#>   ✗ Processing failed: Geocoding API unreachable
+```

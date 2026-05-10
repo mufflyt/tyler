@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -229,7 +230,7 @@
 <h3 id="after-this-session"><strong>After This Session:</strong><a class="anchor" aria-label="anchor" href="#after-this-session"></a></h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># User runs the enhanced workflow</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">run_mystery_caller_workflow_with_logging</span><span class="op">(</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall-deprecated.html">run_mystery_caller_workflow_with_logging</a></span><span class="op">(</span></span>
 <span>  input_data <span class="op">=</span> <span class="st">"physicians.csv"</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="st">"output/"</span>,</span>
 <span>  google_maps_api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_API_KEY"</span><span class="op">)</span>,</span>
@@ -532,7 +533,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cli"</span><span class="op">)</span>  <span class="co"># For beautiful progress bars</span></span>
 <span></span>
 <span><span class="co"># Run workflow with all enhancements</span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">run_mystery_caller_workflow_with_logging</span><span class="op">(</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall-deprecated.html">run_mystery_caller_workflow_with_logging</a></span><span class="op">(</span></span>
 <span>  input_data <span class="op">=</span> <span class="st">"physicians.csv"</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="st">"output/"</span>,</span>
 <span>  google_maps_api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_API_KEY"</span><span class="op">)</span>,</span>
@@ -549,21 +550,21 @@
 <h3 id="custom-workflows"><strong>Custom Workflows:</strong><a class="anchor" aria-label="anchor" href="#custom-workflows"></a></h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use individual components</span></span>
-<span><span class="fu">tyler_workflow_start</span><span class="op">(</span><span class="st">"My Analysis"</span>, total_steps <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_start</a></span><span class="op">(</span><span class="st">"My Analysis"</span>, total_steps <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 1 with progress</span></span>
-<span><span class="fu">tyler_log_step</span><span class="op">(</span><span class="st">"Loading Data"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu">tyler_progress_bar</span><span class="op">(</span><span class="st">"Loading"</span>, total <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Loading Data"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tyler-deprecated.html">tyler_progress_bar</a></span><span class="op">(</span><span class="st">"Loading"</span>, total <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">load_file</span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="fu">tyler_progress_update</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/tyler-deprecated.html">tyler_progress_update</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu">tyler_progress_done</span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span>
-<span><span class="fu">tyler_log_step_complete</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_progress_done</a></span><span class="op">(</span><span class="va">pb</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># More steps...</span></span>
 <span></span>
-<span><span class="fu">tyler_workflow_end</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_end</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr></div>
 </div>
 <div class="section level2">
@@ -597,11 +598,11 @@
 <div class="section level3">
 <h3 id="documentation-1"><strong>Documentation:</strong><a class="anchor" aria-label="anchor" href="#documentation-1"></a></h3>
 <ul><li>
-<code>?tyler_preflight_check</code> - Preflight checks</li>
+<code><a href="reference/tyler-deprecated.html">?tyler_preflight_check</a></code> - Preflight checks</li>
 <li>
-<code>?tyler_workflow_start</code> - Logging system</li>
+<code><a href="reference/tyler-deprecated.html">?tyler_workflow_start</a></code> - Logging system</li>
 <li>
-<code>?tyler_progress_bar</code> - Progress bars</li>
+<code><a href="reference/tyler-deprecated.html">?tyler_progress_bar</a></code> - Progress bars</li>
 <li>
 <code>LOGGING_GUIDE.md</code> - Complete logging guide</li>
 <li>

@@ -54,7 +54,7 @@ mysterycall_geocode(
 - tracker:
 
   Optional progress tracker created with
-  [`mysterycall_progress_tracker()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html).
+  [`mysterycall_progress_tracker()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_tracker.md).
   When supplied, the step named by `tracker_step` is automatically
   started and marked as complete or failed with an appropriate quality
   tier.
@@ -71,13 +71,13 @@ A data frame with latitude and longitude columns added.
 ## See also
 
 Other geospatial helpers:
-[`mysterycall_calculate_overlap()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_calculate_overlap.html),
-[`mysterycall_hrr()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_hrr.html)
+[`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md),
+[`mysterycall_hrr()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 result <- mysterycall_geocode("addresses.csv", "my_api_key")
-} # }
+}
 ```

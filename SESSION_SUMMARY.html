@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -141,7 +142,7 @@
 <div class="section level3">
 <h3 id="what-was-created">What Was Created:<a class="anchor" aria-label="anchor" href="#what-was-created"></a></h3>
 <p><strong>1. Core Framework</strong> (<code>R/utils-logging.R</code> - 500 lines) - 16 new logging functions - Beautiful Unicode symbols (✓ ✗ ⚠ ℹ ▶) - Automatic timing and progress tracking - Optional log file writing - Success rate calculations</p>
-<p><strong>2. Enhanced Workflow</strong> (<code>R/run_mystery_caller_workflow_with_logging.R</code> - 350 lines) - <code>run_mystery_caller_workflow_with_logging()</code> - Shows real-time progress for all steps - Beautiful summary dashboard at end - Complete audit trail</p>
+<p><strong>2. Enhanced Workflow</strong> (<code>R/run_mystery_caller_workflow_with_logging.R</code> - 350 lines) - <code><a href="reference/mysterycall-deprecated.html">run_mystery_caller_workflow_with_logging()</a></code> - Shows real-time progress for all steps - Beautiful summary dashboard at end - Complete audit trail</p>
 <p><strong>3. Enhanced Functions</strong> - <code>geocode.R</code>: Added success/warning/error logging based on rates - Compatible with existing <code>search_and_process_npi.R</code> logging</p>
 <p><strong>4. Documentation</strong> (<code>LOGGING_GUIDE.md</code> - 250 lines) - Quick start guide - Complete function reference - Multiple examples - Troubleshooting tips</p>
 </div>
@@ -344,7 +345,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">tyler</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run with beautiful logging</span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">run_mystery_caller_workflow_with_logging</span><span class="op">(</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall-deprecated.html">run_mystery_caller_workflow_with_logging</a></span><span class="op">(</span></span>
 <span>  input_data <span class="op">=</span> <span class="st">"physicians.csv"</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="st">"output/"</span>,</span>
 <span>  google_maps_api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_API_KEY"</span><span class="op">)</span>,</span>
@@ -356,13 +357,13 @@
 <div class="section level3">
 <h3 id="to-add-logging-to-your-own-code">To Add Logging to Your Own Code:<a class="anchor" aria-label="anchor" href="#to-add-logging-to-your-own-code"></a></h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">tyler_workflow_start</span><span class="op">(</span><span class="st">"My Analysis"</span>, total_steps <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_start</a></span><span class="op">(</span><span class="st">"My Analysis"</span>, total_steps <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tyler_log_step</span><span class="op">(</span><span class="st">"Step 1"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Step 1"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co"># ... do work ...</span></span>
-<span><span class="fu">tyler_log_step_complete</span><span class="op">(</span>n_success <span class="op">=</span> <span class="fl">950</span>, n_total <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span>n_success <span class="op">=</span> <span class="fl">950</span>, n_total <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tyler_workflow_end</span><span class="op">(</span>final_n <span class="op">=</span> <span class="fl">950</span>, input_n <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_end</a></span><span class="op">(</span>final_n <span class="op">=</span> <span class="fl">950</span>, input_n <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <p>See <code>LOGGING_GUIDE.md</code> for complete documentation!</p>
 <hr></div>
 </div>

@@ -11,12 +11,13 @@ Released 2026-05-08.
   work; use
   [`library(mysterycall)`](https://github.com/mufflyt/mysterycall).
 - All 100 exported functions now carry the `mysterycall_` prefix (e.g.,
-  [`mysterycall_geocode()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_geocode.html),
-  [`mysterycall_search_and_process_npi()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html)).
+  [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md),
+  [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)).
   The previous `tyler_` prefix names are retained as deprecated shims
   that emit a warning and forward to the new name. The even-older
-  unprefixed names (e.g., `check_normality()`) continue to work as
-  double-deprecated shims.
+  unprefixed names (e.g.,
+  [`check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md))
+  continue to work as double-deprecated shims.
 
 ### ✅ rOpenSci compliance
 
@@ -48,13 +49,16 @@ Released 2026-05-04.
   packages declared in `Imports` but never called (`tigris`, `effects`)
   were removed entirely.
 
-- `create_isochrones()` no longer accumulates memoized results in RAM
-  indefinitely. The internal memoization object is now exposed through
+- [`create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  no longer accumulates memoized results in RAM indefinitely. The
+  internal memoization object is now exposed through
   [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md).
   Call it after processing a large batch to reclaim memory.
 
-- `create_isochrones_for_dataframe()` and
-  `create_individual_isochrone_plots()` previously called
+- [`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  and
+  [`create_individual_isochrone_plots()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  previously called
   [`beepr::beep()`](https://rdrr.io/pkg/beepr/man/beep.html)
   unconditionally even though `beepr` is a suggested package. Both calls
   are now guarded with
@@ -62,7 +66,7 @@ Released 2026-05-04.
 
 ### ✨ New features
 
-- [`mysterycall_search_taxonomy()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_taxonomy.html)
+- [`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
   gains three new arguments:
   - **`states`** — loops over each state and deduplicates on NPI,
     bypassing the NPI API’s hard 1,200-record-per-query cap. Pass all 50
@@ -88,24 +92,27 @@ Released 2025-10-23.
 - Introduced an **Imotive News & Changelog** vignette centralising
   release notes.
 - Documented how
-  [`mysterycall_run_workflow()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow.html)
+  [`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md)
   coordinates roster creation, validation, call preparation, and QA for
   Imotive projects.
 
 ### ✨ New features
 
-- [`mysterycall_not_contacted_states()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_not_contacted_states.html)
+- [`mysterycall_not_contacted_states()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_not_contacted_states.md)
   now ignores rows without affirmative contact outcomes and reports the
   number of unique physicians reached.
 
 ### 🗑️ Deprecated
 
-- `search_npi()` → use
-  [`mysterycall_search_and_process_npi()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html)
-- `test_and_process_isochrones()` → use
-  [`mysterycall_isochrones_for_df()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_isochrones_for_df.html)
-- `process_and_save_isochrones()` → use
-  [`mysterycall_isochrones_for_df()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_isochrones_for_df.html)
+- [`search_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  → use
+  [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
+- [`test_and_process_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  → use
+  [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md)
+- [`process_and_save_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  → use
+  [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md)
 
 ------------------------------------------------------------------------
 
@@ -117,10 +124,10 @@ Released 2025-10-23.
 - Verified R-CMD-check workflows on macOS, Windows, and Ubuntu.
 - Moved `provider` to `Suggests`; added runtime checks throughout.
 - Refactored
-  [`mysterycall_genderize()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_genderize.html)
+  [`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md)
   to use the Genderize.io API, removing the dependency on the non-CRAN
   `genderdata` package.
 - Added
-  [`mysterycall_geocode()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_geocode.html)
+  [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
   to simplify geocoding lists of addresses.
 - Added vignette skeleton on aggregating provider data.

@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -58,7 +59,7 @@
 <div class="section level3">
 <h3 id="collision-breaking-changes-with-backward-compatibility-1-3-0">💥 Breaking changes (with backward compatibility)<a class="anchor" aria-label="anchor" href="#collision-breaking-changes-with-backward-compatibility-1-3-0"></a></h3>
 <ul><li>Package renamed from <code>tyler</code> to <code>mysterycall</code>. <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(tyler)</a></code> will no longer work; use <code><a href="https://github.com/mufflyt/mysterycall" class="external-link">library(mysterycall)</a></code>.</li>
-<li>All 100 exported functions now carry the <code>mysterycall_</code> prefix (e.g., <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_geocode.html" class="external-link">mysterycall_geocode()</a></code>, <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html" class="external-link">mysterycall_search_and_process_npi()</a></code>). The previous <code>tyler_</code> prefix names are retained as deprecated shims that emit a warning and forward to the new name. The even-older unprefixed names (e.g., <code>check_normality()</code>) continue to work as double-deprecated shims.</li>
+<li>All 100 exported functions now carry the <code>mysterycall_</code> prefix (e.g., <code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code>, <code><a href="../reference/mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code>). The previous <code>tyler_</code> prefix names are retained as deprecated shims that emit a warning and forward to the new name. The even-older unprefixed names (e.g., <code><a href="../reference/mysterycall-deprecated.html">check_normality()</a></code>) continue to work as double-deprecated shims.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="white_check_mark-ropensci-compliance-1-3-0">✅ rOpenSci compliance<a class="anchor" aria-label="anchor" href="#white_check_mark-ropensci-compliance-1-3-0"></a></h3>
@@ -76,13 +77,13 @@
 <div class="section level3">
 <h3 id="bug-bug-fixes-1-2-2">🐛 Bug fixes<a class="anchor" aria-label="anchor" href="#bug-bug-fixes-1-2-2"></a></h3>
 <ul><li><p><code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(tyler)</a></code> no longer crashes R or causes system memory exhaustion. Seven heavy packages (<code>ggmap</code>, <code>ggspatial</code>, <code>hereR</code>, <code>leaflet</code>, <code>leaflet.extras</code>, <code>lme4</code>, <code>censusapi</code>) were moved from <code>Imports</code> to <code>Suggests</code> so their compiled spatial libraries (GDAL, GEOS, PROJ) are loaded <strong>only when the relevant function is first called</strong>, not on package attach. Two packages declared in <code>Imports</code> but never called (<code>tigris</code>, <code>effects</code>) were removed entirely.</p></li>
-<li><p><code>create_isochrones()</code> no longer accumulates memoized results in RAM indefinitely. The internal memoization object is now exposed through <code><a href="../reference/mysterycall_clear_isochrone_cache.html">mysterycall_clear_isochrone_cache()</a></code>. Call it after processing a large batch to reclaim memory.</p></li>
-<li><p><code>create_isochrones_for_dataframe()</code> and <code>create_individual_isochrone_plots()</code> previously called <code><a href="https://rdrr.io/pkg/beepr/man/beep.html" class="external-link">beepr::beep()</a></code> unconditionally even though <code>beepr</code> is a suggested package. Both calls are now guarded with <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace()</a></code>.</p></li>
+<li><p><code><a href="../reference/mysterycall-deprecated.html">create_isochrones()</a></code> no longer accumulates memoized results in RAM indefinitely. The internal memoization object is now exposed through <code><a href="../reference/mysterycall_clear_isochrone_cache.html">mysterycall_clear_isochrone_cache()</a></code>. Call it after processing a large batch to reclaim memory.</p></li>
+<li><p><code><a href="../reference/mysterycall-deprecated.html">create_isochrones_for_dataframe()</a></code> and <code><a href="../reference/mysterycall-deprecated.html">create_individual_isochrone_plots()</a></code> previously called <code><a href="https://rdrr.io/pkg/beepr/man/beep.html" class="external-link">beepr::beep()</a></code> unconditionally even though <code>beepr</code> is a suggested package. Both calls are now guarded with <code><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="sparkles-new-features-1-2-2">✨ New features<a class="anchor" aria-label="anchor" href="#sparkles-new-features-1-2-2"></a></h3>
 <ul><li>
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_search_taxonomy.html" class="external-link">mysterycall_search_taxonomy()</a></code> gains three new arguments:
+<code><a href="../reference/mysterycall_search_taxonomy.html">mysterycall_search_taxonomy()</a></code> gains three new arguments:
 <ul><li>
 <strong><code>states</code></strong> — loops over each state and deduplicates on NPI, bypassing the NPI API’s hard 1,200-record-per-query cap. Pass all 50 state abbreviations to perform a complete national search.</li>
 <li>
@@ -100,23 +101,23 @@
 <h3 id="pencil-documentation-1-2-1">📝 Documentation<a class="anchor" aria-label="anchor" href="#pencil-documentation-1-2-1"></a></h3>
 <ul><li>Released to align all metadata artifacts with the package website and codemeta specification.</li>
 <li>Introduced an <strong>Imotive News &amp; Changelog</strong> vignette centralising release notes.</li>
-<li>Documented how <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow.html" class="external-link">mysterycall_run_workflow()</a></code> coordinates roster creation, validation, call preparation, and QA for Imotive projects.</li>
+<li>Documented how <code><a href="../reference/mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code> coordinates roster creation, validation, call preparation, and QA for Imotive projects.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="sparkles-new-features-1-2-1">✨ New features<a class="anchor" aria-label="anchor" href="#sparkles-new-features-1-2-1"></a></h3>
 <ul><li>
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_not_contacted_states.html" class="external-link">mysterycall_not_contacted_states()</a></code> now ignores rows without affirmative contact outcomes and reports the number of unique physicians reached.</li>
+<code><a href="../reference/mysterycall_not_contacted_states.html">mysterycall_not_contacted_states()</a></code> now ignores rows without affirmative contact outcomes and reports the number of unique physicians reached.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="wastebasket-deprecated-1-2-1">🗑️ Deprecated<a class="anchor" aria-label="anchor" href="#wastebasket-deprecated-1-2-1"></a></h3>
 <ul><li>
-<code>search_npi()</code> → use <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html" class="external-link">mysterycall_search_and_process_npi()</a></code>
+<code><a href="../reference/mysterycall-deprecated.html">search_npi()</a></code> → use <code><a href="../reference/mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code>
 </li>
 <li>
-<code>test_and_process_isochrones()</code> → use <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_isochrones_for_df.html" class="external-link">mysterycall_isochrones_for_df()</a></code>
+<code><a href="../reference/mysterycall-deprecated.html">test_and_process_isochrones()</a></code> → use <code><a href="../reference/mysterycall_isochrones_for_df.html">mysterycall_isochrones_for_df()</a></code>
 </li>
 <li>
-<code>process_and_save_isochrones()</code> → use <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_isochrones_for_df.html" class="external-link">mysterycall_isochrones_for_df()</a></code>
+<code><a href="../reference/mysterycall-deprecated.html">process_and_save_isochrones()</a></code> → use <code><a href="../reference/mysterycall_isochrones_for_df.html">mysterycall_isochrones_for_df()</a></code>
 </li>
 </ul><hr></div>
 </div>
@@ -127,8 +128,8 @@
 <ul><li>Added <code>NEWS.md</code> to track changes.</li>
 <li>Verified R-CMD-check workflows on macOS, Windows, and Ubuntu.</li>
 <li>Moved <code>provider</code> to <code>Suggests</code>; added runtime checks throughout.</li>
-<li>Refactored <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_genderize.html" class="external-link">mysterycall_genderize()</a></code> to use the Genderize.io API, removing the dependency on the non-CRAN <code>genderdata</code> package.</li>
-<li>Added <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_geocode.html" class="external-link">mysterycall_geocode()</a></code> to simplify geocoding lists of addresses.</li>
+<li>Refactored <code><a href="../reference/mysterycall_genderize.html">mysterycall_genderize()</a></code> to use the Genderize.io API, removing the dependency on the non-CRAN <code>genderdata</code> package.</li>
+<li>Added <code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code> to simplify geocoding lists of addresses.</li>
 <li>Added vignette skeleton on aggregating provider data.</li>
 </ul></div>
 </div>

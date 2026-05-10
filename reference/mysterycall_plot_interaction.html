@@ -25,6 +25,7 @@ an interaction term, and saves a publication-ready interaction plot."><meta prop
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -51,7 +52,7 @@ an interaction term, and saves a publication-ready interaction plot."><meta prop
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create and plot interaction effects from a Poisson GLMM</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_plot_interaction.R" class="external-link"><code>R/mysterycall_plot_interaction.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/create_and_plot_interaction.R" class="external-link"><code>R/create_and_plot_interaction.R</code></a></small>
       <div class="d-none name"><code>mysterycall_plot_interaction.Rd</code></div>
     </div>
 
@@ -62,7 +63,7 @@ an interaction term, and saves a publication-ready interaction plot.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_interaction.html" class="external-link">mysterycall_plot_interaction</a></span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_plot_interaction</span><span class="op">(</span></span>
 <span>  <span class="va">data_path</span>,</span>
 <span>  <span class="va">response_variable</span>,</span>
 <span>  <span class="va">variable_of_interest</span>,</span>
@@ -127,18 +128,18 @@ to a count-like outcome (for example, business days until appointment).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html" class="external-link">mysterycall_plot_emmeans()</a></code>, <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_create_formula.html" class="external-link">mysterycall_create_formula()</a></code></p>
+    <div class="dont-index"><p><code><a href="mysterycall_plot_emmeans.html">mysterycall_plot_emmeans()</a></code>, <code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code></p>
 <p>Other modeling helpers:
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_check_normality.html" class="external-link">mysterycall_check_normality()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_create_formula.html" class="external-link">mysterycall_create_formula()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html" class="external-link">mysterycall_plot_emmeans()</a></code></p></div>
+<code><a href="mysterycall_check_normality.html">mysterycall_check_normality()</a></code>,
+<code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code>,
+<code><a href="mysterycall_plot_emmeans.html">mysterycall_plot_emmeans()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="co"># Example 1: Analyzing the effect of gender and appointment center on wait times</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_interaction.html" class="external-link">mysterycall_plot_interaction</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_plot_interaction</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data_path <span class="op">=</span> <span class="st">"Ari/data/Phase2/late_phase_2_ENT_analysis_3.rds"</span>,</span></span>
 <span class="r-in"><span>  response_variable <span class="op">=</span> <span class="st">"business_days_until_appointment"</span>,</span></span>
 <span class="r-in"><span>  variable_of_interest <span class="op">=</span> <span class="st">"central_number_e_g_appointment_center"</span>,</span></span>
@@ -149,7 +150,7 @@ to a count-like outcome (for example, business days until appointment).</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: Examining the interaction between insurance type and scenario on appointment delays</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_interaction.html" class="external-link">mysterycall_plot_interaction</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_plot_interaction</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data_path <span class="op">=</span> <span class="st">"data/healthcare_calls.rds"</span>,</span></span>
 <span class="r-in"><span>  response_variable <span class="op">=</span> <span class="st">"business_days_until_appointment"</span>,</span></span>
 <span class="r-in"><span>  variable_of_interest <span class="op">=</span> <span class="st">"insurance_type"</span>,</span></span>
@@ -160,7 +161,7 @@ to a count-like outcome (for example, business days until appointment).</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 3: Studying the interaction between gender and subspecialty in wait times</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_interaction.html" class="external-link">mysterycall_plot_interaction</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_plot_interaction</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data_path <span class="op">=</span> <span class="st">"data/mystery_caller_study.rds"</span>,</span></span>
 <span class="r-in"><span>  response_variable <span class="op">=</span> <span class="st">"waiting_time_days"</span>,</span></span>
 <span class="r-in"><span>  variable_of_interest <span class="op">=</span> <span class="st">"subspecialty"</span>,</span></span>
@@ -169,8 +170,7 @@ to a count-like outcome (for example, business days until appointment).</p>
 <span class="r-in"><span>  output_path <span class="op">=</span> <span class="st">"results/waiting_times"</span>,</span></span>
 <span class="r-in"><span>  resolution <span class="op">=</span> <span class="fl">300</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

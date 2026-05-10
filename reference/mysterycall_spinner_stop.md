@@ -21,3 +21,13 @@ mysterycall_spinner_stop(id, result = "done")
 ## Value
 
 Invisible NULL
+
+## Examples
+
+``` r
+# \donttest{
+id <- mysterycall_spinner_start("Loading data")
+#>   ↻ Loading data...
+mysterycall_spinner_stop(id, result = "done")
+# }
+```

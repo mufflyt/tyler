@@ -1,0 +1,149 @@
+# Compute appointment acceptance rates
+
+Calculates the proportion of physicians who offered an appointment (or
+were successfully contacted, depending on how `accepted_col` is
+defined), with Wilson confidence intervals. When groups are specified,
+runs a chi-square test or Fisher's exact test (when any cell falls below
+`min_cell`).
+
+## Usage
+
+``` r
+mysterycall_acceptance_rate(
+  data,
+  accepted_col = "contact_office",
+  group_by = NULL,
+  conf_level = 0.95,
+  min_cell = 5L
+)
+```
+
+## Arguments
+
+- data:
+
+  A data frame containing at least the column named by `accepted_col`.
+
+- accepted_col:
+
+  Name of the column recording whether the physician offered an
+  appointment. Defaults to `"contact_office"`, the standard Phase 2
+  column name after
+  [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md).
+
+- group_by:
+
+  Optional character scalar naming a grouping column (e.g.
+  `"insurance"`). When `NULL` (default), rates are computed over the
+  full dataset and no test is run.
+
+- conf_level:
+
+  Confidence level for Wilson confidence intervals. Default `0.95`.
+
+- min_cell:
+
+  Minimum expected cell count; cells below this threshold trigger
+  Fisher's exact test instead of chi-square. Default `5`.
+
+## Value
+
+A named list with:
+
+- `summary`:
+
+  Tibble with one row per group (or one row overall): `n_total`,
+  `n_missing`, `n_accepted`, `n_rejected`, `rate`, `ci_lower`,
+  `ci_upper`.
+
+- `test`:
+
+  `htest` object from
+  [`stats::chisq.test()`](https://rdrr.io/r/stats/chisq.test.html) or
+  [`stats::fisher.test()`](https://rdrr.io/r/stats/fisher.test.html), or
+  `NULL` when no test was run.
+
+- `p_value`:
+
+  Numeric p-value, or `NA_real_`.
+
+- `test_name`:
+
+  Character label describing the test used.
+
+- `interpretation`:
+
+  One-sentence plain-language summary.
+
+## Details
+
+The acceptance column is interpreted generously: logical `TRUE`,
+non-zero numerics, and character strings `"yes"`, `"y"`, `"true"`, and
+`"1"` (case-insensitive) all count as accepted. Everything else –
+including `NA` – counts as not accepted.
+
+## See also
+
+[`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md),
+[`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md)
+
+Other outcomes:
+[`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
+[`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md),
+[`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
+[`mysterycall_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_table.md),
+[`mysterycall_plot_distribution()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_distribution.md),
+[`mysterycall_plot_effect()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_effect.md),
+[`mysterycall_plot_emmeans_full()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_full.md),
+[`mysterycall_plot_emmeans_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_interaction.md),
+[`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md),
+[`mysterycall_plot_residuals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_residuals.md),
+[`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
+[`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
+[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
+[`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
+[`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
+[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md),
+[`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md)
+
+## Examples
+
+``` r
+df <- data.frame(
+  contact_office = c("Yes", "No", "Yes", "Yes", "No", "Yes", "No", "No"),
+  insurance = c("Medicaid", "Medicaid", "Medicaid", "Medicaid",
+                "BCBS", "BCBS", "BCBS", "BCBS")
+)
+mysterycall_acceptance_rate(df, group_by = "insurance")
+#> $summary
+#> # A tibble: 2 × 8
+#>   insurance n_total n_missing n_accepted n_rejected  rate ci_lower ci_upper
+#>   <chr>       <int>     <int>      <int>      <int> <dbl>    <dbl>    <dbl>
+#> 1 BCBS            4         0          1          3  0.25   0.0456    0.699
+#> 2 Medicaid        4         0          3          1  0.75   0.301     0.954
+#> 
+#> $test
+#> 
+#>  Fisher's Exact Test for Count Data
+#> 
+#> data:  ct
+#> p-value = 0.4857
+#> alternative hypothesis: true odds ratio is not equal to 1
+#> 95 percent confidence interval:
+#>  0.001607888 4.722931239
+#> sample estimates:
+#> odds ratio 
+#>   0.156047 
+#> 
+#> 
+#> $p_value
+#> [1] 0.4857143
+#> 
+#> $test_name
+#> [1] "Fisher's exact"
+#> 
+#> $interpretation
+#> [1] "BCBS: 1/4 (25.0%, 95% CI 4.6%–69.9%); Medicaid: 3/4 (75.0%, 95% CI 30.1%–95.4%). Fisher's exact: p = 0.486"
+#> 
+```

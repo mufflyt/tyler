@@ -20,7 +20,7 @@ mysterycall_plot_census_age(
 - census_df:
 
   A data frame produced by
-  [`mysterycall_get_census_data()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_get_census_data.html)
+  [`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md)
   (or another table containing equivalent columns).
 
 - group_var:
@@ -56,13 +56,13 @@ Invisibly returns the generated ggplot object.
 ## See also
 
 Other census:
-[`mysterycall_get_census_data()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_get_census_data.html),
-[`mysterycall_summarize_census()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_summarize_census.html)
+[`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md),
+[`mysterycall_summarize_census()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_census.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
   mysterycall_plot_census_age(census_example, group_var = "statefp", verbose = FALSE)
-} # }
+}
 ```

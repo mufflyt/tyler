@@ -25,17 +25,11 @@ mysterycall_log_step(step_name, detail = NULL, n_items = NULL)
 ## Value
 
 `invisible(NULL)`; updates the internal step counter and emits a
-formatted step header.
+formatted step header to the console.
 
 ## See also
 
 Other logging utilities:
-[`mysterycall_progress_tracker()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html),
-[`mysterycall_progress_fail()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_fail.html),
-[`mysterycall_progress_finish()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_finish.html),
-[`mysterycall_progress_start()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_start.html),
-[`mysterycall_progress_summary()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_summary.html),
-[`mysterycall_progress_update()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_progress_tracker.html),
 [`mysterycall_log_cache_hit()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_cache_hit.md),
 [`mysterycall_log_error()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_error.md),
 [`mysterycall_log_info()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_info.md),
@@ -44,4 +38,25 @@ Other logging utilities:
 [`mysterycall_log_step_complete()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_step_complete.md),
 [`mysterycall_log_success()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_success.md),
 [`mysterycall_log_warning()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_warning.md),
+[`mysterycall_progress_finish()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_finish.md),
+[`mysterycall_progress_start()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_start.md),
+[`mysterycall_progress_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_summary.md),
+[`mysterycall_progress_tracker()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_progress_tracker.md),
+[`mysterycall_tracker_fail()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_tracker_fail.md),
+[`mysterycall_tracker_update()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_tracker_update.md),
 [`mysterycall_workflow_start()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_workflow_start.md)
+
+## Examples
+
+``` r
+mysterycall_workflow_start("Demo", total_steps = 2)
+#> ============================================================
+#>   Demo
+#>   Started: 2026-05-10 15:37:00
+#>   Total Steps: 2
+#> ============================================================
+#> 
+mysterycall_log_step("Step 1: Geocode", n_items = 50)
+#> ▶ Step 1/2: Step 1: Geocode
+#>   Processing 50 item(s)...
+```

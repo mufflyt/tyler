@@ -27,6 +27,7 @@ release that memory."><meta property="og:image" content="https://github.com/muff
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -53,12 +54,12 @@ release that memory."><meta property="og:image" content="https://github.com/muff
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Clear the isochrone memoization cache</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_create_isochrones.R" class="external-link"><code>R/mysterycall_create_isochrones.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/create_isochrones.R" class="external-link"><code>R/create_isochrones.R</code></a></small>
       <div class="d-none name"><code>mysterycall_clear_isochrone_cache.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
-    <p>The <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_create_isochrones.html" class="external-link">mysterycall_create_isochrones()</a></code> function caches every result in memory for the
+    <p>The <code><a href="mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code> function caches every result in memory for the
 duration of the R session. Call this after processing a large batch to
 release that memory.</p>
     </div>
@@ -73,6 +74,11 @@ release that memory.</p>
     <p>Invisibly <code>NULL</code>.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">mysterycall_clear_isochrone_cache</span><span class="op">(</span><span class="op">)</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

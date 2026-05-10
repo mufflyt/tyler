@@ -88,18 +88,18 @@ appointment).
 
 ## See also
 
-[`mysterycall_plot_emmeans()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html),
-[`mysterycall_create_formula()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_create_formula.html)
+[`mysterycall_plot_emmeans()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans.md),
+[`mysterycall_create_formula()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.md)
 
 Other modeling helpers:
-[`mysterycall_check_normality()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_check_normality.html),
-[`mysterycall_create_formula()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_create_formula.html),
-[`mysterycall_plot_emmeans()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html)
+[`mysterycall_check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_normality.md),
+[`mysterycall_create_formula()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.md),
+[`mysterycall_plot_emmeans()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 # Example 1: Analyzing the effect of gender and appointment center on wait times
 result <- mysterycall_plot_interaction(
   data_path = "Ari/data/Phase2/late_phase_2_ENT_analysis_3.rds",
@@ -132,5 +132,5 @@ result <- mysterycall_plot_interaction(
   output_path = "results/waiting_times",
   resolution = 300
 )
-} # }
+}
 ```

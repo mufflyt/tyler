@@ -24,17 +24,17 @@ An sf object containing the hospital referral region data.
 ## See also
 
 [`ensure_hrr_shapefile()`](https://mufflyt.github.io/mysterycall/reference/ensure_hrr_shapefile.md),
-[`mysterycall_hrr_maps()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_hrr_maps.html),
-[`mysterycall_map_base()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_map_base.html)
+[`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md),
+[`mysterycall_map_base()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_base.md)
 
 Other geospatial helpers:
-[`mysterycall_calculate_overlap()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_calculate_overlap.html),
-[`mysterycall_geocode()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_geocode.html)
+[`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md),
+[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 mysterycall_hrr()
-} # }
+}
 ```

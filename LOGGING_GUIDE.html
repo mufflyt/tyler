@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -67,7 +68,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">tyler</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the workflow with beautiful logging</span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">run_mystery_caller_workflow_with_logging</span><span class="op">(</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall-deprecated.html">run_mystery_caller_workflow_with_logging</a></span><span class="op">(</span></span>
 <span>  input_data <span class="op">=</span> <span class="st">"physicians.csv"</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="st">"output/"</span>,</span>
 <span>  google_maps_api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_API_KEY"</span><span class="op">)</span>,</span>
@@ -124,31 +125,31 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">tyler</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Start workflow tracking</span></span>
-<span><span class="fu">tyler_workflow_start</span><span class="op">(</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_start</a></span><span class="op">(</span></span>
 <span>  workflow_name <span class="op">=</span> <span class="st">"My Custom Analysis"</span>,</span>
 <span>  total_steps <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  log_file <span class="op">=</span> <span class="st">"my_workflow.log"</span>  <span class="co"># Optional: save to file</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 1</span></span>
-<span><span class="fu">tyler_log_step</span><span class="op">(</span><span class="st">"Loading Data"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Loading Data"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"data.csv"</span><span class="op">)</span></span>
-<span><span class="fu">tyler_log_success</span><span class="op">(</span><span class="st">"Loaded 1,000 records"</span><span class="op">)</span></span>
-<span><span class="fu">tyler_log_step_complete</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_success</a></span><span class="op">(</span><span class="st">"Loaded 1,000 records"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 2</span></span>
-<span><span class="fu">tyler_log_step</span><span class="op">(</span><span class="st">"Processing Data"</span>, detail <span class="op">=</span> <span class="st">"Cleaning and validating"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Processing Data"</span>, detail <span class="op">=</span> <span class="st">"Cleaning and validating"</span><span class="op">)</span></span>
 <span><span class="va">clean_data</span> <span class="op">&lt;-</span> <span class="fu">clean_my_data</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="fu">tyler_log_step_complete</span><span class="op">(</span>n_success <span class="op">=</span> <span class="fl">950</span>, n_total <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span>n_success <span class="op">=</span> <span class="fl">950</span>, n_total <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Step 3</span></span>
-<span><span class="fu">tyler_log_step</span><span class="op">(</span><span class="st">"Saving Results"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Saving Results"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">clean_data</span>, <span class="st">"output.csv"</span><span class="op">)</span></span>
-<span><span class="fu">tyler_log_save</span><span class="op">(</span><span class="st">"output.csv"</span>, n_rows <span class="op">=</span> <span class="fl">950</span><span class="op">)</span></span>
-<span><span class="fu">tyler_log_step_complete</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_save</a></span><span class="op">(</span><span class="st">"output.csv"</span>, n_rows <span class="op">=</span> <span class="fl">950</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># End with summary</span></span>
-<span><span class="fu">tyler_workflow_end</span><span class="op">(</span>final_n <span class="op">=</span> <span class="fl">950</span>, input_n <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_end</a></span><span class="op">(</span>final_n <span class="op">=</span> <span class="fl">950</span>, input_n <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <hr></div>
 <div class="section level2">
 <h2 id="available-logging-functions">Available Logging Functions<a class="anchor" aria-label="anchor" href="#available-logging-functions"></a></h2>
@@ -189,7 +190,7 @@
 <div class="section level3">
 <h3 id="before-logging">Before Logging:<a class="anchor" aria-label="anchor" href="#before-logging"></a></h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">search_and_process_npi</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mysterycall-deprecated.html">search_and_process_npi</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co"># [silence for 30 minutes]</span></span>
 <span><span class="co"># Did it work? Is it running? No idea!</span></span></code></pre></div>
 </div>
@@ -207,7 +208,7 @@
 <h2 id="log-files">Log Files<a class="anchor" aria-label="anchor" href="#log-files"></a></h2>
 <p>All logs can be saved to a file for later review:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">tyler_workflow_start</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_start</a></span><span class="op">(</span></span>
 <span>  <span class="st">"My Workflow"</span>,</span>
 <span>  log_file <span class="op">=</span> <span class="st">"logs/workflow_20251029.txt"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -216,10 +217,10 @@
 <div class="section level2">
 <h2 id="integration-with-existing-functions">Integration with Existing Functions<a class="anchor" aria-label="anchor" href="#integration-with-existing-functions"></a></h2>
 <p>The logging system is <strong>already integrated</strong> into key functions:</p>
-<ul><li>✅ <code>geocode_unique_addresses()</code> - Shows progress and success rates</li>
-<li>✅ <code>search_and_process_npi()</code> - Already has detailed logging</li>
-<li>✅ <code>create_isochrones_for_dataframe()</code> - Can be enhanced further</li>
-<li>✅ <code>calculate_intersection_overlap_and_save()</code> - Can be enhanced further</li>
+<ul><li>✅ <code><a href="reference/mysterycall-deprecated.html">geocode_unique_addresses()</a></code> - Shows progress and success rates</li>
+<li>✅ <code><a href="reference/mysterycall-deprecated.html">search_and_process_npi()</a></code> - Already has detailed logging</li>
+<li>✅ <code><a href="reference/mysterycall-deprecated.html">create_isochrones_for_dataframe()</a></code> - Can be enhanced further</li>
+<li>✅ <code><a href="reference/mysterycall-deprecated.html">calculate_intersection_overlap_and_save()</a></code> - Can be enhanced further</li>
 </ul><hr></div>
 <div class="section level2">
 <h2 id="tips-for-best-experience">Tips for Best Experience<a class="anchor" aria-label="anchor" href="#tips-for-best-experience"></a></h2>
@@ -256,30 +257,30 @@
 <div class="section level3">
 <h3 id="example-1-simple-workflow">Example 1: Simple Workflow<a class="anchor" aria-label="anchor" href="#example-1-simple-workflow"></a></h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">tyler_workflow_start</span><span class="op">(</span><span class="st">"Quick Analysis"</span>, total_steps <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_start</a></span><span class="op">(</span><span class="st">"Quick Analysis"</span>, total_steps <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tyler_log_step</span><span class="op">(</span><span class="st">"Loading Data"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Loading Data"</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"input.csv"</span><span class="op">)</span></span>
-<span><span class="fu">tyler_log_success</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Loaded %d rows"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">tyler_log_step_complete</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_success</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Loaded %d rows"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tyler_log_step</span><span class="op">(</span><span class="st">"Analyzing"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Analyzing"</span><span class="op">)</span></span>
 <span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">analyze</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="fu">tyler_log_step_complete</span><span class="op">(</span>n_success <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>, n_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span>n_success <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>, n_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tyler_workflow_end</span><span class="op">(</span>final_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>, input_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_workflow_end</a></span><span class="op">(</span>final_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>, input_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-2-with-error-handling">Example 2: With Error Handling<a class="anchor" aria-label="anchor" href="#example-2-with-error-handling"></a></h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">tyler_log_step</span><span class="op">(</span><span class="st">"Risky Operation"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Risky Operation"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">risky_function</span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="fu">tyler_log_success</span><span class="op">(</span><span class="st">"Operation succeeded!"</span><span class="op">)</span></span>
-<span>  <span class="fu">tyler_log_step_complete</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_success</a></span><span class="op">(</span><span class="st">"Operation succeeded!"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">tyler_log_error</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_error</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Operation failed"</span>,</span>
 <span>    cause <span class="op">=</span> <span class="va">e</span><span class="op">$</span><span class="va">message</span>,</span>
 <span>    fix <span class="op">=</span> <span class="st">"Check your input data format"</span></span>
@@ -290,28 +291,28 @@
 <div class="section level3">
 <h3 id="example-3-progress-tracking">Example 3: Progress Tracking<a class="anchor" aria-label="anchor" href="#example-3-progress-tracking"></a></h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">tyler_log_step</span><span class="op">(</span><span class="st">"Processing Items"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step</a></span><span class="op">(</span><span class="st">"Processing Items"</span>, n_items <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Do work...</span></span>
 <span></span>
 <span>  <span class="co"># Report progress every 100 items</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">i</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">100</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu">tyler_log_progress</span><span class="op">(</span><span class="va">i</span>, <span class="fl">1000</span>, status <span class="op">=</span> <span class="st">"Processing..."</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_progress</a></span><span class="op">(</span><span class="va">i</span>, <span class="fl">1000</span>, status <span class="op">=</span> <span class="st">"Processing..."</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">tyler_log_step_complete</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/tyler-deprecated.html">tyler_log_step_complete</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <hr></div>
 </div>
 <div class="section level2">
 <h2 id="see-also">See Also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
 <ul><li>
-<code>?run_mystery_caller_workflow_with_logging</code> - Enhanced workflow wrapper</li>
+<code><a href="reference/mysterycall-deprecated.html">?run_mystery_caller_workflow_with_logging</a></code> - Enhanced workflow wrapper</li>
 <li>
-<code>?tyler_workflow_start</code> - Workflow control functions</li>
+<code><a href="reference/tyler-deprecated.html">?tyler_workflow_start</a></code> - Workflow control functions</li>
 <li>
-<code>?tyler_log_info</code> - Message logging functions</li>
+<code><a href="reference/tyler-deprecated.html">?tyler_log_info</a></code> - Message logging functions</li>
 <li>
 <code>PRODUCTION_95_PERCENT_SUCCESS_PLAN.md</code> - Production readiness plan</li>
 </ul><hr><p><strong>Feedback?</strong> This logging system addresses Risk #9 (Insufficient Logging) from the production readiness analysis. Please report any issues or suggestions!</p>

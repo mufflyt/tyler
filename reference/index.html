@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -117,9 +118,9 @@
         </dt>
         <dd>Taxonomy Codes for Obstetricians and Gynecologists</dd>
       </dl></div><div class="section level2">
-      <h2 id="provider-search">Provider Search<a class="anchor" aria-label="anchor" href="#provider-search"></a></h2>
+      <h2 id="provider-search-and-npi">Provider Search and NPI<a class="anchor" aria-label="anchor" href="#provider-search-and-npi"></a></h2>
 
-
+      <div class="section-desc"><p>Find, validate, and enrich physician records via the NPI registry.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -163,14 +164,70 @@
 
         <dt>
 
-          <code><a href="scrape_physicians_data_with_tor.html">scrape_physicians_data_with_tor()</a></code>
+          <code><a href="mysterycall_luhn_check.html">mysterycall_luhn_check()</a></code>
 
         </dt>
-        <dd>Scrape Physicians' Data with Tor</dd>
+        <dd>Validate NPI numbers using the official CMS Luhn checksum</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_extract_zip5.html">mysterycall_extract_zip5()</a></code>
+
+        </dt>
+        <dd>Extract a clean 5-digit ZIP code from a dirty string</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_extract_physician_name.html">mysterycall_extract_physician_name()</a></code>
+
+        </dt>
+        <dd>Extract a formatted physician name from a raw string</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_parse_certification_subspecialty.html">mysterycall_parse_certification_subspecialty()</a></code>
+
+        </dt>
+        <dd>Map an ABOHNS certification_type string to a subspecialty label</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_check_generalist_presence.html">mysterycall_check_generalist_presence()</a></code>
+
+        </dt>
+        <dd>Flag locations where generalist physicians are absent</dd>
+
+        <dt>
+
+          <code><a href="npi_utils.html">npi_utils</a></code>
+
+        </dt>
+        <dd>NPI validation utilities</dd>
+
+        <dt>
+
+          <code><a href="address_utils.html">address_utils</a></code>
+
+        </dt>
+        <dd>Address cleaning utilities</dd>
+
+        <dt>
+
+          <code><a href="caller_management.html">caller_management</a></code>
+
+        </dt>
+        <dd>Caller-management utilities for mystery-caller studies</dd>
+
+        <dt>
+
+          <code><a href="specialty_utils.html">specialty_utils</a></code>
+
+        </dt>
+        <dd>Specialty parsing and physician name extraction utilities</dd>
       </dl></div><div class="section level2">
-      <h2 id="geocoding">Geocoding<a class="anchor" aria-label="anchor" href="#geocoding"></a></h2>
+      <h2 id="geocoding-and-mapping">Geocoding and Mapping<a class="anchor" aria-label="anchor" href="#geocoding-and-mapping"></a></h2>
 
-
+      <div class="section-desc"><p>Geocode addresses, build isochrones, and produce publication maps.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -183,17 +240,8 @@
 
         </dt>
         <dd>Geocode unique addresses from a file</dd>
-      </dl></div><div class="section level2">
-      <h2 id="isochrones-and-mapping">Isochrones and Mapping<a class="anchor" aria-label="anchor" href="#isochrones-and-mapping"></a></h2>
 
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
+        <dt>
 
           <code><a href="mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code>
 
@@ -279,10 +327,33 @@
 
         <dt>
 
+          <code><a href="mysterycall_assign_region.html">mysterycall_assign_region()</a></code>
+
+        </dt>
+        <dd>Map US states to medical society districts and Census regions</dd>
+
+        <dt>
+
           <code><a href="ensure_hrr_shapefile.html">ensure_hrr_shapefile()</a></code>
 
         </dt>
         <dd>Ensure the Dartmouth Atlas HRR boundary shapefile is available locally</dd>
+      </dl></div><div class="section level2">
+      <h2 id="acceptance-rate-maps">Acceptance Rate Maps<a class="anchor" aria-label="anchor" href="#acceptance-rate-maps"></a></h2>
+
+      <div class="section-desc"><p>Choropleth maps of appointment acceptance rates by state.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_map_acceptance_rate.html">mysterycall_map_acceptance_rate()</a></code>
+
+        </dt>
+        <dd>Choropleth map of appointment acceptance rates by US state</dd>
       </dl></div><div class="section level2">
       <h2 id="census-and-demographics">Census and Demographics<a class="anchor" aria-label="anchor" href="#census-and-demographics"></a></h2>
 
@@ -314,9 +385,9 @@
         </dt>
         <dd>Plot the distribution of female age groups</dd>
       </dl></div><div class="section level2">
-      <h2 id="data-processing">Data Processing<a class="anchor" aria-label="anchor" href="#data-processing"></a></h2>
+      <h2 id="data-cleaning-and-processing">Data Cleaning and Processing<a class="anchor" aria-label="anchor" href="#data-cleaning-and-processing"></a></h2>
 
-
+      <div class="section-desc"><p>Clean Phase 1/2 data, rename columns, recode variables, and impute missing values.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -381,21 +452,140 @@
 
         <dt>
 
-          <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>
+          <code><a href="mysterycall_recode_credentials.html">mysterycall_recode_credentials()</a></code>
 
         </dt>
-        <dd>Run the end-to-end mystery caller workflow</dd>
+        <dd>Recode raw physician credential strings to MD, DO, or Other</dd>
 
         <dt>
 
-          <code><a href="mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged()</a></code>
+          <code><a href="mysterycall_reorder_by_freq.html">mysterycall_reorder_by_freq()</a></code>
 
         </dt>
-        <dd>Run the mystery caller workflow with structured logging</dd>
+        <dd>Reorder a factor (or character vector) by descending frequency</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_collapse_rare.html">mysterycall_collapse_rare()</a></code>
+
+        </dt>
+        <dd>Collapse rare factor/character levels into an "Other" category</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_merge_with_prefix.html">mysterycall_merge_with_prefix()</a></code>
+
+        </dt>
+        <dd>Merge two data frames with source-prefixed column names</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_classify_ruca.html">mysterycall_classify_ruca()</a></code>
+
+        </dt>
+        <dd>Classify RUCA codes into Urban / Suburban / Rural</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_classify_medical_school.html">mysterycall_classify_medical_school()</a></code>
+
+        </dt>
+        <dd>Classify medical school as US_MD, US_DO, CAN_MD, or IMG</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting()</a></code>
+
+        </dt>
+        <dd>Classify physician practice setting from facility/organization name</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code>
+
+        </dt>
+        <dd>Three-tier specialty reconciliation with audit columns</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_impute_age.html">mysterycall_impute_age()</a></code>
+
+        </dt>
+        <dd>Impute physician age from medical school graduation year</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_age_category.html">mysterycall_age_category()</a></code>
+
+        </dt>
+        <dd>Bin physician ages into decade categories</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_stratified_sample.html">mysterycall_stratified_sample()</a></code>
+
+        </dt>
+        <dd>Draw a balanced stratified sample from a data frame</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_check_duplicates.html">mysterycall_check_duplicates()</a></code>
+
+        </dt>
+        <dd>Flag physicians called more than the allowed number of times</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code>
+
+        </dt>
+        <dd>Standardise demographic variables for Table 1</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_assign_scenarios.html">mysterycall_assign_scenarios()</a></code>
+
+        </dt>
+        <dd>Assign call scenarios to generalist providers</dd>
+
+        <dt>
+
+          <code><a href="data_utils.html">data_utils</a></code>
+
+        </dt>
+        <dd>Data utilities for mystery-caller study management</dd>
+
+        <dt>
+
+          <code><a href="factor_utils.html">factor_utils</a></code>
+
+        </dt>
+        <dd>Factor and categorical-variable utilities</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_academic_patterns.html">mysterycall_academic_patterns()</a></code>
+
+        </dt>
+        <dd>Return the built-in academic keyword patterns</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_government_patterns.html">mysterycall_government_patterns()</a></code>
+
+        </dt>
+        <dd>Return the built-in government keyword patterns</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_age.html">mysterycall_age</a></code>
+
+        </dt>
+        <dd>Physician age imputation and categorization</dd>
       </dl></div><div class="section level2">
-      <h2 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a></h2>
+      <h2 id="business-days">Business Days<a class="anchor" aria-label="anchor" href="#business-days"></a></h2>
 
-
+      <div class="section-desc"><p>Calculate business-day wait times excluding weekends and federal holidays.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -403,6 +593,275 @@
 
 
       <dl><dt>
+
+          <code><a href="mysterycall_business_days.html">mysterycall_business_days()</a></code>
+
+        </dt>
+        <dd>Business-day utilities for mystery caller studies</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_count_business_days.html">mysterycall_count_business_days()</a></code>
+
+        </dt>
+        <dd>Count business days between two dates (vectorized)</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_us_federal_calendar.html">mysterycall_us_federal_calendar()</a></code>
+
+        </dt>
+        <dd>Build a US federal holiday calendar</dd>
+      </dl></div><div class="section level2">
+      <h2 id="outcomes-and-wait-times">Outcomes and Wait Times<a class="anchor" aria-label="anchor" href="#outcomes-and-wait-times"></a></h2>
+
+      <div class="section-desc"><p>Core outcome functions: acceptance rate, wait-time distribution, and Poisson modeling.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code>
+
+        </dt>
+        <dd>Compute appointment acceptance rates</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>
+
+        </dt>
+        <dd>Summarise appointment wait times</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>
+
+        </dt>
+        <dd>Fit a Poisson GLMER for mystery caller wait-time analysis</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>
+
+        </dt>
+        <dd>IRR forest plot for a Poisson GLMER result</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_model_table.html">mysterycall_model_table()</a></code>
+
+        </dt>
+        <dd>Word-ready IRR table from a fitted Poisson model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_model_metrics.html">mysterycall_model_metrics()</a></code>
+
+        </dt>
+        <dd>Compute MAE and RMSE from a fitted Poisson or linear model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_select_best_model.html">mysterycall_select_best_model()</a></code>
+
+        </dt>
+        <dd>Compare and rank competing fitted models</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_screen_interactions.html">mysterycall_screen_interactions()</a></code>
+
+        </dt>
+        <dd>Screen candidate variables for interaction with a primary exposure</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_outcomes.html">mysterycall_outcomes</a></code>
+
+        </dt>
+        <dd>Primary outcome analysis for mystery caller studies</dd>
+      </dl></div><div class="section level2">
+      <h2 id="statistical-analysis">Statistical Analysis<a class="anchor" aria-label="anchor" href="#statistical-analysis"></a></h2>
+
+      <div class="section-desc"><p>Disparities tables, multiple-comparison correction, bootstrap CIs, marginal effects, and wave-over-wave comparisons.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_disparities_table.html">mysterycall_disparities_table()</a></code>
+
+        </dt>
+        <dd>Compute Disparity Metrics Across Groups</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_multiple_comparison_adjust.html">mysterycall_multiple_comparison_adjust()</a></code>
+
+        </dt>
+        <dd>Adjust P-Values for Multiple Comparisons</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_bootstrap_ci.html">mysterycall_bootstrap_ci()</a></code>
+
+        </dt>
+        <dd>Bootstrap Confidence Intervals for a Summary Statistic</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_marginal_effects.html">mysterycall_marginal_effects()</a></code>
+
+        </dt>
+        <dd>Compute average marginal effects for a Poisson GLM or GLMER</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code>
+
+        </dt>
+        <dd>Compare a study outcome across waves of a mystery caller study</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_plot_emmeans.html">mysterycall_plot_emmeans()</a></code>
+
+        </dt>
+        <dd>Plot and Save Estimated Marginal Means (EMMs)</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_plot_emmeans_full.html">mysterycall_plot_emmeans_full()</a></code>
+
+        </dt>
+        <dd>Full emmeans interaction plot with optional file save</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_plot_emmeans_interaction.html">mysterycall_plot_emmeans_interaction()</a></code>
+
+        </dt>
+        <dd>Visualise estimated marginal means for an interaction</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_plot_effect.html">mysterycall_plot_effect()</a></code>
+
+        </dt>
+        <dd>Plot marginal effects for a single model term</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_plot_sjplot_interaction.html">mysterycall_plot_sjplot_interaction()</a></code>
+
+        </dt>
+        <dd>Interaction visualization via sjPlot</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_disparities_table.html">print(<i>&lt;mysterycall_disparities_table&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print a mysterycall_disparities_table</dd>
+      </dl></div><div class="section level2">
+      <h2 id="sample-size-and-power">Sample Size and Power<a class="anchor" aria-label="anchor" href="#sample-size-and-power"></a></h2>
+
+      <div class="section-desc"><p>Poisson power calculations and sample-size formulas for mystery-caller studies.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_poisson_power.html">mysterycall_poisson_power()</a></code>
+
+        </dt>
+        <dd>Sample-size calculation for a Poisson mystery caller study</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_cochran_n.html">mysterycall_cochran_n()</a></code>
+
+        </dt>
+        <dd>Cochran finite-population sample size</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_equation_figure.html">mysterycall_equation_figure()</a></code>
+
+        </dt>
+        <dd>Poisson power curve: required sample size across a range of IRRs</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_sample_size_text.html">mysterycall_sample_size_text()</a></code>
+
+        </dt>
+        <dd>Generate a sample-size methods sentence</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_power.html">mysterycall_power</a></code>
+
+        </dt>
+        <dd>Power and sample-size tools for mystery caller studies</dd>
+      </dl></div><div class="section level2">
+      <h2 id="caller-quality-control">Caller Quality Control<a class="anchor" aria-label="anchor" href="#caller-quality-control"></a></h2>
+
+      <div class="section-desc"><p>Audit caller performance: inter-rater reliability and per-caller productivity metrics.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_caller_reliability.html">mysterycall_caller_reliability()</a></code>
+
+        </dt>
+        <dd>Compute inter-rater reliability between mystery callers</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_call_productivity.html">mysterycall_call_productivity()</a></code>
+
+        </dt>
+        <dd>Compute per-caller productivity metrics</dd>
+
+        <dt>
+
+          <code><a href="print.mysterycall_reliability.html">print(<i>&lt;mysterycall_reliability&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for mysterycall_reliability objects</dd>
+      </dl></div><div class="section level2">
+      <h2 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a></h2>
+
+      <div class="section-desc"><p>Publication-ready plots for distributions, interactions, residuals, and stacked bars.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>
+
+        </dt>
+        <dd>Stacked bar chart of appointment acceptance by group</dd>
+
+        <dt>
 
           <code><a href="mysterycall_plot_interaction.html">mysterycall_plot_interaction()</a></code>
 
@@ -415,6 +874,20 @@
 
         </dt>
         <dd>Create a Density Plot for Mystery Caller Studies with Optional Transformations</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_plot_distribution.html">mysterycall_plot_distribution()</a></code>
+
+        </dt>
+        <dd>Distribution plots for numeric outcome variables</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_plot_residuals.html">mysterycall_plot_residuals()</a></code>
+
+        </dt>
+        <dd>Residual diagnostic plots for a fitted model</dd>
 
         <dt>
 
@@ -432,10 +905,31 @@
 
         <dt>
 
-          <code><a href="mysterycall_plot_emmeans.html">mysterycall_plot_emmeans()</a></code>
+          <code><a href="mysterycall_plot_inclexcl.html">mysterycall_plot_inclexcl()</a></code>
 
         </dt>
-        <dd>Plot and Save Estimated Marginal Means (EMMs)</dd>
+        <dd>CONSORT-style inclusion/exclusion flowchart for mystery-caller studies</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_flowchart.html">mysterycall_flowchart()</a></code>
+
+        </dt>
+        <dd>CONSORT-style inclusion/exclusion flowchart</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>
+
+        </dt>
+        <dd>Save a ggplot2 figure with publication-quality defaults</dd>
+
+        <dt>
+
+          <code><a href="plot_effects.html">plot_effects</a></code>
+
+        </dt>
+        <dd>Marginal effect plots for fitted models</dd>
       </dl></div><div class="section level2">
       <h2 id="tables-and-reports">Tables and Reports<a class="anchor" aria-label="anchor" href="#tables-and-reports"></a></h2>
 
@@ -447,6 +941,20 @@
 
 
       <dl><dt>
+
+          <code><a href="mysterycall_table1.html">mysterycall_table1()</a></code>
+
+        </dt>
+        <dd>Build a Table 1 for mystery caller studies</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_table1_gtsummary.html">mysterycall_table1_gtsummary()</a></code>
+
+        </dt>
+        <dd>Publication-ready Table 1 via gtsummary</dd>
+
+        <dt>
 
           <code><a href="mysterycall_max_table.html">mysterycall_max_table()</a></code>
 
@@ -508,6 +1016,50 @@
 
         </dt>
         <dd>Format a Numeric Value as a Percentage</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_format_results_table.html">mysterycall_format_results_table()</a></code>
+
+        </dt>
+        <dd>Format an IRR table for manuscript display</dd>
+      </dl></div><div class="section level2">
+      <h2 id="manuscript-writing">Manuscript Writing<a class="anchor" aria-label="anchor" href="#manuscript-writing"></a></h2>
+
+      <div class="section-desc"><p>Auto-generate methods paragraphs, results sentences, and formatted output tables.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="mysterycall_write_results_paragraph.html">mysterycall_write_results_paragraph()</a></code>
+
+        </dt>
+        <dd>Generate a results paragraph for a mystery caller Poisson model</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_methods_paragraph.html">mysterycall_methods_paragraph()</a></code>
+
+        </dt>
+        <dd>Generate a boilerplate methods paragraph for a mystery-caller study</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_summarize_demographics.html">mysterycall_summarize_demographics()</a></code>
+
+        </dt>
+        <dd>One-line demographic summary for a study cohort</dd>
+
+        <dt>
+
+          <code><a href="manuscript_helpers.html">manuscript_helpers</a></code>
+
+        </dt>
+        <dd>Helpers for writing manuscript methods and results sections</dd>
       </dl></div><div class="section level2">
       <h2 id="quality-and-validation">Quality and Validation<a class="anchor" aria-label="anchor" href="#quality-and-validation"></a></h2>
 
@@ -597,12 +1149,33 @@
 
         <dt>
 
+          <code><a href="mysterycall_verify_artifact.html">mysterycall_verify_artifact()</a></code>
+
+        </dt>
+        <dd>Verify the content-addressable identity of an audit trail JSON file</dd>
+
+        <dt>
+
           <code><a href="preflight-checks.html">preflight-checks</a></code>
 
         </dt>
         <dd>Preflight Checks for Tyler Workflows</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_validate_google_api.html">mysterycall_validate_google_api()</a></code>
+
+        </dt>
+        <dd>Validate Google Maps API key</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_validate_here_api.html">mysterycall_validate_here_api()</a></code>
+
+        </dt>
+        <dd>Validate routing API key</dd>
       </dl></div><div class="section level2">
-      <h2 id="workflow-helpers">Workflow Helpers<a class="anchor" aria-label="anchor" href="#workflow-helpers"></a></h2>
+      <h2 id="workflow">Workflow<a class="anchor" aria-label="anchor" href="#workflow"></a></h2>
 
 
 
@@ -612,6 +1185,20 @@
 
 
       <dl><dt>
+
+          <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>
+
+        </dt>
+        <dd>Run the end-to-end mystery caller workflow</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged()</a></code>
+
+        </dt>
+        <dd>Run the mystery caller workflow with structured logging</dd>
+
+        <dt>
 
           <code><a href="mysterycall_workflow_start.html">mysterycall_workflow_start()</a></code>
 
@@ -631,6 +1218,41 @@
 
         </dt>
         <dd>Print a formatted summary dashboard</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_tracker_fail.html">mysterycall_tracker_fail()</a></code>
+
+        </dt>
+        <dd>Mark a tracker step as failed</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_tracker_update.html">mysterycall_tracker_update()</a></code>
+
+        </dt>
+        <dd>Emit a manual progress heartbeat</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_export_with_backup.html">mysterycall_export_with_backup()</a></code>
+
+        </dt>
+        <dd>Write tabular or graphical outputs with timestamped backups</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_resolve_path.html">mysterycall_resolve_path()</a></code>
+
+        </dt>
+        <dd>Resolve project-relative paths from standard aliases</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_cache_dir.html">mysterycall_cache_dir()</a></code>
+
+        </dt>
+        <dd>Determine the cache directory used for downloaded resources</dd>
       </dl></div><div class="section level2">
       <h2 id="logging">Logging<a class="anchor" aria-label="anchor" href="#logging"></a></h2>
 
@@ -642,13 +1264,6 @@
 
 
       <dl><dt>
-
-          <code><a href="logging-utils.html">logging-utils</a></code>
-
-        </dt>
-        <dd>Comprehensive Logging Utilities for Tyler Package</dd>
-
-        <dt>
 
           <code><a href="mysterycall_log_info.html">mysterycall_log_info()</a></code>
 
@@ -710,6 +1325,20 @@
 
         </dt>
         <dd>Log file save</dd>
+
+        <dt>
+
+          <code><a href="logging-utils.html">logging-utils</a></code>
+
+        </dt>
+        <dd>Comprehensive Logging Utilities for Tyler Package</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_log_to_file.html">mysterycall_log_to_file()</a></code>
+
+        </dt>
+        <dd>Write to log file if configured</dd>
       </dl></div><div class="section level2">
       <h2 id="progress-and-spinners">Progress and Spinners<a class="anchor" aria-label="anchor" href="#progress-and-spinners"></a></h2>
 
@@ -722,14 +1351,7 @@
 
       <dl><dt>
 
-          <code><a href="progress-bars.html">progress-bars</a></code>
-
-        </dt>
-        <dd>Beautiful Progress Bars for Tyler Package</dd>
-
-        <dt>
-
-          <code><a href="mysterycall_progress_tracker.html">mysterycall_progress_tracker()</a></code> <code><a href="mysterycall_progress_tracker.html">mysterycall_progress_start()</a></code> <code><a href="mysterycall_progress_tracker.html">mysterycall_progress_finish()</a></code> <code><a href="mysterycall_progress_tracker.html">mysterycall_progress_fail()</a></code> <code><a href="mysterycall_progress_tracker.html">mysterycall_progress_update()</a></code> <code><a href="mysterycall_progress_tracker.html">mysterycall_progress_summary()</a></code>
+          <code><a href="mysterycall_progress_tracker.html">mysterycall_progress_tracker()</a></code>
 
         </dt>
         <dd>Track multi-stage workflow progress</dd>
@@ -753,14 +1375,14 @@
           <code><a href="mysterycall_progress_fail.html">mysterycall_progress_fail()</a></code>
 
         </dt>
-        <dd>Mark a step as failed</dd>
+        <dd>Fail progress bar</dd>
 
         <dt>
 
           <code><a href="mysterycall_progress_update.html">mysterycall_progress_update()</a></code>
 
         </dt>
-        <dd>Emit a manual progress update</dd>
+        <dd>Update progress bar</dd>
 
         <dt>
 
@@ -845,6 +1467,13 @@
 
         </dt>
         <dd>Stop a spinner</dd>
+
+        <dt>
+
+          <code><a href="progress-bars.html">progress-bars</a></code>
+
+        </dt>
+        <dd>Beautiful Progress Bars for Tyler Package</dd>
       </dl></div><div class="section level2">
       <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
 
@@ -861,20 +1490,6 @@
 
         </dt>
         <dd>Check for required R package dependencies</dd>
-
-        <dt>
-
-          <code><a href="mysterycall_resolve_path.html">mysterycall_resolve_path()</a></code>
-
-        </dt>
-        <dd>Resolve project-relative paths from standard aliases</dd>
-
-        <dt>
-
-          <code><a href="mysterycall_export_with_backup.html">mysterycall_export_with_backup()</a></code>
-
-        </dt>
-        <dd>Write tabular or graphical outputs with timestamped backups</dd>
 
         <dt>
 
@@ -913,13 +1528,6 @@
 
         <dt>
 
-          <code><a href="mysterycall_cache_dir.html">mysterycall_cache_dir()</a></code>
-
-        </dt>
-        <dd>Determine the cache directory used for downloaded resources</dd>
-
-        <dt>
-
           <code><a href="mysterycall_format_duration.html">mysterycall_format_duration()</a></code>
 
         </dt>
@@ -931,6 +1539,13 @@
 
         </dt>
         <dd>Utility helpers for mysterycall workflows</dd>
+
+        <dt>
+
+          <code><a href="mysterycall_tempdir.html">mysterycall_tempdir()</a></code>
+
+        </dt>
+        <dd>Internal helper for package-specific temporary directories</dd>
       </dl></div><div class="section level2">
       <h2 id="deprecated">Deprecated<a class="anchor" aria-label="anchor" href="#deprecated"></a></h2>
 
@@ -943,10 +1558,17 @@
 
       <dl><dt>
 
-          <code><a href="tyler-deprecated.html">mysterycall_search_npi()</a></code> <code><a href="tyler-deprecated.html">mysterycall_test_isochrones()</a></code> <code><a href="tyler-deprecated.html">mysterycall_process_isochrones()</a></code>
+          <code><a href="mysterycall-deprecated.html">arsenal_tables_write2word()</a></code> <code><a href="mysterycall-deprecated.html">calculate_intersection_overlap_and_save()</a></code> <code><a href="mysterycall-deprecated.html">check_normality()</a></code> <code><a href="mysterycall-deprecated.html">clean_phase_1_results()</a></code> <code><a href="mysterycall-deprecated.html">clean_phase_2_data()</a></code> <code><a href="mysterycall-deprecated.html">create_and_plot_interaction()</a></code> <code><a href="mysterycall-deprecated.html">create_density_plot()</a></code> <code><a href="mysterycall-deprecated.html">create_formula()</a></code> <code><a href="mysterycall-deprecated.html">create_individual_isochrone_plots()</a></code> <code><a href="mysterycall-deprecated.html">create_isochrones()</a></code> <code><a href="mysterycall-deprecated.html">create_isochrones_for_dataframe()</a></code> <code><a href="mysterycall-deprecated.html">create_line_plot()</a></code> <code><a href="mysterycall-deprecated.html">create_scatter_plot()</a></code> <code><a href="mysterycall-deprecated.html">download_large_file()</a></code> <code><a href="mysterycall-deprecated.html">format_pct()</a></code> <code><a href="mysterycall-deprecated.html">genderize_physicians()</a></code> <code><a href="mysterycall-deprecated.html">geocode_unique_addresses()</a></code> <code><a href="mysterycall-deprecated.html">get_census_data()</a></code> <code><a href="mysterycall-deprecated.html">hrr()</a></code> <code><a href="mysterycall-deprecated.html">hrr_generate_maps()</a></code> <code><a href="mysterycall-deprecated.html">map_create_acog_districts_sf()</a></code> <code><a href="mysterycall-deprecated.html">map_create_base()</a></code> <code><a href="mysterycall-deprecated.html">map_create_block_group_overlap()</a></code> <code><a href="mysterycall-deprecated.html">map_create_leaflet_base()</a></code> <code><a href="mysterycall-deprecated.html">map_create_physician_dot()</a></code> <code><a href="mysterycall-deprecated.html">max_table()</a></code> <code><a href="mysterycall-deprecated.html">min_table()</a></code> <code><a href="mysterycall-deprecated.html">most_common_gender_training_academic()</a></code> <code><a href="mysterycall-deprecated.html">physician_age()</a></code> <code><a href="mysterycall-deprecated.html">plot_and_save_emmeans()</a></code> <code><a href="mysterycall-deprecated.html">plot_census_age_distribution()</a></code> <code><a href="mysterycall-deprecated.html">remove_constant_vars()</a></code> <code><a href="mysterycall-deprecated.html">remove_near_zero_var()</a></code> <code><a href="mysterycall-deprecated.html">rename_columns_by_substring()</a></code> <code><a href="mysterycall-deprecated.html">retrieve_clinician_data()</a></code> <code><a href="mysterycall-deprecated.html">run_mystery_caller_workflow()</a></code> <code><a href="mysterycall-deprecated.html">run_mystery_caller_workflow_with_logging()</a></code> <code><a href="mysterycall-deprecated.html">save_quality_check_table()</a></code> <code><a href="mysterycall-deprecated.html">search_and_process_npi()</a></code> <code><a href="mysterycall-deprecated.html">search_by_taxonomy()</a></code> <code><a href="mysterycall-deprecated.html">split_and_save()</a></code> <code><a href="mysterycall-deprecated.html">states_where_physicians_were_NOT_contacted()</a></code> <code><a href="mysterycall-deprecated.html">summarize_census_data()</a></code> <code><a href="mysterycall-deprecated.html">table_calculate_percentages()</a></code> <code><a href="mysterycall-deprecated.html">table_calculate_proportion()</a></code> <code><a href="mysterycall-deprecated.html">table_generate_overall()</a></code> <code><a href="mysterycall-deprecated.html">table_write_pdf()</a></code> <code><a href="mysterycall-deprecated.html">validate_and_remove_invalid_npi()</a></code> <code><a href="mysterycall-deprecated.html">search_npi()</a></code> <code><a href="mysterycall-deprecated.html">test_and_process_isochrones()</a></code> <code><a href="mysterycall-deprecated.html">process_and_save_isochrones()</a></code> <code><a href="mysterycall-deprecated.html">progress_tracker()</a></code> <code><a href="mysterycall-deprecated.html">progress_tracker_start()</a></code> <code><a href="mysterycall-deprecated.html">progress_tracker_finish()</a></code> <code><a href="mysterycall-deprecated.html">progress_tracker_fail()</a></code> <code><a href="mysterycall-deprecated.html">progress_tracker_update()</a></code> <code><a href="mysterycall-deprecated.html">progress_tracker_summary()</a></code>
 
         </dt>
         <dd>Deprecated functions in mysterycall</dd>
+
+        <dt>
+
+          <code><a href="tyler-deprecated.html">tyler_assess_data_quality()</a></code> <code><a href="tyler-deprecated.html">tyler_calculate_overlap()</a></code> <code><a href="tyler-deprecated.html">tyler_check_api_response()</a></code> <code><a href="tyler-deprecated.html">tyler_check_data_completeness()</a></code> <code><a href="tyler-deprecated.html">tyler_check_dependencies()</a></code> <code><a href="tyler-deprecated.html">tyler_check_no_data_loss()</a></code> <code><a href="tyler-deprecated.html">tyler_check_no_limits()</a></code> <code><a href="tyler-deprecated.html">tyler_check_normality()</a></code> <code><a href="tyler-deprecated.html">tyler_clean_phase1()</a></code> <code><a href="tyler-deprecated.html">tyler_clean_phase2()</a></code> <code><a href="tyler-deprecated.html">tyler_clear_isochrone_cache()</a></code> <code><a href="tyler-deprecated.html">tyler_create_formula()</a></code> <code><a href="tyler-deprecated.html">tyler_create_isochrones()</a></code> <code><a href="tyler-deprecated.html">tyler_download_file()</a></code> <code><a href="tyler-deprecated.html">tyler_estimate_resources()</a></code> <code><a href="tyler-deprecated.html">tyler_export_with_backup()</a></code> <code><a href="tyler-deprecated.html">tyler_format_duration()</a></code> <code><a href="tyler-deprecated.html">tyler_format_pct()</a></code> <code><a href="tyler-deprecated.html">tyler_genderize()</a></code> <code><a href="tyler-deprecated.html">tyler_geocode()</a></code> <code><a href="tyler-deprecated.html">tyler_get_census_data()</a></code> <code><a href="tyler-deprecated.html">tyler_get_clinician_data()</a></code> <code><a href="tyler-deprecated.html">tyler_hrr()</a></code> <code><a href="tyler-deprecated.html">tyler_hrr_maps()</a></code> <code><a href="tyler-deprecated.html">tyler_isochrones_for_df()</a></code> <code><a href="tyler-deprecated.html">tyler_log_cache_hit()</a></code> <code><a href="tyler-deprecated.html">tyler_log_error()</a></code> <code><a href="tyler-deprecated.html">tyler_log_info()</a></code> <code><a href="tyler-deprecated.html">tyler_log_progress()</a></code> <code><a href="tyler-deprecated.html">tyler_log_save()</a></code> <code><a href="tyler-deprecated.html">tyler_log_step()</a></code> <code><a href="tyler-deprecated.html">tyler_log_step_complete()</a></code> <code><a href="tyler-deprecated.html">tyler_log_success()</a></code> <code><a href="tyler-deprecated.html">tyler_log_warning()</a></code> <code><a href="tyler-deprecated.html">tyler_map_acog_districts()</a></code> <code><a href="tyler-deprecated.html">tyler_map_base()</a></code> <code><a href="tyler-deprecated.html">tyler_map_block_group()</a></code> <code><a href="tyler-deprecated.html">tyler_map_leaflet()</a></code> <code><a href="tyler-deprecated.html">tyler_map_physicians()</a></code> <code><a href="tyler-deprecated.html">tyler_max_table()</a></code> <code><a href="tyler-deprecated.html">tyler_min_table()</a></code> <code><a href="tyler-deprecated.html">tyler_most_common_gender()</a></code> <code><a href="tyler-deprecated.html">tyler_multi_complete()</a></code> <code><a href="tyler-deprecated.html">tyler_multi_done()</a></code> <code><a href="tyler-deprecated.html">tyler_multi_progress()</a></code> <code><a href="tyler-deprecated.html">tyler_multi_step()</a></code> <code><a href="tyler-deprecated.html">tyler_multi_update()</a></code> <code><a href="tyler-deprecated.html">tyler_not_contacted_states()</a></code> <code><a href="tyler-deprecated.html">tyler_physician_age()</a></code> <code><a href="tyler-deprecated.html">tyler_plot_census_age()</a></code> <code><a href="tyler-deprecated.html">tyler_plot_density()</a></code> <code><a href="tyler-deprecated.html">tyler_plot_emmeans()</a></code> <code><a href="tyler-deprecated.html">tyler_plot_interaction()</a></code> <code><a href="tyler-deprecated.html">tyler_plot_isochrones()</a></code> <code><a href="tyler-deprecated.html">tyler_plot_line()</a></code> <code><a href="tyler-deprecated.html">tyler_plot_scatter()</a></code> <code><a href="tyler-deprecated.html">tyler_preflight_check()</a></code> <code><a href="tyler-deprecated.html">tyler_print_dashboard()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_bar()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_callback()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_done()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_fail()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_finish()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_map()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_start()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_summary()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_tracker()</a></code> <code><a href="tyler-deprecated.html">tyler_progress_update()</a></code> <code><a href="tyler-deprecated.html">tyler_quality_tier()</a></code> <code><a href="tyler-deprecated.html">tyler_remove_constants()</a></code> <code><a href="tyler-deprecated.html">tyler_remove_near_zero()</a></code> <code><a href="tyler-deprecated.html">tyler_rename_columns()</a></code> <code><a href="tyler-deprecated.html">tyler_resolve_path()</a></code> <code><a href="tyler-deprecated.html">tyler_run_workflow()</a></code> <code><a href="tyler-deprecated.html">tyler_run_workflow_logged()</a></code> <code><a href="tyler-deprecated.html">tyler_save_quality_table()</a></code> <code><a href="tyler-deprecated.html">tyler_scan_for_limits()</a></code> <code><a href="tyler-deprecated.html">tyler_search_and_process_npi()</a></code> <code><a href="tyler-deprecated.html">tyler_search_taxonomy()</a></code> <code><a href="tyler-deprecated.html">tyler_spinner_start()</a></code> <code><a href="tyler-deprecated.html">tyler_spinner_stop()</a></code> <code><a href="tyler-deprecated.html">tyler_split_and_save()</a></code> <code><a href="tyler-deprecated.html">tyler_standard_labels()</a></code> <code><a href="tyler-deprecated.html">tyler_standard_palette()</a></code> <code><a href="tyler-deprecated.html">tyler_summarize_census()</a></code> <code><a href="tyler-deprecated.html">tyler_table_overall()</a></code> <code><a href="tyler-deprecated.html">tyler_table_percentages()</a></code> <code><a href="tyler-deprecated.html">tyler_table_proportion()</a></code> <code><a href="tyler-deprecated.html">tyler_use_quiet_logging()</a></code> <code><a href="tyler-deprecated.html">tyler_validate_npi()</a></code> <code><a href="tyler-deprecated.html">tyler_workflow_end()</a></code> <code><a href="tyler-deprecated.html">tyler_workflow_start()</a></code> <code><a href="tyler-deprecated.html">tyler_write_arsenal_table()</a></code> <code><a href="tyler-deprecated.html">tyler_write_table_pdf()</a></code>
+
+        </dt>
+        <dd>Deprecated tyler_ prefix functions</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

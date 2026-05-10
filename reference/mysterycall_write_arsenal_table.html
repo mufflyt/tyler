@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -59,7 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_write_arsenal_table.html" class="external-link">mysterycall_write_arsenal_table</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">filename</span>, output_dir <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_write_arsenal_table</span><span class="op">(</span><span class="va">object</span>, <span class="va">filename</span>, output_dir <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -86,18 +87,18 @@ Defaults to a session-specific folder inside <code><a href="https://rdrr.io/r/ba
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other table:
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_max_table.html" class="external-link">mysterycall_max_table()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_min_table.html" class="external-link">mysterycall_min_table()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_table_percentages.html" class="external-link">mysterycall_table_percentages()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_table_proportion.html" class="external-link">mysterycall_table_proportion()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_table_overall.html" class="external-link">mysterycall_table_overall()</a></code></p></div>
+<code><a href="mysterycall_max_table.html">mysterycall_max_table()</a></code>,
+<code><a href="mysterycall_min_table.html">mysterycall_min_table()</a></code>,
+<code><a href="mysterycall_table_overall.html">mysterycall_table_overall()</a></code>,
+<code><a href="mysterycall_table_percentages.html">mysterycall_table_percentages()</a></code>,
+<code><a href="mysterycall_table_proportion.html">mysterycall_table_proportion()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_write_arsenal_table.html" class="external-link">mysterycall_write_arsenal_table</a></span><span class="op">(</span><span class="va">my_table</span>, <span class="st">"output_table"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall_write_arsenal_table</span><span class="op">(</span><span class="va">my_table</span>, <span class="st">"output_table"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

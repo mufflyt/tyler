@@ -1,0 +1,104 @@
+# Word-ready IRR table from a fitted Poisson model
+
+Extracts and formats the fixed-effects table from a
+`mysterycall_poisson_model` result into a print-ready data frame. Column
+names and values follow standard epidemiological reporting conventions
+(IRR with 95% CI in a single "IRR (95% CI)" column, formatted p-values).
+The returned data frame can be passed directly to
+`flextable::flextable()` or
+[`knitr::kable()`](https://rdrr.io/pkg/knitr/man/kable.html) for
+Word/HTML output.
+
+## Usage
+
+``` r
+mysterycall_model_table(
+  x,
+  include_intercept = FALSE,
+  digits = 2L,
+  irr_col = "IRR (95% CI)",
+  p_col = "p-value",
+  term_col = "Term"
+)
+```
+
+## Arguments
+
+- x:
+
+  A `mysterycall_poisson_model` object from
+  [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md).
+
+- include_intercept:
+
+  Logical. When `FALSE` (default) the `(Intercept)` row is dropped.
+
+- digits:
+
+  Integer. Decimal places for IRR and CI values. Default `2`.
+
+- irr_col:
+
+  Character. Name of the combined "IRR (95% CI)" column. Default
+  `"IRR (95% CI)"`.
+
+- p_col:
+
+  Character. Name of the p-value column. Default `"p-value"`.
+
+- term_col:
+
+  Character. Name of the term column. Default `"Term"`.
+
+## Value
+
+A data frame (tibble) with columns `term_col`, `irr_col`, and `p_col`.
+One row per fixed-effect term.
+
+## See also
+
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
+[`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md)
+
+Other outcomes:
+[`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
+[`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
+[`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md),
+[`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
+[`mysterycall_plot_distribution()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_distribution.md),
+[`mysterycall_plot_effect()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_effect.md),
+[`mysterycall_plot_emmeans_full()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_full.md),
+[`mysterycall_plot_emmeans_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_interaction.md),
+[`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md),
+[`mysterycall_plot_residuals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_residuals.md),
+[`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
+[`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
+[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
+[`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
+[`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
+[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md),
+[`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md)
+
+## Examples
+
+``` r
+if (requireNamespace("lme4", quietly = TRUE)) {
+  set.seed(1978)
+  df <- data.frame(
+    wait_days = rpois(40, lambda = 18),
+    insurance = rep(c("Medicaid", "BCBS"), each = 20),
+    physician = rep(paste0("Dr_", 1:8), each = 5),
+    stringsAsFactors = FALSE
+  )
+  result <- suppressWarnings(mysterycall_poisson_model(
+    df, "wait_days", "insurance", "physician"
+  ))
+  mysterycall_model_table(result)
+}
+#> Fitting Poisson GLMER: wait_days ~ insurance + (1 | physician)
+#> boundary (singular) fit: see help('isSingular')
+#> Model fitted: n=40, physicians=8, AIC=229.1, overdispersion=0.89
+#>                Term     IRR (95% CI) p-value
+#> 1 insuranceMedicaid 1.01 (0.87-1.17)   0.883
+```

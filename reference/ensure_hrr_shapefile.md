@@ -14,8 +14,9 @@ ensure_hrr_shapefile(quiet = TRUE)
 
 - quiet:
 
-  Logical flag passed to `mysterycall_download_file()` to silence the
-  underlying download tooling.
+  Logical flag passed to
+  [`mysterycall_download_file()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_download_file.md)
+  to silence the underlying download tooling.
 
 ## Value
 

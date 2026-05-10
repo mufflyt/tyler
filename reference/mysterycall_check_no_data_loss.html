@@ -27,6 +27,7 @@ that lose data."><meta property="og:image" content="https://github.com/mufflyt/m
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -107,33 +108,32 @@ operations that should remove rows (e.g., deduplication).</p></dd>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other utilities:
-<code>mysterycall_download_file()</code>,
-<code>mysterycall_format_pct()</code>,
-<code>mysterycall_remove_constants()</code>,
-<code>mysterycall_remove_near_zero()</code>,
-<code>mysterycall_save_quality_table()</code>,
 <code><a href="mysterycall_assess_data_quality.html">mysterycall_assess_data_quality()</a></code>,
 <code><a href="mysterycall_check_api_response.html">mysterycall_check_api_response()</a></code>,
 <code><a href="mysterycall_check_data_completeness.html">mysterycall_check_data_completeness()</a></code>,
 <code><a href="mysterycall_check_dependencies.html">mysterycall_check_dependencies()</a></code>,
 <code><a href="mysterycall_check_no_limits.html">mysterycall_check_no_limits()</a></code>,
+<code><a href="mysterycall_download_file.html">mysterycall_download_file()</a></code>,
 <code><a href="mysterycall_estimate_resources.html">mysterycall_estimate_resources()</a></code>,
 <code><a href="mysterycall_export_with_backup.html">mysterycall_export_with_backup()</a></code>,
+<code><a href="mysterycall_format_pct.html">mysterycall_format_pct()</a></code>,
 <code><a href="mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code>,
 <code><a href="mysterycall_quality_tier.html">mysterycall_quality_tier()</a></code>,
+<code><a href="mysterycall_remove_constants.html">mysterycall_remove_constants()</a></code>,
+<code><a href="mysterycall_remove_near_zero.html">mysterycall_remove_near_zero()</a></code>,
 <code><a href="mysterycall_resolve_path.html">mysterycall_resolve_path()</a></code>,
+<code><a href="mysterycall_save_quality_table.html">mysterycall_save_quality_table()</a></code>,
 <code><a href="mysterycall_scan_for_limits.html">mysterycall_scan_for_limits()</a></code>,
 <code><a href="mysterycall_standard_labels.html">mysterycall_standard_labels()</a></code>,
-<code><a href="mysterycall_standard_palette.html">mysterycall_standard_palette()</a></code>,
-<code><a href="mysterycall_use_quiet_logging.html">mysterycall_use_quiet_logging()</a></code></p></div>
+<code><a href="mysterycall_standard_palette.html">mysterycall_standard_palette()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="co"># Expect no data loss in cleaning</span></span></span>
 <span class="r-in"><span><span class="va">before</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">clean_data</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_clean_phase1</span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">clean_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="mysterycall_clean_phase1.html">mysterycall_clean_phase1</a></span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_check_no_data_loss</span><span class="op">(</span><span class="va">before</span>, <span class="va">clean_data</span>, <span class="st">"Phase 1 cleaning"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Expect deduplication to remove ~10 rows, allow +/-5</span></span></span>
@@ -141,8 +141,7 @@ operations that should remove rows (e.g., deduplication).</p></dd>
 <span class="r-in"><span><span class="va">dedup_data</span> <span class="op">&lt;-</span> <span class="fu">deduplicate</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_check_no_data_loss</span><span class="op">(</span><span class="va">before</span>, <span class="va">dedup_data</span>, <span class="st">"Deduplication"</span>,</span></span>
 <span class="r-in"><span>                        expected_change <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, tolerance <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -25,6 +25,7 @@ Use after any API call where you expect a specific number of results."><meta pro
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -62,7 +63,12 @@ Use after any API call where you expect a specific number of results.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_check_api_response</span><span class="op">(</span><span class="va">result</span>, <span class="va">expected</span>, api_name <span class="op">=</span> <span class="st">"API"</span>, tolerance <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_check_api_response</span><span class="op">(</span></span>
+<span>  <span class="va">result</span>,</span>
+<span>  <span class="va">expected</span>,</span>
+<span>  api_name <span class="op">=</span> <span class="st">"API"</span>,</span>
+<span>  tolerance <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -93,30 +99,29 @@ Defaults to 0 (exact match required).</p></dd>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other utilities:
-<code>mysterycall_download_file()</code>,
-<code>mysterycall_format_pct()</code>,
-<code>mysterycall_remove_constants()</code>,
-<code>mysterycall_remove_near_zero()</code>,
-<code>mysterycall_save_quality_table()</code>,
 <code><a href="mysterycall_assess_data_quality.html">mysterycall_assess_data_quality()</a></code>,
 <code><a href="mysterycall_check_data_completeness.html">mysterycall_check_data_completeness()</a></code>,
 <code><a href="mysterycall_check_dependencies.html">mysterycall_check_dependencies()</a></code>,
 <code><a href="mysterycall_check_no_data_loss.html">mysterycall_check_no_data_loss()</a></code>,
 <code><a href="mysterycall_check_no_limits.html">mysterycall_check_no_limits()</a></code>,
+<code><a href="mysterycall_download_file.html">mysterycall_download_file()</a></code>,
 <code><a href="mysterycall_estimate_resources.html">mysterycall_estimate_resources()</a></code>,
 <code><a href="mysterycall_export_with_backup.html">mysterycall_export_with_backup()</a></code>,
+<code><a href="mysterycall_format_pct.html">mysterycall_format_pct()</a></code>,
 <code><a href="mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code>,
 <code><a href="mysterycall_quality_tier.html">mysterycall_quality_tier()</a></code>,
+<code><a href="mysterycall_remove_constants.html">mysterycall_remove_constants()</a></code>,
+<code><a href="mysterycall_remove_near_zero.html">mysterycall_remove_near_zero()</a></code>,
 <code><a href="mysterycall_resolve_path.html">mysterycall_resolve_path()</a></code>,
+<code><a href="mysterycall_save_quality_table.html">mysterycall_save_quality_table()</a></code>,
 <code><a href="mysterycall_scan_for_limits.html">mysterycall_scan_for_limits()</a></code>,
 <code><a href="mysterycall_standard_labels.html">mysterycall_standard_labels()</a></code>,
-<code><a href="mysterycall_standard_palette.html">mysterycall_standard_palette()</a></code>,
-<code><a href="mysterycall_use_quiet_logging.html">mysterycall_use_quiet_logging()</a></code></p></div>
+<code><a href="mysterycall_standard_palette.html">mysterycall_standard_palette()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="co"># Expect exactly 100 geocoding results</span></span></span>
 <span class="r-in"><span><span class="va">coords</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggmap/man/geocode.html" class="external-link">geocode</a></span><span class="op">(</span><span class="va">addresses</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_check_api_response</span><span class="op">(</span><span class="va">coords</span>, expected <span class="op">=</span> <span class="fl">100</span>, api_name <span class="op">=</span> <span class="st">"Google Geocoding"</span><span class="op">)</span></span></span>
@@ -125,8 +130,7 @@ Defaults to 0 (exact match required).</p></dd>
 <span class="r-in"><span><span class="va">coords</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggmap/man/geocode.html" class="external-link">geocode</a></span><span class="op">(</span><span class="va">addresses</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_check_api_response</span><span class="op">(</span><span class="va">coords</span>, expected <span class="op">=</span> <span class="fl">100</span>, api_name <span class="op">=</span> <span class="st">"Google Geocoding"</span>,</span></span>
 <span class="r-in"><span>                        tolerance <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

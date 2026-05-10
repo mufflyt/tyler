@@ -28,7 +28,7 @@ Invisibly returns the file path.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 mysterycall_write_table_pdf(overall_summary, "table.pdf")
-} # }
+}
 ```

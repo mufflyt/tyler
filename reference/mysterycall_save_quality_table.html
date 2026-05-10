@@ -27,6 +27,7 @@ The resulting table is saved as a CSV file."><meta property="og:image" content="
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -53,7 +54,7 @@ The resulting table is saved as a CSV file."><meta property="og:image" content="
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Save Quality Check Table</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_save_quality_table.R" class="external-link"><code>R/mysterycall_save_quality_table.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/save_quality_check_table.R" class="external-link"><code>R/save_quality_check_table.R</code></a></small>
       <div class="d-none name"><code>mysterycall_save_quality_table.Rd</code></div>
     </div>
 
@@ -65,7 +66,11 @@ The resulting table is saved as a CSV file.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_save_quality_table.html" class="external-link">mysterycall_save_quality_table</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">filepath</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_save_quality_table</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">filepath</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"csv"</span>, <span class="st">"parquet"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -77,51 +82,58 @@ The resulting table is saved as a CSV file.</p>
 
 
 <dt id="arg-filepath">filepath<a class="anchor" aria-label="anchor" href="#arg-filepath"></a></dt>
-<dd><p>The path where the CSV file should be saved.</p></dd>
+<dd><p>The path where the output file should be saved.</p></dd>
+
+
+<dt id="arg-output-format">output_format<a class="anchor" aria-label="anchor" href="#arg-output-format"></a></dt>
+<dd><p>File format for the saved table. Either <code>"csv"</code> (default)
+or <code>"parquet"</code>. The file extension of <code>filepath</code> is ignored; the format
+here controls what is written.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The filtered data. A message is emitted indicating where the CSV was saved.</p>
+    <p>The filtered data frame (invisibly). A message is emitted indicating
+where the file was saved.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The output table aggregates by <code>npi</code> and <code>name</code>, keeps combinations with more
-than two records, sorts descending by frequency, and writes the result to CSV.
+than two records, sorts descending by frequency, and writes the result to the
+specified format via <code>mysterycall_write_table()</code>.
 This helper is useful for flagging repeated provider entries that may require
 manual review.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow.html" class="external-link">mysterycall_run_workflow()</a></code>, <code><a href="validate_dataframe.html">validate_dataframe()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html" class="external-link">mysterycall_split_and_save()</a></code></p>
+    <div class="dont-index"><p><code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>, <code><a href="validate_dataframe.html">validate_dataframe()</a></code>,
+<code><a href="mysterycall_split_and_save.html">mysterycall_split_and_save()</a></code></p>
 <p>Other utilities:
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_download_file.html" class="external-link">mysterycall_download_file()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_format_pct.html" class="external-link">mysterycall_format_pct()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_remove_constants.html" class="external-link">mysterycall_remove_constants()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_remove_near_zero.html" class="external-link">mysterycall_remove_near_zero()</a></code>,
 <code><a href="mysterycall_assess_data_quality.html">mysterycall_assess_data_quality()</a></code>,
 <code><a href="mysterycall_check_api_response.html">mysterycall_check_api_response()</a></code>,
 <code><a href="mysterycall_check_data_completeness.html">mysterycall_check_data_completeness()</a></code>,
 <code><a href="mysterycall_check_dependencies.html">mysterycall_check_dependencies()</a></code>,
 <code><a href="mysterycall_check_no_data_loss.html">mysterycall_check_no_data_loss()</a></code>,
 <code><a href="mysterycall_check_no_limits.html">mysterycall_check_no_limits()</a></code>,
+<code><a href="mysterycall_download_file.html">mysterycall_download_file()</a></code>,
 <code><a href="mysterycall_estimate_resources.html">mysterycall_estimate_resources()</a></code>,
 <code><a href="mysterycall_export_with_backup.html">mysterycall_export_with_backup()</a></code>,
+<code><a href="mysterycall_format_pct.html">mysterycall_format_pct()</a></code>,
 <code><a href="mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code>,
 <code><a href="mysterycall_quality_tier.html">mysterycall_quality_tier()</a></code>,
+<code><a href="mysterycall_remove_constants.html">mysterycall_remove_constants()</a></code>,
+<code><a href="mysterycall_remove_near_zero.html">mysterycall_remove_near_zero()</a></code>,
 <code><a href="mysterycall_resolve_path.html">mysterycall_resolve_path()</a></code>,
 <code><a href="mysterycall_scan_for_limits.html">mysterycall_scan_for_limits()</a></code>,
 <code><a href="mysterycall_standard_labels.html">mysterycall_standard_labels()</a></code>,
-<code><a href="mysterycall_standard_palette.html">mysterycall_standard_palette()</a></code>,
-<code><a href="mysterycall_use_quiet_logging.html">mysterycall_use_quiet_logging()</a></code></p></div>
+<code><a href="mysterycall_standard_palette.html">mysterycall_standard_palette()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_save_quality_table.html" class="external-link">mysterycall_save_quality_table</a></span><span class="op">(</span><span class="va">my_data</span>, <span class="st">"qc.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall_save_quality_table</span><span class="op">(</span><span class="va">my_data</span>, <span class="st">"qc.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

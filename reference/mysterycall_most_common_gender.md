@@ -33,7 +33,7 @@ column.
 ## See also
 
 Other gender:
-[`mysterycall_genderize()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_genderize.html)
+[`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md)
 
 ## Examples
 

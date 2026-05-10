@@ -48,6 +48,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -116,13 +117,13 @@ Names and addresses can change; NPI is usually the most stable
 identifier across roster creation, enrichment, and call outcome
 files.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">roster</span> <span class="op">&lt;-</span> <span class="fu">search_by_taxonomy</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">roster</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">search_by_taxonomy</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Gynecologic Oncology"</span>,</span>
 <span>  states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CO"</span>, <span class="st">"WY"</span><span class="op">)</span>,</span>
 <span>  write_snapshot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  notify <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">validate_and_remove_invalid_npi</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/mysterycall-deprecated.html">validate_and_remove_invalid_npi</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="add-clinician-enrichment">Add clinician enrichment<a class="anchor" aria-label="anchor" href="#add-clinician-enrichment"></a>
@@ -130,9 +131,9 @@ files.</p>
 <p>Once you have a validated roster, enrich it with clinician-level
 attributes such as demographics or training metadata. In the current
 API, the exported function for this step is
-<code>retrieve_clinician_data()</code>.</p>
+<code><a href="../reference/mysterycall-deprecated.html">retrieve_clinician_data()</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">clinician_data</span> <span class="op">&lt;-</span> <span class="fu">retrieve_clinician_data</span><span class="op">(</span><span class="va">roster</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">clinician_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">retrieve_clinician_data</a></span><span class="op">(</span><span class="va">roster</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">analysis_base</span> <span class="op">&lt;-</span> <span class="va">roster</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
@@ -168,7 +169,7 @@ onto the analysis table using the columns you preserved upstream.</p>
 or payer scenarios. It is usually easier to clean those files first and
 join them late in the pipeline.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">phase2_clean</span> <span class="op">&lt;-</span> <span class="fu">clean_phase_2_data</span><span class="op">(</span><span class="st">"phase2_results.xlsx"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">phase2_clean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">clean_phase_2_data</a></span><span class="op">(</span><span class="st">"phase2_results.xlsx"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">analysis_ready</span> <span class="op">&lt;-</span> <span class="va">analysis_with_geo</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
@@ -209,7 +210,7 @@ summary layers.</p>
 <h4 id="build-publication-tables">Build publication tables<a class="anchor" aria-label="anchor" href="#build-publication-tables"></a>
 </h4>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">table_generate_overall</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall-deprecated.html">table_generate_overall</a></span><span class="op">(</span></span>
 <span>  <span class="va">analysis_ready</span>,</span>
 <span>  vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subspecialty"</span>, <span class="st">"medicaid_accepted"</span>, <span class="st">"appointment_offered"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -247,8 +248,8 @@ counts.</li>
 </h2>
 <p>Once the unified table exists, the remaining tyler helpers for
 manuscript outputs are mostly summarization and visualization:
-<code>table_generate_overall()</code>,
-<code>table_calculate_percentages()</code>, and the mapping functions
+<code><a href="../reference/mysterycall-deprecated.html">table_generate_overall()</a></code>,
+<code><a href="../reference/mysterycall-deprecated.html">table_calculate_percentages()</a></code>, and the mapping functions
 for geographic presentation.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

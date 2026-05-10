@@ -28,8 +28,10 @@ normal, median and IQR if not normal).
 
 ## See also
 
-Other modeling helpers: `mysterycall_plot_interaction()`,
-`mysterycall_create_formula()`, `mysterycall_plot_emmeans()`
+Other modeling helpers:
+[`mysterycall_create_formula()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.md),
+[`mysterycall_plot_emmeans()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans.md),
+[`mysterycall_plot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_interaction.md)
 
 ## Examples
 

@@ -27,6 +27,7 @@ user's R cache directory for subsequent calls."><meta property="og:image" conten
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -53,7 +54,7 @@ user's R cache directory for subsequent calls."><meta property="og:image" conten
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Get Hospital Referral Region Shapefile</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_hrr.R" class="external-link"><code>R/mysterycall_hrr.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/hrr.R" class="external-link"><code>R/hrr.R</code></a></small>
       <div class="d-none name"><code>mysterycall_hrr.Rd</code></div>
     </div>
 
@@ -65,7 +66,7 @@ user's R cache directory for subsequent calls.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_hrr.html" class="external-link">mysterycall_hrr</a></span><span class="op">(</span>remove_HI_AK <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_hrr</span><span class="op">(</span>remove_HI_AK <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -82,17 +83,17 @@ user's R cache directory for subsequent calls.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="ensure_hrr_shapefile.html">ensure_hrr_shapefile()</a></code>, <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_hrr_maps.html" class="external-link">mysterycall_hrr_maps()</a></code>, <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_map_base.html" class="external-link">mysterycall_map_base()</a></code></p>
+    <div class="dont-index"><p><code><a href="ensure_hrr_shapefile.html">ensure_hrr_shapefile()</a></code>, <code><a href="mysterycall_hrr_maps.html">mysterycall_hrr_maps()</a></code>, <code><a href="mysterycall_map_base.html">mysterycall_map_base()</a></code></p>
 <p>Other geospatial helpers:
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_calculate_overlap.html" class="external-link">mysterycall_calculate_overlap()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_geocode.html" class="external-link">mysterycall_geocode()</a></code></p></div>
+<code><a href="mysterycall_calculate_overlap.html">mysterycall_calculate_overlap()</a></code>,
+<code><a href="mysterycall_geocode.html">mysterycall_geocode()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_hrr.html" class="external-link">mysterycall_hrr</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall_hrr</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

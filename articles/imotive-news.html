@@ -39,6 +39,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -96,21 +97,21 @@ surfaces the helpers that changed.</p>
 <div class="section level2">
 <h2 id="end-to-end-orchestration">End-to-end orchestration<a class="anchor" aria-label="anchor" href="#end-to-end-orchestration"></a>
 </h2>
-<p>The <code>run_mystery_caller_workflow()</code> wrapper continues to
+<p>The <code><a href="../reference/mysterycall-deprecated.html">run_mystery_caller_workflow()</a></code> wrapper continues to
 be the recommended entry point for Imotive projects. Recent
 documentation improvements clarify how it:</p>
 <ul>
 <li>Pulls and deduplicates provider rosters via
-<code>search_by_taxonomy()</code> and
-<code>search_and_process_npi()</code>.</li>
-<li>Validates NPIs with <code>validate_and_remove_invalid_npi()</code>
+<code><a href="../reference/mysterycall-deprecated.html">search_by_taxonomy()</a></code> and
+<code><a href="../reference/mysterycall-deprecated.html">search_and_process_npi()</a></code>.</li>
+<li>Validates NPIs with <code><a href="../reference/mysterycall-deprecated.html">validate_and_remove_invalid_npi()</a></code>
 before call prep begins.</li>
 <li>Produces Phase 1 workbooks by pairing
-<code>clean_phase_1_results()</code> with <code>split_and_save()</code>
+<code><a href="../reference/mysterycall-deprecated.html">clean_phase_1_results()</a></code> with <code><a href="../reference/mysterycall-deprecated.html">split_and_save()</a></code>
 so teams can distribute assignments quickly.</li>
-<li>Normalizes follow-up logs through <code>clean_phase_2_data()</code>
+<li>Normalizes follow-up logs through <code><a href="../reference/mysterycall-deprecated.html">clean_phase_2_data()</a></code>
 and saves QA snapshots using
-<code>save_quality_check_table()</code>.</li>
+<code><a href="../reference/mysterycall-deprecated.html">save_quality_check_table()</a></code>.</li>
 </ul>
 <p>Each step now has linked references back to its standalone
 documentation so callers can drill into the underlying helpers when
@@ -123,14 +124,14 @@ needed.</p>
 companion tools that pair naturally with the workflow:</p>
 <ul>
 <li>
-<code>retrieve_clinician_data()</code> for importing CMS Care
+<code><a href="../reference/mysterycall-deprecated.html">retrieve_clinician_data()</a></code> for importing CMS Care
 Compare demographics and practice affiliations.</li>
 <li>
-<code>genderize_physicians()</code> for backfilling gender
+<code><a href="../reference/mysterycall-deprecated.html">genderize_physicians()</a></code> for backfilling gender
 information from the Genderize.io API while respecting daily rate
 limits.</li>
 <li>
-<code>geocode_unique_addresses()</code> to convert deduplicated
+<code><a href="../reference/mysterycall-deprecated.html">geocode_unique_addresses()</a></code> to convert deduplicated
 practice locations into latitude/longitude for mapping or travel-time
 modeling.</li>
 </ul>
@@ -141,10 +142,10 @@ which optional enrichments to run before distributing call lists.</p>
 <h2 id="coverage-monitoring">Coverage monitoring<a class="anchor" aria-label="anchor" href="#coverage-monitoring"></a>
 </h2>
 <p>Field supervisors can keep tabs on geographic coverage with
-<code>states_where_physicians_were_NOT_contacted()</code>. The vignette
+<code><a href="../reference/mysterycall-deprecated.html">states_where_physicians_were_NOT_contacted()</a></code>. The vignette
 outlines how to pass in the full list of expected states so the summary
 correctly flags untouched regions. Pair it with the QA export generated
-by <code>save_quality_check_table()</code> to triage follow-up
+by <code><a href="../reference/mysterycall-deprecated.html">save_quality_check_table()</a></code> to triage follow-up
 calls.</p>
 </div>
 <div class="section level2">

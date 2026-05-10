@@ -22,14 +22,13 @@ A tibble with clinician data for the provided NPIs.
 ## See also
 
 Other npi:
-[`scrape_physicians_data_with_tor()`](https://mufflyt.github.io/mysterycall/reference/scrape_physicians_data_with_tor.md),
-[`mysterycall_search_and_process_npi()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html),
-[`mysterycall_search_taxonomy()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_taxonomy.html)
+[`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md),
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
-} # }
+}
 ```

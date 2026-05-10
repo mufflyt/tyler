@@ -25,6 +25,7 @@ It returns a data frame with the counts and percentages of each level."><meta pr
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -51,7 +52,7 @@ It returns a data frame with the counts and percentages of each level."><meta pr
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Calculate the Proportion of Each Level in a Categorical Variable</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_table_proportion.R" class="external-link"><code>R/mysterycall_table_proportion.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/table_calculate_proportion.R" class="external-link"><code>R/table_calculate_proportion.R</code></a></small>
       <div class="d-none name"><code>mysterycall_table_proportion.Rd</code></div>
     </div>
 
@@ -62,7 +63,7 @@ It returns a data frame with the counts and percentages of each level.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_table_proportion.html" class="external-link">mysterycall_table_proportion</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">variable_name</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_table_proportion</span><span class="op">(</span><span class="va">data</span>, <span class="va">variable_name</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -89,18 +90,18 @@ The percentages are rounded to two decimal places.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other table:
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_write_arsenal_table.html" class="external-link">mysterycall_write_arsenal_table()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_max_table.html" class="external-link">mysterycall_max_table()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_min_table.html" class="external-link">mysterycall_min_table()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_table_percentages.html" class="external-link">mysterycall_table_percentages()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_table_overall.html" class="external-link">mysterycall_table_overall()</a></code></p></div>
+<code><a href="mysterycall_max_table.html">mysterycall_max_table()</a></code>,
+<code><a href="mysterycall_min_table.html">mysterycall_min_table()</a></code>,
+<code><a href="mysterycall_table_overall.html">mysterycall_table_overall()</a></code>,
+<code><a href="mysterycall_table_percentages.html">mysterycall_table_percentages()</a></code>,
+<code><a href="mysterycall_write_arsenal_table.html">mysterycall_write_arsenal_table()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example 1: Basic usage with a simple dataset</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Female"</span>, <span class="st">"Male"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_table_proportion.html" class="external-link">mysterycall_table_proportion</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">gender</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_table_proportion</span><span class="op">(</span><span class="va">data</span>, <span class="va">gender</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   gender n percent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 Female 3      50</span>
@@ -108,7 +109,7 @@ The percentages are rounded to two decimal places.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: Handling a dataset with missing values</span></span></span>
 <span class="r-in"><span><span class="va">df_na</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="cn">NA</span>, <span class="st">"Female"</span>, <span class="st">"Female"</span>, <span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_table_proportion.html" class="external-link">mysterycall_table_proportion</a></span><span class="op">(</span><span class="va">df_na</span>, <span class="va">gender</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_table_proportion</span><span class="op">(</span><span class="va">df_na</span>, <span class="va">gender</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   gender n percent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 Female 3   42.86</span>
@@ -117,7 +118,7 @@ The percentages are rounded to two decimal places.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 3: Using a variable with multiple levels</span></span></span>
 <span class="r-in"><span><span class="va">df_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>grade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"B"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_table_proportion.html" class="external-link">mysterycall_table_proportion</a></span><span class="op">(</span><span class="va">df_multi</span>, <span class="va">grade</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_table_proportion</span><span class="op">(</span><span class="va">df_multi</span>, <span class="va">grade</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   grade n percent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     A 3    37.5</span>

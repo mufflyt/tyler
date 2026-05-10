@@ -189,11 +189,18 @@ analysis - Sharing with collaborators
 
 The logging system is **already integrated** into key functions:
 
-- ✅ `geocode_unique_addresses()` - Shows progress and success rates
-- ✅ `search_and_process_npi()` - Already has detailed logging
-- ✅ `create_isochrones_for_dataframe()` - Can be enhanced further
-- ✅ `calculate_intersection_overlap_and_save()` - Can be enhanced
-  further
+- ✅
+  [`geocode_unique_addresses()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md) -
+  Shows progress and success rates
+- ✅
+  [`search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md) -
+  Already has detailed logging
+- ✅
+  [`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md) -
+  Can be enhanced further
+- ✅
+  [`calculate_intersection_overlap_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md) -
+  Can be enhanced further
 
 ------------------------------------------------------------------------
 
@@ -295,10 +302,12 @@ tyler_log_step_complete()
 
 ## See Also
 
-- `?run_mystery_caller_workflow_with_logging` - Enhanced workflow
-  wrapper
-- `?tyler_workflow_start` - Workflow control functions
-- `?tyler_log_info` - Message logging functions
+- [`?run_mystery_caller_workflow_with_logging`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md) -
+  Enhanced workflow wrapper
+- [`?tyler_workflow_start`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+  Workflow control functions
+- [`?tyler_log_info`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+  Message logging functions
 - `PRODUCTION_95_PERCENT_SUCCESS_PLAN.md` - Production readiness plan
 
 ------------------------------------------------------------------------

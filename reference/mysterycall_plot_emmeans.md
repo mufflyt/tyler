@@ -73,14 +73,14 @@ filename that includes a timestamp.
 ## See also
 
 Other modeling helpers:
-[`mysterycall_check_normality()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_check_normality.html),
-[`mysterycall_plot_interaction()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_interaction.html),
-[`mysterycall_create_formula()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_create_formula.html)
+[`mysterycall_check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_normality.md),
+[`mysterycall_create_formula()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.md),
+[`mysterycall_plot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_interaction.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 # Example 1: Comparing Appointment Wait Times Between Scenarios
 # Assume 'model' is a fitted GLM object with appointment wait time as the outcome
 result <- mysterycall_plot_emmeans(
@@ -120,5 +120,5 @@ result <- mysterycall_plot_emmeans(
   color_by = "insurance",
   output_dir = "Figures/InteractionEffects"
 )
-} # }
+}
 ```

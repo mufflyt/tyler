@@ -48,6 +48,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -96,7 +97,7 @@ MD</h4>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p><code>create_isochrones_for_dataframe()</code> builds drive-time
+<p><code><a href="../reference/mysterycall-deprecated.html">create_isochrones_for_dataframe()</a></code> builds drive-time
 polygons from geocoded practice locations using a drive-time routing
 service. The function is designed for batch processing: it reads a file
 of point locations, validates the coordinates, requests isochrones for
@@ -141,7 +142,7 @@ is made.</p>
 <code>long</code>.</li>
 <li>Write the result to a file.</li>
 <li>Pass that file into
-<code>create_isochrones_for_dataframe()</code>.</li>
+<code><a href="../reference/mysterycall-deprecated.html">create_isochrones_for_dataframe()</a></code>.</li>
 </ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">iso_input</span> <span class="op">&lt;-</span> <span class="va">geocoded</span> <span class="op">|&gt;</span></span>
@@ -153,7 +154,7 @@ is made.</p>
 <span><span class="va">input_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".csv"</span><span class="op">)</span></span>
 <span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="va">iso_input</span>, <span class="va">input_csv</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">isochrones</span> <span class="op">&lt;-</span> <span class="fu">create_isochrones_for_dataframe</span><span class="op">(</span></span>
+<span><span class="va">isochrones</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">create_isochrones_for_dataframe</a></span><span class="op">(</span></span>
 <span>  input_file <span class="op">=</span> <span class="va">input_csv</span>,</span>
 <span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span> <span class="op">*</span> <span class="fl">60</span>, <span class="fl">60</span> <span class="op">*</span> <span class="fl">60</span>, <span class="fl">120</span> <span class="op">*</span> <span class="fl">60</span>, <span class="fl">180</span> <span class="op">*</span> <span class="fl">60</span><span class="op">)</span>,</span>
 <span>  api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"HERE_API_KEY"</span><span class="op">)</span>,</span>
@@ -232,7 +233,7 @@ question. Common cutoffs are 30, 60, 120, and 180 minutes.</li>
 <h2 id="next-step">Next step<a class="anchor" aria-label="anchor" href="#next-step"></a>
 </h2>
 <p>After generating isochrones, a common next stage is
-<code>calculate_intersection_overlap_and_save()</code> to overlay Census
+<code><a href="../reference/mysterycall-deprecated.html">calculate_intersection_overlap_and_save()</a></code> to overlay Census
 block groups and summarize the reachable population inside each
 travel-time band.</p>
 </div>

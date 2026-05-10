@@ -30,9 +30,9 @@ A formula object suitable for modeling in R.
 ## See also
 
 Other modeling helpers:
-[`mysterycall_check_normality()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_check_normality.html),
-[`mysterycall_plot_interaction()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_interaction.html),
-[`mysterycall_plot_emmeans()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html)
+[`mysterycall_check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_normality.md),
+[`mysterycall_plot_emmeans()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans.md),
+[`mysterycall_plot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_interaction.md)
 
 ## Examples
 
@@ -50,5 +50,5 @@ formula <- mysterycall_create_formula(df3_filtered, response_variable, random_ef
 #> Final formula object created: days ~ age + (1 | name)
 formula
 #> days ~ age + (1 | name)
-#> <environment: 0x557a0e3c3f88>
+#> <environment: 0x55b13540d8d8>
 ```

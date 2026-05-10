@@ -31,6 +31,7 @@ geographies."><meta property="og:image" content="https://github.com/mufflyt/myst
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -57,13 +58,13 @@ geographies."><meta property="og:image" content="https://github.com/mufflyt/myst
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Summarize Census Block Group Demographics</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_summarize_census.R" class="external-link"><code>R/mysterycall_summarize_census.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/summarize_census_data.R" class="external-link"><code>R/summarize_census_data.R</code></a></small>
       <div class="d-none name"><code>census_summaries.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
     <p>These helpers aggregate American Community Survey (ACS) estimates returned by
-<code>mysterycall_get_census_data()</code> to produce tidy summary tables and visualizations. They
+<code><a href="mysterycall_get_census_data.html">mysterycall_get_census_data()</a></code> to produce tidy summary tables and visualizations. They
 focus on the sex-by-age table (B01001) so that analysts can quickly spot the
 distribution of female populations across block groups or higher-level
 geographies.</p>

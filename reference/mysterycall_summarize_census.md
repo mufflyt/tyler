@@ -17,7 +17,7 @@ mysterycall_summarize_census(
 - census_df:
 
   A data frame produced by
-  [`mysterycall_get_census_data()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_get_census_data.html)
+  [`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md)
   (or another table containing equivalent columns).
 
 - group_vars:
@@ -40,8 +40,8 @@ share, male share, and the share of females of reproductive age.
 ## See also
 
 Other census:
-[`mysterycall_get_census_data()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_get_census_data.html),
-[`mysterycall_plot_census_age()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_census_age.html)
+[`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md),
+[`mysterycall_plot_census_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_census_age.md)
 
 ## Examples
 

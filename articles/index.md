@@ -14,6 +14,9 @@
   Build an analysis-ready provider table by combining roster,
   enrichment, geography, and call-outcome data.
 
+- [Pipeline
+  Guarantees](https://mufflyt.github.io/mysterycall/articles/pipeline-guarantees.md):
+
 ### Data Collection
 
 - [Search and Process NPI

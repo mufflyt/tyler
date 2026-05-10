@@ -2,11 +2,12 @@
 
 ## Overview
 
-`create_isochrones_for_dataframe()` builds drive-time polygons from
-geocoded practice locations using a drive-time routing service. The
-function is designed for batch processing: it reads a file of point
-locations, validates the coordinates, requests isochrones for each row,
-and periodically writes checkpoint files to disk while it runs.
+[`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+builds drive-time polygons from geocoded practice locations using a
+drive-time routing service. The function is designed for batch
+processing: it reads a file of point locations, validates the
+coordinates, requests isochrones for each row, and periodically writes
+checkpoint files to disk while it runs.
 
 ### Before you start
 
@@ -44,7 +45,8 @@ The typical pattern is:
 1.  Geocode practice addresses.
 2.  Rename the coordinate columns to `lat` and `long`.
 3.  Write the result to a file.
-4.  Pass that file into `create_isochrones_for_dataframe()`.
+4.  Pass that file into
+    [`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md).
 
 ``` r
 
@@ -124,6 +126,6 @@ batch.
 ## Next step
 
 After generating isochrones, a common next stage is
-`calculate_intersection_overlap_and_save()` to overlay Census block
-groups and summarize the reachable population inside each travel-time
-band.
+[`calculate_intersection_overlap_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+to overlay Census block groups and summarize the reachable population
+inside each travel-time band.

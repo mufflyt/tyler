@@ -107,9 +107,10 @@ generate_random_ids) are undocumented
 concerns
 
 **Evidence:** - Main function spans lines 50-465 - Nested function
-`search_npi()` is 115 lines (lines 269-383) - 4-5 levels of nesting in
-retry logic - Multiple concerns: API calls, retry logic, progress
-tracking, file I/O, result accumulation
+[`search_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+is 115 lines (lines 269-383) - 4-5 levels of nesting in retry logic -
+Multiple concerns: API calls, retry logic, progress tracking, file I/O,
+result accumulation
 
 **Fix Priority:** HIGH **Estimated Fix Time:** 10 hours
 
@@ -131,9 +132,8 @@ validation) - Accepts invalid NPIs that pass format but fail checksum
 
 **Why:** Unclear purpose, uses Tor proxy, may be debugging code
 
-**Evidence:** - Function name
-[`scrape_physicians_data_with_tor()`](https://mufflyt.github.io/mysterycall/reference/scrape_physicians_data_with_tor.md)
-is vague - Uses Tor SOCKS proxy for web scraping - File name
+**Evidence:** - Function name `scrape_physicians_data_with_tor()` is
+vague - Uses Tor SOCKS proxy for web scraping - File name
 “this_one_works” suggests experimentation - Unclear if this is
 production code or debugging - No deprecation warning despite being
 questionable
@@ -149,12 +149,13 @@ Time:** 4 hours (to deprecate or document properly)
 
 **Files with Missing Documentation:** 1. `genderize_physicians.R` -
 `genderize_fetch()` helper undocumented 2. `search_and_process_npi.R` -
-`search_npi()` nested function (115 lines) completely undocumented 3.
+[`search_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+nested function (115 lines) completely undocumented 3.
 `clean_phase_1_results.R` - `format_phone_number()`,
 `generate_random_ids()` undocumented 4. `clean_phase_2_results.R` -
-`rename_columns_by_substring()` minimal documentation 5.
-`create_isochrones_for_dataframe.R` - `save_snapshot()` uses `<<-`
-operator without explanation
+[`rename_columns_by_substring()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+minimal documentation 5. `create_isochrones_for_dataframe.R` -
+`save_snapshot()` uses `<<-` operator without explanation
 
 **Impact:** New team members will struggle to understand internal logic
 

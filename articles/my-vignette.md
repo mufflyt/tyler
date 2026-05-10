@@ -4,12 +4,13 @@
 
 The
 [`mysterycall::taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
-data and `mysterycall::search_by_taxonomy` function in the R package
-offers a convenient and efficient way to query the NPI Database for
-healthcare providers based on their taxonomy descriptions. This vignette
-provides a comprehensive guide on how to effectively utilize this
-function, explores its various capabilities, and offers illustrative use
-cases.
+data and
+[`mysterycall::search_by_taxonomy`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+function in the R package offers a convenient and efficient way to query
+the NPI Database for healthcare providers based on their taxonomy
+descriptions. This vignette provides a comprehensive guide on how to
+effectively utilize this function, explores its various capabilities,
+and offers illustrative use cases.
 
 ### Installation
 

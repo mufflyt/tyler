@@ -116,15 +116,14 @@ A data frame containing the processed NPI search results.
 ## See also
 
 Other npi:
-[`mysterycall_get_clinician_data()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_get_clinician_data.html),
-[`scrape_physicians_data_with_tor()`](https://mufflyt.github.io/mysterycall/reference/scrape_physicians_data_with_tor.md),
-[`mysterycall_search_taxonomy()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_taxonomy.html)
+[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md),
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 df <- data.frame(first = "John", last = "Doe")
 results <- mysterycall_search_and_process_npi(df)
-} # }
+}
 ```

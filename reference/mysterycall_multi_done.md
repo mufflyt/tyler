@@ -17,3 +17,12 @@ mysterycall_multi_done(tracker)
 ## Value
 
 Invisible NULL
+
+## Examples
+
+``` r
+# \donttest{
+tracker <- mysterycall_multi_step(c("Geocode", "Validate"), 10)
+mysterycall_multi_done(tracker)
+# }
+```

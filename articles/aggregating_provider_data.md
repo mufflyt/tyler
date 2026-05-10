@@ -35,7 +35,8 @@ roster <- search_by_taxonomy(
 
 Once you have a validated roster, enrich it with clinician-level
 attributes such as demographics or training metadata. In the current
-API, the exported function for this step is `retrieve_clinician_data()`.
+API, the exported function for this step is
+[`retrieve_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md).
 
 ``` r
 
@@ -156,5 +157,6 @@ percentages will be hard to interpret.
 
 Once the unified table exists, the remaining tyler helpers for
 manuscript outputs are mostly summarization and visualization:
-`table_generate_overall()`, `table_calculate_percentages()`, and the
-mapping functions for geographic presentation.
+[`table_generate_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md),
+[`table_calculate_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md),
+and the mapping functions for geographic presentation.

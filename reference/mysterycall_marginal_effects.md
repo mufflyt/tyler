@@ -1,0 +1,150 @@
+# Compute average marginal effects for a Poisson GLM or GLMER
+
+Computes average marginal effects for each predictor in a fitted Poisson
+GLM (`glm` with `family = poisson`) or Poisson GLMER (`glmerMod` from
+lme4). Also accepts a `mysterycall_poisson_model` object, from which the
+fitted model is extracted automatically.
+
+## Usage
+
+``` r
+mysterycall_marginal_effects(
+  model,
+  term = NULL,
+  data = NULL,
+  type = c("response", "link"),
+  eps = 1e-07
+)
+```
+
+## Arguments
+
+- model:
+
+  A fitted `glm` (with `family = poisson`), a `glmerMod` object from
+  lme4, or a `mysterycall_poisson_model` object. For
+  `mysterycall_poisson_model`, the `$model` component is extracted
+  automatically.
+
+- term:
+
+  Character vector of predictor names for which to compute marginal
+  effects. Pass the variable name (e.g. `"cyl"`), not the dummy-encoded
+  column name (e.g. `"factor(cyl)6"`). If `NULL` (default), effects are
+  computed for all predictors in the model frame.
+
+- data:
+
+  Optional data frame to use instead of the stored model data. Columns
+  must use the original (un-transformed) variable names. If `NULL`
+  (default), the data used to fit the model is retrieved automatically.
+
+- type:
+
+  Character scalar, either `"response"` (default) or `"link"`. Passed to
+  [`stats::predict()`](https://rdrr.io/r/stats/predict.html). For lme4
+  models, population-average predictions (`re.form = NA`) are always
+  used.
+
+- eps:
+
+  Positive numeric scalar. Step size for numerical differentiation of
+  continuous predictors. Default `1e-7`.
+
+## Value
+
+A `data.frame` with one row per term–level combination and columns:
+
+- `term`:
+
+  Character. The predictor name (as supplied in `term` or derived from
+  the model frame).
+
+- `level`:
+
+  Character. `NA` for continuous predictors; the factor level name for
+  categorical predictors.
+
+- `ame`:
+
+  Numeric. The average marginal effect.
+
+- `variable_type`:
+
+  Character. Either `"continuous"` or `"categorical"`.
+
+## Details
+
+For continuous predictors, the AME is estimated by numerical
+differentiation: predicted values are computed at the predictor bumped
+up and down by `eps`, and the average finite-difference derivative is
+returned. For factor (categorical) predictors, the AME for each
+non-reference level is the average difference in predicted values
+between that level and the reference level, holding all other predictors
+constant.
+
+Standard errors and confidence intervals are NOT computed by this
+function. Use
+[`mysterycall_bootstrap_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_ci.md)
+for bootstrap-based confidence intervals.
+
+## Standard errors
+
+This function returns only the AME point estimate. Standard errors and
+confidence intervals require a bootstrap procedure; see
+[`mysterycall_bootstrap_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_ci.md).
+
+## lme4 models
+
+For `glmerMod` objects, predictions use `re.form = NA` so that the
+marginal effect is averaged over the population (not conditional on
+estimated random effects). The lme4 package must be installed.
+
+## Formulas with in-line transformations
+
+When a formula contains in-line calls such as `factor(cyl)`, pass the
+underlying variable name (`"cyl"`) to `term`, not the transformed name.
+The function resolves the original column automatically.
+
+## See also
+
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
+[`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md)
+
+Other outcomes:
+[`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
+[`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
+[`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
+[`mysterycall_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_table.md),
+[`mysterycall_plot_distribution()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_distribution.md),
+[`mysterycall_plot_effect()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_effect.md),
+[`mysterycall_plot_emmeans_full()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_full.md),
+[`mysterycall_plot_emmeans_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans_interaction.md),
+[`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md),
+[`mysterycall_plot_residuals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_residuals.md),
+[`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
+[`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
+[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
+[`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
+[`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
+[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md),
+[`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md)
+
+## Examples
+
+``` r
+m <- glm(vs ~ wt + factor(cyl), data = mtcars, family = poisson())
+mysterycall_marginal_effects(m)
+#>   term level        ame variable_type
+#> 1   wt  <NA>  0.1560597    continuous
+#> 2  cyl     6 -0.6971847   categorical
+#> 3  cyl     8 -1.3230068   categorical
+mysterycall_marginal_effects(m, term = "wt")
+#>   term level       ame variable_type
+#> 1   wt  <NA> 0.1560597    continuous
+mysterycall_marginal_effects(m, term = "cyl")
+#>   term level        ame variable_type
+#> 1  cyl     6 -0.6971847   categorical
+#> 2  cyl     8 -1.3230068   categorical
+```

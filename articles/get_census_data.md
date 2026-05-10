@@ -185,9 +185,10 @@ The resulting data is combined into a single dataframe for analysis.
 
 #### Installation
 
-Before using the `mysterycall::get_census_data` function, you need to
-install and load the required packages. You can do this by running the
-following code:
+Before using the
+[`mysterycall::get_census_data`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+function, you need to install and load the required packages. You can do
+this by running the following code:
 
 ``` r
 

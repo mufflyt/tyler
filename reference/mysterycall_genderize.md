@@ -8,7 +8,7 @@ It then saves the result to a new CSV file with a timestamp.
 
 ``` r
 mysterycall_genderize(
-  input_csv,
+  data_or_path,
   output_dir = NULL,
   output_format = c("csv", "parquet")
 )
@@ -16,10 +16,10 @@ mysterycall_genderize(
 
 ## Arguments
 
-- input_csv:
+- data_or_path:
 
-  The path to the input roster file. CSV and Parquet sources are
-  supported.
+  A data frame containing physician data, or a path to a roster file.
+  CSV and Parquet formats are supported when a path is supplied.
 
 - output_dir:
 
@@ -43,12 +43,13 @@ querying the service to minimize repeated requests.
 ## See also
 
 Other gender:
-[`mysterycall_most_common_gender()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_most_common_gender.html)
+[`mysterycall_most_common_gender()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_most_common_gender.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 result <- mysterycall_genderize("sample.csv")
-} # }
+result <- mysterycall_genderize(my_dataframe)  # also accepts a data frame directly
+}
 ```

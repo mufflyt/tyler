@@ -89,14 +89,18 @@ Estimated Fix Time:** 6 hours
 #### Deprecated Features Analysis ✅
 
 - **Current Deprecated Functions:** 3
-  - `search_npi()` → `search_and_process_npi()`
-  - `test_and_process_isochrones()` →
-    `create_isochrones_for_dataframe()`
-  - `process_and_save_isochrones()` →
-    `create_isochrones_for_dataframe()`
+  - [`search_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+    →
+    [`search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  - [`test_and_process_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+    →
+    [`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+  - [`process_and_save_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+    →
+    [`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
 - **Candidates for Deprecation:**
-  - [`scrape_physicians_data_with_tor()`](https://mufflyt.github.io/mysterycall/reference/scrape_physicians_data_with_tor.md) -
-    May be experimental/debugging code
+  - `scrape_physicians_data_with_tor()` - May be experimental/debugging
+    code
 
 #### Assumptions Requiring Data Validation ✅
 
@@ -119,19 +123,19 @@ Estimated Fix Time:** 6 hours
 
 **Functions Created:**
 
-1.  **`tyler_check_no_limits()`**
+1.  **[`tyler_check_no_limits()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)**
     - Detects artificial data limits (head, slice_head, sample_n)
     - Warns if row count is suspiciously round (10, 100, 1000, etc.)
     - Validates expected row count ranges
-2.  **`tyler_scan_for_limits()`**
+2.  **[`tyler_scan_for_limits()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)**
     - Scans all R files for limiting anti-patterns
     - Finds: slice_head(n=), head(N), sample_n(), n_max, LIMIT
     - Reports severity: CRITICAL, HIGH, MEDIUM
-3.  **`tyler_check_api_response()`**
+3.  **[`tyler_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)**
     - Validates API responses match expected row count
     - Catches silent API failures
     - Configurable tolerance for partial results
-4.  **`tyler_check_no_data_loss()`**
+4.  **[`tyler_check_no_data_loss()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md)**
     - Validates no unexpected row loss between pipeline steps
     - Configurable expected change (for deduplication, joins)
     - Early warning system for data corruption
@@ -502,10 +506,14 @@ bugs
 
 ### B. Key Functions Added
 
-1.  `tyler_check_no_limits()` - Detect artificial limits
-2.  `tyler_scan_for_limits()` - Scan code for anti-patterns
-3.  `tyler_check_api_response()` - Validate API responses
-4.  `tyler_check_no_data_loss()` - Prevent silent data loss
+1.  [`tyler_check_no_limits()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+    Detect artificial limits
+2.  [`tyler_scan_for_limits()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+    Scan code for anti-patterns
+3.  [`tyler_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+    Validate API responses
+4.  [`tyler_check_no_data_loss()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+    Prevent silent data loss
 
 ### C. Bug Reference Guide
 

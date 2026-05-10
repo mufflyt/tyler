@@ -262,12 +262,12 @@ Structured log messages for audit trail - ✅ Timing and success rates -
 
 ### 1. Choose the Right Tool
 
-| Situation              | Use                      |
-|------------------------|--------------------------|
-| Single operation       | `tyler_progress_bar()`   |
-| Multi-step workflow    | `tyler_multi_progress()` |
-| Functional programming | `tyler_progress_map()`   |
-| Unknown duration       | `tyler_spinner_start()`  |
+| Situation | Use |
+|----|----|
+| Single operation | [`tyler_progress_bar()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) |
+| Multi-step workflow | [`tyler_multi_progress()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) |
+| Functional programming | [`tyler_progress_map()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) |
+| Unknown duration | [`tyler_spinner_start()`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) |
 
 ### 2. Update Frequency
 
@@ -436,9 +436,12 @@ run_complete_workflow <- function(input_file) {
 
 ## See Also
 
-- `?tyler_progress_bar` - Main progress bar function
-- `?tyler_multi_progress` - Multi-step tracker
-- `?tyler_progress_map` - Functional programming
+- [`?tyler_progress_bar`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+  Main progress bar function
+- [`?tyler_multi_progress`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+  Multi-step tracker
+- [`?tyler_progress_map`](https://mufflyt.github.io/mysterycall/reference/tyler-deprecated.md) -
+  Functional programming
 - `LOGGING_GUIDE.md` - Comprehensive logging
 - `inst/examples/progress_bar_demo.R` - Live demo script
 

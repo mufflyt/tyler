@@ -51,37 +51,37 @@ Key functions
 
 #### Provider search
 
-`mysterycall_search_taxonomy()`  
-`mysterycall_search_and_process_npi()`  
-`mysterycall_validate_npi()`  
-`mysterycall_get_clinician_data()`
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)  
+[`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)  
+[`mysterycall_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_npi.md)  
+[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)
 
 📍
 
 #### Geocoding & isochrones
 
-`mysterycall_geocode()`  
-`mysterycall_isochrones_for_df()`  
-`mysterycall_create_isochrones()`  
+[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)  
+[`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md)  
+[`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md)  
 [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md)
 
 🗺️
 
 #### Mapping
 
-`mysterycall_map_physicians()`  
-`mysterycall_map_block_group()`  
-`mysterycall_map_acog_districts()`  
-`mysterycall_hrr_maps()`
+[`mysterycall_map_physicians()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_physicians.md)  
+[`mysterycall_map_block_group()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_block_group.md)  
+[`mysterycall_map_acog_districts()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acog_districts.md)  
+[`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md)
 
 📊
 
 #### Census & tables
 
-`mysterycall_get_census_data()`  
-`mysterycall_calculate_overlap()`  
-`mysterycall_table_overall()`  
-`mysterycall_table_percentages()`
+[`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md)  
+[`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md)  
+[`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md)  
+[`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md)
 
 Built-in datasets
 

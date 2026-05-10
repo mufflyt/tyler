@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -59,7 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow.html" class="external-link">mysterycall_run_workflow</a></span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_run_workflow</span><span class="op">(</span></span>
 <span>  taxonomy_terms <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  name_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">phase1_data</span>,</span>
@@ -84,6 +85,7 @@
 <span>  <span class="op">)</span>,</span>
 <span>  npi_search_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  all_states <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  taxonomy_states <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  npi_progress_observer <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -94,27 +96,27 @@
 
 
 <dl><dt id="arg-taxonomy-terms">taxonomy_terms<a class="anchor" aria-label="anchor" href="#arg-taxonomy-terms"></a></dt>
-<dd><p>Character vector of taxonomy descriptions to pass to <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_search_taxonomy.html" class="external-link">mysterycall_search_taxonomy</a></code>(). Set to <code>NULL</code> to skip taxonomy-based searches.</p></dd>
+<dd><p>Character vector of taxonomy descriptions to pass to <code><a href="mysterycall_search_taxonomy.html">mysterycall_search_taxonomy</a></code>(). Set to <code>NULL</code> to skip taxonomy-based searches.</p></dd>
 
 
 <dt id="arg-name-data">name_data<a class="anchor" aria-label="anchor" href="#arg-name-data"></a></dt>
-<dd><p>Optional data frame containing <code>first</code> and <code>last</code> columns to use with <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html" class="external-link">mysterycall_search_and_process_npi</a></code>(). Provide <code>NULL</code> to skip name-based searches.</p></dd>
+<dd><p>Optional data frame containing <code>first</code> and <code>last</code> columns to use with <code><a href="mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi</a></code>(). Provide <code>NULL</code> to skip name-based searches.</p></dd>
 
 
 <dt id="arg-phase-data">phase1_data<a class="anchor" aria-label="anchor" href="#arg-phase-data"></a></dt>
-<dd><p>Data frame holding Phase 1 calling roster information to pass to <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase1.html" class="external-link">mysterycall_clean_phase1</a></code>().</p></dd>
+<dd><p>Data frame holding Phase 1 calling roster information to pass to <code><a href="mysterycall_clean_phase1.html">mysterycall_clean_phase1</a></code>().</p></dd>
 
 
 <dt id="arg-lab-assistant-names">lab_assistant_names<a class="anchor" aria-label="anchor" href="#arg-lab-assistant-names"></a></dt>
-<dd><p>Character vector of caller names used when splitting the cleaned roster via <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html" class="external-link">mysterycall_split_and_save()</a></code>. Must contain at least two entries.</p></dd>
+<dd><p>Character vector of caller names used when splitting the cleaned roster via <code><a href="mysterycall_split_and_save.html">mysterycall_split_and_save()</a></code>. Must contain at least two entries.</p></dd>
 
 
 <dt id="arg-output-directory">output_directory<a class="anchor" aria-label="anchor" href="#arg-output-directory"></a></dt>
-<dd><p>Directory where <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html" class="external-link">mysterycall_split_and_save()</a></code> should write the complete and per-caller workbooks.</p></dd>
+<dd><p>Directory where <code><a href="mysterycall_split_and_save.html">mysterycall_split_and_save()</a></code> should write the complete and per-caller workbooks.</p></dd>
 
 
 <dt id="arg-phase-data">phase2_data<a class="anchor" aria-label="anchor" href="#arg-phase-data"></a></dt>
-<dd><p>Data frame or file path consumed by <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase2.html" class="external-link">mysterycall_clean_phase2()</a></code>.</p></dd>
+<dd><p>Data frame or file path consumed by <code><a href="mysterycall_clean_phase2.html">mysterycall_clean_phase2()</a></code>.</p></dd>
 
 
 <dt id="arg-phase-output-directory">phase2_output_directory<a class="anchor" aria-label="anchor" href="#arg-phase-output-directory"></a></dt>
@@ -122,19 +124,19 @@
 
 
 <dt id="arg-quality-check-path">quality_check_path<a class="anchor" aria-label="anchor" href="#arg-quality-check-path"></a></dt>
-<dd><p>File path where <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_save_quality_table.html" class="external-link">mysterycall_save_quality_table()</a></code> should write the quality check CSV.</p></dd>
+<dd><p>File path where <code><a href="mysterycall_save_quality_table.html">mysterycall_save_quality_table()</a></code> should write the quality check CSV.</p></dd>
 
 
 <dt id="arg-phase-output-directory">phase1_output_directory<a class="anchor" aria-label="anchor" href="#arg-phase-output-directory"></a></dt>
-<dd><p>Directory where <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase1.html" class="external-link">mysterycall_clean_phase1()</a></code> should write the cleaned Phase 1 CSV. Defaults to <code>output_directory</code>.</p></dd>
+<dd><p>Directory where <code><a href="mysterycall_clean_phase1.html">mysterycall_clean_phase1()</a></code> should write the cleaned Phase 1 CSV. Defaults to <code>output_directory</code>.</p></dd>
 
 
 <dt id="arg-split-insurance-order">split_insurance_order<a class="anchor" aria-label="anchor" href="#arg-split-insurance-order"></a></dt>
-<dd><p>Ordering passed to <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html" class="external-link">mysterycall_split_and_save()</a></code>'s <code>insurance_order</code> argument. Defaults to <code>c("Medicaid", "Blue Cross/Blue Shield")</code>.</p></dd>
+<dd><p>Ordering passed to <code><a href="mysterycall_split_and_save.html">mysterycall_split_and_save()</a></code>'s <code>insurance_order</code> argument. Defaults to <code>c("Medicaid", "Blue Cross/Blue Shield")</code>.</p></dd>
 
 
 <dt id="arg-phase-required-strings">phase2_required_strings<a class="anchor" aria-label="anchor" href="#arg-phase-required-strings"></a></dt>
-<dd><p>Character vector of substrings used when standardizing Phase 2 column names via <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase2.html" class="external-link">mysterycall_clean_phase2()</a></code>.</p></dd>
+<dd><p>Character vector of substrings used when standardizing Phase 2 column names via <code><a href="mysterycall_clean_phase2.html">mysterycall_clean_phase2()</a></code>.</p></dd>
 
 
 <dt id="arg-phase-standard-names">phase2_standard_names<a class="anchor" aria-label="anchor" href="#arg-phase-standard-names"></a></dt>
@@ -142,11 +144,15 @@
 
 
 <dt id="arg-npi-search-args">npi_search_args<a class="anchor" aria-label="anchor" href="#arg-npi-search-args"></a></dt>
-<dd><p>Named list of additional arguments forwarded to <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html" class="external-link">mysterycall_search_and_process_npi()</a></code>.</p></dd>
+<dd><p>Named list of additional arguments forwarded to <code><a href="mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code>.</p></dd>
 
 
 <dt id="arg-all-states">all_states<a class="anchor" aria-label="anchor" href="#arg-all-states"></a></dt>
-<dd><p>Optional character vector of all states to supply to <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_not_contacted_states.html" class="external-link">mysterycall_not_contacted_states()</a></code>.</p></dd>
+<dd><p>Optional character vector of all states to supply to <code><a href="mysterycall_not_contacted_states.html">mysterycall_not_contacted_states()</a></code>.</p></dd>
+
+
+<dt id="arg-taxonomy-states">taxonomy_states<a class="anchor" aria-label="anchor" href="#arg-taxonomy-states"></a></dt>
+<dd><p>Optional character vector of two-letter state abbreviations passed to <code><a href="mysterycall_search_taxonomy.html">mysterycall_search_taxonomy()</a></code> to restrict taxonomy searches to specific states. Set to <code>NULL</code> to search all states.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -154,7 +160,7 @@
 
 
 <dt id="arg-npi-progress-observer">npi_progress_observer<a class="anchor" aria-label="anchor" href="#arg-npi-progress-observer"></a></dt>
-<dd><p>Optional callback that receives progress updates from <code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html" class="external-link">mysterycall_search_and_process_npi()</a></code>. It is invoked with the same payload as that function's <code>progress_callback</code> argument.</p></dd>
+<dd><p>Optional callback that receives progress updates from <code><a href="mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code>. It is invoked with the same payload as that function's <code>progress_callback</code> argument.</p></dd>
 
 </dl></div>
     <div class="section level2">

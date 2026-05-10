@@ -68,17 +68,62 @@ mysterycall_search_taxonomy(
 A data frame with filtered NPI data based on the specified taxonomy
 description.
 
+## Contract
+
+**Inputs:**
+
+- `taxonomy_to_search` must be an exact NUCC taxonomy description string
+  (see
+  [`mysterycall::taxonomy`](https://mufflyt.github.io/mysterycall/reference/taxonomy.md)
+  dataset for valid values).
+
+- NPI registry API must be reachable; the function retries up to 3 times
+  with exponential back-off before returning an empty data frame.
+
+**Guarantees:**
+
+- Returns a zero-row data frame (never `NULL`) when no records are
+  found.
+
+- Output rows are deduplicated on NPI.
+
+- When `write_snapshot = TRUE`, an `.rds` file is written to
+  `output_dir` for reproducible re-runs without re-querying the live
+  API.
+
+**Fails if:**
+
+- Network is unavailable after all retries (returns empty data frame,
+  does not error).
+
+- `states` contains an invalid two-letter abbreviation (silently
+  skipped).
+
+## Performance
+
+O(t \* p / 200) HTTP requests where `t` = number of state batches and
+`p` = max_records (default 1,200). Each page request targets \< 200
+rows. Full national search across all 50 states for one taxonomy takes
+~2–5 min depending on registry load. Results are cached in-memory per
+session when `use_cache = TRUE`.
+
+## Called By
+
+- [`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md)
+
+- [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
+  (indirectly via taxonomy lookup)
+
 ## See also
 
 Other npi:
-[`mysterycall_get_clinician_data()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_get_clinician_data.html),
-[`scrape_physicians_data_with_tor()`](https://mufflyt.github.io/mysterycall/reference/scrape_physicians_data_with_tor.md),
-[`mysterycall_search_and_process_npi()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_search_and_process_npi.html)
+[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md),
+[`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 # National search (limited to 1200 records per taxonomy):
 go_data <- mysterycall_search_taxonomy("Gynecologic Oncology")
 
@@ -94,5 +139,5 @@ fpmrs_data <- mysterycall_search_taxonomy(
   "Female Pelvic Medicine and Reconstructive Surgery",
   states = all_states
 )
-} # }
+}
 ```

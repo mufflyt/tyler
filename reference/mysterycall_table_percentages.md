@@ -35,11 +35,11 @@ the most common value with its count and percentage.
 ## See also
 
 Other table:
-[`mysterycall_write_arsenal_table()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_write_arsenal_table.html),
-[`mysterycall_max_table()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_max_table.html),
-[`mysterycall_min_table()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_min_table.html),
-[`mysterycall_table_proportion()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_table_proportion.html),
-[`mysterycall_table_overall()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_table_overall.html)
+[`mysterycall_max_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_max_table.md),
+[`mysterycall_min_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_min_table.md),
+[`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md),
+[`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md),
+[`mysterycall_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_arsenal_table.md)
 
 ## Examples
 

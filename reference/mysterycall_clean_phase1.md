@@ -16,7 +16,8 @@ mysterycall_clean_phase1(
   notify = TRUE,
   duplicate_rows = TRUE,
   id_seed = NULL,
-  output_format = c("csv", "parquet")
+  output_format = c("csv", "parquet"),
+  parent_cohort_hash = NULL
 )
 ```
 
@@ -65,6 +66,16 @@ mysterycall_clean_phase1(
   File format to use when writing the cleaned dataset. Supported options
   are "csv" (default) and "parquet".
 
+- parent_cohort_hash:
+
+  Optional character scalar. The `cohort_hash` from an upstream audit
+  trail (e.g. from
+  [`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
+  or a prior cleaning step). When supplied, it is recorded in the audit
+  JSON as `parent_cohort_hash` to enable DAG lineage tracing. Must be a
+  64-character lowercase hex string (SHA-256) or `NULL` (default).
+  Ignored silently if not a valid hex digest.
+
 ## Value
 
 Invisibly returns the cleaned data frame with the following attributes:
@@ -111,23 +122,101 @@ This function now includes comprehensive data provenance tracking:
 
 - Attaches audit trail and quality metrics as data frame attributes
 
+## Contract
+
+**Inputs:**
+
+- `phase1_data` must contain columns: `names`, `practice_name`,
+  `phone_number`, `state_name`, `npi`, `for_redcap`.
+
+- `output_directory` must be writable; function creates it if absent.
+
+**Guarantees:**
+
+- Output rows \\\geq\\ input rows (duplicates may be flagged but are
+  never silently dropped unless `remove_duplicates = TRUE`).
+
+- Every output row carries `processing_flag_*` columns documenting the
+  reason for any modification.
+
+- A JSON audit trail is written alongside the CSV for provenance.
+
+**Fails if:**
+
+- Required columns are absent from `phase1_data`.
+
+- `output_directory` is not writable and cannot be created.
+
+## Provenance Schema
+
+The JSON audit trail written to
+`<output_directory>/audit_trail_<timestamp>.json` always contains these
+required fields (see also `tests/fixtures/audit_trail_schema.json`):
+
+
+    {
+      "function_name":        "mysterycall_clean_phase1",
+      "input_rows":           <integer>,
+      "input_cols":           <integer>,
+      "input_colnames":       ["names", "practice_name", ...],
+      "output_rows":          <integer>,
+      "output_cols":          <integer>,
+      "empty_names_count":    <integer>,
+      "no_last_name_count":   <integer>,
+      "rows_retained_pct":    <number>,
+      "rows_duplicated":      <boolean>,
+      "original_npi_preserved": <boolean>,
+      "quality_metrics": {
+        "completeness_npi":   <number>,
+        "completeness_phone": <number>,
+        "completeness_names": <number>,
+        "has_processing_flags": <boolean>
+      },
+      "start_time":           "<ISO-8601>",
+      "end_time":             "<ISO-8601>",
+      "duration_seconds":     <number>,
+      "r_version":            "<string>",
+      "platform":             "<string>",
+      "package_version":      "<string>",
+      "parameters":           { ... }
+    }
+
+The `tests/fixtures/audit_trail_schema.json` file documents which fields
+are required, volatile (excluded from snapshot comparisons), and
+conditional. This schema is stable across patch versions and constitutes
+a public API for downstream reproducibility tooling.
+
+## Performance
+
+O(n) in number of rows. String normalisation via
+[`janitor::clean_names()`](https://sfirke.github.io/janitor/reference/clean_names.html)
+and `stringr` dominates; expect \< 1 s for 1,000 rows on modern
+hardware.
+
+## Called By
+
+- [`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md)
+
+- [`mysterycall_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow_logged.md)
+
 ## See also
 
 Other workflow:
-[`mysterycall_clean_phase2()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase2.html),
-[`mysterycall_rename_columns()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_rename_columns.html),
-[`mysterycall_run_workflow()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow.html),
-[`mysterycall_run_workflow_logged()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow_logged.html),
-[`mysterycall_split_and_save()`](https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html),
-[`mysterycall_print_dashboard()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_print_dashboard.md)
+[`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md),
+[`mysterycall_print_dashboard()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_print_dashboard.md),
+[`mysterycall_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_rename_columns.md),
+[`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md),
+[`mysterycall_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow_logged.md),
+[`mysterycall_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_split_and_save.md),
+[`mysterycall_verify_artifact()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_verify_artifact.md)
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # interactive()
 library(mysterycall)
 file_path <- "/path/to/your/input/file.xls"
 phase1_data <- readxl::read_excel(file_path)  # Assuming use of readxl for Excel files
 mysterycall_clean_phase1(phase1_data)
-} # }
+}
 ```

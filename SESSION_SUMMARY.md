@@ -81,9 +81,9 @@ calculations
 
 **2. Enhanced Workflow**
 (`R/run_mystery_caller_workflow_with_logging.R` - 350 lines) -
-`run_mystery_caller_workflow_with_logging()` - Shows real-time progress
-for all steps - Beautiful summary dashboard at end - Complete audit
-trail
+[`run_mystery_caller_workflow_with_logging()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md) -
+Shows real-time progress for all steps - Beautiful summary dashboard at
+end - Complete audit trail
 
 **3. Enhanced Functions** - `geocode.R`: Added success/warning/error
 logging based on rates - Compatible with existing

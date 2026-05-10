@@ -21,3 +21,14 @@ mysterycall_spinner_start(name, msg = NULL)
 ## Value
 
 Spinner ID
+
+## Examples
+
+``` r
+# \donttest{
+id <- mysterycall_spinner_start("Loading data")
+#>   ↻ Loading data...
+Sys.sleep(0.1)
+mysterycall_spinner_stop(id)
+# }
+```

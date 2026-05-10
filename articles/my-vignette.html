@@ -48,6 +48,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -95,7 +96,7 @@ MD</h4>
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p>The <code><a href="../reference/taxonomy.html">mysterycall::taxonomy</a></code> data and
-<code>mysterycall::search_by_taxonomy</code> function in the R package
+<code><a href="../reference/mysterycall-deprecated.html">mysterycall::search_by_taxonomy</a></code> function in the R package
 offers a convenient and efficient way to query the NPI Database for
 healthcare providers based on their taxonomy descriptions. This vignette
 provides a comprehensive guide on how to effectively utilize this
@@ -180,7 +181,7 @@ with a taxonomy of “Hospice and Palliative Medicine.”</p>
 <code class="sourceCode R"><span><span class="co"># Search for providers based on taxonomy descriptions</span></span>
 <span><span class="va">taxonomy_descriptions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Hospice and Palliative Medicine"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">search_by_taxonomy</span><span class="op">(</span>taxonomy_to_search <span class="op">=</span> <span class="va">taxonomy_descriptions</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">search_by_taxonomy</a></span><span class="op">(</span>taxonomy_to_search <span class="op">=</span> <span class="va">taxonomy_descriptions</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Note: basic_credential was removed in the select() statement above</span></span>
 <span><span class="co"># So we'll count by basic_gender and state instead</span></span>

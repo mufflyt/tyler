@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -49,7 +50,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Plot and Save Estimated Marginal Means (EMMs)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_plot_emmeans.R" class="external-link"><code>R/mysterycall_plot_emmeans.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/plot_and_save_emmeans.R" class="external-link"><code>R/plot_and_save_emmeans.R</code></a></small>
       <div class="d-none name"><code>mysterycall_plot_emmeans.Rd</code></div>
     </div>
 
@@ -59,7 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html" class="external-link">mysterycall_plot_emmeans</a></span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_plot_emmeans</span><span class="op">(</span></span>
 <span>  <span class="va">model_object</span>,</span>
 <span>  <span class="va">specs</span>,</span>
 <span>  <span class="va">variable_of_interest</span>,</span>
@@ -105,17 +106,17 @@ be saved. Defaults to a session-specific folder inside <code><a href="https://rd
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other modeling helpers:
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_check_normality.html" class="external-link">mysterycall_check_normality()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_interaction.html" class="external-link">mysterycall_plot_interaction()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_create_formula.html" class="external-link">mysterycall_create_formula()</a></code></p></div>
+<code><a href="mysterycall_check_normality.html">mysterycall_check_normality()</a></code>,
+<code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code>,
+<code><a href="mysterycall_plot_interaction.html">mysterycall_plot_interaction()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="co"># Example 1: Comparing Appointment Wait Times Between Scenarios</span></span></span>
 <span class="r-in"><span><span class="co"># Assume 'model' is a fitted GLM object with appointment wait time as the outcome</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html" class="external-link">mysterycall_plot_emmeans</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_plot_emmeans</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  model_object <span class="op">=</span> <span class="va">model</span>,</span></span>
 <span class="r-in"><span>  specs <span class="op">=</span> <span class="st">"scenario"</span>,</span></span>
 <span class="r-in"><span>  variable_of_interest <span class="op">=</span> <span class="st">"scenario"</span>,</span></span>
@@ -125,7 +126,7 @@ be saved. Defaults to a session-specific folder inside <code><a href="https://rd
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: Comparing EMMs Across Different Insurance Types</span></span></span>
 <span class="r-in"><span><span class="co"># Assume 'model' is a fitted GLM object</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html" class="external-link">mysterycall_plot_emmeans</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_plot_emmeans</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  model_object <span class="op">=</span> <span class="va">model</span>,</span></span>
 <span class="r-in"><span>  specs <span class="op">=</span> <span class="st">"insurance"</span>,</span></span>
 <span class="r-in"><span>  variable_of_interest <span class="op">=</span> <span class="st">"insurance"</span>,</span></span>
@@ -135,7 +136,7 @@ be saved. Defaults to a session-specific folder inside <code><a href="https://rd
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 3: Visualizing EMMs for Different Age Groups in a Mystery Caller Study</span></span></span>
 <span class="r-in"><span><span class="co"># Assume 'model' is a fitted GLM object with age groups as a factor</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html" class="external-link">mysterycall_plot_emmeans</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_plot_emmeans</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  model_object <span class="op">=</span> <span class="va">model</span>,</span></span>
 <span class="r-in"><span>  specs <span class="op">=</span> <span class="st">"age_group"</span>,</span></span>
 <span class="r-in"><span>  variable_of_interest <span class="op">=</span> <span class="st">"age_group"</span>,</span></span>
@@ -145,15 +146,14 @@ be saved. Defaults to a session-specific folder inside <code><a href="https://rd
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 4: Interaction Effects Between Gender and Insurance Type</span></span></span>
 <span class="r-in"><span><span class="co"># Assume 'model' is a fitted GLM object</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_emmeans.html" class="external-link">mysterycall_plot_emmeans</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_plot_emmeans</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  model_object <span class="op">=</span> <span class="va">model</span>,</span></span>
 <span class="r-in"><span>  specs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"insurance"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  variable_of_interest <span class="op">=</span> <span class="st">"gender"</span>,</span></span>
 <span class="r-in"><span>  color_by <span class="op">=</span> <span class="st">"insurance"</span>,</span></span>
 <span class="r-in"><span>  output_dir <span class="op">=</span> <span class="st">"Figures/InteractionEffects"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

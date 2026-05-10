@@ -2,10 +2,11 @@
 
 ## Overview
 
-`search_and_process_npi()` is the name-based entry point for roster
-creation. Use it when you already have clinician first and last names
-from a patient directory, credentialing list, or manually curated study
-roster and need to recover likely NPI matches.
+[`search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+is the name-based entry point for roster creation. Use it when you
+already have clinician first and last names from a patient directory,
+credentialing list, or manually curated study roster and need to recover
+likely NPI matches.
 
 The current exported interface expects a data frame passed through the
 `data` argument. That data frame must contain:
@@ -116,7 +117,7 @@ results_unique |>
 ```
 
 If the next step is clinician enrichment, pass the cleaned result into
-`retrieve_clinician_data()`.
+[`retrieve_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md).
 
 ``` r
 
@@ -134,4 +135,5 @@ clinician_data <- retrieve_clinician_data(results_unique)
 ## Next step
 
 If your project begins from a specialty rather than a name list, see the
-taxonomy-search vignette for `search_by_taxonomy()`.
+taxonomy-search vignette for
+[`search_by_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md).

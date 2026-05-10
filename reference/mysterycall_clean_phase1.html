@@ -29,6 +29,7 @@ NPI numbers are handled by generating a unique random_id."><meta property="og:im
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -55,7 +56,7 @@ NPI numbers are handled by generating a unique random_id."><meta property="og:im
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Clean Phase 1 Results Data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_clean_phase1.R" class="external-link"><code>R/mysterycall_clean_phase1.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/clean_phase_1_results.R" class="external-link"><code>R/clean_phase_1_results.R</code></a></small>
       <div class="d-none name"><code>mysterycall_clean_phase1.Rd</code></div>
     </div>
 
@@ -75,7 +76,8 @@ NPI numbers are handled by generating a unique <code>random_id</code>.</p>
 <span>  notify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  duplicate_rows <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  id_seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  output_format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"csv"</span>, <span class="st">"parquet"</span><span class="op">)</span></span>
+<span>  output_format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"csv"</span>, <span class="st">"parquet"</span><span class="op">)</span>,</span>
+<span>  parent_cohort_hash <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -122,6 +124,15 @@ runs can be reproduced without permanently mutating the global RNG state.</p></d
 <dd><p>File format to use when writing the cleaned dataset.
 Supported options are "csv" (default) and "parquet".</p></dd>
 
+
+<dt id="arg-parent-cohort-hash">parent_cohort_hash<a class="anchor" aria-label="anchor" href="#arg-parent-cohort-hash"></a></dt>
+<dd><p>Optional character scalar. The <code>cohort_hash</code> from
+an upstream audit trail (e.g. from <code><a href="mysterycall_search_taxonomy.html">mysterycall_search_taxonomy()</a></code> or a
+prior cleaning step). When supplied, it is recorded in the audit JSON as
+<code>parent_cohort_hash</code> to enable DAG lineage tracing. Must be a 64-character
+lowercase hex string (SHA-256) or <code>NULL</code> (default). Ignored silently if
+not a valid hex digest.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -145,25 +156,91 @@ Supported options are "csv" (default) and "parquet".</p></dd>
 <li><p>Attaches audit trail and quality metrics as data frame attributes</p></li>
 </ul></div>
     <div class="section level2">
+    <h2 id="contract">Contract<a class="anchor" aria-label="anchor" href="#contract"></a></h2>
+
+
+<p><strong>Inputs:</strong></p><ul><li><p><code>phase1_data</code> must contain columns: <code>names</code>, <code>practice_name</code>, <code>phone_number</code>,
+<code>state_name</code>, <code>npi</code>, <code>for_redcap</code>.</p></li>
+<li><p><code>output_directory</code> must be writable; function creates it if absent.</p></li>
+</ul><p><strong>Guarantees:</strong></p><ul><li><p>Output rows \(\geq\) input rows (duplicates may be flagged but are never
+silently dropped unless <code>remove_duplicates = TRUE</code>).</p></li>
+<li><p>Every output row carries <code>processing_flag_*</code> columns documenting the reason
+for any modification.</p></li>
+<li><p>A JSON audit trail is written alongside the CSV for provenance.</p></li>
+</ul><p><strong>Fails if:</strong></p><ul><li><p>Required columns are absent from <code>phase1_data</code>.</p></li>
+<li><p><code>output_directory</code> is not writable and cannot be created.</p></li>
+</ul></div>
+    <div class="section level2">
+    <h2 id="provenance-schema">Provenance Schema<a class="anchor" aria-label="anchor" href="#provenance-schema"></a></h2>
+
+
+<p>The JSON audit trail written to <code>&lt;output_directory&gt;/audit_trail_&lt;timestamp&gt;.json</code>
+always contains these required fields (see also <code>tests/fixtures/audit_trail_schema.json</code>):</p><div class="sourceCode"><pre><code>
+{
+  "function_name":        "mysterycall_clean_phase1",
+  "input_rows":           &lt;integer&gt;,
+  "input_cols":           &lt;integer&gt;,
+  "input_colnames":       ["names", "practice_name", ...],
+  "output_rows":          &lt;integer&gt;,
+  "output_cols":          &lt;integer&gt;,
+  "empty_names_count":    &lt;integer&gt;,
+  "no_last_name_count":   &lt;integer&gt;,
+  "rows_retained_pct":    &lt;number&gt;,
+  "rows_duplicated":      &lt;boolean&gt;,
+  "original_npi_preserved": &lt;boolean&gt;,
+  "quality_metrics": {
+    "completeness_npi":   &lt;number&gt;,
+    "completeness_phone": &lt;number&gt;,
+    "completeness_names": &lt;number&gt;,
+    "has_processing_flags": &lt;boolean&gt;
+  },
+  "start_time":           "&lt;ISO-8601&gt;",
+  "end_time":             "&lt;ISO-8601&gt;",
+  "duration_seconds":     &lt;number&gt;,
+  "r_version":            "&lt;string&gt;",
+  "platform":             "&lt;string&gt;",
+  "package_version":      "&lt;string&gt;",
+  "parameters":           { ... }
+}
+</code></pre></div><p>The <code>tests/fixtures/audit_trail_schema.json</code> file documents which fields are
+required, volatile (excluded from snapshot comparisons), and conditional.
+This schema is stable across patch versions and constitutes a public API
+for downstream reproducibility tooling.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="performance">Performance<a class="anchor" aria-label="anchor" href="#performance"></a></h2>
+
+
+<p>O(n) in number of rows. String normalisation via <code><a href="https://sfirke.github.io/janitor/reference/clean_names.html" class="external-link">janitor::clean_names()</a></code> and
+<code>stringr</code> dominates; expect &lt; 1 s for 1,000 rows on modern hardware.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="called-by">Called By<a class="anchor" aria-label="anchor" href="#called-by"></a></h2>
+
+
+<ul><li><p><code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code></p></li>
+<li><p><code><a href="mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged()</a></code></p></li>
+</ul></div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other workflow:
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase2.html" class="external-link">mysterycall_clean_phase2()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_rename_columns.html" class="external-link">mysterycall_rename_columns()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow.html" class="external-link">mysterycall_run_workflow()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_run_workflow_logged.html" class="external-link">mysterycall_run_workflow_logged()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_split_and_save.html" class="external-link">mysterycall_split_and_save()</a></code>,
-<code><a href="mysterycall_print_dashboard.html">mysterycall_print_dashboard()</a></code></p></div>
+<code><a href="mysterycall_clean_phase2.html">mysterycall_clean_phase2()</a></code>,
+<code><a href="mysterycall_print_dashboard.html">mysterycall_print_dashboard()</a></code>,
+<code><a href="mysterycall_rename_columns.html">mysterycall_rename_columns()</a></code>,
+<code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>,
+<code><a href="mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged()</a></code>,
+<code><a href="mysterycall_split_and_save.html">mysterycall_split_and_save()</a></code>,
+<code><a href="mysterycall_verify_artifact.html">mysterycall_verify_artifact()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mufflyt/mysterycall" class="external-link">mysterycall</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="st">"/path/to/your/input/file.xls"</span></span></span>
 <span class="r-in"><span><span class="va">phase1_data</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span>  <span class="co"># Assuming use of readxl for Excel files</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_clean_phase1.html" class="external-link">mysterycall_clean_phase1</a></span><span class="op">(</span><span class="va">phase1_data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall_clean_phase1</span><span class="op">(</span><span class="va">phase1_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

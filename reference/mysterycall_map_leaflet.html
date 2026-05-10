@@ -25,6 +25,7 @@ default view settings, and layers control."><meta property="og:image" content="h
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
@@ -51,7 +52,7 @@ default view settings, and layers control."><meta property="og:image" content="h
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create a Leaflet Base Map</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/mysterycall_map_leaflet.R" class="external-link"><code>R/mysterycall_map_leaflet.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mufflyt/mysterycall/blob/main/R/map_create_leaflet_base.R" class="external-link"><code>R/map_create_leaflet_base.R</code></a></small>
       <div class="d-none name"><code>mysterycall_map_leaflet.Rd</code></div>
     </div>
 
@@ -62,7 +63,7 @@ default view settings, and layers control.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_map_leaflet.html" class="external-link">mysterycall_map_leaflet</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mysterycall_map_leaflet</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,22 +73,23 @@ default view settings, and layers control.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other mapping:
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_density.html" class="external-link">mysterycall_plot_density()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_isochrones.html" class="external-link">mysterycall_plot_isochrones()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_create_isochrones.html" class="external-link">mysterycall_create_isochrones()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_isochrones_for_df.html" class="external-link">mysterycall_isochrones_for_df()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_line.html" class="external-link">mysterycall_plot_line()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_plot_scatter.html" class="external-link">mysterycall_plot_scatter()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_map_acog_districts.html" class="external-link">mysterycall_map_acog_districts()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_map_base.html" class="external-link">mysterycall_map_base()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_map_block_group.html" class="external-link">mysterycall_map_block_group()</a></code>,
-<code><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_map_physicians.html" class="external-link">mysterycall_map_physicians()</a></code></p></div>
+<code><a href="mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code>,
+<code><a href="mysterycall_isochrones_for_df.html">mysterycall_isochrones_for_df()</a></code>,
+<code><a href="mysterycall_map_acceptance_rate.html">mysterycall_map_acceptance_rate()</a></code>,
+<code><a href="mysterycall_map_acog_districts.html">mysterycall_map_acog_districts()</a></code>,
+<code><a href="mysterycall_map_base.html">mysterycall_map_base()</a></code>,
+<code><a href="mysterycall_map_block_group.html">mysterycall_map_block_group()</a></code>,
+<code><a href="mysterycall_map_physicians.html">mysterycall_map_physicians()</a></code>,
+<code><a href="mysterycall_plot_density.html">mysterycall_plot_density()</a></code>,
+<code><a href="mysterycall_plot_isochrones.html">mysterycall_plot_isochrones()</a></code>,
+<code><a href="mysterycall_plot_line.html">mysterycall_plot_line()</a></code>,
+<code><a href="mysterycall_plot_scatter.html">mysterycall_plot_scatter()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mysterycall/man/mysterycall_map_leaflet.html" class="external-link">mysterycall_map_leaflet</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">map</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_map_leaflet</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
