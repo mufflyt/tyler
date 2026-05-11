@@ -138,6 +138,16 @@ in <code>input_data</code>. Defaults to <code>c("first", "last")</code>.</p></dd
     <p>Invisible list with check results, or stops with error if checks fail</p>
     </div>
     <div class="section level2">
+    <h2 id="data-quality-thresholds">Data quality thresholds<a class="anchor" aria-label="anchor" href="#data-quality-thresholds"></a></h2>
+
+
+<p>Input data is scored from 0–1 by <code><a href="mysterycall_assess_data_quality.html">mysterycall_assess_data_quality()</a></code>.
+Scores below <strong>0.70</strong> cause this function to stop with an error; scores
+between 0.70 and 0.80 emit a warning. A score below 0.70 typically means
+a required name column has more than 50\<!-- % missing values. See -->
+<code><a href="mysterycall_assess_data_quality.html">mysterycall_assess_data_quality()</a></code> for the full penalty schedule.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other utilities:
 <code>%&gt;%()</code>,

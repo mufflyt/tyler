@@ -21,6 +21,16 @@ A named list with elements `total_time_hours` (estimated wall time),
 `peak_memory_gb` (estimated peak RAM in GB), and `api_calls` (estimated
 number of external API requests).
 
+## Estimation method
+
+Runtime is estimated as `n_rows × 4.5` seconds: 1.5 s/row for NPI
+registry lookups, 0.5 s/row for geocoding (assumes a warm Google Maps
+cache), and 2.5 s/row for HERE isochrone generation. Memory is
+`(n_rows × 2) + 500` MB. These constants were measured on a typical US
+residential broadband connection with warm API caches. Slow networks or
+cold caches can **triple** the runtime estimate. Benchmark on 50–100
+rows before committing to a large run.
+
 ## See also
 
 Other utilities: `%>%()`,

@@ -135,6 +135,23 @@ completes (requires the optional <code>beepr</code> package). Defaults to <code>
 description.</p>
     </div>
     <div class="section level2">
+    <h2 id="output-columns">Output columns<a class="anchor" aria-label="anchor" href="#output-columns"></a></h2>
+
+
+<p>The function retains a curated subset of the columns returned by
+<code><a href="https://docs.ropensci.org/npi/reference/npi_flatten.html" class="external-link">npi::npi_flatten()</a></code>. The following column categories are <strong>always
+dropped</strong> regardless of what the NPI API returns: all <code>endpoints_*</code>
+fields, all <code>other_names_*</code> fields, all <code>identifiers_*</code> fields,
+supplementary address fields (<code>addresses_address_2</code>,
+<code>addresses_fax_number</code>, <code>addresses_address_type</code>,
+<code>addresses_country_code</code>), and several basic and taxonomy metadata fields
+(<code>basic_last_updated</code>, <code>basic_status</code>, <code>basic_name_prefix</code>,
+<code>basic_name_suffix</code>, <code>basic_certification_date</code>, <code>taxonomies_code</code>,
+<code>taxonomies_taxonomy_group</code>, <code>taxonomies_state</code>, <code>taxonomies_license</code>).
+To access dropped columns, call <code><a href="https://docs.ropensci.org/npi/reference/npi_search.html" class="external-link">npi::npi_search()</a></code> and
+<code><a href="https://docs.ropensci.org/npi/reference/npi_flatten.html" class="external-link">npi::npi_flatten()</a></code> directly.</p>
+    </div>
+    <div class="section level2">
     <h2 id="contract">Contract<a class="anchor" aria-label="anchor" href="#contract"></a></h2>
 
 

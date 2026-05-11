@@ -106,6 +106,35 @@ Genderize.io: typically <code>gender</code>, <code>probability</code>, and <code
 are raised as errors immediately (no silent fallback).</p>
     </div>
     <div class="section level2">
+    <h2 id="gender-coding">Gender coding<a class="anchor" aria-label="anchor" href="#gender-coding"></a></h2>
+
+
+<p>Genderize.io returns <code>"male"</code>, <code>"female"</code>, or <code>NULL</code> for ambiguous or
+unknown names. The API does not currently return non-binary values. <code>NULL</code>
+responses are stored as <code>NA</code> in the raw <code>gender</code> output column. If the API
+ever adds non-binary values they will be stored as-is in <code>gender</code> but will
+be recoded to <code>"Unknown"</code> by <code><a href="mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="api-response-schema">API response schema<a class="anchor" aria-label="anchor" href="#api-response-schema"></a></h2>
+
+
+<p>Each Genderize.io JSON entry is expected to contain exactly four fields:
+<code>name</code>, <code>gender</code>, <code>probability</code>, and <code>count</code>. Any additional fields
+returned by the API are silently dropped. If the API renames or removes
+one of these four fields, the corresponding output column will contain
+<code>NA</code> without an explicit error or warning.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="output-file-timestamps">Output file timestamps<a class="anchor" aria-label="anchor" href="#output-file-timestamps"></a></h2>
+
+
+<p>Output filenames include a timestamp from <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time()</a></code>, which uses the
+<strong>local system timezone</strong> (not UTC). Files produced on systems in
+different timezones will reflect different local times for the same
+wall-clock moment.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other gender:
 <code><a href="mysterycall_most_common_gender.html">mysterycall_most_common_gender()</a></code></p></div>

@@ -25,6 +25,25 @@ mysterycall_assess_data_quality(data, required_columns = c("first", "last"))
 A named list with elements `score` (numeric 0–1) and `issues` (list of
 issue records with `severity` and `message` fields).
 
+## Scoring method
+
+Quality is scored on a 0–1 scale by subtracting penalties from a maximum
+of 10:
+
+- Required column with \> 50\\
+
+- Required column with 20–50\\
+
+- More than 10\\
+
+- Required column is not character or factor type: −0.5 points
+
+Final score = max(0, 1 − penalties / 10). The 0.70 and 0.80 thresholds
+used by
+[`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
+were chosen to catch severely incomplete data while tolerating modest
+missingness in large rosters.
+
 ## See also
 
 Other utilities: `%>%()`,

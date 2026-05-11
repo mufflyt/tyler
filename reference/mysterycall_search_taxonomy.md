@@ -68,6 +68,24 @@ mysterycall_search_taxonomy(
 A data frame with filtered NPI data based on the specified taxonomy
 description.
 
+## Output columns
+
+The function retains a curated subset of the columns returned by
+[`npi::npi_flatten()`](https://docs.ropensci.org/npi/reference/npi_flatten.html).
+The following column categories are **always dropped** regardless of
+what the NPI API returns: all `endpoints_*` fields, all `other_names_*`
+fields, all `identifiers_*` fields, supplementary address fields
+(`addresses_address_2`, `addresses_fax_number`,
+`addresses_address_type`, `addresses_country_code`), and several basic
+and taxonomy metadata fields (`basic_last_updated`, `basic_status`,
+`basic_name_prefix`, `basic_name_suffix`, `basic_certification_date`,
+`taxonomies_code`, `taxonomies_taxonomy_group`, `taxonomies_state`,
+`taxonomies_license`). To access dropped columns, call
+[`npi::npi_search()`](https://docs.ropensci.org/npi/reference/npi_search.html)
+and
+[`npi::npi_flatten()`](https://docs.ropensci.org/npi/reference/npi_flatten.html)
+directly.
+
 ## Contract
 
 **Inputs:**

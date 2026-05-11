@@ -81,6 +81,18 @@ time), <code>peak_memory_gb</code> (estimated peak RAM in GB), and
 <code>api_calls</code> (estimated number of external API requests).</p>
     </div>
     <div class="section level2">
+    <h2 id="estimation-method">Estimation method<a class="anchor" aria-label="anchor" href="#estimation-method"></a></h2>
+
+
+<p>Runtime is estimated as <code>n_rows × 4.5</code> seconds: 1.5 s/row for NPI
+registry lookups, 0.5 s/row for geocoding (assumes a warm Google Maps
+cache), and 2.5 s/row for HERE isochrone generation. Memory is
+<code>(n_rows × 2) + 500</code> MB. These constants were measured on a typical US
+residential broadband connection with warm API caches. Slow networks or
+cold caches can <strong>triple</strong> the runtime estimate. Benchmark on 50–100
+rows before committing to a large run.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other utilities:
 <code>%&gt;%()</code>,

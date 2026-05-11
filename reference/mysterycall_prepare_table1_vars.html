@@ -100,7 +100,11 @@ column. Used to impute age when <code>age_col</code> is <code>NULL</code>.</p></
 
 <dt id="arg-gender-col">gender_col<a class="anchor" aria-label="anchor" href="#arg-gender-col"></a></dt>
 <dd><p>Optional character scalar naming a gender/sex column.
-Values are standardised to <code>"Male"</code>, <code>"Female"</code>, or <code>"Unknown"</code>.</p></dd>
+Values are recoded to <code>"Male"</code> (inputs <code>"m"</code> or <code>"male"</code>), <code>"Female"</code>
+(inputs <code>"f"</code> or <code>"female"</code>), or <code>"Unknown"</code> for any other value
+including <code>NA</code>. Matching is case-insensitive and whitespace-trimmed.
+This is a <strong>binary classification</strong>: non-binary or ambiguous values are
+silently bucketed into <code>"Unknown"</code>.</p></dd>
 
 
 <dt id="arg-setting-col">setting_col<a class="anchor" aria-label="anchor" href="#arg-setting-col"></a></dt>
@@ -122,6 +126,15 @@ calendar year.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code>data</code> with zero or more additional standardised columns appended:
 <code>age_imputed</code>, <code>age_category</code>, <code>gender_std</code>, <code>setting_std</code>, <code>region_std</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="gender-standardisation">Gender standardisation<a class="anchor" aria-label="anchor" href="#gender-standardisation"></a></h2>
+
+
+<p>The <code>gender_std</code> column is produced by a binary lookup: <code>"m"</code>/<code>"male"</code>
+→ <code>"Male"</code>, <code>"f"</code>/<code>"female"</code> → <code>"Female"</code>, all other values →
+<code>"Unknown"</code>. Non-binary values, <code>NA</code>, and any future Genderize.io API
+additions are all mapped to <code>"Unknown"</code> without a warning.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

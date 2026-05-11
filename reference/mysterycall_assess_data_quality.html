@@ -86,6 +86,19 @@ and sufficiently complete. Defaults to <code>c("first", "last")</code>.</p></dd>
 <code>message</code> fields).</p>
     </div>
     <div class="section level2">
+    <h2 id="scoring-method">Scoring method<a class="anchor" aria-label="anchor" href="#scoring-method"></a></h2>
+
+
+<p>Quality is scored on a 0–1 scale by subtracting penalties from a
+maximum of 10:</p><ul><li><p>Required column with &gt; 50\<!-- % missing values: −3 points --></p></li>
+<li><p>Required column with 20–50\<!-- % missing values: −1 point --></p></li>
+<li><p>More than 10\<!-- % duplicate rows: −1 point --></p></li>
+<li><p>Required column is not character or factor type: −0.5 points</p></li>
+</ul><p>Final score = max(0, 1 − penalties / 10). The 0.70 and 0.80 thresholds
+used by <code><a href="mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code> were chosen to catch severely
+incomplete data while tolerating modest missingness in large rosters.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other utilities:
 <code>%&gt;%()</code>,

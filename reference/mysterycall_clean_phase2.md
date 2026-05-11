@@ -46,6 +46,23 @@ mysterycall_clean_phase2(
 
 A data frame with processed data.
 
+## Column name transformation
+
+All input column names are converted to **lowercase snake\\case** by
+[`janitor::clean_names()`](https://sfirke.github.io/janitor/reference/clean_names.html)
+before `required_strings` pattern matching. For example,
+`"PhysicianInfo"` becomes `"physician_info"` and `"NPI Registry"`
+becomes `"npi_registry"`. Pass `required_strings` and `standard_names`
+in snake\\case to match the transformed names.
+
+## Output file timestamps
+
+Output filenames include a timestamp from
+[`Sys.time()`](https://rdrr.io/r/base/Sys.time.html), which uses the
+**local system timezone** (not UTC). Filenames produced on systems in
+different timezones will reflect different local times for the same
+wall-clock moment.
+
 ## See also
 
 Other workflow:

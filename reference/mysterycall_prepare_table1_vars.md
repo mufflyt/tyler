@@ -38,7 +38,11 @@ mysterycall_prepare_table1_vars(
 - gender_col:
 
   Optional character scalar naming a gender/sex column. Values are
-  standardised to `"Male"`, `"Female"`, or `"Unknown"`.
+  recoded to `"Male"` (inputs `"m"` or `"male"`), `"Female"` (inputs
+  `"f"` or `"female"`), or `"Unknown"` for any other value including
+  `NA`. Matching is case-insensitive and whitespace-trimmed. This is a
+  **binary classification**: non-binary or ambiguous values are silently
+  bucketed into `"Unknown"`.
 
 - setting_col:
 
@@ -60,6 +64,13 @@ mysterycall_prepare_table1_vars(
 `data` with zero or more additional standardised columns appended:
 `age_imputed`, `age_category`, `gender_std`, `setting_std`,
 `region_std`.
+
+## Gender standardisation
+
+The `gender_std` column is produced by a binary lookup: `"m"`/`"male"` →
+`"Male"`, `"f"`/`"female"` → `"Female"`, all other values → `"Unknown"`.
+Non-binary values, `NA`, and any future Genderize.io API additions are
+all mapped to `"Unknown"` without a warning.
 
 ## See also
 

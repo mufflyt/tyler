@@ -100,6 +100,25 @@ Supported values are "csv" (default) and "parquet".</p></dd>
     <p>A data frame with processed data.</p>
     </div>
     <div class="section level2">
+    <h2 id="column-name-transformation">Column name transformation<a class="anchor" aria-label="anchor" href="#column-name-transformation"></a></h2>
+
+
+<p>All input column names are converted to <strong>lowercase snake\_case</strong> by
+<code><a href="https://sfirke.github.io/janitor/reference/clean_names.html" class="external-link">janitor::clean_names()</a></code> before <code>required_strings</code> pattern matching.
+For example, <code>"PhysicianInfo"</code> becomes <code>"physician_info"</code> and
+<code>"NPI Registry"</code> becomes <code>"npi_registry"</code>. Pass <code>required_strings</code> and
+<code>standard_names</code> in snake\_case to match the transformed names.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="output-file-timestamps">Output file timestamps<a class="anchor" aria-label="anchor" href="#output-file-timestamps"></a></h2>
+
+
+<p>Output filenames include a timestamp from <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time()</a></code>, which uses the
+<strong>local system timezone</strong> (not UTC). Filenames produced on systems in
+different timezones will reflect different local times for the same
+wall-clock moment.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other workflow:
 <code><a href="mysterycall_call_productivity.html">mysterycall_call_productivity()</a></code>,

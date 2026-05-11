@@ -77,6 +77,16 @@ mysterycall_preflight_check(
 
 Invisible list with check results, or stops with error if checks fail
 
+## Data quality thresholds
+
+Input data is scored from 0–1 by
+[`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md).
+Scores below **0.70** cause this function to stop with an error; scores
+between 0.70 and 0.80 emit a warning. A score below 0.70 typically means
+a required name column has more than 50\\
+[`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md)
+for the full penalty schedule.
+
 ## See also
 
 Other utilities: `%>%()`,

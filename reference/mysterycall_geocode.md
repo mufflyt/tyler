@@ -68,6 +68,17 @@ mysterycall_geocode(
 
 A data frame with latitude and longitude columns added.
 
+## Requirements
+
+Geocoding requires the `ggmap` package (listed in `Suggests`, not
+`Imports`) and a Google Maps Platform API key with the **Geocoding API**
+enabled. If `ggmap` is not installed the function stops immediately with
+an install message. An invalid or expired key is only detected at the
+first geocoding request — run
+[`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
+with `check_apis = TRUE` to validate the key before starting a long
+workflow.
+
 ## See also
 
 Other geospatial helpers:
