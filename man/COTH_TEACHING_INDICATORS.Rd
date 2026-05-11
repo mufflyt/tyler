@@ -19,7 +19,7 @@ length(COTH_TEACHING_INDICATORS)
 
 }
 \seealso{
-\code{\link{classify_academic_affiliation}}
+\code{\link{mysterycall_classify_academic_affiliation}}
 
 Other academic-indicators: 
 \code{\link{ACADEMIC_HOSPITAL_PATTERNS}},

@@ -131,6 +131,7 @@ mysterycall_get_acs_women_18_90 <- function(year = 2022, states = NULL, verbose 
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name get_acs_women_18_90
 #' @export

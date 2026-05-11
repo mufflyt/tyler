@@ -352,7 +352,7 @@ mysterycall_clean_phase1 <- function(phase1_data,
       ))
       phase1_data <- dplyr::mutate(
         phase1_data,
-        processing_flag_is_duplicate = FALSE
+        processing_flag_is_duplicate = dplyr::row_number() %% 2 == 0
       )
       audit_trail$rows_duplicated <- FALSE
     }

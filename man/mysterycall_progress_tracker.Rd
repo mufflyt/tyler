@@ -9,7 +9,7 @@ workflows.
 }
 \usage{
 mysterycall_progress_tracker(steps, update_every = 300,
-  quiet = getOption("tyler.quiet", FALSE))
+  quiet = getOption("mysterycall.quiet", FALSE))
 }
 \arguments{
 \item{steps}{Character vector naming each workflow stage.}

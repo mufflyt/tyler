@@ -142,6 +142,7 @@ mysterycall_get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name get_acs_adults_18_90
 #' @export

@@ -82,11 +82,12 @@ mysterycall_rename_columns <- function(data, target_strings, new_names) {
       ))
       # Error if more than one match is found to avoid ambiguous renames.
       if (length(matched_cols) > 1) {
-        stop(sprintf(
-          "Multiple columns matched '%s': %s. Use a more specific target string to disambiguate.",
+        warning(sprintf(
+          "Multiple columns matched '%s': %s. Renaming only the first match.",
           target_strings[i],
           paste(matched_cols, collapse = ", ")
         ), call. = FALSE)
+        matched_cols <- matched_cols[1]
       }
       # Rename the matching column
       if (replacement %in% names(data) && replacement != matched_cols[1]) {

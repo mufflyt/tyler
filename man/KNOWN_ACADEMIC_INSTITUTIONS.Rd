@@ -22,7 +22,7 @@ grepl("STANFORD", "Stanford University Hospital", ignore.case = TRUE)
 
 }
 \seealso{
-\code{\link{check_academic_name_patterns}},
+\code{\link{mysterycall_check_academic_name_patterns}},
 \code{\link{ACADEMIC_HOSPITAL_PATTERNS}}
 
 Other academic-indicators: 

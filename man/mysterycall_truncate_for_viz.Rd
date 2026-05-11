@@ -17,7 +17,7 @@ mysterycall_truncate_for_viz(x, floor = 0, ceiling = 100)
 Numeric vector clipped to \verb{[floor, ceiling]}.
 }
 \description{
-Hard floor/ceiling clipping for visualization. Unlike \code{\link[=winsorize]{winsorize()}}, which
+Hard floor/ceiling clipping for visualization. Unlike \code{\link[=mysterycall_winsorize]{mysterycall_winsorize()}}, which
 uses data-driven quantiles, this forces exact bounds for clean legend breaks
 (e.g., 0-100\% for coverage maps). Use when the legend must show round
 numbers regardless of the data range.

@@ -286,6 +286,7 @@ mysterycall_check_academic_name_patterns <- function(org_name, confidence_thresh
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name check_academic_name_patterns
 #' @export
@@ -358,6 +359,7 @@ mysterycall_classify_academic_affiliation <- function(org_name,
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name classify_academic_affiliation
 #' @export
@@ -428,6 +430,7 @@ mysterycall_get_academic_indicators_summary <- function() {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name get_academic_indicators_summary
 #' @export

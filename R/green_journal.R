@@ -385,6 +385,7 @@ mysterycall_crs_albers_conus <- function() {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name crs_albers_conus
 #' @export
@@ -420,6 +421,7 @@ mysterycall_winsorize <- function(x, lower = 0.005, upper = 0.995, na.rm = TRUE)
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name winsorize
 #' @export
@@ -447,6 +449,7 @@ mysterycall_truncate_for_viz <- function(x, floor = 0, ceiling = 100) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name truncate_for_viz
 #' @export
@@ -490,6 +493,7 @@ mysterycall_compose_map_density <- function(map_plot, density_plot,
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name compose_map_density
 #' @export

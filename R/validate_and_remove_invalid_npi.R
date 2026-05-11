@@ -90,15 +90,10 @@ mysterycall_validate_npi <- function(input_data) {
   npi_df <- npi_df %>%
     dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
 
-  n_before_dedup <- nrow(npi_df)
-  npi_df <- dplyr::distinct(npi_df, npi, .keep_all = TRUE)
-  n_dupes <- n_before_dedup - nrow(npi_df)
-
   message(sprintf(
-    "Validated %d candidate NPI(s); %d passed checksum and formatting rules%s.",
+    "Validated %d candidate NPI(s); %d passed checksum and formatting rules.",
     total_candidates,
-    nrow(npi_df),
-    if (n_dupes > 0) sprintf(", %d duplicate row(s) removed", n_dupes) else ""
+    nrow(npi_df)
   ))
 
   npi_df

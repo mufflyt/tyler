@@ -22,7 +22,7 @@ A \code{\link[ggplot2:theme]{ggplot2::theme()}} object.
 Variant of \code{\link[=theme_green_journal]{theme_green_journal()}} for choropleth maps, isochrone
 coverage maps, and other spatial figures. Removes all axis elements,
 centers the title, and adds a framed legend. Use with
-\code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}} and \code{\link[=crs_albers_conus]{crs_albers_conus()}} for equal-area projection.
+\code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}} and \code{\link[=mysterycall_crs_albers_conus]{mysterycall_crs_albers_conus()}} for equal-area projection.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}

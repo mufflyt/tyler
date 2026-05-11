@@ -82,8 +82,8 @@ NULL
 #'   all whitespace collapsed to single spaces.
 #'
 #' @examples
-#' ascii_norm("123 Main St Suite 100")
-#' ascii_norm("456   Oak    Avenue")
+#' mysterycall_ascii_norm("123 Main St Suite 100")
+#' mysterycall_ascii_norm("456   Oak    Avenue")
 #'
 #' @importFrom stringr str_replace_all str_squish
 #' @family address-normalization
@@ -95,6 +95,7 @@ mysterycall_ascii_norm <- function(x) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name ascii_norm
 #' @export
@@ -110,14 +111,15 @@ ascii_norm <- function(...) { .Deprecated("mysterycall_ascii_norm"); mysterycall
 #' @return Character vector in uppercase with normalized ASCII and whitespace.
 #'
 #' @examples
-#' caps("123 main street")
-#' caps("456 oak ave #100")
+#' mysterycall_caps("123 main street")
+#' mysterycall_caps("456 oak ave #100")
 #'
 #' @family address-normalization
 #' @export
 mysterycall_caps <- function(x) toupper(mysterycall_ascii_norm(x))
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name caps
 #' @export
@@ -154,8 +156,8 @@ map_token <- function(x, map) {
 #' @return Logical vector indicating whether each address is a PO Box.
 #'
 #' @examples
-#' is_po_box("PO Box 12345")
-#' is_po_box("123 Main Street")
+#' mysterycall_is_po_box("PO Box 12345")
+#' mysterycall_is_po_box("123 Main Street")
 #'
 #' @importFrom stringr str_detect
 #' @family address-normalization
@@ -166,6 +168,7 @@ mysterycall_is_po_box <- function(x) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name is_po_box
 #' @export
@@ -180,8 +183,8 @@ is_po_box <- function(...) { .Deprecated("mysterycall_is_po_box"); mysterycall_i
 #' @return Logical vector indicating whether each address starts with a number.
 #'
 #' @examples
-#' has_street_number("123 Main Street")
-#' has_street_number("University Medical Center")
+#' mysterycall_has_street_number("123 Main Street")
+#' mysterycall_has_street_number("University Medical Center")
 #'
 #' @importFrom stringr str_detect
 #' @family address-normalization
@@ -192,6 +195,7 @@ mysterycall_has_street_number <- function(x) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name has_street_number
 #' @export
@@ -207,8 +211,8 @@ has_street_number <- function(...) { .Deprecated("mysterycall_has_street_number"
 #' @return Character vector of two-letter USPS state codes.
 #'
 #' @examples
-#' normalize_state("California")
-#' normalize_state("NY")
+#' mysterycall_normalize_state("California")
+#' mysterycall_normalize_state("NY")
 #'
 #' @importFrom stringr str_detect
 #' @importFrom dplyr if_else
@@ -220,6 +224,7 @@ mysterycall_normalize_state <- function(state) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name normalize_state
 #' @export
@@ -235,8 +240,8 @@ normalize_state <- function(...) { .Deprecated("mysterycall_normalize_state"); m
 #' @return Character vector with directionals converted to USPS abbreviations.
 #'
 #' @examples
-#' normalize_directionals("123 North Main Street")
-#' normalize_directionals("456 Southeast Oak Avenue")
+#' mysterycall_normalize_directionals("123 North Main Street")
+#' mysterycall_normalize_directionals("456 Southeast Oak Avenue")
 #'
 #' @importFrom stringr str_replace_all
 #' @family address-normalization
@@ -251,6 +256,7 @@ mysterycall_normalize_directionals <- function(addr) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name normalize_directionals
 #' @export
@@ -266,8 +272,8 @@ normalize_directionals <- function(...) { .Deprecated("mysterycall_normalize_dir
 #' @return Character vector with street suffixes converted to USPS abbreviations.
 #'
 #' @examples
-#' normalize_suffix("123 Main Street")
-#' normalize_suffix("456 Oak Boulevard Suite 100")
+#' mysterycall_normalize_suffix("123 Main Street")
+#' mysterycall_normalize_suffix("456 Oak Boulevard Suite 100")
 #'
 #' @importFrom stringr str_replace_all
 #' @family address-normalization
@@ -281,6 +287,7 @@ mysterycall_normalize_suffix <- function(addr) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name normalize_suffix
 #' @export
@@ -303,8 +310,8 @@ normalize_suffix <- function(...) { .Deprecated("mysterycall_normalize_suffix");
 #'   }
 #'
 #' @examples
-#' normalize_units("123 Main St Suite 100", NA_character_)
-#' normalize_units("456 Oak Avenue", "Apartment 4B")
+#' mysterycall_normalize_units("123 Main St Suite 100", NA_character_)
+#' mysterycall_normalize_units("456 Oak Avenue", "Apartment 4B")
 #'
 #' @importFrom stringr str_replace_all
 #' @family address-normalization
@@ -326,6 +333,7 @@ mysterycall_normalize_units <- function(addr1, addr2 = NA_character_) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name normalize_units
 #' @export
@@ -341,8 +349,8 @@ normalize_units <- function(...) { .Deprecated("mysterycall_normalize_units"); m
 #' @return Character vector of 5-digit ZIP codes, or \code{NA} for invalid inputs.
 #'
 #' @examples
-#' normalize_zip5("80111-1234")
-#' normalize_zip5(90210)
+#' mysterycall_normalize_zip5("80111-1234")
+#' mysterycall_normalize_zip5(90210)
 #'
 #' @importFrom stringr str_extract
 #' @family address-normalization
@@ -355,6 +363,7 @@ mysterycall_normalize_zip5 <- function(zip) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name normalize_zip5
 #' @export
@@ -371,8 +380,8 @@ normalize_zip5 <- function(...) { .Deprecated("mysterycall_normalize_zip5"); mys
 #' @return Character vector with unit designators removed and whitespace cleaned.
 #'
 #' @examples
-#' strip_suite("123 Main St Suite 100")
-#' strip_suite("456 Oak Ave APT 4B #200")
+#' mysterycall_strip_suite("123 Main St Suite 100")
+#' mysterycall_strip_suite("456 Oak Ave APT 4B #200")
 #'
 #' @importFrom stringr str_replace_all str_squish
 #' @family address-normalization
@@ -384,6 +393,7 @@ mysterycall_strip_suite <- function(addr) {
 }
 
 #' @noRd
+#' @keywords internal
 #' @export
 #' @name strip_suite
 #' @export
