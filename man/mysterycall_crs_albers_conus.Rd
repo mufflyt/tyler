@@ -2,12 +2,9 @@
 % Please edit documentation in R/green_journal.R
 \name{mysterycall_crs_albers_conus}
 \alias{mysterycall_crs_albers_conus}
-\alias{crs_albers_conus}
 \title{Albers Equal-Area CRS for the continental United States}
 \usage{
 mysterycall_crs_albers_conus()
-
-crs_albers_conus(...)
 }
 \value{
 An \code{sf::st_crs} object (EPSG:5070).
@@ -16,7 +13,7 @@ An \code{sf::st_crs} object (EPSG:5070).
 Returns EPSG:5070 (NAD83 / Conus Albers), the standard equal-area
 projection used by USGS and the US Census Bureau. Use with
 \code{coord_sf(crs = crs_albers_conus())} to avoid the area distortion of the
-default plate carrée projection on national choropleths.
+default plate carree projection on national choropleths.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}

@@ -2,12 +2,9 @@
 % Please edit documentation in R/green_journal.R
 \name{mysterycall_winsorize}
 \alias{mysterycall_winsorize}
-\alias{winsorize}
 \title{Winsorize extreme values}
 \usage{
 mysterycall_winsorize(x, lower = 0.005, upper = 0.995, na.rm = TRUE)
-
-winsorize(...)
 }
 \arguments{
 \item{x}{Numeric vector to winsorize.}

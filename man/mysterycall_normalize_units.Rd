@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_normalize_units}
 \alias{mysterycall_normalize_units}
-\alias{normalize_units}
 \title{Normalize Unit Designators}
 \usage{
 mysterycall_normalize_units(addr1, addr2 = NA_character_)
-
-normalize_units(...)
 }
 \arguments{
 \item{addr1}{Character scalar for the primary address line.}

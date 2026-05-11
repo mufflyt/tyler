@@ -20,7 +20,7 @@ palette_publication(
 all 8. Warns if \code{n > 8} and recycles.}
 
 \item{type}{Character. One of \code{"qualitative"} (default, Okabe-Ito),
-\code{"sequential"} (blue ramp), or \code{"diverging"} (blue–orange).}
+\code{"sequential"} (blue ramp), or \code{"diverging"} (blue-orange).}
 }
 \value{
 Character vector of hex color codes.

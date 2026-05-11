@@ -19,15 +19,15 @@
 #'   \describe{
 #'     \item{GEOID}{Census tract ID (11-digit string).}
 #'     \item{men_18_90}{Sum of male population aged 18-89.}
-#'     \item{men_18_90_moe}{Margin of error for males (90\% CI).}
+#'     \item{men_18_90_moe}{Margin of error for males (90% CI).}
 #'     \item{women_18_90}{Sum of female population aged 18-89.}
-#'     \item{women_18_90_moe}{Margin of error for females (90\% CI).}
+#'     \item{women_18_90_moe}{Margin of error for females (90% CI).}
 #'     \item{adults_18_90}{Total adult population (male + female).}
-#'     \item{adults_18_90_moe}{Propagated total margin of error (90\% CI).}
+#'     \item{adults_18_90_moe}{Propagated total margin of error (90% CI).}
 #'   }
 #'
 #' @note MOE propagation follows Census Bureau ACS Handbook Appendix 3.
-#'   All MOE values are at 90\% confidence level (Census standard).
+#'   All MOE values are at 90% confidence level (Census standard).
 #'   This function is more efficient than calling \code{mysterycall_get_acs_women_18_90()}
 #'   separately as it makes a single Census API call.
 #'
@@ -141,7 +141,9 @@ mysterycall_get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose
   result
 }
 
-#' @rdname mysterycall_get_acs_adults_18_90
+#' @noRd
+#' @export
+#' @name get_acs_adults_18_90
 #' @export
 get_acs_adults_18_90 <- function(...) {
   .Deprecated("mysterycall_get_acs_adults_18_90")

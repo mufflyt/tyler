@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_ascii_norm}
 \alias{mysterycall_ascii_norm}
-\alias{ascii_norm}
 \title{Normalize ASCII Characters and Whitespace}
 \usage{
 mysterycall_ascii_norm(x)
-
-ascii_norm(...)
 }
 \arguments{
 \item{x}{Character vector of strings to normalize.}

@@ -285,7 +285,9 @@ mysterycall_check_academic_name_patterns <- function(org_name, confidence_thresh
   results
 }
 
-#' @rdname mysterycall_check_academic_name_patterns
+#' @noRd
+#' @export
+#' @name check_academic_name_patterns
 #' @export
 check_academic_name_patterns <- function(...) { .Deprecated("mysterycall_check_academic_name_patterns"); mysterycall_check_academic_name_patterns(...) }
 
@@ -355,7 +357,9 @@ mysterycall_classify_academic_affiliation <- function(org_name,
   )
 }
 
-#' @rdname mysterycall_classify_academic_affiliation
+#' @noRd
+#' @export
+#' @name classify_academic_affiliation
 #' @export
 classify_academic_affiliation <- function(...) { .Deprecated("mysterycall_classify_academic_affiliation"); mysterycall_classify_academic_affiliation(...) }
 
@@ -423,6 +427,8 @@ mysterycall_get_academic_indicators_summary <- function() {
   )
 }
 
-#' @rdname mysterycall_get_academic_indicators_summary
+#' @noRd
+#' @export
+#' @name get_academic_indicators_summary
 #' @export
 get_academic_indicators_summary <- function(...) { .Deprecated("mysterycall_get_academic_indicators_summary"); mysterycall_get_academic_indicators_summary(...) }

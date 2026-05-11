@@ -2,12 +2,9 @@
 % Please edit documentation in R/acs_female_pop.R
 \name{mysterycall_get_acs_women_18_90}
 \alias{mysterycall_get_acs_women_18_90}
-\alias{get_acs_women_18_90}
 \title{Get ACS Female Population (Ages 18-90) by Census Tract}
 \usage{
 mysterycall_get_acs_women_18_90(year = 2022, states = NULL, verbose = TRUE)
-
-get_acs_women_18_90(...)
 }
 \arguments{
 \item{year}{Integer. ACS 5-year survey year (2009–2023). Default: \code{2022}.}
@@ -22,7 +19,7 @@ Tibble with columns:
 \describe{
 \item{GEOID}{Census tract ID (11-digit string).}
 \item{women_18_90}{Sum of female population aged 18-89.}
-\item{women_18_90_moe}{Margin of error (90\\% CI, propagated via sum-of-squares).}
+\item{women_18_90_moe}{Margin of error (90\% CI, propagated via sum-of-squares).}
 }
 }
 \description{
@@ -38,7 +35,7 @@ Age groups included: 18-19, 20, 21, 22-24, 25-29, 30-34, 35-39, 40-44,
 }
 \note{
 MOE propagation follows Census Bureau ACS Handbook Appendix 3.
-All MOE values are at 90\\% confidence level (Census standard).
+All MOE values are at 90\% confidence level (Census standard).
 For both sexes in one call, use \code{\link{mysterycall_get_acs_adults_18_90}}.
 }
 \examples{

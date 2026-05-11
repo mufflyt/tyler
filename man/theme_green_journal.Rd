@@ -11,7 +11,7 @@ theme_publication(base_size = 10, base_family = "Arial")
 }
 \arguments{
 \item{base_size}{Numeric. Base font size in points (default 10; Green
-Journal range 8–12 pt, minimum 6 pt for labels).}
+Journal range 8-12 pt, minimum 6 pt for labels).}
 
 \item{base_family}{Character. Font family. Defaults to \code{"Arial"} with
 automatic fallback to \code{"sans"} when Arial is unavailable.}

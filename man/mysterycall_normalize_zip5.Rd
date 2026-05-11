@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_normalize_zip5}
 \alias{mysterycall_normalize_zip5}
-\alias{normalize_zip5}
 \title{Extract 5-Digit ZIP Code}
 \usage{
 mysterycall_normalize_zip5(zip)
-
-normalize_zip5(...)
 }
 \arguments{
 \item{zip}{Character or numeric vector of ZIP code strings.}

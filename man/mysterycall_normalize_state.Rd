@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_normalize_state}
 \alias{mysterycall_normalize_state}
-\alias{normalize_state}
 \title{Normalize State Names to USPS Codes}
 \usage{
 mysterycall_normalize_state(state)
-
-normalize_state(...)
 }
 \arguments{
 \item{state}{Character vector of state names or abbreviations.}

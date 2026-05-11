@@ -13,6 +13,7 @@ Provides utilities for mystery caller and audit studies evaluating patient acces
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://mufflyt.github.io/mysterycall/}
   \item \url{https://github.com/mufflyt/mysterycall}
   \item Report bugs at \url{https://github.com/mufflyt/mysterycall/issues}
 }

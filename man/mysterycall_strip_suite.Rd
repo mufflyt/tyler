@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_strip_suite}
 \alias{mysterycall_strip_suite}
-\alias{strip_suite}
 \title{Remove Unit Designators from Address}
 \usage{
 mysterycall_strip_suite(addr)
-
-strip_suite(...)
 }
 \arguments{
 \item{addr}{Character vector of address strings.}

@@ -40,7 +40,7 @@ descending. Columns:
 \item{n_days}{Unique call dates (NA if \code{date_col} is NULL).}
 \item{calls_per_day}{n_calls / n_days (NA if \code{date_col} is NULL).}
 \item{n_accepted}{Sum of \code{outcome_col} (NA if not provided).}
-\item{acceptance_rate}{Formatted "XX.X\\%" (NA if \code{outcome_col} NULL).}
+\item{acceptance_rate}{Formatted "XX.X\%" (NA if \code{outcome_col} NULL).}
 \item{mean_hold_sec}{Mean hold time in seconds (NA if not provided).}
 \item{mean_call_sec}{Mean call time in seconds (NA if not provided).}
 }

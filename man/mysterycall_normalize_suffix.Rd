@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_normalize_suffix}
 \alias{mysterycall_normalize_suffix}
-\alias{normalize_suffix}
 \title{Normalize Street Suffixes}
 \usage{
 mysterycall_normalize_suffix(addr)
-
-normalize_suffix(...)
 }
 \arguments{
 \item{addr}{Character vector of address strings to normalize.}

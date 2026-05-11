@@ -270,7 +270,7 @@ print.mysterycall_disparities_table <- function(x, ...) {
   alpha  <- attr(x, "alpha")     %||% 0.05
   ci_pct <- round((1 - alpha) * 100)
 
-  cat(sprintf("Disparity table — %d groups | ref: '%s' | %s %d%% CI\n",
+  cat(sprintf("Disparity table -- %d groups | ref: '%s' | %s %d%% CI\n",
               nrow(x), ref, method, ci_pct))
   cat(sprintf("%-22s %6s %6s %8s  %-16s %9s  %-22s  %s\n",
               "Group", "n", "n_acc", "Rate",

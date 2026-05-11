@@ -2,7 +2,6 @@
 % Please edit documentation in R/academic_indicators.R
 \name{mysterycall_classify_academic_affiliation}
 \alias{mysterycall_classify_academic_affiliation}
-\alias{classify_academic_affiliation}
 \title{Classify Academic vs. Non-Academic Practice Setting}
 \usage{
 mysterycall_classify_academic_affiliation(
@@ -10,8 +9,6 @@ mysterycall_classify_academic_affiliation(
   hospital_affiliation = NULL,
   specialty = NULL
 )
-
-classify_academic_affiliation(...)
 }
 \arguments{
 \item{org_name}{Character vector of organization names to classify.}

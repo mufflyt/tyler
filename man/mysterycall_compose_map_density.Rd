@@ -2,7 +2,6 @@
 % Please edit documentation in R/green_journal.R
 \name{mysterycall_compose_map_density}
 \alias{mysterycall_compose_map_density}
-\alias{compose_map_density}
 \title{Composite map + density figure}
 \usage{
 mysterycall_compose_map_density(
@@ -11,8 +10,6 @@ mysterycall_compose_map_density(
   map_weight = 7L,
   density_weight = 2L
 )
-
-compose_map_density(...)
 }
 \arguments{
 \item{map_plot}{A \code{ggplot} object. The choropleth / spatial map (upper panel).}

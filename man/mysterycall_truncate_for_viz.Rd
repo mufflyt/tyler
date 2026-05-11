@@ -2,12 +2,9 @@
 % Please edit documentation in R/green_journal.R
 \name{mysterycall_truncate_for_viz}
 \alias{mysterycall_truncate_for_viz}
-\alias{truncate_for_viz}
 \title{Truncate values to fixed bounds}
 \usage{
 mysterycall_truncate_for_viz(x, floor = 0, ceiling = 100)
-
-truncate_for_viz(...)
 }
 \arguments{
 \item{x}{Numeric vector.}
@@ -22,7 +19,7 @@ Numeric vector clipped to \verb{[floor, ceiling]}.
 \description{
 Hard floor/ceiling clipping for visualization. Unlike \code{\link[=winsorize]{winsorize()}}, which
 uses data-driven quantiles, this forces exact bounds for clean legend breaks
-(e.g., 0–100\% for coverage maps). Use when the legend must show round
+(e.g., 0-100\% for coverage maps). Use when the legend must show round
 numbers regardless of the data range.
 }
 \examples{

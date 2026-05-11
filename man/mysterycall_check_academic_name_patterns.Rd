@@ -2,12 +2,9 @@
 % Please edit documentation in R/academic_indicators.R
 \name{mysterycall_check_academic_name_patterns}
 \alias{mysterycall_check_academic_name_patterns}
-\alias{check_academic_name_patterns}
 \title{Check if Organization Name Suggests Academic Affiliation}
 \usage{
 mysterycall_check_academic_name_patterns(org_name, confidence_threshold = 0.85)
-
-check_academic_name_patterns(...)
 }
 \arguments{
 \item{org_name}{Character vector of organization names to evaluate.}

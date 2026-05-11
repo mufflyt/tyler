@@ -46,10 +46,10 @@ Invisible character vector of paths written.
 \description{
 Exports a ggplot in all formats needed for journal submission:
 \itemize{
-\item \strong{TIFF} (300 DPI, LZW compression) — primary submission format
-\item \strong{PDF} (cairo, font-embedded) — vector companion for review
-\item \strong{PNG} (300 DPI) — web / presentation companion
-\item \strong{CSV} — underlying data for peer-review transparency
+\item \strong{TIFF} (300 DPI, LZW compression) -- primary submission format
+\item \strong{PDF} (cairo, font-embedded) -- vector companion for review
+\item \strong{PNG} (300 DPI) -- web / presentation companion
+\item \strong{CSV} -- underlying data for peer-review transparency
 }
 }
 \details{

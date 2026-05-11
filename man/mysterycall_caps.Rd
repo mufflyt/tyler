@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_caps}
 \alias{mysterycall_caps}
-\alias{caps}
 \title{Convert to Canonical Uppercase}
 \usage{
 mysterycall_caps(x)
-
-caps(...)
 }
 \arguments{
 \item{x}{Character vector of strings to convert.}

@@ -74,7 +74,20 @@ utils::globalVariables(c(
   "group",
   "rate_pct",
   "status",
-  "pct"
+  "pct",
+  "label",
+  "men_18_90",
+  "men_18_90_moe",
+  "women_18_90",
+  "women_18_90_moe",
+  "adults_18_90",
+  "adults_18_90_moe",
+  "addr1_dir",
+  "addr1_suf",
+  "address1_norm",
+  "tmp_units",
+  "tmp_units_addr1",
+  "tmp_units_addr2"
 ))
 
 .onAttach <- function(libname, pkgname) {

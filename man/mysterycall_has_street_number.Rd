@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_has_street_number}
 \alias{mysterycall_has_street_number}
-\alias{has_street_number}
 \title{Detect Addresses with Street Numbers}
 \usage{
 mysterycall_has_street_number(x)
-
-has_street_number(...)
 }
 \arguments{
 \item{x}{Character vector of address strings to check.}

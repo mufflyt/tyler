@@ -94,7 +94,9 @@ mysterycall_ascii_norm <- function(x) {
     stringr::str_squish()
 }
 
-#' @rdname mysterycall_ascii_norm
+#' @noRd
+#' @export
+#' @name ascii_norm
 #' @export
 ascii_norm <- function(...) { .Deprecated("mysterycall_ascii_norm"); mysterycall_ascii_norm(...) }
 
@@ -115,7 +117,9 @@ ascii_norm <- function(...) { .Deprecated("mysterycall_ascii_norm"); mysterycall
 #' @export
 mysterycall_caps <- function(x) toupper(mysterycall_ascii_norm(x))
 
-#' @rdname mysterycall_caps
+#' @noRd
+#' @export
+#' @name caps
 #' @export
 caps <- function(...) { .Deprecated("mysterycall_caps"); mysterycall_caps(...) }
 
@@ -130,7 +134,7 @@ caps <- function(...) { .Deprecated("mysterycall_caps"); mysterycall_caps(...) }
 #'
 #' @return Character vector with all matching tokens replaced.
 #'
-#' @examples
+#' @examplesIf FALSE
 #' dir_map <- c("NORTH" = "N", "SOUTH" = "S")
 #' map_token("123 NORTH MAIN STREET", dir_map)
 #'
@@ -161,7 +165,9 @@ mysterycall_is_po_box <- function(x) {
   stringr::str_detect(y, "\\bP\\s*O\\s*BOX\\b|\\bPO\\s*BOX\\b|\\bPOST\\s*OFFICE\\s*BOX\\b")
 }
 
-#' @rdname mysterycall_is_po_box
+#' @noRd
+#' @export
+#' @name is_po_box
 #' @export
 is_po_box <- function(...) { .Deprecated("mysterycall_is_po_box"); mysterycall_is_po_box(...) }
 
@@ -185,7 +191,9 @@ mysterycall_has_street_number <- function(x) {
   stringr::str_detect(y, "^\\s*\\d+\\b")
 }
 
-#' @rdname mysterycall_has_street_number
+#' @noRd
+#' @export
+#' @name has_street_number
 #' @export
 has_street_number <- function(...) { .Deprecated("mysterycall_has_street_number"); mysterycall_has_street_number(...) }
 
@@ -211,7 +219,9 @@ mysterycall_normalize_state <- function(state) {
   dplyr::if_else(stringr::str_detect(s, "^[A-Z]{2}$"), s, map_token(s, .state_map))
 }
 
-#' @rdname mysterycall_normalize_state
+#' @noRd
+#' @export
+#' @name normalize_state
 #' @export
 normalize_state <- function(...) { .Deprecated("mysterycall_normalize_state"); mysterycall_normalize_state(...) }
 
@@ -240,7 +250,9 @@ mysterycall_normalize_directionals <- function(addr) {
   a
 }
 
-#' @rdname mysterycall_normalize_directionals
+#' @noRd
+#' @export
+#' @name normalize_directionals
 #' @export
 normalize_directionals <- function(...) { .Deprecated("mysterycall_normalize_directionals"); mysterycall_normalize_directionals(...) }
 
@@ -268,7 +280,9 @@ mysterycall_normalize_suffix <- function(addr) {
   a
 }
 
-#' @rdname mysterycall_normalize_suffix
+#' @noRd
+#' @export
+#' @name normalize_suffix
 #' @export
 normalize_suffix <- function(...) { .Deprecated("mysterycall_normalize_suffix"); mysterycall_normalize_suffix(...) }
 
@@ -311,7 +325,9 @@ mysterycall_normalize_units <- function(addr1, addr2 = NA_character_) {
   list(addr1 = a1, addr2 = a2)
 }
 
-#' @rdname mysterycall_normalize_units
+#' @noRd
+#' @export
+#' @name normalize_units
 #' @export
 normalize_units <- function(...) { .Deprecated("mysterycall_normalize_units"); mysterycall_normalize_units(...) }
 
@@ -338,7 +354,9 @@ mysterycall_normalize_zip5 <- function(zip) {
   ifelse(is.na(z), NA_character_, z)
 }
 
-#' @rdname mysterycall_normalize_zip5
+#' @noRd
+#' @export
+#' @name normalize_zip5
 #' @export
 normalize_zip5 <- function(...) { .Deprecated("mysterycall_normalize_zip5"); mysterycall_normalize_zip5(...) }
 
@@ -365,7 +383,9 @@ mysterycall_strip_suite <- function(addr) {
   stringr::str_squish(a)
 }
 
-#' @rdname mysterycall_strip_suite
+#' @noRd
+#' @export
+#' @name strip_suite
 #' @export
 strip_suite <- function(...) { .Deprecated("mysterycall_strip_suite"); mysterycall_strip_suite(...) }
 

@@ -18,11 +18,11 @@
 #'   \describe{
 #'     \item{GEOID}{Census tract ID (11-digit string).}
 #'     \item{women_18_90}{Sum of female population aged 18-89.}
-#'     \item{women_18_90_moe}{Margin of error (90\% CI, propagated via sum-of-squares).}
+#'     \item{women_18_90_moe}{Margin of error (90% CI, propagated via sum-of-squares).}
 #'   }
 #'
 #' @note MOE propagation follows Census Bureau ACS Handbook Appendix 3.
-#'   All MOE values are at 90\% confidence level (Census standard).
+#'   All MOE values are at 90% confidence level (Census standard).
 #'   For both sexes in one call, use \code{\link{mysterycall_get_acs_adults_18_90}}.
 #'
 #' @examplesIf interactive()
@@ -130,7 +130,9 @@ mysterycall_get_acs_women_18_90 <- function(year = 2022, states = NULL, verbose 
   result
 }
 
-#' @rdname mysterycall_get_acs_women_18_90
+#' @noRd
+#' @export
+#' @name get_acs_women_18_90
 #' @export
 get_acs_women_18_90 <- function(...) {
   .Deprecated("mysterycall_get_acs_women_18_90")

@@ -9,7 +9,7 @@
 #   - No gray panel background; black axes with ticks; bottom legend
 
 
-# ── Figure dimension constants ─────────────────────────────────────────────────
+# -- Figure dimension constants -------------------------------------------------
 .GJ <- list(
   single_width = 3.5,
   double_width = 7.0,
@@ -31,7 +31,7 @@
 #' [save_green_journal_figure()] for a complete submission workflow.
 #'
 #' @param base_size Numeric. Base font size in points (default 10; Green
-#'   Journal range 8–12 pt, minimum 6 pt for labels).
+#'   Journal range 8-12 pt, minimum 6 pt for labels).
 #' @param base_family Character. Font family. Defaults to `"Arial"` with
 #'   automatic fallback to `"sans"` when Arial is unavailable.
 #' @return A [ggplot2::theme()] object.
@@ -173,7 +173,7 @@ theme_green_journal_faceted <- function(base_size = 9) {
 #' @param n Integer. Number of colors (max 8 for qualitative). `NULL` returns
 #'   all 8. Warns if `n > 8` and recycles.
 #' @param type Character. One of `"qualitative"` (default, Okabe-Ito),
-#'   `"sequential"` (blue ramp), or `"diverging"` (blue–orange).
+#'   `"sequential"` (blue ramp), or `"diverging"` (blue-orange).
 #' @return Character vector of hex color codes.
 #' @export
 #' @family green-journal-colors
@@ -198,7 +198,7 @@ palette_green_journal <- function(n = NULL, type = c("qualitative", "sequential"
       c("#CA0020", "#F4A582", "#F7F7F7", "#92C5DE", "#0571B0"))(n_div))
   }
 
-  # qualitative — Okabe-Ito / Wong (2011)
+  # qualitative -- Okabe-Ito / Wong (2011)
   pal <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442",
            "#0072B2", "#D55E00", "#CC79A7", "#999999")
 
@@ -257,10 +257,10 @@ scale_fill_green_journal <- function(...) {
 #'
 #' Exports a ggplot in all formats needed for journal submission:
 #' \itemize{
-#'   \item **TIFF** (300 DPI, LZW compression) — primary submission format
-#'   \item **PDF** (cairo, font-embedded) — vector companion for review
-#'   \item **PNG** (300 DPI) — web / presentation companion
-#'   \item **CSV** — underlying data for peer-review transparency
+#'   \item **TIFF** (300 DPI, LZW compression) -- primary submission format
+#'   \item **PDF** (cairo, font-embedded) -- vector companion for review
+#'   \item **PNG** (300 DPI) -- web / presentation companion
+#'   \item **CSV** -- underlying data for peer-review transparency
 #' }
 #'
 #' Geometry columns (`sfc`) are automatically dropped from the CSV export.
@@ -346,7 +346,7 @@ save_green_journal_figure <- function(plot,
       csv_path  <- paste0(path_stem, "_data.csv")
       utils::write.csv(plot_data, csv_path, row.names = FALSE)
       paths_written <- c(paths_written, csv_path)
-      message(sprintf("[Green Journal] CSV:  %s (%d rows × %d cols)",
+      message(sprintf("[Green Journal] CSV:  %s (%d rows x %d cols)",
                       basename(csv_path), nrow(plot_data), ncol(plot_data)))
     }
   }
@@ -364,7 +364,7 @@ save_green_journal_figure <- function(plot,
 #' Returns EPSG:5070 (NAD83 / Conus Albers), the standard equal-area
 #' projection used by USGS and the US Census Bureau. Use with
 #' `coord_sf(crs = crs_albers_conus())` to avoid the area distortion of the
-#' default plate carrée projection on national choropleths.
+#' default plate carree projection on national choropleths.
 #'
 #' @return An `sf::st_crs` object (EPSG:5070).
 #' @export
@@ -384,7 +384,9 @@ mysterycall_crs_albers_conus <- function() {
   sf::st_crs(5070)
 }
 
-#' @rdname mysterycall_crs_albers_conus
+#' @noRd
+#' @export
+#' @name crs_albers_conus
 #' @export
 crs_albers_conus <- function(...) { .Deprecated("mysterycall_crs_albers_conus"); mysterycall_crs_albers_conus(...) }
 
@@ -417,7 +419,9 @@ mysterycall_winsorize <- function(x, lower = 0.005, upper = 0.995, na.rm = TRUE)
   x
 }
 
-#' @rdname mysterycall_winsorize
+#' @noRd
+#' @export
+#' @name winsorize
 #' @export
 winsorize <- function(...) { .Deprecated("mysterycall_winsorize"); mysterycall_winsorize(...) }
 
@@ -426,7 +430,7 @@ winsorize <- function(...) { .Deprecated("mysterycall_winsorize"); mysterycall_w
 #'
 #' Hard floor/ceiling clipping for visualization. Unlike [winsorize()], which
 #' uses data-driven quantiles, this forces exact bounds for clean legend breaks
-#' (e.g., 0–100% for coverage maps). Use when the legend must show round
+#' (e.g., 0-100% for coverage maps). Use when the legend must show round
 #' numbers regardless of the data range.
 #'
 #' @param x Numeric vector.
@@ -442,7 +446,9 @@ mysterycall_truncate_for_viz <- function(x, floor = 0, ceiling = 100) {
   pmin(pmax(x, floor, na.rm = TRUE), ceiling, na.rm = TRUE)
 }
 
-#' @rdname mysterycall_truncate_for_viz
+#' @noRd
+#' @export
+#' @name truncate_for_viz
 #' @export
 truncate_for_viz <- function(...) { .Deprecated("mysterycall_truncate_for_viz"); mysterycall_truncate_for_viz(...) }
 
@@ -483,7 +489,9 @@ mysterycall_compose_map_density <- function(map_plot, density_plot,
   gridExtra::arrangeGrob(map_plot, density_plot, layout_matrix = layout)
 }
 
-#' @rdname mysterycall_compose_map_density
+#' @noRd
+#' @export
+#' @name compose_map_density
 #' @export
 compose_map_density <- function(...) { .Deprecated("mysterycall_compose_map_density"); mysterycall_compose_map_density(...) }
 

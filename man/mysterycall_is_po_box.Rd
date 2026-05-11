@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_is_po_box}
 \alias{mysterycall_is_po_box}
-\alias{is_po_box}
 \title{Detect PO Box Addresses}
 \usage{
 mysterycall_is_po_box(x)
-
-is_po_box(...)
 }
 \arguments{
 \item{x}{Character vector of address strings to check.}

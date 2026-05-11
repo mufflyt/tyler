@@ -2,12 +2,9 @@
 % Please edit documentation in R/academic_indicators.R
 \name{mysterycall_get_academic_indicators_summary}
 \alias{mysterycall_get_academic_indicators_summary}
-\alias{get_academic_indicators_summary}
 \title{Export Academic Indicator Summary}
 \usage{
 mysterycall_get_academic_indicators_summary()
-
-get_academic_indicators_summary(...)
 }
 \value{
 Named list with elements \code{module_version}, \code{created_date},

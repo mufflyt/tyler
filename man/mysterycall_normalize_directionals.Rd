@@ -2,12 +2,9 @@
 % Please edit documentation in R/address_normalizer.R
 \name{mysterycall_normalize_directionals}
 \alias{mysterycall_normalize_directionals}
-\alias{normalize_directionals}
 \title{Normalize Directional Prefixes and Suffixes}
 \usage{
 mysterycall_normalize_directionals(addr)
-
-normalize_directionals(...)
 }
 \arguments{
 \item{addr}{Character vector of address strings to normalize.}
