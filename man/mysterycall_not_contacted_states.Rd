@@ -13,11 +13,8 @@ mysterycall_not_contacted_states(filtered_data, all_states = NULL)
 If not provided, a default set of states will be used.}
 }
 \value{
-A data frame with one row per state and columns \code{state}, \code{status}
-(\code{"included"} or \code{"excluded"}), and \code{unique_physicians} (the count of unique
-contacted physicians, repeated on every row for convenience). The summary
-sentence is attached as \code{attr(result, "summary_text")} for human-readable
-output.
+A length-1 character string summarising the states not contacted and
+the number of unique physicians successfully reached.
 }
 \description{
 This function summarizes the demographic details by identifying the states where physicians

@@ -31,19 +31,20 @@ test_that("mysterycall_rename_columns falls back to substring matches", {
   expect_true("physician_info" %in% names(renamed))
 })
 
-test_that("mysterycall_rename_columns errors on ambiguous substring matches", {
+test_that("mysterycall_rename_columns warns on ambiguous substring matches and keeps first", {
   raw <- data.frame(
     physician_information_1 = c("A"),
     physician_information_2 = c("B"),
     stringsAsFactors = FALSE
   )
 
-  expect_error(
-    mysterycall_rename_columns(
+  expect_warning(
+    result <- mysterycall_rename_columns(
       raw,
       target_strings = "physician_information",
       new_names = "physician_info"
     ),
     "Multiple columns matched"
   )
+  expect_true("physician_info" %in% names(result))
 })

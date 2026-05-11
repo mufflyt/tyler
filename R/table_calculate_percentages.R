@@ -9,7 +9,7 @@
 #'
 #' @return A data frame with one row per unique non-missing value of `variable`,
 #'   sorted by descending count. Columns: the variable itself, `n` (count), and
-#'   `percent` (percentage of total, rounded to 1 decimal place).
+#'   `percent` (percentage of total, as a numeric value).
 #'
 #' @examples
 #' data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
@@ -32,7 +32,7 @@ mysterycall_table_percentages <- function(data_frame, variable) {
 
   summary_df <- data_frame %>%
     dplyr::count(!!rlang::sym(variable), name = "n") %>%
-    dplyr::mutate(percent = round(100 * n / sum(n), 1)) %>%
+    dplyr::mutate(percent = 100 * n / sum(n)) %>%
     dplyr::arrange(dplyr::desc(n))
 
   return(summary_df)

@@ -9,11 +9,8 @@
 #' @param all_states A character vector of all possible states including Washington, DC.
 #' If not provided, a default set of states will be used.
 #'
-#' @return A data frame with one row per state and columns `state`, `status`
-#'   (`"included"` or `"excluded"`), and `unique_physicians` (the count of unique
-#'   contacted physicians, repeated on every row for convenience). The summary
-#'   sentence is attached as `attr(result, "summary_text")` for human-readable
-#'   output.
+#' @return A length-1 character string summarising the states not contacted and
+#'   the number of unique physicians successfully reached.
 #' @details
 #' If `contact_office` and/or `included_in_study` exist, they are interpreted as
 #' contact indicators and used to restrict the denominator to successfully
@@ -126,13 +123,6 @@ mysterycall_not_contacted_states <- function(filtered_data, all_states = NULL) {
     unique_physicians <- nrow(dplyr::distinct(contacted_data))
   }
 
-  # Build DC phrase from actual data, not hardcoded boilerplate
-  dc_phrase <- if ("District of Columbia" %in% included_states$state) {
-    " including the District of Columbia"
-  } else {
-    ""
-  }
-
   exclusion_sentence <- if (length(excluded_states) == 0) {
     "No states were excluded."
   } else {
@@ -143,22 +133,12 @@ mysterycall_not_contacted_states <- function(filtered_data, all_states = NULL) {
     "A total of ", unique_physicians,
     " unique physicians were identified in the dataset and were successfully contacted",
     " (i.e., with a recorded wait time for an appointment) in ",
-    num_included_states, " state(s)", dc_phrase,
-    ". ", exclusion_sentence
+    num_included_states, " states including the District of Columbia. ",
+    exclusion_sentence
   )
-
-  # Return a data frame (one row per state) so workflow_summary can record
-  # nrow(coverage_summary) meaningfully. Summary text is an attribute.
-  coverage_df <- data.frame(
-    state            = all_states,
-    status           = ifelse(all_states %in% included_states$state, "included", "excluded"),
-    unique_physicians = unique_physicians,
-    stringsAsFactors = FALSE
-  )
-  attr(coverage_df, "summary_text") <- output_string
 
   if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) beepr::beep(2)
-  return(coverage_df)
+  return(output_string)
 }
 
 

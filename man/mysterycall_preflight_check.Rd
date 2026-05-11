@@ -12,6 +12,7 @@ mysterycall_preflight_check(
   check_apis = TRUE,
   estimate_resources = TRUE,
   prompt_user = interactive(),
+  interactive = NULL,
   required_columns = c("first", "last")
 )
 }

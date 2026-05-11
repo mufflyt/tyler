@@ -80,8 +80,7 @@ mysterycall_write_results_paragraph <- function(
   matched <- irr_table[startsWith(as.character(irr_table$term), exposure_col), ]
 
   if (nrow(matched) == 0) {
-    warning("No terms found starting with exposure_col = '", exposure_col,
-            "'. Returning overall sentence only.")
+    stop("No coefficient found for exposure_col = '", exposure_col, "'.", call. = FALSE)
   }
 
   # ---- format p-value ---------------------------------------------------------

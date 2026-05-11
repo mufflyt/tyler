@@ -103,7 +103,7 @@ test_that("clean_phase_2_data standardises Phase 2 exports", {
 
   persisted <- readr::read_csv(
     file.path(tmp_dir, output_files[[1]]),
-    col_types = readr::cols(.default = readr::col_character()),
+    col_types = readr::cols(appt_date = readr::col_character()),
     show_col_types = FALSE
   )
   expect_equal(as.data.frame(persisted), expected, ignore_attr = TRUE)

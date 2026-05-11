@@ -33,10 +33,9 @@ mysterycall_check_no_limits <- function(data,
   n <- nrow(data)
 
   # Check for suspiciously round numbers that suggest artificial limits.
-  # 1000 is intentionally absent -- legitimate NPI searches return 1000 rows.
-  # 1200 replaces it: that is the hard NPI API cap and a reliable signal that
-  # the result was truncated rather than complete.
-  suspicious_counts <- c(5, 10, 25, 50, 100, 500, 1200, 5000, 10000, 50000, 100000)
+  # 1000 is included because head(1000) / LIMIT 1000 are common truncation points.
+  # 1200 is the NPI API hard cap.
+  suspicious_counts <- c(5, 10, 25, 50, 100, 500, 1000, 1200, 5000, 10000, 50000, 100000)
 
   if (n %in% suspicious_counts) {
     detail <- if (n == 1200L) {

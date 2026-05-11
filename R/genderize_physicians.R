@@ -179,17 +179,7 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
 
     if (is.null(response) || httr::http_error(response)) {
       status_str <- if (is.null(response)) "network error" else as.character(httr::status_code(response))
-      warning(sprintf(
-        "Genderize.io batch %d/%d failed after %d attempt(s) (status: %s); returning NA for %d name(s) in this batch.",
-        i, total_batches, max_retries, status_str, length(name_batch)
-      ), call. = FALSE)
-      results[[i]] <- tibble::tibble(
-        first_name = name_batch,
-        gender      = NA_character_,
-        probability = NA_real_,
-        count       = NA_integer_
-      )
-      next
+      stop(sprintf("Genderize.io request failed (status: %s).", status_str), call. = FALSE)
     }
 
     parsed <- httr::content(response, as = "parsed", type = "application/json", encoding = "UTF-8")

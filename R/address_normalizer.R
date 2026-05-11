@@ -94,7 +94,7 @@ mysterycall_ascii_norm <- function(x) {
     stringr::str_squish()
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name ascii_norm
@@ -118,7 +118,7 @@ ascii_norm <- function(...) { .Deprecated("mysterycall_ascii_norm"); mysterycall
 #' @export
 mysterycall_caps <- function(x) toupper(mysterycall_ascii_norm(x))
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name caps
@@ -167,7 +167,7 @@ mysterycall_is_po_box <- function(x) {
   stringr::str_detect(y, "\\bP\\s*O\\s*BOX\\b|\\bPO\\s*BOX\\b|\\bPOST\\s*OFFICE\\s*BOX\\b")
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name is_po_box
@@ -194,7 +194,7 @@ mysterycall_has_street_number <- function(x) {
   stringr::str_detect(y, "^\\s*\\d+\\b")
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name has_street_number
@@ -223,7 +223,7 @@ mysterycall_normalize_state <- function(state) {
   dplyr::if_else(stringr::str_detect(s, "^[A-Z]{2}$"), s, map_token(s, .state_map))
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name normalize_state
@@ -255,7 +255,7 @@ mysterycall_normalize_directionals <- function(addr) {
   a
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name normalize_directionals
@@ -286,7 +286,7 @@ mysterycall_normalize_suffix <- function(addr) {
   a
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name normalize_suffix
@@ -332,7 +332,7 @@ mysterycall_normalize_units <- function(addr1, addr2 = NA_character_) {
   list(addr1 = a1, addr2 = a2)
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name normalize_units
@@ -362,7 +362,7 @@ mysterycall_normalize_zip5 <- function(zip) {
   ifelse(is.na(z), NA_character_, z)
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name normalize_zip5
@@ -392,7 +392,7 @@ mysterycall_strip_suite <- function(addr) {
   stringr::str_squish(a)
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name strip_suite

@@ -48,8 +48,10 @@ mysterycall_preflight_check <- function(input_data,
                                    check_apis = TRUE,
                                    estimate_resources = TRUE,
                                    prompt_user = interactive(),
+                                   interactive = NULL,
                                    required_columns = c("first", "last")) {
 
+  if (!is.null(interactive)) prompt_user <- interactive
   checkmate::assert_flag(check_apis)
   checkmate::assert_flag(estimate_resources)
   checkmate::assert_flag(prompt_user)

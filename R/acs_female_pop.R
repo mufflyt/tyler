@@ -130,7 +130,7 @@ mysterycall_get_acs_women_18_90 <- function(year = 2022, states = NULL, verbose 
   result
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name get_acs_women_18_90

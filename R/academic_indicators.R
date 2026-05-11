@@ -31,7 +31,7 @@ NULL
 #' length(KNOWN_ACADEMIC_INSTITUTIONS)
 #' grepl("STANFORD", "Stanford University Hospital", ignore.case = TRUE)
 #'
-#' @seealso \code{\link{check_academic_name_patterns}},
+#' @seealso \code{\link{mysterycall_check_academic_name_patterns}},
 #'   \code{\link{ACADEMIC_HOSPITAL_PATTERNS}}
 #' @family academic-indicators
 #' @export
@@ -61,7 +61,7 @@ KNOWN_ACADEMIC_INSTITUTIONS <- c(
 #' names(ACADEMIC_HOSPITAL_PATTERNS)
 #' ACADEMIC_HOSPITAL_PATTERNS$very_high
 #'
-#' @seealso \code{\link{check_academic_name_patterns}},
+#' @seealso \code{\link{mysterycall_check_academic_name_patterns}},
 #'   \code{\link{KNOWN_ACADEMIC_INSTITUTIONS}}
 #' @family academic-indicators
 #' @export
@@ -89,7 +89,7 @@ ACADEMIC_HOSPITAL_PATTERNS <- list(
 #' @examples
 #' length(ACGME_PROGRAM_INDICATORS)
 #'
-#' @seealso \code{\link{classify_academic_affiliation}}
+#' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 #' @export
 ACGME_PROGRAM_INDICATORS <- c(
@@ -107,7 +107,7 @@ ACGME_PROGRAM_INDICATORS <- c(
 #' @examples
 #' length(COTH_TEACHING_INDICATORS)
 #'
-#' @seealso \code{\link{classify_academic_affiliation}}
+#' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 #' @export
 COTH_TEACHING_INDICATORS <- c(
@@ -124,7 +124,7 @@ COTH_TEACHING_INDICATORS <- c(
 #' @examples
 #' length(MEDICAL_SCHOOL_INDICATORS)
 #'
-#' @seealso \code{\link{classify_academic_affiliation}}
+#' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 #' @export
 MEDICAL_SCHOOL_INDICATORS <- c(
@@ -144,7 +144,7 @@ MEDICAL_SCHOOL_INDICATORS <- c(
 #' @examples
 #' NIH_CTSA_HUBS
 #'
-#' @seealso \code{\link{classify_academic_affiliation}}
+#' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 #' @export
 NIH_CTSA_HUBS <- c(
@@ -163,7 +163,7 @@ NIH_CTSA_HUBS <- c(
 #' @examples
 #' NCI_CANCER_CENTERS
 #'
-#' @seealso \code{\link{classify_academic_affiliation}}
+#' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 #' @export
 NCI_CANCER_CENTERS <- c(
@@ -181,7 +181,7 @@ NCI_CANCER_CENTERS <- c(
 #' @examples
 #' MEDICARE_GME_INDICATORS
 #'
-#' @seealso \code{\link{classify_academic_affiliation}}
+#' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
 #' @family academic-indicators
 #' @export
 MEDICARE_GME_INDICATORS <- c(
@@ -285,7 +285,7 @@ mysterycall_check_academic_name_patterns <- function(org_name, confidence_thresh
   results
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name check_academic_name_patterns
@@ -358,7 +358,7 @@ mysterycall_classify_academic_affiliation <- function(org_name,
   )
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name classify_academic_affiliation
@@ -429,7 +429,7 @@ mysterycall_get_academic_indicators_summary <- function() {
   )
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name get_academic_indicators_summary

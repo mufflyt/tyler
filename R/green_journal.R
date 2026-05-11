@@ -384,7 +384,7 @@ mysterycall_crs_albers_conus <- function() {
   sf::st_crs(5070)
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name crs_albers_conus
@@ -420,7 +420,7 @@ mysterycall_winsorize <- function(x, lower = 0.005, upper = 0.995, na.rm = TRUE)
   x
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name winsorize
@@ -448,7 +448,7 @@ mysterycall_truncate_for_viz <- function(x, floor = 0, ceiling = 100) {
   pmin(pmax(x, floor, na.rm = TRUE), ceiling, na.rm = TRUE)
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name truncate_for_viz
@@ -492,7 +492,7 @@ mysterycall_compose_map_density <- function(map_plot, density_plot,
   gridExtra::arrangeGrob(map_plot, density_plot, layout_matrix = layout)
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name compose_map_density

@@ -15,7 +15,7 @@ variable within \code{data_frame}.}
 \value{
 A data frame with one row per unique non-missing value of \code{variable},
 sorted by descending count. Columns: the variable itself, \code{n} (count), and
-\code{percent} (percentage of total, rounded to 1 decimal place).
+\code{percent} (percentage of total, as a numeric value).
 }
 \description{
 Counts each level of a categorical variable and computes its share of all

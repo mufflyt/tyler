@@ -141,7 +141,7 @@ mysterycall_get_acs_adults_18_90 <- function(year = NULL, states = NULL, verbose
   result
 }
 
-#' @noRd
+#' Deprecated.
 #' @keywords internal
 #' @export
 #' @name get_acs_adults_18_90
