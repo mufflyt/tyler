@@ -84,39 +84,53 @@ Provides a go/no-go decision before starting long-running operations.</p>
 
 
 <dl><dt id="arg-input-data">input_data<a class="anchor" aria-label="anchor" href="#arg-input-data"></a></dt>
-<dd><p>Path to input data file or data frame</p></dd>
+<dd><p>Either a file path (character scalar) to a CSV/Parquet
+roster, or an already-loaded data frame. If a path, the file must exist and
+be readable; if a data frame it is validated in memory.</p></dd>
 
 
 <dt id="arg-output-dir">output_dir<a class="anchor" aria-label="anchor" href="#arg-output-dir"></a></dt>
-<dd><p>Output directory path</p></dd>
+<dd><p>Character scalar. Destination directory for workflow
+outputs. Created if it does not exist.</p></dd>
 
 
 <dt id="arg-google-maps-api-key">google_maps_api_key<a class="anchor" aria-label="anchor" href="#arg-google-maps-api-key"></a></dt>
-<dd><p>Google Maps API key (optional if not geocoding)</p></dd>
+<dd><p>Character scalar. Google Maps Platform API key.
+Required only when geocoding is part of the workflow; leave <code>NULL</code>
+to skip geocoding validation.</p></dd>
 
 
 <dt id="arg-here-api-key">here_api_key<a class="anchor" aria-label="anchor" href="#arg-here-api-key"></a></dt>
-<dd><p>Routing API key (optional if not creating isochrones)</p></dd>
+<dd><p>Character scalar. HERE Routing API key. Required only
+when creating drive-time isochrones; leave <code>NULL</code> to skip.</p></dd>
 
 
 <dt id="arg-check-apis">check_apis<a class="anchor" aria-label="anchor" href="#arg-check-apis"></a></dt>
-<dd><p>Whether to validate API keys with test calls (default: TRUE)</p></dd>
+<dd><p>Logical. If <code>TRUE</code> (default), validates each non-<code>NULL</code>
+API key by making a minimal test request. Set to <code>FALSE</code> to skip
+live validation (e.g., in tests or when offline).</p></dd>
 
 
 <dt id="arg-estimate-resources">estimate_resources<a class="anchor" aria-label="anchor" href="#arg-estimate-resources"></a></dt>
-<dd><p>Whether to estimate runtime and memory (default: TRUE)</p></dd>
+<dd><p>Logical. If <code>TRUE</code> (default), estimates wall-clock
+time and peak memory consumption before the run starts.</p></dd>
 
 
 <dt id="arg-prompt-user">prompt_user<a class="anchor" aria-label="anchor" href="#arg-prompt-user"></a></dt>
-<dd><p>Whether to prompt user for confirmation (default: TRUE)</p></dd>
+<dd><p>Logical. If <code>TRUE</code> (default in interactive sessions),
+prints a go/no-go summary and waits for user confirmation. Set to
+<code>FALSE</code> in non-interactive scripts.</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
-<dd><p>Alias for <code>prompt_user</code>; if non-NULL it takes precedence.</p></dd>
+<dd><p>Alias for <code>prompt_user</code>; if non-<code>NULL</code> it takes
+precedence over <code>prompt_user</code>. Provided for back-compatibility with
+scripts that pass <code>interactive = FALSE</code>.</p></dd>
 
 
 <dt id="arg-required-columns">required_columns<a class="anchor" aria-label="anchor" href="#arg-required-columns"></a></dt>
-<dd><p>Required column names in input data</p></dd>
+<dd><p>Character vector of column names that must be present
+in <code>input_data</code>. Defaults to <code>c("first", "last")</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

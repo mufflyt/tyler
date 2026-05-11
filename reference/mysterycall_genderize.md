@@ -1,8 +1,10 @@
-# Genderize Physicians Data
+# Infer physician gender from first names via Genderize.io
 
-This function reads a CSV file containing physician data, genderizes the
-first names, and joins the gender information back to the original data.
-It then saves the result to a new CSV file with a timestamp.
+Queries the [Genderize.io](https://genderize.io) API for first-name
+gender predictions and joins the results back to the input roster. First
+names are deduplicated before querying to minimize API calls. The
+enriched roster is written to `output_dir` with a timestamp in the
+filename.
 
 ## Usage
 
@@ -18,27 +20,28 @@ mysterycall_genderize(
 
 - data_or_path:
 
-  A data frame containing physician data, or a path to a roster file.
-  CSV and Parquet formats are supported when a path is supplied.
+  A data frame with at least a `first_name` column, or a file path
+  (character scalar) to a CSV or Parquet roster.
 
 - output_dir:
 
-  The directory where the output file will be saved. Default is a
-  session-specific folder inside
+  Character scalar. Directory where the genderized roster is saved.
+  Defaults to a session-specific subfolder of
   [`tempdir()`](https://rdrr.io/r/base/tempfile.html).
 
 - output_format:
 
-  Output format for the saved roster. Either "csv" or "parquet" with
-  "csv" as the default to preserve backwards compatibility.
+  `"csv"` (default) or `"parquet"`. Format for the saved output file.
 
 ## Value
 
-A data frame with genderized information joined to the original data.
+A data frame matching the input rows with additional columns from
+Genderize.io: typically `gender`, `probability`, and `count`.
 
-The function queries the [Genderize.io](https://genderize.io) API for
-first name gender predictions. First names are deduplicated before
-querying the service to minimize repeated requests.
+## Details
+
+Requires a `first_name` column in the input data. HTTP errors from the
+API are raised as errors immediately (no silent fallback).
 
 ## See also
 

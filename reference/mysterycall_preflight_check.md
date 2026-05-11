@@ -25,39 +25,53 @@ mysterycall_preflight_check(
 
 - input_data:
 
-  Path to input data file or data frame
+  Either a file path (character scalar) to a CSV/Parquet roster, or an
+  already-loaded data frame. If a path, the file must exist and be
+  readable; if a data frame it is validated in memory.
 
 - output_dir:
 
-  Output directory path
+  Character scalar. Destination directory for workflow outputs. Created
+  if it does not exist.
 
 - google_maps_api_key:
 
-  Google Maps API key (optional if not geocoding)
+  Character scalar. Google Maps Platform API key. Required only when
+  geocoding is part of the workflow; leave `NULL` to skip geocoding
+  validation.
 
 - here_api_key:
 
-  Routing API key (optional if not creating isochrones)
+  Character scalar. HERE Routing API key. Required only when creating
+  drive-time isochrones; leave `NULL` to skip.
 
 - check_apis:
 
-  Whether to validate API keys with test calls (default: TRUE)
+  Logical. If `TRUE` (default), validates each non-`NULL` API key by
+  making a minimal test request. Set to `FALSE` to skip live validation
+  (e.g., in tests or when offline).
 
 - estimate_resources:
 
-  Whether to estimate runtime and memory (default: TRUE)
+  Logical. If `TRUE` (default), estimates wall-clock time and peak
+  memory consumption before the run starts.
 
 - prompt_user:
 
-  Whether to prompt user for confirmation (default: TRUE)
+  Logical. If `TRUE` (default in interactive sessions), prints a
+  go/no-go summary and waits for user confirmation. Set to `FALSE` in
+  non-interactive scripts.
 
 - interactive:
 
-  Alias for `prompt_user`; if non-NULL it takes precedence.
+  Alias for `prompt_user`; if non-`NULL` it takes precedence over
+  `prompt_user`. Provided for back-compatibility with scripts that pass
+  `interactive = FALSE`.
 
 - required_columns:
 
-  Required column names in input data
+  Character vector of column names that must be present in `input_data`.
+  Defaults to `c("first", "last")`.
 
 ## Value
 

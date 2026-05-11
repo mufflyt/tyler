@@ -12,9 +12,12 @@ mysterycall_academic_patterns()
 
 ## Value
 
-Character vector of lower-case regex patterns.
+Character vector of lower-case regex patterns used to identify academic
+medical centers and teaching hospitals.
 
 ## See also
+
+[`mysterycall_classify_practice_setting()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_practice_setting.md)
 
 Other provider characteristics:
 [`mysterycall_age_category()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_age_category.md),
@@ -30,3 +33,31 @@ Other provider characteristics:
 [`mysterycall_recode_credentials()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_recode_credentials.md),
 [`mysterycall_reconcile_specialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_specialty.md),
 [`mysterycall_reorder_by_freq()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reorder_by_freq.md)
+
+## Examples
+
+``` r
+# View all built-in academic patterns
+mysterycall_academic_patterns()
+#>  [1] "university"             "medical center"         "med center"            
+#>  [4] "medical college"        "school of medicine"     "teaching hospital"     
+#>  [7] "academic"               "children's hospital"    "childrens hospital"    
+#> [10] "mayo clinic"            "cleveland clinic"       "johns hopkins"         
+#> [13] "memorial sloan"         "md anderson"            "duke"                  
+#> [16] "stanford"               "ucsf"                   "ucla"                  
+#> [19] "usc"                    "nyu"                    "columbia"              
+#> [22] "harvard"                "yale"                   "penn"                  
+#> [25] "cornell"                "upmc"                   "vanderbilt"            
+#> [28] "emory"                  "baylor"                 "ohio state"            
+#> [31] "michigan medicine"      "northwestern"           "mount sinai"           
+#> [34] "brigham"                "jefferson"              "health sciences center"
+#> [37] "cancer center"          "cancer ctr"             "sch of med"            
+#> [40] "dept of oto"            "infirmary"              "health system"         
+#> [43] "henry ford"             "uab"                    "suny"                  
+#> [46] "oto dept"              
+
+# Extend with a custom term
+my_patterns <- c(mysterycall_academic_patterns(), "regional medical center")
+mysterycall_classify_practice_setting("Regional Medical Center", academic_patterns = my_patterns)
+#> [1] "Academic"
+```

@@ -1,8 +1,9 @@
-# Frequency counts and percentages for a categorical variable
+# Most frequent level(s) of a categorical variable with percentage
 
-Counts each level of a categorical variable and computes its share of
-all non-missing rows, returning all levels sorted from most to least
-common.
+Counts each level of a categorical variable, computes its share of all
+non-missing rows, and returns **only the level(s) with the highest
+count**. When multiple levels tie for the top count, all tied levels are
+returned. `NA` values are excluded from counts and the denominator.
 
 ## Usage
 
@@ -23,9 +24,9 @@ mysterycall_table_percentages(data_frame, variable)
 
 ## Value
 
-A data frame with one row per unique non-missing value of `variable`,
-sorted by descending count. Columns: the variable itself, `n` (count),
-and `percent` (percentage of total, as a numeric value).
+A data frame with one row per level tied for the highest count. Columns:
+the variable itself, `n` (count), and `percent` (exact percentage of
+non-missing rows, not rounded).
 
 ## See also
 
@@ -49,12 +50,13 @@ Other table:
 ## Examples
 
 ``` r
+# "A" is most frequent: returns 1 row
 data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
 mysterycall_table_percentages(data_frame, "category")
 #>   category n percent
 #> 1        A 4      50
 
-# Ties are all included, sorted alphabetically within the tied rank
+# Three-way tie: all three returned
 df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
 mysterycall_table_percentages(df_tie, "category")
 #>   category n  percent

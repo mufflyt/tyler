@@ -52,6 +52,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/classify_academic_affiliation.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/compose_map_density.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/crs_albers_conus.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/data_cache_helpers.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/data_utils.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/dot-audit_volatile_fields.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/ensure_hrr_shapefile.html</loc></url>
@@ -62,6 +63,7 @@
 <url><loc>https://mufflyt.github.io/mysterycall/reference/get_acs_women_18_90.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/has_street_number.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/index.html</loc></url>
+<url><loc>https://mufflyt.github.io/mysterycall/reference/io_helpers.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/is_po_box.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/logging-utils.html</loc></url>
 <url><loc>https://mufflyt.github.io/mysterycall/reference/manuscript_helpers.html</loc></url>

@@ -32,7 +32,7 @@ Find, validate, and enrich physician records via the NPI registry.
 - [`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)
   : Retrieve Clinician Data
 - [`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md)
-  : Genderize Physicians Data
+  : Infer physician gender from first names via Genderize.io
 - [`mysterycall_luhn_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_luhn_check.md)
   : Validate NPI numbers using the official CMS Luhn checksum
 - [`mysterycall_extract_zip5()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_extract_zip5.md)
@@ -195,7 +195,7 @@ missing values.
 - [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md)
   : Clean and process Phase 2 data
 - [`mysterycall_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_rename_columns.md)
-  : Rename columns based on substring matches
+  : Rename columns by substring match
 - [`mysterycall_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_split_and_save.md)
   : Split data into multiple parts and save each part as separate Excel
   files
@@ -242,7 +242,7 @@ missing values.
 - [`mysterycall_academic_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_academic_patterns.md)
   : Return the built-in academic keyword patterns
 - [`mysterycall_government_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_government_patterns.md)
-  : Return the built-in government keyword patterns
+  : Return the built-in government/military keyword patterns
 - [`mysterycall_age`](https://mufflyt.github.io/mysterycall/reference/mysterycall_age.md)
   : Physician age imputation and categorization
 
@@ -386,7 +386,7 @@ stacked bars.
 - [`mysterycall_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_arsenal_table.md)
   : Writes an Arsenal summary table to a Word document
 - [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md)
-  : Frequency counts and percentages for a categorical variable
+  : Most frequent level(s) of a categorical variable with percentage
 - [`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md)
   : Calculate the Proportion of Each Level in a Categorical Variable
 - [`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md)

@@ -68,11 +68,13 @@ list: <code>academic_patterns = c(mysterycall_academic_patterns(), "my term")</c
 
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Character vector of lower-case regex patterns.</p>
+    <p>Character vector of lower-case regex patterns used to identify
+academic medical centers and teaching hospitals.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other provider characteristics:
+    <div class="dont-index"><p><code><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting()</a></code></p>
+<p>Other provider characteristics:
 <code><a href="mysterycall_age_category.html">mysterycall_age_category()</a></code>,
 <code><a href="mysterycall_assign_region.html">mysterycall_assign_region()</a></code>,
 <code><a href="mysterycall_classify_medical_school.html">mysterycall_classify_medical_school()</a></code>,
@@ -88,6 +90,33 @@ list: <code>academic_patterns = c(mysterycall_academic_patterns(), "my term")</c
 <code><a href="mysterycall_reorder_by_freq.html">mysterycall_reorder_by_freq()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># View all built-in academic patterns</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall_academic_patterns</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "university"             "medical center"         "med center"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "medical college"        "school of medicine"     "teaching hospital"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "academic"               "children's hospital"    "childrens hospital"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "mayo clinic"            "cleveland clinic"       "johns hopkins"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "memorial sloan"         "md anderson"            "duke"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "stanford"               "ucsf"                   "ucla"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "usc"                    "nyu"                    "columbia"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] "harvard"                "yale"                   "penn"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "cornell"                "upmc"                   "vanderbilt"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "emory"                  "baylor"                 "ohio state"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "michigan medicine"      "northwestern"           "mount sinai"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [34] "brigham"                "jefferson"              "health sciences center"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] "cancer center"          "cancer ctr"             "sch of med"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [40] "dept of oto"            "infirmary"              "health system"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43] "henry ford"             "uab"                    "suny"                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [46] "oto dept"              </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Extend with a custom term</span></span></span>
+<span class="r-in"><span><span class="va">my_patterns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">mysterycall_academic_patterns</span><span class="op">(</span><span class="op">)</span>, <span class="st">"regional medical center"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting</a></span><span class="op">(</span><span class="st">"Regional Medical Center"</span>, academic_patterns <span class="op">=</span> <span class="va">my_patterns</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Academic"</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
