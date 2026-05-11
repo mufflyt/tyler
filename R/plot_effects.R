@@ -39,7 +39,7 @@ mysterycall_plot_effect <- function(model,
     stop("effects is required. Install with install.packages('effects').", call. = FALSE)
   }
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("ggplot2 is required.", call. = FALSE)
+    stop("ggplot2 is required. Install with install.packages('ggplot2').", call. = FALSE)
   }
   if (!is.character(term) || length(term) != 1L) {
     stop("`term` must be a single character string.", call. = FALSE)
