@@ -146,16 +146,30 @@ mysterycall_rename_columns <- function(data, target_strings, new_names) {
 #'
 #' @section Column name transformation:
 #'   All input column names are converted to **lowercase snake\_case** by
-#'   [janitor::clean_names()] before `required_strings` pattern matching.
-#'   For example, `"PhysicianInfo"` becomes `"physician_info"` and
-#'   `"NPI Registry"` becomes `"npi_registry"`. Pass `required_strings` and
-#'   `standard_names` in snake\_case to match the transformed names.
+#'   [janitor::clean_names()] **unconditionally** before `required_strings`
+#'   pattern matching. Transformation cannot be disabled. Common examples:
+#'   \tabular{ll}{
+#'     **Input column name** \tab **After `clean_names()`** \cr
+#'     `"Physician Information"` \tab `"physician_information"` \cr
+#'     `"NPI Number"` \tab `"npi_number"` \cr
+#'     `"Q1-2023 Revenue"` \tab `"q1_2023_revenue"` \cr
+#'     `"able_to_contact_office"` \tab `"able_to_contact_office"` (unchanged) \cr
+#'     `"ContactOfficeYN"` \tab `"contact_office_yn"`
+#'   }
+#'   To preview the exact names your data will have, run
+#'   `names(janitor::clean_names(your_data))` before calling this function,
+#'   then write `required_strings` to match those transformed names.
 #'
 #' @section Output file timestamps:
 #'   Output filenames include a timestamp from [Sys.time()], which uses the
 #'   **local system timezone** (not UTC). Filenames produced on systems in
 #'   different timezones will reflect different local times for the same
-#'   wall-clock moment.
+#'   wall-clock moment. To force UTC filenames, wrap the call:
+#'   ```r
+#'   withr::with_timezone("UTC", {
+#'     mysterycall_clean_phase2(data, required_strings, standard_names)
+#'   })
+#'   ```
 #'
 #' @family workflow
 #' @export

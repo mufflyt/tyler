@@ -44,7 +44,21 @@ NULL
 #'   Scores below **0.70** cause this function to stop with an error; scores
 #'   between 0.70 and 0.80 emit a warning. A score below 0.70 typically means
 #'   a required name column has more than 50\% missing values. See
-#'   [mysterycall_assess_data_quality()] for the full penalty schedule.
+#'   [mysterycall_assess_data_quality()] for the full penalty schedule and
+#'   worked examples.
+#'
+#'   The thresholds are **not configurable** via parameters. To investigate
+#'   quality issues without stopping, call [mysterycall_assess_data_quality()]
+#'   directly and inspect the returned `$issues` list:
+#'   ```r
+#'   report <- mysterycall_assess_data_quality(my_data)
+#'   report$score          # numeric 0–1
+#'   report$issues         # list of issue records with $severity and $message
+#'   ```
+#'
+#' @seealso [mysterycall_assess_data_quality()] for the scoring formula and
+#'   per-issue details; [mysterycall_estimate_resources()] for runtime and
+#'   memory projections.
 #'
 #' @family utilities
 #' @export
@@ -470,9 +484,19 @@ mysterycall_validate_here_api <- function(api_key) {
 #'     \item More than 10\% duplicate rows: −1 point
 #'     \item Required column is not character or factor type: −0.5 points
 #'   }
-#'   Final score = max(0, 1 − penalties / 10). The 0.70 and 0.80 thresholds
-#'   used by [mysterycall_preflight_check()] were chosen to catch severely
-#'   incomplete data while tolerating modest missingness in large rosters.
+#'   Final score = max(0, 1 − penalties / 10).
+#'
+#'   Worked examples for a 1,000-row physician roster with `required_columns
+#'   = c("first", "last")`:
+#'   \itemize{
+#'     \item All names present, < 10\% duplicates → **1.00** (100\%, pass)
+#'     \item 30\% of `first` names missing → **0.90** (90\%, pass)
+#'     \item 60\% of `first` names missing → **0.70** (70\%, borderline pass with warning)
+#'     \item Both columns > 50\% missing (−3 each) → **0.40** (40\%, preflight stops)
+#'   }
+#'   The 0.70 and 0.80 thresholds in [mysterycall_preflight_check()] were
+#'   chosen to catch severely incomplete data while tolerating modest
+#'   missingness in large rosters.
 #'
 #' @family utilities
 #' @export
@@ -560,10 +584,23 @@ mysterycall_assess_data_quality <- function(data, required_columns = c("first", 
 #'   Runtime is estimated as `n_rows × 4.5` seconds: 1.5 s/row for NPI
 #'   registry lookups, 0.5 s/row for geocoding (assumes a warm Google Maps
 #'   cache), and 2.5 s/row for HERE isochrone generation. Memory is
-#'   `(n_rows × 2) + 500` MB. These constants were measured on a typical US
-#'   residential broadband connection with warm API caches. Slow networks or
-#'   cold caches can **triple** the runtime estimate. Benchmark on 50–100
-#'   rows before committing to a large run.
+#'   `(n_rows × 2) + 500` MB.
+#'
+#'   Reference values for the full workflow:
+#'   \tabular{rrl}{
+#'     **Rows** \tab **Est. runtime** \tab **Est. memory** \cr
+#'     100 \tab ~8 min \tab ~700 MB \cr
+#'     500 \tab ~38 min \tab ~1.5 GB \cr
+#'     1,000 \tab ~75 min \tab ~2.5 GB \cr
+#'     5,000 \tab ~6.3 h \tab ~10.3 GB
+#'   }
+#'   These constants reflect typical US residential broadband with warm API
+#'   caches. Slow networks or cold caches can **triple** the runtime estimate.
+#'   Benchmark on 50–100 rows before committing to a large run.
+#'
+#'   If only a subset of the pipeline is used (e.g., NPI lookup only), the
+#'   relevant per-row constant is 1.5 s (NPI), 0.5 s (geocoding), or 2.5 s
+#'   (isochrones), not the combined 4.5 s.
 #'
 #' @family utilities
 #' @export

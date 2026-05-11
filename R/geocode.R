@@ -27,10 +27,27 @@
 #' @section Requirements:
 #'   Geocoding requires the `ggmap` package (listed in `Suggests`, not
 #'   `Imports`) and a Google Maps Platform API key with the **Geocoding API**
-#'   enabled. If `ggmap` is not installed the function stops immediately with
-#'   an install message. An invalid or expired key is only detected at the
-#'   first geocoding request — run [mysterycall_preflight_check()] with
-#'   `check_apis = TRUE` to validate the key before starting a long workflow.
+#'   enabled. Steps to obtain a key:
+#'   \enumerate{
+#'     \item Create a project at <https://console.cloud.google.com/>.
+#'     \item Enable the **Geocoding API** under APIs & Services → Library.
+#'     \item Create a key under APIs & Services → Credentials.
+#'     \item Enable **billing** on the project (required even for free-tier usage;
+#'           Google provides a $200/month credit that covers ~40,000 geocodes).
+#'   }
+#'
+#'   Common errors and remedies:
+#'   \tabular{ll}{
+#'     **Error message** \tab **Cause / fix** \cr
+#'     `"ggmap is required"` \tab Run `install.packages("ggmap")`. \cr
+#'     `"REQUEST_DENIED"` \tab Geocoding API not enabled for the key. \cr
+#'     `"OVER_QUERY_LIMIT"` \tab Daily free quota (40,000 calls) exceeded. \cr
+#'     `"INVALID_REQUEST"` \tab Malformed address string in the data.
+#'   }
+#'
+#'   An invalid or expired key is only detected at the first geocoding
+#'   request, not at function entry. Run [mysterycall_preflight_check()] with
+#'   `check_apis = TRUE` before a long workflow to catch key problems early.
 #'
 #' @family geospatial helpers
 #' @export

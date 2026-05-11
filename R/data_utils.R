@@ -117,10 +117,23 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 #'   `age_imputed`, `age_category`, `gender_std`, `setting_std`, `region_std`.
 #'
 #' @section Gender standardisation:
-#'   The `gender_std` column is produced by a binary lookup: `"m"`/`"male"`
-#'   → `"Male"`, `"f"`/`"female"` → `"Female"`, all other values →
-#'   `"Unknown"`. Non-binary values, `NA`, and any future Genderize.io API
-#'   additions are all mapped to `"Unknown"` without a warning.
+#'   The `gender_std` column is produced by a binary lookup applied
+#'   case-insensitively after whitespace trimming:
+#'   \tabular{ll}{
+#'     **Input value** \tab **`gender_std`** \cr
+#'     `"male"`, `"m"`, `"Male"`, `"M"` \tab `"Male"` \cr
+#'     `"female"`, `"f"`, `"Female"`, `"F"` \tab `"Female"` \cr
+#'     `NA` \tab `"Unknown"` \cr
+#'     `""`, `"unknown"`, `"non-binary"`, any other string \tab `"Unknown"`
+#'   }
+#'   Non-binary values and any future Genderize.io API additions are all
+#'   mapped to `"Unknown"` silently. Before calling this function, inspect
+#'   `table(data[[gender_col]], useNA = "always")` to check for unexpected
+#'   values that will be bucketed into `"Unknown"`.
+#'
+#' @seealso [mysterycall_genderize()] for the upstream API call that produces
+#'   the raw `gender` column; [mysterycall_preflight_check()] to validate
+#'   data quality before processing.
 #'
 #' @family data management
 #' @export

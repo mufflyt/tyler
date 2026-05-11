@@ -33,18 +33,38 @@
 #'   ever adds non-binary values they will be stored as-is in `gender` but will
 #'   be recoded to `"Unknown"` by [mysterycall_prepare_table1_vars()].
 #'
+#'   The `probability` column (0–1) reflects the API's prediction confidence.
+#'   Names with low probability may be genuine but uncommon (e.g., gender-neutral
+#'   names). A common post-processing filter:
+#'   ```r
+#'   result <- mysterycall_genderize(data)
+#'   high_conf <- dplyr::filter(result, probability >= 0.70 | is.na(gender))
+#'   ```
+#'
 #' @section API response schema:
-#'   Each Genderize.io JSON entry is expected to contain exactly four fields:
-#'   `name`, `gender`, `probability`, and `count`. Any additional fields
-#'   returned by the API are silently dropped. If the API renames or removes
-#'   one of these four fields, the corresponding output column will contain
-#'   `NA` without an explicit error or warning.
+#'   Each Genderize.io JSON entry is expected to contain exactly four fields.
+#'   Expected structure (single entry):
+#'   ```json
+#'   { "name": "james", "gender": "male", "probability": 0.92, "count": 12345 }
+#'   ```
+#'   Any additional fields returned by the API are silently dropped. If the
+#'   API renames or removes one of these four fields, the corresponding output
+#'   column will contain `NA` without an explicit error or warning. See the
+#'   API documentation at <https://genderize.io/#docs> for the current schema.
 #'
 #' @section Output file timestamps:
 #'   Output filenames include a timestamp from [Sys.time()], which uses the
 #'   **local system timezone** (not UTC). Files produced on systems in
 #'   different timezones will reflect different local times for the same
-#'   wall-clock moment.
+#'   wall-clock moment. To standardise to UTC:
+#'   ```r
+#'   withr::with_timezone("UTC", mysterycall_genderize(data))
+#'   ```
+#'   Alternatively, supply a meaningful `output_dir` path that encodes the
+#'   study date rather than relying on the auto-generated timestamp.
+#'
+#' @seealso [mysterycall_prepare_table1_vars()] for downstream gender
+#'   recoding to `"Male"`/`"Female"`/`"Unknown"`.
 #'
 #' @family gender
 #' @export
