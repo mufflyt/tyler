@@ -40,15 +40,15 @@ and
 ``` r
 tracker <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 10)
 mysterycall_progress_start(tracker, "Geocode")
-#> [03:08:34] Started Geocode
-#> [03:08:34] Progress: 0/2 steps complete (0.0%)
+#> [03:23:51] Started Geocode
+#> [03:23:51] Progress: 0/2 steps complete (0.0%)
 mysterycall_progress_finish(tracker, "Geocode", score = 0.92)
-#> [03:08:34] Completed Geocode (high)
-#> [03:08:34] Progress: 1/2 steps complete (50.0%)
+#> [03:23:51] Completed Geocode (high)
+#> [03:23:51] Progress: 1/2 steps complete (50.0%)
 mysterycall_progress_summary(tracker)
 #> # A tibble: 2 × 6
 #>   step     status    started_at          finished_at         quality note 
 #>   <chr>    <fct>     <dttm>              <dttm>              <chr>   <chr>
-#> 1 Geocode  completed 2026-05-11 03:08:34 2026-05-11 03:08:34 high    NA   
+#> 1 Geocode  completed 2026-05-11 03:23:51 2026-05-11 03:23:51 high    NA   
 #> 2 Validate pending   NA                  NA                  NA      NA   
 ```

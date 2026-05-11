@@ -52,9 +52,7 @@ Other table:
 data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
 mysterycall_table_percentages(data_frame, "category")
 #>   category n percent
-#> 1        A 4    50.0
-#> 2        B 3    37.5
-#> 3        C 1    12.5
+#> 1        A 4      50
 
 # Ties are all included, sorted alphabetically within the tied rank
 df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
@@ -69,7 +67,4 @@ df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
 mysterycall_table_percentages(df_na, "category")
 #>   category n percent
 #> 1        A 3    37.5
-#> 2        B 2    25.0
-#> 3     <NA> 2    25.0
-#> 4        C 1    12.5
 ```

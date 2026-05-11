@@ -51,6 +51,10 @@ mysterycall_preflight_check(
 
   Whether to prompt user for confirmation (default: TRUE)
 
+- interactive:
+
+  Alias for `prompt_user`; if non-NULL it takes precedence.
+
 - required_columns:
 
   Required column names in input data
