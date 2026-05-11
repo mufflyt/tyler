@@ -37,14 +37,8 @@ Other address-normalization:
 ## Examples
 
 ``` r
-normalize_directionals("123 North Main Street")
-#> Warning: 'normalize_directionals' is deprecated.
-#> Use 'mysterycall_normalize_directionals' instead.
-#> See help("Deprecated")
+mysterycall_normalize_directionals("123 North Main Street")
 #> [1] "123 N MAIN STREET"
-normalize_directionals("456 Southeast Oak Avenue")
-#> Warning: 'normalize_directionals' is deprecated.
-#> Use 'mysterycall_normalize_directionals' instead.
-#> See help("Deprecated")
+mysterycall_normalize_directionals("456 Southeast Oak Avenue")
 #> [1] "456 SE OAK AVENUE"
 ```

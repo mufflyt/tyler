@@ -36,14 +36,8 @@ Other address-normalization:
 ## Examples
 
 ``` r
-is_po_box("PO Box 12345")
-#> Warning: 'is_po_box' is deprecated.
-#> Use 'mysterycall_is_po_box' instead.
-#> See help("Deprecated")
+mysterycall_is_po_box("PO Box 12345")
 #> [1] TRUE
-is_po_box("123 Main Street")
-#> Warning: 'is_po_box' is deprecated.
-#> Use 'mysterycall_is_po_box' instead.
-#> See help("Deprecated")
+mysterycall_is_po_box("123 Main Street")
 #> [1] FALSE
 ```

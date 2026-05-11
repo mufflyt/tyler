@@ -36,14 +36,8 @@ Other address-normalization:
 ## Examples
 
 ``` r
-normalize_zip5("80111-1234")
-#> Warning: 'normalize_zip5' is deprecated.
-#> Use 'mysterycall_normalize_zip5' instead.
-#> See help("Deprecated")
+mysterycall_normalize_zip5("80111-1234")
 #> [1] "80111"
-normalize_zip5(90210)
-#> Warning: 'normalize_zip5' is deprecated.
-#> Use 'mysterycall_normalize_zip5' instead.
-#> See help("Deprecated")
+mysterycall_normalize_zip5(90210)
 #> [1] "90210"
 ```

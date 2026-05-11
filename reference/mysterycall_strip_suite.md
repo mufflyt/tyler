@@ -37,14 +37,8 @@ Other address-normalization:
 ## Examples
 
 ``` r
-strip_suite("123 Main St Suite 100")
-#> Warning: 'strip_suite' is deprecated.
-#> Use 'mysterycall_strip_suite' instead.
-#> See help("Deprecated")
+mysterycall_strip_suite("123 Main St Suite 100")
 #> [1] "123 MAIN ST"
-strip_suite("456 Oak Ave APT 4B #200")
-#> Warning: 'strip_suite' is deprecated.
-#> Use 'mysterycall_strip_suite' instead.
-#> See help("Deprecated")
+mysterycall_strip_suite("456 Oak Ave APT 4B #200")
 #> [1] "456 OAK AVE #200"
 ```

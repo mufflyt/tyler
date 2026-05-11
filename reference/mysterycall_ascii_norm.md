@@ -38,14 +38,8 @@ Other address-normalization:
 ## Examples
 
 ``` r
-ascii_norm("123 Main St Suite 100")
-#> Warning: 'ascii_norm' is deprecated.
-#> Use 'mysterycall_ascii_norm' instead.
-#> See help("Deprecated")
+mysterycall_ascii_norm("123 Main St Suite 100")
 #> [1] "123 Main St Suite 100"
-ascii_norm("456   Oak    Avenue")
-#> Warning: 'ascii_norm' is deprecated.
-#> Use 'mysterycall_ascii_norm' instead.
-#> See help("Deprecated")
+mysterycall_ascii_norm("456   Oak    Avenue")
 #> [1] "456 Oak Avenue"
 ```

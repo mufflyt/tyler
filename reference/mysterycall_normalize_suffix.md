@@ -36,14 +36,8 @@ Other address-normalization:
 ## Examples
 
 ``` r
-normalize_suffix("123 Main Street")
-#> Warning: 'normalize_suffix' is deprecated.
-#> Use 'mysterycall_normalize_suffix' instead.
-#> See help("Deprecated")
+mysterycall_normalize_suffix("123 Main Street")
 #> [1] "123 MAIN ST"
-normalize_suffix("456 Oak Boulevard Suite 100")
-#> Warning: 'normalize_suffix' is deprecated.
-#> Use 'mysterycall_normalize_suffix' instead.
-#> See help("Deprecated")
+mysterycall_normalize_suffix("456 Oak Boulevard Suite 100")
 #> [1] "456 OAK BLVD SUITE 100"
 ```

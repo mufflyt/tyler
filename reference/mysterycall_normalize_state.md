@@ -36,14 +36,8 @@ Other address-normalization:
 ## Examples
 
 ``` r
-normalize_state("California")
-#> Warning: 'normalize_state' is deprecated.
-#> Use 'mysterycall_normalize_state' instead.
-#> See help("Deprecated")
+mysterycall_normalize_state("California")
 #> [1] "CA"
-normalize_state("NY")
-#> Warning: 'normalize_state' is deprecated.
-#> Use 'mysterycall_normalize_state' instead.
-#> See help("Deprecated")
+mysterycall_normalize_state("NY")
 #> [1] "NY"
 ```

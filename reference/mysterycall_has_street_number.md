@@ -35,14 +35,8 @@ Other address-normalization:
 ## Examples
 
 ``` r
-has_street_number("123 Main Street")
-#> Warning: 'has_street_number' is deprecated.
-#> Use 'mysterycall_has_street_number' instead.
-#> See help("Deprecated")
+mysterycall_has_street_number("123 Main Street")
 #> [1] TRUE
-has_street_number("University Medical Center")
-#> Warning: 'has_street_number' is deprecated.
-#> Use 'mysterycall_has_street_number' instead.
-#> See help("Deprecated")
+mysterycall_has_street_number("University Medical Center")
 #> [1] FALSE
 ```

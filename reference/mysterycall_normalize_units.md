@@ -50,20 +50,14 @@ Other address-normalization:
 ## Examples
 
 ``` r
-normalize_units("123 Main St Suite 100", NA_character_)
-#> Warning: 'normalize_units' is deprecated.
-#> Use 'mysterycall_normalize_units' instead.
-#> See help("Deprecated")
+mysterycall_normalize_units("123 Main St Suite 100", NA_character_)
 #> $addr1
 #> [1] "123 MAIN ST STE 100"
 #> 
 #> $addr2
 #> [1] NA
 #> 
-normalize_units("456 Oak Avenue", "Apartment 4B")
-#> Warning: 'normalize_units' is deprecated.
-#> Use 'mysterycall_normalize_units' instead.
-#> See help("Deprecated")
+mysterycall_normalize_units("456 Oak Avenue", "Apartment 4B")
 #> $addr1
 #> [1] "456 OAK AVENUE"
 #> 

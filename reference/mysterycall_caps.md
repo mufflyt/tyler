@@ -36,14 +36,8 @@ Other address-normalization:
 ## Examples
 
 ``` r
-caps("123 main street")
-#> Warning: 'caps' is deprecated.
-#> Use 'mysterycall_caps' instead.
-#> See help("Deprecated")
+mysterycall_caps("123 main street")
 #> [1] "123 MAIN STREET"
-caps("456 oak ave #100")
-#> Warning: 'caps' is deprecated.
-#> Use 'mysterycall_caps' instead.
-#> See help("Deprecated")
+mysterycall_caps("456 oak ave #100")
 #> [1] "456 OAK AVE #100"
 ```

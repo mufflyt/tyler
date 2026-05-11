@@ -17,7 +17,7 @@ case-insensitively using `grepl(fixed = TRUE)`.
 
 ## See also
 
-[`mysterycall_check_academic_name_patterns`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md),
+`check_academic_name_patterns`,
 [`ACADEMIC_HOSPITAL_PATTERNS`](https://mufflyt.github.io/mysterycall/reference/ACADEMIC_HOSPITAL_PATTERNS.md)
 
 Other academic-indicators:
