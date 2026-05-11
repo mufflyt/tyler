@@ -28,7 +28,7 @@ Named list with three character vector elements:
 
 ## See also
 
-`check_academic_name_patterns`,
+[`mysterycall_check_academic_name_patterns`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md),
 [`KNOWN_ACADEMIC_INSTITUTIONS`](https://mufflyt.github.io/mysterycall/reference/KNOWN_ACADEMIC_INSTITUTIONS.md)
 
 Other academic-indicators:

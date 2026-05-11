@@ -25,7 +25,7 @@ mysterycall_table_percentages(data_frame, variable)
 
 A data frame with one row per unique non-missing value of `variable`,
 sorted by descending count. Columns: the variable itself, `n` (count),
-and `percent` (percentage of total, rounded to 1 decimal place).
+and `percent` (percentage of total, as a numeric value).
 
 ## See also
 
@@ -59,10 +59,10 @@ mysterycall_table_percentages(data_frame, "category")
 # Ties are all included, sorted alphabetically within the tied rank
 df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
 mysterycall_table_percentages(df_tie, "category")
-#>   category n percent
-#> 1        A 3    33.3
-#> 2        B 3    33.3
-#> 3        C 3    33.3
+#>   category n  percent
+#> 1        A 3 33.33333
+#> 2        B 3 33.33333
+#> 3        C 3 33.33333
 
 # NAs are excluded from counts and the denominator
 df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))

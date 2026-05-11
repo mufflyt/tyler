@@ -87,11 +87,8 @@ If not provided, a default set of states will be used.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with one row per state and columns <code>state</code>, <code>status</code>
-(<code>"included"</code> or <code>"excluded"</code>), and <code>unique_physicians</code> (the count of unique
-contacted physicians, repeated on every row for convenience). The summary
-sentence is attached as <code>attr(result, "summary_text")</code> for human-readable
-output.</p>
+    <p>A length-1 character string summarising the states not contacted and
+the number of unique physicians successfully reached.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -125,114 +122,12 @@ numerics, and character values such as <code>"yes"</code>, <code>"y"</code>, <co
 <span class="r-in"><span>                 <span class="st">"Washington"</span>, <span class="st">"West Virginia"</span>, <span class="st">"Wisconsin"</span>, <span class="st">"Wyoming"</span>,</span></span>
 <span class="r-in"><span>                 <span class="st">"District of Columbia"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_not_contacted_states</span><span class="op">(</span><span class="va">filtered_data</span>, <span class="va">all_states</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   state   status unique_physicians</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               Alabama excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                Alaska excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3               Arizona excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4              Arkansas excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5            California included                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6              Colorado excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7           Connecticut excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8              Delaware excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9               Florida excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10              Georgia excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11               Hawaii excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                Idaho excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13             Illinois excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14              Indiana excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15                 Iowa excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16               Kansas excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17             Kentucky excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18            Louisiana excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19                Maine excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20             Maryland excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21        Massachusetts excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22             Michigan excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23            Minnesota excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24          Mississippi excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25             Missouri excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26              Montana excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27             Nebraska excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28               Nevada excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29        New Hampshire excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30           New Jersey excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31           New Mexico excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32             New York included                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33       North Carolina excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34         North Dakota excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35                 Ohio excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36             Oklahoma excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37               Oregon excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38         Pennsylvania excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39         Rhode Island excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40       South Carolina excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41         South Dakota excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42            Tennessee excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43                Texas included                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44                 Utah excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45              Vermont excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46             Virginia excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47           Washington excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48        West Virginia excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49            Wisconsin excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50              Wyoming excluded                 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51 District of Columbia excluded                 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A total of 3 unique physicians were identified in the dataset and were successfully contacted (i.e., with a recorded wait time for an appointment) in 3 states including the District of Columbia. The excluded states include Alabama, Alaska, Arizona, Arkansas, Colorado, Connecticut, Delaware, Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, North Carolina, North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina, South Dakota, Tennessee, Utah, Vermont, Virginia, Washington, West Virginia, Wisconsin, Wyoming and District of Columbia."</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example with default all_states</span></span></span>
 <span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"California"</span>, <span class="st">"New York"</span>, <span class="st">"Texas"</span>, <span class="st">"Nevada"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_not_contacted_states</span><span class="op">(</span><span class="va">filtered_data</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   state   status unique_physicians</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               Alabama excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                Alaska excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3               Arizona excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4              Arkansas excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5            California included                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6              Colorado excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7           Connecticut excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8              Delaware excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9               Florida excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10              Georgia excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11               Hawaii excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                Idaho excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13             Illinois excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14              Indiana excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15                 Iowa excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16               Kansas excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17             Kentucky excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18            Louisiana excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19                Maine excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20             Maryland excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21        Massachusetts excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22             Michigan excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23            Minnesota excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24          Mississippi excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25             Missouri excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26              Montana excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27             Nebraska excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28               Nevada included                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29        New Hampshire excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30           New Jersey excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31           New Mexico excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32             New York included                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33       North Carolina excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34         North Dakota excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35                 Ohio excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36             Oklahoma excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37               Oregon excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38         Pennsylvania excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39         Rhode Island excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40       South Carolina excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41         South Dakota excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42            Tennessee excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43                Texas included                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44                 Utah excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45              Vermont excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46             Virginia excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47           Washington excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48        West Virginia excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49            Wisconsin excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50              Wyoming excluded                 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51 District of Columbia excluded                 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A total of 4 unique physicians were identified in the dataset and were successfully contacted (i.e., with a recorded wait time for an appointment) in 4 states including the District of Columbia. The excluded states include Alabama, Alaska, Arizona, Arkansas, Colorado, Connecticut, Delaware, Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana, Nebraska, New Hampshire, New Jersey, New Mexico, North Carolina, North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina, South Dakota, Tennessee, Utah, Vermont, Virginia, Washington, West Virginia, Wisconsin, Wyoming and District of Columbia."</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

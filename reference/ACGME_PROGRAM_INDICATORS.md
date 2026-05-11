@@ -15,7 +15,7 @@ Character vector of ACGME-related text patterns.
 
 ## See also
 
-`classify_academic_affiliation`
+[`mysterycall_classify_academic_affiliation`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)
 
 Other academic-indicators:
 [`ACADEMIC_HOSPITAL_PATTERNS`](https://mufflyt.github.io/mysterycall/reference/ACADEMIC_HOSPITAL_PATTERNS.md),
