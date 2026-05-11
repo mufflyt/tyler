@@ -7,13 +7,24 @@
 mysterycall_academic_patterns()
 }
 \value{
-Character vector of lower-case regex patterns.
+Character vector of lower-case regex patterns used to identify
+academic medical centers and teaching hospitals.
 }
 \description{
 Convenience accessor so callers can extend rather than replace the default
 list: \code{academic_patterns = c(mysterycall_academic_patterns(), "my term")}.
 }
+\examples{
+# View all built-in academic patterns
+mysterycall_academic_patterns()
+
+# Extend with a custom term
+my_patterns <- c(mysterycall_academic_patterns(), "regional medical center")
+mysterycall_classify_practice_setting("Regional Medical Center", academic_patterns = my_patterns)
+}
 \seealso{
+\code{\link[=mysterycall_classify_practice_setting]{mysterycall_classify_practice_setting()}}
+
 Other provider characteristics: 
 \code{\link{mysterycall_age_category}()},
 \code{\link{mysterycall_assign_region}()},

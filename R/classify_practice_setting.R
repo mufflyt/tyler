@@ -104,15 +104,39 @@ mysterycall_classify_practice_setting <- function(facility_name,
 #' Convenience accessor so callers can extend rather than replace the default
 #' list: `academic_patterns = c(mysterycall_academic_patterns(), "my term")`.
 #'
-#' @return Character vector of lower-case regex patterns.
+#' @return Character vector of lower-case regex patterns used to identify
+#'   academic medical centers and teaching hospitals.
 #' @family provider characteristics
+#' @seealso [mysterycall_classify_practice_setting()]
 #' @export
+#'
+#' @examples
+#' # View all built-in academic patterns
+#' mysterycall_academic_patterns()
+#'
+#' # Extend with a custom term
+#' my_patterns <- c(mysterycall_academic_patterns(), "regional medical center")
+#' mysterycall_classify_practice_setting("Regional Medical Center", academic_patterns = my_patterns)
 mysterycall_academic_patterns <- function() .mc_academic_patterns
 
 
-#' Return the built-in government keyword patterns
+#' Return the built-in government/military keyword patterns
 #'
-#' @return Character vector of lower-case regex patterns.
+#' Convenience accessor so callers can extend rather than replace the default
+#' government pattern list used by [mysterycall_classify_practice_setting()].
+#'
+#' @return Character vector of lower-case regex patterns used to identify
+#'   VA, military, and other government-affiliated facilities.
 #' @family provider characteristics
+#' @seealso [mysterycall_classify_practice_setting()]
 #' @export
+#'
+#' @examples
+#' # View all built-in government patterns
+#' mysterycall_government_patterns()
+#'
+#' # Extend with a custom term
+#' my_gov <- c(mysterycall_government_patterns(), "state health dept")
+#' mysterycall_classify_practice_setting("State Health Dept Clinic",
+#'                                        government_patterns = my_gov)
 mysterycall_government_patterns <- function() .mc_government_patterns

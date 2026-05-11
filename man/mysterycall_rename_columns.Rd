@@ -2,22 +2,28 @@
 % Please edit documentation in R/clean_phase_2_results.R
 \name{mysterycall_rename_columns}
 \alias{mysterycall_rename_columns}
-\title{Rename columns based on substring matches}
+\title{Rename columns by substring match}
 \usage{
 mysterycall_rename_columns(data, target_strings, new_names)
 }
 \arguments{
 \item{data}{A data frame whose columns need renaming.}
 
-\item{target_strings}{A vector of substrings to search for within column names.}
+\item{target_strings}{Character vector of substrings to search for within
+column names. Must be the same length as \code{new_names}.}
 
-\item{new_names}{A vector of new names corresponding to the target strings.}
+\item{new_names}{Character vector of replacement column names, aligned with
+\code{target_strings}.}
 }
 \value{
-A data frame with renamed columns.
+A data frame with matched columns renamed. Unmatched targets are
+silently skipped; a warning is issued when multiple columns match.
 }
 \description{
-This function searches through column names in a data frame for specified substrings and renames the first matching column to a new name provided by the user. It provides detailed logs for each operation, including the columns found and any renaming actions taken. If multiple columns match a substring, only the first is renamed, and a warning is issued.
+For each \code{target_strings[i]}, finds the first column whose name contains
+that substring and renames it to \code{new_names[i]}. When multiple columns
+match, the first match is used and a warning is issued. When no column
+matches, a message is emitted and that rename is skipped.
 }
 \examples{
 df <- data.frame(

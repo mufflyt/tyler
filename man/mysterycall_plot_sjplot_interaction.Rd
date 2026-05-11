@@ -20,7 +20,7 @@ mysterycall_plot_sjplot_interaction(model, terms, title = NULL, ...)
 A \code{ggplot} object.
 }
 \description{
-Thin wrapper around \code{\link[sjPlot:plot_model]{sjPlot::plot_model()}} with \code{type = "int"}. Returns a
+Thin wrapper around \code{sjPlot::plot_model()} with \code{type = "int"}. Returns a
 ggplot object that can be further customised with standard ggplot2 layers.
 }
 \examples{

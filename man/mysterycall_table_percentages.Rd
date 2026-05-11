@@ -2,7 +2,7 @@
 % Please edit documentation in R/table_calculate_percentages.R
 \name{mysterycall_table_percentages}
 \alias{mysterycall_table_percentages}
-\title{Frequency counts and percentages for a categorical variable}
+\title{Most frequent level(s) of a categorical variable with percentage}
 \usage{
 mysterycall_table_percentages(data_frame, variable)
 }
@@ -13,19 +13,22 @@ mysterycall_table_percentages(data_frame, variable)
 variable within \code{data_frame}.}
 }
 \value{
-A data frame with one row per unique non-missing value of \code{variable},
-sorted by descending count. Columns: the variable itself, \code{n} (count), and
-\code{percent} (percentage of total, as a numeric value).
+A data frame with one row per level tied for the highest count.
+Columns: the variable itself, \code{n} (count), and \code{percent} (exact percentage
+of non-missing rows, not rounded).
 }
 \description{
-Counts each level of a categorical variable and computes its share of all
-non-missing rows, returning all levels sorted from most to least common.
+Counts each level of a categorical variable, computes its share of all
+non-missing rows, and returns \strong{only the level(s) with the highest count}.
+When multiple levels tie for the top count, all tied levels are returned.
+\code{NA} values are excluded from counts and the denominator.
 }
 \examples{
+# "A" is most frequent: returns 1 row
 data_frame <- data.frame(category = c("A", "B", "A", "C", "A", "B", "B", "A"))
 mysterycall_table_percentages(data_frame, "category")
 
-# Ties are all included, sorted alphabetically within the tied rank
+# Three-way tie: all three returned
 df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
 mysterycall_table_percentages(df_tie, "category")
 

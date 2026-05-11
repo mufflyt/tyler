@@ -4,6 +4,7 @@
 #' datasets so that functions can transparently support both CSV and Parquet
 #' storage without duplicating logic.
 #'
+#' @name io_helpers
 #' @keywords internal
 NULL
 

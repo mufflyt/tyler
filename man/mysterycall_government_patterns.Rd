@@ -2,17 +2,30 @@
 % Please edit documentation in R/classify_practice_setting.R
 \name{mysterycall_government_patterns}
 \alias{mysterycall_government_patterns}
-\title{Return the built-in government keyword patterns}
+\title{Return the built-in government/military keyword patterns}
 \usage{
 mysterycall_government_patterns()
 }
 \value{
-Character vector of lower-case regex patterns.
+Character vector of lower-case regex patterns used to identify
+VA, military, and other government-affiliated facilities.
 }
 \description{
-Return the built-in government keyword patterns
+Convenience accessor so callers can extend rather than replace the default
+government pattern list used by \code{\link[=mysterycall_classify_practice_setting]{mysterycall_classify_practice_setting()}}.
+}
+\examples{
+# View all built-in government patterns
+mysterycall_government_patterns()
+
+# Extend with a custom term
+my_gov <- c(mysterycall_government_patterns(), "state health dept")
+mysterycall_classify_practice_setting("State Health Dept Clinic",
+                                       government_patterns = my_gov)
 }
 \seealso{
+\code{\link[=mysterycall_classify_practice_setting]{mysterycall_classify_practice_setting()}}
+
 Other provider characteristics: 
 \code{\link{mysterycall_academic_patterns}()},
 \code{\link{mysterycall_age_category}()},

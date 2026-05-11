@@ -32,7 +32,7 @@ on the linear predictor scale.}
 A \code{ggplot} object.
 }
 \description{
-Calls \code{\link[effects:effect]{effects::effect()}} on a fitted model and returns a ggplot2 ribbon
+Calls \code{effects::effect()} on a fitted model and returns a ggplot2 ribbon
 plot of the marginal predicted values with 95\% confidence bands. Works
 with any model class supported by the \strong{effects} package (lm, glm,
 glmerMod, lmerMod, …).

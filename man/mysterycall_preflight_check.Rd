@@ -17,23 +17,37 @@ mysterycall_preflight_check(
 )
 }
 \arguments{
-\item{input_data}{Path to input data file or data frame}
+\item{input_data}{Either a file path (character scalar) to a CSV/Parquet
+roster, or an already-loaded data frame. If a path, the file must exist and
+be readable; if a data frame it is validated in memory.}
 
-\item{output_dir}{Output directory path}
+\item{output_dir}{Character scalar. Destination directory for workflow
+outputs. Created if it does not exist.}
 
-\item{google_maps_api_key}{Google Maps API key (optional if not geocoding)}
+\item{google_maps_api_key}{Character scalar. Google Maps Platform API key.
+Required only when geocoding is part of the workflow; leave \code{NULL}
+to skip geocoding validation.}
 
-\item{here_api_key}{Routing API key (optional if not creating isochrones)}
+\item{here_api_key}{Character scalar. HERE Routing API key. Required only
+when creating drive-time isochrones; leave \code{NULL} to skip.}
 
-\item{check_apis}{Whether to validate API keys with test calls (default: TRUE)}
+\item{check_apis}{Logical. If \code{TRUE} (default), validates each non-\code{NULL}
+API key by making a minimal test request. Set to \code{FALSE} to skip
+live validation (e.g., in tests or when offline).}
 
-\item{estimate_resources}{Whether to estimate runtime and memory (default: TRUE)}
+\item{estimate_resources}{Logical. If \code{TRUE} (default), estimates wall-clock
+time and peak memory consumption before the run starts.}
 
-\item{prompt_user}{Whether to prompt user for confirmation (default: TRUE)}
+\item{prompt_user}{Logical. If \code{TRUE} (default in interactive sessions),
+prints a go/no-go summary and waits for user confirmation. Set to
+\code{FALSE} in non-interactive scripts.}
 
-\item{interactive}{Alias for \code{prompt_user}; if non-NULL it takes precedence.}
+\item{interactive}{Alias for \code{prompt_user}; if non-\code{NULL} it takes
+precedence over \code{prompt_user}. Provided for back-compatibility with
+scripts that pass \code{interactive = FALSE}.}
 
-\item{required_columns}{Required column names in input data}
+\item{required_columns}{Character vector of column names that must be present
+in \code{input_data}. Defaults to \code{c("first", "last")}.}
 }
 \value{
 Invisible list with check results, or stops with error if checks fail

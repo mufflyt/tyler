@@ -17,7 +17,6 @@
 
 # Misc build artifacts and temp files
 ^cran-comments\.md$
-^inst/doc$
 \.DS_Store$
 .*\.Rhistory$
 .*\.RData$

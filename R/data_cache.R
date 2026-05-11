@@ -4,6 +4,7 @@
 #' used to persist large external resources that are downloaded on demand.
 #' They are not exported.
 #'
+#' @name data_cache_helpers
 #' @keywords internal
 NULL
 

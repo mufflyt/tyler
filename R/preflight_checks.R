@@ -13,15 +13,29 @@ NULL
 #' data quality, output directories, estimated resources, and dependencies.
 #' Provides a go/no-go decision before starting long-running operations.
 #'
-#' @param input_data Path to input data file or data frame
-#' @param output_dir Output directory path
-#' @param google_maps_api_key Google Maps API key (optional if not geocoding)
-#' @param here_api_key Routing API key (optional if not creating isochrones)
-#' @param check_apis Whether to validate API keys with test calls (default: TRUE)
-#' @param estimate_resources Whether to estimate runtime and memory (default: TRUE)
-#' @param prompt_user Whether to prompt user for confirmation (default: TRUE)
-#' @param interactive Alias for `prompt_user`; if non-NULL it takes precedence.
-#' @param required_columns Required column names in input data
+#' @param input_data Either a file path (character scalar) to a CSV/Parquet
+#'   roster, or an already-loaded data frame. If a path, the file must exist and
+#'   be readable; if a data frame it is validated in memory.
+#' @param output_dir Character scalar. Destination directory for workflow
+#'   outputs. Created if it does not exist.
+#' @param google_maps_api_key Character scalar. Google Maps Platform API key.
+#'   Required only when geocoding is part of the workflow; leave `NULL`
+#'   to skip geocoding validation.
+#' @param here_api_key Character scalar. HERE Routing API key. Required only
+#'   when creating drive-time isochrones; leave `NULL` to skip.
+#' @param check_apis Logical. If `TRUE` (default), validates each non-`NULL`
+#'   API key by making a minimal test request. Set to `FALSE` to skip
+#'   live validation (e.g., in tests or when offline).
+#' @param estimate_resources Logical. If `TRUE` (default), estimates wall-clock
+#'   time and peak memory consumption before the run starts.
+#' @param prompt_user Logical. If `TRUE` (default in interactive sessions),
+#'   prints a go/no-go summary and waits for user confirmation. Set to
+#'   `FALSE` in non-interactive scripts.
+#' @param interactive Alias for `prompt_user`; if non-`NULL` it takes
+#'   precedence over `prompt_user`. Provided for back-compatibility with
+#'   scripts that pass `interactive = FALSE`.
+#' @param required_columns Character vector of column names that must be present
+#'   in `input_data`. Defaults to `c("first", "last")`.
 #'
 #' @return Invisible list with check results, or stops with error if checks fail
 #' @family utilities
