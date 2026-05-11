@@ -6,7 +6,9 @@ for choropleth maps, isochrone coverage maps, and other spatial figures.
 Removes all axis elements, centers the title, and adds a framed legend.
 Use with
 [`ggplot2::coord_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)
-and `crs_albers_conus()` for equal-area projection.
+and
+[`mysterycall_crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md)
+for equal-area projection.
 
 ## Usage
 

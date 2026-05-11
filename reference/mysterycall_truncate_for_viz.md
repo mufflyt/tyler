@@ -1,6 +1,7 @@
 # Truncate values to fixed bounds
 
-Hard floor/ceiling clipping for visualization. Unlike `winsorize()`,
+Hard floor/ceiling clipping for visualization. Unlike
+[`mysterycall_winsorize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_winsorize.md),
 which uses data-driven quantiles, this forces exact bounds for clean
 legend breaks (e.g., 0-100% for coverage maps). Use when the legend must
 show round numbers regardless of the data range.
