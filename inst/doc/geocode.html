@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Tyler Muffly, MD" />
+
+
+<title>Geocoding</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Geocoding</h1>
+<h4 class="author">Tyler Muffly, MD</h4>
+
+
+
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>The <code>geocode</code> function is designed to help you geocode
+datasets containing addresses and change them to latitude and
+longitude.</p>
+<div id="step-1" class="section level2">
+<h2>Step 1</h2>
+<div id="installation" class="section level3">
+<h3>Installation</h3>
+<p>Before you can harness the power of the
+<code>mysterycall_search_by_taxonomy</code> function, it is essential to
+ensure that you have the <code>tyler</code> package installed. You can
+effortlessly install it using the following command:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(mysterycall)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="example-usage" class="section level1">
+<h1>Example Usage</h1>
+<div id="understanding-geocoding" class="section level2">
+<h2>Understanding Geocoding</h2>
+<p>Certainly! Geocoding, the process of converting addresses or place
+names into geographic coordinates (latitude and longitude), has its
+advantages and disadvantages. Here’s an overview of the pluses and
+minuses of geocoding:</p>
+<p><strong>Pluses of Geocoding:</strong></p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li><strong>Location Accuracy:</strong> Geocoding provides precise
+location information, allowing you to pinpoint addresses or places on a
+map with high accuracy. This is crucial for various applications such as
+mapping, navigation, and location-based services.</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li><strong>Spatial Analysis:</strong> Geocoded data enables spatial
+analysis, allowing you to perform tasks like proximity analysis, spatial
+clustering, and spatial interpolation. It’s invaluable for geographic
+information systems (GIS) and geographic research.</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li><strong>Geographic Visualization:</strong> Geocoded data can be
+visualized on maps, making it easier to understand and communicate
+spatial patterns and trends. This is particularly useful for data
+presentation and decision-making.</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: decimal">
+<li><strong>Routing and Navigation:</strong> Geocoding is essential for
+navigation systems, delivery route optimization, and location-based apps
+that provide directions and estimated travel times.</li>
+</ol></li>
+</ul>
+<p><strong>Minuses of Geocoding:</strong></p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li><strong>Data Quality Issues:</strong> Geocoding accuracy heavily
+relies on the quality of the underlying address data. Inaccurate or
+outdated address information can lead to geocoding errors.</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li><strong>Costs:</strong> Geocoding services or software often come
+with associated costs, particularly for large-scale geocoding
+operations. These costs can include data licensing fees and usage
+charges.</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li><strong>Complexity:</strong> Advanced geocoding tasks, such as
+reverse geocoding (converting coordinates to addresses) and batch
+geocoding, can be technically complex and may require expertise or
+specialized tools.</li>
+</ol></li>
+</ul>
+<p>In summary, geocoding offers numerous benefits in terms of location
+accuracy, spatial analysis, visualization, and navigation. However, it
+also comes with challenges related to data quality, costs, and
+complexity. Careful consideration of these factors is essential when
+using geocoding in various applications.</p>
+<p><strong>Do not geocode from Zip codes</strong> There are several
+issues and limitations associated with geocoding solely based on zip
+codes:</p>
+<ul>
+<li><p>Lack of Precision: Zip codes are designed to cover a group of
+addresses or an area, not specific points. Therefore, geocoding based
+solely on a zip code provides only an approximation of the location,
+often at the center or centroid of the zip code area. This lack of
+precision can be problematic for applications that require accurate
+coordinates.</p></li>
+<li><p>Zip Code Boundaries: Zip code boundaries can be irregular and may
+not align with natural or administrative boundaries. This means that
+geocoding based on zip codes can result in coordinates that do not
+reflect the actual geography of the area, leading to
+inaccuracies.</p></li>
+<li><p>Zip Code Changes: Zip code boundaries and assignments can change
+over time due to population growth, urban development, or administrative
+reasons. Geocoding based on outdated zip code data can lead to incorrect
+locations.</p></li>
+<li><p>Large Zip Codes: Some zip codes cover vast geographic areas,
+especially in rural regions. Geocoding to the center of such large zip
+code areas can be highly inaccurate for specific locations within that
+area.</p></li>
+<li><p>Overlapping Zip Codes: In some cases, zip codes may overlap with
+one another. Geocoding based solely on a zip code may not distinguish
+between the overlapping areas, leading to ambiguity.</p></li>
+<li><p>Urban Density: In densely populated urban areas, zip codes can be
+small and densely packed with addresses. Geocoding solely by zip code
+may still result in a lack of precision when trying to identify a
+particular location within a zip code.</p></li>
+</ul>
+</div>
+<div id="step-2-prepare-your-data" class="section level2">
+<h2>Step 2: Prepare Your Data</h2>
+<p>You can provide your data as either a dataframe or a CSV file in the
+argument <code>input_data</code>. Under the hood
+<code>ggmap::geocode</code> is accessing a Google API.
+<code>ggmap::geocode</code> is the program AHRQ uses.</p>
+<ul>
+<li>If your data is in a CSV file, pass the file path as the input_data
+parameter.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>output_data <span class="ot">&lt;-</span> <span class="fu">mysterycall_geocode</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="at">file_path =</span><span class="st">&quot;address_for_geocoding.csv&quot;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="at">google_maps_api_key =</span> <span class="st">&quot;123&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">output_file_path =</span> <span class="st">&quot;data/geocoded_unique_addresses.csv&quot;</span>)</span></code></pre></div>
+<ul>
+<li>Sometimes the data needs to have separate <code>lat</code> and
+<code>long</code> columns. This code can do that:</li>
+</ul>
+<pre><code>geocoded_data1 &lt;- geocoded_data %&gt;%
+        dplyr::mutate(lat = sf::st_coordinates(.)[, &quot;Y&quot;],
+               long = sf::st_coordinates(.)[, &quot;X&quot;])</code></pre>
+<ul>
+<li><p>How do you match the <code>geocoded_data</code> with the original
+dataframe? You can use the <code>postmastr</code> package that allows
+the addresses in both dataframes to be parsed into house number, street,
+state, etc. Once in their individual parts you can do a join together.
+This seems janky af.</p></li>
+<li><p>postmastr’s functionality rests on an order of operations that
+must be followed to ensure correct parsing:</p></li>
+<li><p>prep</p></li>
+<li><p>postal code</p></li>
+<li><p>state</p></li>
+<li><p>city</p></li>
+<li><p>unit</p></li>
+<li><p>house number</p></li>
+<li><p>ranged house number</p></li>
+<li><p>fractional house number</p></li>
+<li><p>house suffix</p></li>
+<li><p>street directionals</p></li>
+<li><p>street suffix</p></li>
+<li><p>street name</p></li>
+<li><p>reconstruct</p></li>
+</ul>
+<pre><code># install.packages(&quot;remotes&quot;)
+      # remotes::install_github(&quot;slu-openGIS/postmastr&quot;)
+      library(postmastr)
+      abc &lt;- read_csv(csv_file)
+      abc %&gt;% pm_identify(var = &quot;address&quot;) -&gt; sushi2
+      sushi2_min &lt;- pm_prep(sushi2, var = &quot;address&quot;, type = &quot;street&quot;)
+      pm_postal_all(sushi2_min)
+      sushi2_min &lt;- pm_postal_parse(sushi2_min)
+      moDict &lt;- pm_dictionary(locale = &quot;us&quot;, type = &quot;state&quot;, case = c(&quot;title&quot;, &quot;upper&quot;))
+      moDict
+      pm_state_all(sushi2_min, dictionary = moDict) #Checks to make sure that all states have matches
+      sushi2_min &lt;- pm_state_parse(sushi2_min, dictionary = moDict)
+      pm_house_all(sushi2_min)
+      sushi2_min &lt;- pm_house_parse(sushi2_min)
+      sushi2_min &lt;- pm_streetDir_parse(sushi2_min)
+      sushi2_min &lt;- pm_streetSuf_parse(sushi2_min)
+      sushi2_min &lt;- pm_street_parse(sushi2_min, ordinal = TRUE, drop = TRUE)
+      sushi2_parsed &lt;- pm_replace(sushi2_min, source = sushi2)
+      readr::write_csv(sushi2_parsed, &quot;~/Dropbox (Personal)/workforce/Master_References/NPPES/NPPES_November_filtered_data_address_parsed.csv&quot;)</code></pre>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>The <code>mysterycall_validate_npi</code> function is a handy tool
+for cleaning and validating datasets with NPI numbers. By following the
+steps outlined in this vignette, you can ensure that your data contains
+only valid NPIs for further analysis and processing.</p>
+</div>
+<div id="features-and-bugs" class="section level1">
+<h1>Features and bugs</h1>
+<p>If you have ideas for other features that would make name handling
+easier, or find a bug, the best approach is to either report it or add
+it!</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
