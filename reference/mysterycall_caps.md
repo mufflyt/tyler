@@ -7,8 +7,6 @@ standard format for USPS address comparison.
 
 ``` r
 mysterycall_caps(x)
-
-caps(...)
 ```
 
 ## Arguments

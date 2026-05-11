@@ -8,8 +8,6 @@ units in address line 2.
 
 ``` r
 mysterycall_normalize_units(addr1, addr2 = NA_character_)
-
-normalize_units(...)
 ```
 
 ## Arguments

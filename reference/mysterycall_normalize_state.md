@@ -7,8 +7,6 @@ is already a valid two-letter code, it is returned unchanged.
 
 ``` r
 mysterycall_normalize_state(state)
-
-normalize_state(...)
 ```
 
 ## Arguments

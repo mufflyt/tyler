@@ -8,8 +8,6 @@ address for matching.
 
 ``` r
 mysterycall_strip_suite(addr)
-
-strip_suite(...)
 ```
 
 ## Arguments

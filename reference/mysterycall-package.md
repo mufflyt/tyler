@@ -9,6 +9,8 @@ generate tables and maps for analysis and reporting.
 
 Useful links:
 
+- <https://mufflyt.github.io/mysterycall/>
+
 - <https://github.com/mufflyt/mysterycall>
 
 - Report bugs at <https://github.com/mufflyt/mysterycall/issues>

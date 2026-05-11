@@ -7,8 +7,6 @@ formats and various input types.
 
 ``` r
 mysterycall_normalize_zip5(zip)
-
-normalize_zip5(...)
 ```
 
 ## Arguments

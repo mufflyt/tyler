@@ -8,8 +8,6 @@ address normalization to ensure consistent character encoding.
 
 ``` r
 mysterycall_ascii_norm(x)
-
-ascii_norm(...)
 ```
 
 ## Arguments

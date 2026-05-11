@@ -15,8 +15,6 @@ mysterycall_compose_map_density(
   map_weight = 7L,
   density_weight = 2L
 )
-
-compose_map_density(...)
 ```
 
 ## Arguments

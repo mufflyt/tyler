@@ -137,7 +137,7 @@ df <- data.frame(
   accepted  = rbinom(120, 1, 0.5)
 )
 mysterycall_disparities_table(df, "accepted", "insurance")
-#> Disparity table — 3 groups | ref: 'Medicaid' | wilson 95% CI
+#> Disparity table -- 3 groups | ref: 'Medicaid' | wilson 95% CI
 #> Group                       n  n_acc     Rate  95% CI            Abs.Diff  RR (95% CI)             p-value
 #> ---------------------------------------------------------------------------------------------------- 
 #> Medicaid                   38     18    47.4%  32.5%-62.7%          (ref)  1.00 (ref)              (ref)

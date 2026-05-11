@@ -8,8 +8,6 @@ Returns the highest confidence match found.
 
 ``` r
 mysterycall_check_academic_name_patterns(org_name, confidence_threshold = 0.85)
-
-check_academic_name_patterns(...)
 ```
 
 ## Arguments

@@ -60,34 +60,24 @@ state codes, ZIP extraction, and full data-frame normalization.
 - [`address_normalizer`](https://mufflyt.github.io/mysterycall/reference/address_normalizer.md)
   : USPS Address Normalization Utilities
 - [`mysterycall_ascii_norm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ascii_norm.md)
-  [`ascii_norm()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_ascii_norm.md)
   : Normalize ASCII Characters and Whitespace
 - [`mysterycall_caps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caps.md)
-  [`caps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caps.md)
   : Convert to Canonical Uppercase
 - [`mysterycall_is_po_box()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_is_po_box.md)
-  [`is_po_box()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_is_po_box.md)
   : Detect PO Box Addresses
 - [`mysterycall_has_street_number()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_has_street_number.md)
-  [`has_street_number()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_has_street_number.md)
   : Detect Addresses with Street Numbers
 - [`mysterycall_normalize_state()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_state.md)
-  [`normalize_state()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_state.md)
   : Normalize State Names to USPS Codes
 - [`mysterycall_normalize_directionals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_directionals.md)
-  [`normalize_directionals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_directionals.md)
   : Normalize Directional Prefixes and Suffixes
 - [`mysterycall_normalize_suffix()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_suffix.md)
-  [`normalize_suffix()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_suffix.md)
   : Normalize Street Suffixes
 - [`mysterycall_normalize_units()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_units.md)
-  [`normalize_units()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_units.md)
   : Normalize Unit Designators
 - [`mysterycall_normalize_zip5()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_zip5.md)
-  [`normalize_zip5()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_normalize_zip5.md)
   : Extract 5-Digit ZIP Code
 - [`mysterycall_strip_suite()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strip_suite.md)
-  [`strip_suite()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_strip_suite.md)
   : Remove Unit Designators from Address
 - [`normalize_address_df()`](https://mufflyt.github.io/mysterycall/reference/normalize_address_df.md)
   : Normalize All Address Fields in a Data Frame
@@ -100,13 +90,10 @@ tiered confidence scoring and institution name patterns.
 - [`academic_indicators`](https://mufflyt.github.io/mysterycall/reference/academic_indicators.md)
   : Academic Practice Indicators for Institution Classification
 - [`mysterycall_classify_academic_affiliation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)
-  [`classify_academic_affiliation()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_academic_affiliation.md)
   : Classify Academic vs. Non-Academic Practice Setting
 - [`mysterycall_check_academic_name_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md)
-  [`check_academic_name_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md)
   : Check if Organization Name Suggests Academic Affiliation
 - [`mysterycall_get_academic_indicators_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.md)
-  [`get_academic_indicators_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.md)
   : Export Academic Indicator Summary
 - [`KNOWN_ACADEMIC_INSTITUTIONS`](https://mufflyt.github.io/mysterycall/reference/KNOWN_ACADEMIC_INSTITUTIONS.md)
   : Known Academic Medical Centers
@@ -194,10 +181,8 @@ Choropleth maps of appointment acceptance rates by state.
 - [`mysterycall_plot_census_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_census_age.md)
   : Plot the distribution of female age groups
 - [`mysterycall_get_acs_adults_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_adults_18_90.md)
-  [`get_acs_adults_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_adults_18_90.md)
   : Get ACS Adult Population (Ages 18-90, Both Sexes) by Census Tract
 - [`mysterycall_get_acs_women_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_women_18_90.md)
-  [`get_acs_women_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_women_18_90.md)
   : Get ACS Female Population (Ages 18-90) by Census Tract
 
 ## Data Cleaning and Processing
@@ -578,16 +563,12 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
   [`save_publication_figure()`](https://mufflyt.github.io/mysterycall/reference/save_green_journal_figure.md)
   : Save a figure in Green Journal submission format
 - [`mysterycall_crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md)
-  [`crs_albers_conus()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_crs_albers_conus.md)
   : Albers Equal-Area CRS for the continental United States
 - [`mysterycall_winsorize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_winsorize.md)
-  [`winsorize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_winsorize.md)
   : Winsorize extreme values
 - [`mysterycall_truncate_for_viz()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_truncate_for_viz.md)
-  [`truncate_for_viz()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_truncate_for_viz.md)
   : Truncate values to fixed bounds
 - [`mysterycall_compose_map_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compose_map_density.md)
-  [`compose_map_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compose_map_density.md)
   : Composite map + density figure
 
 ## Utilities

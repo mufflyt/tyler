@@ -9,8 +9,6 @@ of the distribution.
 
 ``` r
 mysterycall_winsorize(x, lower = 0.005, upper = 0.995, na.rm = TRUE)
-
-winsorize(...)
 ```
 
 ## Arguments

@@ -1,11 +1,14 @@
 # Get ACS Female Population (Ages 18-90) by Census Tract
 
+Downloads ACS B01001 (Sex by Age) data for women aged 18-89 years.
+Automatically sums across age groups and propagates margins of error
+using the Census Bureau sum-of-squares formula: \\MOE\_{sum} =
+\sqrt{\sum MOE_i^2}\\.
+
 ## Usage
 
 ``` r
 mysterycall_get_acs_women_18_90(year = 2022, states = NULL, verbose = TRUE)
-
-get_acs_women_18_90(...)
 ```
 
 ## Arguments
@@ -37,22 +40,34 @@ Tibble with columns:
 
 - women_18_90_moe:
 
-  Margin of error (90\\
+  Margin of error (90% CI, propagated via sum-of-squares).
 
-Downloads ACS B01001 (Sex by Age) data for women aged 18-89 years.
-Automatically sums across age groups and propagates margins of error
-using the Census Bureau sum-of-squares formula: \\MOE\_{sum} =
-\sqrt{\sum MOE_i^2}\\. Age groups included: 18-19, 20, 21, 22-24, 25-29,
-30-34, 35-39, 40-44, 45-49, 50-54, 55-59, 60-61, 62-64, 65-66, 67-69,
-70-74, 75-79, 80-84, 85-89. MOE propagation follows Census Bureau ACS
-Handbook Appendix 3. All MOE values are at 90\\ For both sexes in one
-call, use
+## Details
+
+Age groups included: 18-19, 20, 21, 22-24, 25-29, 30-34, 35-39, 40-44,
+45-49, 50-54, 55-59, 60-61, 62-64, 65-66, 67-69, 70-74, 75-79, 80-84,
+85-89.
+
+## Note
+
+MOE propagation follows Census Bureau ACS Handbook Appendix 3. All MOE
+values are at 90% confidence level (Census standard). For both sexes in
+one call, use
 [`mysterycall_get_acs_adults_18_90`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_adults_18_90.md).
-co_women \<- mysterycall_get_acs_women_18_90(year = 2022, states = "CO")
-west_coast \<- mysterycall_get_acs_women_18_90(year = 2022, states =
-c("CA", "OR", "WA")) Other census:
+
+## See also
+
+Other census:
 [`mysterycall_get_acs_adults_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_adults_18_90.md),
 [`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md),
 [`mysterycall_plot_census_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_census_age.md),
 [`mysterycall_summarize_census()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_census.md)
-census
+
+## Examples
+
+``` r
+if (FALSE) { # interactive()
+co_women <- mysterycall_get_acs_women_18_90(year = 2022, states = "CO")
+west_coast <- mysterycall_get_acs_women_18_90(year = 2022, states = c("CA", "OR", "WA"))
+}
+```

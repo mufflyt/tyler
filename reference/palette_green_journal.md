@@ -28,7 +28,7 @@ palette_publication(
 - type:
 
   Character. One of `"qualitative"` (default, Okabe-Ito), `"sequential"`
-  (blue ramp), or `"diverging"` (blue–orange).
+  (blue ramp), or `"diverging"` (blue-orange).
 
 ## Value
 

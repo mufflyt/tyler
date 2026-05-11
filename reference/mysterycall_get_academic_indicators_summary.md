@@ -7,8 +7,6 @@ indicators, organized by evidence tier.
 
 ``` r
 mysterycall_get_academic_indicators_summary()
-
-get_academic_indicators_summary(...)
 ```
 
 ## Value

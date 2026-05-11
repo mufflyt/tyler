@@ -7,8 +7,6 @@ variations including "PO BOX", "P O BOX", and "POST OFFICE BOX".
 
 ``` r
 mysterycall_is_po_box(x)
-
-is_po_box(...)
 ```
 
 ## Arguments

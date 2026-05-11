@@ -3,14 +3,12 @@
 Returns EPSG:5070 (NAD83 / Conus Albers), the standard equal-area
 projection used by USGS and the US Census Bureau. Use with
 `coord_sf(crs = crs_albers_conus())` to avoid the area distortion of the
-default plate carrée projection on national choropleths.
+default plate carree projection on national choropleths.
 
 ## Usage
 
 ``` r
 mysterycall_crs_albers_conus()
-
-crs_albers_conus(...)
 ```
 
 ## Value

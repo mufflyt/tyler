@@ -1,5 +1,8 @@
 # Compute per-caller productivity metrics
 
+Summarises call volume, scheduling rates, and time metrics for each
+caller in a mystery caller dataset.
+
 ## Usage
 
 ``` r
@@ -71,14 +74,20 @@ Columns:
 
 - acceptance_rate:
 
-  Formatted "XX.X\\ mean_hold_secMean hold time in seconds (NA if not
-  provided). mean_call_secMean call time in seconds (NA if not
-  provided).
+  Formatted "XX.X%" (NA if `outcome_col` NULL).
 
-Summarises call volume, scheduling rates, and time metrics for each
-caller in a mystery caller dataset. df \<- data.frame( caller =
-c("Alice","Alice","Bob"), outcome = c(1, 0, 1) )
-mysterycall_call_productivity(df, "caller", outcome_col = "outcome")
+- mean_hold_sec:
+
+  Mean hold time in seconds (NA if not provided).
+
+- mean_call_sec:
+
+  Mean call time in seconds (NA if not provided).
+
+The attribute `total_calls_all` is set on the returned data frame.
+
+## See also
+
 Other workflow:
 [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md),
 [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md),
@@ -88,4 +97,19 @@ Other workflow:
 [`mysterycall_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow_logged.md),
 [`mysterycall_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_split_and_save.md),
 [`mysterycall_verify_artifact()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_verify_artifact.md)
-workflow
+
+## Examples
+
+``` r
+df <- data.frame(
+  caller  = c("Alice","Alice","Bob"),
+  outcome = c(1, 0, 1)
+)
+mysterycall_call_productivity(df, "caller", outcome_col = "outcome")
+#>   caller n_calls n_days calls_per_day n_accepted acceptance_rate mean_hold_sec
+#> 1  Alice       2     NA            NA          1           50.0%            NA
+#> 2    Bob       1     NA            NA          1          100.0%            NA
+#>   mean_call_sec
+#> 1            NA
+#> 2            NA
+```

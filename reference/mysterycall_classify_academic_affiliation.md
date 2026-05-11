@@ -12,8 +12,6 @@ mysterycall_classify_academic_affiliation(
   hospital_affiliation = NULL,
   specialty = NULL
 )
-
-classify_academic_affiliation(...)
 ```
 
 ## Arguments

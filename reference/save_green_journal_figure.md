@@ -2,13 +2,13 @@
 
 Exports a ggplot in all formats needed for journal submission:
 
-- **TIFF** (300 DPI, LZW compression) — primary submission format
+- **TIFF** (300 DPI, LZW compression) – primary submission format
 
-- **PDF** (cairo, font-embedded) — vector companion for review
+- **PDF** (cairo, font-embedded) – vector companion for review
 
-- **PNG** (300 DPI) — web / presentation companion
+- **PNG** (300 DPI) – web / presentation companion
 
-- **CSV** — underlying data for peer-review transparency
+- **CSV** – underlying data for peer-review transparency
 
 ## Usage
 

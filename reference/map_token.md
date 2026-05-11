@@ -28,7 +28,8 @@ Character vector with all matching tokens replaced.
 ## Examples
 
 ``` r
+if (FALSE) {
 dir_map <- c("NORTH" = "N", "SOUTH" = "S")
 map_token("123 NORTH MAIN STREET", dir_map)
-#> Error in map_token("123 NORTH MAIN STREET", dir_map): could not find function "map_token"
+}
 ```

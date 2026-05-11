@@ -50,5 +50,5 @@ formula <- mysterycall_create_formula(df3_filtered, response_variable, random_ef
 #> Final formula object created: days ~ age + (1 | name)
 formula
 #> days ~ age + (1 | name)
-#> <environment: 0x562cb855cc20>
+#> <environment: 0x55a3a0184668>
 ```

@@ -7,8 +7,6 @@ USPS abbreviations (ST, AVE, RD, etc.).
 
 ``` r
 mysterycall_normalize_suffix(addr)
-
-normalize_suffix(...)
 ```
 
 ## Arguments

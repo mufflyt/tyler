@@ -6,8 +6,6 @@ Checks if an address string begins with a numeric street number.
 
 ``` r
 mysterycall_has_street_number(x)
-
-has_street_number(...)
 ```
 
 ## Arguments

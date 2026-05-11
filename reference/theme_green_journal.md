@@ -22,7 +22,7 @@ theme_publication(base_size = 10, base_family = "Arial")
 - base_size:
 
   Numeric. Base font size in points (default 10; Green Journal range
-  8–12 pt, minimum 6 pt for labels).
+  8-12 pt, minimum 6 pt for labels).
 
 - base_family:
 

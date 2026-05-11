@@ -8,8 +8,6 @@ etc.).
 
 ``` r
 mysterycall_normalize_directionals(addr)
-
-normalize_directionals(...)
 ```
 
 ## Arguments
