@@ -180,7 +180,35 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
 
     if (is.null(response) || httr::http_error(response)) {
       status_str <- if (is.null(response)) "network error" else as.character(httr::status_code(response))
+      if (!is.null(response) && httr::status_code(response) == 429L) {
+        reset_ts <- httr::headers(response)[["X-Rate-Limit-Reset"]]
+        reset_msg <- if (!is.null(reset_ts)) {
+          sprintf(" Quota resets at Unix timestamp %s.", reset_ts)
+        } else ""
+        stop(sprintf(
+          "Genderize.io monthly quota exhausted (HTTP 429).%s Free tier allows 1,000 names/month; upgrade at https://genderize.io/#pricing.",
+          reset_msg
+        ), call. = FALSE)
+      }
       stop(sprintf("Genderize.io request failed (status: %s).", status_str), call. = FALSE)
+    }
+
+    hdrs <- httr::headers(response)
+    remaining <- suppressWarnings(as.integer(hdrs[["X-Rate-Limit-Remaining"]]))
+    limit_total <- suppressWarnings(as.integer(hdrs[["X-Rate-Limit-Limit"]]))
+    if (!is.na(remaining) && !is.na(limit_total) && limit_total > 0L) {
+      pct_left <- remaining / limit_total
+      if (remaining == 0L) {
+        warning(
+          "Genderize.io monthly quota is now exhausted. Further batches will fail with HTTP 429.",
+          call. = FALSE
+        )
+      } else if (pct_left < 0.1) {
+        warning(sprintf(
+          "Genderize.io quota low: %d of %d monthly name lookups remaining (%.0f%%). Consider upgrading at https://genderize.io/#pricing.",
+          remaining, limit_total, pct_left * 100
+        ), call. = FALSE)
+      }
     }
 
     parsed <- httr::content(response, as = "parsed", type = "application/json", encoding = "UTF-8")

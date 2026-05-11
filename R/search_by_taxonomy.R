@@ -116,6 +116,23 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
       ), call. = FALSE)
       states <- states[nchar(states) == 2]
     }
+
+    known_codes <- c(
+      "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA",
+      "HI","ID","IL","IN","IA","KS","KY","LA","ME","MD",
+      "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
+      "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+      "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY",
+      "DC","GU","PR","VI","AS","MP"
+    )
+    unrecognized <- states[!states %in% known_codes]
+    if (length(unrecognized)) {
+      warning(sprintf(
+        "%d unrecognized state code(s) will be queried but are not known US state/territory abbreviations and will likely return no results: %s",
+        length(unrecognized),
+        paste(unrecognized, collapse = ", ")
+      ), call. = FALSE)
+    }
     if (!length(states)) {
       message("No valid state abbreviations remain after filtering. Returning empty data frame.")
       return(tibble::tibble())
@@ -239,11 +256,32 @@ mysterycall_search_taxonomy <- function(taxonomy_to_search,
             credential = stringr::str_remove_all(.data$basic_credential, "[[\\p{P}][\\p{S}]]"),
             credential_lower = stringr::str_to_lower(.data$credential)
           )
+          n_before_cred <- nrow(data_taxonomy)
           data_taxonomy <- dplyr::filter(
             data_taxonomy,
             is.na(.data$credential_lower) | stringr::str_detect(.data$credential_lower, "\\bmd\\b|\\bdo\\b")
           )
-          data_taxonomy <- dplyr::filter(data_taxonomy, .data$addresses_country_name == "United States")
+          n_dropped_cred <- n_before_cred - nrow(data_taxonomy)
+          if (n_dropped_cred > 0) {
+            message(sprintf(
+              "Dropped %d record(s) whose credential did not contain MD or DO (punctuation is stripped before matching).",
+              n_dropped_cred
+            ))
+          }
+
+          country_vals <- unique(data_taxonomy$addresses_country_name)
+          n_before_country <- nrow(data_taxonomy)
+          data_taxonomy <- dplyr::filter(
+            data_taxonomy,
+            grepl("^united states( of america)?$|^usa?$", .data$addresses_country_name, ignore.case = TRUE)
+          )
+          if (!nrow(data_taxonomy) && n_before_country > 0) {
+            warning(sprintf(
+              "All %d record(s) were removed by the US country name filter. Observed country values: %s. The NPI registry may have changed its country name format.",
+              n_before_country,
+              paste(head(country_vals, 5L), collapse = ", ")
+            ), call. = FALSE)
+          }
           data_taxonomy <- dplyr::filter(
             data_taxonomy,
             stringr::str_detect(

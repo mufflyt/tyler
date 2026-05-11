@@ -52,6 +52,10 @@ mysterycall_get_clinician_data <- function(input_data) {
     }
     clinicians_fn <- get0("clinicians", envir = asNamespace("provider"), mode = "function")
     if (is.null(clinicians_fn)) {
+      warning(sprintf(
+        "NPI %s: the 'provider' package is installed but does not export a 'clinicians()' function; returning NULL. Try updating with: remotes::install_github('andrewallenbruce/provider')",
+        npi
+      ), call. = FALSE)
       return(NULL)
     }
 

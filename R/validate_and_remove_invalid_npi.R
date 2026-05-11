@@ -79,6 +79,15 @@ mysterycall_validate_npi <- function(input_data) {
   valid_format <- nchar(npi_df$npi) == 10
   npi_df$npi_is_valid <- FALSE
 
+  n_wrong_length <- sum(!valid_format)
+  if (n_wrong_length > 0) {
+    warning(sprintf(
+      "%d NPI value(s) are not 10 digits and were dropped before Luhn validation: %s",
+      n_wrong_length,
+      paste(head(npi_df$npi[!valid_format], 5L), collapse = ", ")
+    ), call. = FALSE)
+  }
+
   if (any(valid_format)) {
     npi_df$npi_is_valid[valid_format] <- vapply(
       npi_df$npi[valid_format],
@@ -87,12 +96,23 @@ mysterycall_validate_npi <- function(input_data) {
     )
   }
 
+  n_luhn_fail <- sum(valid_format & !npi_df$npi_is_valid)
+  if (n_luhn_fail > 0) {
+    warning(sprintf(
+      "%d NPI value(s) are 10 digits but failed the Luhn checksum and were dropped: %s",
+      n_luhn_fail,
+      paste(head(npi_df$npi[valid_format & !npi_df$npi_is_valid], 5L), collapse = ", ")
+    ), call. = FALSE)
+  }
+
   npi_df <- npi_df %>%
     dplyr::filter(!is.na(npi_is_valid) & npi_is_valid)
 
   message(sprintf(
-    "Validated %d candidate NPI(s); %d passed checksum and formatting rules.",
+    "Validated %d candidate NPI(s): %d wrong length, %d failed Luhn, %d passed.",
     total_candidates,
+    n_wrong_length,
+    n_luhn_fail,
     nrow(npi_df)
   ))
 

@@ -43,7 +43,19 @@ mysterycall_read_table <- function(path, format = NULL, ...) {
     arrow::read_parquet(path, as_data_frame = TRUE)
   }
   if ("npi" %in% names(df) && is.numeric(df[["npi"]])) {
-    df[["npi"]] <- sprintf("%.0f", df[["npi"]])
+    npi_vals <- df[["npi"]]
+    non_integer <- !is.na(npi_vals) & (npi_vals != floor(npi_vals))
+    if (any(non_integer)) {
+      warning(sprintf(
+        paste0(
+          "%d NPI value(s) are stored as non-integer numeric (e.g. %g) and will be ",
+          "rounded to the nearest integer, which may produce invalid NPIs. ",
+          "Save the source file with the NPI column as character type to prevent this."
+        ),
+        sum(non_integer), npi_vals[which(non_integer)[1L]]
+      ), call. = FALSE)
+    }
+    df[["npi"]] <- sprintf("%.0f", npi_vals)
   }
   df
 }

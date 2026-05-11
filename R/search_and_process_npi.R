@@ -320,6 +320,18 @@ mysterycall_search_and_process_npi <- function(data,
           return(NULL)
         }
 
+        critical_cols <- c("npi", "taxonomies_desc")
+        missing_critical <- setdiff(critical_cols, names(flattened))
+        if (length(missing_critical)) {
+          warning(sprintf(
+            "npi::npi_flatten() for '%s' is missing column(s): %s. The npi package schema may have changed. Columns returned: %s",
+            search_term,
+            paste(missing_critical, collapse = ", "),
+            paste(names(flattened), collapse = ", ")
+          ), call. = FALSE)
+          return(NULL)
+        }
+
         filtered <- dplyr::filter(flattened, .data$taxonomies_desc %in% allowed_taxonomies)
         if (!nrow(filtered)) {
           return(NULL)
