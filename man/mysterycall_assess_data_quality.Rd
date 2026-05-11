@@ -21,6 +21,21 @@ A named list with elements \code{score} (numeric 0–1) and
 Scores a data frame for completeness and validity and returns a list of
 issues that may affect downstream workflow steps.
 }
+\section{Scoring method}{
+
+Quality is scored on a 0–1 scale by subtracting penalties from a
+maximum of 10:
+\itemize{
+\item Required column with > 50\\% missing values: −3 points
+\item Required column with 20–50\\% missing values: −1 point
+\item More than 10\\% duplicate rows: −1 point
+\item Required column is not character or factor type: −0.5 points
+}
+Final score = max(0, 1 − penalties / 10). The 0.70 and 0.80 thresholds
+used by \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} were chosen to catch severely
+incomplete data while tolerating modest missingness in large rosters.
+}
+
 \examples{
 df <- data.frame(first = c("Jane", NA), last = c("Doe", "Smith"))
 mysterycall_assess_data_quality(df)

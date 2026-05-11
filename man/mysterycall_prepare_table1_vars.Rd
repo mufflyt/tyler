@@ -24,7 +24,11 @@ column. When supplied, \code{age_category} is derived from it.}
 column. Used to impute age when \code{age_col} is \code{NULL}.}
 
 \item{gender_col}{Optional character scalar naming a gender/sex column.
-Values are standardised to \code{"Male"}, \code{"Female"}, or \code{"Unknown"}.}
+Values are recoded to \code{"Male"} (inputs \code{"m"} or \code{"male"}), \code{"Female"}
+(inputs \code{"f"} or \code{"female"}), or \code{"Unknown"} for any other value
+including \code{NA}. Matching is case-insensitive and whitespace-trimmed.
+This is a \strong{binary classification}: non-binary or ambiguous values are
+silently bucketed into \code{"Unknown"}.}
 
 \item{setting_col}{Optional character scalar naming a practice-setting
 column. Passed through as \code{setting_std}.}
@@ -45,6 +49,14 @@ gender standardisation in a single call. Columns are added to (not
 replacing) the input data frame. Only columns explicitly specified are
 processed.
 }
+\section{Gender standardisation}{
+
+The \code{gender_std} column is produced by a binary lookup: \code{"m"}/\code{"male"}
+→ \code{"Male"}, \code{"f"}/\code{"female"} → \code{"Female"}, all other values →
+\code{"Unknown"}. Non-binary values, \code{NA}, and any future Genderize.io API
+additions are all mapped to \code{"Unknown"} without a warning.
+}
+
 \examples{
 df <- data.frame(
   grad_year = c(1990, 2000, 2010),

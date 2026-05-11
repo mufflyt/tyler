@@ -143,6 +143,20 @@ mysterycall_rename_columns <- function(data, target_strings, new_names) {
 #' @param output_format File format to use when persisting the cleaned dataset.
 #'   Supported values are "csv" (default) and "parquet".
 #' @return A data frame with processed data.
+#'
+#' @section Column name transformation:
+#'   All input column names are converted to **lowercase snake\_case** by
+#'   [janitor::clean_names()] before `required_strings` pattern matching.
+#'   For example, `"PhysicianInfo"` becomes `"physician_info"` and
+#'   `"NPI Registry"` becomes `"npi_registry"`. Pass `required_strings` and
+#'   `standard_names` in snake\_case to match the transformed names.
+#'
+#' @section Output file timestamps:
+#'   Output filenames include a timestamp from [Sys.time()], which uses the
+#'   **local system timezone** (not UTC). Filenames produced on systems in
+#'   different timezones will reflect different local times for the same
+#'   wall-clock moment.
+#'
 #' @family workflow
 #' @export
 #' @importFrom readr read_csv write_csv

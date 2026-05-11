@@ -38,6 +38,14 @@ NULL
 #'   in `input_data`. Defaults to `c("first", "last")`.
 #'
 #' @return Invisible list with check results, or stops with error if checks fail
+#'
+#' @section Data quality thresholds:
+#'   Input data is scored from 0–1 by [mysterycall_assess_data_quality()].
+#'   Scores below **0.70** cause this function to stop with an error; scores
+#'   between 0.70 and 0.80 emit a warning. A score below 0.70 typically means
+#'   a required name column has more than 50\% missing values. See
+#'   [mysterycall_assess_data_quality()] for the full penalty schedule.
+#'
 #' @family utilities
 #' @export
 #'
@@ -452,6 +460,20 @@ mysterycall_validate_here_api <- function(api_key) {
 #' @return A named list with elements \code{score} (numeric 0–1) and
 #'   \code{issues} (list of issue records with \code{severity} and
 #'   \code{message} fields).
+#'
+#' @section Scoring method:
+#'   Quality is scored on a 0–1 scale by subtracting penalties from a
+#'   maximum of 10:
+#'   \itemize{
+#'     \item Required column with > 50\% missing values: −3 points
+#'     \item Required column with 20–50\% missing values: −1 point
+#'     \item More than 10\% duplicate rows: −1 point
+#'     \item Required column is not character or factor type: −0.5 points
+#'   }
+#'   Final score = max(0, 1 − penalties / 10). The 0.70 and 0.80 thresholds
+#'   used by [mysterycall_preflight_check()] were chosen to catch severely
+#'   incomplete data while tolerating modest missingness in large rosters.
+#'
 #' @family utilities
 #' @export
 #' @examples
@@ -533,6 +555,16 @@ mysterycall_assess_data_quality <- function(data, required_columns = c("first", 
 #' @return A named list with elements \code{total_time_hours} (estimated wall
 #'   time), \code{peak_memory_gb} (estimated peak RAM in GB), and
 #'   \code{api_calls} (estimated number of external API requests).
+#'
+#' @section Estimation method:
+#'   Runtime is estimated as `n_rows × 4.5` seconds: 1.5 s/row for NPI
+#'   registry lookups, 0.5 s/row for geocoding (assumes a warm Google Maps
+#'   cache), and 2.5 s/row for HERE isochrone generation. Memory is
+#'   `(n_rows × 2) + 500` MB. These constants were measured on a typical US
+#'   residential broadband connection with warm API caches. Slow networks or
+#'   cold caches can **triple** the runtime estimate. Benchmark on 50–100
+#'   rows before committing to a large run.
+#'
 #' @family utilities
 #' @export
 #' @examples

@@ -52,6 +52,22 @@ of state abbreviations via the \code{states} argument; the function will loop ov
 each state and combine the results, effectively bypassing the 1\,200-record
 cap.
 }
+\section{Output columns}{
+
+The function retains a curated subset of the columns returned by
+\code{npi::npi_flatten()}. The following column categories are \strong{always
+dropped} regardless of what the NPI API returns: all \verb{endpoints_*}
+fields, all \verb{other_names_*} fields, all \verb{identifiers_*} fields,
+supplementary address fields (\code{addresses_address_2},
+\code{addresses_fax_number}, \code{addresses_address_type},
+\code{addresses_country_code}), and several basic and taxonomy metadata fields
+(\code{basic_last_updated}, \code{basic_status}, \code{basic_name_prefix},
+\code{basic_name_suffix}, \code{basic_certification_date}, \code{taxonomies_code},
+\code{taxonomies_taxonomy_group}, \code{taxonomies_state}, \code{taxonomies_license}).
+To access dropped columns, call \code{npi::npi_search()} and
+\code{npi::npi_flatten()} directly.
+}
+
 \section{Contract}{
 
 \strong{Inputs:}

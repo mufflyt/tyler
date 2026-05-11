@@ -31,6 +31,23 @@ A data frame with processed data.
 \description{
 This function reads data from a file or data frame, cleans column names, and applies renaming based on specified criteria to facilitate data analysis. The function logs each step of the process, including data loading, column cleaning, and renaming for transparency.
 }
+\section{Column name transformation}{
+
+All input column names are converted to \strong{lowercase snake\_case} by
+\code{\link[janitor:clean_names]{janitor::clean_names()}} before \code{required_strings} pattern matching.
+For example, \code{"PhysicianInfo"} becomes \code{"physician_info"} and
+\code{"NPI Registry"} becomes \code{"npi_registry"}. Pass \code{required_strings} and
+\code{standard_names} in snake\_case to match the transformed names.
+}
+
+\section{Output file timestamps}{
+
+Output filenames include a timestamp from \code{\link[=Sys.time]{Sys.time()}}, which uses the
+\strong{local system timezone} (not UTC). Filenames produced on systems in
+different timezones will reflect different local times for the same
+wall-clock moment.
+}
+
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Assuming an input path to a CSV file

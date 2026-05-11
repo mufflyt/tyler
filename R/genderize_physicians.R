@@ -26,6 +26,26 @@
 #' result <- mysterycall_genderize("sample.csv")
 #' result <- mysterycall_genderize(my_dataframe)  # also accepts a data frame directly
 #'
+#' @section Gender coding:
+#'   Genderize.io returns `"male"`, `"female"`, or `NULL` for ambiguous or
+#'   unknown names. The API does not currently return non-binary values. `NULL`
+#'   responses are stored as `NA` in the raw `gender` output column. If the API
+#'   ever adds non-binary values they will be stored as-is in `gender` but will
+#'   be recoded to `"Unknown"` by [mysterycall_prepare_table1_vars()].
+#'
+#' @section API response schema:
+#'   Each Genderize.io JSON entry is expected to contain exactly four fields:
+#'   `name`, `gender`, `probability`, and `count`. Any additional fields
+#'   returned by the API are silently dropped. If the API renames or removes
+#'   one of these four fields, the corresponding output column will contain
+#'   `NA` without an explicit error or warning.
+#'
+#' @section Output file timestamps:
+#'   Output filenames include a timestamp from [Sys.time()], which uses the
+#'   **local system timezone** (not UTC). Files produced on systems in
+#'   different timezones will reflect different local times for the same
+#'   wall-clock moment.
+#'
 #' @family gender
 #' @export
 mysterycall_genderize <- function(data_or_path, output_dir = NULL, output_format = c("csv", "parquet")) {

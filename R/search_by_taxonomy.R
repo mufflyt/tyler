@@ -45,6 +45,20 @@
 #'   states = all_states
 #' )
 #'
+#' @section Output columns:
+#'   The function retains a curated subset of the columns returned by
+#'   `npi::npi_flatten()`. The following column categories are **always
+#'   dropped** regardless of what the NPI API returns: all `endpoints_*`
+#'   fields, all `other_names_*` fields, all `identifiers_*` fields,
+#'   supplementary address fields (`addresses_address_2`,
+#'   `addresses_fax_number`, `addresses_address_type`,
+#'   `addresses_country_code`), and several basic and taxonomy metadata fields
+#'   (`basic_last_updated`, `basic_status`, `basic_name_prefix`,
+#'   `basic_name_suffix`, `basic_certification_date`, `taxonomies_code`,
+#'   `taxonomies_taxonomy_group`, `taxonomies_state`, `taxonomies_license`).
+#'   To access dropped columns, call `npi::npi_search()` and
+#'   `npi::npi_flatten()` directly.
+#'
 #' @section Contract:
 #' **Inputs:**
 #' - `taxonomy_to_search` must be an exact NUCC taxonomy description string

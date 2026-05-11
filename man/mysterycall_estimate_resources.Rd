@@ -18,6 +18,17 @@ time), \code{peak_memory_gb} (estimated peak RAM in GB), and
 Projects the approximate runtime and memory requirements for a mystery caller
 workflow based on the number of input rows.
 }
+\section{Estimation method}{
+
+Runtime is estimated as \verb{n_rows × 4.5} seconds: 1.5 s/row for NPI
+registry lookups, 0.5 s/row for geocoding (assumes a warm Google Maps
+cache), and 2.5 s/row for HERE isochrone generation. Memory is
+\verb{(n_rows × 2) + 500} MB. These constants were measured on a typical US
+residential broadband connection with warm API caches. Slow networks or
+cold caches can \strong{triple} the runtime estimate. Benchmark on 50–100
+rows before committing to a large run.
+}
+
 \examples{
 mysterycall_estimate_resources(500)
 }

@@ -101,7 +101,11 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 #' @param grad_year_col Optional character scalar naming a graduation-year
 #'   column. Used to impute age when `age_col` is `NULL`.
 #' @param gender_col Optional character scalar naming a gender/sex column.
-#'   Values are standardised to `"Male"`, `"Female"`, or `"Unknown"`.
+#'   Values are recoded to `"Male"` (inputs `"m"` or `"male"`), `"Female"`
+#'   (inputs `"f"` or `"female"`), or `"Unknown"` for any other value
+#'   including `NA`. Matching is case-insensitive and whitespace-trimmed.
+#'   This is a **binary classification**: non-binary or ambiguous values are
+#'   silently bucketed into `"Unknown"`.
 #' @param setting_col Optional character scalar naming a practice-setting
 #'   column. Passed through as `setting_std`.
 #' @param region_col Optional character scalar naming a region column. Passed
@@ -111,6 +115,12 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 #'
 #' @return `data` with zero or more additional standardised columns appended:
 #'   `age_imputed`, `age_category`, `gender_std`, `setting_std`, `region_std`.
+#'
+#' @section Gender standardisation:
+#'   The `gender_std` column is produced by a binary lookup: `"m"`/`"male"`
+#'   → `"Male"`, `"f"`/`"female"` → `"Female"`, all other values →
+#'   `"Unknown"`. Non-binary values, `NA`, and any future Genderize.io API
+#'   additions are all mapped to `"Unknown"` without a warning.
 #'
 #' @family data management
 #' @export

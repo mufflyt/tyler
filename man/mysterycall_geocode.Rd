@@ -49,6 +49,16 @@ addresses using the Google Maps API via \code{ggmap::geocode}, and returns the
 data with additional \code{latitude} and \code{longitude} columns. Optionally writes the
 result to \code{output_file_path}.
 }
+\section{Requirements}{
+
+Geocoding requires the \code{ggmap} package (listed in \code{Suggests}, not
+\code{Imports}) and a Google Maps Platform API key with the \strong{Geocoding API}
+enabled. If \code{ggmap} is not installed the function stops immediately with
+an install message. An invalid or expired key is only detected at the
+first geocoding request — run \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} with
+\code{check_apis = TRUE} to validate the key before starting a long workflow.
+}
+
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 result <- mysterycall_geocode("addresses.csv", "my_api_key")

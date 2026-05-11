@@ -34,6 +34,32 @@ written to \code{output_dir} with a timestamp in the filename.
 Requires a \code{first_name} column in the input data. HTTP errors from the API
 are raised as errors immediately (no silent fallback).
 }
+\section{Gender coding}{
+
+Genderize.io returns \code{"male"}, \code{"female"}, or \code{NULL} for ambiguous or
+unknown names. The API does not currently return non-binary values. \code{NULL}
+responses are stored as \code{NA} in the raw \code{gender} output column. If the API
+ever adds non-binary values they will be stored as-is in \code{gender} but will
+be recoded to \code{"Unknown"} by \code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}}.
+}
+
+\section{API response schema}{
+
+Each Genderize.io JSON entry is expected to contain exactly four fields:
+\code{name}, \code{gender}, \code{probability}, and \code{count}. Any additional fields
+returned by the API are silently dropped. If the API renames or removes
+one of these four fields, the corresponding output column will contain
+\code{NA} without an explicit error or warning.
+}
+
+\section{Output file timestamps}{
+
+Output filenames include a timestamp from \code{\link[=Sys.time]{Sys.time()}}, which uses the
+\strong{local system timezone} (not UTC). Files produced on systems in
+different timezones will reflect different local times for the same
+wall-clock moment.
+}
+
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 result <- mysterycall_genderize("sample.csv")

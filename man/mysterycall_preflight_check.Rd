@@ -57,6 +57,15 @@ Validates all requirements for a successful workflow run including API keys,
 data quality, output directories, estimated resources, and dependencies.
 Provides a go/no-go decision before starting long-running operations.
 }
+\section{Data quality thresholds}{
+
+Input data is scored from 0–1 by \code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}}.
+Scores below \strong{0.70} cause this function to stop with an error; scores
+between 0.70 and 0.80 emit a warning. A score below 0.70 typically means
+a required name column has more than 50\\% missing values. See
+\code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}} for the full penalty schedule.
+}
+
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Basic preflight check
