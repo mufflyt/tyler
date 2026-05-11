@@ -18,8 +18,8 @@ from an address string. Useful for creating a base street address for
 matching.
 }
 \examples{
-strip_suite("123 Main St Suite 100")
-strip_suite("456 Oak Ave APT 4B #200")
+mysterycall_strip_suite("123 Main St Suite 100")
+mysterycall_strip_suite("456 Oak Ave APT 4B #200")
 
 }
 \seealso{

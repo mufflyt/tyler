@@ -17,8 +17,8 @@ Normalizes ASCII characters and converts the result to uppercase — the
 standard format for USPS address comparison.
 }
 \examples{
-caps("123 main street")
-caps("456 oak ave #100")
+mysterycall_caps("123 main street")
+mysterycall_caps("456 oak ave #100")
 
 }
 \seealso{

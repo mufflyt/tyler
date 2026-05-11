@@ -19,8 +19,8 @@ characters into single spaces. This is the first step in address
 normalization to ensure consistent character encoding.
 }
 \examples{
-ascii_norm("123 Main St Suite 100")
-ascii_norm("456   Oak    Avenue")
+mysterycall_ascii_norm("123 Main St Suite 100")
+mysterycall_ascii_norm("456   Oak    Avenue")
 
 }
 \seealso{

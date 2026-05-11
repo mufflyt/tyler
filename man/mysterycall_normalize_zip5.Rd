@@ -17,8 +17,8 @@ Extracts the first 5 digits from a ZIP code string, handling ZIP+4 formats
 and various input types.
 }
 \examples{
-normalize_zip5("80111-1234")
-normalize_zip5(90210)
+mysterycall_normalize_zip5("80111-1234")
+mysterycall_normalize_zip5(90210)
 
 }
 \seealso{

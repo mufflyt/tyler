@@ -16,8 +16,8 @@ Logical vector indicating whether each address starts with a number.
 Checks if an address string begins with a numeric street number.
 }
 \examples{
-has_street_number("123 Main Street")
-has_street_number("University Medical Center")
+mysterycall_has_street_number("123 Main Street")
+mysterycall_has_street_number("University Medical Center")
 
 }
 \seealso{

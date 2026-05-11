@@ -25,8 +25,8 @@ abbreviations. Handles both inline units in address line 1 and separate
 units in address line 2.
 }
 \examples{
-normalize_units("123 Main St Suite 100", NA_character_)
-normalize_units("456 Oak Avenue", "Apartment 4B")
+mysterycall_normalize_units("123 Main St Suite 100", NA_character_)
+mysterycall_normalize_units("456 Oak Avenue", "Apartment 4B")
 
 }
 \seealso{

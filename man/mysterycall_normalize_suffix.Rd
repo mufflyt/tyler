@@ -17,8 +17,8 @@ Converts full street suffix names (STREET, AVENUE, ROAD, etc.) to their
 USPS abbreviations (ST, AVE, RD, etc.).
 }
 \examples{
-normalize_suffix("123 Main Street")
-normalize_suffix("456 Oak Boulevard Suite 100")
+mysterycall_normalize_suffix("123 Main Street")
+mysterycall_normalize_suffix("456 Oak Boulevard Suite 100")
 
 }
 \seealso{

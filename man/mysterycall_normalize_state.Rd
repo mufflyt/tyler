@@ -17,8 +17,8 @@ Converts full state names to their two-letter USPS codes. If the input is
 already a valid two-letter code, it is returned unchanged.
 }
 \examples{
-normalize_state("California")
-normalize_state("NY")
+mysterycall_normalize_state("California")
+mysterycall_normalize_state("NY")
 
 }
 \seealso{

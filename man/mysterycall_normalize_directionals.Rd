@@ -17,8 +17,8 @@ Converts full directional words (NORTH, SOUTH, EAST, WEST) and compound
 directions (NORTHEAST, etc.) to USPS abbreviations (N, S, E, W, NE, etc.).
 }
 \examples{
-normalize_directionals("123 North Main Street")
-normalize_directionals("456 Southeast Oak Avenue")
+mysterycall_normalize_directionals("123 North Main Street")
+mysterycall_normalize_directionals("456 Southeast Oak Avenue")
 
 }
 \seealso{

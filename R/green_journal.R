@@ -91,7 +91,7 @@ theme_green_journal <- function(base_size = 10, base_family = "Arial") {
 #' Variant of [theme_green_journal()] for choropleth maps, isochrone
 #' coverage maps, and other spatial figures. Removes all axis elements,
 #' centers the title, and adds a framed legend. Use with
-#' [ggplot2::coord_sf()] and [crs_albers_conus()] for equal-area projection.
+#' [ggplot2::coord_sf()] and [mysterycall_crs_albers_conus()] for equal-area projection.
 #'
 #' @param base_size Numeric. Base font size (default 10).
 #' @param legend_position Character. Legend position (default `"right"`; use
@@ -363,7 +363,7 @@ save_green_journal_figure <- function(plot,
 #'
 #' Returns EPSG:5070 (NAD83 / Conus Albers), the standard equal-area
 #' projection used by USGS and the US Census Bureau. Use with
-#' `coord_sf(crs = crs_albers_conus())` to avoid the area distortion of the
+#' `coord_sf(crs = mysterycall_crs_albers_conus())` to avoid the area distortion of the
 #' default plate carree projection on national choropleths.
 #'
 #' @return An `sf::st_crs` object (EPSG:5070).
@@ -430,7 +430,7 @@ winsorize <- function(...) { .Deprecated("mysterycall_winsorize"); mysterycall_w
 
 #' Truncate values to fixed bounds
 #'
-#' Hard floor/ceiling clipping for visualization. Unlike [winsorize()], which
+#' Hard floor/ceiling clipping for visualization. Unlike [mysterycall_winsorize()], which
 #' uses data-driven quantiles, this forces exact bounds for clean legend breaks
 #' (e.g., 0-100% for coverage maps). Use when the legend must show round
 #' numbers regardless of the data range.

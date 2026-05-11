@@ -17,8 +17,8 @@ Checks if an address string represents a Post Office Box. Detects common
 variations including "PO BOX", "P O BOX", and "POST OFFICE BOX".
 }
 \examples{
-is_po_box("PO Box 12345")
-is_po_box("123 Main Street")
+mysterycall_is_po_box("PO Box 12345")
+mysterycall_is_po_box("123 Main Street")
 
 }
 \seealso{

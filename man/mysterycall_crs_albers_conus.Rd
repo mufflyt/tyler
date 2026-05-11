@@ -12,7 +12,7 @@ An \code{sf::st_crs} object (EPSG:5070).
 \description{
 Returns EPSG:5070 (NAD83 / Conus Albers), the standard equal-area
 projection used by USGS and the US Census Bureau. Use with
-\code{coord_sf(crs = crs_albers_conus())} to avoid the area distortion of the
+\code{coord_sf(crs = mysterycall_crs_albers_conus())} to avoid the area distortion of the
 default plate carree projection on national choropleths.
 }
 \examples{

@@ -26,7 +26,7 @@ ACADEMIC_HOSPITAL_PATTERNS$very_high
 
 }
 \seealso{
-\code{\link{mysterycall_check_academic_name_patterns}},
+\code{\link{check_academic_name_patterns}},
 \code{\link{KNOWN_ACADEMIC_INSTITUTIONS}}
 
 Other academic-indicators: 
