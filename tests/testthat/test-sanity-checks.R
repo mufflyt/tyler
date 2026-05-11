@@ -28,12 +28,12 @@ test_that("mysterycall_check_no_limits handles normal row counts", {
 })
 
 test_that("mysterycall_check_no_limits detects multiples of 1000", {
-  # Exact multiples of 1000 are suspicious
+  # 1000 rows is in suspicious_counts and triggers a SUSPICIOUS warning
   thousand_data <- data.frame(x = 1:1000)
 
-  expect_message(
+  expect_warning(
     mysterycall_check_no_limits(thousand_data, "thousand_data"),
-    "multiple of 1000"
+    "SUSPICIOUS"
   )
 })
 

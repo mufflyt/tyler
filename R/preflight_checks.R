@@ -20,6 +20,7 @@ NULL
 #' @param check_apis Whether to validate API keys with test calls (default: TRUE)
 #' @param estimate_resources Whether to estimate runtime and memory (default: TRUE)
 #' @param prompt_user Whether to prompt user for confirmation (default: TRUE)
+#' @param interactive Alias for `prompt_user`; if non-NULL it takes precedence.
 #' @param required_columns Required column names in input data
 #'
 #' @return Invisible list with check results, or stops with error if checks fail

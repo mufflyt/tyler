@@ -33,7 +33,8 @@ mysterycall_table_percentages <- function(data_frame, variable) {
   summary_df <- data_frame %>%
     dplyr::count(!!rlang::sym(variable), name = "n") %>%
     dplyr::mutate(percent = 100 * n / sum(n)) %>%
-    dplyr::arrange(dplyr::desc(n))
+    dplyr::arrange(dplyr::desc(n)) %>%
+    dplyr::filter(n == max(n))
 
   return(summary_df)
 }

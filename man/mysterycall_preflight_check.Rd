@@ -31,6 +31,8 @@ mysterycall_preflight_check(
 
 \item{prompt_user}{Whether to prompt user for confirmation (default: TRUE)}
 
+\item{interactive}{Alias for \code{prompt_user}; if non-NULL it takes precedence.}
+
 \item{required_columns}{Required column names in input data}
 }
 \value{
