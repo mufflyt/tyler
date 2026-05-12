@@ -79,6 +79,80 @@ run_mystery_caller_workflow <- function(
   verbose = interactive(),
   npi_progress_observer = NULL
 ) {
+  checkmate::assert_character(
+    taxonomy_terms,
+    null.ok = TRUE,
+    any.missing = FALSE,
+    min.len = 1,
+    .var.name = "taxonomy_terms"
+  )
+  checkmate::assert_data_frame(name_data, null.ok = TRUE, .var.name = "name_data")
+  checkmate::assert_data_frame(phase1_data, min.rows = 1, .var.name = "phase1_data")
+  checkmate::assert_character(
+    lab_assistant_names,
+    any.missing = FALSE,
+    min.len = 2,
+    .var.name = "lab_assistant_names"
+  )
+  checkmate::assert_string(output_directory, min.chars = 1, .var.name = "output_directory")
+  checkmate::assert_true(
+    is.data.frame(phase2_data) || (is.character(phase2_data) && length(phase2_data) == 1),
+    .var.name = "phase2_data"
+  )
+  checkmate::assert_string(phase2_output_directory, min.chars = 1, .var.name = "phase2_output_directory")
+  checkmate::assert_string(quality_check_path, min.chars = 1, .var.name = "quality_check_path")
+  checkmate::assert_string(phase1_output_directory, min.chars = 1, .var.name = "phase1_output_directory")
+  checkmate::assert_character(
+    split_insurance_order,
+    any.missing = FALSE,
+    min.len = 1,
+    unique = TRUE,
+    .var.name = "split_insurance_order"
+  )
+  checkmate::assert_character(
+    phase2_required_strings,
+    any.missing = FALSE,
+    min.len = 1,
+    unique = TRUE,
+    .var.name = "phase2_required_strings"
+  )
+  checkmate::assert_character(
+    phase2_standard_names,
+    any.missing = FALSE,
+    min.len = 1,
+    unique = TRUE,
+    .var.name = "phase2_standard_names"
+  )
+  checkmate::assert_true(
+    length(phase2_required_strings) == length(phase2_standard_names),
+    .var.name = "phase2_required_strings/phase2_standard_names length parity"
+  )
+  checkmate::assert_true(
+    nzchar(trimws(quality_check_path)),
+    .var.name = "quality_check_path non-empty after trim"
+  )
+  checkmate::assert_list(npi_search_args, names = "named", .var.name = "npi_search_args")
+  checkmate::assert_subset(
+    names(npi_search_args),
+    choices = c(
+      "year", "years", "limit", "pause_seconds", "skip_validation",
+      "batch_size", "progress_callback", "heartbeat_seconds",
+      "config_file", "config_path", "max_retries"
+    ),
+    empty.ok = TRUE,
+    .var.name = "npi_search_args names"
+  )
+  if (!is.null(npi_search_args$progress_callback)) {
+    checkmate::assert_function(npi_search_args$progress_callback, .var.name = "npi_search_args$progress_callback")
+  }
+  if (!is.null(npi_search_args$skip_validation)) {
+    checkmate::assert_flag(npi_search_args$skip_validation, .var.name = "npi_search_args$skip_validation")
+  }
+  checkmate::assert_character(all_states, null.ok = TRUE, any.missing = FALSE, .var.name = "all_states")
+  checkmate::assert_character(all_states, null.ok = TRUE, unique = TRUE, .var.name = "all_states unique")
+  checkmate::assert_flag(verbose, .var.name = "verbose")
+  checkmate::assert_function(npi_progress_observer, null.ok = TRUE, .var.name = "npi_progress_observer")
+
   announce <- function(stage) {
     if (isTRUE(verbose)) {
       message(sprintf("[%s] %s", format(Sys.time(), "%H:%M:%S"), stage))
@@ -143,13 +217,8 @@ run_mystery_caller_workflow <- function(
 
   roster_names <- tibble::tibble()
   if (!is.null(name_data)) {
-    if (!is.data.frame(name_data)) {
-      stop("`name_data` must be a data frame with `first` and `last` columns.")
-    }
+    checkmate::assert_names(names(name_data), must.include = c("first", "last"), .var.name = "name_data columns")
     if (nrow(name_data)) {
-      if (!all(c("first", "last") %in% names(name_data))) {
-        stop("`name_data` must contain columns named `first` and `last`.")
-      }
       announce("Searching NPIs by name")
       args <- utils::modifyList(list(data = name_data), npi_search_args)
       user_callback <- NULL

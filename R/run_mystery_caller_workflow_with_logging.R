@@ -58,9 +58,22 @@ run_mystery_caller_workflow_with_logging <- function(input_data,
                                                       log_file = NULL,
                                                       skip_preflight = FALSE) {
 
+  checkmate::assert(
+    checkmate::check_string(input_data, min.chars = 1),
+    checkmate::check_data_frame(input_data, min.rows = 1),
+    .var.name = "input_data"
+  )
   checkmate::assert_string(output_dir, min.chars = 1, any.missing = FALSE)
-  checkmate::assert_flag(skip_preflight)
+  checkmate::assert_string(google_maps_api_key, min.chars = 1, any.missing = FALSE)
+  checkmate::assert_string(here_api_key, min.chars = 1, any.missing = FALSE)
   checkmate::assert_numeric(drive_time_minutes, any.missing = FALSE, min.len = 1)
+  checkmate::assert_true(all(drive_time_minutes >= 1), .var.name = "drive_time_minutes minimum 1 minute")
+  checkmate::assert_true(all(drive_time_minutes <= 1440), .var.name = "drive_time_minutes maximum 1440 minutes")
+  checkmate::assert_int(census_year, lower = 2000, upper = as.integer(format(Sys.Date(), "%Y")), .var.name = "census_year")
+  checkmate::assert_string(log_file, null.ok = TRUE, min.chars = 1, .var.name = "log_file")
+  checkmate::assert_flag(skip_preflight)
+
+  checkmate::assert_string(output_dir, min.chars = 1, any.missing = FALSE)
   checkmate::assert_true(all(is.finite(drive_time_minutes)), .var.name = "drive_time_minutes finite")
   checkmate::assert_true(all(drive_time_minutes > 0), .var.name = "drive_time_minutes positive")
   drive_time_minutes <- sort(unique(as.integer(round(drive_time_minutes))))
