@@ -35,6 +35,8 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
     stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
   }
   checkmate::assert_string(output_dir, min.chars = 1, .var.name = "output_dir")
+  checkmate::assert_true(nrow(bg_data) > 0, .var.name = "bg_data")
+  checkmate::assert_true(nrow(isochrones_data) > 0, .var.name = "isochrones_data")
   if (!inherits(bg_data, "sf")) {
     stop("`bg_data` must be an sf object with polygon geometries.", call. = FALSE)
   }
@@ -47,6 +49,7 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   if (!is.numeric(isochrones_data$drive_time)) {
     stop("`isochrones_data$drive_time` must be a numeric column.", call. = FALSE)
   }
+  checkmate::assert_numeric(isochrones_data$drive_time, any.missing = FALSE, finite = TRUE, .var.name = "isochrones_data$drive_time")
   if (!"overlap" %in% names(bg_data)) {
     stop("`bg_data` must include an `overlap` column (proportion 0-1). Run calculate_intersection_overlap_and_save() first.", call. = FALSE)
   }

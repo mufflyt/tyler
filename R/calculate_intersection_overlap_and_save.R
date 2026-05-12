@@ -48,22 +48,15 @@ calculate_intersection_overlap_and_save <- function(block_groups,
   }
 
   # Parameter validation
-  if (!inherits(block_groups, "sf")) {
-    stop("Error: 'block_groups' must be an sf object.", call. = FALSE)
-  }
-  if (!inherits(isochrones_joined, "sf")) {
-    stop("Error: 'isochrones_joined' must be an sf object.", call. = FALSE)
-  }
-  if (!is.numeric(drive_time_minutes) || length(drive_time_minutes) != 1L || drive_time_minutes < 0) {
-    stop("Error: 'drive_time_minutes' must be a single non-negative numeric value.", call. = FALSE)
-  }
-  if (!is.character(output_dir) || !nzchar(output_dir)) {
-    stop("Error: 'output_dir' must be a non-empty character string.", call. = FALSE)
-  }
-  if (!is.null(crosswalk) && !is.function(crosswalk)) {
-    stop("Error: 'crosswalk' must be a function or NULL.", call. = FALSE)
-  }
+  checkmate::assert_class(block_groups, classes = "sf", .var.name = "block_groups")
+  checkmate::assert_class(isochrones_joined, classes = "sf", .var.name = "isochrones_joined")
+  checkmate::assert_number(drive_time_minutes, lower = 0, finite = TRUE, .var.name = "drive_time_minutes")
+  checkmate::assert_string(output_dir, min.chars = 1, .var.name = "output_dir")
+  checkmate::assert_function(crosswalk, null.ok = TRUE, .var.name = "crosswalk")
   checkmate::assert_flag(notify, .var.name = "notify")
+  checkmate::assert_true(nrow(block_groups) > 0, .var.name = "block_groups")
+  checkmate::assert_true(nrow(isochrones_joined) > 0, .var.name = "isochrones_joined")
+  checkmate::assert_true(all(!is.na(isochrones_joined$drive_time)), .var.name = "isochrones_joined$drive_time")
 
   validated <- validate_sf_inputs(
     block_groups = block_groups,
@@ -88,6 +81,8 @@ calculate_intersection_overlap_and_save <- function(block_groups,
     stop("`block_groups` must include a `vintage` column indicating ACS vintage.", call. = FALSE)
   }
 
+  checkmate::assert_numeric(isochrones_joined$data_year, any.missing = FALSE, finite = TRUE, .var.name = "isochrones_joined$data_year")
+  checkmate::assert_numeric(block_groups$vintage, any.missing = FALSE, finite = TRUE, .var.name = "block_groups$vintage")
   provider_years <- stats::na.omit(unique(isochrones_joined$data_year))
   acs_years <- stats::na.omit(unique(block_groups$vintage))
 
