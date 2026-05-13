@@ -35,27 +35,17 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
     stop("Package 'htmlwidgets' is required for this function. Install with: install.packages('htmlwidgets')", call. = FALSE)
   }
   checkmate::assert_string(output_dir, min.chars = 1, .var.name = "output_dir")
+  checkmate::assert_class(bg_data, classes = "sf", .var.name = "bg_data")
+  checkmate::assert_class(isochrones_data, classes = "sf", .var.name = "isochrones_data")
   checkmate::assert_true(nrow(bg_data) > 0, .var.name = "bg_data")
   checkmate::assert_true(nrow(isochrones_data) > 0, .var.name = "isochrones_data")
-  if (!inherits(bg_data, "sf")) {
-    stop("`bg_data` must be an sf object with polygon geometries.", call. = FALSE)
-  }
-  if (!inherits(isochrones_data, "sf")) {
-    stop("`isochrones_data` must be an sf object with polygon geometries.", call. = FALSE)
-  }
-  if (!"drive_time" %in% names(isochrones_data)) {
-    stop("`isochrones_data` must include a `drive_time` column in minutes.", call. = FALSE)
-  }
-  if (!is.numeric(isochrones_data$drive_time)) {
-    stop("`isochrones_data$drive_time` must be a numeric column.", call. = FALSE)
-  }
-  checkmate::assert_numeric(isochrones_data$drive_time, any.missing = FALSE, finite = TRUE, .var.name = "isochrones_data$drive_time")
-  if (!"overlap" %in% names(bg_data)) {
-    stop("`bg_data` must include an `overlap` column (proportion 0-1). Run calculate_intersection_overlap_and_save() first.", call. = FALSE)
-  }
-  if (any(!is.na(bg_data$overlap) & (bg_data$overlap < 0 | bg_data$overlap > 1))) {
-    stop("`bg_data$overlap` values must be between 0 and 1.", call. = FALSE)
-  }
+  checkmate::assert_names(names(isochrones_data), must.include = "drive_time", .var.name = "names(isochrones_data)")
+  checkmate::assert_names(names(bg_data), must.include = c("overlap", "NAMELSAD", "GEOID"), .var.name = "names(bg_data)")
+  checkmate::assert_numeric(isochrones_data$drive_time, any.missing = FALSE, finite = TRUE, lower = 0, .var.name = "isochrones_data$drive_time")
+  checkmate::assert_numeric(bg_data$overlap, any.missing = FALSE, finite = TRUE, lower = 0, upper = 1, .var.name = "bg_data$overlap")
+  checkmate::assert_true(any(isochrones_data$drive_time %in% c(30, 60, 120, 180)),
+    .var.name = "isochrones_data$drive_time"
+  )
 
   validated <- validate_sf_inputs(
     bg_data = bg_data,
