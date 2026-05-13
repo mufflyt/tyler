@@ -84,6 +84,16 @@ search_and_process_npi <- function(data,
   table_format <- tyler_normalize_file_format(file_format, path = accumulate_path)
 
   validate_required_columns(data, required = c("first", "last"), name = "data")
+  checkmate::assert_true(nrow(data) >= 0, .var.name = "data")
+  checkmate::assert_character(names(data), min.len = 1, any.missing = FALSE, .var.name = "names(data)")
+  checkmate::assert_true(all(nzchar(names(data))), .var.name = "names(data)")
+  checkmate::assert_true(length(unique(names(data))) == length(names(data)), .var.name = "names(data)")
+  checkmate::assert_atomic_vector(data$first, .var.name = "data$first")
+  checkmate::assert_atomic_vector(data$last, .var.name = "data$last")
+  checkmate::assert_true(length(data$first) == nrow(data), .var.name = "data$first")
+  checkmate::assert_true(length(data$last) == nrow(data), .var.name = "data$last")
+  checkmate::assert_true(is.null(limit) || limit >= 1L, .var.name = "limit")
+  checkmate::assert_true(is.null(filter_credentials) || all(nzchar(trimws(filter_credentials))), .var.name = "filter_credentials")
 
   # Validate that required columns contain actual data, not all NA (Bug #7 fix)
   if (nrow(data) > 0) {
