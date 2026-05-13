@@ -45,6 +45,12 @@ tyler_progress_bar <- function(name,
                                 clear = FALSE,
                                 show_after = 0,
                                 force = FALSE) {
+  checkmate::assert_string(name, min.chars = 1)
+  checkmate::assert_count(total, positive = TRUE)
+  checkmate::assert_flag(clear)
+  checkmate::assert_number(show_after, lower = 0)
+  checkmate::assert_flag(force)
+  checkmate::assert_string(format, null.ok = TRUE)
 
   make_pb_env <- function(...) {
     env <- list2env(list(...), parent = emptyenv())
@@ -108,6 +114,9 @@ tyler_progress_bar <- function(name,
 #' @return Invisible NULL
 #' @export
 tyler_progress_update <- function(pb, amount = 1, status = NULL, set = NULL) {
+  checkmate::assert_count(amount, positive = TRUE)
+  checkmate::assert_string(status, null.ok = TRUE)
+  checkmate::assert_count(set, positive = FALSE, null.ok = TRUE)
   if (!inherits(pb, "tyler_progress")) {
     return(invisible(NULL))
   }
@@ -244,6 +253,7 @@ tyler_progress_fail <- function(pb, msg = NULL) {
 #' tyler_multi_done(tracker)
 #' }
 tyler_multi_progress <- function(steps, show_overall = TRUE) {
+  checkmate::assert_character(steps, min.len = 1, any.missing = FALSE)
   env <- new.env(parent = emptyenv())
   env$steps <- steps
   env$total_steps <- length(steps)
