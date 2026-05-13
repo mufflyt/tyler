@@ -79,3 +79,24 @@ test_that("Saves output file correctly", {
     }
   )
 })
+
+
+test_that("Handles partial geocode response without crashing", {
+  temp_csv <- create_temp_csv(sample_data)
+  short_geocode <- function(address, key, ...) {
+    data.frame(lat = c(37.7749, 37.3318), lon = c(-122.4194, -122.0312))
+  }
+
+  with_mocked_bindings(
+    geocode = short_geocode,
+    .package = "ggmap",
+    code = {
+      expect_warning(
+        result <- geocode_unique_addresses(temp_csv, "fake_api_key", notify = FALSE),
+        "Missing rows will be padded with NA coordinates"
+      )
+      expect_equal(nrow(result), nrow(sample_data))
+      expect_true(any(is.na(result$latitude) | is.na(result$longitude)))
+    }
+  )
+})
