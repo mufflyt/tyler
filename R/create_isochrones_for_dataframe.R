@@ -29,13 +29,23 @@ create_isochrones_for_dataframe <- function(
   #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
   #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 
+  checkmate::assert(
+    checkmate::check_data_frame(input_file),
+    checkmate::check_string(input_file, min.chars = 1),
+    .var.name = "input_file"
+  )
+  checkmate::assert_numeric(breaks, min.len = 1, any.missing = FALSE, finite = TRUE, lower = 1, .var.name = "breaks")
+  checkmate::assert_true(length(unique(breaks)) == length(breaks), .var.name = "breaks")
+  checkmate::assert_true(isTRUE(all.equal(breaks, sort(breaks))), .var.name = "breaks")
+  checkmate::assert_string(api_key, min.chars = 1, .var.name = "api_key")
+  checkmate::assert_string(output_dir, null.ok = TRUE, min.chars = 1, .var.name = "output_dir")
+  checkmate::assert_number(save_interval, lower = 0, finite = TRUE, .var.name = "save_interval")
   if (!requireNamespace("hereR", quietly = TRUE)) {
     stop("Package 'hereR' is required for create_isochrones_for_dataframe(). Install with: install.packages('hereR')", call. = FALSE)
   }
   if (!requireNamespace("easyr", quietly = TRUE)) {
     stop("Package 'easyr' is required for create_isochrones_for_dataframe(). Install with: install.packages('easyr')", call. = FALSE)
   }
-  if (is.na(api_key) || !nzchar(api_key)) stop("HERE API key is required via argument or HERE_API_KEY env var.", call. = FALSE)
 
   hereR::set_key(api_key)
   if (is.data.frame(input_file)) {
@@ -46,8 +56,13 @@ create_isochrones_for_dataframe <- function(
 
   # Normalise column names before validation so that "LAT"/"LONG" etc. are accepted
   dataframe <- janitor::clean_names(dataframe)
+  checkmate::assert_data_frame(dataframe, min.rows = 0, .var.name = "dataframe")
+  checkmate::assert_names(names(dataframe), type = "unique", .var.name = "names(dataframe)")
 
   # Check if "lat" and "long" columns exist
+  checkmate::assert_names(names(dataframe), must.include = c("lat", "long"), .var.name = "names(dataframe)")
+  checkmate::assert_numeric(dataframe$lat, any.missing = FALSE, finite = TRUE, .var.name = "dataframe$lat")
+  checkmate::assert_numeric(dataframe$long, any.missing = FALSE, finite = TRUE, .var.name = "dataframe$long")
   if (!all(c("lat", "long") %in% colnames(dataframe))) {
     stop("The dataframe must have 'lat' and 'long' columns.", call. = FALSE)
   }
@@ -102,9 +117,6 @@ create_isochrones_for_dataframe <- function(
     }
   }
 
-  if (!is.numeric(save_interval) || length(save_interval) != 1 || is.na(save_interval) || save_interval <= 0) {
-    stop("save_interval must be a positive number of seconds.", call. = FALSE)
-  }
 
   if (is.null(output_dir)) {
     output_dir <- tyler_tempdir("isochrones", create = TRUE)

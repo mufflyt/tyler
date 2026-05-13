@@ -435,3 +435,16 @@ test_that("Edge cases don't break bug fixes", {
   # All tests should complete quickly
   expect_true(TRUE)
 })
+
+test_that("create_isochrones_for_dataframe checkmate input validations trigger", {
+  skip_if_not_installed("hereR")
+  skip_if_not_installed("easyr")
+
+  valid_df <- data.frame(lat = 39.7, long = -104.9)
+
+  expect_error(create_isochrones_for_dataframe(valid_df, breaks = c(3600, 1800), api_key = "dummy"), "breaks")
+  expect_error(create_isochrones_for_dataframe(valid_df, breaks = c(1800, 1800), api_key = "dummy"), "breaks")
+  expect_error(create_isochrones_for_dataframe(valid_df, output_dir = "", api_key = "dummy"), "output_dir")
+  expect_error(create_isochrones_for_dataframe(data.frame(lat = "x", long = -104.9), api_key = "dummy"), "dataframe\\$lat")
+  expect_error(create_isochrones_for_dataframe(data.frame(lat = 39.7), api_key = "dummy"), "names\\(dataframe\\)")
+})
