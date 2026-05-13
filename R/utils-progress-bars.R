@@ -168,6 +168,7 @@ tyler_progress_update <- function(pb, amount = 1, status = NULL, set = NULL) {
 #' @return Invisible NULL
 #' @export
 tyler_progress_done <- function(pb, result = NULL, status = "done") {
+  checkmate::assert_string(result, null.ok = TRUE)
   if (!inherits(pb, "tyler_progress")) {
     return(invisible(NULL))
   }
@@ -197,6 +198,7 @@ tyler_progress_done <- function(pb, result = NULL, status = "done") {
 #' @return Invisible NULL
 #' @export
 tyler_progress_fail <- function(pb, msg = NULL) {
+  checkmate::assert_string(msg, null.ok = TRUE)
   if (!inherits(pb, "tyler_progress")) {
     return(invisible(NULL))
   }
@@ -254,6 +256,7 @@ tyler_progress_fail <- function(pb, msg = NULL) {
 #' }
 tyler_multi_progress <- function(steps, show_overall = TRUE) {
   checkmate::assert_character(steps, min.len = 1, any.missing = FALSE)
+  checkmate::assert_flag(show_overall)
   env <- new.env(parent = emptyenv())
   env$steps <- steps
   env$total_steps <- length(steps)
@@ -277,6 +280,8 @@ tyler_multi_progress <- function(steps, show_overall = TRUE) {
 #' @return Invisible NULL
 #' @export
 tyler_multi_step <- function(tracker, step_num, total, detail = NULL) {
+  checkmate::assert_count(step_num, positive = TRUE)
+  checkmate::assert_count(total, positive = TRUE)
   if (!inherits(tracker, "tyler_multi_progress")) {
     return(invisible(NULL))
   }
@@ -317,6 +322,8 @@ tyler_multi_step <- function(tracker, step_num, total, detail = NULL) {
 #' @return Invisible NULL
 #' @export
 tyler_multi_update <- function(tracker, amount = 1, status = NULL) {
+  checkmate::assert_count(amount, positive = TRUE)
+  checkmate::assert_string(status, null.ok = TRUE)
   if (!inherits(tracker, "tyler_multi_progress")) {
     return(invisible(NULL))
   }
@@ -337,6 +344,7 @@ tyler_multi_update <- function(tracker, amount = 1, status = NULL) {
 #' @return Invisible NULL
 #' @export
 tyler_multi_complete <- function(tracker, result = NULL) {
+  checkmate::assert_string(result, null.ok = TRUE)
   if (!inherits(tracker, "tyler_multi_progress")) {
     return(invisible(NULL))
   }
@@ -407,6 +415,8 @@ tyler_progress_map <- function(items,
                                 name = "Processing items",
                                 batch_size = NULL,
                                 parallel = FALSE) {
+  checkmate::assert_function(fn)
+  checkmate::assert_string(name, min.chars = 1)
 
   n <- length(items)
 
