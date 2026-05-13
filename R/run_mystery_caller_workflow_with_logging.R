@@ -56,6 +56,17 @@ run_mystery_caller_workflow_with_logging <- function(
   log_file = NULL,
   skip_preflight = FALSE
 ) {
+  checkmate::assert_character(taxonomy_terms, null.ok = TRUE, any.missing = FALSE, .var.name = "taxonomy_terms")
+  checkmate::assert_data_frame(name_data, null.ok = TRUE, .var.name = "name_data")
+  checkmate::assert_data_frame(phase1_data, min.rows = 1, .var.name = "phase1_data")
+  checkmate::assert_character(lab_assistant_names, min.len = 1, any.missing = FALSE, .var.name = "lab_assistant_names")
+  checkmate::assert_string(output_directory, min.chars = 1, .var.name = "output_directory")
+  checkmate::assert_data_frame(phase2_data, min.rows = 1, .var.name = "phase2_data")
+  checkmate::assert_string(quality_check_path, min.chars = 1, .var.name = "quality_check_path")
+  checkmate::assert_character(split_insurance_order, min.len = 1, any.missing = FALSE, .var.name = "split_insurance_order")
+  checkmate::assert_list(npi_search_args, names = "named", .var.name = "npi_search_args")
+  checkmate::assert_flag(skip_preflight, .var.name = "skip_preflight")
+
   dir.create(output_directory, showWarnings = FALSE, recursive = TRUE)
 
   if (is.null(log_file)) {
