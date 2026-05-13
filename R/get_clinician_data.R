@@ -14,12 +14,19 @@
 #' clinician_df <- retrieve_clinician_data("clinicians.csv")
 #' }
 retrieve_clinician_data <- function(input_data) {
+  checkmate::assert(
+    checkmate::check_data_frame(input_data),
+    checkmate::check_string(input_data, min.chars = 1),
+    .var.name = "input_data"
+  )
+
   if (is.data.frame(input_data)) {
+    checkmate::assert_true(nrow(input_data) > 0, .var.name = "input_data")
+    checkmate::assert_names(names(input_data), type = "strict", .var.name = "names(input_data)")
     clinician_df <- input_data
   } else if (is.character(input_data) && length(input_data) == 1) {
-    if (!file.exists(input_data)) {
-      stop(sprintf("CSV file not found: %s", input_data), call. = FALSE)
-    }
+    checkmate::assert_file_exists(input_data, access = "r", .var.name = "input_data")
+    checkmate::assert_true(grepl("\.csv$", input_data, ignore.case = TRUE), .var.name = "input_data")
 
     clinician_df <- readr::read_csv(
       input_data,
@@ -29,18 +36,24 @@ retrieve_clinician_data <- function(input_data) {
     stop(sprintf("`input_data` must be a data frame or a single CSV file path; received class: %s.", paste(class(input_data), collapse = ", ")), call. = FALSE)
   }
 
+  checkmate::assert_data_frame(clinician_df, min.rows = 1, .var.name = "clinician_df")
+
   if (!"npi" %in% names(clinician_df)) {
     stop(sprintf("`input_data` is missing required column `npi`. Available columns: %s", if (length(names(clinician_df))) paste(names(clinician_df), collapse = ", ") else "<none>"), call. = FALSE)
   }
 
   cleaned_df <- validate_and_remove_invalid_npi(clinician_df)
+  checkmate::assert_data_frame(cleaned_df, .var.name = "cleaned_df")
+  checkmate::assert_names(names(cleaned_df), must.include = "npi", .var.name = "names(cleaned_df)")
   if (!nrow(cleaned_df)) {
     cleaned_df$npi_is_valid <- logical()
     return(cleaned_df)
   }
 
   get_clinician_data <- function(npi) {
+    checkmate::assert_atomic_vector(npi, len = 1, null.ok = FALSE, .var.name = "npi")
     npi <- as.character(npi)
+    checkmate::assert_string(npi, na.ok = FALSE, .var.name = "npi")
     if (nchar(npi) != 10 || grepl("\\D", npi)) {
       return(NULL)
     }
@@ -80,6 +93,7 @@ retrieve_clinician_data <- function(input_data) {
   }, logical(1))
 
   base_cols <- setdiff(names(cleaned_df), "clinician_data")
+  checkmate::assert_character(base_cols, min.len = 1, any.missing = FALSE, .var.name = "base_cols")
 
   if (!any(has_results)) {
     return(cleaned_df[FALSE, base_cols, drop = FALSE])
@@ -97,6 +111,7 @@ retrieve_clinician_data <- function(input_data) {
   })
 
   result <- dplyr::bind_rows(expanded)
+  checkmate::assert_data_frame(result, .var.name = "result")
 
   if (isTRUE(interactive()) && requireNamespace("beepr", quietly = TRUE)) {
     beepr::beep(2)
