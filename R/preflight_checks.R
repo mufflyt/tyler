@@ -52,10 +52,19 @@ tyler_preflight_check <- function(input_data,
                                    interactive = interactive(),
                                    required_columns = c("first", "last")) {
 
+  checkmate::assert(
+    checkmate::check_data_frame(input_data),
+    checkmate::check_string(input_data, min.chars = 1),
+    .var.name = "input_data"
+  )
+  checkmate::assert_string(output_dir, min.chars = 1, .var.name = "output_dir")
+  checkmate::assert_string(google_maps_api_key, null.ok = TRUE, .var.name = "google_maps_api_key")
+  checkmate::assert_string(here_api_key, null.ok = TRUE, .var.name = "here_api_key")
   checkmate::assert_flag(check_apis)
   checkmate::assert_flag(estimate_resources)
   checkmate::assert_flag(interactive)
-  checkmate::assert_character(required_columns, any.missing = FALSE)
+  checkmate::assert_character(required_columns, min.len = 1, any.missing = FALSE, unique = TRUE, .var.name = "required_columns")
+  checkmate::assert_true(all(nzchar(trimws(required_columns))), .var.name = "required_columns")
 
   message("")
   message("\u256D", strrep("\u2500", 58), "\u256E")
@@ -365,6 +374,7 @@ tyler_preflight_check <- function(input_data,
 #' @return List with valid (logical) and error (character) fields
 #' @keywords internal
 tyler_validate_google_api <- function(api_key) {
+  checkmate::assert_string(api_key, min.chars = 1, .var.name = "api_key")
   if (!requireNamespace("ggmap", quietly = TRUE)) {
     return(list(valid = FALSE, error = "Package 'ggmap' is required to validate the Google Maps API key. Install with: install.packages('ggmap')"))
   }
@@ -390,6 +400,7 @@ tyler_validate_google_api <- function(api_key) {
 #' @return List with valid (logical) and error (character) fields
 #' @keywords internal
 tyler_validate_here_api <- function(api_key) {
+  checkmate::assert_string(api_key, min.chars = 1, .var.name = "api_key")
   tryCatch({
     # Try a simple isochrone request
     url <- sprintf(
@@ -423,6 +434,8 @@ tyler_validate_here_api <- function(api_key) {
 #' @family utilities
 #' @export
 tyler_assess_data_quality <- function(data, required_columns = c("first", "last")) {
+  checkmate::assert_data_frame(data, .var.name = "data")
+  checkmate::assert_character(required_columns, min.len = 1, any.missing = FALSE, unique = TRUE, .var.name = "required_columns")
   issues <- list()
   penalties <- 0
   max_penalties <- 10
@@ -496,6 +509,7 @@ tyler_assess_data_quality <- function(data, required_columns = c("first", "last"
 #' @family utilities
 #' @export
 tyler_estimate_resources <- function(n_rows) {
+  checkmate::assert_count(n_rows, positive = FALSE, .var.name = "n_rows")
   # Rough estimates based on typical performance
   # These should be calibrated with real-world data
 
