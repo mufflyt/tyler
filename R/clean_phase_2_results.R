@@ -35,11 +35,17 @@
 rename_columns_by_substring <- function(data, target_strings, new_names) {
   # Initial checks and setup
   validate_dataframe(data, name = "data")
+  checkmate::assert_character(target_strings, any.missing = FALSE, null.ok = TRUE, .var.name = "target_strings")
+  checkmate::assert_character(new_names, any.missing = FALSE, null.ok = TRUE, .var.name = "new_names")
   if (!length(target_strings) && !length(new_names)) {
     return(invisible(data))
   }
   checkmate::assert_character(target_strings, any.missing = FALSE, min.len = 1, .var.name = "target_strings")
   checkmate::assert_character(new_names, any.missing = FALSE, min.len = 1, .var.name = "new_names")
+  checkmate::assert_true(length(unique(target_strings)) == length(target_strings), .var.name = "target_strings")
+  checkmate::assert_true(length(unique(new_names)) == length(new_names), .var.name = "new_names")
+  checkmate::assert_true(all(nchar(trimws(target_strings)) <= 200), .var.name = "target_strings")
+  checkmate::assert_true(all(nchar(trimws(new_names)) <= 200), .var.name = "new_names")
 
   if (length(target_strings) != length(new_names)) {
     stop("target_strings and new_names must have the same length.", call. = FALSE)
@@ -166,6 +172,18 @@ clean_phase_2_data <- function(
   output_directory = NULL,
   output_format = c("csv", "parquet")
 ) {
+  checkmate::assert_character(required_strings, any.missing = FALSE, min.len = 1, .var.name = "required_strings")
+  checkmate::assert_character(standard_names, any.missing = FALSE, min.len = 1, .var.name = "standard_names")
+  checkmate::assert_string(output_directory, null.ok = TRUE, min.chars = 1, .var.name = "output_directory")
+  checkmate::assert_true(is.null(output_directory) || !grepl("^\\s*$", output_directory), .var.name = "output_directory")
+  checkmate::assert_true(length(required_strings) == length(standard_names), .var.name = "required_strings")
+  checkmate::assert_true(all(nzchar(trimws(required_strings))), .var.name = "required_strings")
+  checkmate::assert_true(all(nzchar(trimws(standard_names))), .var.name = "standard_names")
+  checkmate::assert_true(all(nchar(trimws(required_strings)) <= 200), .var.name = "required_strings")
+  checkmate::assert_true(all(nchar(trimws(standard_names)) <= 200), .var.name = "standard_names")
+  checkmate::assert_true(length(unique(required_strings)) == length(required_strings), .var.name = "required_strings")
+  checkmate::assert_true(length(unique(standard_names)) == length(standard_names), .var.name = "standard_names")
+
   output_format <- match.arg(output_format)
   # Data loading and initial checks
   if (is.character(data_or_path)) {
