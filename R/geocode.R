@@ -142,10 +142,15 @@ geocode_unique_addresses <- function(file_path, google_maps_api_key,
 
         if (nrow(coords) != total_unique) {
           warning(sprintf(
-            "Geocoding returned %d rows but expected %d. Some addresses may be missing results.",
+            "Geocoding returned %d rows but expected %d. Missing rows will be padded with NA coordinates.",
             nrow(coords),
             total_unique
           ))
+          if (nrow(coords) < total_unique) {
+            coords[(nrow(coords) + 1):total_unique, c("lat", "lon")] <- NA_real_
+          } else {
+            coords <- coords[seq_len(total_unique), , drop = FALSE]
+          }
         }
 
         break
