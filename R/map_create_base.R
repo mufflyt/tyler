@@ -92,6 +92,17 @@ map_create_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 
 #' @family mapping
 #' @export
 map_create_physician_dot <- function(physician_data, jitter_range = 0.05, color_palette = "magma", popup_var = "name", output_dir = NULL) {
+  checkmate::assert_data_frame(physician_data, min.rows = 1, .var.name = "physician_data")
+  checkmate::assert_names(names(physician_data), must.include = c("long", "lat", "ACOG_District"), .var.name = "physician_data")
+  checkmate::assert_numeric(physician_data$long, any.missing = FALSE, finite = TRUE, lower = -180, upper = 180, .var.name = "physician_data$long")
+  checkmate::assert_numeric(physician_data$lat, any.missing = FALSE, finite = TRUE, lower = -90, upper = 90, .var.name = "physician_data$lat")
+  checkmate::assert_number(jitter_range, lower = 0, finite = TRUE, .var.name = "jitter_range")
+  checkmate::assert_string(color_palette, min.chars = 1, .var.name = "color_palette")
+  checkmate::assert_choice(color_palette, choices = c("magma", "inferno", "plasma", "viridis", "cividis", "rocket", "mako", "turbo"), .var.name = "color_palette")
+  checkmate::assert_string(popup_var, min.chars = 1, .var.name = "popup_var")
+  checkmate::assert_true(popup_var %in% names(physician_data), .var.name = "popup_var")
+  checkmate::assert_string(output_dir, null.ok = TRUE, min.chars = 1, .var.name = "output_dir")
+
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for map_create_physician_dot(). Install with: install.packages('leaflet')", call. = FALSE)
   }
