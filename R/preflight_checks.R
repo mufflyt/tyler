@@ -65,6 +65,17 @@ tyler_preflight_check <- function(input_data,
   checkmate::assert_flag(interactive)
   checkmate::assert_character(required_columns, min.len = 1, any.missing = FALSE, unique = TRUE, .var.name = "required_columns")
   checkmate::assert_true(all(nzchar(trimws(required_columns))), .var.name = "required_columns")
+  checkmate::assert_true(!grepl("^\\s*$", output_dir), .var.name = "output_dir")
+  checkmate::assert_true(all(!grepl("^\\s*$", required_columns)), .var.name = "required_columns")
+  checkmate::assert_true(all(nchar(required_columns) <= 100), .var.name = "required_columns")
+  checkmate::assert_true(!isTRUE(check_apis) || (!is.null(google_maps_api_key) && !is.null(here_api_key)),
+    .var.name = "check_apis"
+  )
+  checkmate::assert_true(!isTRUE(check_apis) || (nzchar(trimws(google_maps_api_key)) && nzchar(trimws(here_api_key))),
+    .var.name = "check_apis"
+  )
+  checkmate::assert_true(is.data.frame(input_data) || !grepl("^\\s*$", input_data), .var.name = "input_data")
+  checkmate::assert_true(is.data.frame(input_data) || grepl("\\.(csv|parquet)$", input_data, ignore.case = TRUE), .var.name = "input_data")
 
   message("")
   message("\u256D", strrep("\u2500", 58), "\u256E")
@@ -83,6 +94,9 @@ tyler_preflight_check <- function(input_data,
   errors <- character()
   warnings <- character()
   estimates <- NULL
+  checkmate::assert_list(checks, names = "strict", .var.name = "checks")
+  checkmate::assert_character(errors, any.missing = FALSE, .var.name = "errors")
+  checkmate::assert_character(warnings, any.missing = FALSE, .var.name = "warnings")
 
   # ==================== Check 1: Input Data ====================
   message("\U0001F4CA Checking input data...")
