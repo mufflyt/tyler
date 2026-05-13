@@ -61,6 +61,18 @@ search_and_process_npi <- function(data,
                                    heartbeat_seconds = NULL,
                                    progress_log_format = c("text", "csv")) {
   validate_dataframe(data, name = "data")
+  checkmate::assert_choice(enumeration_type, c("ind", "org", "all"), .var.name = "enumeration_type")
+  checkmate::assert_int(limit, lower = 1, null.ok = TRUE, .var.name = "limit")
+  checkmate::assert_string(country_code, min.chars = 2, max.chars = 2, .var.name = "country_code")
+  checkmate::assert_character(filter_credentials, null.ok = TRUE, any.missing = FALSE, .var.name = "filter_credentials")
+  checkmate::assert_int(save_chunk_size, lower = 1, .var.name = "save_chunk_size")
+  checkmate::assert_string(dest_dir, null.ok = TRUE, min.chars = 1, .var.name = "dest_dir")
+  checkmate::assert_choice(file_format, c("csv", "parquet"), null.ok = TRUE, .var.name = "file_format")
+  checkmate::assert_string(accumulate_path, null.ok = TRUE, min.chars = 1, .var.name = "accumulate_path")
+  checkmate::assert_flag(resume, .var.name = "resume")
+  checkmate::assert_string(progress_log, null.ok = TRUE, min.chars = 1, .var.name = "progress_log")
+  checkmate::assert_flag(notify, .var.name = "notify")
+  checkmate::assert_function(progress_callback, null.ok = TRUE, .var.name = "progress_callback")
 
   progress_log_format <- match.arg(progress_log_format)
   validate_scalar_positive_numeric(
