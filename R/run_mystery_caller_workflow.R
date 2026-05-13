@@ -102,6 +102,16 @@ run_mystery_caller_workflow <- function(
   checkmate::assert_character(all_states, null.ok = TRUE, any.missing = FALSE, .var.name = "all_states")
   checkmate::assert_flag(verbose, .var.name = "verbose")
   checkmate::assert_function(npi_progress_observer, null.ok = TRUE, .var.name = "npi_progress_observer")
+  checkmate::assert_true(nrow(phase1_data) > 0, .var.name = "phase1_data")
+  checkmate::assert_true(!grepl("^\\s*$", output_directory), .var.name = "output_directory")
+  checkmate::assert_true(!grepl("^\\s*$", phase2_output_directory), .var.name = "phase2_output_directory")
+  checkmate::assert_true(!grepl("^\\s*$", phase1_output_directory), .var.name = "phase1_output_directory")
+  checkmate::assert_true(!grepl("^\\s*$", quality_check_path), .var.name = "quality_check_path")
+  checkmate::assert_true(length(unique(lab_assistant_names)) == length(lab_assistant_names), .var.name = "lab_assistant_names")
+  checkmate::assert_true(length(unique(split_insurance_order)) == length(split_insurance_order), .var.name = "split_insurance_order")
+  checkmate::assert_true(length(unique(phase2_required_strings)) == length(phase2_required_strings), .var.name = "phase2_required_strings")
+  checkmate::assert_true(length(unique(phase2_standard_names)) == length(phase2_standard_names), .var.name = "phase2_standard_names")
+  checkmate::assert_names(names(npi_search_args), type = "unique", .var.name = "names(npi_search_args)")
 
   if (length(phase2_required_strings) != length(phase2_standard_names)) {
     stop("`phase2_required_strings` and `phase2_standard_names` must have the same length.", call. = FALSE)
