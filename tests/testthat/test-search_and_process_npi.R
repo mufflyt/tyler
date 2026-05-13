@@ -171,3 +171,19 @@ test_that("Handles large datasets efficiently", {
     }
   )
 })
+
+
+test_that("Preserves query-to-NPI linkage fields", {
+  with_mocked_bindings(
+    npi_search = mock_npi_search,
+    npi_flatten = mock_npi_flatten,
+    .package = "npi",
+    code = {
+      data <- data.frame(first = "John", last = "Doe", stringsAsFactors = FALSE)
+      result <- search_and_process_npi(data, notify = FALSE)
+      expect_true(all(result$query_first_name == "John"))
+      expect_true(all(result$query_last_name == "Doe"))
+      expect_true(all(result$search_term == "John Doe"))
+    }
+  )
+})
