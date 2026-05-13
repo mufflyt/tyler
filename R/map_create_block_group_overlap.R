@@ -46,6 +46,16 @@ map_create_block_group_overlap <- function(bg_data, isochrones_data, output_dir 
   checkmate::assert_true(any(isochrones_data$drive_time %in% c(30, 60, 120, 180)),
     .var.name = "isochrones_data$drive_time"
   )
+  checkmate::assert_true(anyDuplicated(bg_data$GEOID) == 0, .var.name = "bg_data$GEOID")
+  checkmate::assert_true(all(!is.na(sf::st_is_valid(bg_data))), .var.name = "bg_data geometry validity")
+  checkmate::assert_character(bg_data$GEOID, any.missing = FALSE, min.chars = 1, .var.name = "bg_data$GEOID")
+  checkmate::assert_character(bg_data$NAMELSAD, any.missing = FALSE, min.chars = 1, .var.name = "bg_data$NAMELSAD")
+  checkmate::assert_true(all(grepl("^[0-9]{12}$", bg_data$GEOID)), .var.name = "bg_data$GEOID")
+  checkmate::assert_true(all(isochrones_data$drive_time == as.integer(isochrones_data$drive_time)), .var.name = "isochrones_data$drive_time")
+  checkmate::assert_subset(unique(isochrones_data$drive_time), choices = c(30, 60, 120, 180), .var.name = "isochrones_data$drive_time")
+  checkmate::assert_true(all(bg_data$overlap >= 0 & bg_data$overlap <= 1), .var.name = "bg_data$overlap")
+  checkmate::assert_true(any(bg_data$overlap > 0), .var.name = "bg_data$overlap")
+  checkmate::assert_true(nchar(trimws(output_dir)) > 0, .var.name = "output_dir")
 
   validated <- validate_sf_inputs(
     bg_data = bg_data,
