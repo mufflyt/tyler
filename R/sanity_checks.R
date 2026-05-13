@@ -28,8 +28,12 @@ tyler_check_no_limits <- function(data,
                                    context = "dataset",
                                    min_expected = NULL,
                                    max_expected = NULL) {
-  if (!is.data.frame(data)) {
-    stop(sprintf("'%s' must be a data frame, got: %s", context, class(data)[1]), call. = FALSE)
+  checkmate::assert_data_frame(data, .var.name = "data")
+  checkmate::assert_string(context, min.chars = 1, .var.name = "context")
+  checkmate::assert_count(min_expected, null.ok = TRUE, .var.name = "min_expected")
+  checkmate::assert_count(max_expected, null.ok = TRUE, .var.name = "max_expected")
+  if (!is.null(min_expected) && !is.null(max_expected)) {
+    checkmate::assert_true(min_expected <= max_expected, .var.name = "min_expected <= max_expected")
   }
 
   n <- nrow(data)
@@ -288,9 +292,10 @@ tyler_check_api_response <- function(result,
                                      expected,
                                      api_name = "API",
                                      tolerance = 0) {
-  if (!is.data.frame(result)) {
-    stop(sprintf("%s returned non-dataframe result: %s", api_name, class(result)[1]), call. = FALSE)
-  }
+  checkmate::assert_data_frame(result, .var.name = "result")
+  checkmate::assert_count(expected, .var.name = "expected")
+  checkmate::assert_string(api_name, min.chars = 1, .var.name = "api_name")
+  checkmate::assert_number(tolerance, lower = 0, finite = TRUE, .var.name = "tolerance")
 
   actual <- nrow(result)
   diff <- abs(actual - expected)
@@ -351,6 +356,20 @@ tyler_check_no_data_loss <- function(before,
                                      operation = "operation",
                                      expected_change = 0,
                                      tolerance = 0) {
+  checkmate::assert(
+    checkmate::check_data_frame(before),
+    checkmate::check_count(before),
+    .var.name = "before"
+  )
+  checkmate::assert(
+    checkmate::check_data_frame(after),
+    checkmate::check_count(after),
+    .var.name = "after"
+  )
+  checkmate::assert_string(operation, min.chars = 1, .var.name = "operation")
+  checkmate::assert_integerish(expected_change, len = 1, finite = TRUE, .var.name = "expected_change")
+  checkmate::assert_count(tolerance, .var.name = "tolerance")
+
   # Extract row counts if data frames provided
   n_before <- if (is.data.frame(before)) nrow(before) else as.integer(before)
   n_after <- if (is.data.frame(after)) nrow(after) else as.integer(after)
