@@ -68,6 +68,10 @@ search_by_taxonomy <- function(taxonomy_to_search,
   checkmate::assert_flag(write_snapshot, .var.name = "write_snapshot")
   checkmate::assert_flag(notify, .var.name = "notify")
   checkmate::assert_number(limit, lower = 1, upper = 1200, finite = TRUE, .var.name = "limit")
+  checkmate::assert_character(taxonomy_to_search, null.ok = TRUE, any.missing = FALSE, .var.name = "taxonomy_to_search")
+  checkmate::assert_character(states, null.ok = TRUE, any.missing = FALSE, .var.name = "states")
+  checkmate::assert_string(city, null.ok = TRUE, min.chars = 1, .var.name = "city")
+  checkmate::assert_string(snapshot_dir, null.ok = TRUE, min.chars = 1, .var.name = "snapshot_dir")
 
   taxonomy_to_search <- trimws(as.character(taxonomy_to_search))
   taxonomy_to_search <- taxonomy_to_search[!is.na(taxonomy_to_search) & nzchar(taxonomy_to_search)]
@@ -87,6 +91,7 @@ search_by_taxonomy <- function(taxonomy_to_search,
         paste(invalid_states, collapse = ", ")
       ), call. = FALSE)
     }
+    checkmate::assert_subset(states, choices = state.abb, .var.name = "states")
     message(sprintf(
       "Searching %d taxonomy term(s) across %d state(s) to bypass the 1200-record cap...",
       length(taxonomy_to_search), length(states)
@@ -137,6 +142,10 @@ search_by_taxonomy <- function(taxonomy_to_search,
 # Internal workhorse for a single state (or national) query.
 .search_by_taxonomy_single <- function(taxonomy_to_search, state = NULL,
                                        city = NULL, limit = 1200L) {
+  checkmate::assert_character(taxonomy_to_search, min.len = 1, any.missing = FALSE, .var.name = "taxonomy_to_search")
+  checkmate::assert_string(state, null.ok = TRUE, min.chars = 2, max.chars = 2, .var.name = "state")
+  checkmate::assert_string(city, null.ok = TRUE, min.chars = 1, .var.name = "city")
+  checkmate::assert_int(limit, lower = 1, upper = 1200, .var.name = "limit")
   extract_status <- function(msg) {
     status <- stringr::str_extract(msg, "\\b[0-9]{3}\\b")
     if (!is.na(status)) return(paste("after", status))
@@ -293,6 +302,8 @@ search_by_taxonomy <- function(taxonomy_to_search,
 }
 
 .save_taxonomy_snapshot <- function(npi_data, snapshot_dir) {
+  checkmate::assert_data_frame(npi_data, .var.name = "npi_data")
+  checkmate::assert_string(snapshot_dir, null.ok = TRUE, min.chars = 1, .var.name = "snapshot_dir")
   if (is.null(snapshot_dir)) {
     snapshot_dir <- tyler_tempdir("search_by_taxonomy", create = TRUE)
   } else if (!dir.exists(snapshot_dir)) {
