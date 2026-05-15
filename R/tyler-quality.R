@@ -179,3 +179,51 @@ tyler_data_transparency_report <- function(data,
     audit_trail = audit_trail
   )
 }
+
+#' Persist transparency reports in machine-readable formats
+#'
+#' Writes outputs produced by [tyler_data_transparency_report()] to disk in
+#' deterministic, machine-readable files for reproducibility and automation.
+#'
+#' @param report A report object returned by [tyler_data_transparency_report()].
+#' @param output_dir Directory where report files should be written.
+#' @param file_prefix Prefix used for generated file names.
+#' @param formats Character vector of output formats. Supported values are
+#'   `"csv"` and `"json"`.
+#'
+#' @return Invisibly returns a named character vector of written file paths.
+#' @family utilities
+#' @export
+tyler_write_transparency_report <- function(report,
+                                            output_dir = ".",
+                                            file_prefix = "transparency_report",
+                                            formats = c("csv", "json")) {
+  checkmate::assert_list(report, names = "named", .var.name = "report")
+  checkmate::assert_subset(c("column_metrics", "dataset_metrics"), choices = names(report), .var.name = "names(report)")
+  checkmate::assert_string(output_dir, min.chars = 1, .var.name = "output_dir")
+  checkmate::assert_string(file_prefix, min.chars = 1, .var.name = "file_prefix")
+  checkmate::assert_character(formats, min.len = 1, any.missing = FALSE, unique = TRUE, .var.name = "formats")
+  checkmate::assert_subset(formats, c("csv", "json"), .var.name = "formats")
+
+  dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
+
+  paths <- character(0)
+  if ("csv" %in% formats) {
+    column_csv <- file.path(output_dir, paste0(file_prefix, "_column_metrics.csv"))
+    dataset_csv <- file.path(output_dir, paste0(file_prefix, "_dataset_metrics.csv"))
+    readr::write_csv(report$column_metrics, column_csv, na = "")
+    readr::write_csv(report$dataset_metrics, dataset_csv, na = "")
+    paths <- c(paths, column_metrics_csv = column_csv, dataset_metrics_csv = dataset_csv)
+  }
+
+  if ("json" %in% formats) {
+    if (!requireNamespace("jsonlite", quietly = TRUE)) {
+      stop("Package 'jsonlite' is required for JSON export. Install with install.packages('jsonlite').", call. = FALSE)
+    }
+    json_path <- file.path(output_dir, paste0(file_prefix, ".json"))
+    jsonlite::write_json(report, json_path, pretty = TRUE, auto_unbox = TRUE, null = "null", na = "null")
+    paths <- c(paths, json = json_path)
+  }
+
+  invisible(paths)
+}
