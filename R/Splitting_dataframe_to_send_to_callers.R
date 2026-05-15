@@ -46,8 +46,29 @@ split_and_save <- function(data_or_path, output_directory, lab_assistant_names, 
     ext <- tolower(tools::file_ext(data_or_path))
     if (ext %in% c("csv", "parquet")) {
       data <- tyler_read_table(data_or_path)
-    } else if (ext %in% c("rds", "rda")) {
+    } else if (ext == "rds") {
       data <- readRDS(data_or_path)
+    } else if (ext == "rda") {
+      loaded_names <- load(data_or_path)
+      if (!length(loaded_names)) {
+        stop("RDA file did not contain any objects.", call. = FALSE)
+      }
+      if (length(loaded_names) > 1) {
+        stop(
+          "RDA file contains multiple objects. Please provide an .rds file or an .rda with exactly one data frame object.",
+          call. = FALSE
+        )
+      }
+      data <- get(loaded_names[[1]], inherits = FALSE)
+      if (!is.data.frame(data)) {
+        stop(
+          sprintf(
+            "Object '%s' loaded from RDA file is not a data frame.",
+            loaded_names[[1]]
+          ),
+          call. = FALSE
+        )
+      }
     } else if (ext %in% c("xls", "xlsx")) {
       if (!requireNamespace("readxl", quietly = TRUE)) {
         stop("Reading Excel workbooks requires the 'readxl' package. Install it with install.packages('readxl').", call. = FALSE)
