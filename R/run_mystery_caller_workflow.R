@@ -302,6 +302,14 @@ run_mystery_caller_workflow <- function(
       "coverage_summary",
       "quality_check_table"
     ),
+    stage_description = c(
+      "All roster sources merged and deduplicated by NPI",
+      "Roster after NPI validity filtering",
+      "Phase 1 roster after cleaning and exclusions",
+      "Phase 2 data after column normalization and cleaning",
+      "States not yet contacted summary",
+      "Unique NPI/name quality-control export"
+    ),
     n_rows = c(
       nrow(combined_roster),
       nrow(validated_roster),
@@ -310,6 +318,14 @@ run_mystery_caller_workflow <- function(
       if (!is.data.frame(coverage_summary)) NA_integer_ else nrow(coverage_summary),
       if (!is.data.frame(quality_check_table)) NA_integer_ else nrow(quality_check_table)
     ),
+    dropped_rows_from_previous = c(
+      NA_integer_,
+      nrow(combined_roster) - nrow(validated_roster),
+      nrow(validated_roster) - nrow(cleaned_phase1),
+      nrow(cleaned_phase1) - nrow(cleaned_phase2),
+      if (!is.data.frame(coverage_summary)) NA_integer_ else nrow(cleaned_phase2) - nrow(coverage_summary),
+      if (!is.data.frame(quality_check_table)) NA_integer_ else nrow(cleaned_phase2) - nrow(quality_check_table)
+    ),
     retention_from_previous = c(
       NA_real_,
       if (nrow(combined_roster) == 0) NA_real_ else nrow(validated_roster) / nrow(combined_roster),
@@ -317,6 +333,14 @@ run_mystery_caller_workflow <- function(
       if (nrow(cleaned_phase1) == 0) NA_real_ else nrow(cleaned_phase2) / nrow(cleaned_phase1),
       if (!is.data.frame(coverage_summary) || nrow(cleaned_phase2) == 0) NA_real_ else nrow(coverage_summary) / nrow(cleaned_phase2),
       if (!is.data.frame(quality_check_table) || nrow(cleaned_phase2) == 0) NA_real_ else nrow(quality_check_table) / nrow(cleaned_phase2)
+    ),
+    status = c(
+      "created",
+      "created",
+      "created",
+      "created",
+      if (is.data.frame(coverage_summary)) "created" else "skipped_missing_state_column",
+      if (is.data.frame(quality_check_table)) "created" else "skipped_missing_required_columns"
     ),
     output_path = c(
       NA_character_,
@@ -329,7 +353,7 @@ run_mystery_caller_workflow <- function(
   )
 
   if (isTRUE(verbose)) {
-    message("Workflow summary (rows and retention):")
+    message("Workflow summary (rows, retention, and stage status):")
     print(workflow_summary)
     message(sprintf("[%s] Mystery caller workflow complete", format(Sys.time(), "%H:%M:%S")))
   }
