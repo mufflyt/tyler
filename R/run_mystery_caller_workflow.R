@@ -44,8 +44,8 @@
 #' @return A list containing intermediate artifacts from each workflow stage:
 #'   `roster`, `validated_roster`, `cleaned_phase1`, `cleaned_phase2`,
 #'   `coverage_summary`, `quality_check_table`, and a `workflow_summary` data
-#'   frame documenting row counts, retention rates, and output paths for audit
-#'   transparency.
+#'   frame documenting input/output row counts, rows dropped, retention rates,
+#'   output paths, and stage notes for audit transparency.
 #'
 #' @family workflow
 #' @export
@@ -121,6 +121,23 @@ run_mystery_caller_workflow <- function(
     if (isTRUE(verbose)) {
       message(sprintf("[%s] %s", format(Sys.time(), "%H:%M:%S"), stage))
     }
+  }
+
+  stage_snapshot <- function(stage_name, data, input_rows = NA_integer_, output_path = NA_character_, notes = NA_character_) {
+    output_rows <- if (is.data.frame(data)) nrow(data) else NA_integer_
+    output_cols <- if (is.data.frame(data)) ncol(data) else NA_integer_
+    tibble::tibble(
+      stage = stage_name,
+      input_rows = input_rows,
+      output_rows = output_rows,
+      n_rows = output_rows,
+      rows_dropped = if (is.na(input_rows) || is.na(output_rows)) NA_integer_ else input_rows - output_rows,
+      retention_from_input = if (is.na(input_rows) || input_rows == 0 || is.na(output_rows)) NA_real_ else output_rows / input_rows,
+      retention_from_previous = if (is.na(input_rows) || input_rows == 0 || is.na(output_rows)) NA_real_ else output_rows / input_rows,
+      n_cols = output_cols,
+      output_path = output_path,
+      notes = notes
+    )
   }
 
   announce("Starting mystery caller workflow")
@@ -293,43 +310,16 @@ run_mystery_caller_workflow <- function(
     quality_check_table <- save_quality_check_table(cleaned_phase2, quality_check_path)
   }
 
-  workflow_summary <- tibble::tibble(
-    stage = c(
-      "combined_roster",
-      "validated_roster",
-      "cleaned_phase1",
-      "cleaned_phase2",
-      "coverage_summary",
-      "quality_check_table"
-    ),
-    n_rows = c(
-      nrow(combined_roster),
-      nrow(validated_roster),
-      nrow(cleaned_phase1),
-      nrow(cleaned_phase2),
-      if (!is.data.frame(coverage_summary)) NA_integer_ else nrow(coverage_summary),
-      if (!is.data.frame(quality_check_table)) NA_integer_ else nrow(quality_check_table)
-    ),
-    retention_from_previous = c(
-      NA_real_,
-      if (nrow(combined_roster) == 0) NA_real_ else nrow(validated_roster) / nrow(combined_roster),
-      if (nrow(validated_roster) == 0) NA_real_ else nrow(cleaned_phase1) / nrow(validated_roster),
-      if (nrow(cleaned_phase1) == 0) NA_real_ else nrow(cleaned_phase2) / nrow(cleaned_phase1),
-      if (!is.data.frame(coverage_summary) || nrow(cleaned_phase2) == 0) NA_real_ else nrow(coverage_summary) / nrow(cleaned_phase2),
-      if (!is.data.frame(quality_check_table) || nrow(cleaned_phase2) == 0) NA_real_ else nrow(quality_check_table) / nrow(cleaned_phase2)
-    ),
-    output_path = c(
-      NA_character_,
-      NA_character_,
-      phase1_output_directory,
-      phase2_output_directory,
-      NA_character_,
-      quality_check_path
-    )
+  workflow_summary <- dplyr::bind_rows(
+    stage_snapshot("combined_roster", combined_roster, input_rows = NA_integer_, notes = "Combined taxonomy + name search results"),
+    stage_snapshot("validated_roster", validated_roster, input_rows = nrow(combined_roster), notes = "NPI validity filtering"),
+    stage_snapshot("cleaned_phase1", cleaned_phase1, input_rows = nrow(validated_roster), output_path = phase1_output_directory, notes = "Phase 1 roster cleaned + split-ready"),
+    stage_snapshot("cleaned_phase2", cleaned_phase2, input_rows = nrow(cleaned_phase1), output_path = phase2_output_directory, notes = "Phase 2 responses standardized"),
+    stage_snapshot("coverage_summary", coverage_summary, input_rows = nrow(cleaned_phase2), notes = if (is.data.frame(coverage_summary)) "States without physician contact" else "Coverage summary skipped (no state column)"),
+    stage_snapshot("quality_check_table", quality_check_table, input_rows = nrow(cleaned_phase2), output_path = quality_check_path, notes = if (is.data.frame(quality_check_table)) "NPI/name quality checks" else "Quality table skipped (missing npi/name columns)")
   )
-
   if (isTRUE(verbose)) {
-    message("Workflow summary (rows and retention):")
+    message("Workflow summary (data transparency report):")
     print(workflow_summary)
     message(sprintf("[%s] Mystery caller workflow complete", format(Sys.time(), "%H:%M:%S")))
   }
