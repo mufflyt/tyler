@@ -98,3 +98,84 @@ tyler_use_quiet_logging <- function(quiet = TRUE) {
   options(tyler.quiet = quiet)
   invisible(old)
 }
+
+#' Create a compact data transparency report
+#'
+#' Builds a single, auditable summary table showing completeness for key
+#' columns, duplicate row rate, and (when available) audit metadata attached by
+#' cleaning workflows such as [clean_phase_1_results()].
+#'
+#' @param data A data frame to profile.
+#' @param key_columns Character vector of columns to include in completeness
+#'   checks. Missing columns are retained in the report with `NA` metrics.
+#' @param id_cols Optional identifier columns used to compute duplicate rate.
+#'
+#' @return A list with:
+#' \itemize{
+#'   \item `column_metrics`: tibble with per-column completeness.
+#'   \item `dataset_metrics`: tibble with dataset-level transparency metrics.
+#'   \item `audit_trail`: audit metadata attribute from `data`, if present.
+#' }
+#' @family utilities
+#' @export
+tyler_data_transparency_report <- function(data,
+                                           key_columns = c("names", "npi", "phone_number", "state_name"),
+                                           id_cols = c("random_id", "doctor_id", "id")) {
+  validate_dataframe(data, name = "data", allow_zero_rows = FALSE)
+
+  present_key_cols <- intersect(key_columns, names(data))
+  missing_key_cols <- setdiff(key_columns, names(data))
+
+  metrics_present <- if (length(present_key_cols) > 0) {
+    tibble::tibble(
+      column = present_key_cols,
+      present = TRUE,
+      non_missing = vapply(present_key_cols, function(col) {
+        sum(!is.na(data[[col]]) & as.character(data[[col]]) != "")
+      }, numeric(1)),
+      total_rows = nrow(data)
+    )
+  } else {
+    tibble::tibble(
+      column = character(0),
+      present = logical(0),
+      non_missing = numeric(0),
+      total_rows = numeric(0)
+    )
+  }
+
+  metrics_missing <- tibble::tibble(
+    column = missing_key_cols,
+    present = FALSE,
+    non_missing = NA_real_,
+    total_rows = nrow(data)
+  )
+
+  column_metrics <- dplyr::bind_rows(metrics_present, metrics_missing)
+  column_metrics$completeness <- column_metrics$non_missing / column_metrics$total_rows
+  column_metrics$quality <- vapply(column_metrics$completeness, tyler_quality_tier, character(1))
+
+  id_col <- id_cols[id_cols %in% names(data)][1]
+  duplicate_rate <- NA_real_
+  if (!is.na(id_col)) {
+    duplicate_rate <- mean(duplicated(data[[id_col]]))
+  }
+
+  audit_trail <- attr(data, "audit_trail")
+
+  dataset_metrics <- tibble::tibble(
+    metric = c("rows", "columns", "duplicate_rate", "has_audit_trail"),
+    value = c(
+      as.character(nrow(data)),
+      as.character(ncol(data)),
+      ifelse(is.na(duplicate_rate), NA_character_, sprintf("%.4f", duplicate_rate)),
+      as.character(!is.null(audit_trail))
+    )
+  )
+
+  list(
+    column_metrics = column_metrics,
+    dataset_metrics = dataset_metrics,
+    audit_trail = audit_trail
+  )
+}
