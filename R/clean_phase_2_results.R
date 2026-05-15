@@ -66,15 +66,11 @@ rename_columns_by_substring <- function(data, target_strings, new_names) {
     replacement <- trimws(new_names[i])
     normalized_names <- tolower(names(data))
 
-    # Prefer exact case-insensitive matches first.
+    # Use exact case-insensitive matching only.
+    # Substring matching can silently target the wrong column (e.g. "doctor"
+    # matching both "doctor_name" and "undoctored").
     matches <- normalized_names == target
-    # Fall back to substring matching to preserve historical behavior and
-    # prevent downstream column mismatch errors when callers pass patterns.
     matched_by <- "exact"
-    if (!any(matches)) {
-      matches <- grepl(target, normalized_names, fixed = TRUE)
-      matched_by <- "substring"
-    }
     matched_cols <- names(data)[matches]
 
     # Detailed log of what matches were found
