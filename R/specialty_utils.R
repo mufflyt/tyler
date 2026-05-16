@@ -20,11 +20,24 @@ NULL
 #' Pediatric Otolaryngology > Sleep Medicine > Facial Plastic Surgery.
 #' When none match, returns `default`.
 #'
-#' @param cert_type Character vector of ABOHNS certification type strings.
-#' @param default Character scalar returned when no subspecialty is detected.
-#'   Default `NA_character_`.
+#' @section Authoritative subspecialty source:
+#'   This function is the **only authorised way** to derive subspecialty labels
+#'   in the mysterycall workflow. NPPES (`taxonomies_desc`) and DAC
+#'   (Data at CMS) taxonomy codes reflect broad specialty groupings and must
+#'   not be used to assign subspecialty. Pass the output of this function as
+#'   `secondary_col` in [mysterycall_reconcile_specialty()] to correctly
+#'   populate subspecialty via board certification evidence only.
 #'
-#' @return Character vector the same length as `cert_type`.
+#' @param cert_type Character vector of ABOHNS `certification_type` strings,
+#'   one element per provider. Values like `"Otolaryngology - Head & Neck
+#'   Surgery + Neurotology"` are parsed for subspecialty patterns. Pass `NA`
+#'   for providers without ABOHNS records; they will receive `default`.
+#' @param default Character scalar returned when no subspecialty pattern is
+#'   detected (including `NA` or blank input). Default `NA_character_`.
+#'
+#' @return Character vector the same length as `cert_type`. Values are one of
+#'   `"Otology/Neurotology"`, `"Pediatric Otolaryngology"`,
+#'   `"Sleep Medicine"`, `"Facial Plastic Surgery"`, or `default`.
 #'
 #' @family provider characteristics
 #' @export

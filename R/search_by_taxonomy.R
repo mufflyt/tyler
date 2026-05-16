@@ -25,8 +25,19 @@
 #'   [tempdir()] when not supplied.
 #' @param notify Logical. If `TRUE`, play a notification sound when processing
 #'   completes (requires the optional `beepr` package). Defaults to `TRUE`.
-#' @return A data frame with filtered NPI data based on the specified taxonomy
-#'   description.
+#' @return A data frame of NPPES records matching the requested taxonomy. Key
+#'   columns include `npi`, `first_name`, `last_name`, `taxonomies_desc`
+#'   (broad NPPES specialty label), and `taxonomies_primary` (logical).
+#'
+#' @section Subspecialty source warning:
+#'   `taxonomies_desc` reflects the NPPES taxonomy code the provider self-
+#'   reported to the NPI registry. **Do not use this column to assign
+#'   subspecialty.** NPPES taxonomy codes cannot reliably distinguish
+#'   subspecialties (e.g. Neurotology vs. General Otolaryngology). Subspecialty
+#'   must be derived from board certification data only, using
+#'   [mysterycall_parse_certification_subspecialty()] on the ABOHNS
+#'   `certification_type` field, then reconciled with
+#'   [mysterycall_reconcile_specialty()].
 #'
 #' @examplesIf interactive()
 #' # National search (limited to 1200 records per taxonomy):

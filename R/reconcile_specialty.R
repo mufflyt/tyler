@@ -7,21 +7,39 @@ NULL
 #'
 #' Applies a three-tier decision rule:
 #' \enumerate{
-#'   \item **Tier 1 (high)**: primary column is non-missing and non-default  -- 
+#'   \item **Tier 1 (high)**: primary column is non-missing and non-default -
 #'     use it as-is.
 #'   \item **Tier 2 (medium)**: primary is missing or the default label, but
-#'     the secondary column is informative  --  adopt the secondary value.
-#'   \item **Tier 3 (low)**: both sources are uninformative  --  set specialty to
+#'     the secondary column is informative - adopt the secondary value.
+#'   \item **Tier 3 (low)**: both sources are uninformative - set specialty to
 #'     `default`.
 #' }
 #' Two audit columns are appended: one recording which source was used and one
 #' recording the confidence tier.
 #'
+#' @section Subspecialty source rule:
+#'   **Subspecialty values must only come from board certification data.**
+#'   NPPES (`taxonomies_desc`) and DAC (Data at CMS) report broad specialty
+#'   taxonomy codes that do not reliably distinguish subspecialties such as
+#'   Neurotology or Pediatric Otolaryngology. Always supply board certification
+#'   data (e.g. ABOHNS) in `secondary_col` when subspecialty resolution is
+#'   needed. Passing an NPPES or DAC column as `secondary_col` for subspecialty
+#'   will produce incorrect Tier-2 assignments that appear valid but are not.
+#'   Use [mysterycall_parse_certification_subspecialty()] to derive a
+#'   subspecialty column from the ABOHNS `certification_type` field before
+#'   calling this function.
+#'
 #' @param data A data frame.
-#' @param primary_col Character scalar. Column containing the primary specialty
-#'   label (e.g. from NPI registry).
-#' @param secondary_col Optional character scalar. Column containing an
-#'   alternative specialty label (e.g. from board certification data).
+#' @param primary_col Character scalar. Column containing the broad specialty
+#'   label from a registry source such as NPPES or DAC (e.g.
+#'   `"Otolaryngology - Head & Neck Surgery"`). Do not use this column to
+#'   carry subspecialty values; subspecialty must come via `secondary_col`
+#'   from board certification data only.
+#' @param secondary_col Optional character scalar. Column containing a
+#'   subspecialty label derived **exclusively from board certification data**
+#'   (e.g. ABOHNS `certification_type` parsed by
+#'   [mysterycall_parse_certification_subspecialty()]). DAC and NPPES columns
+#'   must not be passed here for subspecialty purposes.
 #' @param default Character scalar. The "uninformative" label that triggers
 #'   tier-2 or tier-3 logic. Default `"General"`.
 #' @param source_col Character scalar. Name of the new audit column recording

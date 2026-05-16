@@ -28,7 +28,10 @@ NULL
 #'   `c("Neurotology" = "Neurotology", "Pediatric Otolaryngology" = "Pediatric Otolaryngology")`.
 #'   Each name is a value that appears in `specialty_col`; each value is the
 #'   scenario label that will be assigned to generalists in cities where that
-#'   subspecialty is present.
+#'   subspecialty is present. **The subspecialty values used as names here must
+#'   derive from board certification data (e.g. ABOHNS via
+#'   [mysterycall_parse_certification_subspecialty()]) and must not come from
+#'   NPPES `taxonomies_desc` or DAC taxonomy codes.**
 #' @param id_col Optional character scalar. Column used to sort rows within each
 #'   location group before round-robin assignment. When `NULL` (default) the
 #'   existing row order is used.

@@ -10,9 +10,18 @@
 #'
 #' @return A tibble with one row per valid NPI and columns from
 #'   `provider::clinicians()` (name, specialty, address, etc.), plus an
-#'   `npi_is_valid` column.  Returns a zero-row tibble when no valid NPIs are
-#'   found.  Returns `NULL` silently per NPI when the `provider` package is not
+#'   `npi_is_valid` column. Returns a zero-row tibble when no valid NPIs are
+#'   found. Returns `NULL` silently per NPI when the `provider` package is not
 #'   installed.
+#'
+#' @section Subspecialty source warning:
+#'   The `taxonomies_desc` column in the returned tibble reflects NPPES
+#'   taxonomy codes (broad specialty groupings from the NPI registry). **Do not
+#'   use `taxonomies_desc` to assign subspecialty.** NPPES does not
+#'   reliably distinguish subspecialties such as Neurotology or Pediatric
+#'   Otolaryngology. Subspecialty must be derived exclusively from board
+#'   certification data using [mysterycall_parse_certification_subspecialty()]
+#'   and reconciled via [mysterycall_reconcile_specialty()].
 #' @seealso [mysterycall_luhn_check()] to validate NPI checksums;
 #'   [mysterycall_validate_npi()] for row-level NPI filtering;
 #'   [mysterycall_safe_left_join()] to attach clinician data to a roster.
