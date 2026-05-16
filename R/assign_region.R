@@ -203,12 +203,15 @@ mysterycall_assign_region <- function(state,
 }
 
 .title_case <- function(s) {
+  # Prepositions/conjunctions kept lowercase so "District of Columbia" matches
+  # the lookup table key exactly.
+  small_words <- c("of", "the", "and", "in", "at", "by", "for", "to", "or")
   words <- strsplit(s, " ", fixed = TRUE)[[1L]]
-  paste(
-    vapply(words, function(w) {
-      if (!nzchar(w)) return(w)
-      paste0(toupper(substr(w, 1L, 1L)), tolower(substr(w, 2L, nchar(w))))
-    }, character(1L)),
-    collapse = " "
-  )
+  out <- vapply(seq_along(words), function(i) {
+    w <- words[[i]]
+    if (!nzchar(w)) return(w)
+    if (i > 1L && tolower(w) %in% small_words) return(tolower(w))
+    paste0(toupper(substr(w, 1L, 1L)), tolower(substr(w, 2L, nchar(w))))
+  }, character(1L))
+  paste(out, collapse = " ")
 }

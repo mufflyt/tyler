@@ -149,12 +149,13 @@ mysterycall_caller_reliability <- function(
 
   # ---- ICC (one-way random effects, Shrout & Fleiss 1979 ICC(1,1)) -----------
   .icc_stats <- function(r1, r2, z_crit) {
-    # Stack the two rater columns into long form for aov()
+    # Stack so that subjects (not raters) are the grouping factor.
+    # BMS = between-subject mean square; WMS = within-subject (residual).
     outcome <- c(r1, r2)
-    caller  <- factor(c(rep("rater1", length(r1)), rep("rater2", length(r2))))
-    fit     <- stats::aov(outcome ~ caller)
+    subject <- factor(rep(seq_along(r1), 2L))
+    fit     <- stats::aov(outcome ~ subject)
     ms      <- summary(fit)[[1]][["Mean Sq"]]
-    # ms[1] = between (caller), ms[2] = within (residual)
+    # ms[1] = between-subject (BMS), ms[2] = within-subject residual (WMS)
     ms_b <- ms[1]
     ms_w <- ms[2]
     k    <- 2  # two raters

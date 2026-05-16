@@ -559,7 +559,7 @@ mysterycall_assess_data_quality <- function(data, required_columns = c("first", 
     }
   }
 
-  score <- max(0, 1 - (penalties / max_penalties))
+  score <- if (max_penalties == 0) 1 else max(0, 1 - (penalties / max_penalties))
 
   list(
     score = score,

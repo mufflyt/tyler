@@ -186,12 +186,9 @@ mysterycall_search_and_process_npi <- function(data,
         sep = ""
       ))
     } else if (!is.null(existing_accumulated) && "search_term" %in% names(existing_accumulated)) {
-      # Legacy accumulation file without resume_row_index: fall back to name-only matching
-      processed_resume_keys <- paste(
-        NA_integer_,
-        unique(existing_accumulated$search_term[!is.na(existing_accumulated$search_term)]),
-        sep = ""
-      )
+      # Legacy accumulation file without resume_row_index: fall back to name-only matching.
+      # Store just the search_term values; the skip check below also tests search_term directly.
+      processed_resume_keys <- unique(existing_accumulated$search_term[!is.na(existing_accumulated$search_term)])
     }
   }
 
@@ -442,7 +439,10 @@ mysterycall_search_and_process_npi <- function(data,
     # Resume key = row index + name so two rows with the same name at different
     # positions are treated as distinct lookups (different practices / providers).
     resume_key <- paste0(i, search_term)
-    if (isTRUE(resume) && length(processed_resume_keys) && resume_key %in% processed_resume_keys) {
+    # Match current-format keys (index + name) OR legacy-format keys (name only).
+    already_processed <- isTRUE(resume) && length(processed_resume_keys) &&
+      (resume_key %in% processed_resume_keys || search_term %in% processed_resume_keys)
+    if (already_processed) {
       dispatch_progress(
         event = "skipped",
         search_term = search_term,

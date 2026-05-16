@@ -27,7 +27,7 @@ mysterycall_collapse_rare <- function(x, threshold = 50L, other_label = "Other")
   if (!is.character(x) && !is.factor(x)) {
     stop("`x` must be a character or factor vector.", call. = FALSE)
   }
-  if (!is.numeric(threshold) || length(threshold) != 1L || threshold < 1) {
+  if (!is.numeric(threshold) || length(threshold) != 1L || is.na(threshold) || threshold < 1) {
     stop("`threshold` must be a single positive number.", call. = FALSE)
   }
   if (!is.character(other_label) || length(other_label) != 1L) {

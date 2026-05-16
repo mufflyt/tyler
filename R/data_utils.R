@@ -30,8 +30,8 @@ NULL
 mysterycall_check_duplicates <- function(data, id_col, max_calls = 2L) {
   if (!is.data.frame(data))           stop("`data` must be a data frame.", call. = FALSE)
   if (!id_col %in% names(data))       stop("`id_col` not found in data.", call. = FALSE)
-  if (!is.numeric(max_calls) || max_calls < 1L) {
-    stop("`max_calls` must be a positive integer.", call. = FALSE)
+  if (!is.numeric(max_calls) || length(max_calls) != 1L || is.na(max_calls) || max_calls < 1L) {
+    stop("`max_calls` must be a single positive integer.", call. = FALSE)
   }
 
   tab         <- table(as.character(data[[id_col]]))
@@ -73,7 +73,7 @@ mysterycall_check_duplicates <- function(data, id_col, max_calls = 2L) {
 mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = NULL) {
   if (!is.data.frame(data))              stop("`data` must be a data frame.", call. = FALSE)
   if (!group_col %in% names(data))       stop("`group_col` not found in data.", call. = FALSE)
-  if (!is.numeric(n_per_group) || length(n_per_group) != 1L || n_per_group < 1L) {
+  if (!is.numeric(n_per_group) || length(n_per_group) != 1L || is.na(n_per_group) || n_per_group < 1L) {
     stop("`n_per_group` must be a single positive integer.", call. = FALSE)
   }
 
@@ -158,23 +158,46 @@ mysterycall_prepare_table1_vars <- function(data,
   out <- data
 
   # Age from existing column
-  if (!is.null(age_col) && age_col %in% names(out)) {
-    out$age_category <- mysterycall_age_category(out[[age_col]])
+  if (!is.null(age_col)) {
+    if (!age_col %in% names(out)) {
+      warning(sprintf("Column '%s' (age_col) not found in data; age_category will not be computed.", age_col), call. = FALSE)
+    } else {
+      out$age_category <- mysterycall_age_category(out[[age_col]])
+    }
   }
 
   # Age from graduation year (only if no direct age column)
-  if (is.null(age_col) && !is.null(grad_year_col) && grad_year_col %in% names(out)) {
-    out$age_imputed  <- mysterycall_impute_age(out[[grad_year_col]], ref_year = ref_year)
-    out$age_category <- mysterycall_age_category(out$age_imputed)
+  if (is.null(age_col) && !is.null(grad_year_col)) {
+    if (!grad_year_col %in% names(out)) {
+      warning(sprintf("Column '%s' (grad_year_col) not found in data; age_imputed will not be computed.", grad_year_col), call. = FALSE)
+    } else {
+      out$age_imputed  <- mysterycall_impute_age(out[[grad_year_col]], ref_year = ref_year)
+      out$age_category <- mysterycall_age_category(out$age_imputed)
+    }
   }
 
   # Gender standardisation
-  if (!is.null(gender_col) && gender_col %in% names(out)) {
-    g <- tolower(trimws(as.character(out[[gender_col]])))
-    out$gender_std <- ifelse(
-      g %in% c("m", "male"),    "Male",
-      ifelse(g %in% c("f", "female"), "Female", "Unknown")
-    )
+  if (!is.null(gender_col)) {
+    if (!gender_col %in% names(out)) {
+      warning(sprintf("Column '%s' (gender_col) not found in data; gender_std will not be computed.", gender_col), call. = FALSE)
+    } else {
+      g <- tolower(trimws(as.character(out[[gender_col]])))
+      out$gender_std <- ifelse(
+        g %in% c("m", "male"),    "Male",
+        ifelse(g %in% c("f", "female"), "Female", "Unknown")
+      )
+      unexpected <- unique(out[[gender_col]][
+        !g %in% c("m", "male", "f", "female") & !is.na(out[[gender_col]])
+      ])
+      if (length(unexpected)) {
+        warning(sprintf(
+          "%d value(s) in '%s' not recognised as Male/Female and bucketed to \"Unknown\": %s",
+          sum(!g %in% c("m", "male", "f", "female") & !is.na(out[[gender_col]])),
+          gender_col,
+          paste(unexpected, collapse = ", ")
+        ), call. = FALSE)
+      }
+    }
   }
 
   if (!is.null(setting_col) && setting_col %in% names(out)) {

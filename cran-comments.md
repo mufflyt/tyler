@@ -1,8 +1,8 @@
 ## Test environments
 
 * macOS Ventura 13.7.8, R 4.4.2 (local)
-* win-builder R-devel — results pending (uploaded 2026-05-08)
-* win-builder R-release — results pending (uploaded 2026-05-08)
+* win-builder R-devel — results pending (uploaded 2026-05-15)
+* win-builder R-release — results pending (uploaded 2026-05-15)
 * R-hub Linux / macOS (trigger `.github/workflows/rhub.yaml` via
   `Actions → R-hub → Run workflow` on GitHub after pushing)
 

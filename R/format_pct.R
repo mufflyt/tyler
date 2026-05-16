@@ -28,6 +28,7 @@
 #' @family table
 #' @export
 mysterycall_format_pct <- function(x, my_digits = 1) {
-  formatted <- formatC(100 * x, format = "f", digits = my_digits)
-  paste0(formatted, "%")
+  result <- paste0(formatC(100 * x, format = "f", digits = my_digits), "%")
+  result[is.na(x)] <- NA_character_
+  result
 }

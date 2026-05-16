@@ -52,11 +52,19 @@ mysterycall_impute_age <- function(grad_year,
   if (!is.numeric(grad_year)) {
     stop("`grad_year` must be a numeric vector.", call. = FALSE)
   }
-  if (!is.numeric(ref_year) || length(ref_year) != 1L || ref_year < 1900L) {
+  if (!is.numeric(ref_year) || length(ref_year) != 1L || is.na(ref_year) || ref_year < 1900L) {
     stop("`ref_year` must be a single year >= 1900.", call. = FALSE)
   }
-  if (!is.numeric(age_offset) || length(age_offset) != 1L || age_offset < 0L) {
+  if (!is.numeric(age_offset) || length(age_offset) != 1L || is.na(age_offset) || age_offset < 0L) {
     stop("`age_offset` must be a single non-negative number.", call. = FALSE)
+  }
+
+  future_grad <- !is.na(grad_year) & grad_year > ref_year
+  if (any(future_grad)) {
+    warning(sprintf(
+      "%d graduation year(s) exceed ref_year (%d) and will produce NA ages.",
+      sum(future_grad), ref_year
+    ), call. = FALSE)
   }
 
   age <- as.integer(ref_year - grad_year + age_offset)
@@ -111,7 +119,7 @@ mysterycall_age_category <- function(age,
   if (!is.numeric(age)) {
     stop("`age` must be a numeric vector.", call. = FALSE)
   }
-  if (!is.numeric(breaks) || length(breaks) < 1L || is.unsorted(breaks)) {
+  if (!is.numeric(breaks) || length(breaks) < 1L || anyNA(breaks) || is.unsorted(breaks)) {
     stop("`breaks` must be an increasing numeric vector with at least one value.", call. = FALSE)
   }
   if (!is.character(na_label) || length(na_label) != 1L) {

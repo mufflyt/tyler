@@ -37,6 +37,7 @@
 #' @export
 mysterycall_table_proportion <- function(data, variable_name) {
   tabyl_result <- data %>%
+    dplyr::filter(!is.na({{ variable_name }})) %>%
     count({{ variable_name }}, name = "n") %>%
     mutate(percent = n / sum(n) * 100)
 

@@ -27,7 +27,7 @@ mysterycall_remove_constants <- function(data_frame) {
 
   # Identify constant variables
   message("Identifying constant variables...")
-  const_vars <- dplyr::select(data_frame, dplyr::where(~ length(unique(.)) == 1)) %>% names()
+  const_vars <- dplyr::select(data_frame, dplyr::where(~ length(unique(as.character(.))) == 1)) %>% names()
 
   # Log: Number of constant variables found
   message(sprintf("Found %d constant variables.", length(const_vars)))

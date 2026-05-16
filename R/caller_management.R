@@ -56,8 +56,8 @@ mysterycall_check_generalist_presence <- function(data,
   loc_key  <- do.call(paste, c(loc_norm, list(sep = "\t")))
 
   spec     <- as.character(data[[specialty_col]])
-  is_gen   <- spec == generalist_level
-  is_sub   <- !is_gen
+  is_gen   <- !is.na(spec) & spec == generalist_level
+  is_sub   <- !is.na(spec) & spec != generalist_level
 
   sub_locs <- unique(loc_key[is_sub])
   if (length(sub_locs) == 0L) {

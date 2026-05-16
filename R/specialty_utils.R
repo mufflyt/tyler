@@ -99,6 +99,9 @@ mysterycall_extract_physician_name <- function(x,
     clean <- gsub(title_re, "", clean, perl = TRUE, ignore.case = TRUE)
     clean <- trimws(clean)
 
+    # Input was all credentials/titles with no name remaining
+    if (!nzchar(clean)) return(NA_character_)
+
     # Handle "Last, First" format
     last <- if (grepl(",", clean, fixed = TRUE)) {
       trimws(strsplit(clean, ",")[[1L]][[1L]])

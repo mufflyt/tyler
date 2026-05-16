@@ -84,6 +84,13 @@ validate_sf_inputs <- function(...,
     if (!is.null(target_crs)) {
       obj <- sf::st_transform(obj, ref_crs)
     } else if (!identical(obj_crs, ref_crs)) {
+      warning(sprintf(
+        "`%s` CRS (%s) differs from reference CRS (%s) for %s; transforming automatically.",
+        name,
+        if (!is.na(obj_crs$input)) obj_crs$input else "unknown",
+        if (!is.na(ref_crs$input)) ref_crs$input else "unknown",
+        context
+      ), call. = FALSE)
       obj <- sf::st_transform(obj, ref_crs)
     }
 

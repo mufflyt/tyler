@@ -38,9 +38,11 @@ NULL
 #' Classify a facility name as Academic, Government, or Private Practice
 #'
 #' Applies a three-tier keyword search to facility or organization names:
-#' Academic > Government > Private Practice. If the name matches no pattern
-#' but is non-empty, it defaults to `"Private Practice"`. Missing or empty
-#' values return `na_label`.
+#' Government > Academic > Private Practice. Government is checked first so
+#' that VA and military facilities are not mis-classified as Academic when
+#' their name also contains "Medical Center" or a university name. If the
+#' name matches no pattern but is non-empty, it defaults to
+#' `"Private Practice"`. Missing or empty values return `na_label`.
 #'
 #' This is a pure-R, vectorized function with no package dependencies beyond
 #' base R.

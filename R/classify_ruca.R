@@ -57,10 +57,10 @@ mysterycall_classify_ruca <- function(ruca_code,
   if (!is.numeric(ruca_code)) {
     stop("`ruca_code` must be a numeric vector.", call. = FALSE)
   }
-  if (!is.numeric(urban_max)    || length(urban_max)    != 1L) {
+  if (!is.numeric(urban_max)    || length(urban_max)    != 1L || is.na(urban_max)) {
     stop("`urban_max` must be a single number.", call. = FALSE)
   }
-  if (!is.numeric(suburban_max) || length(suburban_max) != 1L) {
+  if (!is.numeric(suburban_max) || length(suburban_max) != 1L || is.na(suburban_max)) {
     stop("`suburban_max` must be a single number.", call. = FALSE)
   }
   if (suburban_max <= urban_max) {

@@ -73,7 +73,7 @@ mysterycall_reconcile_specialty <- function(data,
     }
     secondary <- as.character(out[[secondary_col]])
     t2 <- !t1 & !is.na(secondary) & nzchar(trimws(secondary)) & secondary != default
-    out[[primary_col]] <- ifelse(t2, secondary, out[[primary_col]])
+    out[[primary_col]] <- ifelse(t2, secondary, as.character(out[[primary_col]]))
     out[[source_col]][t2]     <- secondary_col
     out[[confidence_col]][t2] <- "medium"
   }
