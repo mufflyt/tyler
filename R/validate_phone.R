@@ -79,6 +79,9 @@ NULL
 #'   )
 #'   ```
 #'
+#' @seealso [mysterycall_parse_physician_name()] to structure name strings;
+#'   [mysterycall_validate_parsed_names()] for name-level quality checks;
+#'   [mysterycall_safe_left_join()] to attach validated phone data to a roster.
 #' @family data quality
 #' @export
 #'

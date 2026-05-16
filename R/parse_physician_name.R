@@ -192,10 +192,12 @@ mysterycall_parse_physician_name <- function(physician_name,
 #' @param parsed_names A tibble from [mysterycall_parse_physician_name()],
 #'   with at least columns `first_name`, `last_name`, `middle_name`, and
 #'   `parse_confidence`.
-#' @param require_first Logical. When `TRUE` (default) a row is `is_valid =
-#'   FALSE` if `first_name` is `NA`.
-#' @param require_last Logical. When `TRUE` (default) a row is `is_valid =
-#'   FALSE` if `last_name` is `NA`.
+#' @param require_first Logical. When `TRUE` (default) rows where `first_name`
+#'   is `NA` are marked `is_valid = FALSE`.  Set `FALSE` for data sources that
+#'   store only last names (e.g. single-name lookup tables).
+#' @param require_last Logical. When `TRUE` (default) rows where `last_name`
+#'   is `NA` are marked `is_valid = FALSE`.  Set `FALSE` when processing
+#'   mononyms or incomplete name strings where absence of a surname is expected.
 #'
 #' @return The input tibble with additional columns:
 #' \describe{
@@ -354,12 +356,10 @@ mysterycall_format_physician_name <- function(first_name,
 #' @return (invisibly) The validated tibble from
 #'   [mysterycall_validate_parsed_names()].
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' tbl <- mysterycall_test_name_parser()
 #' sum(tbl$is_valid)       # number of valid parses
 #' tbl$quality_issue       # per-case quality codes
-#' }
 #'
 #' @seealso [mysterycall_parse_physician_name()],
 #'   [mysterycall_validate_parsed_names()]

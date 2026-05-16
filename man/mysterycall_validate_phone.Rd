@@ -75,4 +75,9 @@ mysterycall_validate_phone(
 # Without state matching
 mysterycall_validate_phone(c("2125551234", "0005551234"), practice_state = NULL)
 }
+\seealso{
+\code{\link[=mysterycall_parse_physician_name]{mysterycall_parse_physician_name()}} to structure name strings;
+\code{\link[=mysterycall_validate_parsed_names]{mysterycall_validate_parsed_names()}} for name-level quality checks;
+\code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}} to attach validated phone data to a roster.
+}
 \concept{data quality}

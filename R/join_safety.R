@@ -113,8 +113,10 @@ NULL
 #' @param .data A data frame to check.
 #' @param key_cols Character vector of column names that together form the key.
 #' @param label Character scalar used in error/message text. Default `"table"`.
-#' @param dedupe Logical. When `TRUE` duplicates are removed (first row kept)
-#'   instead of raising an error. Default `FALSE`.
+#' @param dedupe Logical. When `TRUE` duplicates are silently removed (first
+#'   row per key is kept) and the deduplicated data frame is returned
+#'   invisibly.  When `FALSE` (default) any duplicates raise an error with
+#'   sample duplicate values to help locate the problem.
 #'
 #' @return `.data` invisibly (possibly deduplicated). Errors when duplicates
 #'   exist and `dedupe = FALSE`.
@@ -330,7 +332,7 @@ mysterycall_safe_left_join <- function(left, right, by,
 #' )
 #'
 #' @seealso [mysterycall_safe_left_join()], [mysterycall_safe_semi_join()],
-#'   [mysterycall_safe_anti_join()]
+#'   [mysterycall_safe_anti_join()], [mysterycall_assert_unique_keys()]
 #' @family safe-joins
 #' @importFrom dplyr inner_join semi_join
 #' @importFrom tibble tibble
@@ -426,7 +428,8 @@ mysterycall_safe_inner_join <- function(left, right, by,
 #'   write_report = FALSE
 #' )
 #'
-#' @seealso [mysterycall_safe_left_join()], [mysterycall_safe_anti_join()]
+#' @seealso [mysterycall_safe_left_join()], [mysterycall_safe_inner_join()],
+#'   [mysterycall_safe_anti_join()], [mysterycall_assert_unique_keys()]
 #' @family safe-joins
 #' @importFrom dplyr semi_join
 #' @importFrom tibble tibble
@@ -513,7 +516,8 @@ mysterycall_safe_semi_join <- function(left, right, by,
 #'   write_report = FALSE
 #' )
 #'
-#' @seealso [mysterycall_safe_semi_join()], [mysterycall_safe_left_join()]
+#' @seealso [mysterycall_safe_left_join()], [mysterycall_safe_inner_join()],
+#'   [mysterycall_safe_semi_join()], [mysterycall_assert_unique_keys()]
 #' @family safe-joins
 #' @importFrom dplyr anti_join
 #' @importFrom tibble tibble

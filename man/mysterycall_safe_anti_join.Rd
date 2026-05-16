@@ -64,7 +64,10 @@ active <- mysterycall_safe_anti_join(
 
 }
 \seealso{
-\code{\link[=mysterycall_safe_semi_join]{mysterycall_safe_semi_join()}}, \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}}
+\code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}},
+\code{\link[=mysterycall_safe_inner_join]{mysterycall_safe_inner_join()}},
+\code{\link[=mysterycall_safe_semi_join]{mysterycall_safe_semi_join()}},
+\code{\link[=mysterycall_assert_unique_keys]{mysterycall_assert_unique_keys()}}
 
 Other safe-joins: 
 \code{\link{mysterycall_assert_unique_keys}()},

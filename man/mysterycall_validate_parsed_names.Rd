@@ -15,9 +15,13 @@ mysterycall_validate_parsed_names(
 with at least columns \code{first_name}, \code{last_name}, \code{middle_name}, and
 \code{parse_confidence}.}
 
-\item{require_first}{Logical. When \code{TRUE} (default) a row is \code{is_valid = FALSE} if \code{first_name} is \code{NA}.}
+\item{require_first}{Logical. When \code{TRUE} (default) rows where \code{first_name}
+is \code{NA} are marked \code{is_valid = FALSE}.  Set \code{FALSE} for data sources that
+store only last names (e.g. single-name lookup tables).}
 
-\item{require_last}{Logical. When \code{TRUE} (default) a row is \code{is_valid = FALSE} if \code{last_name} is \code{NA}.}
+\item{require_last}{Logical. When \code{TRUE} (default) rows where \code{last_name}
+is \code{NA} are marked \code{is_valid = FALSE}.  Set \code{FALSE} when processing
+mononyms or incomplete name strings where absence of a surname is expected.}
 }
 \value{
 The input tibble with additional columns:
