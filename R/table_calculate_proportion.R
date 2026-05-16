@@ -32,8 +32,10 @@
 #' print(result)
 #'
 #' @importFrom dplyr count mutate across where
-#' @family table
-#' @seealso [mysterycall_table_percentages()]
+#' @family table helpers
+#' @seealso [mysterycall_table_percentages()] for the string-based equivalent;
+#'   [mysterycall_max_table()], [mysterycall_min_table()] for single-value
+#'   mode/anti-mode queries.
 #' @export
 mysterycall_table_proportion <- function(data, variable_name) {
   tabyl_result <- data %>%

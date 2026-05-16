@@ -10,9 +10,16 @@
 #'   Defaults to a session-specific folder beneath [tempdir()].
 #' @param save_interval Number of seconds between automatic checkpoint saves.
 #'   Defaults to 240 seconds (~4 minutes).
-#' @return A dataframe containing the isochrones data with added 'name' column.
+#' @return An sf data frame (class `c("sf", "data.frame")`) with one row per
+#'   isochrone polygon. Columns include all original input columns plus `name`
+#'   (character label such as `"30 minutes"`), `range` (drive-time in seconds),
+#'   and geometry. Returns an empty `data.frame()` if no valid isochrones were
+#'   generated. Intermediate results are checkpointed as `.rds` and `.gpkg`
+#'   files in `output_dir` at `save_interval` seconds.
+#' @seealso [mysterycall_create_isochrones()] for single-point isochrone
+#'   creation; [mysterycall_calculate_overlap()] for the downstream
+#'   block-group intersection step.
 #' @importFrom readr write_rds
-
 #' @importFrom janitor clean_names
 #' @family mapping
 #' @export
@@ -27,9 +34,6 @@ mysterycall_isochrones_for_df <- function(
   if (!requireNamespace("sf", quietly = TRUE)) {
     stop("Package 'sf' is required. Install with: install.packages('sf')", call. = FALSE)
   }
-
-  #input_file <- "_Recent_Grads_GOBA_NPI_2022a.rds" #for testing;
-  #input_file <- "data/test_short_inner_join_postmastr_clinician_data_sf.csv"
 
   if (!requireNamespace("hereR", quietly = TRUE)) {
     stop("Package 'hereR' is required for mysterycall_isochrones_for_df(). Install with: install.packages('hereR')", call. = FALSE)

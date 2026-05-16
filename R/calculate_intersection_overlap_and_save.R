@@ -16,7 +16,14 @@
 #' @param notify Logical. If `TRUE`, play a notification sound on completion when
 #'   the optional `beepr` package is available. Defaults to `TRUE`.
 #'
-#' @return Called for its side effect of saving the intersection overlap shapefile and CSV.
+#' @return `invisible(NULL)`. As side effects: (1) writes an ESRI shapefile
+#'   (EPSG:4326) of the block-group/isochrone intersection to `output_dir`,
+#'   (2) writes a CSV with columns `GEOID`, `intersect_area`, and
+#'   `area_method` to the same directory, and (3) emits messages with the
+#'   50th and 75th percentile overlap statistics. If `notify = TRUE` and
+#'   `beepr` is installed, plays a completion sound.
+#' @seealso [mysterycall_isochrones_for_df()] to generate the `isochrones_joined`
+#'   input; [mysterycall_create_isochrones()] for single-point isochrone creation.
 #'
 #' @examplesIf interactive()
 #' mysterycall_calculate_overlap(block_groups, isochrones_joined, 30L, "data/shp/")

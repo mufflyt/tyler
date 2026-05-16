@@ -22,24 +22,10 @@ NULL
 #' @family progress-bars
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' # Simple progress bar
-#' pb_id <- mysterycall_progress_bar("Processing", total = 100)
-#' for (i in 1:100) {
-#'   Sys.sleep(0.1)
-#'   mysterycall_progress_update(pb_id)
-#' }
+#' @examplesIf interactive()
+#' pb_id <- mysterycall_progress_bar("Processing", total = 10)
+#' for (i in 1:10) mysterycall_progress_update(pb_id)
 #' mysterycall_progress_done(pb_id)
-#'
-#' # With custom message
-#' pb_id <- mysterycall_progress_bar("Geocoding addresses", total = 500)
-#' for (i in 1:500) {
-#'   # do work
-#'   mysterycall_progress_update(pb_id, status = sprintf("Address %d", i))
-#' }
-#' mysterycall_progress_done(pb_id, result = "All addresses geocoded!")
-#' }
 mysterycall_progress_bar <- function(name,
                                 total,
                                 format = NULL,
@@ -241,26 +227,12 @@ mysterycall_progress_fail <- function(pb, msg = NULL) {
 #' @family progress-bars
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' tracker <- mysterycall_multi_progress(c("Load Data", "Process", "Save"))
-#'
-#' # Step 1
-#' mysterycall_multi_step(tracker, 1, total = 100)
-#' for (i in 1:100) {
-#'   mysterycall_multi_update(tracker)
-#' }
+#' @examplesIf interactive()
+#' tracker <- mysterycall_multi_progress(c("Load Data", "Save"))
+#' mysterycall_multi_step(tracker, 1, total = 5)
+#' for (i in 1:5) mysterycall_multi_update(tracker)
 #' mysterycall_multi_complete(tracker)
-#'
-#' # Step 2
-#' mysterycall_multi_step(tracker, 2, total = 50)
-#' for (i in 1:50) {
-#'   mysterycall_multi_update(tracker)
-#' }
-#' mysterycall_multi_complete(tracker)
-#'
 #' mysterycall_multi_done(tracker)
-#' }
 mysterycall_multi_progress <- function(steps, show_overall = TRUE) {
   env <- new.env(parent = emptyenv())
   env$steps <- steps
@@ -363,12 +335,10 @@ mysterycall_multi_update <- function(tracker, amount = 1, status = NULL) {
 #' @param result Optional result message
 #'
 #' @return Invisible NULL
-#' @examples
-#' \donttest{
-#' tracker <- mysterycall_multi_step(c("Geocode", "Validate"), 10)
-#' mysterycall_multi_update(tracker, amount = 10)
+#' @examplesIf interactive()
+#' tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
+#' mysterycall_multi_step(tracker, 1, total = 5)
 #' mysterycall_multi_complete(tracker, result = "ok")
-#' }
 #' @family progress-bars
 #' @export
 mysterycall_multi_complete <- function(tracker, result = NULL) {
@@ -390,11 +360,9 @@ mysterycall_multi_complete <- function(tracker, result = NULL) {
 #' @param tracker Multi-progress tracker object
 #'
 #' @return Invisible NULL
-#' @examples
-#' \donttest{
-#' tracker <- mysterycall_multi_step(c("Geocode", "Validate"), 10)
+#' @examplesIf interactive()
+#' tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
 #' mysterycall_multi_done(tracker)
-#' }
 #' @family progress-bars
 #' @export
 mysterycall_multi_done <- function(tracker) {
@@ -427,23 +395,12 @@ mysterycall_multi_done <- function(tracker) {
 #' @family progress-bars
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' # Process items with progress bar
+#' @examplesIf interactive()
 #' results <- mysterycall_progress_map(
-#'   items = 1:100,
-#'   fn = function(x) { Sys.sleep(0.1); x^2 },
-#'   name = "Computing squares"
+#'   items = 1:10,
+#'   fn    = function(x) x^2,
+#'   name  = "Computing squares"
 #' )
-#'
-#' # With custom batch size
-#' results <- mysterycall_progress_map(
-#'   items = 1:50,
-#'   fn = function(x) x^2,
-#'   name = "Computing squares",
-#'   batch_size = 10  # Update every 10 items
-#' )
-#' }
 mysterycall_progress_map <- function(items,
                                 fn,
                                 name = "Processing items",
@@ -485,14 +442,11 @@ mysterycall_progress_map <- function(items,
 #' @param name Operation name
 #' @param msg Optional message to display
 #'
-#' @return Spinner ID
+#' @return Spinner ID (a `cli` progress bar ID, or `NULL` if cli is unavailable).
 #' @family progress-bars
-#' @examples
-#' \donttest{
+#' @examplesIf interactive()
 #' id <- mysterycall_spinner_start("Loading data")
-#' Sys.sleep(0.1)
 #' mysterycall_spinner_stop(id)
-#' }
 #' @export
 mysterycall_spinner_start <- function(name, msg = NULL) {
   if (requireNamespace("cli", quietly = TRUE) && cli::is_ansi_tty()) {
@@ -517,13 +471,11 @@ mysterycall_spinner_start <- function(name, msg = NULL) {
 #' @param id Spinner ID from mysterycall_spinner_start()
 #' @param result Result message
 #'
-#' @return Invisible NULL
+#' @return `invisible(NULL)`
 #' @family progress-bars
-#' @examples
-#' \donttest{
+#' @examplesIf interactive()
 #' id <- mysterycall_spinner_start("Loading data")
 #' mysterycall_spinner_stop(id, result = "done")
-#' }
 #' @export
 mysterycall_spinner_stop <- function(id, result = "done") {
   if (!is.null(id) && requireNamespace("cli", quietly = TRUE)) {

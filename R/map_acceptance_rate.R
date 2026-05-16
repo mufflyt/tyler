@@ -42,8 +42,12 @@ NULL
 #' @param dpi Integer. Resolution passed to [mysterycall_save_plot()].
 #'   Default `300L`.
 #'
-#' @return The ggplot object, invisibly.
+#' @return A `ggplot` object of class `c("gg", "ggplot")`, returned invisibly.
+#'   When `save_path` is not `NULL`, also writes the plot to disk via
+#'   [mysterycall_save_plot()].
 #'
+#' @seealso [mysterycall_save_plot()] to write the result to disk;
+#'   [mysterycall_hrr_maps()] for HRR-level choropleth maps.
 #' @family mapping
 #' @export
 #'

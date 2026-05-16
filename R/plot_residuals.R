@@ -13,9 +13,16 @@ NULL
 #' @param model A `mysterycall_poisson_model` result, or a `glm`, `glmerMod`,
 #'   or `lm` object.
 #'
-#' @return A named list with elements `residuals_vs_fitted`, `qq`, and
-#'   `scale_location`, each a `ggplot` object.
+#' @return A named list with three elements, each a `ggplot` object:
+#'   \describe{
+#'     \item{`residuals_vs_fitted`}{Pearson residuals vs. fitted values with a horizontal dashed reference at zero.}
+#'     \item{`qq`}{Normal Q-Q plot of Pearson residuals.}
+#'     \item{`scale_location`}{Square-root of |Pearson residuals| vs. fitted values (spread-location plot).}
+#'   }
 #'
+#' @seealso [mysterycall_poisson_model()] to fit the model passed here;
+#'   [mysterycall_plot_effects()] for marginal-effect plots;
+#'   [mysterycall_save_plot()] to write any element to disk.
 #' @family outcomes
 #' @export
 #'
