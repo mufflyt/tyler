@@ -19,9 +19,9 @@ mysterycall_assert_unique_keys(
 \item{label}{Character scalar used in error/message text. Default \code{"table"}.}
 
 \item{dedupe}{Logical. When \code{TRUE} duplicates are silently removed (first
-row per key is kept) and the deduplicated data frame is returned invisibly.
-When \code{FALSE} (default) any duplicates raise an error with sample duplicate
-values to help locate the problem.}
+row per key is kept) and the deduplicated data frame is returned
+invisibly.  When \code{FALSE} (default) any duplicates raise an error with
+sample duplicate values to help locate the problem.}
 }
 \value{
 \code{.data} invisibly (possibly deduplicated). Errors when duplicates
