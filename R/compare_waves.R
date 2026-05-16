@@ -30,6 +30,9 @@
 #' )
 #' mysterycall_compare_waves(df, "wave", "outcome")
 #'
+#' @seealso [mysterycall_wait_time_summary()], [mysterycall_acceptance_rate()]
+#'   for detailed single-wave outcome analysis; [mysterycall_bootstrap_ci()]
+#'   for non-parametric confidence intervals.
 #' @family outcomes
 #' @export
 mysterycall_compare_waves <- function(

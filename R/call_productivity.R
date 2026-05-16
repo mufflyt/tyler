@@ -36,6 +36,8 @@
 #' )
 #' mysterycall_call_productivity(df, "caller", outcome_col = "outcome")
 #'
+#' @seealso [mysterycall_caller_reliability()] for inter-rater reliability
+#'   metrics; [mysterycall_compare_waves()] for cross-wave outcome comparisons.
 #' @family workflow
 #' @export
 mysterycall_call_productivity <- function(

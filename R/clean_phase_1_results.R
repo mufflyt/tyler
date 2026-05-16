@@ -40,7 +40,9 @@
 #'   lowercase hex string (SHA-256) or `NULL` (default). Ignored silently if
 #'   not a valid hex digest.
 #'
-#' @return Invisibly returns the cleaned data frame with the following attributes:
+#' @return Invisibly returns the cleaned data frame (side effect: files are
+#'   written to `output_directory`).  The returned object carries these
+#'   attributes:
 #' \itemize{
 #'   \item `audit_trail`: List containing processing metadata (timestamps, row counts, flags)
 #'   \item `processing_timestamp`: Time when processing completed
@@ -128,6 +130,8 @@
 #' @importFrom janitor clean_names
 #' @importFrom readr type_convert write_csv
 #' @importFrom stringr str_detect
+#' @seealso [mysterycall_clean_phase2()] for Phase 2 data cleaning;
+#'   [mysterycall_run_workflow()] which orchestrates both phases.
 #' @family workflow
 #' @export
 

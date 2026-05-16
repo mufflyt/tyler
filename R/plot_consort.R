@@ -26,8 +26,15 @@ NULL
 #' @param node_width Numeric. Width of the main boxes in inches. Default `3.5`.
 #' @param font_size Integer. Font size in points. Default `10L`.
 #'
-#' @return A DiagrammeR `grViz` object (renders in RMarkdown / Viewer).
-#'
+#' @return A `DiagrammeR::grViz` object representing the CONSORT flow diagram.
+#'   Renders automatically in the RStudio Viewer and RMarkdown HTML output.
+#'   To export to SVG or PDF:
+#'   ```r
+#'   svg_text <- DiagrammeRsvg::export_svg(diagram)
+#'   rsvg::rsvg_pdf(chartr("\n", "", svg_text), "consort.pdf")
+#'   ```
+#' @seealso [mysterycall_flowchart()] for a generic multi-step flowchart;
+#'   [mysterycall_acceptance_rate()] to compute the counts that feed this diagram.
 #' @family outcomes
 #' @export
 #'

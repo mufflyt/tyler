@@ -31,6 +31,9 @@
 #' )
 #' mysterycall_write_results_paragraph(irr_tbl, "commercial insurance", "insurance")
 #'
+#' @seealso [mysterycall_poisson_model()] which produces the `model_result`
+#'   input; [mysterycall_acceptance_rate()] for tabular summaries of the
+#'   same outcome data.
 #' @family reporting
 #' @export
 mysterycall_write_results_paragraph <- function(

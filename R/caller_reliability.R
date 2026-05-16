@@ -39,6 +39,9 @@
 #' )
 #' mysterycall_caller_reliability(df, "caller", "outcome", gold_col = "gold")
 #'
+#' @seealso [mysterycall_check_generalist_presence()] for pre-call QC;
+#'   [mysterycall_call_productivity()] for per-caller volume metrics;
+#'   [mysterycall_compare_waves()] for cross-wave outcome comparisons.
 #' @family caller-management
 #' @export
 mysterycall_caller_reliability <- function(

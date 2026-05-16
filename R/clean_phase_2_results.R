@@ -137,7 +137,8 @@ mysterycall_rename_columns <- function(data, target_strings, new_names) {
 #'
 #' @param data_or_path Path to the data file or a data frame.
 #' @param required_strings Vector of substrings for which to search in column names.
-#' @param standard_names Vector of new names to apply to the matched columns.
+#' @param standard_names Character vector of replacement names, the same length
+#'   as `required_strings`, applied to matched columns in order.
 #' @param output_directory Directory where the cleaned dataset should be written.
 #'   Defaults to a session-specific folder inside [tempdir()] when not provided.
 #' @param output_format File format to use when persisting the cleaned dataset.
@@ -171,6 +172,8 @@ mysterycall_rename_columns <- function(data, target_strings, new_names) {
 #'   })
 #'   ```
 #'
+#' @seealso [mysterycall_clean_phase1()] for Phase 1 data cleaning;
+#'   [mysterycall_run_workflow()] which orchestrates both phases.
 #' @family workflow
 #' @export
 #' @importFrom readr read_csv write_csv

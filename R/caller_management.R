@@ -29,6 +29,9 @@ NULL
 #'     \item{generalist_needed}{`TRUE` when no generalist is present.}
 #'   }
 #'
+#' @seealso [mysterycall_caller_reliability()] for inter-rater reliability
+#'   metrics; [mysterycall_assign_scenarios()] to pair generalists with
+#'   subspecialists once locations are validated.
 #' @family data management
 #' @export
 #'
