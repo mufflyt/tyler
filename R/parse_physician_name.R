@@ -125,8 +125,11 @@ NULL
 #' @param physician_name Character vector of physician name strings. Accepts
 #'   `"First Last"`, `"Last, First"`, `"Last, First, Suffix"`,
 #'   `"First Last, MD"`, and `"Dr. First Middle Last Jr., MD FACOG"`.
-#' @param remove_titles Logical scalar. When `TRUE` (default) titles such as
-#'   `"Dr."` and `"Prof."` are discarded from the `title` column.
+#' @param remove_titles Logical scalar. When `TRUE` (default), leading titles
+#'   (`"Dr."`, `"Prof."`, `"Mr."`, `"Mrs."`, `"Ms."`) are stripped from the
+#'   name string before parsing; the `title` column in the output is `NA`.
+#'   When `FALSE`, the title is preserved in the `title` column and the name
+#'   is parsed without stripping it.
 #'
 #' @return A [tibble::tibble()] with one row per element of `physician_name`:
 #' \describe{

@@ -5,7 +5,7 @@ NULL
 
 #' Plot marginal effects for a single model term
 #'
-#' Calls \code{effects::effect()} on a fitted model and returns a ggplot2 ribbon
+#' Calls [effects::effect()] on a fitted model and returns a ggplot2 ribbon
 #' plot of the marginal predicted values with 95% confidence bands. Works
 #' with any model class supported by the **effects** package (lm, glm,
 #' glmerMod, lmerMod, ...).
@@ -73,7 +73,7 @@ mysterycall_plot_effect <- function(model,
 
 #' Interaction visualization via sjPlot
 #'
-#' Thin wrapper around \code{sjPlot::plot_model()} with `type = "int"`. Returns a
+#' Thin wrapper around [sjPlot::plot_model()] with `type = "int"`. Returns a
 #' ggplot object that can be further customised with standard ggplot2 layers.
 #'
 #' @param model A fitted model accepted by `sjPlot::plot_model()`.

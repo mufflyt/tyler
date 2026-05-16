@@ -208,7 +208,7 @@ mysterycall_poisson_power <- function(irr,
 #'   required sample size per arm, and a vertical dashed line marks
 #'   IRR = 1 (no effect).
 #'
-#' @family sample size
+#' @family power analysis
 #' @export
 #'
 #' @examples

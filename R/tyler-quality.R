@@ -42,8 +42,17 @@ mysterycall_quality_tier <- function(score, thresholds = c(high = 0.9, medium = 
 #' @param thresholds Named numeric vector with `high` and `medium` breakpoints
 #'   between 0 and 1 determining the quality tier.
 #'
-#' @return A list containing `summary` (tibble of completeness metrics) and
-#'   `quality` (overall quality tier).
+#' @return A named list with three elements:
+#' \describe{
+#'   \item{`summary`}{A [tibble::tibble()] with one row per entry in `required`
+#'     (plus one uniqueness row when `id_cols` is supplied). Columns: `column`
+#'     (character), `completeness` (numeric, proportion 0-1 of non-missing
+#'     values), `missing` (numeric, `1 - completeness`).}
+#'   \item{`quality`}{Character scalar: `"high"`, `"medium"`, or `"low"` based
+#'     on the mean completeness score relative to `thresholds`.}
+#'   \item{`score`}{Numeric scalar. Mean completeness across all `required`
+#'     columns (and the uniqueness row when `id_cols` is supplied).}
+#' }
 #' @importFrom dplyr bind_rows
 #' @importFrom tibble tibble
 #' @importFrom stats complete.cases

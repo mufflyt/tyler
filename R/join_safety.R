@@ -206,7 +206,13 @@ mysterycall_assert_unique_keys <- function(.data, key_cols,
 #'   `FALSE`.
 #' @param report_prefix Character scalar. Filename prefix for the audit CSV.
 #'
-#' @return A data frame: the left-join result.
+#' @return A data frame containing all rows of `left` joined to matching rows
+#'   of `right`. Columns from both tables are included; name conflicts gain the
+#'   `suffix` extensions. Stops with an informative error when: `left` or
+#'   `right` is not a data frame; `by` columns are absent; coverage falls below
+#'   `min_coverage`; or output rows exceed `max_duplication` times input rows.
+#'   When `write_report = TRUE`, a one-row CSV audit record is written to the
+#'   working directory using `report_prefix` as the filename stem.
 #'
 #' @examples
 #' physicians <- data.frame(

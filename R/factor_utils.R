@@ -20,7 +20,9 @@ NULL
 #'
 #' @param x Character vector of raw credential strings.
 #' @param other_label Character scalar returned when neither MD nor DO pattern
-#'   matches. Default `"Other"`.
+#'   matches. Default `"Other"`. This label covers all non-physician
+#'   credentials such as PA, NP, RN, DDS, DMD, MBBS, and any unrecognised
+#'   free-text strings.
 #'
 #' @return Character vector the same length as `x`. `NA` inputs return `NA`.
 #'
