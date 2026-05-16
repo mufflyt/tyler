@@ -21,9 +21,10 @@
 .*\.Rhistory$
 .*\.RData$
 
-# Ignore data files
+# Ignore data files at the package root and in /data/ — but NOT inst/extdata/
 .*\.rds$
-.*\.csv$
+^[^/]*\.csv$
+^data/.*\.csv$
 ^To_amany\.R$
 ^install_log\.txt$
 ^codemeta\.json$
