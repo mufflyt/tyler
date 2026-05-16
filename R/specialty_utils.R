@@ -3,7 +3,7 @@
 #' @name specialty_utils
 NULL
 
-# ── ABOHNS certification-type patterns ────────────────────────────────────────
+# -- ABOHNS certification-type patterns ----------------------------------------
 
 .mc_cert_patterns <- list(
   "Otology/Neurotology"         = "neurotology",

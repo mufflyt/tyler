@@ -11,7 +11,7 @@ NULL
 #' ZIP code.
 #'
 #' @param x Character vector of raw ZIP/postal-code strings (e.g. `"80203"`,
-#'   `"80203-1234"`, `"  80203 "`, `"8020"` → `"08020"`).
+#'   `"80203-1234"`, `"  80203 "`, `"8020"` -> `"08020"`).
 #'
 #' @return Character vector the same length as `x`. Each element is a
 #'   5-character string of digits or `NA_character_`.

@@ -16,6 +16,9 @@ NULL
 #'   passes the CMS Luhn checksum; `FALSE` means it does not or is malformed.
 #'   `NA` inputs return `FALSE`.
 #'
+#' @seealso [mysterycall_validate_npi()] for row-level NPI validation with
+#'   filtering; [mysterycall_get_clinician_data()] to retrieve clinician detail
+#'   records for validated NPIs.
 #' @family data management
 #' @export
 #'

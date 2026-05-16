@@ -85,7 +85,7 @@ mysterycall_assign_scenarios <- function(data,
 
   subspecialty_values <- names(scenario_map)
 
-  # ── Process each location group ─────────────────────────────────────────────
+  # -- Process each location group ---------------------------------------------
   data[[scenario_col]] <- NA_character_
 
   groups <- unique(data[, location_cols, drop = FALSE])

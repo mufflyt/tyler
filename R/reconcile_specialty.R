@@ -7,11 +7,11 @@ NULL
 #'
 #' Applies a three-tier decision rule:
 #' \enumerate{
-#'   \item **Tier 1 (high)**: primary column is non-missing and non-default —
+#'   \item **Tier 1 (high)**: primary column is non-missing and non-default  -- 
 #'     use it as-is.
 #'   \item **Tier 2 (medium)**: primary is missing or the default label, but
-#'     the secondary column is informative — adopt the secondary value.
-#'   \item **Tier 3 (low)**: both sources are uninformative — set specialty to
+#'     the secondary column is informative  --  adopt the secondary value.
+#'   \item **Tier 3 (low)**: both sources are uninformative  --  set specialty to
 #'     `default`.
 #' }
 #' Two audit columns are appended: one recording which source was used and one
@@ -61,12 +61,12 @@ mysterycall_reconcile_specialty <- function(data,
 
   primary <- as.character(out[[primary_col]])
 
-  # ── Tier 1: primary is informative ───────────────────────────────────────────
+  # -- Tier 1: primary is informative -------------------------------------------
   t1 <- !is.na(primary) & nzchar(trimws(primary)) & primary != default
   out[[source_col]][t1]     <- primary_col
   out[[confidence_col]][t1] <- "high"
 
-  # ── Tier 2: secondary fills the gap ──────────────────────────────────────────
+  # -- Tier 2: secondary fills the gap ------------------------------------------
   if (!is.null(secondary_col)) {
     if (!secondary_col %in% names(data)) {
       stop("`secondary_col` not found in data.", call. = FALSE)
@@ -78,7 +78,7 @@ mysterycall_reconcile_specialty <- function(data,
     out[[confidence_col]][t2] <- "medium"
   }
 
-  # ── Tier 3: fall back to default ─────────────────────────────────────────────
+  # -- Tier 3: fall back to default ---------------------------------------------
   t3 <- is.na(out[[source_col]])
   out[[source_col]][t3]     <- "default"
   out[[confidence_col]][t3] <- "low"

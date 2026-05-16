@@ -421,7 +421,7 @@ progress_tracker_summary <- function(...) {
   mysterycall_progress_summary(...)
 }
 
-# ── tyler_ → mysterycall_ shims (package renamed from tyler to mysterycall) ───
+# -- tyler_ -> mysterycall_ shims (package renamed from tyler to mysterycall) ---
 
 #' Deprecated tyler_ prefix functions
 #'

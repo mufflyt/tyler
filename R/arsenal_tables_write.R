@@ -1,7 +1,7 @@
 #' Writes an Arsenal summary table to a Word document
 #'
 #' @param object A data frame (e.g. the output of [arsenal::summary.tableby()])
-#'   to write. Must be a data frame — the function will error otherwise.
+#'   to write. Must be a data frame  --  the function will error otherwise.
 #' @param filename The filename without extension for the Word document.
 #' @param output_dir Directory where the Word document should be written.
 #'   Defaults to a session-specific folder inside [tempdir()].

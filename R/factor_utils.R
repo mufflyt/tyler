@@ -15,7 +15,7 @@ NULL
 #'   \item{`"MD"`}{`M.D.`, `MD`, `MD/PhD`, `MD-PhD`, `MD, PhD`,
 #'     `doctor of medicine`, `allopathic`}
 #'   \item{`"DO"`}{`D.O.`, `DO`, `D.O.M.`, `osteopathic`}
-#'   \item{`"Other"`}{everything else (PA, NP, RN, DDS, DMD, MBBS, …)}
+#'   \item{`"Other"`}{everything else (PA, NP, RN, DDS, DMD, MBBS, ...)}
 #' }
 #'
 #' @param x Character vector of raw credential strings.

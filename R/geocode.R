@@ -30,8 +30,8 @@
 #'   enabled. Steps to obtain a key:
 #'   \enumerate{
 #'     \item Create a project at <https://console.cloud.google.com/>.
-#'     \item Enable the **Geocoding API** under APIs & Services → Library.
-#'     \item Create a key under APIs & Services → Credentials.
+#'     \item Enable the **Geocoding API** under APIs & Services > Library.
+#'     \item Create a key under APIs & Services > Credentials.
 #'     \item Enable **billing** on the project (required even for free-tier usage;
 #'           Google provides a $200/month credit that covers ~40,000 geocodes).
 #'   }
@@ -49,6 +49,9 @@
 #'   request, not at function entry. Run [mysterycall_preflight_check()] with
 #'   `check_apis = TRUE` before a long workflow to catch key problems early.
 #'
+#' @seealso [mysterycall_preflight_check()] to validate API keys before a long
+#'   workflow; [mysterycall_create_isochrones()] to compute drive-time polygons
+#'   from geocoded coordinates.
 #' @family geospatial helpers
 #' @export
 #' @examplesIf interactive()

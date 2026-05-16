@@ -3,9 +3,9 @@
 #' @name mysterycall_classify_medical_school
 NULL
 
-# ── Built-in pattern lists ────────────────────────────────────────────────────
+# -- Built-in pattern lists ----------------------------------------------------
 
-# DO-granting schools — all contain one of these substrings (case-insensitive)
+# DO-granting schools  --  all contain one of these substrings (case-insensitive)
 .mc_do_patterns <- c(
   "osteopathic", "college of osteo",
   "touro", "pcom", "noorda", "atsu", "msucom",
@@ -31,7 +31,7 @@ NULL
   "queen's university", "queens university", "northern ontario"
 )
 
-# International indicators — country names, known IMG schools, Spanish prefix
+# International indicators  --  country names, known IMG schools, Spanish prefix
 .mc_img_patterns <- c(
   "mexico", "india", "china", "pakistan", "egypt", "philippines",
   "grenada", "ross university", "st\\. george", "\\bsgu\\b",

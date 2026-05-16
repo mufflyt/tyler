@@ -82,7 +82,7 @@ NULL
 #'   all whitespace collapsed to single spaces.
 #'
 #' @examples
-#' mysterycall_ascii_norm("123 Main St Suite 100")
+#' mysterycall_ascii_norm("123 Main St Suite 100")
 #' mysterycall_ascii_norm("456   Oak    Avenue")
 #'
 #' @importFrom stringr str_replace_all str_squish
@@ -103,7 +103,7 @@ ascii_norm <- function(...) { .Deprecated("mysterycall_ascii_norm"); mysterycall
 
 #' Convert to Canonical Uppercase
 #'
-#' Normalizes ASCII characters and converts the result to uppercase — the
+#' Normalizes ASCII characters and converts the result to uppercase  --  the
 #' standard format for USPS address comparison.
 #'
 #' @param x Character vector of strings to convert.
@@ -112,7 +112,7 @@ ascii_norm <- function(...) { .Deprecated("mysterycall_ascii_norm"); mysterycall
 #'
 #' @examples
 #' mysterycall_caps("123 main street")
-#' mysterycall_caps("456 oak ave #100")
+#' mysterycall_caps("456 oak ave #100")
 #'
 #' @family address-normalization
 #' @export

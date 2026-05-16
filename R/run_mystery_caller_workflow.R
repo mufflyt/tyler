@@ -75,7 +75,7 @@
 #' Complexity is approximately O(n) in number of Phase 1 rows for local steps.
 #' NPI registry calls via `mysterycall_search_taxonomy()` add O(t * p) where
 #' `t` = number of taxonomy terms and `p` = max records per term (default 1,200).
-#' Budget ~5–30 s per taxonomy term depending on network latency.
+#' Budget ~5-30 s per taxonomy term depending on network latency.
 #'
 #' @section Calls:
 #' - [mysterycall_search_taxonomy()] (when `taxonomy_terms` is non-NULL)

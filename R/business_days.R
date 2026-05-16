@@ -1,7 +1,7 @@
 #' Business-day utilities for mystery caller studies
 #'
 #' The primary outcome in mystery caller studies is
-#' `business_days_until_appointment`: the number of Mon–Fri working days
+#' `business_days_until_appointment`: the number of Mon-Fri working days
 #' (excluding US federal holidays) between the call date and the offered
 #' appointment date. These helpers build a `bizdays` calendar from US
 #' federal holidays and compute that column for a data frame.
@@ -9,7 +9,7 @@
 #' @name mysterycall_business_days
 NULL
 
-# ── Internal calendar helpers (no lubridate) ──────────────────────────────────
+# -- Internal calendar helpers (no lubridate) ----------------------------------
 
 # Returns 1=Sun, 2=Mon, ..., 7=Sat  (same convention as lubridate::wday)
 .mc_wday <- function(d) as.integer(format(as.Date(d), "%w")) + 1L
@@ -37,8 +37,8 @@ NULL
 # Shift a fixed-date holiday to its observed weekday (Fri if Sat, Mon if Sun)
 .mc_observe <- function(d) {
   dow <- .mc_wday(d)
-  if (dow == 7L) return(d - 1L)   # Saturday → Friday
-  if (dow == 1L) return(d + 1L)   # Sunday   → Monday
+  if (dow == 7L) return(d - 1L)   # Saturday -> Friday
+  if (dow == 1L) return(d + 1L)   # Sunday   -> Monday
   d
 }
 
@@ -69,7 +69,7 @@ NULL
 #'
 #' @examplesIf requireNamespace("bizdays", quietly = TRUE)
 #' cal <- mysterycall_us_federal_calendar(2024, 2028)
-#' bizdays::is.bizday(as.Date("2026-01-19"), cal)  # MLK Day → FALSE
+#' bizdays::is.bizday(as.Date("2026-01-19"), cal)  # MLK Day -> FALSE
 mysterycall_us_federal_calendar <- function(
     start_year = as.integer(format(Sys.Date(), "%Y")) - 5L,
     end_year   = as.integer(format(Sys.Date(), "%Y")) + 10L) {
@@ -128,7 +128,7 @@ mysterycall_us_federal_calendar <- function(
 
 #' Count business days between two dates (vectorized)
 #'
-#' Returns the number of Mon–Fri working days, excluding US federal holidays,
+#' Returns the number of Mon-Fri working days, excluding US federal holidays,
 #' between `start_date` (exclusive) and `end_date` (inclusive). This matches
 #' the `business_days_until_appointment` convention used in mystery caller
 #' studies: a call made on Monday for an appointment on Friday of the same
@@ -141,7 +141,7 @@ mysterycall_us_federal_calendar <- function(
 #'   a character vector in `"YYYY-MM-DD"` format. Vectorised.
 #' @param end_date Date of the offered appointment. Same types accepted.
 #' @param calendar A `bizdays` calendar from [mysterycall_us_federal_calendar()].
-#'   When `NULL` (default) a calendar covering `r (as.integer(format(Sys.Date(), "%Y"))-5)` –
+#'   When `NULL` (default) a calendar covering `r (as.integer(format(Sys.Date(), "%Y"))-5)` -
 #'   `r (as.integer(format(Sys.Date(), "%Y"))+10)` is built automatically.
 #'
 #' @return Integer vector the same length as `start_date`.

@@ -37,7 +37,7 @@
 #'
 #' @section Performance:
 #' O(n log n) due to sorting. Excel I/O via `openxlsx` dominates for large
-#' rosters; expect ~2–5 s for 500 rows.
+#' rosters; expect ~2-5 s for 500 rows.
 #'
 #' @section Called By:
 #' - [mysterycall_run_workflow()]
@@ -119,7 +119,7 @@ mysterycall_split_and_save <- function(data_or_path, output_directory, lab_assis
     ), call. = FALSE)
   }
 
-  # Warn about rows with NA insurance — they will be assigned to callers but
+  # Warn about rows with NA insurance  --  they will be assigned to callers but
   # their workbook position is undefined (sorted last, grouped separately).
   n_na_insurance <- sum(is.na(data$insurance))
   if (n_na_insurance > 0) {
@@ -156,7 +156,7 @@ mysterycall_split_and_save <- function(data_or_path, output_directory, lab_assis
 
   # Shuffle rows within each insurance group (seed-controlled), then assign
   # lab assistants via round-robin so every assistant receives at most one row
-  # more than any other — guaranteed regardless of group size or roster length.
+  # more than any other  --  guaranteed regardless of group size or roster length.
   set.seed(seed)
   if (nrow(data) == 0) {
     message("Input contains zero rows; workbooks will be created without assignments.")

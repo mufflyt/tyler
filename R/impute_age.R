@@ -38,7 +38,7 @@ NULL
 #' @export
 #'
 #' @examples
-#' # Physician who graduated in 1995; current year 2026 → age ≈ 58
+#' # Physician who graduated in 1995; current year 2026 -> age ~ 58
 #' mysterycall_impute_age(1995)
 #'
 #' # Vectorized
@@ -87,7 +87,7 @@ mysterycall_impute_age <- function(grad_year,
 #'
 #' Returns a character label for each age, using decade brackets suitable for
 #' Table 1 demographic summaries. The break points match the standard used in
-#' mystery caller studies: Under 30, 30–39, 40–49, 50–59, 60–69, 70+.
+#' mystery caller studies: Under 30, 30-39, 40-49, 50-59, 60-69, 70+.
 #'
 #' @param age Numeric vector of physician ages. `NA` values return `na_label`.
 #' @param breaks Numeric vector of break points defining the category

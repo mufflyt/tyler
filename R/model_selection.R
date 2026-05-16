@@ -10,7 +10,7 @@ NULL
 #' returns a ranked summary table.
 #'
 #' @param models Named list of fitted model objects. Any object with an `AIC()`
-#'   or `BIC()` method is accepted (glm, glmerMod, lm, lmerMod, …).
+#'   or `BIC()` method is accepted (glm, glmerMod, lm, lmerMod, ...).
 #' @param criterion One of:
 #'   \describe{
 #'     \item{`"aic"`}{Rank by Akaike Information Criterion (default).}

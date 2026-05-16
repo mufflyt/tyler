@@ -3,7 +3,7 @@
 #' @name phone_validation
 NULL
 
-# Package-level cache — loaded once per session on first call.
+# Package-level cache - loaded once per session on first call.
 .nanp_lookup_cache <- NULL
 
 .load_nanp_lookup <- function(nanp_path = NULL) {
@@ -35,8 +35,8 @@ NULL
 #' \itemize{
 #'   \item Exactly 10 digits after stripping non-digits (an optional leading
 #'         `"1"` country code is dropped first).
-#'   \item NPA first digit (N) is 2–9.
-#'   \item NXX first digit (N) is 2–9.
+#'   \item NPA first digit (N) is 2-9.
+#'   \item NXX first digit (N) is 2-9.
 #'   \item NXX is not an N11 code (e.g. 911, 411, 211).
 #' }
 #'
@@ -116,7 +116,7 @@ mysterycall_validate_phone <- function(phone_str,
 
   lookup <- .load_nanp_lookup(nanp_path)
 
-  # ── Strip to digits; drop optional leading country code "1" ──────────────
+  # Strip to digits; drop optional leading country code "1"
   digits <- gsub("[^0-9]", "", phone_str)
   digits <- ifelse(
     !is.na(digits) & nchar(digits) == 11L & substr(digits, 1L, 1L) == "1",
@@ -128,21 +128,20 @@ mysterycall_validate_phone <- function(phone_str,
   npa       <- ifelse(ten_digit, substr(digits, 1L, 3L), NA_character_)
   nxx       <- ifelse(ten_digit, substr(digits, 4L, 6L), NA_character_)
 
-  # ── NANP syntactic rules ─────────────────────────────────────────────────
+  # NANP syntactic rules
   npa_valid <- !is.na(npa) & substr(npa, 1L, 1L) %in% as.character(2:9)
   nxx_valid <- !is.na(nxx) &
     substr(nxx, 1L, 1L) %in% as.character(2:9) &
     !(substr(nxx, 2L, 2L) == "1" & substr(nxx, 3L, 3L) == "1")
   phone_e164_valid <- ten_digit & npa_valid & nxx_valid
 
-  # ── Area-code → state lookup ──────────────────────────────────────────────
-  # Named vector preserves input order exactly and handles NA/duplicate NPA
-  # without any dependence on merge() row ordering.
+  # Area-code to state lookup - named vector preserves input order exactly
+  # and handles NA/duplicate NPA without any dependence on merge() row ordering.
   lookup_vec           <- stats::setNames(lookup$state, lookup$area_code)
-  phone_state_from_npa <- lookup_vec[npa]          # NA npa → NA state (correct)
+  phone_state_from_npa <- lookup_vec[npa]          # NA npa -> NA state (correct)
   names(phone_state_from_npa) <- NULL
 
-  # ── State-match flag ──────────────────────────────────────────────────────
+  # State-match flag
   state_match <- if (is.null(practice_state)) {
     rep(NA, n)
   } else {
@@ -150,7 +149,7 @@ mysterycall_validate_phone <- function(phone_str,
       phone_state_from_npa == practice_state
   }
 
-  # ── Validity flag ─────────────────────────────────────────────────────────
+  # Validity flag
   missing_phone <- is.na(phone_str) | !nzchar(trimws(phone_str))
   validity_flag <- ifelse(
     missing_phone,                       "missing",

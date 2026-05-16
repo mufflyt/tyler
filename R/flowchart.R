@@ -65,7 +65,7 @@ mysterycall_flowchart <- function(steps,
          call. = FALSE)
   }
 
-  # ── Validate ───────────────────────────────────────────────────────────────
+  # -- Validate ---------------------------------------------------------------
   if (!is.character(steps) || is.null(names(steps)) || length(steps) < 1L) {
     stop("`steps` must be a named character vector with at least one entry.", call. = FALSE)
   }
@@ -85,7 +85,7 @@ mysterycall_flowchart <- function(steps,
   step_names <- names(steps)
   n_steps    <- length(steps)
 
-  # ── Build safe DOT IDs (alphanumeric only) ─────────────────────────────────
+  # -- Build safe DOT IDs (alphanumeric only) ---------------------------------
   make_id <- function(s, prefix = "N") {
     paste0(prefix, gsub("[^A-Za-z0-9]", "_", s))
   }
@@ -93,7 +93,7 @@ mysterycall_flowchart <- function(steps,
   node_ids  <- make_id(step_names)
   excl_ids  <- if (!is.null(exclusions)) make_id(names(exclusions), "E") else character(0L)
 
-  # ── Node definitions ────────────────────────────────────────────────────────
+  # -- Node definitions --------------------------------------------------------
   node_lines <- character(0L)
 
   if (!is.null(title)) {
@@ -119,7 +119,7 @@ mysterycall_flowchart <- function(steps,
     ))
   }
 
-  # ── Edge definitions ────────────────────────────────────────────────────────
+  # -- Edge definitions --------------------------------------------------------
   edge_lines <- character(0L)
 
   if (!is.null(title)) {
@@ -139,7 +139,7 @@ mysterycall_flowchart <- function(steps,
     }
   }
 
-  # ── Assemble DOT ────────────────────────────────────────────────────────────
+  # -- Assemble DOT ------------------------------------------------------------
   dot <- paste0(
     "digraph flowchart {\n",
     "  graph [layout=dot, rankdir=TB, overlap=false, fontsize=", font_size, "]\n",

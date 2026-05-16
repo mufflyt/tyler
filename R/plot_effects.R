@@ -8,7 +8,7 @@ NULL
 #' Calls \code{effects::effect()} on a fitted model and returns a ggplot2 ribbon
 #' plot of the marginal predicted values with 95% confidence bands. Works
 #' with any model class supported by the **effects** package (lm, glm,
-#' glmerMod, lmerMod, …).
+#' glmerMod, lmerMod, ...).
 #'
 #' @param model A fitted model object.
 #' @param term Character scalar. The term to visualise (must match a fixed

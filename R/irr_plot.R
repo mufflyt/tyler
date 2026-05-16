@@ -60,7 +60,7 @@ mysterycall_irr_plot <- function(x,
                                   title             = NULL,
                                   x_log             = FALSE) {
 
-  # ── Extract table ──────────────────────────────────────────────────────────
+  # -- Extract table ----------------------------------------------------------
   if (inherits(x, "mysterycall_poisson_model")) {
     tbl <- x$irr_table
   } else if (is.data.frame(x)) {
@@ -85,7 +85,7 @@ mysterycall_irr_plot <- function(x,
          call. = FALSE)
   }
 
-  # ── Significance colouring ─────────────────────────────────────────────────
+  # -- Significance colouring -------------------------------------------------
   if ("p_value" %in% names(tbl) && is.numeric(tbl$p_value)) {
     tbl$.sig <- ifelse(!is.na(tbl$p_value) & tbl$p_value < 0.05,
                        color_sig, color_ns)
@@ -93,10 +93,10 @@ mysterycall_irr_plot <- function(x,
     tbl$.sig <- color_ns
   }
 
-  # ── Term ordering: bottom-to-top matches table reading order ──────────────
+  # -- Term ordering: bottom-to-top matches table reading order --------------
   tbl$term <- factor(tbl$term, levels = rev(tbl$term))
 
-  # ── Build plot ─────────────────────────────────────────────────────────────
+  # -- Build plot -------------------------------------------------------------
   p <- ggplot2::ggplot(tbl, ggplot2::aes(x = irr, y = term)) +
     ggplot2::geom_vline(xintercept = reference_line,
                         linetype = "dashed", colour = "grey60", linewidth = 0.5) +

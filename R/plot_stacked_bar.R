@@ -139,8 +139,8 @@ mysterycall_plot_stacked_bar <- function(data,
 
   # ---- Build long data frame -------------------------------------------------
   # ggplot2 stacks in reverse factor order: Accepted (level 2) lands on the
-  # left (0 → pct_accepted), Not Accepted (level 1) on the right
-  # (pct_accepted → 100).  Midpoints must match that layout.
+  # left (0 -> pct_accepted), Not Accepted (level 1) on the right
+  # (pct_accepted -> 100).  Midpoints must match that layout.
   not_acc_df <- data.frame(
     group  = smry$group,
     status = fill_labels[1L],

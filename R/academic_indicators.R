@@ -7,7 +7,7 @@
 #' @details
 #' Evidence-based indicators with calibrated confidence scores:
 #' \itemize{
-#'   \item ACGME residency/fellowship programs (0.98–0.99)
+#'   \item ACGME residency/fellowship programs (0.98-0.99)
 #'   \item COTH (Council of Teaching Hospitals) membership (0.95)
 #'   \item Medical school affiliations (0.97)
 #'   \item NIH CTSA awards (0.99)
@@ -47,8 +47,8 @@ KNOWN_ACADEMIC_INSTITUTIONS <- c(
 #' Academic Hospital Name Patterns
 #'
 #' Tiered list of string patterns indicating academic hospital affiliation,
-#' organized by confidence level: very_high (0.95–0.99), high (0.85–0.94),
-#' and moderate (0.75–0.84).
+#' organized by confidence level: very_high (0.95-0.99), high (0.85-0.94),
+#' and moderate (0.75-0.84).
 #'
 #' @format Named list with three character vector elements:
 #'   \describe{
@@ -82,7 +82,7 @@ ACADEMIC_HOSPITAL_PATTERNS <- list(
 #' ACGME Program Indicators
 #'
 #' String patterns indicating ACGME-accredited residency or fellowship programs.
-#' Confidence: 0.98–0.99.
+#' Confidence: 0.98-0.99.
 #'
 #' @format Character vector of ACGME-related text patterns.
 #'
@@ -203,7 +203,7 @@ MEDICARE_GME_INDICATORS <- c(
 #'   \describe{
 #'     \item{academic_indicator}{Logical. TRUE if name matches an academic
 #'       pattern at or above the confidence threshold.}
-#'     \item{confidence_score}{Numeric. Highest confidence score (0.0–0.99).}
+#'     \item{confidence_score}{Numeric. Highest confidence score (0.0-0.99).}
 #'     \item{matched_pattern}{Character. Description of the matching pattern.
 #'       NA if no match.}
 #'   }
@@ -309,7 +309,7 @@ check_academic_name_patterns <- function(...) { .Deprecated("mysterycall_check_a
 #' @return Data frame with one row per input and columns:
 #'   \describe{
 #'     \item{academic_classification}{Character. "Academic" or "Non-Academic".}
-#'     \item{confidence_score}{Numeric. Confidence in the classification (0–1).}
+#'     \item{confidence_score}{Numeric. Confidence in the classification (0-1).}
 #'     \item{matched_pattern}{Character. Highest-scoring pattern match, or NA.}
 #'   }
 #'

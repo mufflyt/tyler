@@ -33,7 +33,7 @@
 #'   ever adds non-binary values they will be stored as-is in `gender` but will
 #'   be recoded to `"Unknown"` by [mysterycall_prepare_table1_vars()].
 #'
-#'   The `probability` column (0–1) reflects the API's prediction confidence.
+#'   The `probability` column (0-1) reflects the API's prediction confidence.
 #'   Names with low probability may be genuine but uncommon (e.g., gender-neutral
 #'   names). A common post-processing filter:
 #'   ```r

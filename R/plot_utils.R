@@ -7,7 +7,7 @@ NULL
 #'
 #' A thin wrapper around [ggplot2::ggsave()] that:
 #' \itemize{
-#'   \item Defaults to 300 dpi, 8 × 6 inches, white background.
+#'   \item Defaults to 300 dpi, 8 x 6 inches, white background.
 #'   \item Creates the output directory automatically if it does not exist.
 #'   \item Returns the output path invisibly so calls can be piped.
 #' }

@@ -9,7 +9,7 @@
 #' 45-49, 50-54, 55-59, 60-61, 62-64, 65-66, 67-69, 70-74, 75-79, 80-84,
 #' 85-89.
 #'
-#' @param year Integer. ACS 5-year survey year (2009–2023). Default: \code{2022}.
+#' @param year Integer. ACS 5-year survey year (2009-2023). Default: \code{2022}.
 #' @param states Character vector of two-letter state abbreviations, or
 #'   \code{NULL} to download all states (slow, ~30 min). Default: \code{NULL}.
 #' @param verbose Logical. Print progress messages. Default: \code{TRUE}.

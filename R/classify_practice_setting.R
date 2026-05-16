@@ -3,7 +3,7 @@
 #' @name mysterycall_classify_practice_setting
 NULL
 
-# ── Built-in pattern lists ────────────────────────────────────────────────────
+# -- Built-in pattern lists ----------------------------------------------------
 
 .mc_academic_patterns <- c(
   "university", "medical center", "med center", "medical college",

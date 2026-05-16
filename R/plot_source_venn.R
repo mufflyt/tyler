@@ -29,7 +29,7 @@
 #'   [ggplot2::ggsave()].  The file format is inferred from the extension
 #'   (`.png`, `.pdf`, `.svg`, etc.).
 #' @param width,height Numeric.  Plot dimensions in inches passed to
-#'   [ggplot2::ggsave()].  Defaults `11` × `9`.
+#'   [ggplot2::ggsave()].  Defaults `11` x `9`.
 #' @param dpi Integer.  Resolution for raster output.  Default `300`.
 #' @param bg Character scalar.  Background colour passed to
 #'   [ggplot2::ggsave()].  Default `"white"`.
@@ -93,7 +93,7 @@ mysterycall_plot_source_venn <- function(
          call. = FALSE)
   }
 
-  # ── Load data ──────────────────────────────────────────────────────────────
+  # -- Load data --------------------------------------------------------------
   if (is.character(data_or_path) && length(data_or_path) == 1L) {
     if (!file.exists(data_or_path)) {
       stop(sprintf("File not found: %s", data_or_path), call. = FALSE)
@@ -137,7 +137,7 @@ mysterycall_plot_source_venn <- function(
     stop("`border_colors` must be a character vector of length 3.", call. = FALSE)
   }
 
-  # ── Compute regions ────────────────────────────────────────────────────────
+  # -- Compute regions --------------------------------------------------------
   ABC    <- intersect(intersect(A, B), C)
   AB_only <- setdiff(intersect(A, B), C)
   AC_only <- setdiff(intersect(A, C), B)
@@ -149,7 +149,7 @@ mysterycall_plot_source_venn <- function(
 
   fmt <- function(n) format(n, big.mark = ",")
 
-  # ── Circle geometry (fixed layout) ─────────────────────────────────────────
+  # -- Circle geometry (fixed layout) -----------------------------------------
   circles <- data.frame(
     x0 = c(-1.2, 1.2, 0),
     y0 = c(0.7,  0.7, -0.8),
@@ -157,7 +157,7 @@ mysterycall_plot_source_venn <- function(
     stringsAsFactors = FALSE
   )
 
-  # ── Auto-generate subtitle / caption ───────────────────────────────────────
+  # -- Auto-generate subtitle / caption ---------------------------------------
   if (is.null(subtitle)) {
     subtitle <- sprintf(
       "%s total  |  %s (%.1f%%) in no source  |  Cascade: %s > %s > %s",
@@ -167,7 +167,7 @@ mysterycall_plot_source_venn <- function(
     )
   }
 
-  # ── Build plot ─────────────────────────────────────────────────────────────
+  # -- Build plot -------------------------------------------------------------
   p <- ggplot2::ggplot() +
     ggforce::geom_circle(
       data = circles[1L, ],
@@ -185,7 +185,7 @@ mysterycall_plot_source_venn <- function(
       fill = fills[3L], alpha = 0.2, color = border_colors[3L], linewidth = 0.8
     ) +
 
-    # ── Region counts ──────────────────────────────────────────────────────
+    # -- Region counts ------------------------------------------------------
     ggplot2::annotate("text", x = -2.8, y = 2.2,
                       label = sprintf("%s\nonly", fmt(length(A_only))),
                       size = 3.5, color = "gray30", lineheight = 0.9) +
@@ -211,7 +211,7 @@ mysterycall_plot_source_venn <- function(
                                       fmt(length(BC_only))),
                       size = 3.2, color = "gray30", lineheight = 0.9) +
 
-    # ── Centre: all three ─────────────────────────────────────────────────
+    # -- Centre: all three -------------------------------------------------
     ggplot2::annotate("text", x = 0.05, y = 0.15,
                       label = sprintf("All three\n%s\n(%.0f%%)",
                                       fmt(length(ABC)),
@@ -219,7 +219,7 @@ mysterycall_plot_source_venn <- function(
                       size = 5, fontface = "bold", color = "gray10",
                       lineheight = 0.9) +
 
-    # ── Source header labels ───────────────────────────────────────────────
+    # -- Source header labels -----------------------------------------------
     ggplot2::annotate("label", x = -2.6, y = 3.4,
                       label = sprintf("%s\nn = %s (%.1f%%)",
                                       source_long[1],
@@ -256,7 +256,7 @@ mysterycall_plot_source_venn <- function(
       plot.margin   = ggplot2::margin(15, 20, 15, 20)
     )
 
-  # ── Optionally save ────────────────────────────────────────────────────────
+  # -- Optionally save --------------------------------------------------------
   if (!is.null(output_path)) {
     dir.create(dirname(output_path), showWarnings = FALSE, recursive = TRUE)
     ggplot2::ggsave(output_path, p, width = width, height = height,

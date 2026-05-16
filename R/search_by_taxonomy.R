@@ -97,7 +97,7 @@
 #' @section Performance:
 #' O(t * p / 200) HTTP requests where `t` = number of state batches and
 #' `p` = max_records (default 1,200). Each page request targets < 200 rows.
-#' Full national search across all 50 states for one taxonomy takes ~2–5 min
+#' Full national search across all 50 states for one taxonomy takes ~2-5 min
 #' depending on registry load. Results are cached in-memory per session when
 #' `use_cache = TRUE`.
 #'

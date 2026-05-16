@@ -13,7 +13,7 @@
 #' - NPIs are validated via the Luhn checksum algorithm (NPI standard).
 #'
 #' **Guarantees:**
-#' - Output rows \eqn{\subseteq} input rows — rows are only removed, never added.
+#' - Output rows \eqn{\subseteq} input rows  --  rows are only removed, never added.
 #' - Every removed row had either `NA`, a non-10-digit string, or a failed Luhn
 #'   checksum.
 #' - Output NPI column is always character type.

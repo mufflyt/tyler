@@ -1,10 +1,21 @@
 #' Retrieve Clinician Data
 #'
-#' This function retrieves clinician data for each valid NPI in the input data frame.
+#' Retrieves clinician data from the `provider` package for each valid NPI in
+#' the input.  Accepts either a data frame with an `npi` column or a path to a
+#' CSV file.  Invalid NPIs are filtered out via [mysterycall_validate_npi()]
+#' before any API calls are made.
 #'
-#' @param input_data Either a data frame containing NPI numbers or a path to a CSV file.
+#' @param input_data A data frame with an `npi` column, or a character scalar
+#'   path to a CSV file that contains an `npi` column.
 #'
-#' @return A tibble with clinician data for the provided NPIs.
+#' @return A tibble with one row per valid NPI and columns from
+#'   `provider::clinicians()` (name, specialty, address, etc.), plus an
+#'   `npi_is_valid` column.  Returns a zero-row tibble when no valid NPIs are
+#'   found.  Returns `NULL` silently per NPI when the `provider` package is not
+#'   installed.
+#' @seealso [mysterycall_luhn_check()] to validate NPI checksums;
+#'   [mysterycall_validate_npi()] for row-level NPI filtering;
+#'   [mysterycall_safe_left_join()] to attach clinician data to a roster.
 #' @importFrom readr read_csv cols col_character col_guess
 #' @importFrom dplyr mutate bind_rows
 #' @family npi

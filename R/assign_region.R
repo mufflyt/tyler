@@ -3,7 +3,7 @@
 #' @name mysterycall_assign_region
 NULL
 
-# ── Internal lookup tables (built from regions.R and add_ent_demographics.R) ──
+# -- Internal lookup tables (built from regions.R and add_ent_demographics.R) --
 
 .mc_acog_map <- c(
   "Connecticut" = "District I",   "Maine" = "District I",
@@ -38,39 +38,39 @@ NULL
 )
 
 .mc_aao_hns_map <- c(
-  # District 1 — New England
+  # District 1  --  New England
   "Connecticut" = "District 1", "Maine" = "District 1",
   "Massachusetts" = "District 1", "New Hampshire" = "District 1",
   "Rhode Island" = "District 1", "Vermont" = "District 1",
-  # District 2 — Middle Atlantic
+  # District 2  --  Middle Atlantic
   "New Jersey" = "District 2", "New York" = "District 2",
   "Pennsylvania" = "District 2",
-  # District 3 — Mid-Atlantic/Southeast
+  # District 3  --  Mid-Atlantic/Southeast
   "Delaware" = "District 3",  "District of Columbia" = "District 3",
   "Maryland" = "District 3",  "North Carolina" = "District 3",
   "Virginia" = "District 3",  "West Virginia" = "District 3",
-  # District 4 — Southeast
+  # District 4  --  Southeast
   "Alabama" = "District 4",   "Florida" = "District 4",
   "Georgia" = "District 4",   "Kentucky" = "District 4",
   "Louisiana" = "District 4", "Mississippi" = "District 4",
   "South Carolina" = "District 4", "Tennessee" = "District 4",
   "Puerto Rico" = "District 4", "U.S. Virgin Islands" = "District 4",
-  # District 5 — Midwest
+  # District 5  --  Midwest
   "Illinois" = "District 5",  "Indiana" = "District 5",
   "Iowa" = "District 5",      "Michigan" = "District 5",
   "Minnesota" = "District 5", "Ohio" = "District 5",
   "Wisconsin" = "District 5",
-  # District 6 — Central
+  # District 6  --  Central
   "Arkansas" = "District 6",  "Kansas" = "District 6",
   "Missouri" = "District 6",  "Nebraska" = "District 6",
   "North Dakota" = "District 6", "Oklahoma" = "District 6",
   "South Dakota" = "District 6", "Texas" = "District 6",
-  # District 7 — Mountain/Southwest
+  # District 7  --  Mountain/Southwest
   "Arizona" = "District 7",   "Colorado" = "District 7",
   "Montana" = "District 7",   "New Mexico" = "District 7",
   "Nevada" = "District 7",    "Utah" = "District 7",
   "Wyoming" = "District 7",
-  # District 8 — Pacific
+  # District 8  --  Pacific
   "Alaska" = "District 8",    "California" = "District 8",
   "Hawaii" = "District 8",    "Idaho" = "District 8",
   "Oregon" = "District 8",    "Washington" = "District 8",
@@ -78,40 +78,40 @@ NULL
 )
 
 .mc_census_map <- c(
-  # Northeast — New England
+  # Northeast  --  New England
   "Connecticut" = "Northeast", "Maine" = "Northeast",
   "Massachusetts" = "Northeast", "New Hampshire" = "Northeast",
   "Rhode Island" = "Northeast", "Vermont" = "Northeast",
-  # Northeast — Middle Atlantic
+  # Northeast  --  Middle Atlantic
   "New Jersey" = "Northeast", "New York" = "Northeast",
   "Pennsylvania" = "Northeast",
-  # Midwest — East North Central
+  # Midwest  --  East North Central
   "Illinois" = "Midwest", "Indiana" = "Midwest",
   "Michigan" = "Midwest", "Ohio" = "Midwest",
   "Wisconsin" = "Midwest",
-  # Midwest — West North Central
+  # Midwest  --  West North Central
   "Iowa" = "Midwest",     "Kansas" = "Midwest",
   "Minnesota" = "Midwest","Missouri" = "Midwest",
   "Nebraska" = "Midwest", "North Dakota" = "Midwest",
   "South Dakota" = "Midwest",
-  # South — South Atlantic
+  # South  --  South Atlantic
   "Delaware" = "South",  "District of Columbia" = "South",
   "Florida" = "South",   "Georgia" = "South",
   "Maryland" = "South",  "North Carolina" = "South",
   "South Carolina" = "South", "Virginia" = "South",
   "West Virginia" = "South",
-  # South — East South Central
+  # South  --  East South Central
   "Alabama" = "South",     "Kentucky" = "South",
   "Mississippi" = "South", "Tennessee" = "South",
-  # South — West South Central
+  # South  --  West South Central
   "Arkansas" = "South",  "Louisiana" = "South",
   "Oklahoma" = "South",  "Texas" = "South",
-  # West — Mountain
+  # West  --  Mountain
   "Arizona" = "West",    "Colorado" = "West",
   "Idaho" = "West",      "Montana" = "West",
   "Nevada" = "West",     "New Mexico" = "West",
   "Utah" = "West",       "Wyoming" = "West",
-  # West — Pacific
+  # West  --  Pacific
   "Alaska" = "West",     "California" = "West",
   "Hawaii" = "West",     "Oregon" = "West",
   "Washington" = "West"
@@ -144,9 +144,9 @@ NULL
 #' and returns the corresponding medical society district or Census region.
 #' Three classification systems are supported:
 #'
-#' * **`"acog"`** — ACOG Districts I–XII (obstetrics/gynecology)
-#' * **`"aao_hns"`** — AAO-HNS Districts 1–8 (otolaryngology)
-#' * **`"census"`** — US Census Bureau regions: Northeast, Midwest, South, West
+#' * **`"acog"`**  --  ACOG Districts I-XII (obstetrics/gynecology)
+#' * **`"aao_hns"`**  --  AAO-HNS Districts 1-8 (otolaryngology)
+#' * **`"census"`**  --  US Census Bureau regions: Northeast, Midwest, South, West
 #'
 #' @param state Character vector of US state names or two-letter abbreviations.
 #'   Mixed formats are accepted (e.g. `c("CO", "Texas", "new york")`).

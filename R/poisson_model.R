@@ -10,7 +10,7 @@
 #' @name mysterycall_poisson_model
 NULL
 
-# ── Internal helper: format a p-value for display ─────────────────────────────
+# -- Internal helper: format a p-value for display -----------------------------
 .fmt_model_pval <- function(p) {
   ifelse(is.na(p), NA_character_,
          ifelse(p < 0.001, "<0.001", sprintf("%.3f", p)))
@@ -65,7 +65,7 @@ NULL
 #' An IRR of 1.40 for `insurance_typeMedicaid` means physicians contacted
 #' with Medicaid insurance had, on average, 40% longer wait times than the
 #' reference insurance group. Compute as `exp(estimate)` with Wald CI
-#' `exp(estimate ± z * se)`.
+#' `exp(estimate +/- z * se)`.
 #'
 #' @section Overdispersion:
 #' Poisson assumes mean = variance. If `overdispersion` is substantially
@@ -105,7 +105,7 @@ mysterycall_poisson_model <- function(data,
                                       offset_col = NULL,
                                       ...) {
 
-  # ── Require lme4 ─────────────────────────────────────────────────────────────
+  # -- Require lme4 -------------------------------------------------------------
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop(
       "Package 'lme4' is required. Install with: install.packages('lme4')",
@@ -113,7 +113,7 @@ mysterycall_poisson_model <- function(data,
     )
   }
 
-  # ── Validate inputs ───────────────────────────────────────────────────────────
+  # -- Validate inputs -----------------------------------------------------------
   validate_dataframe(data, name = "data", allow_zero_rows = FALSE)
   validate_required_columns(data, outcome,          name = "data")
   validate_required_columns(data, predictors,       name = "data")
@@ -143,7 +143,7 @@ mysterycall_poisson_model <- function(data,
     }
   }
 
-  # ── Complete-case filtering ───────────────────────────────────────────────────
+  # -- Complete-case filtering ---------------------------------------------------
   model_cols <- unique(c(outcome, predictors, random_intercept, offset_col))
   n_before   <- nrow(data)
   cc_mask    <- stats::complete.cases(data[, model_cols, drop = FALSE])
@@ -168,7 +168,7 @@ mysterycall_poisson_model <- function(data,
     ))
   }
 
-  # ── Reference levels for factor/character predictors ─────────────────────────
+  # -- Reference levels for factor/character predictors -------------------------
   factor_refs <- Filter(Negate(is.null), lapply(
     setNames(predictors, predictors),
     function(pred) {
@@ -179,7 +179,7 @@ mysterycall_poisson_model <- function(data,
     }
   ))
 
-  # ── Build formula ─────────────────────────────────────────────────────────────
+  # -- Build formula -------------------------------------------------------------
   fixed_part  <- paste(predictors, collapse = " + ")
   random_part <- sprintf("(1 | %s)", random_intercept)
   offset_part <- if (!is.null(offset_col)) {
@@ -194,7 +194,7 @@ mysterycall_poisson_model <- function(data,
 
   message(sprintf("Fitting Poisson GLMER: %s", deparse(model_formula)))
 
-  # ── Fit ───────────────────────────────────────────────────────────────────────
+  # -- Fit -----------------------------------------------------------------------
   warnings_captured <- character(0L)
 
   model <- tryCatch(
@@ -216,7 +216,7 @@ mysterycall_poisson_model <- function(data,
     }
   )
 
-  # ── Convergence / singularity ─────────────────────────────────────────────────
+  # -- Convergence / singularity -------------------------------------------------
   conv_msgs   <- model@optinfo$conv$lme4$messages
   is_singular <- lme4::isSingular(model)
   converged   <- is.null(conv_msgs) && !length(warnings_captured)
@@ -235,7 +235,7 @@ mysterycall_poisson_model <- function(data,
     )
   }
 
-  # ── IRR table ─────────────────────────────────────────────────────────────────
+  # -- IRR table -----------------------------------------------------------------
   z_crit <- stats::qnorm(1 - (1 - conf_level) / 2)
   fe     <- as.data.frame(coef(summary(model)))
 
@@ -251,7 +251,7 @@ mysterycall_poisson_model <- function(data,
     ci_upper    = exp(fe$Estimate + z_crit * fe[["Std. Error"]])
   )
 
-  # ── Random effects and overdispersion ─────────────────────────────────────────
+  # -- Random effects and overdispersion -----------------------------------------
   re_df <- as.data.frame(lme4::VarCorr(model))
 
   pearson_resid  <- residuals(model, type = "pearson")
