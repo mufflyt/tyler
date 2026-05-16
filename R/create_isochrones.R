@@ -13,9 +13,12 @@
 #' @param api_key HERE API key.  Defaults to the `HERE_API_KEY` environment
 #'   variable.  Obtain a free key at <https://developer.here.com/>.
 #'
-#' @return A named list of `sf` polygon objects, one per element of `range`,
-#'   keyed by the range value in seconds.  Returns a list with a single `error`
-#'   character element if the API call fails.
+#' @return A named `list`. On success: one element per value in `range`,
+#'   named by the drive-time threshold in seconds (e.g., `"1800"`), each
+#'   containing an `sf` POLYGON object with the isochrone geometry. On
+#'   API failure: a `list` with a single `error` element (character scalar)
+#'   containing the error message. Detect failures with
+#'   `if (!is.null(result$error)) { ... }`.
 #'
 #' @seealso [mysterycall_clear_isochrone_cache()] to free session memory after
 #'   batch processing; [mysterycall_geocode()] to produce the input coordinates.

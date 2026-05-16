@@ -34,8 +34,11 @@
 #' @param bg Character scalar.  Background colour passed to
 #'   [ggplot2::ggsave()].  Default `"white"`.
 #'
-#' @return A [ggplot2::ggplot()] object (invisibly when `output_path` is
-#'   supplied).
+#' @return A [ggplot2::ggplot()] object. Returned visibly when `output_path`
+#'   is `NULL` so it prints to the active graphics device. Returned
+#'   `invisible()` when `output_path` is supplied (the save is the intended
+#'   side effect); assign the return value to capture the object for further
+#'   modification.
 #'
 #' @section Data format:
 #'   The input list must have at minimum three named elements whose values are

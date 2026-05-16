@@ -1,6 +1,13 @@
 #' Retrieve the standard label dictionary used in `mysterycall`
 #'
-#' @return A named list of canonical labels for common columns.
+#' @return A named `list` with character scalar elements: `npi`
+#'   (`"National Provider Identifier"`), `state` (`"State"`),
+#'   `city` (`"City"`), `call_outcome` (`"Call Outcome"`),
+#'   `quality` (`"Quality Tier"`), `call_time`
+#'   (`"Call Duration (minutes)"`), `hold_time`
+#'   (`"Hold Duration (minutes)"`), and `eta`
+#'   (`"Estimated Completion"`). Use these as axis or column labels in
+#'   tables and plots for display consistency across the package.
 #' @family utilities
 #' @export
 #' @examples

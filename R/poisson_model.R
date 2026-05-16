@@ -41,24 +41,28 @@ NULL
 #'
 #' @return A list of class `mysterycall_poisson_model` containing:
 #' \describe{
-#'   \item{`model`}{The fitted `glmerMod` object.}
-#'   \item{`irr_table`}{Tibble with one row per fixed-effect term:
-#'     `term`, `estimate` (log scale), `se`, `z_value`, `p_value`,
-#'     `p_value_fmt` (character), `irr`, `ci_lower`, `ci_upper`.}
-#'   \item{`random_effects`}{Data frame from [lme4::VarCorr()] describing
-#'     the random-intercept variance and standard deviation.}
-#'   \item{`factor_refs`}{Named list of reference levels for character/factor
-#'     predictors.}
-#'   \item{`formula`}{The formula passed to `glmer`.}
-#'   \item{`n`}{Number of complete-case rows used for fitting.}
-#'   \item{`n_dropped`}{Rows excluded due to missing values.}
-#'   \item{`n_clusters`}{Number of unique values of `random_intercept`.}
-#'   \item{`overdispersion`}{Pearson chi-square / residual df. Values
-#'     substantially above 1 suggest overdispersion; consider a negative
-#'     binomial model.}
-#'   \item{`convergence`}{List with `converged` (logical), `singular`
-#'     (logical), and `messages` (character).}
-#'   \item{`aic`, `bic`}{Model information criteria.}
+#'   \item{`model`}{`glmerMod`. The fitted multilevel Poisson model.}
+#'   \item{`irr_table`}{`tibble`. One row per fixed-effect term with
+#'     columns: `term` (character), `estimate` (numeric, log scale),
+#'     `se` (numeric), `z_value` (numeric), `p_value` (numeric),
+#'     `p_value_fmt` (character, formatted), `irr` (numeric, incidence
+#'     rate ratio), `ci_lower` (numeric), `ci_upper` (numeric).}
+#'   \item{`random_effects`}{`data.frame` from [lme4::VarCorr()].
+#'     Describes random-intercept variance and standard deviation.}
+#'   \item{`factor_refs`}{`list` (named). Reference levels for each
+#'     character/factor predictor.}
+#'   \item{`formula`}{`formula`. The formula passed to [lme4::glmer()].}
+#'   \item{`n`}{`integer`. Number of complete-case rows used for fitting.}
+#'   \item{`n_dropped`}{`integer`. Rows excluded due to missing values.}
+#'   \item{`n_clusters`}{`integer`. Number of unique values of
+#'     `random_intercept`.}
+#'   \item{`overdispersion`}{`numeric`. Pearson chi-square / residual df.
+#'     Values substantially above 1 (common threshold: 2) suggest
+#'     overdispersion; consider a negative binomial model.}
+#'   \item{`convergence`}{`list`. Elements: `converged` (logical),
+#'     `singular` (logical), `messages` (character vector).}
+#'   \item{`aic`}{`numeric`. Akaike Information Criterion.}
+#'   \item{`bic`}{`numeric`. Bayesian Information Criterion.}
 #' }
 #'
 #' @section Interpreting IRRs:
@@ -302,10 +306,11 @@ mysterycall_poisson_model <- function(data,
 #' for each factor, and a fixed-effects table with incidence rate ratios (IRR),
 #' Wald 95% CIs, and p-values.
 #'
-#' @param x A \code{mysterycall_poisson_model} object.
-#' @param digits Integer decimal places for coefficient display. Default \code{3}.
+#' @param x A `mysterycall_poisson_model` object.
+#' @param digits Integer. Decimal places for coefficient display. Default `3`.
 #' @param ... Ignored.
-#' @return Invisibly returns \code{x}.
+#' @return `invisible(x)` (the original model list, returned silently so
+#'   the print method can be used in pipes without printing twice).
 #' @seealso [mysterycall_poisson_model()] which produces this object;
 #'   [mysterycall_irr_plot()] to visualise the same IRR estimates.
 #' @family outcomes

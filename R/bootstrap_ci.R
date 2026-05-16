@@ -1,33 +1,35 @@
 #' Bootstrap Confidence Intervals for a Summary Statistic
 #'
 #' For each level of an optional grouping column (or for the whole dataset),
-#' draws \code{n_boot} bootstrap samples with replacement, computes a
+#' draws `n_boot` bootstrap samples with replacement, computes a
 #' summary statistic, and returns percentile confidence intervals.
 #'
 #' @param data A data.frame.
 #' @param outcome_col Character scalar. Name of the outcome column.
-#'   When \code{stat = "proportion"}, values must be 0/1.
+#'   When `stat = "proportion"`, values must be 0/1.
 #' @param group_col Character scalar or NULL. Name of a grouping column.
 #'   If NULL, a single "Overall" row is returned.
 #' @param n_boot Positive integer (>= 100). Number of bootstrap replicates.
 #'   Default 2000L.
-#' @param seed Integer or NULL. If not NULL, passed to \code{set.seed()}
+#' @param seed Integer or NULL. If not NULL, passed to `set.seed()`
 #'   before bootstrapping to make results reproducible.
-#' @param alpha Numeric in (0, 1). CI uses the \code{alpha/2} and
-#'   \code{1 - alpha/2} percentiles. Default 0.05.
+#' @param alpha Numeric in (0, 1). CI uses the `alpha/2` and
+#'   `1 - alpha/2` percentiles. Default 0.05.
 #' @param stat Character. Statistic to bootstrap. One of
-#'   \code{"proportion"} (mean of a 0/1 variable), \code{"mean"}, or
-#'   \code{"median"}.
+#'   `"proportion"` (mean of a 0/1 variable), `"mean"`, or `"median"`.
 #'
-#' @return A data.frame with columns:
+#' @return A data frame with one row per group (or `"Overall"` when
+#'   `group_col` is `NULL`) and columns:
 #'   \describe{
-#'     \item{group}{Group label, or \code{"Overall"} when \code{group_col}
-#'       is NULL.}
-#'     \item{n}{Number of non-NA observations used.}
-#'     \item{estimate}{Observed statistic value.}
-#'     \item{lower_ci}{Lower percentile CI bound.}
-#'     \item{upper_ci}{Upper percentile CI bound.}
-#'     \item{n_boot}{Number of bootstrap replicates used.}
+#'     \item{`group`}{Character. Group label, or `"Overall"` when
+#'       `group_col` is `NULL`.}
+#'     \item{`n`}{Integer. Number of non-NA observations used.}
+#'     \item{`estimate`}{Numeric. Observed statistic value (proportion,
+#'       mean, or median depending on `stat`).}
+#'     \item{`lower_ci`}{Numeric. Lower percentile CI bound at `alpha/2`.}
+#'     \item{`upper_ci`}{Numeric. Upper percentile CI bound at
+#'       `1 - alpha/2`.}
+#'     \item{`n_boot`}{Integer. Number of bootstrap replicates used.}
 #'   }
 #'
 #' @examples

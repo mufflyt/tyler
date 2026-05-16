@@ -37,7 +37,13 @@ NULL
 #' @param required_columns Character vector of column names that must be present
 #'   in `input_data`. Defaults to `c("first", "last")`.
 #'
-#' @return Invisible list with check results, or stops with error if checks fail
+#' @return `invisible()` list with elements: `passed` (logical), `checks`
+#'   (list of individual check results), `errors` (character vector of
+#'   blocking issues), `warnings` (character vector of non-blocking issues),
+#'   `data` (the validated input data frame), `n_rows` (integer), and
+#'   `estimates` (list from [mysterycall_estimate_resources()], or `NULL`
+#'   when `estimate_resources = FALSE`). Stops with an informative error if
+#'   any required check fails.
 #'
 #' @section Data quality thresholds:
 #'   Input data is scored from 0-1 by [mysterycall_assess_data_quality()].
@@ -581,9 +587,17 @@ mysterycall_assess_data_quality <- function(data, required_columns = c("first", 
 #'
 #' @param n_rows Integer number of input rows.
 #'
-#' @return A named list with elements \code{total_time_hours} (estimated wall
-#'   time), \code{peak_memory_gb} (estimated peak RAM in GB), and
-#'   \code{api_calls} (estimated number of external API requests).
+#' @return A named `list` with elements:
+#' \describe{
+#'   \item{`runtime_seconds`}{`numeric`. Total estimated wall time in seconds.}
+#'   \item{`runtime_hours`}{`numeric`. Total estimated wall time in hours.}
+#'   \item{`runtime_str`}{`character`. Human-readable runtime string
+#'     (e.g., `"45 minutes"` or `"2h 15m"`).}
+#'   \item{`memory_mb`}{`numeric`. Estimated peak memory in megabytes.}
+#'   \item{`memory_gb`}{`numeric`. Estimated peak memory in gigabytes.}
+#'   \item{`memory_str`}{`character`. Human-readable memory string
+#'     (e.g., `"1.5 GB"` or `"700 MB"`).}
+#' }
 #'
 #' @section Estimation method:
 #'   Runtime is estimated as `n_rows x 4.5` seconds: 1.5 s/row for NPI

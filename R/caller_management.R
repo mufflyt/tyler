@@ -31,7 +31,9 @@ NULL
 #'
 #' @seealso [mysterycall_caller_reliability()] for inter-rater reliability
 #'   metrics; [mysterycall_assign_scenarios()] to pair generalists with
-#'   subspecialists once locations are validated.
+#'   subspecialists once locations are validated;
+#'   [mysterycall_validate_npi()] for row-level NPI validation before
+#'   location assignment.
 #' @family data management
 #' @export
 #'
