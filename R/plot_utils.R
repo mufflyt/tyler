@@ -22,9 +22,12 @@ NULL
 #' @param bg Character scalar. Background colour. Default `"white"`.
 #' @param ... Additional arguments forwarded to [ggplot2::ggsave()].
 #'
-#' @return The output `path`, invisibly.
+#' @return The output `path` (character scalar), invisibly. Assign the return
+#'   value to capture the path for downstream use; printing is suppressed.
 #'
-#' @family outcomes
+#' @seealso [mysterycall_plot_stacked_bar()], [mysterycall_plot_scatter()],
+#'   [mysterycall_plot_density()] for functions that produce plots to pass here.
+#' @family manuscript
 #' @export
 #'
 #' @examplesIf interactive()

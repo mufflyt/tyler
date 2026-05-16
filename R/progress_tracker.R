@@ -16,9 +16,15 @@ NULL
 #' @param quiet Logical flag controlling console output. When `TRUE`, suppresses
 #'   status messages.
 #'
-#' @return An object of class `mysterycall_progress_tracker`.
+#' @return An S3 object of class `"mysterycall_progress_tracker"` wrapping an
+#'   internal environment. The environment holds a `records` tibble with columns
+#'   `step`, `status` (factor: `"pending"`, `"in_progress"`, `"completed"`,
+#'   `"failed"`), `started_at`, `finished_at` (POSIXct), `quality`
+#'   (character), and `note` (character). Interact with it via
+#'   [mysterycall_progress_start()], [mysterycall_progress_finish()], and
+#'   [mysterycall_progress_summary()].
 #' @importFrom tibble tibble
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' tracker <- mysterycall_progress_tracker(c("Geocode", "Validate", "Export"))
@@ -107,7 +113,7 @@ mysterycall_progress_tracker <- function(steps, update_every = 300, quiet = getO
 #' @param note Optional note stored alongside the step.
 #'
 #' @return The tracker object, invisibly.
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' tr <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
@@ -143,7 +149,7 @@ mysterycall_progress_start <- function(tracker, step, note = NULL) {
 #' @param note Optional note to store for the step.
 #'
 #' @return The tracker object, invisibly.
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
@@ -171,7 +177,7 @@ mysterycall_progress_finish <- function(tracker, step, score = NULL, quality = N
 #' @param reason Optional string describing why the step failed.
 #'
 #' @return The tracker object, invisibly.
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
@@ -197,7 +203,7 @@ mysterycall_tracker_fail <- function(tracker, step, reason = NULL) {
 #'   even if the configured interval has not elapsed.
 #'
 #' @return The tracker object, invisibly.
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' tr <- mysterycall_progress_tracker(c("Geocode"), update_every = 1e9)
@@ -213,7 +219,7 @@ mysterycall_tracker_update <- function(tracker, force = FALSE) {
 #'
 #' @return Tibble with per-step status, timestamps, and quality tiers.
 #' @importFrom tibble as_tibble
-#' @family logging utilities
+#' @family logging
 #' @examples
 #' tr <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
 #' mysterycall_progress_start(tr, "Geocode")

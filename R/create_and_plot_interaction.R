@@ -11,11 +11,15 @@
 #' @param output_path A character string specifying the directory where the interaction plot will be saved.
 #' @param resolution Integer DPI used when saving the plot. Defaults to `100`.
 #'
-#' @return A list with:
+#' @return A named list with two elements:
 #' \describe{
-#'   \item{`model`}{The fitted `lme4::glmer()` model object.}
-#'   \item{`effects_plot_data`}{Summarized predicted values used in the plot.}
+#'   \item{`model`}{The fitted `lme4::glmer()` model object (class `glmerMod`).}
+#'   \item{`effects_plot_data`}{A data frame with one row per
+#'     `interaction_variable` x `variable_of_interest` combination and columns
+#'     named after those two arguments plus `mean_pred` (numeric mean predicted
+#'     response on the link scale).}
 #' }
+#' A PNG file is also written to `output_path` as a side effect.
 #'
 #' @details
 #' The function:

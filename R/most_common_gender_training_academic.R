@@ -4,7 +4,11 @@
 #'
 #' @param data A data frame containing the columns `gender`, `specialty`, `Provider.Credential.Text`, and `academic_affiliation`.
 #'
-#' @return A character string summarizing the most common gender, specialty, training, and academic affiliation along with their respective proportions.
+#' @return A length-1 character string naming the most common value and its
+#'   proportion (rounded to 1 decimal place) for each of `gender`, `specialty`,
+#'   `Provider.Credential.Text`, and `academic_affiliation`. When a column is
+#'   entirely `NA`, the proportion is reported as `NaN`. In case of a tie,
+#'   the level that sorts first alphabetically is returned.
 #'
 #' @details The function filters out missing values in each column before determining the most common value. It then calculates the proportion of this most common value relative to the total non-missing values in that column.
 #'
@@ -39,9 +43,12 @@
 #' result <- mysterycall_most_common_gender(df_large)
 #' print(result)
 #'
+#' @seealso [mysterycall_table_percentages()] for tabulating any single
+#'   categorical variable; [mysterycall_prepare_table1_vars()] for upstream
+#'   gender standardisation.
 #' @importFrom dplyr filter count arrange desc slice
 #' @importFrom rlang sym
-#' @family gender
+#' @family provider characteristics
 #' @export
 mysterycall_most_common_gender <- function(data) {
   required_cols <- c("gender", "specialty", "Provider.Credential.Text", "academic_affiliation")

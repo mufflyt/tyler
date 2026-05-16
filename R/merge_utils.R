@@ -21,9 +21,15 @@ NULL
 #' @param join_type One of `"left"` (default), `"inner"`, `"full"`, or
 #'   `"right"`.
 #'
-#' @return A data frame with key columns first, followed by prefixed columns
-#'   from `x`, followed by prefixed columns from `y`.
+#' @return A data frame in this column order: (1) join key columns (names
+#'   unchanged), (2) non-key columns of `x` with `prefix_x` prepended (e.g.
+#'   `"specialty"` becomes `"npi_specialty"`), (3) non-key columns of `y` with
+#'   `prefix_y` prepended. Row order follows base R `merge()` (sorted by key).
+#'   For `join_type = "left"`, unmatched `y` columns are `NA`.
 #'
+#' @seealso [mysterycall_safe_left_join()] for joins with duplicate-key
+#'   warnings; [mysterycall_reconcile_specialty()] for post-join specialty
+#'   harmonisation.
 #' @family data management
 #' @export
 #'

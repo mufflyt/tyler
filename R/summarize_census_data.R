@@ -20,8 +20,13 @@ NULL
 #'   that should be treated as reproductive-age (defaults to
 #'   `B01001_030E:B01001_038E`, representing 15 to 44 years).
 #'
-#' @return A tibble containing one row per grouping with population totals,
-#'   female share, male share, and the share of females of reproductive age.
+#' @return A tibble with one row per unique combination of `group_vars` and
+#'   columns: `block_group_count` (integer), `total_population`,
+#'   `female_population`, `male_population` (numerics), `reproductive_age_female`
+#'   (numeric; sum of `reproductive_age_vars`), `female_share`, `male_share`,
+#'   `reproductive_age_female_share` (proportions 0-1; `NA` when
+#'   `total_population` is zero or all relevant estimates are missing). Returns
+#'   an empty tibble when `census_df` has zero rows.
 #' @export
 #' @family census
 #' @examples

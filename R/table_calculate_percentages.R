@@ -27,8 +27,9 @@
 #' mysterycall_table_percentages(df_na, "category")
 #'
 #' @importFrom rlang sym
-#' @family table
-#' @seealso [mysterycall_table_proportion()]
+#' @family table helpers
+#' @seealso [mysterycall_table_proportion()], [mysterycall_most_common_gender()],
+#'   [mysterycall_min_table()], [mysterycall_max_table()]
 #' @export
 mysterycall_table_percentages <- function(data_frame, variable) {
   variable <- as.character(variable)  # Ensure the variable name is a string

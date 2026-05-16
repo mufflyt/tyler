@@ -43,8 +43,12 @@ NULL
 #'   descending acceptance rate so the highest-acceptance group appears at the
 #'   top of the flipped chart.
 #'
-#' @return A `ggplot` object.
+#' @return A `ggplot` object of class `c("gg", "ggplot")`. Pass to
+#'   [mysterycall_save_plot()] or [ggplot2::ggsave()] to write to disk.
 #'
+#' @seealso [mysterycall_save_plot()] to write the returned plot to disk;
+#'   [mysterycall_plot_scatter()] and [mysterycall_plot_density()] for
+#'   continuous-outcome visualizations.
 #' @family outcomes
 #' @export
 #'

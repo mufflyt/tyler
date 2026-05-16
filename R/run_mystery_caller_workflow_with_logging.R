@@ -11,7 +11,10 @@
 #' @param skip_preflight Logical. When `TRUE`, skip the preflight validation
 #'   step. Defaults to `FALSE`.
 #'
-#' @return The same list returned by [mysterycall_run_workflow()].
+#' @return Invisibly, the named list returned by [mysterycall_run_workflow()].
+#'   Key elements include `cleaned_phase1` and `cleaned_phase2` (data frames),
+#'   `excluded_records` (data frame), and `workflow_summary` (stage-level
+#'   counts). See [mysterycall_run_workflow()] for the complete structure.
 #'
 #' @examplesIf interactive()
 #' results <- mysterycall_run_workflow_logged(
