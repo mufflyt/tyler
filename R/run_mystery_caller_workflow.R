@@ -87,6 +87,12 @@
 #' - [mysterycall_not_contacted_states()]
 #' - [mysterycall_save_quality_table()]
 #'
+#' @seealso Stage functions called by this workflow:
+#'   [mysterycall_search_taxonomy()], [mysterycall_search_and_process_npi()],
+#'   [mysterycall_validate_npi()], [mysterycall_clean_phase1()],
+#'   [mysterycall_clean_phase2()].
+#'   Run [mysterycall_preflight_check()] before starting to catch missing
+#'   API keys and malformed inputs early.
 #' @family workflow
 #' @examplesIf interactive()
 #' results <- mysterycall_run_workflow(

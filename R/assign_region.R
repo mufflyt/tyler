@@ -157,6 +157,9 @@ NULL
 #'
 #' @return Character vector the same length as `state`.
 #'
+#' @seealso [mysterycall_classify_practice_setting()],
+#'   [mysterycall_classify_medical_school()], [mysterycall_classify_ruca()]
+#'   for other provider demographic classifications.
 #' @family provider characteristics
 #' @export
 #'

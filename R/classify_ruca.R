@@ -17,6 +17,11 @@ NULL
 #' | 4-6  | Suburban |
 #' | 7-10 | Rural    |
 #'
+#' The 2010-vintage RUCA codes are the standard crosswalk applied through 2023
+#' in CMS and HRSA analyses.  Although newer ACS-based updates exist, the
+#' 2010 vintage remains the most widely cited in peer-reviewed healthcare
+#' access research and is the version bundled in this package.
+#'
 #' ZIP-to-RUCA crosswalk files are available from USDA ERS
 #' (<https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes>).
 #' Join your data to the crosswalk first, then pass the resulting `ruca_code`
@@ -36,8 +41,13 @@ NULL
 #' @param as_factor Logical. When `TRUE` the result is returned as an ordered
 #'   factor with levels `c(labels, na_label)`. Default `FALSE`.
 #'
-#' @return Character vector (or ordered factor) the same length as `ruca_code`.
+#' @return Character vector the same length as `ruca_code` with values from
+#'   `labels` (`"Urban"`, `"Suburban"`, `"Rural"` by default) or `na_label`
+#'   (`"Unknown"` by default) for `NA` inputs.  When `as_factor = TRUE`,
+#'   returns an ordered factor with levels `c(labels, na_label)`.
 #'
+#' @seealso [mysterycall_assign_region()], [mysterycall_classify_practice_setting()],
+#'   [mysterycall_classify_medical_school()] for related provider characterizations.
 #' @family provider characteristics
 #' @export
 #'

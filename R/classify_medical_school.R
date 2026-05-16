@@ -62,6 +62,8 @@ NULL
 #' @return Character vector the same length as `school_name` with values
 #'   `"US_MD"`, `"US_DO"`, `"CAN_MD"`, `"IMG"`, or `na_label`.
 #'
+#' @seealso [mysterycall_classify_practice_setting()], [mysterycall_assign_region()],
+#'   [mysterycall_classify_ruca()] for related provider characterization functions.
 #' @family provider characteristics
 #' @export
 #'

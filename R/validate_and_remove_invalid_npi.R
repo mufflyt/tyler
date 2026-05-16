@@ -5,7 +5,10 @@
 #'
 #' @param input_data Either a data frame containing NPI numbers or a path to a CSV file.
 #'
-#' @return A data frame containing valid NPI numbers, with invalid or missing NPI rows removed.
+#' @return A data frame with the same columns as `input_data`, plus a logical
+#'   column `npi_is_valid`.  Only rows with non-empty, 10-digit, Luhn-valid NPI
+#'   values are returned; the `npi` column is always character type.  Returns a
+#'   zero-row data frame (preserving column names) when no rows pass validation.
 #'
 #' @section Contract:
 #' **Inputs:**
@@ -31,6 +34,10 @@
 #' - [mysterycall_run_workflow()]
 #' - [mysterycall_search_and_process_npi()]
 #'
+#' @seealso [mysterycall_luhn_check()] for the underlying Luhn checksum;
+#'   [mysterycall_get_clinician_data()] to retrieve clinician details for
+#'   validated NPIs; [mysterycall_search_and_process_npi()] for upstream NPI
+#'   discovery.
 #' @importFrom npi npi_is_valid
 #' @importFrom readr read_csv cols col_character col_guess
 #' @importFrom dplyr filter mutate

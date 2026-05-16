@@ -61,6 +61,10 @@ NULL
 #' @return Character vector the same length as `facility_name` with values
 #'   `"Academic"`, `"Government"`, `"Private Practice"`, or `na_label`.
 #'
+#' @seealso [mysterycall_assign_region()], [mysterycall_classify_medical_school()],
+#'   [mysterycall_classify_ruca()],
+#'   [mysterycall_academic_patterns()], [mysterycall_government_patterns()]
+#'   for related provider characterization helpers.
 #' @family provider characteristics
 #' @export
 #'

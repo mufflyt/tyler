@@ -1,10 +1,14 @@
 #' Search and Process NPI Numbers
 #'
-#' This function takes an input data frame containing first and last names, performs NPI search and processing,
-#' and filters results based on specified taxonomies. It supports customization for enumeration type, search limit,
-#' and filtering credentials.
+#' Searches the NPI registry by provider name, filters by taxonomy and
+#' credentials, and accumulates results across batches.  Supports resume
+#' capability for interrupted runs (via `resume = TRUE`), structured logging to
+#' CSV or plain-text files, and optional progress callbacks for long-running
+#' workflows.  Failed searches are automatically retried (up to 3 attempts)
+#' with exponential backoff.
 #'
-#' @param data A data frame with columns 'first' and 'last' containing the names to search.
+#' @param data A data frame with columns `first` and `last` containing the
+#'   provider names to search.
 #' @param enumeration_type The enumeration type for NPI search (e.g., "ind", "org", "all"). Default is "ind".
 #' @param limit The maximum number of search results to request for each name pair. Default is 5.
 #' @param country_code Filter for only the "US".
@@ -33,8 +37,18 @@
 #' @param progress_log_format Either "text" (default) to append human readable
 #'   lines to `progress_log` or "csv" to write structured entries with columns
 #'   `timestamp`, `event`, `search_term`, `rows`, and `detail`.
-#' @return A data frame containing the processed NPI search results.
+#' @return A data frame with columns `npi`, `first_name`, `last_name`,
+#'   `middle_name`, `credential`, `taxonomies_desc`, `search_term`, and
+#'   `resume_row_index`.  Rows are deduplicated by NPI and sorted by
+#'   `last_name`, `first_name`.  When `resume = TRUE` and prior results
+#'   exist at `accumulate_path`, previously processed names are excluded and
+#'   the new results are appended to the accumulated file.  Returns an empty
+#'   data frame (with the above columns) when no matches pass the credential
+#'   and taxonomy filters.
 #'
+#' @seealso [mysterycall_validate_npi()] for downstream NPI validation;
+#'   [mysterycall_run_workflow()] which orchestrates this function;
+#'   [mysterycall_search_taxonomy()] for taxonomy-based registry searches.
 #' @importFrom dplyr filter mutate select rename distinct arrange bind_rows tibble
 #' @importFrom stringr str_detect
 #' @importFrom npi npi_search npi_flatten
