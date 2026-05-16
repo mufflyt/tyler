@@ -57,7 +57,7 @@ Wraps \code{\link[dplyr:mutate-joins]{dplyr::left_join()}} with:
 coercion from RDS or Parquet round-trips).
 \item Right-side uniqueness assertion (blocks accidental many-to-many
 fan-outs).
-\item Coverage threshold enforcement — stops if fewer than
+\item Coverage threshold enforcement -- stops if fewer than
 \code{min_coverage} of left rows find a match.
 \item Optional CSV audit report written to \code{JOIN_REPORT_DIR} env var or
 \code{getOption("mysterycall.join_report_dir", tempdir())}.

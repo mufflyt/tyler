@@ -50,6 +50,7 @@ Suggests:
     effects,
     emmeans,
     ggmap (>= 3.0.0),
+    ggforce,
     gtsummary,
     ggspatial,
     grid,

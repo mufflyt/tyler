@@ -3,9 +3,9 @@
 #' @name physician_name_parsing
 NULL
 
-# ── Internal helpers ──────────────────────────────────────────────────────────
+# -- Internal helpers ----------------------------------------------------------
 
-# Converts "Linda Smith D.O." → "Linda Smith, D.O."
+# Converts "Linda Smith D.O." -> "Linda Smith, D.O."
 # Leaves "Linda Do" (Vietnamese surname, title-case) untouched.
 .handle_do_credential <- function(names_raw) {
   names_raw |>
@@ -13,7 +13,7 @@ NULL
     stringr::str_replace_all("\\b([A-Z][a-z]+\\s+[A-Z][a-z]+)\\s+DO\\s*$", "\\1, DO")
 }
 
-# Converts "Smith, John, Jr." → "John Smith, Jr." so humaniformat handles it.
+# Converts "Smith, John, Jr." -> "John Smith, Jr." so humaniformat handles it.
 .handle_three_part_comma <- function(x) {
   pat <- "^([^,]+),\\s*([^,]+),\\s*(Jr\\.?|Sr\\.?|II|III|IV|V|2nd|3rd|4th)\\s*$"
   is_three <- stringr::str_detect(x, pat)
@@ -21,7 +21,7 @@ NULL
   x
 }
 
-# ── Core implementation (uncached) ───────────────────────────────────────────
+# -- Core implementation (uncached) -------------------------------------------
 
 .parse_physician_name_impl <- function(physician_name, remove_titles) {
 
@@ -72,7 +72,7 @@ NULL
     }
   }
 
-  # Empty string → NA.
+  # Empty string -> NA.
   result <- dplyr::mutate(result,
     first_name  = dplyr::if_else(first_name  == "", NA_character_, first_name),
     middle_name = dplyr::if_else(middle_name == "", NA_character_, middle_name),
@@ -96,12 +96,12 @@ NULL
   )
 }
 
-# ── Public API ───────────────────────────────────────────────────────────────
+# -- Public API ---------------------------------------------------------------
 
 #' Parse physician names into structured components
 #'
-#' Converts free-text physician name strings — from board certification data,
-#' NPPES, or CMS sources — into a tidy data frame of first, middle, last,
+#' Converts free-text physician name strings -- from board certification data,
+#' NPPES, or CMS sources -- into a tidy data frame of first, middle, last,
 #' suffix, and title fields with confidence scoring and warning flags.
 #' Accuracy: 96.3 % on the 27-case benchmark corpus in
 #' \code{inst/extdata/name_benchmark_corpus.csv}.
@@ -110,13 +110,13 @@ NULL
 #' \describe{
 #'   \item{Vietnamese "Do" surname}{Distinguishes "Do" (surname, title-case)
 #'     from "DO" (Doctor of Osteopathic Medicine, all-caps after a multi-word
-#'     name). `"Linda Do"` → `last_name = "Do"`;
-#'     `"Robert Smith DO"` → `last_name = "Smith"`, `suffix = "DO"`.}
-#'   \item{Three-part comma format}{`"Smith, John, Jr."` →
+#'     name). `"Linda Do"` -> `last_name = "Do"`;
+#'     `"Robert Smith DO"` -> `last_name = "Smith"`, `suffix = "DO"`.}
+#'   \item{Three-part comma format}{`"Smith, John, Jr."` ->
 #'     `last = "Smith"`, `first = "John"`, `suffix = "Jr."`.}
-#'   \item{Hyphenated / compound last names}{`"Maria de la Cruz-Garcia"` →
+#'   \item{Hyphenated / compound last names}{`"Maria de la Cruz-Garcia"` ->
 #'     `last = "de la Cruz-Garcia"`.}
-#'   \item{Multiple credentials}{`"John Smith, MD, FACOG"` →
+#'   \item{Multiple credentials}{`"John Smith, MD, FACOG"` ->
 #'     `suffix = "MD, FACOG"`.}
 #'   \item{NA / empty input}{Returns a row with all `NA` fields and
 #'     `parse_confidence = "low"`; never errors.}
@@ -200,15 +200,15 @@ mysterycall_parse_physician_name <- function(physician_name,
 #' @return The input tibble with additional columns:
 #' \describe{
 #'   \item{`has_first`, `has_last`, `has_middle`}{Logical presence flags.}
-#'   \item{`valid_first`, `valid_last`}{Logical — pass the `require_*` gate.}
+#'   \item{`valid_first`, `valid_last`}{Logical -- pass the `require_*` gate.}
 #'   \item{`is_valid`}{`valid_first & valid_last`.}
-#'   \item{`last_is_credential`}{Logical — last name looks like `"MD"`,
+#'   \item{`last_is_credential`}{Logical -- last name looks like `"MD"`,
 #'     `"PHD"`, etc.}
-#'   \item{`last_is_suffix`}{Logical — last name looks like `"Jr"`, `"III"`,
+#'   \item{`last_is_suffix`}{Logical -- last name looks like `"Jr"`, `"III"`,
 #'     etc.}
-#'   \item{`last_too_short`}{Logical — last name is 1–2 chars (excluding
+#'   \item{`last_too_short`}{Logical -- last name is 1-2 chars (excluding
 #'     common short surnames such as `"Do"`, `"Li"`, `"Ng"`, `"Wu"`).}
-#'   \item{`middle_has_particle`}{Logical — middle name contains a name
+#'   \item{`middle_has_particle`}{Logical -- middle name contains a name
 #'     particle (`"de"`, `"van"`, `"von"`, etc.) that may belong in the last
 #'     name.}
 #'   \item{`quality_issue`}{First detected quality issue code, or `NA`.}
@@ -282,7 +282,7 @@ mysterycall_validate_parsed_names <- function(parsed_names,
 #' @param middle_name Character vector. Default `NA` (omitted).
 #' @param suffix Character vector of professional or generational suffixes
 #'   (`"MD"`, `"Jr."`). Default `NA` (omitted).
-#' @param format Character scalar — output layout:
+#' @param format Character scalar -- output layout:
 #'   \describe{
 #'     \item{`"last_first"`}{(default) `"Smith, John A., MD"`}
 #'     \item{`"first_last"`}{`"John A. Smith, MD"`}
@@ -385,7 +385,7 @@ mysterycall_test_name_parser <- function() {
   results   <- mysterycall_parse_physician_name(test_cases)
   validated <- mysterycall_validate_parsed_names(results)
 
-  cat("\n=== mysterycall name parser — edge-case suite ===\n\n")
+  cat("\n=== mysterycall name parser -- edge-case suite ===\n\n")
   for (i in seq_len(nrow(results))) {
     cat(sprintf("[%d] '%s'\n    first='%s'  last='%s'  middle='%s'  suffix='%s'\n",
       i, test_cases[[i]],

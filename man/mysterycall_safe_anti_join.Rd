@@ -28,7 +28,7 @@ Required; use named vector for cross-column mapping
 the audit report.}
 
 \item{max_matched}{Numeric in \verb{[0, 1]}. Maximum fraction of left rows that
-may be matched (and thus excluded). Default \code{NULL} → reads
+may be matched (and thus excluded). Default \code{NULL} -> reads
 \code{JOIN_MAX_MATCHED} env var or \code{1.0}.}
 
 \item{write_report}{Logical. Write a one-row CSV audit record. Default

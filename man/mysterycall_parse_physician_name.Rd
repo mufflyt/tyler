@@ -30,23 +30,24 @@ or \code{NA}.}
 }
 }
 \description{
-Converts free-text physician name strings — from board certification data,
-NPPES, or CMS sources — into a tidy data frame of first, middle, last,
+Converts free-text physician name strings -- from board certification data,
+NPPES, or CMS sources -- into a tidy data frame of first, middle, last,
 suffix, and title fields with confidence scoring and warning flags.
-Accuracy: 96.7 \% on physician name corpora.
+Accuracy: 96.3 \% on the 27-case benchmark corpus in
+\code{inst/extdata/name_benchmark_corpus.csv}.
 }
 \section{Edge cases handled}{
 
 \describe{
 \item{Vietnamese "Do" surname}{Distinguishes "Do" (surname, title-case)
 from "DO" (Doctor of Osteopathic Medicine, all-caps after a multi-word
-name). \code{"Linda Do"} → \code{last_name = "Do"};
-\code{"Robert Smith DO"} → \code{last_name = "Smith"}, \code{suffix = "DO"}.}
-\item{Three-part comma format}{\code{"Smith, John, Jr."} →
+name). \code{"Linda Do"} -> \code{last_name = "Do"};
+\code{"Robert Smith DO"} -> \code{last_name = "Smith"}, \code{suffix = "DO"}.}
+\item{Three-part comma format}{\code{"Smith, John, Jr."} ->
 \code{last = "Smith"}, \code{first = "John"}, \code{suffix = "Jr."}.}
-\item{Hyphenated / compound last names}{\code{"Maria de la Cruz-Garcia"} →
+\item{Hyphenated / compound last names}{\code{"Maria de la Cruz-Garcia"} ->
 \code{last = "de la Cruz-Garcia"}.}
-\item{Multiple credentials}{\code{"John Smith, MD, FACOG"} →
+\item{Multiple credentials}{\code{"John Smith, MD, FACOG"} ->
 \code{suffix = "MD, FACOG"}.}
 \item{NA / empty input}{Returns a row with all \code{NA} fields and
 \code{parse_confidence = "low"}; never errors.}

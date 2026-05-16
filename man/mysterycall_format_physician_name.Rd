@@ -21,7 +21,7 @@ mysterycall_format_physician_name(
 \item{suffix}{Character vector of professional or generational suffixes
 (\code{"MD"}, \code{"Jr."}). Default \code{NA} (omitted).}
 
-\item{format}{Character scalar — output layout:
+\item{format}{Character scalar -- output layout:
 \describe{
 \item{\code{"last_first"}}{(default) \code{"Smith, John A., MD"}}
 \item{\code{"first_last"}}{\code{"John A. Smith, MD"}}

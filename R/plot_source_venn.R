@@ -53,7 +53,6 @@
 #' @seealso [ggforce::geom_circle()]
 #' @importFrom ggplot2 ggplot annotate coord_fixed theme_void theme element_text
 #'   margin ggsave labs
-#' @importFrom ggforce geom_circle
 #' @family plotting
 #' @export
 #'

@@ -23,15 +23,15 @@ with at least columns \code{first_name}, \code{last_name}, \code{middle_name}, a
 The input tibble with additional columns:
 \describe{
 \item{\code{has_first}, \code{has_last}, \code{has_middle}}{Logical presence flags.}
-\item{\code{valid_first}, \code{valid_last}}{Logical — pass the \verb{require_*} gate.}
+\item{\code{valid_first}, \code{valid_last}}{Logical -- pass the \verb{require_*} gate.}
 \item{\code{is_valid}}{\code{valid_first & valid_last}.}
-\item{\code{last_is_credential}}{Logical — last name looks like \code{"MD"},
+\item{\code{last_is_credential}}{Logical -- last name looks like \code{"MD"},
 \code{"PHD"}, etc.}
-\item{\code{last_is_suffix}}{Logical — last name looks like \code{"Jr"}, \code{"III"},
+\item{\code{last_is_suffix}}{Logical -- last name looks like \code{"Jr"}, \code{"III"},
 etc.}
-\item{\code{last_too_short}}{Logical — last name is 1–2 chars (excluding
+\item{\code{last_too_short}}{Logical -- last name is 1-2 chars (excluding
 common short surnames such as \code{"Do"}, \code{"Li"}, \code{"Ng"}, \code{"Wu"}).}
-\item{\code{middle_has_particle}}{Logical — middle name contains a name
+\item{\code{middle_has_particle}}{Logical -- middle name contains a name
 particle (\code{"de"}, \code{"van"}, \code{"von"}, etc.) that may belong in the last
 name.}
 \item{\code{quality_issue}}{First detected quality issue code, or \code{NA}.}

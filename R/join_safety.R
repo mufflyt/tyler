@@ -3,7 +3,7 @@
 #' @name join_safety
 NULL
 
-# ── Internal helpers ──────────────────────────────────────────────────────────
+# -- Internal helpers ----------------------------------------------------------
 
 # Avoids division-by-zero; returns `default` when denominator is 0 or NA.
 .safe_divide <- function(numerator, denominator, default = NA_real_) {
@@ -38,7 +38,7 @@ NULL
 }
 
 # Coerces mismatched key column types to character on both sides to prevent
-# silent 0-match joins after RDS/Parquet round-trips (e.g. integer → double).
+# silent 0-match joins after RDS/Parquet round-trips (e.g. integer -> double).
 .harmonize_key_types <- function(left, right, by,
                                   label_left = "left", label_right = "right") {
   cols <- .resolve_by(by)
@@ -48,7 +48,7 @@ NULL
     l_cls <- class(left[[lc]])[[1L]];  r_cls <- class(right[[rc]])[[1L]]
     if (l_cls != r_cls) {
       message(sprintf(
-        "[safe_join] key type mismatch: %s$%s (%s) vs %s$%s (%s) — coercing both to character",
+        "[safe_join] key type mismatch: %s$%s (%s) vs %s$%s (%s) -- coercing both to character",
         label_left, lc, l_cls, label_right, rc, r_cls
       ))
       left[[lc]]  <- as.character(left[[lc]])
@@ -86,13 +86,13 @@ NULL
                   format(left_n, big.mark = ","), cov * 100))
   if (!is.na(cov) && cov > 1.0) {
     stop(sprintf(
-      "Join produced more rows than input (%.1f%% > 100%%) — duplicate keys in right table. %s -> %s on %s.",
+      "Join produced more rows than input (%.1f%% > 100%%) -- duplicate keys in right table. %s -> %s on %s.",
       cov * 100, label_left, label_right, .format_by(by)
     ), call. = FALSE)
   }
   if (!is.na(cov) && cov < min_coverage) {
     stop(sprintf(
-      "Join coverage %.1f%% below %.1f%% threshold — lost %s rows. %s -> %s on %s.",
+      "Join coverage %.1f%% below %.1f%% threshold -- lost %s rows. %s -> %s on %s.",
       cov * 100, min_coverage * 100,
       format(left_n - matched_n, big.mark = ","),
       label_left, label_right, .format_by(by)
@@ -101,7 +101,7 @@ NULL
   invisible(TRUE)
 }
 
-# ── Public API ────────────────────────────────────────────────────────────────
+# -- Public API ----------------------------------------------------------------
 
 #' Assert that join key columns are unique
 #'
@@ -173,7 +173,7 @@ mysterycall_assert_unique_keys <- function(.data, key_cols,
 #'     coercion from RDS or Parquet round-trips).
 #'   \item Right-side uniqueness assertion (blocks accidental many-to-many
 #'     fan-outs).
-#'   \item Coverage threshold enforcement — stops if fewer than
+#'   \item Coverage threshold enforcement -- stops if fewer than
 #'     `min_coverage` of left rows find a match.
 #'   \item Optional CSV audit report written to `JOIN_REPORT_DIR` env var or
 #'     `getOption("mysterycall.join_report_dir", tempdir())`.
@@ -363,8 +363,8 @@ mysterycall_safe_inner_join <- function(left, right, by,
   h     <- .harmonize_key_types(left, right, by, label_left, label_right)
   left  <- h$left;  right <- h$right
 
-  if (!nrow(left))  warning(sprintf("`%s` has 0 rows — inner join result will be empty.", label_left),  call. = FALSE)
-  if (!nrow(right)) warning(sprintf("`%s` has 0 rows — inner join result will be empty.", label_right), call. = FALSE)
+  if (!nrow(left))  warning(sprintf("`%s` has 0 rows -- inner join result will be empty.", label_left),  call. = FALSE)
+  if (!nrow(right)) warning(sprintf("`%s` has 0 rows -- inner join result will be empty.", label_right), call. = FALSE)
 
   if (expect_unique_both) {
     mysterycall_assert_unique_keys(left,  cols$left,  label = paste(label_left,  "(left)"))
@@ -465,7 +465,7 @@ mysterycall_safe_semi_join <- function(left, right, by,
                     format(left_n, big.mark = ","), cov * 100))
     if (!is.na(cov) && cov < min_coverage) {
       stop(sprintf(
-        "Semi join kept %.1f%% of %s rows — below %.1f%% threshold. %s -> %s on %s.",
+        "Semi join kept %.1f%% of %s rows -- below %.1f%% threshold. %s -> %s on %s.",
         cov * 100, format(left_n, big.mark = ","), min_coverage * 100,
         label_left, label_right, .format_by(by)
       ), call. = FALSE)
@@ -494,7 +494,7 @@ mysterycall_safe_semi_join <- function(left, right, by,
 #'
 #' @inheritParams mysterycall_safe_left_join
 #' @param max_matched Numeric in `[0, 1]`. Maximum fraction of left rows that
-#'   may be matched (and thus excluded). Default `NULL` → reads
+#'   may be matched (and thus excluded). Default `NULL` -> reads
 #'   `JOIN_MAX_MATCHED` env var or `1.0`.
 #'
 #' @return A data frame: the unmatched subset of `left`.
@@ -564,7 +564,7 @@ mysterycall_safe_anti_join <- function(left, right, by,
                     format(left_n, big.mark = ","), matched_rate * 100))
     if (!is.na(matched_rate) && matched_rate > max_matched) {
       stop(sprintf(
-        "Anti join excluded %.1f%% of %s rows — exceeds max_matched=%.1f%%. %s -> %s on %s.",
+        "Anti join excluded %.1f%% of %s rows -- exceeds max_matched=%.1f%%. %s -> %s on %s.",
         matched_rate * 100, format(left_n, big.mark = ","), max_matched * 100,
         label_left, label_right, .format_by(by)
       ), call. = FALSE)
@@ -583,7 +583,7 @@ mysterycall_safe_anti_join <- function(left, right, by,
   out
 }
 
-# ── Private parameter-resolution helpers ─────────────────────────────────────
+# -- Private parameter-resolution helpers -------------------------------------
 
 .resolve_coverage_param <- function(val, env_var, default) {
   if (!is.null(val)) {
