@@ -1,31 +1,31 @@
 input,expected_first,expected_last,expected_middle,expected_suffix,notes
-John Smith,John,Smith,,,"Standard first last"
-Mary Johnson MD,Mary,Johnson,,MD,"Credential after name"
-Robert Brown Jr.,Robert,Brown,,Jr.,"Generational suffix"
-Robert Smith DO,Robert,Smith,,DO,"DO credential — must not become last name"
-Linda Do,Linda,Do,,,"Vietnamese surname Do — must not be treated as credential"
-Smith John Jr.,John,Smith,,Jr.,"Three-part comma: Last First Suffix"
-Williams Mary Sr.,Mary,Williams,,Sr.,"Three-part comma with Sr."
-Maria de la Cruz,Maria,Cruz,de la,,"Name particle in middle — de la belongs with last"
-Jan van der Berg,Jan,Berg,van der,,"Dutch name particle"
-Mary-Ann O'Connor MD,Mary-Ann,O'Connor,,MD,"Hyphenated first name with credential"
-Jean-Anthony Do,Jean-Anthony,Do,,,"Hyphenated first + Vietnamese surname"
-Elizabeth Van den Berg,Elizabeth,Berg,Van den,,"Dutch particle van den"
-Patricia Garcia-Hernandez,Patricia,Garcia-Hernandez,,,"Hyphenated compound last name"
-Carlos de Anda,Carlos,de Anda,,,"Spanish name particle — de Anda is last name"
-Margaret Ann White MD FACOG,Margaret,White,Ann,MD FACOG,"Multiple credentials"
-Thomas A. Robinson III,Thomas,Robinson,A.,III,"Middle initial plus generational suffix"
-Sarah K. Lee PhD,Sarah,Lee,K.,PhD,"Asian surname with credential"
-Michael D. Nguyen,Michael,Nguyen,D.,"","Vietnamese surname (different from Do)"
-Anna Marie Kowalski,Anna,Kowalski,Marie,,"Two given names"
-Ji-Young Park MD,Ji-Young,Park,,MD,"Korean hyphenated name with credential"
-Fatima Al-Rashid,Fatima,Al-Rashid,,,"Arabic hyphenated last name"
-Priya Krishnamurthy,Priya,Krishnamurthy,,,"Long South Asian surname"
-Xavier de Sousa,Xavier,de Sousa,,,"Portuguese name particle"
-Ruth Bader Ginsburg,Ruth,Ginsburg,Bader,,"Three-word name — Bader is middle"
-William H. Gates,William,Gates,H.,"","Middle initial only"
-John Smith D.O.,John,Smith,,D.O.,"DO with periods"
-Ana María Rodríguez,Ana María,Rodríguez,,,"Diacritic in name"
-Nguyen Thi Lan,,,,,"Vietnamese full name — ambiguous; acceptable low confidence"
-Madonna,,,,,"Single word celebrity-style name; low confidence expected"
-Prince,,,,,"Single word name; low confidence expected"
+John Smith,John,Smith,,,Standard first last
+"Mary Johnson, MD",Mary,Johnson,,MD,Credential after comma — documented format
+"Robert Brown, Jr.",Robert,Brown,,Jr.,Generational suffix after comma — documented format
+Robert Smith DO,Robert,Smith,,DO,DO credential without comma — special-cased
+Linda Do,Linda,Do,,,Vietnamese surname Do — must not be treated as credential
+"Smith, John, Jr.",John,Smith,,Jr.,"Three-part comma: Last, First, Suffix"
+"Williams, Mary, Sr.",Mary,Williams,,Sr.,Three-part comma with Sr.
+Maria de la Cruz,Maria,de la Cruz,,,Spanish particle — de la Cruz is the full last name
+Jan van der Berg,Jan,van der Berg,,,Dutch particle — van der Berg is the full last name
+"Mary-Ann O'Connor, MD",Mary-Ann,O'Connor,,MD,Hyphenated first name with credential after comma
+Jean-Anthony Do,Jean-Anthony,Do,,,Hyphenated first + Vietnamese surname
+Elizabeth Van den Berg,Elizabeth,Van den Berg,,,Dutch particle — Van den Berg is the full last name
+Patricia Garcia-Hernandez,Patricia,Garcia-Hernandez,,,Hyphenated compound last name
+Carlos de Anda,Carlos,de Anda,,,Spanish particle — de Anda is last name
+"Margaret Ann White, MD, FACOG",Margaret,White,Ann,MD FACOG,Middle name plus multiple credentials after comma
+"Thomas A. Robinson, III",Thomas,Robinson,A.,III,Middle initial plus generational suffix after comma
+"Sarah K. Lee, PhD",Sarah,Lee,K.,PhD,Asian surname with credential after comma
+Michael D. Nguyen,Michael,Nguyen,D.,,Vietnamese surname Nguyen with middle initial
+Anna Marie Kowalski,Anna,Kowalski,Marie,,Two given names — Marie is middle
+"Ji-Young Park, MD",Ji-Young,Park,,MD,Korean hyphenated name with credential after comma
+Fatima Al-Rashid,Fatima,Al-Rashid,,,Arabic hyphenated last name
+Priya Krishnamurthy,Priya,Krishnamurthy,,,Long South Asian surname
+Xavier de Sousa,Xavier,de Sousa,,,Portuguese particle — de Sousa is last name
+Ruth Bader Ginsburg,Ruth,Ginsburg,Bader,,Three-word name — Bader is middle
+William H. Gates,William,Gates,H.,,Middle initial only
+"John Smith, D.O.",John,Smith,,D.O.,D.O. with periods — must not become last name
+Ana Maria Rodriguez,Ana,Rodriguez,Maria,,Compound given name without diacritics; Maria is middle
+Nguyen Thi Lan,,,,,Vietnamese full name — ambiguous; low confidence expected
+Madonna,,,,,Single word — low confidence expected
+Prince,,,,,Single word — low confidence expected

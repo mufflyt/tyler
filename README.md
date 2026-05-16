@@ -16,6 +16,29 @@
 [![pkgdown docs](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://mufflyt.github.io/mysterycall/)
 <!-- badges: end -->
 
+## Statement of Need
+
+Measuring patient access to healthcare requires assembling a provider roster,
+placing calls under a standardised script, recording wait times and refusal
+rates, and then modelling disparities by insurance type, race, or geography.
+Each step involves bespoke data-engineering work that research teams currently
+solve ad hoc: custom scripts to loop around the NPI API's 1,200-record cap,
+manual regular expressions to parse name fields, silent `dplyr::left_join()`
+calls that multiply rows when a lookup table has duplicates, and hand-crafted
+Poisson models that lack overdispersion diagnostics.
+
+**mysterycall** consolidates this work into a single, tested, documented
+pipeline. It provides taxonomy-based NPI search that bypasses the record cap,
+NANP phone validation with state-geography checks, physician name parsing with
+credential and surname disambiguation, safe join wrappers that enforce coverage
+and uniqueness guarantees, drive-time isochrone generation, Census demographic
+overlay, Poisson mixed-effects modelling with IRR reporting, and
+publication-ready table and map export. The target users are clinical
+researchers and health-services researchers who conduct mystery-caller or audit
+studies and need reproducible, auditable workflows rather than one-off scripts.
+
+---
+
 **mysterycall** provides a toolkit for mystery caller and audit studies that evaluate
 patient access to healthcare. It handles the full workflow: finding providers
 in the NPI registry, validating and geocoding their addresses, generating

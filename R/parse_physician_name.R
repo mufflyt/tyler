@@ -103,7 +103,8 @@ NULL
 #' Converts free-text physician name strings — from board certification data,
 #' NPPES, or CMS sources — into a tidy data frame of first, middle, last,
 #' suffix, and title fields with confidence scoring and warning flags.
-#' Accuracy: 96.7 % on physician name corpora.
+#' Accuracy: 96.3 % on the 27-case benchmark corpus in
+#' \code{inst/extdata/name_benchmark_corpus.csv}.
 #'
 #' @section Edge cases handled:
 #' \describe{

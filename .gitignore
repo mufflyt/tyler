@@ -16,3 +16,5 @@ docs
 .pdf
 *.tar.gz
 tests/testthat/_problems/
+*.Rcheck/
+..Rcheck/
