@@ -68,5 +68,5 @@ mysterycall_table_percentages(df_tie, "category")
 df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
 mysterycall_table_percentages(df_na, "category")
 #>   category n percent
-#> 1        A 3    37.5
+#> 1        A 3      50
 ```

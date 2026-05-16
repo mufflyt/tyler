@@ -69,9 +69,8 @@ df_na <- data.frame(gender = c("Male", NA, "Female", "Female", "Male", "Female",
 result <- mysterycall_table_proportion(df_na, gender)
 print(result)
 #>   gender n percent
-#> 1 Female 3   42.86
-#> 2   Male 2   28.57
-#> 3   <NA> 2   28.57
+#> 1 Female 3      60
+#> 2   Male 2      40
 
 # Example 3: Using a variable with multiple levels
 df_multi <- data.frame(grade = c("A", "B", "A", "C", "B", "A", "C", "B"))
