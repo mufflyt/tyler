@@ -24,6 +24,9 @@ NULL
 #'   `min_p_value`, `significant` (logical, `min_p_value < 0.05`).
 #'   Models that fail to converge return `NA` for numeric columns.
 #'
+#' @seealso [mysterycall_poisson_model()] to fit the primary model;
+#'   [mysterycall_select_best_model()] to rank models by AIC/BIC/LRT;
+#'   [mysterycall_multiple_comparison_adjust()] for correcting resulting p-values.
 #' @family outcomes
 #' @export
 #'

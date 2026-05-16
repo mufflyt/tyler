@@ -6,9 +6,10 @@
 #'
 #' @param data A data frame containing the columns 'npi' and 'name'.
 #' @param filepath The path where the output file should be saved.
-#' @param output_format File format for the saved table. Either `"csv"` (default)
-#'   or `"parquet"`. The file extension of `filepath` is ignored; the format
-#'   here controls what is written.
+#' @param output_format Character scalar: `"csv"` (default) or `"parquet"`.
+#'   CSV is written via `readr::write_csv()`; Parquet requires the `arrow`
+#'   package and is more efficient for large tables. The file extension of
+#'   `filepath` is ignored; this parameter controls what is actually written.
 #' @return The filtered data frame (invisibly). A message is emitted indicating
 #'   where the file was saved.
 #' @details

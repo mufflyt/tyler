@@ -16,19 +16,24 @@
 #' @param line_color A string specifying the color of the summary line (median). Default is "viridis" to match the accessible palette.
 #' @param verbose A boolean indicating whether to print messages about the saved plot locations. Default is TRUE.
 #'
-#' @return Invisibly returns the generated ggplot object.
+#' @return A ggplot2 object (`c("gg", "ggplot")`), returned invisibly. As a
+#'   side effect, writes a `.tiff` and a `.png` file to `output_dir` with
+#'   filenames of the form `<file_prefix>_<timestamp>.tiff/.png`. A
+#'   `stat_summary` median line is always overlaid; individual points are
+#'   shown via `geom_point`.
+#'
+#' @seealso [mysterycall_plot_scatter()] for jittered point plots;
+#'   [mysterycall_plot_density()] for density distribution plots.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_point geom_line stat_summary ylab theme_minimal element_rect element_blank ggsave
 #' @importFrom rlang sym .data
 #' @family mapping
 #' @export
-#' @examples
-#' \donttest{
+#' @examplesIf interactive()
 #' example_data <- data.frame(
 #'   insurance = rep(c("Medicaid", "Commercial", "Medicare"), each = 3),
 #'   business_days_until_appointment = c(1.5, 2.1, 2.8, 1.7, 2.3, 2.5, 1.9, 2.6, 3.1)
 #' )
-#'
 #' mysterycall_plot_line(
 #'   plot_data = example_data,
 #'   x_var = "insurance",
@@ -39,7 +44,6 @@
 #'   file_prefix = "demo_line",
 #'   verbose = FALSE
 #' )
-#' }
 
 mysterycall_plot_line <- function(plot_data,
                              x_var,

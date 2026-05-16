@@ -15,19 +15,23 @@
 #' @param plot_title A string specifying the title of the plot. Default is `NULL` (no title).
 #' @param verbose A boolean indicating whether to print messages about the saved plot locations. Default is TRUE.
 #'
-#' @return Invisibly returns the generated ggplot object.
+#' @return A ggplot2 object (`c("gg", "ggplot")`), returned invisibly. As a
+#'   side effect, writes a `.tiff` and a `.png` file to `output_dir` with
+#'   filenames of the form `<file_prefix>_<timestamp>.tiff/.png`.
+#'
+#' @seealso [mysterycall_plot_scatter()] for jittered point plots;
+#'   [mysterycall_plot_line()] for median-trend line plots;
+#'   [mysterycall_save_green_journal_figure()] to export at journal resolution.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_density scale_x_log10 scale_x_sqrt labs theme_light theme ggsave
 #' @importFrom rlang sym .data
 #' @family mapping
 #' @export
-#' @examples
-#' \donttest{
+#' @examplesIf interactive()
 #' example_data <- data.frame(
 #'   insurance = rep(c("Medicaid", "Commercial"), each = 3),
 #'   business_days_until_appointment = c(1.5, 2.2, 3.1, 1.8, 2.5, 2.9)
 #' )
-#'
 #' mysterycall_plot_density(
 #'   data = example_data,
 #'   x_var = "business_days_until_appointment",
@@ -41,7 +45,6 @@
 #'   plot_title = "Example Density Plot",
 #'   verbose = FALSE
 #' )
-#' }
 
 mysterycall_plot_density <- function(data,
                                 x_var,

@@ -61,7 +61,11 @@ NULL
 #' @param end_year Last year to include. Defaults to ten years after the
 #'   current year.
 #'
-#' @return A `bizdays` calendar object named `"USFederal"`.
+#' @return An S3 object of class `"calendar"` (from `bizdays`) named
+#'   `"USFederal"`. Pass it to [bizdays::bizdays()] or [bizdays::is.bizday()]
+#'   for date arithmetic. Contains one holiday entry per year from
+#'   `start_year` to `end_year`, with fixed holidays observing the
+#'   Saturday-to-Friday / Sunday-to-Monday shift rule.
 #'
 #' @seealso [mysterycall_business_days()], [mysterycall_count_business_days()]
 #' @family business days

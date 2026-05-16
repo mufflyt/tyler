@@ -2,15 +2,19 @@
 #'
 #' This function returns the level(s) corresponding to the minimum value(s) of a factor variable.
 #'
-#' @param InVec Input vector, expected to be a factor variable or convertible to a factor.
-#' @param mult Logical value indicating whether to return multiple minimum values or just the first one. Default is FALSE.
-#' @return If \code{mult} is FALSE, returns the level corresponding to the minimum value of the factor variable.
-#'         If \code{mult} is TRUE, returns a character vector containing all the levels with the minimum value.
+#' @param InVec A vector or factor. Non-factor inputs are coerced to factor
+#'   via `factor()`. The function counts occurrences of each resulting level.
+#' @param mult Logical scalar. If `TRUE`, all levels tied for the minimum
+#'   count are returned. If `FALSE` (default), only the first such level is
+#'   returned (via `which.min()`).
+#' @return Character scalar (`mult = FALSE`) or character vector (`mult = TRUE`)
+#'   of the factor level(s) with the minimum frequency. Returns `character(0)`
+#'   for a zero-length input.
 #' @examples
 #' vec <- factor(c("A", "B", "A", "C", "B", "B"))
-#' mysterycall_min_table(vec) # Returns "C"
-#' mysterycall_min_table(vec, mult = TRUE) # Returns "C"
-#' @family table
+#' mysterycall_min_table(vec)           # "C"
+#' mysterycall_min_table(vec, mult = TRUE)  # "C"
+#' @family table helpers
 #' @seealso [mysterycall_max_table()]
 #' @export
 

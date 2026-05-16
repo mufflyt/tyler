@@ -18,19 +18,24 @@
 #' @param plot_title A string specifying the title of the plot. Default is `NULL` (no title).
 #' @param verbose A boolean indicating whether to print messages about the saved plot locations. Default is TRUE.
 #'
-#' @return Invisibly returns the generated ggplot object.
+#' @return A ggplot2 object (`c("gg", "ggplot")`), returned invisibly. As a
+#'   side effect, writes a `.tiff` and a `.png` file to `output_dir` with
+#'   filenames of the form `<file_prefix>_<timestamp>.tiff/.png`. Rows
+#'   with zero, negative, or `NA` values in `y_var` are silently removed
+#'   before plotting.
+#'
+#' @seealso [mysterycall_plot_density()] for distribution density plots;
+#'   [mysterycall_plot_line()] for median-trend line plots.
 #' @importFrom dplyr filter mutate %>%
 #' @importFrom ggplot2 ggplot geom_jitter scale_y_log10 scale_y_sqrt labs theme_minimal element_rect element_blank ggsave
 #' @importFrom rlang sym .data
 #' @family mapping
 #' @export
-#' @examples
-#' \donttest{
+#' @examplesIf interactive()
 #' example_data <- data.frame(
 #'   insurance = rep(c("Medicaid", "Commercial", "Medicare"), each = 3),
 #'   business_days_until_appointment = c(1.5, 2.0, 2.8, 1.9, 2.4, 2.6, 2.1, 2.7, 3.0)
 #' )
-#'
 #' mysterycall_plot_scatter(
 #'   plot_data = example_data,
 #'   x_var = "insurance",
@@ -44,7 +49,6 @@
 #'   plot_title = "Example Scatter Plot",
 #'   verbose = FALSE
 #' )
-#' }
 
 mysterycall_plot_scatter <- function(plot_data,
                                 x_var,
