@@ -90,10 +90,11 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 
 #' Standardise demographic variables for Table 1
 #'
-#' A convenience wrapper that applies age imputation, age categorisation, and
-#' gender standardisation in a single call. Columns are added to (not
-#' replacing) the input data frame. Only columns explicitly specified are
-#' processed.
+#' Convenience wrapper that applies age imputation, age categorisation, and
+#' gender standardisation in one call.  All output columns are **added** to
+#' the input data frame — originals are never replaced or removed.  Arguments
+#' set to `NULL` are silently skipped so you can standardise only the
+#' variables your dataset contains.
 #'
 #' @param data A data frame.
 #' @param age_col Optional character scalar naming an existing numeric age

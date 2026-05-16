@@ -1,13 +1,21 @@
-#' Calculate and Summarize Physician Age
+#' Summarise physician age as median (IQR) text
 #'
-#' This function calculates the median age, as well as the 25th and 75th percentiles (Interquartile Range, IQR) of a specified age column in a data frame. It returns a sentence summarizing these statistics.
+#' Computes the median, Q1, and Q3 of a numeric age column (ignoring `NA`)
+#' and returns a ready-to-paste sentence for manuscript methods or results
+#' sections.
 #'
 #' @param data A data frame containing the age data.
-#' @param age_column A character string representing the name of the column in `data` that contains the age data.
+#' @param age_column Character scalar naming the numeric column in `data` that
+#'   holds physician ages.
 #'
-#' @return A character string summarizing the median age and IQR of the specified age column in the dataset.
+#' @return A single character string of the form
+#'   `"The median age was XX.XX years (IQR: Q1.X--Q3.X years)."` where
+#'   the median is rounded to 2 decimal places and IQR bounds to 1.
 #'
-#' @details The function calculates the median, 25th percentile (Q1), and 75th percentile (Q3) of the age data, rounding the results to two decimal places for the median and one decimal place for the percentiles. It then constructs a summary sentence describing these statistics.
+#' @details
+#'   `NA` values in `age_column` are removed before computing quantiles
+#'   (i.e., `na.rm = TRUE`).  All quantiles use the default R `type = 7`
+#'   interpolation.
 #'
 #' @examples
 #' # Example 1: Basic usage with a small dataset
@@ -25,7 +33,9 @@
 #' summary_sentence <- mysterycall_physician_age(df_large, "age")
 #' print(summary_sentence)
 #'
-#' @family summary
+#' @seealso [mysterycall_impute_age()] to derive age from graduation year;
+#'   [mysterycall_age_category()] to bin ages into publication-ready groups.
+#' @family provider characteristics
 #' @export
 mysterycall_physician_age <- function(data, age_column) {
   if (!is.data.frame(data)) {

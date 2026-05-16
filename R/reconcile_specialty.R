@@ -30,8 +30,12 @@ NULL
 #'   recording the tier (`"high"`, `"medium"`, or `"low"`).
 #'   Default `"specialty_confidence"`.
 #'
-#' @return `data` with `primary_col` values possibly updated (tier-2 rows
-#'   receive the secondary value) and two new audit columns appended.
+#' @return The input `data` frame with the same row count, where:
+#'   - `primary_col` is updated: tier-2 rows receive the `secondary_col` value.
+#'   - A new character column (named by `source_col`) records which source was
+#'     used (`"primary"`, `"secondary"`, or `"default"`).
+#'   - A new character column (named by `confidence_col`) records the
+#'     resolution tier (`"high"`, `"medium"`, or `"low"`).
 #'
 #' @family provider characteristics
 #' @export

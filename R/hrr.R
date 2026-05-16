@@ -1,11 +1,20 @@
 #' Get Hospital Referral Region Shapefile
 #'
-#' This function loads the hospital referral region shapefile and optionally removes Hawaii and Alaska.
-#' The shapefile (~8 MB) is downloaded from the Dartmouth Atlas website on first use and cached in the
+#' Loads the Dartmouth Atlas Hospital Referral Region (HRR) shapefile,
+#' transforming it to EPSG:4326 (WGS84) and optionally dropping Alaska and
+#' Hawaii.  The shapefile (~8 MB) is downloaded on first use and cached in the
 #' user's R cache directory for subsequent calls.
 #'
-#' @param remove_HI_AK Logical, should Hawaii and Alaska be removed? Default is TRUE.
-#' @return An sf object containing the hospital referral region data.
+#' @param remove_HI_AK Logical.  When `TRUE` (default), HRRs whose `hrrcity`
+#'   starts with `"AK"` or `"HI"` are dropped from the returned object.
+#'
+#' @return An `sf` object with one row per HRR and columns:
+#'   \describe{
+#'     \item{`hrrcity`}{Character.  HRR city identifier, e.g. `"CA-Sacramento"`.}
+#'     \item{`hrrnum`}{Integer.  Numeric HRR code from the Dartmouth Atlas.}
+#'     \item{`geometry`}{MULTIPOLYGON in EPSG:4326 (WGS84).}
+#'   }
+#'   Additional columns from the raw shapefile may be present.
 #' @seealso [ensure_hrr_shapefile()], [mysterycall_hrr_maps()], [mysterycall_map_base()]
 #' @family geospatial helpers
 
@@ -41,21 +50,31 @@ mysterycall_hrr <- function(remove_HI_AK = TRUE) {
   return(mysterycall_hrr)
 }
 
-#' Generate Hexagon Maps for Hospital Referral Regions (HRR)
+#' Generate honeycomb hex maps for Hospital Referral Regions
 #'
-#' This function generates hexagon maps for hospital referral regions.
+#' Joins physician point data to HRR polygons, computes per-HRR physician
+#' counts, and renders a honeycomb choropleth of the contiguous US with
+#' Alaska, Hawaii, and Puerto Rico as inset maps.  The figure is saved as
+#' both `.tiff` and `.png` to `output_dir`.
 #'
-#' @param physician_sf An sf object containing physician data with coordinates.
-#' @param trait_map A string specifying the trait map (default is "all").
-#' @param honey_map A string specifying the honey map (default is "all").
+#' @param physician_sf An `sf` object with one row per physician.  Must have
+#'   a `geometry` column of POINT geometries; CRS is auto-transformed to
+#'   EPSG:4326 if needed.
+#' @param trait_map Character scalar used as a label in the output filename
+#'   (e.g. `"all"`, `"neurotology"`).  No validation; used as-is.
+#' @param honey_map Character scalar used as a secondary label in the output
+#'   filename (e.g. `"all"`).  No validation; used as-is.
 #' @param output_dir Directory where generated figures are written. Defaults to a
 #'   session-specific folder inside [tempdir()].
-#' @param dpi Resolution used when saving the final figure (default is 600).
-#' @param width Final figure width in inches for journal submission (default is 7).
-#' @param height Final figure height in inches for journal submission (default is 5).
-#' @return Invisibly returns the arranged grob object containing the contiguous
-#'   US map and Alaska/Hawaii/Puerto Rico inset maps.
-#' @seealso [mysterycall_hrr()], [mysterycall_map_base()], [mysterycall_map_block_group()]
+#' @param dpi Integer.  Raster resolution in DPI for the saved figure.  Default `600`.
+#' @param width Numeric.  Figure width in inches.  Default `7`.
+#' @param height Numeric.  Figure height in inches.  Default `5`.
+#'
+#' @return Invisibly returns a `grob` object (from `gridExtra::arrangeGrob`)
+#'   containing the arranged multi-panel map.  Side effects: two files are
+#'   written to `output_dir` — `<trait_map>_<honey_map>.tiff` and `.png`.
+#' @seealso [mysterycall_hrr()] to obtain the HRR `sf` object;
+#'   [mysterycall_map_base()], [mysterycall_map_block_group()]
 #' @family geospatial plotting
 
 #' @importFrom dplyr mutate group_by summarize filter n

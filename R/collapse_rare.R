@@ -17,6 +17,8 @@ NULL
 #'
 #' @return A vector of the same type as `x` with rare levels replaced.
 #'
+#' @seealso [mysterycall_reorder_by_freq()] to reorder factor levels by
+#'   frequency; [mysterycall_recode_credentials()] for credential grouping.
 #' @family provider characteristics
 #' @export
 #'

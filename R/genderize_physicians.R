@@ -14,8 +14,17 @@
 #'   saved. Defaults to a session-specific subfolder of [tempdir()].
 #' @param output_format `"csv"` (default) or `"parquet"`. Format for the saved
 #'   output file.
-#' @return A data frame matching the input rows with additional columns from
-#'   Genderize.io: typically `gender`, `probability`, and `count`.
+#' @return A data frame with the same row count and all original columns as
+#'   `data_or_path`, with three new columns appended:
+#'   \describe{
+#'     \item{`gender`}{Character. `"male"`, `"female"`, or `NA` for ambiguous
+#'       or unknown names.}
+#'     \item{`probability`}{Numeric in [0, 1]. API prediction confidence.}
+#'     \item{`count`}{Integer. Historical frequency of the name in the
+#'       Genderize.io database.}
+#'   }
+#'   Side effect: the enriched roster is written to `output_dir` as CSV or
+#'   Parquet with a timestamp in the filename.
 #'
 #' @importFrom dplyr bind_rows distinct left_join mutate
 #' @importFrom readr read_csv write_csv

@@ -37,6 +37,9 @@ NULL
 #'
 #' @return `data` with one additional character column named `scenario_col`.
 #'
+#' @seealso [mysterycall_check_generalist_presence()] to validate paired
+#'   generalist coverage before assigning scenarios;
+#'   [mysterycall_reconcile_specialty()] for specialty harmonisation.
 #' @family study design
 #' @export
 #'
