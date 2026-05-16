@@ -172,10 +172,6 @@ NULL
 #' @export
 mysterycall_parse_physician_name <- function(physician_name,
                                              remove_titles = TRUE) {
-  if (!requireNamespace("humaniformat", quietly = TRUE)) {
-    stop("Package 'humaniformat' is required. Install with: install.packages('humaniformat')",
-         call. = FALSE)
-  }
   if (!is.character(physician_name) && !is.na(physician_name[[1L]])) {
     stop("`physician_name` must be a character vector.", call. = FALSE)
   }

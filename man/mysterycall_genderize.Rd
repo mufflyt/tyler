@@ -41,15 +41,28 @@ unknown names. The API does not currently return non-binary values. \code{NULL}
 responses are stored as \code{NA} in the raw \code{gender} output column. If the API
 ever adds non-binary values they will be stored as-is in \code{gender} but will
 be recoded to \code{"Unknown"} by \code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}}.
+
+The \code{probability} column (0–1) reflects the API's prediction confidence.
+Names with low probability may be genuine but uncommon (e.g., gender-neutral
+names). A common post-processing filter:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{result <- mysterycall_genderize(data)
+high_conf <- dplyr::filter(result, probability >= 0.70 | is.na(gender))
+}\if{html}{\out{</div>}}
 }
 
 \section{API response schema}{
 
-Each Genderize.io JSON entry is expected to contain exactly four fields:
-\code{name}, \code{gender}, \code{probability}, and \code{count}. Any additional fields
-returned by the API are silently dropped. If the API renames or removes
-one of these four fields, the corresponding output column will contain
-\code{NA} without an explicit error or warning.
+Each Genderize.io JSON entry is expected to contain exactly four fields.
+Expected structure (single entry):
+
+\if{html}{\out{<div class="sourceCode json">}}\preformatted{\{ "name": "james", "gender": "male", "probability": 0.92, "count": 12345 \}
+}\if{html}{\out{</div>}}
+
+Any additional fields returned by the API are silently dropped. If the
+API renames or removes one of these four fields, the corresponding output
+column will contain \code{NA} without an explicit error or warning. See the
+API documentation at \url{https://genderize.io/#docs} for the current schema.
 }
 
 \section{Output file timestamps}{
@@ -57,7 +70,13 @@ one of these four fields, the corresponding output column will contain
 Output filenames include a timestamp from \code{\link[=Sys.time]{Sys.time()}}, which uses the
 \strong{local system timezone} (not UTC). Files produced on systems in
 different timezones will reflect different local times for the same
-wall-clock moment.
+wall-clock moment. To standardise to UTC:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{withr::with_timezone("UTC", mysterycall_genderize(data))
+}\if{html}{\out{</div>}}
+
+Alternatively, supply a meaningful \code{output_dir} path that encodes the
+study date rather than relying on the auto-generated timestamp.
 }
 
 \examples{
@@ -67,6 +86,9 @@ result <- mysterycall_genderize(my_dataframe)  # also accepts a data frame direc
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}} for downstream gender
+recoding to \code{"Male"}/\code{"Female"}/\code{"Unknown"}.
+
 Other gender: 
 \code{\link{mysterycall_most_common_gender}()}
 }

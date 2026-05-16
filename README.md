@@ -222,6 +222,24 @@ mysterycall_map_physicians(geocoded, popup_var = "name")
 </tr>
 </table>
 
+## How mysterycall compares to alternatives
+
+| Capability | mysterycall | `npi` package | `humaniformat` | Manual `dplyr` |
+|---|---|---|---|---|
+| NPI search — state-looping to bypass 1,200-record cap | ✅ | ❌ | ❌ | ❌ |
+| NANP phone validation + state-geography check | ✅ | ❌ | ❌ | ❌ |
+| Physician name parsing with DO/Vietnamese disambiguation | ✅ | ❌ | Partial | ❌ |
+| Safe joins with coverage enforcement | ✅ | ❌ | ❌ | ❌ |
+| Drive-time isochrone generation (HERE API) | ✅ | ❌ | ❌ | ❌ |
+| Census demographic overlay on isochrones | ✅ | ❌ | ❌ | ❌ |
+| Poisson GLMM with IRR reporting | ✅ | ❌ | ❌ | ❌ |
+| Disparities table with Wilson CIs | ✅ | ❌ | ❌ | ❌ |
+| Green Journal–compliant figure export | ✅ | ❌ | ❌ | ❌ |
+
+`npi` and `humaniformat` are excellent single-purpose packages.
+`mysterycall` integrates them into a validated, end-to-end study pipeline
+with audit trails, coverage guards, and publication-ready output.
+
 ## Core functions
 
 | Stage | Function | Description |
@@ -281,11 +299,23 @@ taxonomy |>
 Full documentation, function reference, and worked vignettes:
 **<https://mufflyt.github.io/mysterycall/>**
 
-- [Create Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.html)
-- [Get Census Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.html)
-- [Geocoding](https://mufflyt.github.io/mysterycall/articles/geocode.html)
+**Getting started**
+- [Searching the NPI Database by Taxonomy](https://mufflyt.github.io/mysterycall/articles/my-vignette.html)
 - [Search & Process NPI](https://mufflyt.github.io/mysterycall/articles/search_and_process_npi.html)
-- [Aggregating Provider Data](https://mufflyt.github.io/mysterycall/articles/aggregating_provider_data.html)
+- [Workflow Orchestration](https://mufflyt.github.io/mysterycall/articles/workflow-orchestration.html)
+
+**Data quality**
+- [Phone Validation, Name Parsing, and Safe Joins](https://mufflyt.github.io/mysterycall/articles/data-quality.html)
+
+**Geospatial**
+- [Geocoding](https://mufflyt.github.io/mysterycall/articles/geocode.html)
+- [Create Isochrones](https://mufflyt.github.io/mysterycall/articles/create_isochrones.html)
+
+**Analysis and reporting**
+- [Statistical Analysis (Poisson GLMMs, disparities, bootstrap CIs)](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.html)
+- [Provider Classification (RUCA, practice setting, census region)](https://mufflyt.github.io/mysterycall/articles/provider-classification.html)
+- [Table Generation](https://mufflyt.github.io/mysterycall/articles/table-generation.html)
+- [Get Census Data](https://mufflyt.github.io/mysterycall/articles/get_census_data.html)
 
 ## Citing mysterycall
 

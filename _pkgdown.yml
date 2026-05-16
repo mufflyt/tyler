@@ -154,6 +154,23 @@ reference:
       - mysterycall_get_acs_adults_18_90
       - mysterycall_get_acs_women_18_90
 
+  - title: "Data Quality and Validation"
+    desc: >
+      Validate phone numbers against NANP rules and state geography; parse,
+      validate, and reformat free-text physician name strings; safe join
+      wrappers with coverage enforcement and right-side uniqueness guards.
+    contents:
+      - mysterycall_validate_phone
+      - mysterycall_parse_physician_name
+      - mysterycall_validate_parsed_names
+      - mysterycall_format_physician_name
+      - mysterycall_test_name_parser
+      - mysterycall_safe_left_join
+      - mysterycall_safe_inner_join
+      - mysterycall_safe_semi_join
+      - mysterycall_safe_anti_join
+      - mysterycall_assert_unique_keys
+
   - title: "Data Cleaning and Processing"
     desc: >
       Clean Phase 1/2 data, rename columns, recode variables, and impute missing values.
@@ -398,11 +415,17 @@ articles:
       - my-vignette
       - aggregating_provider_data
       - pipeline-guarantees
+      - workflow-orchestration
 
   - title: "Data Collection"
     navbar: Data Collection
     contents:
       - search_and_process_npi
+
+  - title: "Data Quality"
+    navbar: Data Quality
+    contents:
+      - data-quality
 
   - title: "Geospatial"
     navbar: Geospatial
@@ -415,6 +438,13 @@ articles:
     navbar: Demographics
     contents:
       - get_census_data
+      - provider-classification
+
+  - title: "Analysis and Reporting"
+    navbar: Analysis and Reporting
+    contents:
+      - statistical-analysis
+      - table-generation
 
   - title: "News"
     navbar: ~

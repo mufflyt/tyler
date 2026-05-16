@@ -54,18 +54,35 @@ cap.
 }
 \section{Output columns}{
 
-The function retains a curated subset of the columns returned by
-\code{npi::npi_flatten()}. The following column categories are \strong{always
-dropped} regardless of what the NPI API returns: all \verb{endpoints_*}
-fields, all \verb{other_names_*} fields, all \verb{identifiers_*} fields,
-supplementary address fields (\code{addresses_address_2},
+The function returns a curated subset of \code{npi::npi_flatten()} output.
+
+\strong{Retained} (after renaming):
+\code{npi}, \code{first_name}, \code{last_name}, \code{middle_name}, \code{credential},
+\code{addresses_city}, \code{addresses_state}, \code{addresses_postal_code},
+\code{addresses_telephone_number}, \code{addresses_country_name},
+\code{taxonomies_desc}, \code{taxonomies_primary}, \code{search_term}.
+Any columns returned by \code{npi_flatten()} that are \emph{not} on the explicit
+drop list are also retained.
+
+\strong{Always dropped} regardless of what the NPI API returns:
+\itemize{
+\item All \verb{endpoints_*} fields (electronic health endpoint metadata)
+\item All \verb{other_names_*} fields (former or alternate name records)
+\item All \verb{identifiers_*} fields (legacy identifier records)
+\item Supplementary address fields: \code{addresses_address_2},
 \code{addresses_fax_number}, \code{addresses_address_type},
-\code{addresses_country_code}), and several basic and taxonomy metadata fields
-(\code{basic_last_updated}, \code{basic_status}, \code{basic_name_prefix},
-\code{basic_name_suffix}, \code{basic_certification_date}, \code{taxonomies_code},
-\code{taxonomies_taxonomy_group}, \code{taxonomies_state}, \code{taxonomies_license}).
+\code{addresses_country_code}
+\item Basic metadata: \code{basic_last_updated}, \code{basic_status},
+\code{basic_name_prefix}, \code{basic_name_suffix},
+\code{basic_certification_date}
+\item Secondary taxonomy fields: \code{taxonomies_code},
+\code{taxonomies_taxonomy_group}, \code{taxonomies_state},
+\code{taxonomies_license}
+\item Internal working column: \code{credential_lower}
+}
+
 To access dropped columns, call \code{npi::npi_search()} and
-\code{npi::npi_flatten()} directly.
+\code{npi::npi_flatten()} directly before any filtering.
 }
 
 \section{Contract}{

@@ -51,10 +51,19 @@ processed.
 }
 \section{Gender standardisation}{
 
-The \code{gender_std} column is produced by a binary lookup: \code{"m"}/\code{"male"}
-→ \code{"Male"}, \code{"f"}/\code{"female"} → \code{"Female"}, all other values →
-\code{"Unknown"}. Non-binary values, \code{NA}, and any future Genderize.io API
-additions are all mapped to \code{"Unknown"} without a warning.
+The \code{gender_std} column is produced by a binary lookup applied
+case-insensitively after whitespace trimming:
+\tabular{ll}{
+\strong{Input value} \tab \strong{\code{gender_std}} \cr
+\code{"male"}, \code{"m"}, \code{"Male"}, \code{"M"} \tab \code{"Male"} \cr
+\code{"female"}, \code{"f"}, \code{"Female"}, \code{"F"} \tab \code{"Female"} \cr
+\code{NA} \tab \code{"Unknown"} \cr
+\code{""}, \code{"unknown"}, \code{"non-binary"}, any other string \tab \code{"Unknown"}
+}
+Non-binary values and any future Genderize.io API additions are all
+mapped to \code{"Unknown"} silently. Before calling this function, inspect
+\code{table(data[[gender_col]], useNA = "always")} to check for unexpected
+values that will be bucketed into \code{"Unknown"}.
 }
 
 \examples{
@@ -66,6 +75,10 @@ mysterycall_prepare_table1_vars(df, grad_year_col = "grad_year",
                                  gender_col = "gender", ref_year = 2026L)
 }
 \seealso{
+\code{\link[=mysterycall_genderize]{mysterycall_genderize()}} for the upstream API call that produces
+the raw \code{gender} column; \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} to validate
+data quality before processing.
+
 Other data management: 
 \code{\link{mysterycall_check_duplicates}()},
 \code{\link{mysterycall_check_generalist_presence}()},

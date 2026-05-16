@@ -63,7 +63,17 @@ Input data is scored from 0–1 by \code{\link[=mysterycall_assess_data_quality]
 Scores below \strong{0.70} cause this function to stop with an error; scores
 between 0.70 and 0.80 emit a warning. A score below 0.70 typically means
 a required name column has more than 50\\% missing values. See
-\code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}} for the full penalty schedule.
+\code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}} for the full penalty schedule and
+worked examples.
+
+The thresholds are \strong{not configurable} via parameters. To investigate
+quality issues without stopping, call \code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}}
+directly and inspect the returned \verb{$issues} list:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{report <- mysterycall_assess_data_quality(my_data)
+report$score          # numeric 0–1
+report$issues         # list of issue records with $severity and $message
+}\if{html}{\out{</div>}}
 }
 
 \examples{
@@ -85,6 +95,10 @@ mysterycall_preflight_check(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}} for the scoring formula and
+per-issue details; \code{\link[=mysterycall_estimate_resources]{mysterycall_estimate_resources()}} for runtime and
+memory projections.
+
 Other utilities: 
 \code{\link{\%>\%}()},
 \code{\link{mysterycall_assess_data_quality}()},

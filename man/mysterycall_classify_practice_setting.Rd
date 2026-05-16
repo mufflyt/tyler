@@ -32,9 +32,11 @@ Character vector the same length as \code{facility_name} with values
 }
 \description{
 Applies a three-tier keyword search to facility or organization names:
-Academic > Government > Private Practice. If the name matches no pattern
-but is non-empty, it defaults to \code{"Private Practice"}. Missing or empty
-values return \code{na_label}.
+Government > Academic > Private Practice. Government is checked first so
+that VA and military facilities are not mis-classified as Academic when
+their name also contains "Medical Center" or a university name. If the
+name matches no pattern but is non-empty, it defaults to
+\code{"Private Practice"}. Missing or empty values return \code{na_label}.
 }
 \details{
 This is a pure-R, vectorized function with no package dependencies beyond

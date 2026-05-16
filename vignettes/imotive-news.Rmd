@@ -1,6 +1,6 @@
 ---
 title: "Imotive News & Changelog"
-author: "tyler development team"
+author: "mysterycall development team"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Imotive News & Changelog}
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The **Imotive** initiative combines tyler's provider roster tooling with
+The **Imotive** initiative combines mysterycall's provider roster tooling with
 streamlined QA helpers so field teams can run end-to-end mystery caller studies
 with less manual coordination. This vignette summarizes the highlights from the
 latest development cycle and surfaces the helpers that changed.

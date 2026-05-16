@@ -31,9 +31,18 @@ maximum of 10:
 \item More than 10\\% duplicate rows: −1 point
 \item Required column is not character or factor type: −0.5 points
 }
-Final score = max(0, 1 − penalties / 10). The 0.70 and 0.80 thresholds
-used by \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} were chosen to catch severely
-incomplete data while tolerating modest missingness in large rosters.
+Final score = max(0, 1 − penalties / 10).
+
+Worked examples for a 1,000-row physician roster with \code{required_columns = c("first", "last")}:
+\itemize{
+\item All names present, < 10\\% duplicates → \strong{1.00} (100\\%, pass)
+\item 30\\% of \code{first} names missing → \strong{0.90} (90\\%, pass)
+\item 60\\% of \code{first} names missing → \strong{0.70} (70\\%, borderline pass with warning)
+\item Both columns > 50\\% missing (−3 each) → \strong{0.40} (40\\%, preflight stops)
+}
+The 0.70 and 0.80 thresholds in \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} were
+chosen to catch severely incomplete data while tolerating modest
+missingness in large rosters.
 }
 
 \examples{

@@ -34,10 +34,19 @@ This function reads data from a file or data frame, cleans column names, and app
 \section{Column name transformation}{
 
 All input column names are converted to \strong{lowercase snake\_case} by
-\code{\link[janitor:clean_names]{janitor::clean_names()}} before \code{required_strings} pattern matching.
-For example, \code{"PhysicianInfo"} becomes \code{"physician_info"} and
-\code{"NPI Registry"} becomes \code{"npi_registry"}. Pass \code{required_strings} and
-\code{standard_names} in snake\_case to match the transformed names.
+\code{\link[janitor:clean_names]{janitor::clean_names()}} \strong{unconditionally} before \code{required_strings}
+pattern matching. Transformation cannot be disabled. Common examples:
+\tabular{ll}{
+\strong{Input column name} \tab \strong{After \code{clean_names()}} \cr
+\code{"Physician Information"} \tab \code{"physician_information"} \cr
+\code{"NPI Number"} \tab \code{"npi_number"} \cr
+\code{"Q1-2023 Revenue"} \tab \code{"q1_2023_revenue"} \cr
+\code{"able_to_contact_office"} \tab \code{"able_to_contact_office"} (unchanged) \cr
+\code{"ContactOfficeYN"} \tab \code{"contact_office_yn"}
+}
+To preview the exact names your data will have, run
+\code{names(janitor::clean_names(your_data))} before calling this function,
+then write \code{required_strings} to match those transformed names.
 }
 
 \section{Output file timestamps}{
@@ -45,7 +54,12 @@ For example, \code{"PhysicianInfo"} becomes \code{"physician_info"} and
 Output filenames include a timestamp from \code{\link[=Sys.time]{Sys.time()}}, which uses the
 \strong{local system timezone} (not UTC). Filenames produced on systems in
 different timezones will reflect different local times for the same
-wall-clock moment.
+wall-clock moment. To force UTC filenames, wrap the call:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{withr::with_timezone("UTC", \{
+  mysterycall_clean_phase2(data, required_strings, standard_names)
+\})
+}\if{html}{\out{</div>}}
 }
 
 \examples{
