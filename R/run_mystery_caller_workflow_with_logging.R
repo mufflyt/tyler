@@ -11,7 +11,8 @@
 #' @param skip_preflight Logical. When `TRUE`, skip the preflight validation
 #'   step. Defaults to `FALSE`.
 #'
-#' @return The same list returned by [run_mystery_caller_workflow()].
+#' @return The same list returned by [run_mystery_caller_workflow()] with an
+#'   additional `run_metrics` element containing structured runtime metrics.
 #'
 #' @examples
 #' \dontrun{
@@ -134,6 +135,8 @@ run_mystery_caller_workflow_with_logging <- function(
     final_n = if (!is.null(result$cleaned_phase2)) nrow(result$cleaned_phase2) else NA_integer_,
     input_n  = nrow(phase1_data)
   )
+
+  result$run_metrics <- tyler_collect_run_metrics()
 
   invisible(result)
 }

@@ -402,3 +402,21 @@ test_that("Logging is performant", {
   # Should complete in reasonable time (< 2 seconds for 100 steps)
   expect_true(elapsed < 2.0)
 })
+
+
+test_that("tyler_collect_run_metrics returns structured run data", {
+  tyler_workflow_start("Metrics Test", total_steps = 2)
+  tyler_log_step("One", n_items = 10)
+  tyler_log_step_complete(n_success = 9, n_total = 10)
+  tyler_log_step("Two")
+  tyler_log_step_complete()
+  tyler_workflow_end(final_n = 9, input_n = 10)
+
+  metrics <- tyler:::tyler_collect_run_metrics()
+  expect_equal(metrics$workflow_name, "Metrics Test")
+  expect_equal(metrics$total_steps_expected, 2)
+  expect_equal(metrics$total_steps_completed, 2)
+  expect_true(is.data.frame(metrics$steps))
+  expect_true(all(c("step", "name", "duration_seconds", "n_success", "n_total") %in% names(metrics$steps)))
+  expect_equal(metrics$steps$n_success[[1]], 9)
+})

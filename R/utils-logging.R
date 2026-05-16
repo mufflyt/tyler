@@ -303,6 +303,57 @@ tyler_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_tot
   invisible(NULL)
 }
 
+
+#' Build structured workflow metrics
+#'
+#' @return A list containing workflow-level and per-step metrics suitable for
+#'   programmatic inspection.
+#' @keywords internal
+tyler_collect_run_metrics <- function() {
+  step_results <- .tyler_workflow$step_results
+  if (is.null(step_results) || !length(step_results)) {
+    step_metrics <- data.frame(
+      step = integer(),
+      name = character(),
+      started_at = as.POSIXct(character()),
+      ended_at = as.POSIXct(character()),
+      duration_seconds = numeric(),
+      n_items = integer(),
+      n_success = integer(),
+      n_total = integer(),
+      success_rate = numeric(),
+      stringsAsFactors = FALSE
+    )
+  } else {
+    step_metrics <- do.call(rbind, lapply(seq_along(step_results), function(i) {
+      step <- step_results[[i]]
+      data.frame(
+        step = i,
+        name = if (!is.null(step$name)) as.character(step$name) else NA_character_,
+        started_at = if (!is.null(step$start_time)) as.POSIXct(step$start_time) else as.POSIXct(NA),
+        ended_at = if (!is.null(step$end_time)) as.POSIXct(step$end_time) else as.POSIXct(NA),
+        duration_seconds = if (!is.null(step$duration)) as.numeric(step$duration) else NA_real_,
+        n_items = if (!is.null(step$n_items)) as.integer(step$n_items) else NA_integer_,
+        n_success = if (!is.null(step$n_success)) as.integer(step$n_success) else NA_integer_,
+        n_total = if (!is.null(step$n_total)) as.integer(step$n_total) else NA_integer_,
+        success_rate = if (!is.null(step$success_rate)) as.numeric(step$success_rate) else NA_real_,
+        stringsAsFactors = FALSE
+      )
+    }))
+  }
+
+  list(
+    workflow_name = .tyler_workflow$name,
+    started_at = .tyler_workflow$start_time,
+    ended_at = .tyler_workflow$end_time,
+    duration_seconds = .tyler_workflow$duration_seconds,
+    total_steps_expected = .tyler_workflow$total_steps,
+    total_steps_completed = nrow(step_metrics),
+    log_file = .tyler_workflow$log_file,
+    steps = step_metrics
+  )
+}
+
 #' End workflow and print summary
 #'
 #' @param final_n Number of final output rows
@@ -312,6 +363,8 @@ tyler_log_step_complete <- function(success_rate = NULL, n_success = NULL, n_tot
 tyler_workflow_end <- function(final_n = NULL, input_n = NULL) {
   end_time <- Sys.time()
   duration <- as.numeric(difftime(end_time, .tyler_workflow$start_time, units = "secs"))
+  .tyler_workflow$end_time <- end_time
+  .tyler_workflow$duration_seconds <- duration
   duration_str <- tyler_format_duration(duration)
 
   message("")
