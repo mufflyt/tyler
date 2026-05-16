@@ -257,6 +257,11 @@ mysterycall_disparities_table <- function(
 
 #' Print a mysterycall_disparities_table
 #'
+#' Prints a formatted table of disparity metrics with group sizes, acceptance
+#' rates, Wilson confidence intervals, absolute risk differences, relative risks,
+#' and p-values versus the reference group.  Column headers are labelled using
+#' the `ci_method` and `alpha` attributes stored on the object.
+#'
 #' @param x A `mysterycall_disparities_table` object returned by
 #'   [mysterycall_disparities_table()].
 #' @param ... Ignored.

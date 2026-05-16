@@ -140,6 +140,8 @@ theme_green_journal_map <- function(base_size = 10, legend_position = "right") {
 #'
 #' @param base_size Numeric. Base font size (default 9, smaller for panels).
 #' @return A [ggplot2::theme()] object.
+#' @seealso [theme_green_journal_map()] for single-panel maps;
+#'   [theme_green_journal()] for non-spatial plots.
 #' @export
 #' @family green-journal-themes
 #' @examplesIf interactive()
@@ -218,6 +220,8 @@ palette_green_journal <- function(n = NULL, type = c("qualitative", "sequential"
 #'
 #' @param ... Arguments passed to [ggplot2::scale_color_manual()].
 #' @return A ggplot2 [ggplot2::Scale] object.
+#' @seealso [scale_fill_green_journal()] for fill aesthetics;
+#'   [palette_green_journal()] for the underlying colour values.
 #' @export
 #' @family green-journal-colors
 #' @examples
@@ -237,6 +241,8 @@ scale_color_green_journal <- function(...) {
 #'
 #' @param ... Arguments passed to [ggplot2::scale_fill_manual()].
 #' @return A ggplot2 [ggplot2::Scale] object.
+#' @seealso [scale_color_green_journal()] for colour aesthetics;
+#'   [palette_green_journal()] for the underlying colour values.
 #' @export
 #' @family green-journal-colors
 #' @examples
@@ -276,7 +282,10 @@ scale_fill_green_journal <- function(...) {
 #' @param plot_data Optional data frame for CSV export. `NULL` extracts
 #'   `plot$data`.
 #' @param csv Logical. Export CSV (default `TRUE`).
-#' @return Invisible character vector of paths written.
+#' @return Invisible character vector of file paths written (PNG, PDF, and/or
+#'   CSV depending on arguments).
+#' @seealso [theme_green_journal()], [theme_green_journal_map()] for themes
+#'   to apply before saving; [palette_green_journal()] for the colour palette.
 #' @export
 #' @family green-journal-output
 #' @examplesIf interactive()

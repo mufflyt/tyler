@@ -20,6 +20,8 @@
 #' npi_results <- mysterycall_search_and_process_npi(data)
 #' mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 100)
 #'
+#' @seealso [mysterycall_check_no_data_loss()], [mysterycall_check_api_response()],
+#'   [mysterycall_scan_for_limits()] for related sanity-check utilities.
 #' @family utilities
 #' @export
 mysterycall_check_no_limits <- function(data,
@@ -118,6 +120,8 @@ mysterycall_check_no_limits <- function(data,
 #' # Scan with exclusions
 #' issues <- mysterycall_scan_for_limits("R/", exclude_pattern = "deprecated")
 #'
+#' @seealso [mysterycall_check_no_limits()] to validate row counts at runtime;
+#'   [mysterycall_check_no_data_loss()], [mysterycall_check_api_response()].
 #' @family utilities
 #' @export
 mysterycall_scan_for_limits <- function(path = "R",
@@ -273,6 +277,8 @@ mysterycall_scan_for_limits <- function(path = "R",
 #' mysterycall_check_api_response(coords, expected = 100, api_name = "Google Geocoding",
 #'                         tolerance = 5)
 #'
+#' @seealso [mysterycall_check_no_limits()], [mysterycall_check_no_data_loss()],
+#'   [mysterycall_preflight_check()] to validate API keys before the workflow.
 #' @family utilities
 #' @export
 mysterycall_check_api_response <- function(result,
@@ -333,6 +339,8 @@ mysterycall_check_api_response <- function(result,
 #' mysterycall_check_no_data_loss(before, dedup_data, "Deduplication",
 #'                         expected_change = -10, tolerance = 5)
 #'
+#' @seealso [mysterycall_check_no_limits()], [mysterycall_check_api_response()],
+#'   [mysterycall_scan_for_limits()] for related sanity-check utilities.
 #' @family utilities
 #' @export
 mysterycall_check_no_data_loss <- function(before,

@@ -464,8 +464,11 @@ mysterycall_validate_here_api <- function(api_key) {
 
 #' Assess data quality
 #'
-#' Scores a data frame for completeness and validity and returns a list of
-#' issues that may affect downstream workflow steps.
+#' Scores a data frame for completeness and validity on a 0-1 scale, returning
+#' both the overall score and a detailed list of specific issues that may affect
+#' downstream workflow steps.  Penalties are applied for missing values in
+#' required columns (>50% missing = -3 pts, 20-50% = -1 pt), excessive
+#' duplicate rows (>10% = -1 pt), and non-character NPI or name columns.
 #'
 #' @param data Data frame to assess.
 #' @param required_columns Character vector of column names that must be present
@@ -498,6 +501,8 @@ mysterycall_validate_here_api <- function(api_key) {
 #'   chosen to catch severely incomplete data while tolerating modest
 #'   missingness in large rosters.
 #'
+#' @seealso [mysterycall_preflight_check()] which calls this function;
+#'   [mysterycall_estimate_resources()] for runtime/memory projections.
 #' @family utilities
 #' @export
 #' @examples
@@ -602,6 +607,8 @@ mysterycall_assess_data_quality <- function(data, required_columns = c("first", 
 #'   relevant per-row constant is 1.5 s (NPI), 0.5 s (geocoding), or 2.5 s
 #'   (isochrones), not the combined 4.5 s.
 #'
+#' @seealso [mysterycall_preflight_check()] which calls this function;
+#'   [mysterycall_assess_data_quality()] for data completeness scoring.
 #' @family utilities
 #' @export
 #' @examples

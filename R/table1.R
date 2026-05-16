@@ -298,9 +298,14 @@ mysterycall_table1 <- function(data,
 
 #' Print a mysterycall_table1 object
 #'
+#' Prints a formatted Table 1 with column sample sizes in the header and the
+#' underlying tibble displayed via [print.tbl_df()].
+#'
 #' @param x A `mysterycall_table1` object returned by [mysterycall_table1()].
 #' @param ... Additional arguments passed to [print.tbl_df()].
 #' @return Invisibly returns `x`.
+#' @seealso [mysterycall_table1()] which produces this object;
+#'   [mysterycall_table1_gtsummary()] for a publication-ready `gtsummary` alternative.
 #' @family table
 #' @export
 print.mysterycall_table1 <- function(x, ...) {

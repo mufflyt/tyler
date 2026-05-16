@@ -297,10 +297,17 @@ mysterycall_poisson_model <- function(data,
 
 #' Print method for mysterycall_poisson_model objects
 #'
+#' Displays a formatted console summary of the fitted model: sample size,
+#' number of physicians, AIC/BIC, any convergence warnings, reference levels
+#' for each factor, and a fixed-effects table with incidence rate ratios (IRR),
+#' Wald 95% CIs, and p-values.
+#'
 #' @param x A \code{mysterycall_poisson_model} object.
 #' @param digits Integer decimal places for coefficient display. Default \code{3}.
 #' @param ... Ignored.
 #' @return Invisibly returns \code{x}.
+#' @seealso [mysterycall_poisson_model()] which produces this object;
+#'   [mysterycall_irr_plot()] to visualise the same IRR estimates.
 #' @family outcomes
 #' @export
 print.mysterycall_poisson_model <- function(x, digits = 3, ...) {

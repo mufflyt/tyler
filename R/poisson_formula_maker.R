@@ -3,20 +3,26 @@
 #' This function creates a formula for a Poisson model based on the provided data,
 #' response variable, and optional random effect.
 #'
-#' @param data A dataframe containing the predictor and response variables.
-#' @param response_var The name of the response variable in the dataframe.
-#' @param random_effect Optional. The name of the random effect variable for the formula.
+#' @param data A data frame containing all predictor and response variables.
+#'   Factor columns are detected automatically and included as-is; all other
+#'   non-response columns are treated as fixed-effect predictors.
+#' @param response_var Character scalar naming the count/numeric response
+#'   (outcome) column in `data`.
+#' @param random_effect Optional character scalar naming a grouping column to
+#'   add as a random intercept `(1 | random_effect)` term, e.g. `"physician"`.
+#'   Default `NULL` (no random effects; produces a fixed-effects-only formula).
 #'
-#' @return A formula object suitable for modeling in R.
+#' @return A `formula` object.  When `random_effect` is `NULL` the formula is
+#'   suitable for [stats::glm()]; when provided it is suitable for
+#'   [lme4::glmer()].
+#' @seealso [mysterycall_poisson_model()] which uses this formula builder
+#'   internally.
 #' @importFrom stats as.formula
 #'
 #' @examples
-#' # Example usage:
-#' response_variable <- "days"
-#' random_effect_term <- "name"  # Change this to the desired random effect variable
-#' df3_filtered <- data.frame(days = c(5, 10, 15), age = c(30, 40, 50), name = c("A", "B", "C"))
-#' formula <- mysterycall_create_formula(df3_filtered, response_variable, random_effect_term)
-#' formula
+#' df <- data.frame(days = c(5, 10, 15), age = c(30, 40, 50), name = c("A", "B", "C"))
+#' mysterycall_create_formula(df, "days", random_effect = "name")
+#' mysterycall_create_formula(df, "days")  # fixed-effects only
 #'
 #' @family modeling helpers
 #' @export

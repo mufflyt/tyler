@@ -13,8 +13,15 @@ NULL
 #' @param model A `mysterycall_poisson_model` result, or a `glm`, `glmerMod`,
 #'   or `lm` object.
 #'
-#' @return A named list with elements `mae` and `rmse` (numeric scalars).
+#' @return A named list with two numeric scalar elements:
+#'   \describe{
+#'     \item{`mae`}{Mean absolute error: mean(|observed - fitted|).}
+#'     \item{`rmse`}{Root-mean-square error: sqrt(mean((observed - fitted)^2)).}
+#'   }
+#'   Both are `NA_real_` if fitted values cannot be extracted from the model.
 #'
+#' @seealso [mysterycall_poisson_model()] which produces compatible model
+#'   objects; [mysterycall_select_best_model()] for AIC/BIC-based selection.
 #' @family outcomes
 #' @export
 #'

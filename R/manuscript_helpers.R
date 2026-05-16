@@ -12,8 +12,11 @@ NULL
 #' @param margin_of_error Numeric in `(0, 1)`. Desired margin of error.
 #'   Default `0.05` (+/-5%).
 #'
-#' @return A single character string.
+#' @return A single character string ready to paste into a manuscript methods
+#'   section describing the required sample size.
 #'
+#' @seealso [mysterycall_cochran_n()] for the underlying sample-size formula;
+#'   [mysterycall_methods_paragraph()] to generate the full methods paragraph.
 #' @family manuscript
 #' @export
 #'
@@ -49,8 +52,11 @@ mysterycall_sample_size_text <- function(N, margin_of_error = 0.05) {
 #' @param academic_label Character scalar for the academic label used in
 #'   `setting_col`. Default `"Academic"`.
 #'
-#' @return A single character string.
+#' @return A single character string describing the physician cohort demographics
+#'   (sex distribution, mean age, practice-setting breakdown).
 #'
+#' @seealso [mysterycall_methods_paragraph()] for the full methods section;
+#'   [mysterycall_write_results_paragraph()] for the results section.
 #' @family manuscript
 #' @export
 #'
@@ -109,8 +115,12 @@ mysterycall_summarize_demographics <- function(data,
 #' @param software Character scalar naming the analysis software.
 #'   Default `"R (R Foundation for Statistical Computing)"`.
 #'
-#' @return A single character string containing the methods paragraph.
+#' @return A single character string containing a ready-to-paste methods
+#'   paragraph describing the mystery-caller study design.
 #'
+#' @seealso [mysterycall_sample_size_text()] for the sample-size sentence;
+#'   [mysterycall_summarize_demographics()] for the demographics summary;
+#'   [mysterycall_write_results_paragraph()] for the results section.
 #' @family manuscript
 #' @export
 #'
@@ -176,9 +186,12 @@ mysterycall_methods_paragraph <- function(n_physicians,
 #'   Default `FALSE`.
 #'
 #' @return A data frame with columns `Term`, `IRR`, `95% CI`, `p-value`.
-#'   Rows where `p_value < 0.05` carry attribute `"significant_rows"` (row
-#'   indices) so downstream formatters can apply bold styling.
+#'   The data frame carries an integer attribute `"significant_rows"` with
+#'   the row indices where `p_value < 0.05`, allowing downstream formatters
+#'   to apply bold styling.  Intercept row is excluded by default.
 #'
+#' @seealso [mysterycall_poisson_model()] which produces the model input;
+#'   [mysterycall_write_results_paragraph()] to generate a prose summary.
 #' @family manuscript
 #' @export
 #'
