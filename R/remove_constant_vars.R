@@ -4,15 +4,20 @@
 #'
 #' @param data_frame A data frame from which constant variables should be removed.
 #'
-#' @return A data frame with constant variables removed.
+#' @return A data frame with the same row count as `data_frame` but with
+#'   zero-variance columns (all values identical after coercion to character)
+#'   removed. Returns `data_frame` unchanged when it is empty or has no
+#'   constant columns.
 #'
+#' @seealso [mysterycall_preflight_check()] to audit data quality before
+#'   removal; [mysterycall_assess_data_quality()] for missingness scoring.
 #' @importFrom dplyr select where all_of
 #'
 #' @examples
 #' df <- data.frame(a = 1:3, b = c(5, 5, 5), c = c("x", "y", "z"))
 #' mysterycall_remove_constants(df)
 #'
-#' @family utilities
+#' @family data quality
 #' @export
 mysterycall_remove_constants <- function(data_frame) {
 

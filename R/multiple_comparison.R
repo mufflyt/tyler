@@ -38,6 +38,9 @@
 #' )
 #' mysterycall_multiple_comparison_adjust(df, p_col = "p", label_col = "comparison")
 #'
+#' @seealso [mysterycall_bootstrap_ci()] for bootstrap-based interval
+#'   estimation; [mysterycall_poisson_model()] whose coefficients typically
+#'   feed this function; [stats::p.adjust()] for the underlying adjustment.
 #' @family inference
 #' @export
 mysterycall_multiple_comparison_adjust <- function(

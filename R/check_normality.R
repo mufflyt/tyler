@@ -6,7 +6,15 @@
 #' @param data A dataframe containing the data.
 #' @param variable A string specifying the column name of the variable to be checked and summarized.
 #'
-#' @return A list containing the summary statistics (mean and standard deviation if normal, median and IQR if not normal).
+#' @return A named list with either:
+#'   \describe{
+#'     \item{mean, sd}{Numeric scalars (if Shapiro-Wilk p > 0.05, data approximately normal).}
+#'     \item{median, iqr}{Numeric scalars (if Shapiro-Wilk p <= 0.05, data non-normal).}
+#'   }
+#'   Also emits a histogram + density plot and a Q-Q plot via side effects.
+#'
+#' @seealso [mysterycall_prepare_table1_vars()] for downstream variable
+#'   standardisation; [mysterycall_physician_age()] for age summary statistics.
 #' @family modeling helpers
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_histogram geom_density labs stat_qq stat_qq_line
@@ -14,13 +22,10 @@
 #' @importFrom stats shapiro.test IQR median
 #'
 #' @examples
-#' \donttest{
 #' sample_data <- data.frame(
 #'   business_days_until_appointment = c(1.5, 2.0, 1.8, 2.2, 1.9, 2.1, 2.3)
 #' )
-#'
 #' mysterycall_check_normality(sample_data, "business_days_until_appointment")
-#' }
 mysterycall_check_normality <- function(data, variable) {
   # Start logging
   message("Starting normality check and summary calculation for variable: ", variable)
@@ -97,5 +102,3 @@ mysterycall_check_normality <- function(data, variable) {
   return(summary_stats)
 }
 
-# Example usage with your dataframe and outcome variable
-# mysterycall_check_normality(df, "business_days_until_appointment")

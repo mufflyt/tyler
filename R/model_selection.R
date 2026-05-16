@@ -24,6 +24,9 @@ NULL
 #'   For `"lrt"`: a data frame with columns `comparison`, `Chisq`, `df`,
 #'   `p_value`.
 #'
+#' @seealso [mysterycall_poisson_model()] to fit the models being compared;
+#'   [mysterycall_create_formula()] to build predictor sets;
+#'   [mysterycall_bootstrap_ci()] for post-selection inference.
 #' @family outcomes
 #' @export
 #'

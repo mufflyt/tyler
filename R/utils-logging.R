@@ -18,7 +18,7 @@ NULL
 #' @param log_file Optional path to log file for persistent logging
 #' @return `invisible(NULL)`; initializes internal workflow state and prints a
 #'   workflow header to the console.
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' mysterycall_workflow_start("Demo Workflow", total_steps = 3)
@@ -62,7 +62,7 @@ mysterycall_workflow_start <- function(workflow_name, total_steps = NULL, log_fi
 #' @param n_items Number of items to process (for progress tracking)
 #' @return `invisible(NULL)`; updates the internal step counter and emits a
 #'   formatted step header to the console.
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' mysterycall_workflow_start("Demo", total_steps = 2)
@@ -112,7 +112,7 @@ mysterycall_log_step <- function(step_name, detail = NULL, n_items = NULL) {
 #' @param msg Message to log
 #' @param indent Whether to indent (default TRUE)
 #' @return `invisible(NULL)`.
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' mysterycall_log_info("Loading provider data")
@@ -129,7 +129,7 @@ mysterycall_log_info <- function(msg, indent = TRUE) {
 #' @param details Optional named list of additional key-value details to print.
 #' @param indent Whether to indent (default TRUE)
 #' @return `invisible(NULL)`.
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' mysterycall_log_success("Geocoding complete", details = list(n = 120, skipped = 3))
@@ -155,7 +155,7 @@ mysterycall_log_success <- function(msg, details = NULL, indent = TRUE) {
 #' @param fix Optional one-line suggested remediation.
 #' @param indent Whether to indent (default TRUE)
 #' @return `invisible(NULL)`.
-#' @family logging utilities
+#' @family logging
 #' @export
 #' @examples
 #' mysterycall_log_warning("Missing API key", fix = "Set GOOGLE_API_KEY env var")
@@ -180,7 +180,7 @@ mysterycall_log_warning <- function(msg, fix = NULL, indent = TRUE) {
 #' @param fix Suggested fix
 #' @param indent Whether to indent (default TRUE)
 #' @return `invisible(NULL)`.
-#' @family logging utilities
+#' @family logging
 #' @examples
 #' mysterycall_log_error("Geocode failed", cause = "API key missing", fix = "Set google_maps_api_key")
 #' @export
@@ -211,7 +211,7 @@ mysterycall_log_error <- function(msg, cause = NULL, fix = NULL, indent = TRUE) 
 #' @param status Optional status message
 #' @param show_percent Whether to show percentage (default TRUE)
 #' @return Invisible NULL
-#' @family logging utilities
+#' @family logging
 #' @examples
 #' mysterycall_log_progress(50, 100)
 #' mysterycall_log_progress(50, 100, status = "geocoding")
@@ -243,7 +243,7 @@ mysterycall_log_progress <- function(current, total, status = NULL, show_percent
 #' @param what What was loaded from cache
 #' @param n_items Number of cached items
 #' @return `invisible(NULL)`.
-#' @family logging utilities
+#' @family logging
 #' @examples
 #' mysterycall_log_cache_hit("geocode results", 250)
 #' @export
@@ -261,7 +261,7 @@ mysterycall_log_cache_hit <- function(what, n_items) {
 #' @param path File path
 #' @param n_rows Number of rows (optional)
 #' @return Invisible NULL
-#' @family logging utilities
+#' @family logging
 #' @examples
 #' mysterycall_log_save(tempfile(fileext = ".csv"), n_rows = 42)
 #' @export
@@ -285,7 +285,7 @@ mysterycall_log_save <- function(path, n_rows = NULL) {
 #' @param n_total Total items attempted
 #' @return `invisible(NULL)` after printing duration and optional success
 #'   metrics for the current step.
-#' @family logging utilities
+#' @family logging
 #' @examplesIf interactive()
 #' mysterycall_workflow_start("Demo", total_steps = 1)
 #' mysterycall_log_step("Step 1")
@@ -332,7 +332,7 @@ mysterycall_log_step_complete <- function(success_rate = NULL, n_success = NULL,
 #' @param final_n Number of final output rows
 #' @param input_n Number of input rows
 #' @return Invisible NULL
-#' @family logging utilities
+#' @family logging
 #' @examplesIf interactive()
 #' mysterycall_workflow_start("Demo", total_steps = 1)
 #' mysterycall_workflow_end(final_n = 80, input_n = 100)
@@ -408,7 +408,7 @@ mysterycall_workflow_end <- function(final_n = NULL, input_n = NULL) {
 #'
 #' @param seconds Duration in seconds
 #' @return Formatted string (e.g., "2h 34m 15s")
-#' @family logging utilities
+#' @family logging
 #' @examples
 #' mysterycall_format_duration(45)
 #' mysterycall_format_duration(125)
@@ -470,7 +470,7 @@ mysterycall_log_to_file <- function(msg) {
 #' @param total Total number of items
 #' @param label Label for progress messages
 #' @return A function that updates progress
-#' @family logging utilities
+#' @family logging
 #' @export
 #'
 #' @examples
@@ -513,7 +513,7 @@ mysterycall_progress_callback <- function(total, label = "Processing") {
 #'   `mysterycall_log_info()` when using quiet-aware wrappers.
 #'
 #' @return The previous quiet value (invisibly).
-#' @family logging utilities
+#' @family logging
 #' @examples
 #' old <- mysterycall_use_quiet_logging(TRUE)
 #' # ... run operations silently ...

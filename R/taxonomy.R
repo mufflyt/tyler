@@ -2,24 +2,20 @@
 #'
 #' This dataset contains taxonomy codes for Obstetricians and Gynecologists among other healthcare providers.
 #'
-#' @return A tibble mapping NUCC taxonomy codes to descriptive provider
-#'   types relevant to obstetrics and gynecology research.
-#' @source <https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf>
 #' @format A data frame with three columns:
 #'   \describe{
-#'     \item{Code}{NUCC (National Uniform Claim Committee) taxonomy code.}
-#'     \item{Classification}{Provider classification (e.g., Allopathic & Osteopathic Physicians).}
-#'     \item{Specialization}{Provider specialization within the classification.}
+#'     \item{Code}{NUCC (National Uniform Claim Committee) taxonomy code (character).}
+#'     \item{Classification}{Provider classification (e.g., "Allopathic & Osteopathic Physicians").}
+#'     \item{Specialization}{Specialty within the classification (e.g., "Obstetrics & Gynecology").}
 #'   }
+#' @source <https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf>
 #'
+#' @seealso [mysterycall_get_clinician_data()] to look up provider taxonomy
+#'   codes from the NPI registry; [acgme] for ACGME residency program data.
 #' @examples
-#' \donttest{
-#' # Load the taxonomy dataset
 #' data(taxonomy)
+#' print(taxonomy[1:3, ])
 #'
-#' # Explore the dataset
-#' print(taxonomy)
-#' }
 #' @family datasets
 #' @name taxonomy
 "taxonomy"
