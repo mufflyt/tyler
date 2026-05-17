@@ -912,8 +912,8 @@ rates <- c(0.91, 0.638, 0.54, 0.00, 1.00, 0.085)
 knitr::kable(
   data.frame(
     raw_rate     = rates,
-    formatted_1d = mysterycall_format_pct(rates, my_digits = 1),
-    formatted_0d = mysterycall_format_pct(rates, my_digits = 0)
+    formatted_1d = mysterycall_format_pct(rates, digits = 1),
+    formatted_0d = mysterycall_format_pct(rates, digits = 0)
   ),
   col.names = c("Raw proportion", "1 decimal place", "0 decimal places"),
   caption   = "`mysterycall_format_pct()` output for typical acceptance rates."

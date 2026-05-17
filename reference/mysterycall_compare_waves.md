@@ -38,7 +38,7 @@ mysterycall_compare_waves(
 - type:
 
   One of `"auto"` (default), `"proportion"`, or `"continuous"`. `"auto"`
-  detects based on whether all non-missing outcome values are in 0, 1.
+  detects based on whether all non-missing outcome values are in {0, 1}.
 
 - ref_wave:
 

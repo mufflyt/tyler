@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Data Quality: Phone Validation, Name Parsing, and Safe Joins">
@@ -264,7 +264,7 @@ whose area code is registered to a different state:</p>
 <code class="sourceCode R"><span><span class="co"># Colorado provider with a New York area code</span></span>
 <span><span class="fu"><a href="../reference/mysterycall_validate_phone.html">mysterycall_validate_phone</a></span><span class="op">(</span><span class="st">"(212) 555-0199"</span>, practice_state <span class="op">=</span> <span class="st">"CO"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   phone_e164_valid phone_npa phone_state_from_npa phone_area_code_matches_state</span></span>
-<span><span class="co">#&gt; 1             TRUE       212                   NY                         FALSE</span></span>
+<span><span class="co">#&gt; 1            FALSE       212                   NY                         FALSE</span></span>
 <span><span class="co">#&gt;        phone_validity_flag</span></span>
 <span><span class="co">#&gt; 1 area_code_state_mismatch</span></span></code></pre></div>
 </div>

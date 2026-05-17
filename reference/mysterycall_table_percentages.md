@@ -1,9 +1,10 @@
 # Most frequent level(s) of a categorical variable with percentage
 
 Counts each level of a categorical variable, computes its share of all
-non-missing rows, and returns **only the level(s) with the highest
+rows (including `NA`), and returns **only the level(s) with the highest
 count**. When multiple levels tie for the top count, all tied levels are
-returned. `NA` values are excluded from counts and the denominator.
+returned. `NA` values are counted as their own level and included in the
+denominator.
 
 ## Usage
 
@@ -61,9 +62,9 @@ mysterycall_table_percentages(df_tie, "category")
 #> 2        B 3 33.33333
 #> 3        C 3 33.33333
 
-# NAs are excluded from counts and the denominator
+# NAs are counted as their own level; denominator includes all rows
 df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
 mysterycall_table_percentages(df_na, "category")
 #>   category n percent
-#> 1        A 3      50
+#> 1        A 3    37.5
 ```

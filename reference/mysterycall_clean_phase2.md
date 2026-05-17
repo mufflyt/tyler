@@ -49,7 +49,7 @@ A data frame with processed data.
 
 ## Column name transformation
 
-All input column names are converted to **lowercase snake\\case** by
+All input column names are converted to **lowercase snake_case** by
 [`janitor::clean_names()`](https://sfirke.github.io/janitor/reference/clean_names.html)
 **unconditionally** before `required_strings` pattern matching.
 Transformation cannot be disabled. Common examples:

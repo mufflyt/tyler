@@ -45,7 +45,7 @@ A data frame with the same row count and all original columns as
 
 - `probability`:
 
-  Numeric in 0, 1. API prediction confidence.
+  Numeric in \[0, 1\]. API prediction confidence.
 
 - `count`:
 

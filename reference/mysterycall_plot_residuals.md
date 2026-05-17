@@ -40,8 +40,9 @@ A named list with three elements, each a `ggplot` object:
 ## See also
 
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
-to fit the model passed here; `mysterycall_plot_effects()` for
-marginal-effect plots;
+to fit the model passed here;
+[`mysterycall_plot_effect()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_effect.md)
+for marginal-effect plots;
 [`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md)
 to write any element to disk.
 

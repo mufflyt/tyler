@@ -97,7 +97,7 @@ area code is registered to a different state:
 # Colorado provider with a New York area code
 mysterycall_validate_phone("(212) 555-0199", practice_state = "CO")
 #>   phone_e164_valid phone_npa phone_state_from_npa phone_area_code_matches_state
-#> 1             TRUE       212                   NY                         FALSE
+#> 1            FALSE       212                   NY                         FALSE
 #>        phone_validity_flag
 #> 1 area_code_state_mismatch
 ```
