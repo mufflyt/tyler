@@ -160,11 +160,14 @@ reference:
       validate, and reformat free-text physician name strings; safe join
       wrappers with coverage enforcement and right-side uniqueness guards.
     contents:
+      - phone_validation
       - mysterycall_validate_phone
+      - physician_name_parsing
       - mysterycall_parse_physician_name
       - mysterycall_validate_parsed_names
       - mysterycall_format_physician_name
       - mysterycall_test_name_parser
+      - join_safety
       - mysterycall_safe_left_join
       - mysterycall_safe_inner_join
       - mysterycall_safe_semi_join
@@ -273,6 +276,7 @@ reference:
       - mysterycall_plot_line
       - mysterycall_plot_scatter
       - mysterycall_plot_inclexcl
+      - mysterycall_plot_source_venn
       - mysterycall_flowchart
       - mysterycall_save_plot
       - plot_effects
