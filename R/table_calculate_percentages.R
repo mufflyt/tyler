@@ -1,9 +1,9 @@
 #' Most frequent level(s) of a categorical variable with percentage
 #'
 #' Counts each level of a categorical variable, computes its share of all
-#' non-missing rows, and returns **only the level(s) with the highest count**.
+#' rows (including `NA`), and returns **only the level(s) with the highest count**.
 #' When multiple levels tie for the top count, all tied levels are returned.
-#' `NA` values are excluded from counts and the denominator.
+#' `NA` values are counted as their own level and included in the denominator.
 #'
 #' @param data_frame A data frame containing the categorical variable.
 #' @param variable A character string giving the column name of the categorical
@@ -22,7 +22,7 @@
 #' df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
 #' mysterycall_table_percentages(df_tie, "category")
 #'
-#' # NAs are excluded from counts and the denominator
+#' # NAs are counted as their own level; denominator includes all rows
 #' df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
 #' mysterycall_table_percentages(df_na, "category")
 #'
@@ -35,7 +35,6 @@ mysterycall_table_percentages <- function(data_frame, variable) {
   variable <- as.character(variable)  # Ensure the variable name is a string
 
   summary_df <- data_frame %>%
-    dplyr::filter(!is.na(!!rlang::sym(variable))) %>%
     dplyr::count(!!rlang::sym(variable), name = "n") %>%
     dplyr::mutate(percent = 100 * n / sum(n)) %>%
     dplyr::arrange(dplyr::desc(n)) %>%

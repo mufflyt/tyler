@@ -1,6 +1,7 @@
 #' @importFrom methods is
 #' @importFrom stats coef density fitted model.frame model.response poisson predict runif sd
 #' @importFrom utils capture.output packageVersion str tail write.csv
+#' @importFrom graphics title
 NULL
 
 utils::globalVariables(c(
@@ -99,7 +100,18 @@ utils::globalVariables(c(
   "rr_lower",
   "rr_upper",
   "p_value_fmt",
-  "p_value"
+  "p_value",
+  ".n",
+  "has_first",
+  "has_last",
+  "last_name",
+  "middle_name",
+  "suffix",
+  "valid_first",
+  "valid_last",
+  "x0",
+  "y0",
+  "r"
 ))
 
 .onAttach <- function(libname, pkgname) {

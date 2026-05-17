@@ -261,8 +261,11 @@ mysterycall_safe_left_join <- function(left, right, by,
   if (!is.character(suffix) || length(suffix) != 2L) stop("`suffix` must be a character vector of length 2.", call. = FALSE)
 
   # Resolve min_coverage and max_duplication (parameter > env var > default).
+  # When expect_unique_right = FALSE the caller has acknowledged duplicates, so
+  # max_duplication defaults to Inf (disabled) unless explicitly supplied.
   min_coverage <- .resolve_coverage_param(min_coverage, "JOIN_MIN_COVERAGE", 0.98)
-  max_duplication <- .resolve_dup_param(max_duplication, "JOIN_MAX_DUPLICATION", 1.02)
+  dup_default <- if (isTRUE(expect_unique_right)) 1.02 else Inf
+  max_duplication <- .resolve_dup_param(max_duplication, "JOIN_MAX_DUPLICATION", dup_default)
 
   # Harmonize key types to prevent silent 0-match joins.
   h     <- .harmonize_key_types(left, right, by, label_left, label_right)

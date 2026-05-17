@@ -319,9 +319,9 @@ mysterycall_format_physician_name <- function(first_name,
                                               suffix         = NA,
                                               format         = "last_first",
                                               include_suffix = TRUE) {
+  if (length(first_name) == 0L || length(last_name) == 0L) return(character(0L))
   n <- max(length(first_name), length(middle_name),
            length(last_name),  length(suffix))
-  if (n == 0L) return(character(0L))
 
   first_name  <- rep_len(as.character(first_name),  n)
   middle_name <- rep_len(as.character(middle_name), n)

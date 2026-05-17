@@ -137,7 +137,7 @@ mysterycall_validate_phone <- function(phone_str,
   nxx_valid <- !is.na(nxx) &
     substr(nxx, 1L, 1L) %in% as.character(2:9) &
     !(substr(nxx, 2L, 2L) == "1" & substr(nxx, 3L, 3L) == "1")
-  phone_e164_valid <- ten_digit & npa_valid & nxx_valid
+  syntax_valid <- ten_digit & npa_valid & nxx_valid
 
   # Area-code to state lookup - named vector preserves input order exactly
   # and handles NA/duplicate NPA without any dependence on merge() row ordering.
@@ -153,15 +153,19 @@ mysterycall_validate_phone <- function(phone_str,
       phone_state_from_npa == practice_state
   }
 
-  # Validity flag
+  # Validity flag: unknown area codes and state mismatches are not valid
   missing_phone <- is.na(phone_str) | !nzchar(trimws(phone_str))
   validity_flag <- ifelse(
-    missing_phone,                       "missing",
-    ifelse(!phone_e164_valid,            "invalid_format",
-    ifelse(is.na(phone_state_from_npa),  "unknown_area_code",
+    missing_phone,                            "missing",
+    ifelse(!syntax_valid,                     "invalid_format",
+    ifelse(is.na(phone_state_from_npa),       "unknown_area_code",
     ifelse(!is.na(state_match) & !state_match, "area_code_state_mismatch",
-                                         "valid")))
+                                              "valid")))
   )
+
+  # phone_e164_valid is TRUE only for fully valid numbers: correct syntax,
+  # known area code, and area code matches practice_state (when provided).
+  phone_e164_valid <- validity_flag == "valid"
 
   data.frame(
     phone_e164_valid              = phone_e164_valid,

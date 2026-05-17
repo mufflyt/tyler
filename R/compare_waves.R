@@ -11,7 +11,7 @@
 #'   are stratified by group x wave.
 #' @param type One of `"auto"` (default), `"proportion"`, or
 #'   `"continuous"`. `"auto"` detects based on whether all
-#'   non-missing outcome values are in {0, 1}.
+#'   non-missing outcome values are in \{0, 1\}.
 #' @param ref_wave Scalar or NULL. The reference wave against which other
 #'   waves are compared. When NULL, the first wave (sorted
 #'   alphabetically/numerically) is used.

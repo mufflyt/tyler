@@ -21,7 +21,7 @@ NULL
 #'   }
 #'
 #' @seealso [mysterycall_poisson_model()] to fit the model passed here;
-#'   [mysterycall_plot_effects()] for marginal-effect plots;
+#'   [mysterycall_plot_effect()] for marginal-effect plots;
 #'   [mysterycall_save_plot()] to write any element to disk.
 #' @family outcomes
 #' @export

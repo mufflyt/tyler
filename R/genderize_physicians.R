@@ -19,7 +19,7 @@
 #'   \describe{
 #'     \item{`gender`}{Character. `"male"`, `"female"`, or `NA` for ambiguous
 #'       or unknown names.}
-#'     \item{`probability`}{Numeric in [0, 1]. API prediction confidence.}
+#'     \item{`probability`}{Numeric in \[0, 1\]. API prediction confidence.}
 #'     \item{`count`}{Integer. Historical frequency of the name in the
 #'       Genderize.io database.}
 #'   }
@@ -245,7 +245,8 @@ genderize_fetch <- function(first_names, batch_size = 10, api_url = "https://api
     hdrs <- httr::headers(response)
     remaining <- suppressWarnings(as.integer(hdrs[["X-Rate-Limit-Remaining"]]))
     limit_total <- suppressWarnings(as.integer(hdrs[["X-Rate-Limit-Limit"]]))
-    if (!is.na(remaining) && !is.na(limit_total) && limit_total > 0L) {
+    if (length(remaining) == 1L && length(limit_total) == 1L &&
+        !is.na(remaining) && !is.na(limit_total) && limit_total > 0L) {
       pct_left <- remaining / limit_total
       if (remaining == 0L) {
         warning(
