@@ -61,10 +61,12 @@ are guarded with `requireNamespace()` throughout.
 * https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf — 200 OK
 * https://github.com/mufflyt/mysterycall — 200 OK
 
-## provider package
+## provider package (non-CRAN Suggests)
 
-`provider` (andrewallenbruce/provider) is not on CRAN and is not declared in
-DESCRIPTION. `retrieve_clinician_data()` accesses it via `asNamespace("provider")`
-and `get0("clinicians", ...)` with no `requireNamespace()` call, so R CMD check
-does not flag it as an undeclared dependency. The function returns `NULL` gracefully
-when the package is not installed.
+`provider` (andrewallenbruce/provider, GitHub-only) is listed in `Suggests` with
+`Additional_repositories: https://github.com/andrewallenbruce/provider` in
+DESCRIPTION. All usage in `mysterycall_get_clinician_data()` is guarded with
+`requireNamespace("provider", quietly = TRUE)`; the function returns `NULL` per NPI
+when the package is not installed. Because `provider` is not on a standard R
+repository, CRAN's check infrastructure cannot install it during automated checks —
+this is intentional and the package operates correctly without it.

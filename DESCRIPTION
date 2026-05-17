@@ -13,6 +13,7 @@ License: MIT + file LICENSE
 URL: https://mufflyt.github.io/mysterycall/, https://github.com/mufflyt/mysterycall
 BugReports: https://github.com/mufflyt/mysterycall/issues
 Date: 2026-05-08
+Additional_repositories: https://github.com/andrewallenbruce/provider
 Depends:
     R (>= 4.1.0)
 Imports:
@@ -70,6 +71,7 @@ Suggests:
     openxlsx,
     patchwork,
     progress,
+    provider,
     readxl,
     rmarkdown,
     rnaturalearth,
