@@ -3,11 +3,13 @@
 #' @name phone_validation
 NULL
 
-# Package-level cache - loaded once per session on first call.
-.nanp_lookup_cache <- NULL
+# Mutable environment for session-level caching; <<- into a locked namespace
+# binding fails when the package is installed, so we store state here instead.
+.nanp_cache_env <- new.env(parent = emptyenv())
+.nanp_cache_env$lookup <- NULL
 
 .load_nanp_lookup <- function(nanp_path = NULL) {
-  if (!is.null(.nanp_lookup_cache)) return(invisible(.nanp_lookup_cache))
+  if (!is.null(.nanp_cache_env$lookup)) return(invisible(.nanp_cache_env$lookup))
   path <- if (!is.null(nanp_path)) {
     nanp_path
   } else {
@@ -21,8 +23,8 @@ NULL
   }
   tbl <- utils::read.csv(path, stringsAsFactors = FALSE)
   tbl$area_code <- sprintf("%03d", as.integer(tbl$area_code))
-  .nanp_lookup_cache <<- tbl
-  invisible(.nanp_lookup_cache)
+  .nanp_cache_env$lookup <- tbl
+  invisible(.nanp_cache_env$lookup)
 }
 
 #' Validate North-American (NANP) phone number strings
