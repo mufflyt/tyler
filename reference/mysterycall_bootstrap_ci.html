@@ -47,6 +47,7 @@ summary statistic, and returns percentile confidence intervals."><meta property=
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -121,36 +122,42 @@ before bootstrapping to make results reproducible.</p></dd>
 
 <dt id="arg-stat">stat<a class="anchor" aria-label="anchor" href="#arg-stat"></a></dt>
 <dd><p>Character. Statistic to bootstrap. One of
-<code>"proportion"</code> (mean of a 0/1 variable), <code>"mean"</code>, or
-<code>"median"</code>.</p></dd>
+<code>"proportion"</code> (mean of a 0/1 variable), <code>"mean"</code>, or <code>"median"</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.frame with columns:</p><dl><dt>group</dt>
-<dd><p>Group label, or <code>"Overall"</code> when <code>group_col</code>
-is NULL.</p></dd>
+    <p>A data frame with one row per group (or <code>"Overall"</code> when
+<code>group_col</code> is <code>NULL</code>) and columns:</p><dl><dt><code>group</code></dt>
+<dd><p>Character. Group label, or <code>"Overall"</code> when
+<code>group_col</code> is <code>NULL</code>.</p></dd>
 
-<dt>n</dt>
-<dd><p>Number of non-NA observations used.</p></dd>
+<dt><code>n</code></dt>
+<dd><p>Integer. Number of non-NA observations used.</p></dd>
 
-<dt>estimate</dt>
-<dd><p>Observed statistic value.</p></dd>
+<dt><code>estimate</code></dt>
+<dd><p>Numeric. Observed statistic value (proportion,
+mean, or median depending on <code>stat</code>).</p></dd>
 
-<dt>lower_ci</dt>
-<dd><p>Lower percentile CI bound.</p></dd>
+<dt><code>lower_ci</code></dt>
+<dd><p>Numeric. Lower percentile CI bound at <code>alpha/2</code>.</p></dd>
 
-<dt>upper_ci</dt>
-<dd><p>Upper percentile CI bound.</p></dd>
+<dt><code>upper_ci</code></dt>
+<dd><p>Numeric. Upper percentile CI bound at
+<code>1 - alpha/2</code>.</p></dd>
 
-<dt>n_boot</dt>
-<dd><p>Number of bootstrap replicates used.</p></dd>
+<dt><code>n_boot</code></dt>
+<dd><p>Integer. Number of bootstrap replicates used.</p></dd>
 
 
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other inference:
+    <div class="dont-index"><p><code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code>, <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>
+for model-based outcome summaries; <code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code> for
+cross-wave significance testing.</p>
+<p>Other inference:
+<code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code>,
 <code><a href="mysterycall_multiple_comparison_adjust.html">mysterycall_multiple_comparison_adjust()</a></code></p></div>
     </div>
 

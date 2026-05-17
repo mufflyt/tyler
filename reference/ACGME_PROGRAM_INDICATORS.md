@@ -1,7 +1,7 @@
 # ACGME Program Indicators
 
 String patterns indicating ACGME-accredited residency or fellowship
-programs. Confidence: 0.98–0.99.
+programs. Confidence: 0.98-0.99.
 
 ## Usage
 

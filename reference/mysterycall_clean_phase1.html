@@ -49,6 +49,7 @@ NPI numbers are handled by generating a unique random_id."><meta property="og:im
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -145,7 +146,9 @@ not a valid hex digest.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisibly returns the cleaned data frame with the following attributes:</p><ul><li><p><code>audit_trail</code>: List containing processing metadata (timestamps, row counts, flags)</p></li>
+    <p>Invisibly returns the cleaned data frame (side effect: files are
+written to <code>output_directory</code>).  The returned object carries these
+attributes:</p><ul><li><p><code>audit_trail</code>: List containing processing metadata (timestamps, row counts, flags)</p></li>
 <li><p><code>processing_timestamp</code>: Time when processing completed</p></li>
 <li><p><code>function_version</code>: Version number of the function (2.0)</p></li>
 <li><p><code>output_path</code>: Path to the saved CSV/Parquet file</p></li>
@@ -232,11 +235,12 @@ for downstream reproducibility tooling.</p>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other workflow:
+    <div class="dont-index"><p><code><a href="mysterycall_clean_phase2.html">mysterycall_clean_phase2()</a></code> for Phase 2 data cleaning;
+<code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code> which orchestrates both phases.</p>
+<p>Other workflow:
 <code><a href="mysterycall_call_productivity.html">mysterycall_call_productivity()</a></code>,
 <code><a href="mysterycall_clean_phase2.html">mysterycall_clean_phase2()</a></code>,
 <code><a href="mysterycall_print_dashboard.html">mysterycall_print_dashboard()</a></code>,
-<code><a href="mysterycall_rename_columns.html">mysterycall_rename_columns()</a></code>,
 <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>,
 <code><a href="mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged()</a></code>,
 <code><a href="mysterycall_split_and_save.html">mysterycall_split_and_save()</a></code>,

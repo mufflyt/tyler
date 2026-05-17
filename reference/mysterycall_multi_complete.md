@@ -40,9 +40,9 @@ Other progress-bars:
 ## Examples
 
 ``` r
-# \donttest{
-tracker <- mysterycall_multi_step(c("Geocode", "Validate"), 10)
-mysterycall_multi_update(tracker, amount = 10)
+if (FALSE) { # interactive()
+tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
+mysterycall_multi_step(tracker, 1, total = 5)
 mysterycall_multi_complete(tracker, result = "ok")
-# }
+}
 ```

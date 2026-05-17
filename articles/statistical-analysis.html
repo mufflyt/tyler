@@ -73,6 +73,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
@@ -485,37 +486,26 @@ insured patients, on average, after adjusting for all other covariates
 in the model.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
-<span><span class="va">n_per</span> <span class="op">&lt;-</span> <span class="fl">200L</span></span>
-<span><span class="va">ins_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Medicaid"</span>, <span class="st">"Medicare"</span>, <span class="st">"Private"</span>, <span class="st">"Uninsured"</span><span class="op">)</span></span>
-<span><span class="va">lambda_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Medicaid <span class="op">=</span> <span class="fl">18</span>, Medicare <span class="op">=</span> <span class="fl">12</span>, Private <span class="op">=</span> <span class="fl">10</span>, Uninsured <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span>
-<span><span class="va">sim_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ins_levels</span>, <span class="kw">function</span><span class="op">(</span><span class="va">ins</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    insurance <span class="op">=</span> <span class="va">ins</span>,</span>
-<span>    wait_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="va">n_per</span>, lambda <span class="op">=</span> <span class="va">lambda_map</span><span class="op">[</span><span class="va">ins</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">sim_df</span><span class="op">$</span><span class="va">insurance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sim_df</span><span class="op">$</span><span class="va">insurance</span>, levels <span class="op">=</span> <span class="va">ins_levels</span><span class="op">)</span></span>
+<span><span class="va">medicaid_waits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">200L</span>, lambda <span class="op">=</span> <span class="fl">18</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sim_df</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wait_days</span>, fill <span class="op">=</span> <span class="va">insurance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">2</span>, colour <span class="op">=</span> <span class="st">"white"</span>, linewidth <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">insurance</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    Medicaid  <span class="op">=</span> <span class="st">"#1b7837"</span>,</span>
-<span>    Medicare  <span class="op">=</span> <span class="st">"#4393c3"</span>,</span>
-<span>    Private   <span class="op">=</span> <span class="st">"#2166ac"</span>,</span>
-<span>    Uninsured <span class="op">=</span> <span class="st">"#d6604d"</span></span>
-<span>  <span class="op">)</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="st">"Wait time (business days)"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Number of calls"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>strip.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># mysterycall_plot_distribution() returns a named list: $raw and $sqrt_transformed</span></span>
+<span><span class="va">dist_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_plot_distribution.html">mysterycall_plot_distribution</a></span><span class="op">(</span><span class="va">medicaid_waits</span>,</span>
+<span>                                             title <span class="op">=</span> <span class="st">"Medicaid wait days"</span>,</span>
+<span>                                             bins  <span class="op">=</span> <span class="fl">25L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Print the two panels side-by-side using patchwork if available,</span></span>
+<span><span class="co"># otherwise fall back to printing the raw panel alone</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"patchwork"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">dist_plots</span><span class="op">$</span><span class="va">raw</span> <span class="op">+</span> <span class="va">dist_plots</span><span class="op">$</span><span class="va">sqrt_transformed</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">dist_plots</span><span class="op">$</span><span class="va">raw</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <div class="figure">
-<img src="statistical-analysis_files/figure-html/wait-time-dist-1.png" class="r-plt" alt="Simulated wait-time distributions by insurance type. Medicaid and Uninsured callers show longer right tails, consistent with Poisson count data." width="624"><p class="caption">
-Simulated wait-time distributions by insurance type. Medicaid and
-Uninsured callers show longer right tails, consistent with Poisson count
-data.
+<img src="statistical-analysis_files/figure-html/wait-time-dist-1.png" class="r-plt" alt="Right-skewed wait-time distribution for Medicaid callers (simulated). `mysterycall_plot_distribution()` returns raw and sqrt-scaled panels — the sqrt panel makes the long upper tail visible without distorting the modal value." width="624"><p class="caption">
+Right-skewed wait-time distribution for Medicaid callers (simulated).
+<code><a href="../reference/mysterycall_plot_distribution.html">mysterycall_plot_distribution()</a></code> returns raw and sqrt-scaled
+panels — the sqrt panel makes the long upper tail visible without
+distorting the modal value.
 </p>
 </div>
 </div>
@@ -651,52 +641,24 @@ approximated as
 (the variance of a logistic distribution), giving:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">ICC</mtext><mo>≈</mo><mfrac><msubsup><mi>σ</mi><mtext mathvariant="normal">physician</mtext><mn>2</mn></msubsup><mrow><msubsup><mi>σ</mi><mtext mathvariant="normal">physician</mtext><mn>2</mn></msubsup><mo>+</mo><msup><mi>π</mi><mn>2</mn></msup><mi>/</mi><mn>3</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{ICC} \approx \frac{\sigma^2_{\text{physician}}}{\sigma^2_{\text{physician}} + \pi^2/3}</annotation></semantics></math></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">irr_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  insurance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Medicaid"</span>, <span class="st">"Medicare"</span>, <span class="st">"Uninsured"</span><span class="op">)</span>,</span>
-<span>                     levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Uninsured"</span>, <span class="st">"Medicare"</span>, <span class="st">"Medicaid"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  irr       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.42</span>, <span class="fl">1.08</span>, <span class="fl">1.29</span><span class="op">)</span>,</span>
-<span>  ci_lo     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.18</span>, <span class="fl">0.89</span>, <span class="fl">1.06</span><span class="op">)</span>,</span>
-<span>  ci_hi     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.70</span>, <span class="fl">1.31</span>, <span class="fl">1.57</span><span class="op">)</span>,</span>
-<span>  p_label   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"p &lt; 0.001"</span>, <span class="st">"p = 0.441"</span>, <span class="st">"p = 0.012"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># mysterycall_irr_plot() accepts a data frame with term/irr/ci_lower/ci_upper/p_value</span></span>
+<span><span class="va">irr_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  term     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Medicaid"</span>, <span class="st">"Medicare"</span>, <span class="st">"Uninsured"</span><span class="op">)</span>,</span>
+<span>  irr      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.42</span>, <span class="fl">1.08</span>, <span class="fl">1.29</span><span class="op">)</span>,</span>
+<span>  ci_lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.18</span>, <span class="fl">0.89</span>, <span class="fl">1.06</span><span class="op">)</span>,</span>
+<span>  ci_upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.70</span>, <span class="fl">1.31</span>, <span class="fl">1.57</span><span class="op">)</span>,</span>
+<span>  p_value  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0001</span>, <span class="fl">0.441</span>, <span class="fl">0.012</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">irr_df</span>,</span>
-<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">irr</span>, y <span class="op">=</span> <span class="va">insurance</span>, xmin <span class="op">=</span> <span class="va">ci_lo</span>, xmax <span class="op">=</span> <span class="va">ci_hi</span>,</span>
-<span>                 colour <span class="op">=</span> <span class="va">irr</span> <span class="op">&gt;</span> <span class="fl">1.1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, colour <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_errorbarh</a></span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0.15</span>, linewidth <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
-<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ci_hi</span> <span class="op">+</span> <span class="fl">0.04</span>, label <span class="op">=</span> <span class="va">p_label</span><span class="op">)</span>,</span>
-<span>    hjust <span class="op">=</span> <span class="fl">0</span>, size <span class="op">=</span> <span class="fl">3</span>, colour <span class="op">=</span> <span class="st">"grey30"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"#c0392b"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"#2980b9"</span><span class="op">)</span>,</span>
-<span>                                guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span></span>
-<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.75</span>, <span class="fl">1.95</span><span class="op">)</span>,</span>
-<span>    breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1.0</span>, <span class="fl">1.2</span>, <span class="fl">1.4</span>, <span class="fl">1.6</span>, <span class="fl">1.8</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="st">"Incidence Rate Ratio (vs. Private insurance)"</span>,</span>
-<span>    y <span class="op">=</span> <span class="cn">NULL</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>    panel.grid.minor <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    axis.text.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: `geom_errorbarh()` was deprecated in ggplot2 4.0.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `orientation` argument of `geom_errorbar()` instead.</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once per session.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
+<span><span class="fu"><a href="../reference/mysterycall_irr_plot.html">mysterycall_irr_plot</a></span><span class="op">(</span><span class="va">irr_df</span>,</span>
+<span>                     x_label <span class="op">=</span> <span class="st">"IRR vs. Private insurance"</span>,</span>
+<span>                     x_log   <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `height` was translated to `width`.</span></span></code></pre></div>
 <div class="figure">
-<img src="statistical-analysis_files/figure-html/irr-forest-1.png" class="r-plt" alt="Forest plot of incidence rate ratios (IRR) from the Poisson GLMM. Error bars are 95 % profile-likelihood confidence intervals. The vertical dashed line at IRR = 1 represents no difference from the Private insurance reference group." width="528"><p class="caption">
-Forest plot of incidence rate ratios (IRR) from the Poisson GLMM. Error
-bars are 95 % profile-likelihood confidence intervals. The vertical
-dashed line at IRR = 1 represents no difference from the Private
-insurance reference group.
+<img src="statistical-analysis_files/figure-html/irr-forest-1.png" class="r-plt" alt="Forest plot of incidence rate ratios (IRR) from the Poisson GLMM produced by `mysterycall_irr_plot()`. Red points are statistically significant (p &lt; 0.05); navy are not. Dashed line at IRR = 1 marks no effect." width="528"><p class="caption">
+Forest plot of incidence rate ratios (IRR) from the Poisson GLMM
+produced by <code><a href="../reference/mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>. Red points are
+statistically significant (p &lt; 0.05); navy are not. Dashed line at
+IRR = 1 marks no effect.
 </p>
 </div>
 </div>
@@ -1026,39 +988,19 @@ Appropriate only when n ≥ 50 per group <em>and</em> the proportion is
 between 0.15 and 0.85. Included for compatibility with older literature
 but rarely recommended.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">disp_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  insurance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Medicaid"</span>, <span class="st">"Medicare"</span>, <span class="st">"Private"</span>, <span class="st">"Uninsured"</span><span class="op">)</span>,</span>
-<span>    levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Uninsured"</span>, <span class="st">"Private"</span>, <span class="st">"Medicare"</span>, <span class="st">"Medicaid"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  rate    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.640</span>, <span class="fl">0.840</span>, <span class="fl">0.910</span>, <span class="fl">0.540</span><span class="op">)</span>,</span>
-<span>  ci_lo   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.572</span>, <span class="fl">0.781</span>, <span class="fl">0.860</span>, <span class="fl">0.471</span><span class="op">)</span>,</span>
-<span>  ci_hi   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.703</span>, <span class="fl">0.888</span>, <span class="fl">0.945</span>, <span class="fl">0.608</span><span class="op">)</span>,</span>
-<span>  is_ref  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Build a representative disparities table from synthetic data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span></span>
+<span><span class="va">n_per</span>   <span class="op">&lt;-</span> <span class="fl">200L</span></span>
+<span><span class="va">ins</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Medicaid"</span>, <span class="st">"Medicare"</span>, <span class="st">"Private"</span>, <span class="st">"Uninsured"</span><span class="op">)</span>, each <span class="op">=</span> <span class="va">n_per</span><span class="op">)</span></span>
+<span><span class="va">probs</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.64</span>, <span class="fl">0.84</span>, <span class="fl">0.91</span>, <span class="fl">0.54</span><span class="op">)</span>, each <span class="op">=</span> <span class="va">n_per</span><span class="op">)</span></span>
+<span><span class="va">demo_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>insurance <span class="op">=</span> <span class="va">ins</span>,</span>
+<span>                       accepted  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ins</span><span class="op">)</span>, <span class="fl">1L</span>, <span class="va">probs</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">disp_df</span>,</span>
-<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">rate</span>, y <span class="op">=</span> <span class="va">insurance</span>, xmin <span class="op">=</span> <span class="va">ci_lo</span>, xmax <span class="op">=</span> <span class="va">ci_hi</span>,</span>
-<span>                 colour <span class="op">=</span> <span class="va">is_ref</span>, shape <span class="op">=</span> <span class="va">is_ref</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0.910</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, colour <span class="op">=</span> <span class="st">"grey60"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_errorbarh</a></span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0.18</span>, linewidth <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"#2166ac"</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"#c0392b"</span><span class="op">)</span>,</span>
-<span>                                guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_shape_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TRUE"</span> <span class="op">=</span> <span class="fl">18</span>, <span class="st">"FALSE"</span> <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span></span>
-<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.40</span>, <span class="fl">1.00</span><span class="op">)</span>,</span>
-<span>    labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent_format</a></span><span class="op">(</span>accuracy <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="st">"Appointment-offered rate (95 % Wilson CI)"</span>,</span>
-<span>    y <span class="op">=</span> <span class="cn">NULL</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>    panel.grid.minor <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    axis.text.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="va">disp_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_disparities_table.html">mysterycall_disparities_table</a></span><span class="op">(</span><span class="va">demo_df</span>, <span class="st">"accepted"</span>, <span class="st">"insurance"</span>,</span>
+<span>                                           ref_group <span class="op">=</span> <span class="st">"Private"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># One call replaces 30+ lines of manual ggplot2</span></span>
+<span><span class="fu"><a href="../reference/mysterycall_plot_disparities.html">mysterycall_plot_disparities</a></span><span class="op">(</span><span class="va">disp_tbl</span>, metric <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `height` was translated to `width`.</span></span></code></pre></div>
 <div class="figure">
 <img src="statistical-analysis_files/figure-html/acceptance-dot-1.png" class="r-plt" alt="Appointment-offered rates by insurance type with 95 % Wilson score confidence intervals. Private insurance is the reference group (dashed line). Medicaid and Uninsured callers face the largest absolute deficits." width="528"><p class="caption">
@@ -1068,12 +1010,37 @@ line). Medicaid and Uninsured callers face the largest absolute
 deficits.
 </p>
 </div>
+<p><code><a href="../reference/mysterycall_plot_disparities.html">mysterycall_plot_disparities()</a></code> supports three metrics —
+switch with <code>metric</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_plot_disparities.html">mysterycall_plot_disparities</a></span><span class="op">(</span><span class="va">disp_tbl</span>, metric <span class="op">=</span> <span class="st">"abs_diff"</span>,</span>
+<span>                              title <span class="op">=</span> <span class="st">"Absolute disparity (pp vs. Private)"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `height` was translated to `width`.</span></span></code></pre></div>
+<div class="figure">
+<img src="statistical-analysis_files/figure-html/disp-abs-diff-1.png" class="r-plt" alt="Absolute difference in acceptance rate (percentage points) versus Private insurance. Negative values indicate lower appointment-offered rates." width="499.2"><p class="caption">
+Absolute difference in acceptance rate (percentage points) versus
+Private insurance. Negative values indicate lower appointment-offered
+rates.
+</p>
+</div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_plot_disparities.html">mysterycall_plot_disparities</a></span><span class="op">(</span><span class="va">disp_tbl</span>, metric <span class="op">=</span> <span class="st">"rel_risk"</span>,</span>
+<span>                              title <span class="op">=</span> <span class="st">"Relative risk vs. Private"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `height` was translated to `width`.</span></span>
+<span><span class="co">#&gt; Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_text()`).</span></span></code></pre></div>
+<div class="figure">
+<img src="statistical-analysis_files/figure-html/disp-rr-1.png" class="r-plt" alt="Relative risk of being offered an appointment versus Private insurance. Values below 1 indicate lower rates for that group." width="499.2"><p class="caption">
+Relative risk of being offered an appointment versus Private insurance.
+Values below 1 indicate lower rates for that group.
+</p>
+</div>
 </div>
 </div>
 <div class="section level3">
 <h3 id="basic-disparity-analysis">5.3 Basic Disparity Analysis<a class="anchor" aria-label="anchor" href="#basic-disparity-analysis"></a>
 </h3>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute disparity metrics for appointment_offered across insurance types</span></span>
 <span><span class="va">disparities</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_disparities_table.html">mysterycall_disparities_table</a></span><span class="op">(</span></span>
 <span>  data       <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -1115,7 +1082,7 @@ for Private, a 37-percentage-point absolute gap.</li>
 <div class="section level3">
 <h3 id="setting-a-custom-reference-group">5.4 Setting a Custom Reference Group<a class="anchor" aria-label="anchor" href="#setting-a-custom-reference-group"></a>
 </h3>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use Medicaid as the reference group to compare others against it</span></span>
 <span><span class="va">disparities_med_ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_disparities_table.html">mysterycall_disparities_table</a></span><span class="op">(</span></span>
 <span>  data      <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -1142,7 +1109,7 @@ emphasise.</p>
 <p>A frequent data-entry error is coding the outcome as 1/2 (e.g., 1 =
 “yes,” 2 = “no”) instead of 0/1. The function will catch this and return
 an informative error:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Wrong: appointment_offered coded as 1 or 2</span></span>
 <span><span class="va">bad_mc</span> <span class="op">&lt;-</span> <span class="va">mc_data</span></span>
 <span><span class="va">bad_mc</span><span class="op">$</span><span class="va">appointment_offered</span> <span class="op">&lt;-</span> <span class="va">bad_mc</span><span class="op">$</span><span class="va">appointment_offered</span> <span class="op">+</span> <span class="fl">1</span>  <span class="co"># now 1 or 2</span></span>
@@ -1217,7 +1184,7 @@ ordered test is:</p>
 <p>Holm-Bonferroni is uniformly more powerful than Bonferroni while
 still controlling the family-wise error rate. <strong>Prefer
 Holm-Bonferroni in almost all situations.</strong></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract the raw p-values from the disparities table</span></span>
 <span><span class="va">raw_p</span> <span class="op">&lt;-</span> <span class="va">disparities</span><span class="op">$</span><span class="va">p_value</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">raw_p</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">disparities</span><span class="op">$</span><span class="va">insurance</span><span class="op">[</span><span class="va">disparities</span><span class="op">$</span><span class="va">insurance</span> <span class="op">!=</span> <span class="st">"Private"</span><span class="op">]</span></span>
@@ -1257,7 +1224,7 @@ evidence across tests.</p>
 <div class="section level3">
 <h3 id="passing-the-full-disparities-table-directly">6.3 Passing the Full Disparities Table Directly<a class="anchor" aria-label="anchor" href="#passing-the-full-disparities-table-directly"></a>
 </h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convenience wrapper: pass the entire disparities table</span></span>
 <span><span class="va">adj_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_multiple_comparison_adjust.html">mysterycall_multiple_comparison_adjust</a></span><span class="op">(</span></span>
 <span>  disparities_table <span class="op">=</span> <span class="va">disparities</span>,  <span class="co"># output of mysterycall_disparities_table()</span></span>
@@ -1328,7 +1295,7 @@ the bias-correction constant and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>a</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{a}</annotation></semantics></math>
 the acceleration constant estimated from jackknife leave-one-out
 statistics.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">20240101</span><span class="op">)</span></span>
 <span><span class="va">n_phys</span>  <span class="op">&lt;-</span> <span class="fl">50L</span></span>
 <span><span class="va">boot_b</span>  <span class="op">&lt;-</span> <span class="fl">2000L</span></span>
@@ -1371,7 +1338,7 @@ the BCa 95 % CI endpoints are dashed.
 <div class="section level3">
 <h3 id="bootstrapping-the-difference-in-appointment-rates">7.3 Bootstrapping the Difference in Appointment Rates<a class="anchor" aria-label="anchor" href="#bootstrapping-the-difference-in-appointment-rates"></a>
 </h3>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set seed for reproducibility — always report this in your methods section</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">20240101</span><span class="op">)</span></span>
 <span></span>
@@ -1414,7 +1381,7 @@ narrow).</p>
 <div class="section level3">
 <h3 id="bootstrapping-a-custom-statistic">7.4 Bootstrapping a Custom Statistic<a class="anchor" aria-label="anchor" href="#bootstrapping-a-custom-statistic"></a>
 </h3>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example: bootstrap the ratio of median wait times (Medicaid / Private)</span></span>
 <span><span class="co"># This has no closed-form CI, making bootstrap ideal.</span></span>
 <span></span>
@@ -1460,7 +1427,7 @@ the most time-consuming parts of manuscript writing. The function
 objects and returns a formatted results paragraph following APA 7th
 edition style conventions and the reporting guidelines of JAMA and NEJM
 for observational health disparities research.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_write_results_paragraph.html">mysterycall_write_results_paragraph</a></span><span class="op">(</span></span>
 <span>  poisson_model      <span class="op">=</span> <span class="va">poisson_fit</span>,</span>
 <span>  disparities_table  <span class="op">=</span> <span class="va">adj_full</span>,           <span class="co"># version with adjusted p-values</span></span>
@@ -1515,7 +1482,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="build-the-synthetic-dataset">9.1 Build the Synthetic Dataset<a class="anchor" aria-label="anchor" href="#build-the-synthetic-dataset"></a>
 </h3>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Study design parameters</span></span>
@@ -1624,7 +1591,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="run-the-preflight-check">9.2 Run the Preflight Check<a class="anchor" aria-label="anchor" href="#run-the-preflight-check"></a>
 </h3>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">preflight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_preflight_check.html">mysterycall_preflight_check</a></span><span class="op">(</span><span class="va">mc_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">preflight</span><span class="op">)</span></span>
 <span><span class="co">#&gt; -- mysterycall preflight check ------------------------------------</span></span>
@@ -1645,7 +1612,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="disparity-analysis-for-appointment-offered-rate">9.3 Disparity Analysis for Appointment-Offered Rate<a class="anchor" aria-label="anchor" href="#disparity-analysis-for-appointment-offered-rate"></a>
 </h3>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># --- Step 1: Compute raw disparity metrics ---</span></span>
 <span><span class="va">disparities_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_disparities_table.html">mysterycall_disparities_table</a></span><span class="op">(</span></span>
 <span>  data      <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -1678,7 +1645,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="poisson-glmm-for-wait-time-disparities">9.4 Poisson GLMM for Wait-Time Disparities<a class="anchor" aria-label="anchor" href="#poisson-glmm-for-wait-time-disparities"></a>
 </h3>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit the Poisson GLMM (wait times among callers offered appointments)</span></span>
 <span><span class="va">poisson_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_poisson_model.html">mysterycall_poisson_model</a></span><span class="op">(</span></span>
 <span>  data         <span class="op">=</span> <span class="va">mc_data</span>,</span>
@@ -1718,7 +1685,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="wait-time-summary-table">9.5 Wait-Time Summary Table<a class="anchor" aria-label="anchor" href="#wait-time-summary-table"></a>
 </h3>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wait_summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_wait_time_summary.html">mysterycall_wait_time_summary</a></span><span class="op">(</span></span>
 <span>  data     <span class="op">=</span> <span class="va">mc_data</span>,</span>
 <span>  wait_col <span class="op">=</span> <span class="st">"wait_days"</span>,</span>
@@ -1737,7 +1704,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="bootstrap-ci-for-the-medicaidprivate-appointment-gap">9.6 Bootstrap CI for the Medicaid–Private Appointment Gap<a class="anchor" aria-label="anchor" href="#bootstrap-ci-for-the-medicaidprivate-appointment-gap"></a>
 </h3>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">20240101</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">boot_medicaid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_bootstrap_ci.html">mysterycall_bootstrap_ci</a></span><span class="op">(</span></span>
@@ -1767,7 +1734,7 @@ chunks.</p>
 </h3>
 <p>The following code assembles all the results into the structure of a
 “Table 2” suitable for direct inclusion in a manuscript.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Merge disparity metrics and Poisson IRRs into a single wide table</span></span>
 <span><span class="va">pub_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span></span>
 <span>  <span class="va">disparities_adj</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"insurance"</span>, <span class="st">"n"</span>, <span class="st">"rate"</span>, <span class="st">"CI_lower"</span>, <span class="st">"CI_upper"</span>,</span>
@@ -1826,7 +1793,7 @@ chunks.</p>
 <div class="section level3">
 <h3 id="write-the-results-paragraph">9.8 Write the Results Paragraph<a class="anchor" aria-label="anchor" href="#write-the-results-paragraph"></a>
 </h3>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results_para</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_write_results_paragraph.html">mysterycall_write_results_paragraph</a></span><span class="op">(</span></span>
 <span>  poisson_model     <span class="op">=</span> <span class="va">poisson_fit</span>,</span>
 <span>  disparities_table <span class="op">=</span> <span class="va">disparities_adj</span>,</span>
@@ -1867,9 +1834,196 @@ chunks.</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="sample-size-and-power">10. Sample Size and Power<a class="anchor" aria-label="anchor" href="#sample-size-and-power"></a>
+</h2>
+<div class="section level3">
+<h3 id="cochrans-formula-for-provider-sampling">10.1 Cochran’s Formula for Provider Sampling<a class="anchor" aria-label="anchor" href="#cochrans-formula-for-provider-sampling"></a>
+</h3>
+<p>Before calling, you need to know how many providers to contact. For a
+<strong>prevalence-type question</strong> (e.g., “what fraction of
+OB-GYNs in a state accept Medicaid?”), Cochran’s formula gives the
+minimum sample size for a desired margin of error at 95 %
+confidence:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>0</mn></msub><mo>=</mo><mfrac><mrow><msubsup><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mn>2</mn></mrow><mn>2</mn></msubsup><mspace width="0.167em"></mspace><mi>p</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><msup><mi>e</mi><mn>2</mn></msup></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>n</mi><mo>=</mo><mfrac><msub><mi>n</mi><mn>0</mn></msub><mrow><mn>1</mn><mo>+</mo><mfrac><mrow><msub><mi>n</mi><mn>0</mn></msub><mo>−</mo><mn>1</mn></mrow><mi>N</mi></mfrac></mrow></mfrac></mrow><annotation encoding="application/x-tex">n_0 = \frac{z^2_{\alpha/2}\,p(1-p)}{e^2}, \qquad
+  n = \frac{n_0}{1 + \frac{n_0 - 1}{N}}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
+is the finite population size,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">p = 0.5</annotation></semantics></math>
+(maximum variance, conservative), and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>e</mi><annotation encoding="application/x-tex">e</annotation></semantics></math>
+is the desired margin of error.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># How many providers needed from a state with N = 800 OB-GYNs,</span></span>
+<span><span class="co"># margin of error ±5 %?</span></span>
+<span><span class="va">result_cochran</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_cochran_n.html">mysterycall_cochran_n</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">800</span>, margin_of_error <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    Population   <span class="op">=</span> <span class="va">result_cochran</span><span class="op">$</span><span class="va">N</span>,</span>
+<span>    Sample_n     <span class="op">=</span> <span class="va">result_cochran</span><span class="op">$</span><span class="va">n</span>,</span>
+<span>    Target_ME    <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">(</span><span class="va">result_cochran</span><span class="op">$</span><span class="va">margin_of_error</span>, accuracy <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    Achieved_ME  <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">(</span><span class="va">result_cochran</span><span class="op">$</span><span class="va">effective_margin</span>, accuracy <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Population (N)"</span>, <span class="st">"Required n"</span>, <span class="st">"Target margin"</span>, <span class="st">"Achieved margin"</span><span class="op">)</span>,</span>
+<span>  caption   <span class="op">=</span> <span class="st">"Cochran sample-size calculation for N = 800 providers, ±5 % margin."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Cochran sample-size calculation for N = 800 providers, ±5 %
+margin.</caption>
+<thead><tr class="header">
+<th align="right">Population (N)</th>
+<th align="right">Required n</th>
+<th align="left">Target margin</th>
+<th align="left">Achieved margin</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">800</td>
+<td align="right">267</td>
+<td align="left">5%</td>
+<td align="left">5.0%</td>
+</tr></tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="poisson-power-for-wait-time-disparities">10.2 Poisson Power for Wait-Time Disparities<a class="anchor" aria-label="anchor" href="#poisson-power-for-wait-time-disparities"></a>
+</h3>
+<p>For the <strong>count outcome</strong> (wait days) analysed with a
+Poisson GLMM, power depends on the minimum detectable IRR, the
+reference-arm mean
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\lambda_0</annotation></semantics></math>),
+type I error, and whether each provider is called once (unpaired) or
+twice (paired with both insurance types):</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mn>2</mn></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><msub><mi>λ</mi><mn>0</mn></msub></mfrac></mstyle><mo>+</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><msub><mi>λ</mi><mn>1</mn></msub></mfrac></mstyle><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mtext mathvariant="normal">IRR</mtext><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">n = \frac{(z_{\alpha/2} + z_\beta)^2 \left(\dfrac{1}{\lambda_0} + \dfrac{1}{\lambda_1}\right)}{(\log \text{IRR})^2}</annotation></semantics></math></p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Detect IRR = 1.40 (Medicaid 40% longer waits) with reference mean 14 days</span></span>
+<span><span class="va">pw_40</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_poisson_power.html">mysterycall_poisson_power</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="fl">1.40</span>, lambda_ref <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>                                    power <span class="op">=</span> <span class="fl">0.80</span>, both_arms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.40, lambda_ref=14.0, lambda_trt=19.6 | n_per_arm=9, n_total=9, calls=18</span></span>
+<span><span class="va">pw_90</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_poisson_power.html">mysterycall_poisson_power</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="fl">1.40</span>, lambda_ref <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>                                    power <span class="op">=</span> <span class="fl">0.90</span>, both_arms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.40, lambda_ref=14.0, lambda_trt=19.6 | n_per_arm=12, n_total=12, calls=24</span></span>
+<span><span class="va">pw_20</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_poisson_power.html">mysterycall_poisson_power</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="fl">1.20</span>, lambda_ref <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>                                    power <span class="op">=</span> <span class="fl">0.80</span>, both_arms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.20, lambda_ref=14.0, lambda_trt=16.8 | n_per_arm=31, n_total=31, calls=62</span></span>
+<span></span>
+<span><span class="va">power_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  IRR        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.40</span>, <span class="fl">1.40</span>, <span class="fl">1.20</span><span class="op">)</span>,</span>
+<span>  Power      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"80 %"</span>, <span class="st">"90 %"</span>, <span class="st">"80 %"</span><span class="op">)</span>,</span>
+<span>  n_per_arm  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pw_40</span><span class="op">$</span><span class="va">n_per_arm</span>, <span class="va">pw_90</span><span class="op">$</span><span class="va">n_per_arm</span>, <span class="va">pw_20</span><span class="op">$</span><span class="va">n_per_arm</span><span class="op">)</span>,</span>
+<span>  n_total    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pw_40</span><span class="op">$</span><span class="va">n_total</span>,   <span class="va">pw_90</span><span class="op">$</span><span class="va">n_total</span>,   <span class="va">pw_20</span><span class="op">$</span><span class="va">n_total</span><span class="op">)</span>,</span>
+<span>  n_calls    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pw_40</span><span class="op">$</span><span class="va">n_total_calls</span>, <span class="va">pw_90</span><span class="op">$</span><span class="va">n_total_calls</span>, <span class="va">pw_20</span><span class="op">$</span><span class="va">n_total_calls</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">power_tbl</span>,</span>
+<span>  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Min. detectable IRR"</span>, <span class="st">"Power"</span>, <span class="st">"Providers/arm"</span>,</span>
+<span>                <span class="st">"Total providers"</span>, <span class="st">"Total calls"</span><span class="op">)</span>,</span>
+<span>  caption   <span class="op">=</span> <span class="st">"Poisson power analysis: providers per arm for paired design, lambda_ref = 14 days."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Poisson power analysis: providers per arm for paired design,
+lambda_ref = 14 days.</caption>
+<colgroup>
+<col width="29%">
+<col width="8%">
+<col width="20%">
+<col width="23%">
+<col width="17%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">Min. detectable IRR</th>
+<th align="left">Power</th>
+<th align="right">Providers/arm</th>
+<th align="right">Total providers</th>
+<th align="right">Total calls</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1.4</td>
+<td align="left">80 %</td>
+<td align="right">9</td>
+<td align="right">9</td>
+<td align="right">18</td>
+</tr>
+<tr class="even">
+<td align="right">1.4</td>
+<td align="left">90 %</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">24</td>
+</tr>
+<tr class="odd">
+<td align="right">1.2</td>
+<td align="left">80 %</td>
+<td align="right">31</td>
+<td align="right">31</td>
+<td align="right">62</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="power-curve-across-a-range-of-irrs">10.3 Power Curve Across a Range of IRRs<a class="anchor" aria-label="anchor" href="#power-curve-across-a-range-of-irrs"></a>
+</h3>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">irr_seq</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1.10</span>, <span class="fl">2.00</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span><span class="va">n_seq</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">irr_seq</span>, <span class="kw">function</span><span class="op">(</span><span class="va">irr</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/mysterycall_poisson_power.html">mysterycall_poisson_power</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="va">irr</span>, lambda_ref <span class="op">=</span> <span class="fl">14</span>, power <span class="op">=</span> <span class="fl">0.80</span>,</span>
+<span>                               both_arms <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">n_per_arm</span>,</span>
+<span>    error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">NA_real_</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.10, lambda_ref=14.0, lambda_trt=15.4 | n_per_arm=118, n_total=118, calls=236</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.15, lambda_ref=14.0, lambda_trt=16.1 | n_per_arm=54, n_total=54, calls=108</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.20, lambda_ref=14.0, lambda_trt=16.8 | n_per_arm=31, n_total=31, calls=62</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.25, lambda_ref=14.0, lambda_trt=17.5 | n_per_arm=21, n_total=21, calls=42</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.30, lambda_ref=14.0, lambda_trt=18.2 | n_per_arm=15, n_total=15, calls=30</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.35, lambda_ref=14.0, lambda_trt=18.9 | n_per_arm=11, n_total=11, calls=22</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.40, lambda_ref=14.0, lambda_trt=19.6 | n_per_arm=9, n_total=9, calls=18</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.45, lambda_ref=14.0, lambda_trt=20.3 | n_per_arm=7, n_total=7, calls=14</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.50, lambda_ref=14.0, lambda_trt=21.0 | n_per_arm=6, n_total=6, calls=12</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.55, lambda_ref=14.0, lambda_trt=21.7 | n_per_arm=5, n_total=5, calls=10</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.60, lambda_ref=14.0, lambda_trt=22.4 | n_per_arm=5, n_total=5, calls=10</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.65, lambda_ref=14.0, lambda_trt=23.1 | n_per_arm=4, n_total=4, calls=8</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.70, lambda_ref=14.0, lambda_trt=23.8 | n_per_arm=4, n_total=4, calls=8</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.75, lambda_ref=14.0, lambda_trt=24.5 | n_per_arm=3, n_total=3, calls=6</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.80, lambda_ref=14.0, lambda_trt=25.2 | n_per_arm=3, n_total=3, calls=6</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.85, lambda_ref=14.0, lambda_trt=25.9 | n_per_arm=3, n_total=3, calls=6</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.90, lambda_ref=14.0, lambda_trt=26.6 | n_per_arm=3, n_total=3, calls=6</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=1.95, lambda_ref=14.0, lambda_trt=27.3 | n_per_arm=2, n_total=2, calls=4</span></span>
+<span><span class="co">#&gt; Poisson power: IRR=2.00, lambda_ref=14.0, lambda_trt=28.0 | n_per_arm=2, n_total=2, calls=4</span></span>
+<span></span>
+<span><span class="va">curve_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="va">irr_seq</span>, n_per_arm <span class="op">=</span> <span class="va">n_seq</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">curve_df</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">irr</span>, y <span class="op">=</span> <span class="va">n_per_arm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"#2166ac"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"#2166ac"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">1.40</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
+<span>                       colour <span class="op">=</span> <span class="st">"#c0392b"</span>, linewidth <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="fl">1.42</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">n_seq</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.9</span>,</span>
+<span>                     label <span class="op">=</span> <span class="st">"IRR = 1.40\n(typical Medicaid gap)"</span>,</span>
+<span>                     hjust <span class="op">=</span> <span class="fl">0</span>, size <span class="op">=</span> <span class="fl">3</span>, colour <span class="op">=</span> <span class="st">"#c0392b"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">2.0</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Minimum detectable IRR"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Providers per arm"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.grid.minor <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="statistical-analysis_files/figure-html/power-curve-1.png" class="r-plt" alt="Required providers per arm (paired design, 80 % power) as a function of the minimum detectable IRR. Detecting small effects (IRR close to 1) requires substantially more providers." width="528"><p class="caption">
+Required providers per arm (paired design, 80 % power) as a function of
+the minimum detectable IRR. Detecting small effects (IRR close to 1)
+requires substantially more providers.
+</p>
+</div>
+<hr>
+</div>
+</div>
+<div class="section level2">
 <h2 id="session-information">Session Information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.1 (2024-06-14)</span></span>
 <span><span class="co">#&gt; Platform: aarch64-apple-darwin20 (64-bit)</span></span>

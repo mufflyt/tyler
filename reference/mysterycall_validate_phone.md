@@ -41,18 +41,20 @@ A data frame with one row per element of `phone_str` and columns:
 
 - `phone_npa`:
 
-  Character. The 3-digit area code, or `NA` when the number is
-  syntactically invalid.
+  Character. The 3-digit North American Numbering Plan area code, or
+  `NA_character_` when the number is syntactically invalid.
 
 - `phone_state_from_npa`:
 
-  Character. The 2-letter state code for the area code, or `NA` when the
-  area code is not in the lookup.
+  Character. The 2-letter US postal abbreviation for the area code's
+  registered state, or `NA_character_` when the area code is absent from
+  the bundled lookup table.
 
 - `phone_area_code_matches_state`:
 
-  Logical. `TRUE` when `phone_state_from_npa` equals `practice_state`;
-  `NA` when `practice_state` is `NULL`.
+  Logical. `TRUE` when `phone_state_from_npa` exactly matches
+  `practice_state`; `FALSE` when they differ; `NA` when `practice_state`
+  is `NULL`.
 
 - `phone_validity_flag`:
 
@@ -66,9 +68,9 @@ Syntactic validity rules applied:
 - Exactly 10 digits after stripping non-digits (an optional leading
   `"1"` country code is dropped first).
 
-- NPA first digit (N) is 2–9.
+- NPA first digit (N) is 2-9.
 
-- NXX first digit (N) is 2–9.
+- NXX first digit (N) is 2-9.
 
 - NXX is not an N11 code (e.g. 911, 411, 211).
 
@@ -92,6 +94,11 @@ to structure name strings;
 for name-level quality checks;
 [`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
 to attach validated phone data to a roster.
+
+Other data quality:
+[`mysterycall_not_contacted_states()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_not_contacted_states.md),
+[`mysterycall_remove_constants()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_constants.md),
+[`mysterycall_remove_near_zero()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_near_zero.md)
 
 ## Examples
 

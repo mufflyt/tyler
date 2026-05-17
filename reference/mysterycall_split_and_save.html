@@ -45,6 +45,7 @@ It allows the arrangement of calls by insurance type to prioritize Medicaid in t
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -122,7 +123,11 @@ It allows the arrangement of calls by insurance type to prioritize Medicaid in t
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisible list of file paths to the created Excel files</p>
+    <p><code><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible()</a></code> character vector of absolute file paths to the
+created Excel files. Element 1 is the combined "all callers" workbook;
+subsequent elements are the per-assistant split workbooks in the order of
+<code>lab_assistant_names</code>. Capture with
+<code>paths &lt;- mysterycall_split_and_save(...)</code> to use the paths downstream.</p>
     </div>
     <div class="section level2">
     <h2 id="contract">Contract<a class="anchor" aria-label="anchor" href="#contract"></a></h2>
@@ -147,7 +152,7 @@ for small rosters.</p>
 
 
 <p>O(n log n) due to sorting. Excel I/O via <code>openxlsx</code> dominates for large
-rosters; expect ~2–5 s for 500 rows.</p>
+rosters; expect ~2-5 s for 500 rows.</p>
     </div>
     <div class="section level2">
     <h2 id="called-by">Called By<a class="anchor" aria-label="anchor" href="#called-by"></a></h2>
@@ -162,7 +167,6 @@ rosters; expect ~2–5 s for 500 rows.</p>
 <code><a href="mysterycall_clean_phase1.html">mysterycall_clean_phase1()</a></code>,
 <code><a href="mysterycall_clean_phase2.html">mysterycall_clean_phase2()</a></code>,
 <code><a href="mysterycall_print_dashboard.html">mysterycall_print_dashboard()</a></code>,
-<code><a href="mysterycall_rename_columns.html">mysterycall_rename_columns()</a></code>,
 <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>,
 <code><a href="mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged()</a></code>,
 <code><a href="mysterycall_verify_artifact.html">mysterycall_verify_artifact()</a></code></p></div>

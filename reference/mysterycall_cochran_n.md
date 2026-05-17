@@ -58,6 +58,7 @@ Cochran, W. G. (1977). *Sampling Techniques* (3rd ed.). Wiley.
 [`mysterycall_poisson_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_power.md)
 
 Other power analysis:
+[`mysterycall_equation_figure()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_equation_figure.md),
 [`mysterycall_poisson_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_power.md)
 
 ## Examples

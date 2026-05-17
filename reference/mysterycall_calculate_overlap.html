@@ -47,6 +47,7 @@ projected to an equal-area CRS before measuring."><meta property="og:image" cont
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -120,11 +121,18 @@ the optional <code>beepr</code> package is available. Defaults to <code>TRUE</co
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Called for its side effect of saving the intersection overlap shapefile and CSV.</p>
+    <p><code>invisible(NULL)</code>. As side effects: (1) writes an ESRI shapefile
+(EPSG:4326) of the block-group/isochrone intersection to <code>output_dir</code>,
+(2) writes a CSV with columns <code>GEOID</code>, <code>intersect_area</code>, and
+<code>area_method</code> to the same directory, and (3) emits messages with the
+50th and 75th percentile overlap statistics. If <code>notify = TRUE</code> and
+<code>beepr</code> is installed, plays a completion sound.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other geospatial helpers:
+    <div class="dont-index"><p><code><a href="mysterycall_isochrones_for_df.html">mysterycall_isochrones_for_df()</a></code> to generate the <code>isochrones_joined</code>
+input; <code><a href="mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code> for single-point isochrone creation.</p>
+<p>Other geospatial helpers:
 <code><a href="mysterycall_geocode.html">mysterycall_geocode()</a></code>,
 <code><a href="mysterycall_hrr.html">mysterycall_hrr()</a></code></p></div>
     </div>

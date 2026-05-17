@@ -43,6 +43,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -135,13 +136,19 @@ saved. Defaults to a session-specific folder inside <code><a href="https://rdrr.
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisibly returns the generated ggplot object.</p>
+    <p>A ggplot2 object (<code>c("gg", "ggplot")</code>), returned invisibly. As a
+side effect, writes a <code>.tiff</code> and a <code>.png</code> file to <code>output_dir</code> with
+filenames of the form <code>&lt;file_prefix&gt;_&lt;timestamp&gt;.tiff/.png</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other mapping:
+    <div class="dont-index"><p><code><a href="mysterycall_plot_scatter.html">mysterycall_plot_scatter()</a></code> for jittered point plots;
+<code><a href="mysterycall_plot_line.html">mysterycall_plot_line()</a></code> for median-trend line plots;
+<code>mysterycall_save_green_journal_figure()</code> to export at journal resolution.</p>
+<p>Other mapping:
 <code><a href="mysterycall_clear_isochrone_cache.html">mysterycall_clear_isochrone_cache()</a></code>,
 <code><a href="mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code>,
+<code><a href="mysterycall_hrr_maps.html">mysterycall_hrr_maps()</a></code>,
 <code><a href="mysterycall_isochrones_for_df.html">mysterycall_isochrones_for_df()</a></code>,
 <code><a href="mysterycall_map_acceptance_rate.html">mysterycall_map_acceptance_rate()</a></code>,
 <code><a href="mysterycall_map_acog_districts.html">mysterycall_map_acog_districts()</a></code>,
@@ -156,12 +163,11 @@ saved. Defaults to a session-specific folder inside <code><a href="https://rdrr.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="va">example_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  insurance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Medicaid"</span>, <span class="st">"Commercial"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  business_days_until_appointment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">2.2</span>, <span class="fl">3.1</span>, <span class="fl">1.8</span>, <span class="fl">2.5</span>, <span class="fl">2.9</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_plot_density</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">example_data</span>,</span></span>
 <span class="r-in"><span>  x_var <span class="op">=</span> <span class="st">"business_days_until_appointment"</span>,</span></span>
@@ -175,7 +181,7 @@ saved. Defaults to a session-specific folder inside <code><a href="https://rdrr.
 <span class="r-in"><span>  plot_title <span class="op">=</span> <span class="st">"Example Density Plot"</span>,</span></span>
 <span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

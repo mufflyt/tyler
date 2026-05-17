@@ -31,8 +31,33 @@ mysterycall_scan_for_limits(
 
 ## Value
 
-A data frame of found issues with columns: file, line, pattern, code.
-Returns empty data frame if no issues found. Also prints warnings.
+A data frame with one row per detected issue and columns:
+
+- `file`:
+
+  Character. Basename of the scanned R file.
+
+- `line`:
+
+  Integer. Line number where the pattern was found.
+
+- `severity`:
+
+  Character. One of `"CRITICAL"`, `"HIGH"`, or `"MEDIUM"`.
+
+- `pattern`:
+
+  Character. Human-readable description of the anti-pattern detected.
+
+- `code`:
+
+  Character. Trimmed source code line that triggered the match.
+
+Returns a zero-row data frame with these columns when no issues are
+found. Rows are sorted by severity (CRITICAL first), then file, then
+line number. Also emits
+[`base::message()`](https://rdrr.io/r/base/message.html) for each
+detected issue.
 
 ## Details
 
@@ -52,6 +77,11 @@ Searches for these anti-patterns:
 
 ## See also
 
+[`mysterycall_check_no_limits()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_no_limits.md)
+to validate row counts at runtime;
+[`mysterycall_check_no_data_loss()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_no_data_loss.md),
+[`mysterycall_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_api_response.md).
+
 Other utilities: `%>%()`,
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),
 [`mysterycall_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_api_response.md),
@@ -64,8 +94,6 @@ Other utilities: `%>%()`,
 [`mysterycall_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_with_backup.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
-[`mysterycall_remove_constants()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_constants.md),
-[`mysterycall_remove_near_zero()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_near_zero.md),
 [`mysterycall_resolve_path()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_resolve_path.md),
 [`mysterycall_save_quality_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_quality_table.md),
 [`mysterycall_standard_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_standard_labels.md),

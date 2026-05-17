@@ -20,7 +20,7 @@ Formatted string (e.g., "2h 34m 15s")
 
 ## See also
 
-Other logging utilities:
+Other logging:
 [`mysterycall_log_cache_hit()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_cache_hit.md),
 [`mysterycall_log_error()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_error.md),
 [`mysterycall_log_info()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_info.md),

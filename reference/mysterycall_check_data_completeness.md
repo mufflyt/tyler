@@ -34,8 +34,26 @@ mysterycall_check_data_completeness(
 
 ## Value
 
-A list containing `summary` (tibble of completeness metrics) and
-`quality` (overall quality tier).
+A named list with three elements:
+
+- `summary`:
+
+  A
+  [`tibble::tibble()`](https://tibble.tidyverse.org/reference/tibble.html)
+  with one row per entry in `required` (plus one uniqueness row when
+  `id_cols` is supplied). Columns: `column` (character), `completeness`
+  (numeric, proportion 0-1 of non-missing values), `missing` (numeric,
+  `1 - completeness`).
+
+- `quality`:
+
+  Character scalar: `"high"`, `"medium"`, or `"low"` based on the mean
+  completeness score relative to `thresholds`.
+
+- `score`:
+
+  Numeric scalar. Mean completeness across all `required` columns (and
+  the uniqueness row when `id_cols` is supplied).
 
 ## See also
 
@@ -50,8 +68,6 @@ Other utilities: `%>%()`,
 [`mysterycall_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_with_backup.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
-[`mysterycall_remove_constants()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_constants.md),
-[`mysterycall_remove_near_zero()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_near_zero.md),
 [`mysterycall_resolve_path()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_resolve_path.md),
 [`mysterycall_save_quality_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_quality_table.md),
 [`mysterycall_scan_for_limits()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scan_for_limits.md),

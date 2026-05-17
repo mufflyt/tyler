@@ -53,6 +53,7 @@ cap."><meta property="og:image" content="https://github.com/mufflyt/mysterycall/
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -140,8 +141,22 @@ completes (requires the optional <code>beepr</code> package). Defaults to <code>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with filtered NPI data based on the specified taxonomy
-description.</p>
+    <p>A data frame of NPPES records matching the requested taxonomy. Key
+columns include <code>npi</code>, <code>first_name</code>, <code>last_name</code>, <code>taxonomies_desc</code>
+(broad NPPES specialty label), and <code>taxonomies_primary</code> (logical).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="subspecialty-source-warning">Subspecialty source warning<a class="anchor" aria-label="anchor" href="#subspecialty-source-warning"></a></h2>
+
+
+<p><code>taxonomies_desc</code> reflects the NPPES taxonomy code the provider self-
+reported to the NPI registry. <strong>Do not use this column to assign
+subspecialty.</strong> NPPES taxonomy codes cannot reliably distinguish
+subspecialties (e.g. Neurotology vs. General Otolaryngology). Subspecialty
+must be derived from board certification data only, using
+<code><a href="mysterycall_parse_certification_subspecialty.html">mysterycall_parse_certification_subspecialty()</a></code> on the ABOHNS
+<code>certification_type</code> field, then reconciled with
+<code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="output-columns">Output columns<a class="anchor" aria-label="anchor" href="#output-columns"></a></h2>
@@ -193,7 +208,7 @@ not error).</p></li>
 
 <p>O(t * p / 200) HTTP requests where <code>t</code> = number of state batches and
 <code>p</code> = max_records (default 1,200). Each page request targets &lt; 200 rows.
-Full national search across all 50 states for one taxonomy takes ~2–5 min
+Full national search across all 50 states for one taxonomy takes ~2-5 min
 depending on registry load. Results are cached in-memory per session when
 <code>use_cache = TRUE</code>.</p>
     </div>

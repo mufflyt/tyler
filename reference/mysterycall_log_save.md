@@ -24,7 +24,7 @@ Invisible NULL
 
 ## See also
 
-Other logging utilities:
+Other logging:
 [`mysterycall_format_duration()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_duration.md),
 [`mysterycall_log_cache_hit()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_cache_hit.md),
 [`mysterycall_log_error()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_error.md),
@@ -49,5 +49,5 @@ Other logging utilities:
 
 ``` r
 mysterycall_log_save(tempfile(fileext = ".csv"), n_rows = 42)
-#>   💾 Saved to: /tmp/RtmptuIJMQ/file231e3ed69a95.csv (42 rows)
+#>   💾 Saved to: /tmp/RtmpJM615b/file22c82c7ee5f6.csv (42 rows)
 ```

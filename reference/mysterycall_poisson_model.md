@@ -77,60 +77,68 @@ A list of class `mysterycall_poisson_model` containing:
 
 - `model`:
 
-  The fitted `glmerMod` object.
+  `glmerMod`. The fitted multilevel Poisson model.
 
 - `irr_table`:
 
-  Tibble with one row per fixed-effect term: `term`, `estimate` (log
-  scale), `se`, `z_value`, `p_value`, `p_value_fmt` (character), `irr`,
-  `ci_lower`, `ci_upper`.
+  `tibble`. One row per fixed-effect term with columns: `term`
+  (character), `estimate` (numeric, log scale), `se` (numeric),
+  `z_value` (numeric), `p_value` (numeric), `p_value_fmt` (character,
+  formatted), `irr` (numeric, incidence rate ratio), `ci_lower`
+  (numeric), `ci_upper` (numeric).
 
 - `random_effects`:
 
-  Data frame from
-  [`lme4::VarCorr()`](https://rdrr.io/pkg/nlme/man/VarCorr.html)
-  describing the random-intercept variance and standard deviation.
+  `data.frame` from
+  [`lme4::VarCorr()`](https://rdrr.io/pkg/nlme/man/VarCorr.html).
+  Describes random-intercept variance and standard deviation.
 
 - `factor_refs`:
 
-  Named list of reference levels for character/factor predictors.
+  `list` (named). Reference levels for each character/factor predictor.
 
 - `formula`:
 
-  The formula passed to `glmer`.
+  `formula`. The formula passed to
+  [`lme4::glmer()`](https://rdrr.io/pkg/lme4/man/glmer.html).
 
 - `n`:
 
-  Number of complete-case rows used for fitting.
+  `integer`. Number of complete-case rows used for fitting.
 
 - `n_dropped`:
 
-  Rows excluded due to missing values.
+  `integer`. Rows excluded due to missing values.
 
 - `n_clusters`:
 
-  Number of unique values of `random_intercept`.
+  `integer`. Number of unique values of `random_intercept`.
 
 - `overdispersion`:
 
-  Pearson chi-square / residual df. Values substantially above 1 suggest
-  overdispersion; consider a negative binomial model.
+  `numeric`. Pearson chi-square / residual df. Values substantially
+  above 1 (common threshold: 2) suggest overdispersion; consider a
+  negative binomial model.
 
 - `convergence`:
 
-  List with `converged` (logical), `singular` (logical), and `messages`
-  (character).
+  `list`. Elements: `converged` (logical), `singular` (logical),
+  `messages` (character vector).
 
-- `aic`, `bic`:
+- `aic`:
 
-  Model information criteria.
+  `numeric`. Akaike Information Criterion.
+
+- `bic`:
+
+  `numeric`. Bayesian Information Criterion.
 
 ## Interpreting IRRs
 
 An IRR of 1.40 for `insurance_typeMedicaid` means physicians contacted
 with Medicaid insurance had, on average, 40% longer wait times than the
 reference insurance group. Compute as `exp(estimate)` with Wald CI
-`exp(estimate ± z * se)`.
+`exp(estimate +/- z * se)`.
 
 ## Overdispersion
 
@@ -147,7 +155,6 @@ quasi-Poisson standard errors for inference.
 
 Other outcomes:
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
-[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md),
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
 [`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md),
 [`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
@@ -159,7 +166,6 @@ Other outcomes:
 [`mysterycall_plot_residuals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_residuals.md),
 [`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
 [`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
-[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
 [`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
 [`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md),

@@ -49,6 +49,7 @@ written to output_dir with a timestamp in the filename."><meta property="og:imag
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -106,8 +107,21 @@ output file.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame matching the input rows with additional columns from
-Genderize.io: typically <code>gender</code>, <code>probability</code>, and <code>count</code>.</p>
+    <p>A data frame with the same row count and all original columns as
+<code>data_or_path</code>, with three new columns appended:</p><dl><dt><code>gender</code></dt>
+<dd><p>Character. <code>"male"</code>, <code>"female"</code>, or <code>NA</code> for ambiguous
+or unknown names.</p></dd>
+
+<dt><code>probability</code></dt>
+<dd><p>Numeric in 0, 1. API prediction confidence.</p></dd>
+
+<dt><code>count</code></dt>
+<dd><p>Integer. Historical frequency of the name in the
+Genderize.io database.</p></dd>
+
+
+</dl><p>Side effect: the enriched roster is written to <code>output_dir</code> as CSV or
+Parquet with a timestamp in the filename.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -123,7 +137,7 @@ unknown names. The API does not currently return non-binary values. <code>NULL</
 responses are stored as <code>NA</code> in the raw <code>gender</code> output column. If the API
 ever adds non-binary values they will be stored as-is in <code>gender</code> but will
 be recoded to <code>"Unknown"</code> by <code><a href="mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code>.</p>
-<p>The <code>probability</code> column (0–1) reflects the API's prediction confidence.
+<p>The <code>probability</code> column (0-1) reflects the API's prediction confidence.
 Names with low probability may be genuine but uncommon (e.g., gender-neutral
 names). A common post-processing filter:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_genderize.html">mysterycall_genderize</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
@@ -157,8 +171,25 @@ study date rather than relying on the auto-generated timestamp.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code> for downstream gender
 recoding to <code>"Male"</code>/<code>"Female"</code>/<code>"Unknown"</code>.</p>
-<p>Other gender:
-<code><a href="mysterycall_most_common_gender.html">mysterycall_most_common_gender()</a></code></p></div>
+<p>Other provider characteristics:
+<code><a href="mysterycall_academic_patterns.html">mysterycall_academic_patterns()</a></code>,
+<code><a href="mysterycall_age_category.html">mysterycall_age_category()</a></code>,
+<code><a href="mysterycall_assign_region.html">mysterycall_assign_region()</a></code>,
+<code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code>,
+<code><a href="mysterycall_classify_medical_school.html">mysterycall_classify_medical_school()</a></code>,
+<code><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting()</a></code>,
+<code><a href="mysterycall_classify_ruca.html">mysterycall_classify_ruca()</a></code>,
+<code><a href="mysterycall_collapse_rare.html">mysterycall_collapse_rare()</a></code>,
+<code><a href="mysterycall_extract_physician_name.html">mysterycall_extract_physician_name()</a></code>,
+<code><a href="mysterycall_get_academic_indicators_summary.html">mysterycall_get_academic_indicators_summary()</a></code>,
+<code><a href="mysterycall_government_patterns.html">mysterycall_government_patterns()</a></code>,
+<code><a href="mysterycall_impute_age.html">mysterycall_impute_age()</a></code>,
+<code><a href="mysterycall_most_common_gender.html">mysterycall_most_common_gender()</a></code>,
+<code><a href="mysterycall_parse_certification_subspecialty.html">mysterycall_parse_certification_subspecialty()</a></code>,
+<code><a href="mysterycall_physician_age.html">mysterycall_physician_age()</a></code>,
+<code><a href="mysterycall_recode_credentials.html">mysterycall_recode_credentials()</a></code>,
+<code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code>,
+<code><a href="mysterycall_reorder_by_freq.html">mysterycall_reorder_by_freq()</a></code></p></div>
     </div>
 
     <div class="section level2">

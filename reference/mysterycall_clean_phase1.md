@@ -78,7 +78,8 @@ mysterycall_clean_phase1(
 
 ## Value
 
-Invisibly returns the cleaned data frame with the following attributes:
+Invisibly returns the cleaned data frame (side effect: files are written
+to `output_directory`). The returned object carries these attributes:
 
 - `audit_trail`: List containing processing metadata (timestamps, row
   counts, flags)
@@ -201,11 +202,15 @@ hardware.
 
 ## See also
 
+[`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md)
+for Phase 2 data cleaning;
+[`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md)
+which orchestrates both phases.
+
 Other workflow:
 [`mysterycall_call_productivity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_call_productivity.md),
 [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md),
 [`mysterycall_print_dashboard()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_print_dashboard.md),
-[`mysterycall_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_rename_columns.md),
 [`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md),
 [`mysterycall_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow_logged.md),
 [`mysterycall_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_split_and_save.md),

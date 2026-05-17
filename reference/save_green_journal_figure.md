@@ -63,12 +63,21 @@ save_publication_figure(
 
 ## Value
 
-Invisible character vector of paths written.
+Invisible character vector of file paths written (PNG, PDF, and/or CSV
+depending on arguments).
 
 ## Details
 
 Geometry columns (`sfc`) are automatically dropped from the CSV export.
 Output directories are created recursively as needed.
+
+## See also
+
+[`theme_green_journal()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal.md),
+[`theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_map.md)
+for themes to apply before saving;
+[`palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/palette_green_journal.md)
+for the colour palette.
 
 ## Examples
 

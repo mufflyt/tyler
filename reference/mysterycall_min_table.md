@@ -13,45 +13,41 @@ mysterycall_min_table(InVec, mult = FALSE)
 
 - InVec:
 
-  Input vector, expected to be a factor variable or convertible to a
-  factor.
+  A vector or factor. Non-factor inputs are coerced to factor via
+  [`factor()`](https://rdrr.io/r/base/factor.html). The function counts
+  occurrences of each resulting level.
 
 - mult:
 
-  Logical value indicating whether to return multiple minimum values or
-  just the first one. Default is FALSE.
+  Logical scalar. If `TRUE`, all levels tied for the minimum count are
+  returned. If `FALSE` (default), only the first such level is returned
+  (via [`which.min()`](https://rdrr.io/r/base/which.min.html)).
 
 ## Value
 
-If `mult` is FALSE, returns the level corresponding to the minimum value
-of the factor variable. If `mult` is TRUE, returns a character vector
-containing all the levels with the minimum value.
+Character scalar (`mult = FALSE`) or character vector (`mult = TRUE`) of
+the factor level(s) with the minimum frequency. Returns `character(0)`
+for a zero-length input.
 
 ## See also
 
 [`mysterycall_max_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_max_table.md)
 
-Other table:
+Other table helpers:
 [`mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_disparities_table.md),
 [`mysterycall_format_pct()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_pct.md),
 [`mysterycall_max_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_max_table.md),
 [`mysterycall_model_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_table.md),
-[`mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1.md),
-[`mysterycall_table1_gtsummary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table1_gtsummary.md),
-[`mysterycall_table_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_overall.md),
 [`mysterycall_table_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_percentages.md),
 [`mysterycall_table_proportion()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_table_proportion.md),
-[`mysterycall_write_arsenal_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_arsenal_table.md),
-[`mysterycall_write_table_pdf()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_table_pdf.md),
-[`print.mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_disparities_table.md),
-[`print.mysterycall_table1()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_table1.md)
+[`print.mysterycall_disparities_table()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_disparities_table.md)
 
 ## Examples
 
 ``` r
 vec <- factor(c("A", "B", "A", "C", "B", "B"))
-mysterycall_min_table(vec) # Returns "C"
+mysterycall_min_table(vec)           # "C"
 #> [1] "C"
-mysterycall_min_table(vec, mult = TRUE) # Returns "C"
+mysterycall_min_table(vec, mult = TRUE)  # "C"
 #> [1] "C"
 ```

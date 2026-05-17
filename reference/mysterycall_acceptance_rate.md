@@ -52,9 +52,11 @@ A named list with:
 
 - `summary`:
 
-  Tibble with one row per group (or one row overall): `n_total`,
-  `n_missing`, `n_accepted`, `n_rejected`, `rate`, `ci_lower`,
-  `ci_upper`.
+  Tibble with one row per group (or one row overall). When `group_by` is
+  non-`NULL`, the first column is named after the grouping variable
+  (character). Remaining columns: `n_total` (integer), `n_missing`
+  (integer), `n_accepted` (integer), `n_rejected` (integer), `rate`
+  (numeric, 0-1), `ci_lower` (numeric, 0-1), `ci_upper` (numeric, 0-1).
 
 - `test`:
 
@@ -65,15 +67,18 @@ A named list with:
 
 - `p_value`:
 
-  Numeric p-value, or `NA_real_`.
+  Numeric p-value extracted from `test`, or `NA_real_` when no test was
+  run.
 
 - `test_name`:
 
-  Character label describing the test used.
+  Character. One of `"Fisher's exact"`, `"chi-square"`,
+  `"chi-square (small cells)"`, or `"none"`.
 
 - `interpretation`:
 
-  One-sentence plain-language summary.
+  Character. One-sentence plain-language summary suitable for pasting
+  into a Results section.
 
 ## Details
 
@@ -88,7 +93,6 @@ including `NA` – counts as not accepted.
 [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md)
 
 Other outcomes:
-[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md),
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
 [`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md),
 [`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
@@ -101,7 +105,6 @@ Other outcomes:
 [`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
 [`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
-[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
 [`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
 [`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md),

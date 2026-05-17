@@ -47,6 +47,7 @@ Optionally excludes the intercept row.'><meta property="og:image" content="https
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -99,14 +100,18 @@ Default <code>FALSE</code>.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame with columns <code>Term</code>, <code>IRR</code>, <code>95% CI</code>, <code>p-value</code>.
-Rows where <code>p_value &lt; 0.05</code> carry attribute <code>"significant_rows"</code> (row
-indices) so downstream formatters can apply bold styling.</p>
+The data frame carries an integer attribute <code>"significant_rows"</code> with
+the row indices where <code>p_value &lt; 0.05</code>, allowing downstream formatters
+to apply bold styling.  Intercept row is excluded by default.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other manuscript:
+    <div class="dont-index"><p><code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code> which produces the model input;
+<code><a href="mysterycall_write_results_paragraph.html">mysterycall_write_results_paragraph()</a></code> to generate a prose summary.</p>
+<p>Other manuscript:
 <code><a href="mysterycall_methods_paragraph.html">mysterycall_methods_paragraph()</a></code>,
 <code><a href="mysterycall_sample_size_text.html">mysterycall_sample_size_text()</a></code>,
+<code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_summarize_demographics.html">mysterycall_summarize_demographics()</a></code></p></div>
     </div>
 

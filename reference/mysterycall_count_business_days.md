@@ -1,6 +1,6 @@
 # Count business days between two dates (vectorized)
 
-Returns the number of Mon–Fri working days, excluding US federal
+Returns the number of Mon-Fri working days, excluding US federal
 holidays, between `start_date` (exclusive) and `end_date` (inclusive).
 This matches the `business_days_until_appointment` convention used in
 mystery caller studies: a call made on Monday for an appointment on
@@ -27,7 +27,7 @@ mysterycall_count_business_days(start_date, end_date, calendar = NULL)
 
   A `bizdays` calendar from
   [`mysterycall_us_federal_calendar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_us_federal_calendar.md).
-  When `NULL` (default) a calendar covering 2021 – 2036 is built
+  When `NULL` (default) a calendar covering 2021 - 2036 is built
   automatically.
 
 ## Value

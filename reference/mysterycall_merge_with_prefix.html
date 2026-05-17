@@ -49,6 +49,7 @@ when two data sources are combined."><meta property="og:image" content="https://
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -122,17 +123,24 @@ Default <code>"y_"</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with key columns first, followed by prefixed columns
-from <code>x</code>, followed by prefixed columns from <code>y</code>.</p>
+    <p>A data frame in this column order: (1) join key columns (names
+unchanged), (2) non-key columns of <code>x</code> with <code>prefix_x</code> prepended (e.g.
+<code>"specialty"</code> becomes <code>"npi_specialty"</code>), (3) non-key columns of <code>y</code> with
+<code>prefix_y</code> prepended. Row order follows base R <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge()</a></code> (sorted by key).
+For <code>join_type = "left"</code>, unmatched <code>y</code> columns are <code>NA</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other data management:
+    <div class="dont-index"><p><code><a href="mysterycall_safe_left_join.html">mysterycall_safe_left_join()</a></code> for joins with duplicate-key
+warnings; <code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code> for post-join specialty
+harmonisation.</p>
+<p>Other data management:
 <code><a href="mysterycall_check_duplicates.html">mysterycall_check_duplicates()</a></code>,
 <code><a href="mysterycall_check_generalist_presence.html">mysterycall_check_generalist_presence()</a></code>,
 <code><a href="mysterycall_extract_zip5.html">mysterycall_extract_zip5()</a></code>,
 <code><a href="mysterycall_luhn_check.html">mysterycall_luhn_check()</a></code>,
 <code><a href="mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code>,
+<code><a href="mysterycall_rename_columns.html">mysterycall_rename_columns()</a></code>,
 <code><a href="mysterycall_stratified_sample.html">mysterycall_stratified_sample()</a></code></p></div>
     </div>
 

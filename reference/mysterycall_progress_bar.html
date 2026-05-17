@@ -45,6 +45,7 @@ Uses the cli package for cross-platform compatibility and beautiful output."><me
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -132,48 +133,11 @@ Uses the cli package for cross-platform compatibility and beautiful output.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co"># Simple progress bar</span></span></span>
-<span class="r-in"><span><span class="va">pb_id</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_progress_bar</span><span class="op">(</span><span class="st">"Processing"</span>, total <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Starting: Processing (100 items)</span>
-<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="mysterycall_progress_update.html">mysterycall_progress_update</a></span><span class="op">(</span><span class="va">pb_id</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 10/100 (10%) - ETA: 9.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 20/100 (20%) - ETA: 8.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 30/100 (30%) - ETA: 7.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 40/100 (40%) - ETA: 6.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 50/100 (50%) - ETA: 5.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 60/100 (60%) - ETA: 4.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 70/100 (70%) - ETA: 3.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 80/100 (80%) - ETA: 2.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 90/100 (90%) - ETA: 1.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 100/100 (100%) - ETA: 0.0s</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="va">pb_id</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_progress_bar</span><span class="op">(</span><span class="st">"Processing"</span>, total <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="fu"><a href="mysterycall_progress_update.html">mysterycall_progress_update</a></span><span class="op">(</span><span class="va">pb_id</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="mysterycall_progress_done.html">mysterycall_progress_done</a></span><span class="op">(</span><span class="va">pb_id</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   ✓ Processing complete</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># With custom message</span></span></span>
-<span class="r-in"><span><span class="va">pb_id</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_progress_bar</span><span class="op">(</span><span class="st">"Geocoding addresses"</span>, total <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Starting: Geocoding addresses (500 items)</span>
-<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">500</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="co"># do work</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="mysterycall_progress_update.html">mysterycall_progress_update</a></span><span class="op">(</span><span class="va">pb_id</span>, status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Address %d"</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 48/500 (10%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 98/500 (20%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 148/500 (30%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 198/500 (40%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 248/500 (50%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 298/500 (60%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 348/500 (70%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 398/500 (80%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 448/500 (90%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 498/500 (100%) - ETA: 0.0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Progress: 500/500 (100%) - ETA: 0.0s</span>
-<span class="r-in"><span><span class="fu"><a href="mysterycall_progress_done.html">mysterycall_progress_done</a></span><span class="op">(</span><span class="va">pb_id</span>, result <span class="op">=</span> <span class="st">"All addresses geocoded!"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   ✓ All addresses geocoded!</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

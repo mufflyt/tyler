@@ -65,8 +65,20 @@ mysterycall_search_taxonomy(
 
 ## Value
 
-A data frame with filtered NPI data based on the specified taxonomy
-description.
+A data frame of NPPES records matching the requested taxonomy. Key
+columns include `npi`, `first_name`, `last_name`, `taxonomies_desc`
+(broad NPPES specialty label), and `taxonomies_primary` (logical).
+
+## Subspecialty source warning
+
+`taxonomies_desc` reflects the NPPES taxonomy code the provider self-
+reported to the NPI registry. **Do not use this column to assign
+subspecialty.** NPPES taxonomy codes cannot reliably distinguish
+subspecialties (e.g. Neurotology vs. General Otolaryngology).
+Subspecialty must be derived from board certification data only, using
+[`mysterycall_parse_certification_subspecialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_certification_subspecialty.md)
+on the ABOHNS `certification_type` field, then reconciled with
+[`mysterycall_reconcile_specialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_specialty.md).
 
 ## Output columns
 
@@ -143,7 +155,7 @@ directly before any filtering.
 O(t \* p / 200) HTTP requests where `t` = number of state batches and
 `p` = max_records (default 1,200). Each page request targets \< 200
 rows. Full national search across all 50 states for one taxonomy takes
-~2–5 min depending on registry load. Results are cached in-memory per
+~2-5 min depending on registry load. Results are cached in-memory per
 session when `use_cache = TRUE`.
 
 ## Called By

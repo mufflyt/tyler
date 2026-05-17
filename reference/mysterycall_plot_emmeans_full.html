@@ -47,6 +47,7 @@ code:"><meta property="og:image" content="https://github.com/mufflyt/mysterycall
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -142,13 +143,19 @@ groups; <code>FALSE</code> uses shapes and linetypes for greyscale output.</p></
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Invisibly, a named list with elements:</p><dl><dt><code>data</code></dt>
-<dd><p><code>data.frame</code> from <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code>.</p></dd>
+<dd><p><code>data.frame</code> from <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code> with columns for
+the x-axis variable, <code>emmean</code> (or <code>rate</code> for Poisson link), <code>SE</code>,
+<code>df</code>, <code>lower.CL</code>/<code>upper.CL</code> (or <code>asymp.LCL</code>/<code>asymp.UCL</code> for large
+samples), and any grouping variable from <code>specs</code>. Exact column names
+depend on the model family.</p></dd>
 
 <dt><code>plot</code></dt>
-<dd><p>The <code>ggplot</code> object.</p></dd>
+<dd><p><code>ggplot</code> object. Print or pass to <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggplot2::ggsave()</a></code>.</p></dd>
 
 
-</dl></div>
+</dl><p>Capture with <code>res &lt;- mysterycall_plot_emmeans_full(...)</code> to access
+<code>res$data</code> and <code>res$plot</code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
 
@@ -164,7 +171,6 @@ on the count scale (rates) rather than the log scale.</p></li>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other outcomes:
 <code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code>,
-<code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code>,
 <code><a href="mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>,
 <code><a href="mysterycall_marginal_effects.html">mysterycall_marginal_effects()</a></code>,
 <code><a href="mysterycall_model_metrics.html">mysterycall_model_metrics()</a></code>,
@@ -176,7 +182,6 @@ on the count scale (rates) rather than the log scale.</p></li>
 <code><a href="mysterycall_plot_sjplot_interaction.html">mysterycall_plot_sjplot_interaction()</a></code>,
 <code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>,
 <code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>,
-<code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_screen_interactions.html">mysterycall_screen_interactions()</a></code>,
 <code><a href="mysterycall_select_best_model.html">mysterycall_select_best_model()</a></code>,
 <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>,

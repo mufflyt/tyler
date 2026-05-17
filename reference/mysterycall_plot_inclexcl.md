@@ -55,7 +55,13 @@ mysterycall_plot_inclexcl(
 
 ## Value
 
-A DiagrammeR `grViz` object (renders in RMarkdown / Viewer).
+A
+[`DiagrammeR::grViz`](https://rich-iannone.github.io/DiagrammeR/reference/grViz.html)
+object representing the CONSORT flow diagram. Renders automatically in
+the RStudio Viewer and RMarkdown HTML output. To export to SVG or PDF:
+
+    svg_text <- DiagrammeRsvg::export_svg(diagram)
+    rsvg::rsvg_pdf(chartr("\n", "", svg_text), "consort.pdf")
 
 ## Details
 
@@ -63,9 +69,13 @@ Optionally appends a subspecialty distribution table in the final node.
 
 ## See also
 
+[`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md)
+for a generic multi-step flowchart;
+[`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md)
+to compute the counts that feed this diagram.
+
 Other outcomes:
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
-[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md),
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
 [`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md),
 [`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
@@ -77,7 +87,6 @@ Other outcomes:
 [`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
 [`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
-[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
 [`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
 [`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md),

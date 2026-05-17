@@ -45,6 +45,7 @@ over the specified list of state FIPS codes."><meta property="og:image" content=
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -97,10 +98,32 @@ over the specified list of state FIPS codes.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A tibble containing Census block group data for the requested
-states. The result includes padded 2020 FIPS columns (<code>statefp</code>,
-<code>countyfp</code>, <code>tractce</code>, <code>block_group</code>, <code>geoid</code>) and a <code>vintage</code> column
-indicating the Census vintage that supplied the estimates.</p>
+    <p>A tibble with one row per Census block group. Columns include:</p><dl><dt><code>statefp</code></dt>
+<dd><p>Character. Zero-padded 2-digit state FIPS code.</p></dd>
+
+<dt><code>countyfp</code></dt>
+<dd><p>Character. Zero-padded 3-digit county FIPS code.</p></dd>
+
+<dt><code>tractce</code></dt>
+<dd><p>Character. Zero-padded 6-digit Census tract code.</p></dd>
+
+<dt><code>block_group</code></dt>
+<dd><p>Character. Single-digit block group identifier.</p></dd>
+
+<dt><code>geoid</code></dt>
+<dd><p>Character. Full 12-digit block group GEOID
+(<code>statefp + countyfp + tractce + block_group</code>).</p></dd>
+
+<dt><code>vintage</code></dt>
+<dd><p>Integer. The ACS vintage year supplied via <code>vintage</code>.</p></dd>
+
+<dt>Population columns</dt>
+<dd><p>Numeric. ACS 5-year estimates for total
+population and sex-by-age detail (<code>B01001_*E</code> variables).</p></dd>
+
+
+</dl><p>Returns an empty tibble when <code>us_fips_list</code> is length zero. States whose
+API call fails emit a warning and are silently skipped.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

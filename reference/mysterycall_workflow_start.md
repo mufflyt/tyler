@@ -29,7 +29,7 @@ workflow header to the console.
 
 ## See also
 
-Other logging utilities:
+Other logging:
 [`mysterycall_format_duration()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_duration.md),
 [`mysterycall_log_cache_hit()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_cache_hit.md),
 [`mysterycall_log_error()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_error.md),
@@ -56,7 +56,7 @@ Other logging utilities:
 mysterycall_workflow_start("Demo Workflow", total_steps = 3)
 #> ============================================================
 #>   Demo Workflow
-#>   Started: 2026-05-17 01:42:47
+#>   Started: 2026-05-17 02:57:06
 #>   Total Steps: 3
 #> ============================================================
 #> 

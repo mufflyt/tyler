@@ -262,41 +262,32 @@ adjusting for all other covariates in the model.
 ``` r
 
 set.seed(42)
-n_per <- 200L
-ins_levels <- c("Medicaid", "Medicare", "Private", "Uninsured")
-lambda_map <- c(Medicaid = 18, Medicare = 12, Private = 10, Uninsured = 16)
-sim_df <- do.call(rbind, lapply(ins_levels, function(ins) {
-  data.frame(
-    insurance = ins,
-    wait_days = rpois(n_per, lambda = lambda_map[ins])
-  )
-}))
-sim_df$insurance <- factor(sim_df$insurance, levels = ins_levels)
+medicaid_waits <- rpois(200L, lambda = 18)
 
-ggplot2::ggplot(sim_df, ggplot2::aes(x = wait_days, fill = insurance)) +
-  ggplot2::geom_histogram(binwidth = 2, colour = "white", linewidth = 0.2) +
-  ggplot2::facet_wrap(~ insurance, nrow = 1) +
-  ggplot2::scale_fill_manual(values = c(
-    Medicaid  = "#1b7837",
-    Medicare  = "#4393c3",
-    Private   = "#2166ac",
-    Uninsured = "#d6604d"
-  ), guide = "none") +
-  ggplot2::labs(
-    x = "Wait time (business days)",
-    y = "Number of calls"
-  ) +
-  ggplot2::theme_minimal(base_size = 11) +
-  ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
+# mysterycall_plot_distribution() returns a named list: $raw and $sqrt_transformed
+dist_plots <- mysterycall_plot_distribution(medicaid_waits,
+                                             title = "Medicaid wait days",
+                                             bins  = 25L)
+
+# Print the two panels side-by-side using patchwork if available,
+# otherwise fall back to printing the raw panel alone
+if (requireNamespace("patchwork", quietly = TRUE)) {
+  dist_plots$raw + dist_plots$sqrt_transformed
+} else {
+  dist_plots$raw
+}
 ```
 
-![Simulated wait-time distributions by insurance type. Medicaid and
-Uninsured callers show longer right tails, consistent with Poisson count
-data.](statistical-analysis_files/figure-html/wait-time-dist-1.png)
+![Right-skewed wait-time distribution for Medicaid callers (simulated).
+\`mysterycall_plot_distribution()\` returns raw and sqrt-scaled panels —
+the sqrt panel makes the long upper tail visible without distorting the
+modal
+value.](statistical-analysis_files/figure-html/wait-time-dist-1.png)
 
-Simulated wait-time distributions by insurance type. Medicaid and
-Uninsured callers show longer right tails, consistent with Poisson count
-data.
+Right-skewed wait-time distribution for Medicaid callers (simulated).
+[`mysterycall_plot_distribution()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_distribution.md)
+returns raw and sqrt-scaled panels — the sqrt panel makes the long upper
+tail visible without distorting the modal value.
 
 ### 3.2 Why a Random Intercept on Physician?
 
@@ -436,58 +427,30 @@ distribution), giving:
 
 ``` r
 
+# mysterycall_irr_plot() accepts a data frame with term/irr/ci_lower/ci_upper/p_value
 irr_df <- data.frame(
-  insurance = factor(c("Medicaid", "Medicare", "Uninsured"),
-                     levels = c("Uninsured", "Medicare", "Medicaid")),
-  irr       = c(1.42, 1.08, 1.29),
-  ci_lo     = c(1.18, 0.89, 1.06),
-  ci_hi     = c(1.70, 1.31, 1.57),
-  p_label   = c("p < 0.001", "p = 0.441", "p = 0.012")
+  term     = c("Medicaid", "Medicare", "Uninsured"),
+  irr      = c(1.42, 1.08, 1.29),
+  ci_lower = c(1.18, 0.89, 1.06),
+  ci_upper = c(1.70, 1.31, 1.57),
+  p_value  = c(0.0001, 0.441, 0.012)
 )
-
-ggplot2::ggplot(irr_df,
-    ggplot2::aes(x = irr, y = insurance, xmin = ci_lo, xmax = ci_hi,
-                 colour = irr > 1.1)) +
-  ggplot2::geom_vline(xintercept = 1, linetype = "dashed", colour = "grey50") +
-  ggplot2::geom_errorbarh(height = 0.15, linewidth = 0.8) +
-  ggplot2::geom_point(size = 3) +
-  ggplot2::geom_text(
-    ggplot2::aes(x = ci_hi + 0.04, label = p_label),
-    hjust = 0, size = 3, colour = "grey30"
-  ) +
-  ggplot2::scale_colour_manual(values = c("TRUE" = "#c0392b", "FALSE" = "#2980b9"),
-                                guide = "none") +
-  ggplot2::scale_x_continuous(
-    limits = c(0.75, 1.95),
-    breaks = c(0.8, 1.0, 1.2, 1.4, 1.6, 1.8)
-  ) +
-  ggplot2::labs(
-    x = "Incidence Rate Ratio (vs. Private insurance)",
-    y = NULL
-  ) +
-  ggplot2::theme_minimal(base_size = 11) +
-  ggplot2::theme(
-    panel.grid.minor = ggplot2::element_blank(),
-    axis.text.y = ggplot2::element_text(face = "bold")
-  )
-#> Warning: `geom_errorbarh()` was deprecated in ggplot2 4.0.0.
-#> ℹ Please use the `orientation` argument of `geom_errorbar()` instead.
-#> This warning is displayed once per session.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-#> generated.
+mysterycall_irr_plot(irr_df,
+                     x_label = "IRR vs. Private insurance",
+                     x_log   = FALSE)
 #> `height` was translated to `width`.
 ```
 
-![Forest plot of incidence rate ratios (IRR) from the Poisson GLMM.
-Error bars are 95 % profile-likelihood confidence intervals. The
-vertical dashed line at IRR = 1 represents no difference from the
-Private insurance reference
-group.](statistical-analysis_files/figure-html/irr-forest-1.png)
+![Forest plot of incidence rate ratios (IRR) from the Poisson GLMM
+produced by \`mysterycall_irr_plot()\`. Red points are statistically
+significant (p \< 0.05); navy are not. Dashed line at IRR = 1 marks no
+effect.](statistical-analysis_files/figure-html/irr-forest-1.png)
 
-Forest plot of incidence rate ratios (IRR) from the Poisson GLMM. Error
-bars are 95 % profile-likelihood confidence intervals. The vertical
-dashed line at IRR = 1 represents no difference from the Private
-insurance reference group.
+Forest plot of incidence rate ratios (IRR) from the Poisson GLMM
+produced by
+[`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md).
+Red points are statistically significant (p \< 0.05); navy are not.
+Dashed line at IRR = 1 marks no effect.
 
 ### 3.6 Checking for Overdispersion
 
@@ -763,39 +726,19 @@ rarely recommended.
 
 ``` r
 
-disp_df <- data.frame(
-  insurance = factor(
-    c("Medicaid", "Medicare", "Private", "Uninsured"),
-    levels = c("Uninsured", "Private", "Medicare", "Medicaid")
-  ),
-  rate    = c(0.640, 0.840, 0.910, 0.540),
-  ci_lo   = c(0.572, 0.781, 0.860, 0.471),
-  ci_hi   = c(0.703, 0.888, 0.945, 0.608),
-  is_ref  = c(FALSE, FALSE, TRUE, FALSE)
-)
+# Build a representative disparities table from synthetic data
+set.seed(99)
+n_per   <- 200L
+ins     <- rep(c("Medicaid", "Medicare", "Private", "Uninsured"), each = n_per)
+probs   <- rep(c(0.64, 0.84, 0.91, 0.54), each = n_per)
+demo_df <- data.frame(insurance = ins,
+                       accepted  = rbinom(length(ins), 1L, probs))
 
-ggplot2::ggplot(disp_df,
-    ggplot2::aes(x = rate, y = insurance, xmin = ci_lo, xmax = ci_hi,
-                 colour = is_ref, shape = is_ref)) +
-  ggplot2::geom_vline(xintercept = 0.910, linetype = "dashed", colour = "grey60") +
-  ggplot2::geom_errorbarh(height = 0.18, linewidth = 0.8) +
-  ggplot2::geom_point(size = 3.5) +
-  ggplot2::scale_colour_manual(values = c("TRUE" = "#2166ac", "FALSE" = "#c0392b"),
-                                guide = "none") +
-  ggplot2::scale_shape_manual(values = c("TRUE" = 18, "FALSE" = 16), guide = "none") +
-  ggplot2::scale_x_continuous(
-    limits = c(0.40, 1.00),
-    labels = scales::percent_format(accuracy = 1)
-  ) +
-  ggplot2::labs(
-    x = "Appointment-offered rate (95 % Wilson CI)",
-    y = NULL
-  ) +
-  ggplot2::theme_minimal(base_size = 11) +
-  ggplot2::theme(
-    panel.grid.minor = ggplot2::element_blank(),
-    axis.text.y = ggplot2::element_text(face = "bold")
-  )
+disp_tbl <- mysterycall_disparities_table(demo_df, "accepted", "insurance",
+                                           ref_group = "Private")
+
+# One call replaces 30+ lines of manual ggplot2
+mysterycall_plot_disparities(disp_tbl, metric = "rate")
 #> `height` was translated to `width`.
 ```
 
@@ -808,6 +751,40 @@ Appointment-offered rates by insurance type with 95 % Wilson score
 confidence intervals. Private insurance is the reference group (dashed
 line). Medicaid and Uninsured callers face the largest absolute
 deficits.
+
+[`mysterycall_plot_disparities()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_disparities.md)
+supports three metrics — switch with `metric`:
+
+``` r
+
+mysterycall_plot_disparities(disp_tbl, metric = "abs_diff",
+                              title = "Absolute disparity (pp vs. Private)")
+#> `height` was translated to `width`.
+```
+
+![Absolute difference in acceptance rate (percentage points) versus
+Private insurance. Negative values indicate lower appointment-offered
+rates.](statistical-analysis_files/figure-html/disp-abs-diff-1.png)
+
+Absolute difference in acceptance rate (percentage points) versus
+Private insurance. Negative values indicate lower appointment-offered
+rates.
+
+``` r
+
+mysterycall_plot_disparities(disp_tbl, metric = "rel_risk",
+                              title = "Relative risk vs. Private")
+#> `height` was translated to `width`.
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_text()`).
+```
+
+![Relative risk of being offered an appointment versus Private
+insurance. Values below 1 indicate lower rates for that
+group.](statistical-analysis_files/figure-html/disp-rr-1.png)
+
+Relative risk of being offered an appointment versus Private insurance.
+Values below 1 indicate lower rates for that group.
 
 ### 5.3 Basic Disparity Analysis
 
@@ -1622,6 +1599,157 @@ cat(results_para)
 #> Medicare callers compared with privately insured callers (IRR 1.08; 95% CI:
 #> 0.87-1.35; p = .481).
 ```
+
+------------------------------------------------------------------------
+
+## 10. Sample Size and Power
+
+### 10.1 Cochran’s Formula for Provider Sampling
+
+Before calling, you need to know how many providers to contact. For a
+**prevalence-type question** (e.g., “what fraction of OB-GYNs in a state
+accept Medicaid?”), Cochran’s formula gives the minimum sample size for
+a desired margin of error at 95 % confidence:
+
+``` math
+n_0 = \frac{z^2_{\alpha/2}\,p(1-p)}{e^2}, \qquad
+  n = \frac{n_0}{1 + \frac{n_0 - 1}{N}}
+```
+
+where $`N`$ is the finite population size, $`p = 0.5`$ (maximum
+variance, conservative), and $`e`$ is the desired margin of error.
+
+``` r
+
+# How many providers needed from a state with N = 800 OB-GYNs,
+# margin of error ±5 %?
+result_cochran <- mysterycall_cochran_n(N = 800, margin_of_error = 0.05)
+knitr::kable(
+  data.frame(
+    Population   = result_cochran$N,
+    Sample_n     = result_cochran$n,
+    Target_ME    = scales::percent(result_cochran$margin_of_error, accuracy = 1),
+    Achieved_ME  = scales::percent(result_cochran$effective_margin, accuracy = 0.1)
+  ),
+  col.names = c("Population (N)", "Required n", "Target margin", "Achieved margin"),
+  caption   = "Cochran sample-size calculation for N = 800 providers, ±5 % margin."
+)
+```
+
+| Population (N) | Required n | Target margin | Achieved margin |
+|---------------:|-----------:|:--------------|:----------------|
+|            800 |        267 | 5%            | 5.0%            |
+
+Cochran sample-size calculation for N = 800 providers, ±5 % margin.
+{.table}
+
+### 10.2 Poisson Power for Wait-Time Disparities
+
+For the **count outcome** (wait days) analysed with a Poisson GLMM,
+power depends on the minimum detectable IRR, the reference-arm mean
+($`\lambda_0`$), type I error, and whether each provider is called once
+(unpaired) or twice (paired with both insurance types):
+
+``` math
+n = \frac{(z_{\alpha/2} + z_\beta)^2 \left(\dfrac{1}{\lambda_0} + \dfrac{1}{\lambda_1}\right)}{(\log \text{IRR})^2}
+```
+
+``` r
+
+# Detect IRR = 1.40 (Medicaid 40% longer waits) with reference mean 14 days
+pw_40 <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14,
+                                    power = 0.80, both_arms = TRUE)
+#> Poisson power: IRR=1.40, lambda_ref=14.0, lambda_trt=19.6 | n_per_arm=9, n_total=9, calls=18
+pw_90 <- mysterycall_poisson_power(irr = 1.40, lambda_ref = 14,
+                                    power = 0.90, both_arms = TRUE)
+#> Poisson power: IRR=1.40, lambda_ref=14.0, lambda_trt=19.6 | n_per_arm=12, n_total=12, calls=24
+pw_20 <- mysterycall_poisson_power(irr = 1.20, lambda_ref = 14,
+                                    power = 0.80, both_arms = TRUE)
+#> Poisson power: IRR=1.20, lambda_ref=14.0, lambda_trt=16.8 | n_per_arm=31, n_total=31, calls=62
+
+power_tbl <- data.frame(
+  IRR        = c(1.40, 1.40, 1.20),
+  Power      = c("80 %", "90 %", "80 %"),
+  n_per_arm  = c(pw_40$n_per_arm, pw_90$n_per_arm, pw_20$n_per_arm),
+  n_total    = c(pw_40$n_total,   pw_90$n_total,   pw_20$n_total),
+  n_calls    = c(pw_40$n_total_calls, pw_90$n_total_calls, pw_20$n_total_calls)
+)
+knitr::kable(
+  power_tbl,
+  col.names = c("Min. detectable IRR", "Power", "Providers/arm",
+                "Total providers", "Total calls"),
+  caption   = "Poisson power analysis: providers per arm for paired design, lambda_ref = 14 days."
+)
+```
+
+| Min. detectable IRR | Power | Providers/arm | Total providers | Total calls |
+|--------------------:|:------|--------------:|----------------:|------------:|
+|                 1.4 | 80 %  |             9 |               9 |          18 |
+|                 1.4 | 90 %  |            12 |              12 |          24 |
+|                 1.2 | 80 %  |            31 |              31 |          62 |
+
+Poisson power analysis: providers per arm for paired design, lambda_ref
+= 14 days. {.table}
+
+### 10.3 Power Curve Across a Range of IRRs
+
+``` r
+
+irr_seq  <- seq(1.10, 2.00, by = 0.05)
+n_seq    <- vapply(irr_seq, function(irr) {
+  tryCatch(
+    mysterycall_poisson_power(irr = irr, lambda_ref = 14, power = 0.80,
+                               both_arms = TRUE)$n_per_arm,
+    error = function(e) NA_real_
+  )
+}, numeric(1L))
+#> Poisson power: IRR=1.10, lambda_ref=14.0, lambda_trt=15.4 | n_per_arm=118, n_total=118, calls=236
+#> Poisson power: IRR=1.15, lambda_ref=14.0, lambda_trt=16.1 | n_per_arm=54, n_total=54, calls=108
+#> Poisson power: IRR=1.20, lambda_ref=14.0, lambda_trt=16.8 | n_per_arm=31, n_total=31, calls=62
+#> Poisson power: IRR=1.25, lambda_ref=14.0, lambda_trt=17.5 | n_per_arm=21, n_total=21, calls=42
+#> Poisson power: IRR=1.30, lambda_ref=14.0, lambda_trt=18.2 | n_per_arm=15, n_total=15, calls=30
+#> Poisson power: IRR=1.35, lambda_ref=14.0, lambda_trt=18.9 | n_per_arm=11, n_total=11, calls=22
+#> Poisson power: IRR=1.40, lambda_ref=14.0, lambda_trt=19.6 | n_per_arm=9, n_total=9, calls=18
+#> Poisson power: IRR=1.45, lambda_ref=14.0, lambda_trt=20.3 | n_per_arm=7, n_total=7, calls=14
+#> Poisson power: IRR=1.50, lambda_ref=14.0, lambda_trt=21.0 | n_per_arm=6, n_total=6, calls=12
+#> Poisson power: IRR=1.55, lambda_ref=14.0, lambda_trt=21.7 | n_per_arm=5, n_total=5, calls=10
+#> Poisson power: IRR=1.60, lambda_ref=14.0, lambda_trt=22.4 | n_per_arm=5, n_total=5, calls=10
+#> Poisson power: IRR=1.65, lambda_ref=14.0, lambda_trt=23.1 | n_per_arm=4, n_total=4, calls=8
+#> Poisson power: IRR=1.70, lambda_ref=14.0, lambda_trt=23.8 | n_per_arm=4, n_total=4, calls=8
+#> Poisson power: IRR=1.75, lambda_ref=14.0, lambda_trt=24.5 | n_per_arm=3, n_total=3, calls=6
+#> Poisson power: IRR=1.80, lambda_ref=14.0, lambda_trt=25.2 | n_per_arm=3, n_total=3, calls=6
+#> Poisson power: IRR=1.85, lambda_ref=14.0, lambda_trt=25.9 | n_per_arm=3, n_total=3, calls=6
+#> Poisson power: IRR=1.90, lambda_ref=14.0, lambda_trt=26.6 | n_per_arm=3, n_total=3, calls=6
+#> Poisson power: IRR=1.95, lambda_ref=14.0, lambda_trt=27.3 | n_per_arm=2, n_total=2, calls=4
+#> Poisson power: IRR=2.00, lambda_ref=14.0, lambda_trt=28.0 | n_per_arm=2, n_total=2, calls=4
+
+curve_df <- data.frame(irr = irr_seq, n_per_arm = n_seq)
+
+ggplot2::ggplot(curve_df, ggplot2::aes(x = irr, y = n_per_arm)) +
+  ggplot2::geom_line(colour = "#2166ac", linewidth = 1) +
+  ggplot2::geom_point(colour = "#2166ac", size = 2) +
+  ggplot2::geom_vline(xintercept = 1.40, linetype = "dashed",
+                       colour = "#c0392b", linewidth = 0.7) +
+  ggplot2::annotate("text", x = 1.42, y = max(n_seq, na.rm = TRUE) * 0.9,
+                     label = "IRR = 1.40\n(typical Medicaid gap)",
+                     hjust = 0, size = 3, colour = "#c0392b") +
+  ggplot2::scale_x_continuous(breaks = seq(1.1, 2.0, 0.1)) +
+  ggplot2::labs(
+    x = "Minimum detectable IRR",
+    y = "Providers per arm"
+  ) +
+  ggplot2::theme_minimal(base_size = 11) +
+  ggplot2::theme(panel.grid.minor = ggplot2::element_blank())
+```
+
+![Required providers per arm (paired design, 80 % power) as a function
+of the minimum detectable IRR. Detecting small effects (IRR close to 1)
+requires substantially more
+providers.](statistical-analysis_files/figure-html/power-curve-1.png)
+
+Required providers per arm (paired design, 80 % power) as a function of
+the minimum detectable IRR. Detecting small effects (IRR close to 1)
+requires substantially more providers.
 
 ------------------------------------------------------------------------
 

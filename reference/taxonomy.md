@@ -15,26 +15,26 @@ A data frame with three columns:
 
 - Code:
 
-  NUCC (National Uniform Claim Committee) taxonomy code.
+  NUCC (National Uniform Claim Committee) taxonomy code (character).
 
 - Classification:
 
-  Provider classification (e.g., Allopathic & Osteopathic Physicians).
+  Provider classification (e.g., "Allopathic & Osteopathic Physicians").
 
 - Specialization:
 
-  Provider specialization within the classification.
+  Specialty within the classification (e.g., "Obstetrics & Gynecology").
 
 ## Source
 
 <https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf>
 
-## Value
-
-A tibble mapping NUCC taxonomy codes to descriptive provider types
-relevant to obstetrics and gynecology research.
-
 ## See also
+
+[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)
+to look up provider taxonomy codes from the NPI registry;
+[acgme](https://mufflyt.github.io/mysterycall/reference/acgme.md) for
+ACGME residency program data.
 
 Other datasets:
 [`ACOG_Districts`](https://mufflyt.github.io/mysterycall/reference/ACOG_Districts.md),
@@ -45,25 +45,12 @@ Other datasets:
 ## Examples
 
 ``` r
-# \donttest{
-# Load the taxonomy dataset
 data(taxonomy)
-
-# Explore the dataset
-print(taxonomy)
-#> # A tibble: 862 × 3
-#>    Code       Classification             Specialization                    
-#>    <chr>      <chr>                      <chr>                             
-#>  1 101Y00000X Counselor                  NA                                
-#>  2 101YA0400X Counselor                  Addiction (Substance Use Disorder)
-#>  3 101YM0800X Counselor                  Mental Health                     
-#>  4 101YP1600X Counselor                  Pastoral                          
-#>  5 101YP2500X Counselor                  Professional                      
-#>  6 101YS0200X Counselor                  School                            
-#>  7 102L00000X Psychoanalyst              NA                                
-#>  8 102X00000X Poetry Therapist           NA                                
-#>  9 103G00000X Clinical Neuropsychologist NA                                
-#> 10 103GC0700X Clinical Neuropsychologist Clinical                          
-#> # ℹ 852 more rows
-# }
+print(taxonomy[1:3, ])
+#> # A tibble: 3 × 3
+#>   Code       Classification Specialization                    
+#>   <chr>      <chr>          <chr>                             
+#> 1 101Y00000X Counselor      NA                                
+#> 2 101YA0400X Counselor      Addiction (Substance Use Disorder)
+#> 3 101YM0800X Counselor      Mental Health                     
 ```

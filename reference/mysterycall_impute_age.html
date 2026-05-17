@@ -53,6 +53,7 @@ physicians (r = 0.957, MAE = 1.7 years); see the technical appendix."><meta prop
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -124,7 +125,10 @@ threshold are replaced with <code>NA</code>. Default <code>90</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Integer vector the same length as <code>grad_year</code>.</p>
+    <p>Integer vector the same length as <code>grad_year</code>. <code>NA</code> is returned
+for elements where <code>grad_year</code> is <code>NA</code>, where the computed age is below
+<code>min_age</code>, or where it exceeds <code>max_age</code> (with a <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">base::warning()</a></code> in
+each case).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -143,13 +147,18 @@ to <code>NA</code> with a warning.</p>
 <code><a href="mysterycall_academic_patterns.html">mysterycall_academic_patterns()</a></code>,
 <code><a href="mysterycall_age_category.html">mysterycall_age_category()</a></code>,
 <code><a href="mysterycall_assign_region.html">mysterycall_assign_region()</a></code>,
+<code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code>,
 <code><a href="mysterycall_classify_medical_school.html">mysterycall_classify_medical_school()</a></code>,
 <code><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting()</a></code>,
 <code><a href="mysterycall_classify_ruca.html">mysterycall_classify_ruca()</a></code>,
 <code><a href="mysterycall_collapse_rare.html">mysterycall_collapse_rare()</a></code>,
 <code><a href="mysterycall_extract_physician_name.html">mysterycall_extract_physician_name()</a></code>,
+<code><a href="mysterycall_genderize.html">mysterycall_genderize()</a></code>,
+<code><a href="mysterycall_get_academic_indicators_summary.html">mysterycall_get_academic_indicators_summary()</a></code>,
 <code><a href="mysterycall_government_patterns.html">mysterycall_government_patterns()</a></code>,
+<code><a href="mysterycall_most_common_gender.html">mysterycall_most_common_gender()</a></code>,
 <code><a href="mysterycall_parse_certification_subspecialty.html">mysterycall_parse_certification_subspecialty()</a></code>,
+<code><a href="mysterycall_physician_age.html">mysterycall_physician_age()</a></code>,
 <code><a href="mysterycall_recode_credentials.html">mysterycall_recode_credentials()</a></code>,
 <code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code>,
 <code><a href="mysterycall_reorder_by_freq.html">mysterycall_reorder_by_freq()</a></code></p></div>
@@ -157,7 +166,7 @@ to <code>NA</code> with a warning.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Physician who graduated in 1995; current year 2026 → age ≈ 58</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Physician who graduated in 1995; current year 2026 -&gt; age ~ 58</span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_impute_age</span><span class="op">(</span><span class="fl">1995</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 58</span>
 <span class="r-in"><span></span></span>

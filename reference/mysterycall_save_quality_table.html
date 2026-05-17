@@ -47,6 +47,7 @@ The resulting table is saved as a CSV file."><meta property="og:image" content="
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -95,9 +96,10 @@ The resulting table is saved as a CSV file.</p>
 
 
 <dt id="arg-output-format">output_format<a class="anchor" aria-label="anchor" href="#arg-output-format"></a></dt>
-<dd><p>File format for the saved table. Either <code>"csv"</code> (default)
-or <code>"parquet"</code>. The file extension of <code>filepath</code> is ignored; the format
-here controls what is written.</p></dd>
+<dd><p>Character scalar: <code>"csv"</code> (default) or <code>"parquet"</code>.
+CSV is written via <code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">readr::write_csv()</a></code>; Parquet requires the <code>arrow</code>
+package and is more efficient for large tables. The file extension of
+<code>filepath</code> is ignored; this parameter controls what is actually written.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -130,8 +132,6 @@ manual review.</p>
 <code><a href="mysterycall_export_with_backup.html">mysterycall_export_with_backup()</a></code>,
 <code><a href="mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code>,
 <code><a href="mysterycall_quality_tier.html">mysterycall_quality_tier()</a></code>,
-<code><a href="mysterycall_remove_constants.html">mysterycall_remove_constants()</a></code>,
-<code><a href="mysterycall_remove_near_zero.html">mysterycall_remove_near_zero()</a></code>,
 <code><a href="mysterycall_resolve_path.html">mysterycall_resolve_path()</a></code>,
 <code><a href="mysterycall_scan_for_limits.html">mysterycall_scan_for_limits()</a></code>,
 <code><a href="mysterycall_standard_labels.html">mysterycall_standard_labels()</a></code>,

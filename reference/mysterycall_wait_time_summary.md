@@ -43,28 +43,35 @@ A named list with:
 
 - `summary`:
 
-  Tibble with one row per group (or one row overall): `n`, `n_missing`,
-  `mean`, `sd`, `median`, `q1`, `q3`, `min`, `max`.
+  Tibble with one row per group (or one row overall). When `group_by` is
+  non-`NULL`, the first column is named after the grouping variable
+  (character). Remaining columns: `n` (integer), `n_missing` (integer),
+  `mean` (numeric), `sd` (numeric), `median` (numeric), `q1` (numeric),
+  `q3` (numeric), `min` (numeric), `max` (numeric).
 
 - `test`:
 
   `htest` object from
-  [`stats::wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html) or
-  [`stats::kruskal.test()`](https://rdrr.io/r/stats/kruskal.test.html),
-  or `NULL` when no test was run.
+  [`stats::wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html)
+  (two groups) or
+  [`stats::kruskal.test()`](https://rdrr.io/r/stats/kruskal.test.html)
+  (three or more groups), or `NULL` when no test was run (i.e.,
+  `group_by = NULL`).
 
 - `p_value`:
 
-  Numeric p-value, or `NA_real_`.
+  Numeric p-value extracted from `test`, or `NA_real_` when no test was
+  run.
 
 - `test_name`:
 
-  Character label describing the test used.
+  Character. One of `"Wilcoxon rank-sum"`, `"Kruskal-Wallis"`, or
+  `"none"`.
 
 - `interpretation`:
 
-  One-sentence plain-language summary suitable for pasting into a
-  Results section.
+  Character. One-sentence plain-language summary suitable for pasting
+  into a Results section.
 
 ## Details
 
@@ -80,7 +87,6 @@ calling this function.
 
 Other outcomes:
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
-[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md),
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
 [`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md),
 [`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
@@ -93,7 +99,6 @@ Other outcomes:
 [`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
 [`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
-[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
 [`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
 [`print.mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_poisson_model.md)

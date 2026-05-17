@@ -1,7 +1,7 @@
 # Business-day utilities for mystery caller studies
 
 The primary outcome in mystery caller studies is
-`business_days_until_appointment`: the number of Mon–Fri working days
+`business_days_until_appointment`: the number of Mon-Fri working days
 (excluding US federal holidays) between the call date and the offered
 appointment date. These helpers build a `bizdays` calendar from US
 federal holidays and compute that column for a data frame.

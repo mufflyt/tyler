@@ -49,6 +49,7 @@ objects."><meta property="og:image" content="https://github.com/mufflyt/mysteryc
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -92,13 +93,26 @@ or <code>lm</code> object.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A named list with elements <code>mae</code> and <code>rmse</code> (numeric scalars).</p>
+    <p>A named list with two numeric scalar elements:</p><dl><dt><code>mae</code></dt>
+<dd><p>Numeric scalar (or <code>NA_real_</code>). Mean absolute error:
+mean(|observed - fitted|). Measures average prediction error in the
+original response units.</p></dd>
+
+<dt><code>rmse</code></dt>
+<dd><p>Numeric scalar (or <code>NA_real_</code>). Root-mean-square error:
+sqrt(mean((observed - fitted)^2)). Penalises large errors more
+heavily than MAE.</p></dd>
+
+
+</dl><p>Both elements are <code>NA_real_</code> when fitted values cannot be extracted
+(e.g., model fitting failed or an unsupported class was passed).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other outcomes:
+    <div class="dont-index"><p><code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code> which produces compatible model
+objects; <code><a href="mysterycall_select_best_model.html">mysterycall_select_best_model()</a></code> for AIC/BIC-based selection.</p>
+<p>Other outcomes:
 <code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code>,
-<code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code>,
 <code><a href="mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>,
 <code><a href="mysterycall_marginal_effects.html">mysterycall_marginal_effects()</a></code>,
 <code><a href="mysterycall_plot_distribution.html">mysterycall_plot_distribution()</a></code>,
@@ -110,7 +124,6 @@ or <code>lm</code> object.</p></dd>
 <code><a href="mysterycall_plot_sjplot_interaction.html">mysterycall_plot_sjplot_interaction()</a></code>,
 <code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>,
 <code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>,
-<code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_screen_interactions.html">mysterycall_screen_interactions()</a></code>,
 <code><a href="mysterycall_select_best_model.html">mysterycall_select_best_model()</a></code>,
 <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>,

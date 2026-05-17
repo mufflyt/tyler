@@ -49,7 +49,11 @@ mysterycall_assign_scenarios(
   `c("Neurotology" = "Neurotology", "Pediatric Otolaryngology" = "Pediatric Otolaryngology")`.
   Each name is a value that appears in `specialty_col`; each value is
   the scenario label that will be assigned to generalists in cities
-  where that subspecialty is present.
+  where that subspecialty is present. **The subspecialty values used as
+  names here must derive from board certification data (e.g. ABOHNS via
+  [`mysterycall_parse_certification_subspecialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_certification_subspecialty.md))
+  and must not come from NPPES `taxonomies_desc` or DAC taxonomy
+  codes.**
 
 - id_col:
 
@@ -71,6 +75,13 @@ mysterycall_assign_scenarios(
 Non-generalist rows receive their own specialty as the scenario.
 Generalists in locations that have no matching subspecialists receive
 `NA`.
+
+## See also
+
+[`mysterycall_check_generalist_presence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_generalist_presence.md)
+to validate paired generalist coverage before assigning scenarios;
+[`mysterycall_reconcile_specialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_specialty.md)
+for specialty harmonisation.
 
 ## Examples
 

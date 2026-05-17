@@ -45,6 +45,7 @@ response variable, and optional random effect."><meta property="og:image" conten
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -80,45 +81,57 @@ response variable, and optional random effect.</p>
 
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>A dataframe containing the predictor and response variables.</p></dd>
+<dd><p>A data frame containing all predictor and response variables.
+Factor columns are detected automatically and included as-is; all other
+non-response columns are treated as fixed-effect predictors.</p></dd>
 
 
 <dt id="arg-response-var">response_var<a class="anchor" aria-label="anchor" href="#arg-response-var"></a></dt>
-<dd><p>The name of the response variable in the dataframe.</p></dd>
+<dd><p>Character scalar naming the count/numeric response
+(outcome) column in <code>data</code>.</p></dd>
 
 
 <dt id="arg-random-effect">random_effect<a class="anchor" aria-label="anchor" href="#arg-random-effect"></a></dt>
-<dd><p>Optional. The name of the random effect variable for the formula.</p></dd>
+<dd><p>Optional character scalar naming a grouping column to
+add as a random intercept <code>(1 | random_effect)</code> term, e.g. <code>"physician"</code>.
+Default <code>NULL</code> (no random effects; produces a fixed-effects-only formula).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A formula object suitable for modeling in R.</p>
+    <p>A <code>formula</code> object.  When <code>random_effect</code> is <code>NULL</code> the formula is
+suitable for <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code>; when provided it is suitable for
+<code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">lme4::glmer()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other modeling helpers:
+    <div class="dont-index"><p><code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code> which uses this formula builder
+internally.</p>
+<p>Other modeling helpers:
 <code><a href="mysterycall_check_normality.html">mysterycall_check_normality()</a></code>,
-<code><a href="mysterycall_plot_emmeans.html">mysterycall_plot_emmeans()</a></code>,
 <code><a href="mysterycall_plot_interaction.html">mysterycall_plot_interaction()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example usage:</span></span></span>
-<span class="r-in"><span><span class="va">response_variable</span> <span class="op">&lt;-</span> <span class="st">"days"</span></span></span>
-<span class="r-in"><span><span class="va">random_effect_term</span> <span class="op">&lt;-</span> <span class="st">"name"</span>  <span class="co"># Change this to the desired random effect variable</span></span></span>
-<span class="r-in"><span><span class="va">df3_filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span><span class="op">)</span>, age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_create_formula</span><span class="op">(</span><span class="va">df3_filtered</span>, <span class="va">response_variable</span>, <span class="va">random_effect_term</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span><span class="op">)</span>, age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mysterycall_create_formula</span><span class="op">(</span><span class="va">df</span>, <span class="st">"days"</span>, random_effect <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating formula with response variable: days</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Predictor variables identified: age</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Predictor variables after formatting: `age`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Initial formula string: days ~ `age`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Formula string with random effect: days ~ `age` + (1 | name )</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Final formula object created: days ~ age + (1 | name)</span>
-<span class="r-in"><span><span class="va">formula</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> days ~ age + (1 | name)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x56314f616348&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55f4ba94e148&gt;</span>
+<span class="r-in"><span><span class="fu">mysterycall_create_formula</span><span class="op">(</span><span class="va">df</span>, <span class="st">"days"</span><span class="op">)</span>  <span class="co"># fixed-effects only</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating formula with response variable: days</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Predictor variables identified: age, name</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Predictor variables after formatting: `age`, `name`</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial formula string: days ~ `age` + `name`</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final formula object created: days ~ age + name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> days ~ age + name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55f4bb7a8438&gt;</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

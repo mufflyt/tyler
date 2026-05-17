@@ -47,6 +47,7 @@ checks whether that state matches the physician's practice state."><meta propert
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -107,17 +108,19 @@ will be <code>NA</code>).</p></dd>
 syntactic rules.</p></dd>
 
 <dt><code>phone_npa</code></dt>
-<dd><p>Character. The 3-digit area code, or <code>NA</code> when the
-number is syntactically invalid.</p></dd>
+<dd><p>Character. The 3-digit North American Numbering Plan
+area code, or <code>NA_character_</code> when the number is syntactically
+invalid.</p></dd>
 
 <dt><code>phone_state_from_npa</code></dt>
-<dd><p>Character. The 2-letter state code for the
-area code, or <code>NA</code> when the area code is not in the lookup.</p></dd>
+<dd><p>Character. The 2-letter US postal
+abbreviation for the area code's registered state, or <code>NA_character_</code>
+when the area code is absent from the bundled lookup table.</p></dd>
 
 <dt><code>phone_area_code_matches_state</code></dt>
 <dd><p>Logical. <code>TRUE</code> when
-<code>phone_state_from_npa</code> equals <code>practice_state</code>; <code>NA</code> when
-<code>practice_state</code> is <code>NULL</code>.</p></dd>
+<code>phone_state_from_npa</code> exactly matches <code>practice_state</code>; <code>FALSE</code> when
+they differ; <code>NA</code> when <code>practice_state</code> is <code>NULL</code>.</p></dd>
 
 <dt><code>phone_validity_flag</code></dt>
 <dd><p>Character. One of <code>"valid"</code>,
@@ -130,8 +133,8 @@ area code, or <code>NA</code> when the area code is not in the lookup.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Syntactic validity rules applied:</p><ul><li><p>Exactly 10 digits after stripping non-digits (an optional leading
 <code>"1"</code> country code is dropped first).</p></li>
-<li><p>NPA first digit (N) is 2–9.</p></li>
-<li><p>NXX first digit (N) is 2–9.</p></li>
+<li><p>NPA first digit (N) is 2-9.</p></li>
+<li><p>NXX first digit (N) is 2-9.</p></li>
 <li><p>NXX is not an N11 code (e.g. 911, 411, 211).</p></li>
 </ul><p>Area-code-to-state mapping is loaded from the bundled
 <code>inst/extdata/nanp_area_codes_us.csv</code> file.  Pass <code>nanp_path</code> to override
@@ -152,7 +155,11 @@ with a custom CSV that has columns <code>area_code</code> (integer) and <code>st
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="mysterycall_parse_physician_name.html">mysterycall_parse_physician_name()</a></code> to structure name strings;
 <code><a href="mysterycall_validate_parsed_names.html">mysterycall_validate_parsed_names()</a></code> for name-level quality checks;
-<code><a href="mysterycall_safe_left_join.html">mysterycall_safe_left_join()</a></code> to attach validated phone data to a roster.</p></div>
+<code><a href="mysterycall_safe_left_join.html">mysterycall_safe_left_join()</a></code> to attach validated phone data to a roster.</p>
+<p>Other data quality:
+<code><a href="mysterycall_not_contacted_states.html">mysterycall_not_contacted_states()</a></code>,
+<code><a href="mysterycall_remove_constants.html">mysterycall_remove_constants()</a></code>,
+<code><a href="mysterycall_remove_near_zero.html">mysterycall_remove_near_zero()</a></code></p></div>
     </div>
 
     <div class="section level2">

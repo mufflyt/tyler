@@ -20,7 +20,7 @@ mysterycall_spinner_stop(id, result = "done")
 
 ## Value
 
-Invisible NULL
+`invisible(NULL)`
 
 ## See also
 
@@ -40,9 +40,8 @@ Other progress-bars:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # interactive()
 id <- mysterycall_spinner_start("Loading data")
-#>   ↻ Loading data...
 mysterycall_spinner_stop(id, result = "done")
-# }
+}
 ```

@@ -22,8 +22,11 @@ mysterycall_parse_physician_name(physician_name, remove_titles = TRUE)
 
 - remove_titles:
 
-  Logical scalar. When `TRUE` (default) titles such as `"Dr."` and
-  `"Prof."` are discarded from the `title` column.
+  Logical scalar. When `TRUE` (default), leading titles (`"Dr."`,
+  `"Prof."`, `"Mr."`, `"Mrs."`, `"Ms."`) are stripped from the name
+  string before parsing; the `title` column in the output is `NA`. When
+  `FALSE`, the title is preserved in the `title` column and the name is
+  parsed without stripping it.
 
 ## Value
 

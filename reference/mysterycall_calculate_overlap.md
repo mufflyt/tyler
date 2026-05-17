@@ -51,10 +51,19 @@ mysterycall_calculate_overlap(
 
 ## Value
 
-Called for its side effect of saving the intersection overlap shapefile
-and CSV.
+`invisible(NULL)`. As side effects: (1) writes an ESRI shapefile
+(EPSG:4326) of the block-group/isochrone intersection to `output_dir`,
+(2) writes a CSV with columns `GEOID`, `intersect_area`, and
+`area_method` to the same directory, and (3) emits messages with the
+50th and 75th percentile overlap statistics. If `notify = TRUE` and
+`beepr` is installed, plays a completion sound.
 
 ## See also
+
+[`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md)
+to generate the `isochrones_joined` input;
+[`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md)
+for single-point isochrone creation.
 
 Other geospatial helpers:
 [`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md),

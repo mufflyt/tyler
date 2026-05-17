@@ -49,6 +49,7 @@ the fitted model is extracted automatically."><meta property="og:image" content=
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -124,23 +125,29 @@ of continuous predictors. Default <code>1e-7</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>data.frame</code> with one row per term–level combination and columns:</p><dl><dt><code>term</code></dt>
+    <p>A <code>data.frame</code> with one row per term-level combination and columns:</p><dl><dt><code>term</code></dt>
 <dd><p>Character. The predictor name (as supplied in <code>term</code> or
-derived from the model frame).</p></dd>
+derived from the model frame). Continuous predictors yield one row;
+categorical predictors yield one row per non-reference level.</p></dd>
 
 <dt><code>level</code></dt>
-<dd><p>Character. <code>NA</code> for continuous predictors; the factor level
-name for categorical predictors.</p></dd>
+<dd><p>Character or <code>NA_character_</code>. <code>NA_character_</code> for
+continuous predictors; the factor level name for categorical predictors.
+The reference level is omitted from the output.</p></dd>
 
 <dt><code>ame</code></dt>
-<dd><p>Numeric. The average marginal effect.</p></dd>
+<dd><p>Numeric. The average marginal effect. For continuous
+predictors, the mean finite-difference derivative across all
+observations. For categorical predictors, the mean difference in
+predicted values versus the reference level.</p></dd>
 
 <dt><code>variable_type</code></dt>
 <dd><p>Character. Either <code>"continuous"</code> or
 <code>"categorical"</code>.</p></dd>
 
 
-</dl></div>
+</dl><p>Row names are not set. No special class attributes are added.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>For continuous predictors, the AME is estimated by numerical
@@ -181,7 +188,6 @@ The function resolves the original column automatically.</p>
     <div class="dont-index"><p><code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>, <code><a href="mysterycall_model_metrics.html">mysterycall_model_metrics()</a></code></p>
 <p>Other outcomes:
 <code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code>,
-<code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code>,
 <code><a href="mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>,
 <code><a href="mysterycall_model_metrics.html">mysterycall_model_metrics()</a></code>,
 <code><a href="mysterycall_plot_distribution.html">mysterycall_plot_distribution()</a></code>,
@@ -193,7 +199,6 @@ The function resolves the original column automatically.</p>
 <code><a href="mysterycall_plot_sjplot_interaction.html">mysterycall_plot_sjplot_interaction()</a></code>,
 <code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>,
 <code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>,
-<code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_screen_interactions.html">mysterycall_screen_interactions()</a></code>,
 <code><a href="mysterycall_select_best_model.html">mysterycall_select_best_model()</a></code>,
 <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>,

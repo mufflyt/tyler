@@ -1,7 +1,11 @@
 # Assess data quality
 
-Scores a data frame for completeness and validity and returns a list of
-issues that may affect downstream workflow steps.
+Scores a data frame for completeness and validity on a 0-1 scale,
+returning both the overall score and a detailed list of specific issues
+that may affect downstream workflow steps. Penalties are applied for
+missing values in required columns (\>50% missing = -3 pts, 20-50% = -1
+pt), excessive duplicate rows (\>10% = -1 pt), and non-character NPI or
+name columns.
 
 ## Usage
 
@@ -22,23 +26,23 @@ mysterycall_assess_data_quality(data, required_columns = c("first", "last"))
 
 ## Value
 
-A named list with elements `score` (numeric 0–1) and `issues` (list of
+A named list with elements `score` (numeric 0-1) and `issues` (list of
 issue records with `severity` and `message` fields).
 
 ## Scoring method
 
-Quality is scored on a 0–1 scale by subtracting penalties from a maximum
+Quality is scored on a 0-1 scale by subtracting penalties from a maximum
 of 10:
 
 - Required column with \> 50\\
 
-- Required column with 20–50\\
+- Required column with 20-50\\
 
 - More than 10\\
 
-- Required column is not character or factor type: −0.5 points
+- Required column is not character or factor type: -0.5 points
 
-Final score = max(0, 1 − penalties / 10).
+Final score = max(0, 1 - penalties / 10).
 
 Worked examples for a 1,000-row physician roster with
 `required_columns = c("first", "last")`:
@@ -58,6 +62,11 @@ missingness in large rosters.
 
 ## See also
 
+[`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
+which calls this function;
+[`mysterycall_estimate_resources()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_estimate_resources.md)
+for runtime/memory projections.
+
 Other utilities: `%>%()`,
 [`mysterycall_check_api_response()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_api_response.md),
 [`mysterycall_check_data_completeness()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_data_completeness.md),
@@ -69,8 +78,6 @@ Other utilities: `%>%()`,
 [`mysterycall_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_with_backup.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
-[`mysterycall_remove_constants()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_constants.md),
-[`mysterycall_remove_near_zero()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_near_zero.md),
 [`mysterycall_resolve_path()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_resolve_path.md),
 [`mysterycall_save_quality_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_quality_table.md),
 [`mysterycall_scan_for_limits()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scan_for_limits.md),

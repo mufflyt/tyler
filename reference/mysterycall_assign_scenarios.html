@@ -51,6 +51,7 @@ so that calls are balanced across scenarios."><meta property="og:image" content=
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -122,7 +123,10 @@ identifies generalist providers who will receive scenario assignments.</p></dd>
 <code>c("Neurotology" = "Neurotology", "Pediatric Otolaryngology" = "Pediatric Otolaryngology")</code>.
 Each name is a value that appears in <code>specialty_col</code>; each value is the
 scenario label that will be assigned to generalists in cities where that
-subspecialty is present.</p></dd>
+subspecialty is present. <strong>The subspecialty values used as names here must
+derive from board certification data (e.g. ABOHNS via
+<code><a href="mysterycall_parse_certification_subspecialty.html">mysterycall_parse_certification_subspecialty()</a></code>) and must not come from
+NPPES <code>taxonomies_desc</code> or DAC taxonomy codes.</strong></p></dd>
 
 
 <dt id="arg-id-col">id_col<a class="anchor" aria-label="anchor" href="#arg-id-col"></a></dt>
@@ -144,6 +148,12 @@ create (default <code>"scenario"</code>).</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Non-generalist rows receive their own specialty as the scenario. Generalists
 in locations that have no matching subspecialists receive <code>NA</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="mysterycall_check_generalist_presence.html">mysterycall_check_generalist_presence()</a></code> to validate paired
+generalist coverage before assigning scenarios;
+<code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code> for specialty harmonisation.</p></div>
     </div>
 
     <div class="section level2">

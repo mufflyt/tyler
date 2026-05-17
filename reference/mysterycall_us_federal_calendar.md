@@ -30,7 +30,13 @@ mysterycall_us_federal_calendar(
 
 ## Value
 
-A `bizdays` calendar object named `"USFederal"`.
+An S3 object of class `"calendar"` (from `bizdays`) named `"USFederal"`.
+Pass it to
+[`bizdays::bizdays()`](https://rdrr.io/pkg/bizdays/man/bizdays.html) or
+[`bizdays::is.bizday()`](https://rdrr.io/pkg/bizdays/man/is.bizday.html)
+for date arithmetic. Contains one holiday entry per year from
+`start_year` to `end_year`, with fixed holidays observing the
+Saturday-to-Friday / Sunday-to-Monday shift rule.
 
 ## Details
 
@@ -55,6 +61,6 @@ Other business days:
 
 ``` r
 cal <- mysterycall_us_federal_calendar(2024, 2028)
-bizdays::is.bizday(as.Date("2026-01-19"), cal)  # MLK Day → FALSE
+bizdays::is.bizday(as.Date("2026-01-19"), cal)  # MLK Day -> FALSE
 #> [1] FALSE
 ```

@@ -1,9 +1,11 @@
 # Search and Process NPI Numbers
 
-This function takes an input data frame containing first and last names,
-performs NPI search and processing, and filters results based on
-specified taxonomies. It supports customization for enumeration type,
-search limit, and filtering credentials.
+Searches the NPI registry by provider name, filters by taxonomy and
+credentials, and accumulates results across batches. Supports resume
+capability for interrupted runs (via `resume = TRUE`), structured
+logging to CSV or plain-text files, and optional progress callbacks for
+long-running workflows. Failed searches are automatically retried (up to
+3 attempts) with exponential backoff.
 
 ## Usage
 
@@ -31,8 +33,8 @@ mysterycall_search_and_process_npi(
 
 - data:
 
-  A data frame with columns 'first' and 'last' containing the names to
-  search.
+  A data frame with columns `first` and `last` containing the provider
+  names to search.
 
 - enumeration_type:
 
@@ -111,9 +113,55 @@ mysterycall_search_and_process_npi(
 
 ## Value
 
-A data frame containing the processed NPI search results.
+A data frame with 8 columns:
+
+- `npi`:
+
+  Character. 10-digit NPI identifier; deduplicated within results.
+
+- `first_name`:
+
+  Character. Provider first name from the NPI registry.
+
+- `last_name`:
+
+  Character. Provider last name from the NPI registry.
+
+- `middle_name`:
+
+  Character. Provider middle name; `NA` when absent.
+
+- `credential`:
+
+  Character. Degree credential string (e.g., `"MD"`, `"DO"`).
+
+- `taxonomies_desc`:
+
+  Character. Taxonomy classification from the NPI registry.
+
+- `search_term`:
+
+  Character. The `first last` name string that was looked up.
+
+- `resume_row_index`:
+
+  Integer. Row number from input `data`; disambiguates providers with
+  identical names.
+
+Rows are deduplicated by NPI and sorted by `last_name`, `first_name`.
+When `resume = TRUE` and `accumulate_path` already exists, previously
+processed names are skipped and new results are appended to that file.
+Returns an empty data frame with these columns when no matches pass the
+credential and taxonomy filters.
 
 ## See also
+
+[`mysterycall_validate_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_npi.md)
+for downstream NPI validation;
+[`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md)
+which orchestrates this function;
+[`mysterycall_search_taxonomy()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_taxonomy.md)
+for taxonomy-based registry searches.
 
 Other npi:
 [`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md),

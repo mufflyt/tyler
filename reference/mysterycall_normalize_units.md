@@ -23,15 +23,17 @@ mysterycall_normalize_units(addr1, addr2 = NA_character_)
 
 ## Value
 
-A list with two elements:
+A named list with two character elements:
 
-- addr1:
+- `addr1`:
 
-  Normalized primary address line.
+  Character. Primary address with unit designators standardised to USPS
+  abbreviations (STE, APT, UNIT, FL, RM).
 
-- addr2:
+- `addr2`:
 
-  Normalized secondary address line (or NA if not provided).
+  Character or `NA_character_`. Normalized secondary address line;
+  `NA_character_` when `addr2` was `NA_character_`.
 
 ## See also
 

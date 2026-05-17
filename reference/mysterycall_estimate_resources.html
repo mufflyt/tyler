@@ -45,6 +45,7 @@ workflow based on the number of input rows."><meta property="og:image" content="
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -85,28 +86,48 @@ workflow based on the number of input rows.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A named list with elements <code>total_time_hours</code> (estimated wall
-time), <code>peak_memory_gb</code> (estimated peak RAM in GB), and
-<code>api_calls</code> (estimated number of external API requests).</p>
-    </div>
+    <p>A named <code>list</code> with elements:</p><dl><dt><code>runtime_seconds</code></dt>
+<dd><p><code>numeric</code>. Total estimated wall time in seconds.</p></dd>
+
+<dt><code>runtime_hours</code></dt>
+<dd><p><code>numeric</code>. Total estimated wall time in hours.</p></dd>
+
+<dt><code>runtime_str</code></dt>
+<dd><p><code>character</code>. Human-readable runtime string
+(e.g., <code>"45 minutes"</code> or <code>"2h 15m"</code>).</p></dd>
+
+<dt><code>memory_mb</code></dt>
+<dd><p><code>numeric</code>. Estimated peak memory in megabytes.</p></dd>
+
+<dt><code>memory_gb</code></dt>
+<dd><p><code>numeric</code>. Estimated peak memory in gigabytes.</p></dd>
+
+<dt><code>memory_str</code></dt>
+<dd><p><code>character</code>. Human-readable memory string
+(e.g., <code>"1.5 GB"</code> or <code>"700 MB"</code>).</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="estimation-method">Estimation method<a class="anchor" aria-label="anchor" href="#estimation-method"></a></h2>
 
 
-<p>Runtime is estimated as <code>n_rows × 4.5</code> seconds: 1.5 s/row for NPI
+<p>Runtime is estimated as <code>n_rows x 4.5</code> seconds: 1.5 s/row for NPI
 registry lookups, 0.5 s/row for geocoding (assumes a warm Google Maps
 cache), and 2.5 s/row for HERE isochrone generation. Memory is
-<code>(n_rows × 2) + 500</code> MB.</p>
+<code>(n_rows x 2) + 500</code> MB.</p>
 <p>Reference values for the full workflow:</p><table class="table table"><tr><td><strong>Rows</strong></td><td><strong>Est. runtime</strong></td><td><strong>Est. memory</strong></td></tr><tr><td>100</td><td>~8 min</td><td>~700 MB</td></tr><tr><td>500</td><td>~38 min</td><td>~1.5 GB</td></tr><tr><td>1,000</td><td>~75 min</td><td>~2.5 GB</td></tr><tr><td>5,000</td><td>~6.3 h</td><td>~10.3 GB</td></tr></table><p>These constants reflect typical US residential broadband with warm API
 caches. Slow networks or cold caches can <strong>triple</strong> the runtime estimate.
-Benchmark on 50–100 rows before committing to a large run.</p>
+Benchmark on 50-100 rows before committing to a large run.</p>
 <p>If only a subset of the pipeline is used (e.g., NPI lookup only), the
 relevant per-row constant is 1.5 s (NPI), 0.5 s (geocoding), or 2.5 s
 (isochrones), not the combined 4.5 s.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other utilities:
+    <div class="dont-index"><p><code><a href="mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code> which calls this function;
+<code><a href="mysterycall_assess_data_quality.html">mysterycall_assess_data_quality()</a></code> for data completeness scoring.</p>
+<p>Other utilities:
 <code>%&gt;%()</code>,
 <code><a href="mysterycall_assess_data_quality.html">mysterycall_assess_data_quality()</a></code>,
 <code><a href="mysterycall_check_api_response.html">mysterycall_check_api_response()</a></code>,
@@ -118,8 +139,6 @@ relevant per-row constant is 1.5 s (NPI), 0.5 s (geocoding), or 2.5 s
 <code><a href="mysterycall_export_with_backup.html">mysterycall_export_with_backup()</a></code>,
 <code><a href="mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code>,
 <code><a href="mysterycall_quality_tier.html">mysterycall_quality_tier()</a></code>,
-<code><a href="mysterycall_remove_constants.html">mysterycall_remove_constants()</a></code>,
-<code><a href="mysterycall_remove_near_zero.html">mysterycall_remove_near_zero()</a></code>,
 <code><a href="mysterycall_resolve_path.html">mysterycall_resolve_path()</a></code>,
 <code><a href="mysterycall_save_quality_table.html">mysterycall_save_quality_table()</a></code>,
 <code><a href="mysterycall_scan_for_limits.html">mysterycall_scan_for_limits()</a></code>,

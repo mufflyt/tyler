@@ -30,10 +30,40 @@ mysterycall_get_census_data(
 
 ## Value
 
-A tibble containing Census block group data for the requested states.
-The result includes padded 2020 FIPS columns (`statefp`, `countyfp`,
-`tractce`, `block_group`, `geoid`) and a `vintage` column indicating the
-Census vintage that supplied the estimates.
+A tibble with one row per Census block group. Columns include:
+
+- `statefp`:
+
+  Character. Zero-padded 2-digit state FIPS code.
+
+- `countyfp`:
+
+  Character. Zero-padded 3-digit county FIPS code.
+
+- `tractce`:
+
+  Character. Zero-padded 6-digit Census tract code.
+
+- `block_group`:
+
+  Character. Single-digit block group identifier.
+
+- `geoid`:
+
+  Character. Full 12-digit block group GEOID
+  (`statefp + countyfp + tractce + block_group`).
+
+- `vintage`:
+
+  Integer. The ACS vintage year supplied via `vintage`.
+
+- Population columns:
+
+  Numeric. ACS 5-year estimates for total population and sex-by-age
+  detail (`B01001_*E` variables).
+
+Returns an empty tibble when `us_fips_list` is length zero. States whose
+API call fails emit a warning and are silently skipped.
 
 ## See also
 

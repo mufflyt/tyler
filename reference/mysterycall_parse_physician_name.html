@@ -51,6 +51,7 @@ inst/extdata/name_benchmark_corpus.csv."><meta property="og:image" content="http
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -95,8 +96,11 @@ Accuracy: 96.3 % on the 27-case benchmark corpus in
 
 
 <dt id="arg-remove-titles">remove_titles<a class="anchor" aria-label="anchor" href="#arg-remove-titles"></a></dt>
-<dd><p>Logical scalar. When <code>TRUE</code> (default) titles such as
-<code>"Dr."</code> and <code>"Prof."</code> are discarded from the <code>title</code> column.</p></dd>
+<dd><p>Logical scalar. When <code>TRUE</code> (default), leading titles
+(<code>"Dr."</code>, <code>"Prof."</code>, <code>"Mr."</code>, <code>"Mrs."</code>, <code>"Ms."</code>) are stripped from the
+name string before parsing; the <code>title</code> column in the output is <code>NA</code>.
+When <code>FALSE</code>, the title is preserved in the <code>title</code> column and the name
+is parsed without stripping it.</p></dd>
 
 </dl></div>
     <div class="section level2">

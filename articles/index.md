@@ -81,6 +81,9 @@
   metrics across insurance types, bootstrap confidence intervals, and
   multiple- comparison adjustment for mystery-caller studies.
 
+- [Power Analysis and Sample Size for Mystery Caller
+  Studies](https://mufflyt.github.io/mysterycall/articles/power-analysis.md):
+
 - [Generating Publication
   Tables](https://mufflyt.github.io/mysterycall/articles/table-generation.md):
 

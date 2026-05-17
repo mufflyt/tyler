@@ -85,6 +85,13 @@ A named list with elements:
 
 ## See also
 
+[`mysterycall_check_generalist_presence()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_generalist_presence.md)
+for pre-call QC;
+[`mysterycall_call_productivity()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_call_productivity.md)
+for per-caller volume metrics;
+[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md)
+for cross-wave outcome comparisons.
+
 Other caller-management:
 [`print.mysterycall_reliability()`](https://mufflyt.github.io/mysterycall/reference/print.mysterycall_reliability.md)
 

@@ -73,6 +73,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
@@ -1011,6 +1012,96 @@ type<a class="anchor" aria-label="anchor" href="#step-2-table-2-appointment-acce
 <span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
+</div>
+<div class="section level2">
+<h2 id="frequency-helpers-mysterycall_max_table-and-mysterycall_min_table">11. Frequency Helpers: <code>mysterycall_max_table()</code> and
+<code>mysterycall_min_table()</code><a class="anchor" aria-label="anchor" href="#frequency-helpers-mysterycall_max_table-and-mysterycall_min_table"></a>
+</h2>
+<p>These helpers quickly identify the most- and least-common values in
+any vector — useful for sanity-checking free-text columns or building
+footnotes.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">subspecialties</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"General OB/GYN"</span>, <span class="st">"MFM"</span>, <span class="st">"GYN Oncology"</span>, <span class="st">"REI"</span>, <span class="st">"FPMRS"</span>, <span class="st">"General OB/GYN"</span>,</span>
+<span>    <span class="st">"General OB/GYN"</span>, <span class="st">"MFM"</span>, <span class="st">"General OB/GYN"</span>, <span class="st">"REI"</span><span class="op">)</span>,</span>
+<span>  size <span class="op">=</span> <span class="fl">120</span>, replace <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Most common subspecialty</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Most common:\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Most common:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_max_table.html">mysterycall_max_table</a></span><span class="op">(</span><span class="va">subspecialties</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "General OB/GYN"</span></span>
+<span></span>
+<span><span class="co"># Least common subspecialty</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nLeast common:\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Least common:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/mysterycall_min_table.html">mysterycall_min_table</a></span><span class="op">(</span><span class="va">subspecialties</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "GYN Oncology"</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="formatting-percentages-mysterycall_format_pct">12. Formatting Percentages:
+<code>mysterycall_format_pct()</code><a class="anchor" aria-label="anchor" href="#formatting-percentages-mysterycall_format_pct"></a>
+</h2>
+<p><code><a href="../reference/mysterycall_format_pct.html">mysterycall_format_pct()</a></code> converts a numeric proportion
+to a character string with a configurable number of decimal places —
+useful for inline reporting and table cells.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.91</span>, <span class="fl">0.638</span>, <span class="fl">0.54</span>, <span class="fl">0.00</span>, <span class="fl">1.00</span>, <span class="fl">0.085</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    raw_rate     <span class="op">=</span> <span class="va">rates</span>,</span>
+<span>    formatted_1d <span class="op">=</span> <span class="fu"><a href="../reference/mysterycall_format_pct.html">mysterycall_format_pct</a></span><span class="op">(</span><span class="va">rates</span>, my_digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    formatted_0d <span class="op">=</span> <span class="fu"><a href="../reference/mysterycall_format_pct.html">mysterycall_format_pct</a></span><span class="op">(</span><span class="va">rates</span>, my_digits <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Raw proportion"</span>, <span class="st">"1 decimal place"</span>, <span class="st">"0 decimal places"</span><span class="op">)</span>,</span>
+<span>  caption   <span class="op">=</span> <span class="st">"`mysterycall_format_pct()` output for typical acceptance rates."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>
+<code><a href="../reference/mysterycall_format_pct.html">mysterycall_format_pct()</a></code> output for typical
+acceptance rates.</caption>
+<thead><tr class="header">
+<th align="right">Raw proportion</th>
+<th align="left">1 decimal place</th>
+<th align="left">0 decimal places</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.910</td>
+<td align="left">91.0%</td>
+<td align="left">91%</td>
+</tr>
+<tr class="even">
+<td align="right">0.638</td>
+<td align="left">63.8%</td>
+<td align="left">64%</td>
+</tr>
+<tr class="odd">
+<td align="right">0.540</td>
+<td align="left">54.0%</td>
+<td align="left">54%</td>
+</tr>
+<tr class="even">
+<td align="right">0.000</td>
+<td align="left">0.0%</td>
+<td align="left">0%</td>
+</tr>
+<tr class="odd">
+<td align="right">1.000</td>
+<td align="left">100.0%</td>
+<td align="left">100%</td>
+</tr>
+<tr class="even">
+<td align="right">0.085</td>
+<td align="left">8.5%</td>
+<td align="left">8%</td>
+</tr>
+</tbody>
+</table>
+<hr>
 <div class="section level3">
 <h3 id="a-note-on-journal-specific-requirements">A note on journal-specific requirements<a class="anchor" aria-label="anchor" href="#a-note-on-journal-specific-requirements"></a>
 </h3>

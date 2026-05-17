@@ -29,7 +29,7 @@ The tracker object, invisibly.
 
 ## See also
 
-Other logging utilities:
+Other logging:
 [`mysterycall_format_duration()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_duration.md),
 [`mysterycall_log_cache_hit()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_cache_hit.md),
 [`mysterycall_log_error()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_error.md),
@@ -55,6 +55,6 @@ Other logging utilities:
 ``` r
 tr <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
 mysterycall_progress_start(tr, "Geocode")
-#> [01:42:29] Started Geocode
-#> [01:42:29] Progress: 0/2 steps complete (0.0%)
+#> [02:56:46] Started Geocode
+#> [02:56:46] Progress: 0/2 steps complete (0.0%)
 ```

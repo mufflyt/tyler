@@ -120,7 +120,7 @@ Geocode addresses, build isochrones, and produce publication maps.
   : Geocode unique addresses from a file
 
 - [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md)
-  : Memoized function to try a location with isoline calculations
+  : Calculate drive-time isochrones for a location
 
 - [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md)
   : Get isochrones for each point in a dataframe
@@ -156,7 +156,7 @@ Geocode addresses, build isochrones, and produce publication maps.
   : Get Hospital Referral Region Shapefile
 
 - [`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md)
-  : Generate Hexagon Maps for Hospital Referral Regions (HRR)
+  : Generate honeycomb hex maps for Hospital Referral Regions
 
 - [`mysterycall_assign_region()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_region.md)
   : Map US states to medical society districts and Census regions
@@ -378,31 +378,47 @@ productivity metrics.
 Publication-ready plots for distributions, interactions, residuals, and
 stacked bars.
 
+- [`mysterycall_plot_disparities()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_disparities.md)
+  :
+
+  Plot disparity metrics from a `mysterycall_disparities_table`
+
 - [`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md)
   : Stacked bar chart of appointment acceptance by group
+
 - [`mysterycall_plot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_interaction.md)
   : Create and plot interaction effects from a Poisson GLMM
+
 - [`mysterycall_plot_density()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_density.md)
   : Create a Density Plot for Mystery Caller Studies with Optional
   Transformations
+
 - [`mysterycall_plot_distribution()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_distribution.md)
   : Distribution plots for numeric outcome variables
+
 - [`mysterycall_plot_residuals()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_residuals.md)
   : Residual diagnostic plots for a fitted model
+
 - [`mysterycall_plot_line()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_line.md)
   : Create a Line Plot with Optional Transformations and Grouping
+
 - [`mysterycall_plot_scatter()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_scatter.md)
   : Create a Scatter Plot for Mystery Caller Studies with Optional
   Transformations, Jitter, and Custom Labels
+
 - [`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md)
   : CONSORT-style inclusion/exclusion flowchart for mystery-caller
   studies
+
 - [`mysterycall_plot_source_venn()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_source_venn.md)
   : Three-circle Venn diagram for data-source overlap
+
 - [`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md)
   : CONSORT-style inclusion/exclusion flowchart
+
 - [`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md)
   : Save a ggplot2 figure with publication-quality defaults
+
 - [`plot_effects`](https://mufflyt.github.io/mysterycall/reference/plot_effects.md)
   : Marginal effect plots for fitted models
 
@@ -472,7 +488,7 @@ output tables.
 - [`mysterycall_not_contacted_states()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_not_contacted_states.md)
   : Summarize States Where Physicians Were NOT Contacted
 - [`mysterycall_physician_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_physician_age.md)
-  : Calculate and Summarize Physician Age
+  : Summarise physician age as median (IQR) text
 - [`mysterycall_most_common_gender()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_most_common_gender.md)
   : Generate a Summary Sentence for the Most Common Gender, Specialty,
   Training, and Academic Affiliation

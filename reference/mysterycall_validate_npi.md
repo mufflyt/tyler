@@ -18,8 +18,11 @@ mysterycall_validate_npi(input_data)
 
 ## Value
 
-A data frame containing valid NPI numbers, with invalid or missing NPI
-rows removed.
+A data frame with the same columns as `input_data`, plus a logical
+column `npi_is_valid`. Only rows with non-empty, 10-digit, Luhn-valid
+NPI values are returned; the `npi` column is always character type.
+Returns a zero-row data frame (preserving column names) when no rows
+pass validation.
 
 ## Contract
 
@@ -31,7 +34,7 @@ rows removed.
 
 **Guarantees:**
 
-- Output rows \\\subseteq\\ input rows — rows are only removed, never
+- Output rows \\\subseteq\\ input rows – rows are only removed, never
   added.
 
 - Every removed row had either `NA`, a non-10-digit string, or a failed
@@ -53,6 +56,15 @@ Expect \< 0.1 s for 10,000 rows.
 - [`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md)
 
 - [`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
+
+## See also
+
+[`mysterycall_luhn_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_luhn_check.md)
+for the underlying Luhn checksum;
+[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)
+to retrieve clinician details for validated NPIs;
+[`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
+for upstream NPI discovery.
 
 ## Examples
 

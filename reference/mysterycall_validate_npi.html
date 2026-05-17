@@ -45,6 +45,7 @@ format using the npi package, and removes rows with missing or invalid NPIs."><m
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -85,7 +86,10 @@ format using the npi package, and removes rows with missing or invalid NPIs.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame containing valid NPI numbers, with invalid or missing NPI rows removed.</p>
+    <p>A data frame with the same columns as <code>input_data</code>, plus a logical
+column <code>npi_is_valid</code>.  Only rows with non-empty, 10-digit, Luhn-valid NPI
+values are returned; the <code>npi</code> column is always character type.  Returns a
+zero-row data frame (preserving column names) when no rows pass validation.</p>
     </div>
     <div class="section level2">
     <h2 id="contract">Contract<a class="anchor" aria-label="anchor" href="#contract"></a></h2>
@@ -93,7 +97,7 @@ format using the npi package, and removes rows with missing or invalid NPIs.</p>
 
 <p><strong>Inputs:</strong></p><ul><li><p><code>input_data</code> must contain an <code>npi</code> column (character or numeric).</p></li>
 <li><p>NPIs are validated via the Luhn checksum algorithm (NPI standard).</p></li>
-</ul><p><strong>Guarantees:</strong></p><ul><li><p>Output rows \(\subseteq\) input rows — rows are only removed, never added.</p></li>
+</ul><p><strong>Guarantees:</strong></p><ul><li><p>Output rows \(\subseteq\) input rows  –  rows are only removed, never added.</p></li>
 <li><p>Every removed row had either <code>NA</code>, a non-10-digit string, or a failed Luhn
 checksum.</p></li>
 <li><p>Output NPI column is always character type.</p></li>
@@ -116,6 +120,13 @@ Expect &lt; 0.1 s for 10,000 rows.</p>
 <ul><li><p><code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code></p></li>
 <li><p><code><a href="mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code></p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="mysterycall_luhn_check.html">mysterycall_luhn_check()</a></code> for the underlying Luhn checksum;
+<code><a href="mysterycall_get_clinician_data.html">mysterycall_get_clinician_data()</a></code> to retrieve clinician details for
+validated NPIs; <code><a href="mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code> for upstream NPI
+discovery.</p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

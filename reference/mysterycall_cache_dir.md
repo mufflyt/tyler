@@ -16,4 +16,8 @@ mysterycall_cache_dir(...)
 
 ## Value
 
-A character string with the cache directory path.
+Character scalar. Absolute path to the cache directory. When `...` is
+empty, returns the cache root (created automatically if absent). When
+`...` supplies path components, they are appended via
+[`file.path()`](https://rdrr.io/r/base/file.path.html) before returning;
+the directory is not created in that case.

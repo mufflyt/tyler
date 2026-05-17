@@ -82,11 +82,19 @@ Invisibly, a named list with elements:
 - `data`:
 
   `data.frame` from
-  [`emmeans::emmeans()`](https://rvlenth.github.io/emmeans/reference/emmeans.html).
+  [`emmeans::emmeans()`](https://rvlenth.github.io/emmeans/reference/emmeans.html)
+  with columns for the x-axis variable, `emmean` (or `rate` for Poisson
+  link), `SE`, `df`, `lower.CL`/`upper.CL` (or `asymp.LCL`/`asymp.UCL`
+  for large samples), and any grouping variable from `specs`. Exact
+  column names depend on the model family.
 
 - `plot`:
 
-  The `ggplot` object.
+  `ggplot` object. Print or pass to
+  [`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html).
+
+Capture with `res <- mysterycall_plot_emmeans_full(...)` to access
+`res$data` and `res$plot`.
 
 ## Details
 
@@ -105,7 +113,6 @@ Invisibly, a named list with elements:
 
 Other outcomes:
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
-[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md),
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
 [`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md),
 [`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
@@ -117,7 +124,6 @@ Other outcomes:
 [`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
 [`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
-[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
 [`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
 [`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md),

@@ -9,7 +9,7 @@ evidence tiers.
 
 Evidence-based indicators with calibrated confidence scores:
 
-- ACGME residency/fellowship programs (0.98–0.99)
+- ACGME residency/fellowship programs (0.98-0.99)
 
 - COTH (Council of Teaching Hospitals) membership (0.95)
 

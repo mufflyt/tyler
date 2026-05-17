@@ -53,25 +53,32 @@ mysterycall_marginal_effects(
 
 ## Value
 
-A `data.frame` with one row per term–level combination and columns:
+A `data.frame` with one row per term-level combination and columns:
 
 - `term`:
 
   Character. The predictor name (as supplied in `term` or derived from
-  the model frame).
+  the model frame). Continuous predictors yield one row; categorical
+  predictors yield one row per non-reference level.
 
 - `level`:
 
-  Character. `NA` for continuous predictors; the factor level name for
-  categorical predictors.
+  Character or `NA_character_`. `NA_character_` for continuous
+  predictors; the factor level name for categorical predictors. The
+  reference level is omitted from the output.
 
 - `ame`:
 
-  Numeric. The average marginal effect.
+  Numeric. The average marginal effect. For continuous predictors, the
+  mean finite-difference derivative across all observations. For
+  categorical predictors, the mean difference in predicted values versus
+  the reference level.
 
 - `variable_type`:
 
   Character. Either `"continuous"` or `"categorical"`.
+
+Row names are not set. No special class attributes are added.
 
 ## Details
 
@@ -113,7 +120,6 @@ The function resolves the original column automatically.
 
 Other outcomes:
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
-[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md),
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
 [`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
 [`mysterycall_plot_distribution()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_distribution.md),
@@ -125,7 +131,6 @@ Other outcomes:
 [`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
 [`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
-[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
 [`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
 [`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md),

@@ -43,6 +43,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -75,13 +76,13 @@
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
     <p>A data frame with three columns:</p><dl><dt>Code</dt>
-<dd><p>NUCC (National Uniform Claim Committee) taxonomy code.</p></dd>
+<dd><p>NUCC (National Uniform Claim Committee) taxonomy code (character).</p></dd>
 
 <dt>Classification</dt>
-<dd><p>Provider classification (e.g., Allopathic &amp; Osteopathic Physicians).</p></dd>
+<dd><p>Provider classification (e.g., "Allopathic &amp; Osteopathic Physicians").</p></dd>
 
 <dt>Specialization</dt>
-<dd><p>Provider specialization within the classification.</p></dd>
+<dd><p>Specialty within the classification (e.g., "Obstetrics &amp; Gynecology").</p></dd>
 
 
 </dl></div>
@@ -90,13 +91,10 @@
     <p><a href="https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf" class="external-link">https://www.nucc.org/images/stories/PDF/taxonomy_23_0.pdf</a></p>
     </div>
     <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A tibble mapping NUCC taxonomy codes to descriptive provider
-types relevant to obstetrics and gynecology research.</p>
-    </div>
-    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other datasets:
+    <div class="dont-index"><p><code><a href="mysterycall_get_clinician_data.html">mysterycall_get_clinician_data()</a></code> to look up provider taxonomy
+codes from the NPI registry; <a href="acgme.html">acgme</a> for ACGME residency program data.</p>
+<p>Other datasets:
 <code><a href="ACOG_Districts.html">ACOG_Districts</a></code>,
 <code><a href="acgme.html">acgme</a></code>,
 <code><a href="cityStateToLatLong.html">cityStateToLatLong</a></code>,
@@ -105,27 +103,15 @@ types relevant to obstetrics and gynecology research.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co"># Load the taxonomy dataset</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">taxonomy</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">taxonomy</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">taxonomy</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Code       Classification Specialization                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 101Y00000X Counselor      <span style="color: #BB0000;">NA</span>                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 101YA0400X Counselor      Addiction (Substance Use Disorder)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 101YM0800X Counselor      Mental Health                     </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Explore the dataset</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">taxonomy</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 862 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Code       Classification             Specialization                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 101Y00000X Counselor                  <span style="color: #BB0000;">NA</span>                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 101YA0400X Counselor                  Addiction (Substance Use Disorder)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 101YM0800X Counselor                  Mental Health                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 101YP1600X Counselor                  Pastoral                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 101YP2500X Counselor                  Professional                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 101YS0200X Counselor                  School                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 102L00000X Psychoanalyst              <span style="color: #BB0000;">NA</span>                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 102X00000X Poetry Therapist           <span style="color: #BB0000;">NA</span>                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 103G00000X Clinical Neuropsychologist <span style="color: #BB0000;">NA</span>                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 103GC0700X Clinical Neuropsychologist Clinical                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 852 more rows</span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -23,26 +23,26 @@ mysterycall_plot_emmeans(
 
 - model_object:
 
-  A fitted model object from which EMMs are to be computed. This can be
-  a generalized linear model (GLM), linear model, or other suitable
-  models.
+  A fitted model object of class `glm`, `lm`, `lmerMod`, `glmerMod`, or
+  any class supported by
+  [`emmeans::emmeans()`](https://rvlenth.github.io/emmeans/reference/emmeans.html).
 
 - specs:
 
-  A character string specifying the predictor variable(s) for which EMMs
-  are to be computed. For example, this could be the treatment groups,
-  scenarios, or demographic variables.
+  Character scalar or vector. Predictor variable(s) for which marginal
+  means are computed. The first element is used as the x-axis variable;
+  the second (if present) becomes the `color_by` grouping variable.
+  Example: `c("insurance", "gender")`.
 
 - variable_of_interest:
 
-  A character string specifying the variable to be plotted on the
-  x-axis. Typically, this would be the same as the `specs`.
+  Character scalar. Label for the x-axis, typically equal to the first
+  element of `specs`.
 
 - color_by:
 
-  A character string specifying the variable used to color the points
-  and error bars. This could be a categorical variable like gender,
-  insurance type, or academic affiliation.
+  Character scalar or `NULL`. Grouping variable name for coloring points
+  and error bars. When `NULL` a single-group plot is drawn.
 
 - output_dir:
 
@@ -52,8 +52,11 @@ mysterycall_plot_emmeans(
 
 ## Value
 
-Invisibly returns a list containing the estimated marginal means data
-(`data`) and the ggplot object (`plot`).
+[`invisible()`](https://rdrr.io/r/base/invisible.html) named list with
+two elements: `data` (data.frame of EMMs from
+[`emmeans::emmeans()`](https://rvlenth.github.io/emmeans/reference/emmeans.html))
+and `plot` (`ggplot` object). A plot file is also written to
+`output_dir` as a side effect.
 
 ## Details
 
@@ -72,10 +75,9 @@ filename that includes a timestamp.
 
 ## See also
 
-Other modeling helpers:
-[`mysterycall_check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_normality.md),
-[`mysterycall_create_formula()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.md),
-[`mysterycall_plot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_interaction.md)
+Other plotting:
+[`mysterycall_plot_disparities()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_disparities.md),
+[`mysterycall_plot_source_venn()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_source_venn.md)
 
 ## Examples
 

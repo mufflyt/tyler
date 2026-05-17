@@ -47,6 +47,7 @@ which makes right-skewed count data easier to read."><meta property="og:image" c
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -97,14 +98,22 @@ which makes right-skewed count data easier to read.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A named list with elements <code>raw</code> and <code>sqrt_transformed</code>, each a
-<code>ggplot</code> object.</p>
+    <p>A named list with two <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot2::ggplot</a></code> objects:</p><dl><dt><code>raw</code></dt>
+<dd><p>Histogram of <code>x</code> with raw counts on the y-axis.</p></dd>
+
+<dt><code>sqrt_transformed</code></dt>
+<dd><p>Same histogram with a square-root-transformed
+y-axis via <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">ggplot2::scale_y_sqrt()</a></code>, improving visibility of
+right-skewed count distributions.</p></dd>
+
+
+</dl><p>Both plots use the same <code>bins</code> value. Access elements with <code>$raw</code> and
+<code>$sqrt_transformed</code> for side-by-side comparison.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other outcomes:
 <code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code>,
-<code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code>,
 <code><a href="mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>,
 <code><a href="mysterycall_marginal_effects.html">mysterycall_marginal_effects()</a></code>,
 <code><a href="mysterycall_model_metrics.html">mysterycall_model_metrics()</a></code>,
@@ -116,7 +125,6 @@ which makes right-skewed count data easier to read.</p>
 <code><a href="mysterycall_plot_sjplot_interaction.html">mysterycall_plot_sjplot_interaction()</a></code>,
 <code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>,
 <code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>,
-<code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_screen_interactions.html">mysterycall_screen_interactions()</a></code>,
 <code><a href="mysterycall_select_best_model.html">mysterycall_select_best_model()</a></code>,
 <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>,

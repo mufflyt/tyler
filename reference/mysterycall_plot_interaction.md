@@ -56,16 +56,21 @@ mysterycall_plot_interaction(
 
 ## Value
 
-A list with:
+A named list with two elements:
 
 - `model`:
 
   The fitted [`lme4::glmer()`](https://rdrr.io/pkg/lme4/man/glmer.html)
-  model object.
+  model object (class `glmerMod`).
 
 - `effects_plot_data`:
 
-  Summarized predicted values used in the plot.
+  A data frame with one row per `interaction_variable` x
+  `variable_of_interest` combination and columns named after those two
+  arguments plus `mean_pred` (numeric mean predicted response on the
+  link scale).
+
+A PNG file is also written to `output_path` as a side effect.
 
 ## Details
 
@@ -93,8 +98,7 @@ appointment).
 
 Other modeling helpers:
 [`mysterycall_check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_normality.md),
-[`mysterycall_create_formula()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.md),
-[`mysterycall_plot_emmeans()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans.md)
+[`mysterycall_create_formula()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.md)
 
 ## Examples
 

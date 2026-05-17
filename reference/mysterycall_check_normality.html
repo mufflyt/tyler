@@ -45,6 +45,7 @@ and provides summary statistics (mean and standard deviation if normal, median a
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -89,23 +90,29 @@ and provides summary statistics (mean and standard deviation if normal, median a
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list containing the summary statistics (mean and standard deviation if normal, median and IQR if not normal).</p>
+    <p>A named list with either:</p><dl><dt>mean, sd</dt>
+<dd><p>Numeric scalars (if Shapiro-Wilk p &gt; 0.05, data approximately normal).</p></dd>
+
+<dt>median, iqr</dt>
+<dd><p>Numeric scalars (if Shapiro-Wilk p &lt;= 0.05, data non-normal).</p></dd>
+
+
+</dl><p>Also emits a histogram + density plot and a Q-Q plot via side effects.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other modeling helpers:
+    <div class="dont-index"><p><code><a href="mysterycall_prepare_table1_vars.html">mysterycall_prepare_table1_vars()</a></code> for downstream variable
+standardisation; <code><a href="mysterycall_physician_age.html">mysterycall_physician_age()</a></code> for age summary statistics.</p>
+<p>Other modeling helpers:
 <code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code>,
-<code><a href="mysterycall_plot_emmeans.html">mysterycall_plot_emmeans()</a></code>,
 <code><a href="mysterycall_plot_interaction.html">mysterycall_plot_interaction()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">sample_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  business_days_until_appointment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">2.0</span>, <span class="fl">1.8</span>, <span class="fl">2.2</span>, <span class="fl">1.9</span>, <span class="fl">2.1</span>, <span class="fl">2.3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">mysterycall_check_normality</span><span class="op">(</span><span class="va">sample_data</span>, <span class="st">"business_days_until_appointment"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting normality check and summary calculation for variable: business_days_until_appointment</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Data extracted for variable: business_days_until_appointment</span>
@@ -122,7 +129,6 @@ and provides summary statistics (mean and standard deviation if normal, median a
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2690371</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

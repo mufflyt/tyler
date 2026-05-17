@@ -28,6 +28,11 @@ object.
 
 ## See also
 
+[`theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_map.md)
+for single-panel maps;
+[`theme_green_journal()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal.md)
+for non-spatial plots.
+
 Other green-journal-themes:
 [`theme_green_journal()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal.md),
 [`theme_green_journal_map()`](https://mufflyt.github.io/mysterycall/reference/theme_green_journal_map.md)

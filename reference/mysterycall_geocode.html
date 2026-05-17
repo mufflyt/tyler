@@ -49,6 +49,7 @@ result to output_file_path."><meta property="og:image" content="https://github.c
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -136,7 +137,20 @@ updating <code>tracker</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with latitude and longitude columns added.</p>
+    <p>A data frame with all original columns from the input file plus two
+new numeric columns:</p><dl><dt><code>latitude</code></dt>
+<dd><p>Numeric. Geographic latitude in decimal degrees
+(WGS 84). <code>NA</code> for addresses that failed geocoding after all retries.</p></dd>
+
+<dt><code>longitude</code></dt>
+<dd><p>Numeric. Geographic longitude in decimal degrees
+(WGS 84). <code>NA</code> for addresses that failed geocoding after all retries.</p></dd>
+
+
+</dl><p>Side effects: when <code>output_file_path</code> is non-<code>NULL</code>, the enriched data
+frame is written as CSV; when <code>failed_output_path</code> is non-<code>NULL</code>, rows
+that could not be geocoded are written separately (with a timestamped
+backup if the file already exists).</p>
     </div>
     <div class="section level2">
     <h2 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a></h2>
@@ -145,8 +159,8 @@ updating <code>tracker</code>.</p></dd>
 <p>Geocoding requires the <code>ggmap</code> package (listed in <code>Suggests</code>, not
 <code>Imports</code>) and a Google Maps Platform API key with the <strong>Geocoding API</strong>
 enabled. Steps to obtain a key:</p><ol><li><p>Create a project at <a href="https://console.cloud.google.com/" class="external-link">https://console.cloud.google.com/</a>.</p></li>
-<li><p>Enable the <strong>Geocoding API</strong> under APIs &amp; Services → Library.</p></li>
-<li><p>Create a key under APIs &amp; Services → Credentials.</p></li>
+<li><p>Enable the <strong>Geocoding API</strong> under APIs &amp; Services &gt; Library.</p></li>
+<li><p>Create a key under APIs &amp; Services &gt; Credentials.</p></li>
 <li><p>Enable <strong>billing</strong> on the project (required even for free-tier usage;
 Google provides a $200/month credit that covers ~40,000 geocodes).</p></li>
 </ol><p>Common errors and remedies:</p><table class="table table"><tr><td><strong>Error message</strong></td><td><strong>Cause / fix</strong></td></tr><tr><td><code>"ggmap is required"</code></td><td>Run <code>install.packages("ggmap")</code>.</td></tr><tr><td><code>"REQUEST_DENIED"</code></td><td>Geocoding API not enabled for the key.</td></tr><tr><td><code>"OVER_QUERY_LIMIT"</code></td><td>Daily free quota (40,000 calls) exceeded.</td></tr><tr><td><code>"INVALID_REQUEST"</code></td><td>Malformed address string in the data.</td></tr></table><p>An invalid or expired key is only detected at the first geocoding
@@ -155,7 +169,10 @@ request, not at function entry. Run <code><a href="mysterycall_preflight_check.h
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other geospatial helpers:
+    <div class="dont-index"><p><code><a href="mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code> to validate API keys before a long
+workflow; <code><a href="mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code> to compute drive-time polygons
+from geocoded coordinates.</p>
+<p>Other geospatial helpers:
 <code><a href="mysterycall_calculate_overlap.html">mysterycall_calculate_overlap()</a></code>,
 <code><a href="mysterycall_hrr.html">mysterycall_hrr()</a></code></p></div>
     </div>

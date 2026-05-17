@@ -1,9 +1,10 @@
 # Standardise demographic variables for Table 1
 
-A convenience wrapper that applies age imputation, age categorisation,
-and gender standardisation in a single call. Columns are added to (not
-replacing) the input data frame. Only columns explicitly specified are
-processed.
+Convenience wrapper that applies age imputation, age categorisation, and
+gender standardisation in one call. All output columns are **added** to
+the input data frame - originals are never replaced or removed.
+Arguments set to `NULL` are silently skipped so you can standardise only
+the variables your dataset contains.
 
 ## Usage
 
@@ -61,9 +62,34 @@ mysterycall_prepare_table1_vars(
 
 ## Value
 
-`data` with zero or more additional standardised columns appended:
-`age_imputed`, `age_category`, `gender_std`, `setting_std`,
-`region_std`.
+`data` with zero or more additional standardised columns appended (only
+columns whose source `*_col` parameter was non-`NULL` are created):
+
+- `age_imputed`:
+
+  Numeric. Estimated age derived from `grad_year_col` as
+  `ref_year - grad_year`. Only added when `grad_year_col` is supplied.
+
+- `age_category`:
+
+  Character. Age group binned from `age_col` or `age_imputed` (e.g.,
+  `"<35"`, `"35-44"`, `"45-54"`, `"55-64"`, `">=65"`). Only added when
+  `age_col` or `grad_year_col` is supplied.
+
+- `gender_std`:
+
+  Character. Standardised gender: `"Male"`, `"Female"`, or `"Unknown"`.
+  Only added when `gender_col` is supplied.
+
+- `setting_std`:
+
+  Character. Practice setting, copied from the source column. Only added
+  when `setting_col` is supplied.
+
+- `region_std`:
+
+  Character. Region, copied from the source column. Only added when
+  `region_col` is supplied.
 
 ## Gender standardisation
 
@@ -96,6 +122,7 @@ Other data management:
 [`mysterycall_extract_zip5()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_extract_zip5.md),
 [`mysterycall_luhn_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_luhn_check.md),
 [`mysterycall_merge_with_prefix()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_merge_with_prefix.md),
+[`mysterycall_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_rename_columns.md),
 [`mysterycall_stratified_sample()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_stratified_sample.md)
 
 ## Examples

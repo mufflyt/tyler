@@ -57,35 +57,44 @@ mysterycall_bootstrap_ci(
 
 ## Value
 
-A data.frame with columns:
+A data frame with one row per group (or `"Overall"` when `group_col` is
+`NULL`) and columns:
 
-- group:
+- `group`:
 
-  Group label, or `"Overall"` when `group_col` is NULL.
+  Character. Group label, or `"Overall"` when `group_col` is `NULL`.
 
-- n:
+- `n`:
 
-  Number of non-NA observations used.
+  Integer. Number of non-NA observations used.
 
-- estimate:
+- `estimate`:
 
-  Observed statistic value.
+  Numeric. Observed statistic value (proportion, mean, or median
+  depending on `stat`).
 
-- lower_ci:
+- `lower_ci`:
 
-  Lower percentile CI bound.
+  Numeric. Lower percentile CI bound at `alpha/2`.
 
-- upper_ci:
+- `upper_ci`:
 
-  Upper percentile CI bound.
+  Numeric. Upper percentile CI bound at `1 - alpha/2`.
 
-- n_boot:
+- `n_boot`:
 
-  Number of bootstrap replicates used.
+  Integer. Number of bootstrap replicates used.
 
 ## See also
 
+[`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
+[`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md)
+for model-based outcome summaries;
+[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md)
+for cross-wave significance testing.
+
 Other inference:
+[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md),
 [`mysterycall_multiple_comparison_adjust()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multiple_comparison_adjust.md)
 
 ## Examples

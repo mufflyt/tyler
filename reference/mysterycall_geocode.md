@@ -66,7 +66,23 @@ mysterycall_geocode(
 
 ## Value
 
-A data frame with latitude and longitude columns added.
+A data frame with all original columns from the input file plus two new
+numeric columns:
+
+- `latitude`:
+
+  Numeric. Geographic latitude in decimal degrees (WGS 84). `NA` for
+  addresses that failed geocoding after all retries.
+
+- `longitude`:
+
+  Numeric. Geographic longitude in decimal degrees (WGS 84). `NA` for
+  addresses that failed geocoding after all retries.
+
+Side effects: when `output_file_path` is non-`NULL`, the enriched data
+frame is written as CSV; when `failed_output_path` is non-`NULL`, rows
+that could not be geocoded are written separately (with a timestamped
+backup if the file already exists).
 
 ## Requirements
 
@@ -76,9 +92,9 @@ enabled. Steps to obtain a key:
 
 1.  Create a project at <https://console.cloud.google.com/>.
 
-2.  Enable the **Geocoding API** under APIs & Services → Library.
+2.  Enable the **Geocoding API** under APIs & Services \> Library.
 
-3.  Create a key under APIs & Services → Credentials.
+3.  Create a key under APIs & Services \> Credentials.
 
 4.  Enable **billing** on the project (required even for free-tier
     usage; Google provides a \$200/month credit that covers ~40,000
@@ -101,6 +117,11 @@ with `check_apis = TRUE` before a long workflow to catch key problems
 early.
 
 ## See also
+
+[`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
+to validate API keys before a long workflow;
+[`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md)
+to compute drive-time polygons from geocoded coordinates.
 
 Other geospatial helpers:
 [`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md),

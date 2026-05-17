@@ -49,10 +49,19 @@ mysterycall_merge_with_prefix(
 
 ## Value
 
-A data frame with key columns first, followed by prefixed columns from
-`x`, followed by prefixed columns from `y`.
+A data frame in this column order: (1) join key columns (names
+unchanged), (2) non-key columns of `x` with `prefix_x` prepended (e.g.
+`"specialty"` becomes `"npi_specialty"`), (3) non-key columns of `y`
+with `prefix_y` prepended. Row order follows base R
+[`merge()`](https://rdrr.io/r/base/merge.html) (sorted by key). For
+`join_type = "left"`, unmatched `y` columns are `NA`.
 
 ## See also
+
+[`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
+for joins with duplicate-key warnings;
+[`mysterycall_reconcile_specialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_specialty.md)
+for post-join specialty harmonisation.
 
 Other data management:
 [`mysterycall_check_duplicates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_duplicates.md),
@@ -60,6 +69,7 @@ Other data management:
 [`mysterycall_extract_zip5()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_extract_zip5.md),
 [`mysterycall_luhn_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_luhn_check.md),
 [`mysterycall_prepare_table1_vars()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_table1_vars.md),
+[`mysterycall_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_rename_columns.md),
 [`mysterycall_stratified_sample()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_stratified_sample.md)
 
 ## Examples

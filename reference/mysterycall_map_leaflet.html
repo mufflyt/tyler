@@ -45,6 +45,7 @@ default view settings, and layers control."><meta property="og:image" content="h
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -77,13 +78,15 @@ default view settings, and layers control.</p>
 
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisibly returns the Leaflet map object.</p>
+    <p>A <code>leaflet</code> map object (class <code>"leaflet"</code> from the leaflet package)
+pre-configured with tile providers, scale bar, and layer controls.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other mapping:
 <code><a href="mysterycall_clear_isochrone_cache.html">mysterycall_clear_isochrone_cache()</a></code>,
 <code><a href="mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code>,
+<code><a href="mysterycall_hrr_maps.html">mysterycall_hrr_maps()</a></code>,
 <code><a href="mysterycall_isochrones_for_df.html">mysterycall_isochrones_for_df()</a></code>,
 <code><a href="mysterycall_map_acceptance_rate.html">mysterycall_map_acceptance_rate()</a></code>,
 <code><a href="mysterycall_map_acog_districts.html">mysterycall_map_acog_districts()</a></code>,
@@ -98,9 +101,9 @@ default view settings, and layers control.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
 <span class="r-in"><span><span class="va">map</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_map_leaflet</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -1,6 +1,6 @@
 # Convert to Canonical Uppercase
 
-Normalizes ASCII characters and converts the result to uppercase — the
+Normalizes ASCII characters and converts the result to uppercase – the
 standard format for USPS address comparison.
 
 ## Usage
@@ -38,6 +38,6 @@ Other address-normalization:
 ``` r
 mysterycall_caps("123 main street")
 #> [1] "123 MAIN STREET"
-mysterycall_caps("456 oak ave #100")
+mysterycall_caps("456 oak ave #100")
 #> [1] "456 OAK AVE #100"
 ```

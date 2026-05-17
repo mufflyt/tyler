@@ -1,8 +1,8 @@
-# Calculate and Summarize Physician Age
+# Summarise physician age as median (IQR) text
 
-This function calculates the median age, as well as the 25th and 75th
-percentiles (Interquartile Range, IQR) of a specified age column in a
-data frame. It returns a sentence summarizing these statistics.
+Computes the median, Q1, and Q3 of a numeric age column (ignoring `NA`)
+and returns a ready-to-paste sentence for manuscript methods or results
+sections.
 
 ## Usage
 
@@ -18,25 +18,47 @@ mysterycall_physician_age(data, age_column)
 
 - age_column:
 
-  A character string representing the name of the column in `data` that
-  contains the age data.
+  Character scalar naming the numeric column in `data` that holds
+  physician ages.
 
 ## Value
 
-A character string summarizing the median age and IQR of the specified
-age column in the dataset.
+A single character string of the form
+`"The median age was XX.XX years (IQR: Q1.X--Q3.X years)."` where the
+median is rounded to 2 decimal places and IQR bounds to 1.
 
 ## Details
 
-The function calculates the median, 25th percentile (Q1), and 75th
-percentile (Q3) of the age data, rounding the results to two decimal
-places for the median and one decimal place for the percentiles. It then
-constructs a summary sentence describing these statistics.
+`NA` values in `age_column` are removed before computing quantiles
+(i.e., `na.rm = TRUE`). All quantiles use the default R `type = 7`
+interpolation.
 
 ## See also
 
-Other summary:
-[`mysterycall_not_contacted_states()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_not_contacted_states.md)
+[`mysterycall_impute_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_impute_age.md)
+to derive age from graduation year;
+[`mysterycall_age_category()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_age_category.md)
+to bin ages into publication-ready groups.
+
+Other provider characteristics:
+[`mysterycall_academic_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_academic_patterns.md),
+[`mysterycall_age_category()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_age_category.md),
+[`mysterycall_assign_region()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assign_region.md),
+[`mysterycall_check_academic_name_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md),
+[`mysterycall_classify_medical_school()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_medical_school.md),
+[`mysterycall_classify_practice_setting()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_practice_setting.md),
+[`mysterycall_classify_ruca()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_classify_ruca.md),
+[`mysterycall_collapse_rare()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_collapse_rare.md),
+[`mysterycall_extract_physician_name()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_extract_physician_name.md),
+[`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md),
+[`mysterycall_get_academic_indicators_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.md),
+[`mysterycall_government_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_government_patterns.md),
+[`mysterycall_impute_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_impute_age.md),
+[`mysterycall_most_common_gender()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_most_common_gender.md),
+[`mysterycall_parse_certification_subspecialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_certification_subspecialty.md),
+[`mysterycall_recode_credentials()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_recode_credentials.md),
+[`mysterycall_reconcile_specialty()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reconcile_specialty.md),
+[`mysterycall_reorder_by_freq()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_reorder_by_freq.md)
 
 ## Examples
 

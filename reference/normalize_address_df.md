@@ -48,28 +48,29 @@ normalize_address_df(
 
 ## Value
 
-The input data frame with original columns modified plus additional
-derived columns:
+The input data frame with the original address columns normalised
+in-place plus five new derived columns:
 
-- address1_norm:
+- `address1_norm`:
 
-  Fully normalized primary address.
+  Character. Fully normalised primary address (ASCII, directionals,
+  suffixes, and units standardised).
 
-- address2_norm:
+- `address2_norm`:
 
-  Fully normalized secondary address.
+  Character or `NA_character_`. Normalised secondary address.
 
-- address1_no_unit:
+- `address1_no_unit`:
 
-  Primary address with unit designators removed.
+  Character. Primary address with all unit designators stripped.
 
-- is_po_box:
+- `is_po_box`:
 
-  Logical: is this a PO Box address?
+  Logical. `TRUE` if the address matches a PO Box pattern.
 
-- has_num:
+- `has_num`:
 
-  Logical: does the address start with a street number?
+  Logical. `TRUE` if the address begins with a street number.
 
 ## See also
 

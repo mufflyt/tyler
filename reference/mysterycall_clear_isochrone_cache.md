@@ -1,10 +1,10 @@
 # Clear the isochrone memoization cache
 
-The
 [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md)
-function caches every result in memory for the duration of the R
-session. Call this after processing a large batch to release that
-memory.
+caches every result in memory for the duration of the R session. Call
+this after processing a large batch to release that memory. Has no
+effect if the `memoise` package is not installed (memoization is skipped
+in that case).
 
 ## Usage
 
@@ -18,8 +18,12 @@ Invisibly `NULL`.
 
 ## See also
 
+[`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md)
+which builds the memoized cache.
+
 Other mapping:
 [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md),
+[`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md),
 [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md),
 [`mysterycall_map_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acceptance_rate.md),
 [`mysterycall_map_acog_districts()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acog_districts.md),

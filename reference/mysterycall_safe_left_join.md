@@ -85,7 +85,14 @@ mysterycall_safe_left_join(
 
 ## Value
 
-A data frame: the left-join result.
+A data frame containing all rows of `left` joined to matching rows of
+`right`. Columns from both tables are included; name conflicts gain the
+`suffix` extensions. Stops with an informative error when: `left` or
+`right` is not a data frame; `by` columns are absent; coverage falls
+below `min_coverage`; or output rows exceed `max_duplication` times
+input rows. When `write_report = TRUE`, a one-row CSV audit record is
+written to the working directory using `report_prefix` as the filename
+stem.
 
 ## Details
 

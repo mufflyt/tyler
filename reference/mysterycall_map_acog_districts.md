@@ -20,14 +20,34 @@ mysterycall_map_acog_districts(acog_districts_file = NULL)
 
 ## Value
 
-An `sf` object with one row per ACOG district and columns describing the
-district name, subregion, member states, and their abbreviations.
+An `sf` object with one row per ACOG district and columns:
+
+- `ACOG_District`:
+
+  Character. ACOG district identifier (e.g. `"District I"`).
+
+- `Subregion`:
+
+  Character. Regional grouping of states.
+
+- `States`:
+
+  Character. Comma-separated state names in the district.
+
+- `State_Abbreviations`:
+
+  Character. Comma-separated 2-letter postal codes.
+
+- `geometry`:
+
+  sfc_MULTIPOLYGON. District boundaries in EPSG:4326.
 
 ## See also
 
 Other mapping:
 [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md),
 [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md),
+[`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md),
 [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md),
 [`mysterycall_map_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acceptance_rate.md),
 [`mysterycall_map_base()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_base.md),

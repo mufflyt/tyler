@@ -45,6 +45,7 @@ caller in a mystery caller dataset."><meta property="og:image" content="https://
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -96,8 +97,8 @@ caller in a mystery caller dataset.</p>
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
 <dd><p>Character scalar or NULL. Column containing call dates.
-Accepts <code>Date</code>, <code>POSIXct</code>, or character (coerced via
-<code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code>).</p></dd>
+Accepts <code>Date</code>, <code>POSIXct</code>, or character (coerced via <code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code>).
+When <code>NULL</code>, <code>n_days</code> and <code>calls_per_day</code> are <code>NA</code> in the output.</p></dd>
 
 
 <dt id="arg-outcome-col">outcome_col<a class="anchor" aria-label="anchor" href="#arg-outcome-col"></a></dt>
@@ -118,40 +119,48 @@ whether a call resulted in an accepted appointment.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame with one row per caller, sorted by <code>n_calls</code>
-descending. Columns:</p><dl><dt>caller</dt>
-<dd><p>Caller identifier.</p></dd>
+descending. Columns:</p><dl><dt><code>caller</code></dt>
+<dd><p>Character. Caller identifier (values from <code>caller_col</code>).</p></dd>
 
-<dt>n_calls</dt>
-<dd><p>Total calls.</p></dd>
+<dt><code>n_calls</code></dt>
+<dd><p>Integer. Total number of calls made.</p></dd>
 
-<dt>n_days</dt>
-<dd><p>Unique call dates (NA if <code>date_col</code> is NULL).</p></dd>
+<dt><code>n_days</code></dt>
+<dd><p>Numeric. Count of unique call dates. <code>NA</code> when
+<code>date_col</code> is <code>NULL</code>.</p></dd>
 
-<dt>calls_per_day</dt>
-<dd><p>n_calls / n_days (NA if <code>date_col</code> is NULL).</p></dd>
+<dt><code>calls_per_day</code></dt>
+<dd><p>Numeric. <code>n_calls / n_days</code>. <code>NA</code> when
+<code>date_col</code> is <code>NULL</code>.</p></dd>
 
-<dt>n_accepted</dt>
-<dd><p>Sum of <code>outcome_col</code> (NA if not provided).</p></dd>
+<dt><code>n_accepted</code></dt>
+<dd><p>Numeric. Sum of <code>outcome_col</code>. <code>NA</code> when
+<code>outcome_col</code> is <code>NULL</code>.</p></dd>
 
-<dt>acceptance_rate</dt>
-<dd><p>Formatted "XX.X%" (NA if <code>outcome_col</code> NULL).</p></dd>
+<dt><code>acceptance_rate</code></dt>
+<dd><p>Character. Formatted <code>"XX.X%"</code>. <code>NA</code> when
+<code>outcome_col</code> is <code>NULL</code>.</p></dd>
 
-<dt>mean_hold_sec</dt>
-<dd><p>Mean hold time in seconds (NA if not provided).</p></dd>
+<dt><code>mean_hold_sec</code></dt>
+<dd><p>Numeric. Mean hold time in seconds. <code>NA</code> when
+<code>hold_time_col</code> is <code>NULL</code>.</p></dd>
 
-<dt>mean_call_sec</dt>
-<dd><p>Mean call time in seconds (NA if not provided).</p></dd>
+<dt><code>mean_call_sec</code></dt>
+<dd><p>Numeric. Mean call time in seconds. <code>NA</code> when
+<code>call_time_col</code> is <code>NULL</code>.</p></dd>
 
 
-</dl><p>The attribute <code>total_calls_all</code> is set on the returned data frame.</p>
+</dl><p>The attribute <code>total_calls_all</code> (integer) is set on the returned data
+frame recording the grand total across all callers.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other workflow:
+    <div class="dont-index"><p><code><a href="mysterycall_caller_reliability.html">mysterycall_caller_reliability()</a></code> for inter-rater reliability
+metrics; <code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code> for cross-wave outcome comparisons.</p>
+<p>Other workflow:
 <code><a href="mysterycall_clean_phase1.html">mysterycall_clean_phase1()</a></code>,
 <code><a href="mysterycall_clean_phase2.html">mysterycall_clean_phase2()</a></code>,
 <code><a href="mysterycall_print_dashboard.html">mysterycall_print_dashboard()</a></code>,
-<code><a href="mysterycall_rename_columns.html">mysterycall_rename_columns()</a></code>,
 <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>,
 <code><a href="mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged()</a></code>,
 <code><a href="mysterycall_split_and_save.html">mysterycall_split_and_save()</a></code>,

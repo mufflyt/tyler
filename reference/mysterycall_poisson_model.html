@@ -53,6 +53,7 @@ physicians. Fixed-effect results are returned as incidence rate ratios
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -146,44 +147,50 @@ as a log-offset (e.g. log(exposure time)). When supplied, the term
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list of class <code>mysterycall_poisson_model</code> containing:</p><dl><dt><code>model</code></dt>
-<dd><p>The fitted <code>glmerMod</code> object.</p></dd>
+<dd><p><code>glmerMod</code>. The fitted multilevel Poisson model.</p></dd>
 
 <dt><code>irr_table</code></dt>
-<dd><p>Tibble with one row per fixed-effect term:
-<code>term</code>, <code>estimate</code> (log scale), <code>se</code>, <code>z_value</code>, <code>p_value</code>,
-<code>p_value_fmt</code> (character), <code>irr</code>, <code>ci_lower</code>, <code>ci_upper</code>.</p></dd>
+<dd><p><code>tibble</code>. One row per fixed-effect term with
+columns: <code>term</code> (character), <code>estimate</code> (numeric, log scale),
+<code>se</code> (numeric), <code>z_value</code> (numeric), <code>p_value</code> (numeric),
+<code>p_value_fmt</code> (character, formatted), <code>irr</code> (numeric, incidence
+rate ratio), <code>ci_lower</code> (numeric), <code>ci_upper</code> (numeric).</p></dd>
 
 <dt><code>random_effects</code></dt>
-<dd><p>Data frame from <code><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">lme4::VarCorr()</a></code> describing
-the random-intercept variance and standard deviation.</p></dd>
+<dd><p><code>data.frame</code> from <code><a href="https://rdrr.io/pkg/nlme/man/VarCorr.html" class="external-link">lme4::VarCorr()</a></code>.
+Describes random-intercept variance and standard deviation.</p></dd>
 
 <dt><code>factor_refs</code></dt>
-<dd><p>Named list of reference levels for character/factor
-predictors.</p></dd>
+<dd><p><code>list</code> (named). Reference levels for each
+character/factor predictor.</p></dd>
 
 <dt><code>formula</code></dt>
-<dd><p>The formula passed to <code>glmer</code>.</p></dd>
+<dd><p><code>formula</code>. The formula passed to <code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">lme4::glmer()</a></code>.</p></dd>
 
 <dt><code>n</code></dt>
-<dd><p>Number of complete-case rows used for fitting.</p></dd>
+<dd><p><code>integer</code>. Number of complete-case rows used for fitting.</p></dd>
 
 <dt><code>n_dropped</code></dt>
-<dd><p>Rows excluded due to missing values.</p></dd>
+<dd><p><code>integer</code>. Rows excluded due to missing values.</p></dd>
 
 <dt><code>n_clusters</code></dt>
-<dd><p>Number of unique values of <code>random_intercept</code>.</p></dd>
+<dd><p><code>integer</code>. Number of unique values of
+<code>random_intercept</code>.</p></dd>
 
 <dt><code>overdispersion</code></dt>
-<dd><p>Pearson chi-square / residual df. Values
-substantially above 1 suggest overdispersion; consider a negative
-binomial model.</p></dd>
+<dd><p><code>numeric</code>. Pearson chi-square / residual df.
+Values substantially above 1 (common threshold: 2) suggest
+overdispersion; consider a negative binomial model.</p></dd>
 
 <dt><code>convergence</code></dt>
-<dd><p>List with <code>converged</code> (logical), <code>singular</code>
-(logical), and <code>messages</code> (character).</p></dd>
+<dd><p><code>list</code>. Elements: <code>converged</code> (logical),
+<code>singular</code> (logical), <code>messages</code> (character vector).</p></dd>
 
-<dt><code>aic</code>, <code>bic</code></dt>
-<dd><p>Model information criteria.</p></dd>
+<dt><code>aic</code></dt>
+<dd><p><code>numeric</code>. Akaike Information Criterion.</p></dd>
+
+<dt><code>bic</code></dt>
+<dd><p><code>numeric</code>. Bayesian Information Criterion.</p></dd>
 
 
 </dl></div>
@@ -194,7 +201,7 @@ binomial model.</p></dd>
 <p>An IRR of 1.40 for <code>insurance_typeMedicaid</code> means physicians contacted
 with Medicaid insurance had, on average, 40% longer wait times than the
 reference insurance group. Compute as <code>exp(estimate)</code> with Wald CI
-<code>exp(estimate ± z * se)</code>.</p>
+<code>exp(estimate +/- z * se)</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="overdispersion">Overdispersion<a class="anchor" aria-label="anchor" href="#overdispersion"></a></h2>
@@ -211,7 +218,6 @@ quasi-Poisson standard errors for inference.</p>
 <code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code></p>
 <p>Other outcomes:
 <code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code>,
-<code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code>,
 <code><a href="mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>,
 <code><a href="mysterycall_marginal_effects.html">mysterycall_marginal_effects()</a></code>,
 <code><a href="mysterycall_model_metrics.html">mysterycall_model_metrics()</a></code>,
@@ -223,7 +229,6 @@ quasi-Poisson standard errors for inference.</p>
 <code><a href="mysterycall_plot_residuals.html">mysterycall_plot_residuals()</a></code>,
 <code><a href="mysterycall_plot_sjplot_interaction.html">mysterycall_plot_sjplot_interaction()</a></code>,
 <code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>,
-<code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_screen_interactions.html">mysterycall_screen_interactions()</a></code>,
 <code><a href="mysterycall_select_best_model.html">mysterycall_select_best_model()</a></code>,
 <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>,

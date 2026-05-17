@@ -38,7 +38,7 @@ Other address-normalization:
 ## Examples
 
 ``` r
-mysterycall_ascii_norm("123 Main St Suite 100")
+mysterycall_ascii_norm("123 Main St Suite 100")
 #> [1] "123 Main St Suite 100"
 mysterycall_ascii_norm("456   Oak    Avenue")
 #> [1] "456 Oak Avenue"

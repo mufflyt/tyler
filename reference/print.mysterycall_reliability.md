@@ -21,7 +21,7 @@ print(x, ...)
 
 ## Value
 
-Invisibly returns `x`.
+`invisible(x)`.
 
 ## See also
 

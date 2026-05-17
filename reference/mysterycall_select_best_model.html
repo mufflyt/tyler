@@ -47,6 +47,7 @@ returns a ranked summary table."><meta property="og:image" content="https://gith
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -84,7 +85,7 @@ returns a ranked summary table.</p>
 
 <dl><dt id="arg-models">models<a class="anchor" aria-label="anchor" href="#arg-models"></a></dt>
 <dd><p>Named list of fitted model objects. Any object with an <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code>
-or <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC()</a></code> method is accepted (glm, glmerMod, lm, lmerMod, …).</p></dd>
+or <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC()</a></code> method is accepted (glm, glmerMod, lm, lmerMod, ...).</p></dd>
 
 
 <dt id="arg-criterion">criterion<a class="anchor" aria-label="anchor" href="#arg-criterion"></a></dt>
@@ -111,9 +112,11 @@ For <code>"lrt"</code>: a data frame with columns <code>comparison</code>, <code
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other outcomes:
+    <div class="dont-index"><p><code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code> to fit the models being compared;
+<code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code> to build predictor sets;
+<code><a href="mysterycall_bootstrap_ci.html">mysterycall_bootstrap_ci()</a></code> for post-selection inference.</p>
+<p>Other outcomes:
 <code><a href="mysterycall_acceptance_rate.html">mysterycall_acceptance_rate()</a></code>,
-<code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code>,
 <code><a href="mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>,
 <code><a href="mysterycall_marginal_effects.html">mysterycall_marginal_effects()</a></code>,
 <code><a href="mysterycall_model_metrics.html">mysterycall_model_metrics()</a></code>,
@@ -126,7 +129,6 @@ For <code>"lrt"</code>: a data frame with columns <code>comparison</code>, <code
 <code><a href="mysterycall_plot_sjplot_interaction.html">mysterycall_plot_sjplot_interaction()</a></code>,
 <code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>,
 <code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>,
-<code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_screen_interactions.html">mysterycall_screen_interactions()</a></code>,
 <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>,
 <code><a href="print.mysterycall_poisson_model.html">print.mysterycall_poisson_model()</a></code></p></div>

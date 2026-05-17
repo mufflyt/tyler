@@ -20,7 +20,7 @@ mysterycall_spinner_start(name, msg = NULL)
 
 ## Value
 
-Spinner ID
+Spinner ID (a `cli` progress bar ID, or `NULL` if cli is unavailable).
 
 ## See also
 
@@ -40,10 +40,8 @@ Other progress-bars:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # interactive()
 id <- mysterycall_spinner_start("Loading data")
-#>   ↻ Loading data...
-Sys.sleep(0.1)
 mysterycall_spinner_stop(id)
-# }
+}
 ```

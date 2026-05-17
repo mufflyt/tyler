@@ -43,6 +43,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -95,8 +96,10 @@
 
 
 <dt id="arg-selected-columns">selected_columns<a class="anchor" aria-label="anchor" href="#arg-selected-columns"></a></dt>
-<dd><p>Optional character vector of column names to include.
-When <code>NULL</code> (default) all columns are used.</p></dd>
+<dd><p>Optional character vector of quoted column names to
+include in the summary. When <code>NULL</code> (default) all columns of the loaded
+data frame are used. Supplying a non-existent column name raises an error.
+Useful for focusing Table 1 on a curated set of demographic variables.</p></dd>
 
 
 <dt id="arg-label-translations">label_translations<a class="anchor" aria-label="anchor" href="#arg-label-translations"></a></dt>
@@ -112,18 +115,10 @@ labels, passed to <code><a href="https://mayoverse.github.io/arsenal/reference/s
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="mysterycall_write_table_pdf.html">mysterycall_write_table_pdf()</a></code></p>
 <p>Other table:
-<code><a href="mysterycall_disparities_table.html">mysterycall_disparities_table()</a></code>,
-<code><a href="mysterycall_format_pct.html">mysterycall_format_pct()</a></code>,
-<code><a href="mysterycall_max_table.html">mysterycall_max_table()</a></code>,
-<code><a href="mysterycall_min_table.html">mysterycall_min_table()</a></code>,
-<code><a href="mysterycall_model_table.html">mysterycall_model_table()</a></code>,
 <code><a href="mysterycall_table1.html">mysterycall_table1()</a></code>,
 <code><a href="mysterycall_table1_gtsummary.html">mysterycall_table1_gtsummary()</a></code>,
-<code><a href="mysterycall_table_percentages.html">mysterycall_table_percentages()</a></code>,
-<code><a href="mysterycall_table_proportion.html">mysterycall_table_proportion()</a></code>,
 <code><a href="mysterycall_write_arsenal_table.html">mysterycall_write_arsenal_table()</a></code>,
 <code><a href="mysterycall_write_table_pdf.html">mysterycall_write_table_pdf()</a></code>,
-<code><a href="print.mysterycall_disparities_table.html">print.mysterycall_disparities_table()</a></code>,
 <code><a href="print.mysterycall_table1.html">print.mysterycall_table1()</a></code></p></div>
     </div>
 

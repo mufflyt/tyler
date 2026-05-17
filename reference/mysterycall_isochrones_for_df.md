@@ -46,13 +46,25 @@ mysterycall_isochrones_for_df(
 
 ## Value
 
-A dataframe containing the isochrones data with added 'name' column.
+An sf data frame (class `c("sf", "data.frame")`) with one row per
+isochrone polygon. Columns include all original input columns plus
+`name` (character label such as `"30 minutes"`), `range` (drive-time in
+seconds), and geometry. Returns an empty
+[`data.frame()`](https://rdrr.io/r/base/data.frame.html) if no valid
+isochrones were generated. Intermediate results are checkpointed as
+`.rds` and `.gpkg` files in `output_dir` at `save_interval` seconds.
 
 ## See also
+
+[`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md)
+for single-point isochrone creation;
+[`mysterycall_calculate_overlap()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_calculate_overlap.md)
+for the downstream block-group intersection step.
 
 Other mapping:
 [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md),
 [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md),
+[`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md),
 [`mysterycall_map_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acceptance_rate.md),
 [`mysterycall_map_acog_districts()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acog_districts.md),
 [`mysterycall_map_base()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_base.md),

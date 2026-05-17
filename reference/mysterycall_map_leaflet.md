@@ -12,13 +12,15 @@ mysterycall_map_leaflet()
 
 ## Value
 
-Invisibly returns the Leaflet map object.
+A `leaflet` map object (class `"leaflet"` from the leaflet package)
+pre-configured with tile providers, scale bar, and layer controls.
 
 ## See also
 
 Other mapping:
 [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md),
 [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md),
+[`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md),
 [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md),
 [`mysterycall_map_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acceptance_rate.md),
 [`mysterycall_map_acog_districts()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acog_districts.md),
@@ -33,7 +35,7 @@ Other mapping:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # interactive()
 map <- mysterycall_map_leaflet()
-# }
+}
 ```

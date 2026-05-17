@@ -43,6 +43,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -91,7 +92,8 @@
 
 
 <dt id="arg-standard-names">standard_names<a class="anchor" aria-label="anchor" href="#arg-standard-names"></a></dt>
-<dd><p>Vector of new names to apply to the matched columns.</p></dd>
+<dd><p>Character vector of replacement names, the same length
+as <code>required_strings</code>, applied to matched columns in order.</p></dd>
 
 
 <dt id="arg-output-directory">output_directory<a class="anchor" aria-label="anchor" href="#arg-output-directory"></a></dt>
@@ -132,11 +134,13 @@ wall-clock moment. To force UTC filenames, wrap the call:</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other workflow:
+    <div class="dont-index"><p><code><a href="mysterycall_clean_phase1.html">mysterycall_clean_phase1()</a></code> for Phase 1 data cleaning;
+<code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code> which orchestrates both phases;
+<code><a href="mysterycall_rename_columns.html">mysterycall_rename_columns()</a></code> for the underlying column-renaming logic.</p>
+<p>Other workflow:
 <code><a href="mysterycall_call_productivity.html">mysterycall_call_productivity()</a></code>,
 <code><a href="mysterycall_clean_phase1.html">mysterycall_clean_phase1()</a></code>,
 <code><a href="mysterycall_print_dashboard.html">mysterycall_print_dashboard()</a></code>,
-<code><a href="mysterycall_rename_columns.html">mysterycall_rename_columns()</a></code>,
 <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>,
 <code><a href="mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged()</a></code>,
 <code><a href="mysterycall_split_and_save.html">mysterycall_split_and_save()</a></code>,

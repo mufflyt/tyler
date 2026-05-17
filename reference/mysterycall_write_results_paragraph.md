@@ -62,6 +62,13 @@ mysterycall_write_results_paragraph(
 
 A single character string containing all result sentences.
 
+## See also
+
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
+which produces the `model_result` input;
+[`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md)
+for tabular summaries of the same outcome data.
+
 ## Examples
 
 ``` r

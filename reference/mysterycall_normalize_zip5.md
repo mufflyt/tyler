@@ -17,7 +17,8 @@ mysterycall_normalize_zip5(zip)
 
 ## Value
 
-Character vector of 5-digit ZIP codes, or `NA` for invalid inputs.
+Character vector of 5-digit ZIP codes, or `NA_character_` for inputs
+that contain no 5-digit sequence. Length-0 input returns `character(0)`.
 
 ## See also
 

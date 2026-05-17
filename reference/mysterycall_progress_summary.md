@@ -21,7 +21,7 @@ Tibble with per-step status, timestamps, and quality tiers.
 
 ## See also
 
-Other logging utilities:
+Other logging:
 [`mysterycall_format_duration()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_duration.md),
 [`mysterycall_log_cache_hit()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_cache_hit.md),
 [`mysterycall_log_error()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_log_error.md),
@@ -47,15 +47,15 @@ Other logging utilities:
 ``` r
 tr <- mysterycall_progress_tracker(c("Geocode", "Validate"), update_every = 1e9)
 mysterycall_progress_start(tr, "Geocode")
-#> [01:42:29] Started Geocode
-#> [01:42:29] Progress: 0/2 steps complete (0.0%)
+#> [02:56:47] Started Geocode
+#> [02:56:47] Progress: 0/2 steps complete (0.0%)
 mysterycall_progress_finish(tr, "Geocode", score = 0.95)
-#> [01:42:29] Completed Geocode (high)
-#> [01:42:29] Progress: 1/2 steps complete (50.0%)
+#> [02:56:47] Completed Geocode (high)
+#> [02:56:47] Progress: 1/2 steps complete (50.0%)
 mysterycall_progress_summary(tr)
 #> # A tibble: 2 × 6
 #>   step     status    started_at          finished_at         quality note 
 #>   <chr>    <fct>     <dttm>              <dttm>              <chr>   <chr>
-#> 1 Geocode  completed 2026-05-17 01:42:29 2026-05-17 01:42:29 high    NA   
+#> 1 Geocode  completed 2026-05-17 02:56:47 2026-05-17 02:56:47 high    NA   
 #> 2 Validate pending   NA                  NA                  NA      NA   
 ```

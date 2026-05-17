@@ -10,7 +10,8 @@ fips
 
 ## Format
 
-A tibble with 243 rows and 10 variables:
+A tibble with 243 rows and 10 variables containing Federal Information
+Processing Standards (FIPS) codes for states and counties:
 
 - state:
 
@@ -55,11 +56,6 @@ A tibble with 243 rows and 10 variables:
 ## Source
 
 <https://github.com/kjhealy/fips-codes/blob/master/state_and_county_fips_master.csv>
-
-## Value
-
-A tibble containing Federal Information Processing Standards (FIPS)
-codes for states and counties.
 
 ## See also
 

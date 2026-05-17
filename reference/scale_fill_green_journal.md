@@ -26,6 +26,11 @@ object.
 
 ## See also
 
+[`scale_color_green_journal()`](https://mufflyt.github.io/mysterycall/reference/scale_color_green_journal.md)
+for colour aesthetics;
+[`palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/palette_green_journal.md)
+for the underlying colour values.
+
 Other green-journal-colors:
 [`palette_green_journal()`](https://mufflyt.github.io/mysterycall/reference/palette_green_journal.md),
 [`scale_color_green_journal()`](https://mufflyt.github.io/mysterycall/reference/scale_color_green_journal.md)

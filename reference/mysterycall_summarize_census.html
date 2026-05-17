@@ -43,6 +43,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -99,8 +100,13 @@ that should be treated as reproductive-age (defaults to
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A tibble containing one row per grouping with population totals,
-female share, male share, and the share of females of reproductive age.</p>
+    <p>A tibble with one row per unique combination of <code>group_vars</code> and
+columns: <code>block_group_count</code> (integer), <code>total_population</code>,
+<code>female_population</code>, <code>male_population</code> (numerics), <code>reproductive_age_female</code>
+(numeric; sum of <code>reproductive_age_vars</code>), <code>female_share</code>, <code>male_share</code>,
+<code>reproductive_age_female_share</code> (proportions 0-1; <code>NA</code> when
+<code>total_population</code> is zero or all relevant estimates are missing). Returns
+an empty tibble when <code>census_df</code> has zero rows.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

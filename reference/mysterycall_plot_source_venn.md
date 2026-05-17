@@ -85,7 +85,7 @@ mysterycall_plot_source_venn(
 
   Numeric. Plot dimensions in inches passed to
   [`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html).
-  Defaults `11` × `9`.
+  Defaults `11` x `9`.
 
 - dpi:
 
@@ -101,7 +101,11 @@ mysterycall_plot_source_venn(
 
 A
 [`ggplot2::ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html)
-object (invisibly when `output_path` is supplied).
+object. Returned visibly when `output_path` is `NULL` so it prints to
+the active graphics device. Returned
+[`invisible()`](https://rdrr.io/r/base/invisible.html) when
+`output_path` is supplied (the save is the intended side effect); assign
+the return value to capture the object for further modification.
 
 ## Data format
 
@@ -119,6 +123,10 @@ are vectors of provider identifiers (typically NPI strings). Example:
 ## See also
 
 [`ggforce::geom_circle()`](https://ggforce.data-imaginist.com/reference/geom_circle.html)
+
+Other plotting:
+[`mysterycall_plot_disparities()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_disparities.md),
+[`mysterycall_plot_emmeans()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans.md)
 
 ## Examples
 

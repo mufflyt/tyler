@@ -27,14 +27,27 @@ mysterycall_plot_distribution(x, title = NULL, bins = 30L)
 
 ## Value
 
-A named list with elements `raw` and `sqrt_transformed`, each a `ggplot`
-object.
+A named list with two
+[`ggplot2::ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)
+objects:
+
+- `raw`:
+
+  Histogram of `x` with raw counts on the y-axis.
+
+- `sqrt_transformed`:
+
+  Same histogram with a square-root-transformed y-axis via
+  [`ggplot2::scale_y_sqrt()`](https://ggplot2.tidyverse.org/reference/scale_continuous.html),
+  improving visibility of right-skewed count distributions.
+
+Both plots use the same `bins` value. Access elements with `$raw` and
+`$sqrt_transformed` for side-by-side comparison.
 
 ## See also
 
 Other outcomes:
 [`mysterycall_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_acceptance_rate.md),
-[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md),
 [`mysterycall_irr_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_irr_plot.md),
 [`mysterycall_marginal_effects()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_marginal_effects.md),
 [`mysterycall_model_metrics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_model_metrics.md),
@@ -46,7 +59,6 @@ Other outcomes:
 [`mysterycall_plot_sjplot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_sjplot_interaction.md),
 [`mysterycall_plot_stacked_bar()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_stacked_bar.md),
 [`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md),
-[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_screen_interactions()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_screen_interactions.md),
 [`mysterycall_select_best_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_select_best_model.md),
 [`mysterycall_wait_time_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_wait_time_summary.md),

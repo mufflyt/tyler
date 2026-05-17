@@ -73,6 +73,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
@@ -1253,6 +1254,177 @@ combination (5–10× faster than CSV for &gt; 5,000 rows).</p>
 <span>  verbose          <span class="op">=</span> <span class="cn">FALSE</span>,       <span class="co"># suppress console output in batch scripts</span></span>
 <span>  log_file         <span class="op">=</span> <span class="st">"/logs/workflow.jsonl"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<hr>
+</div>
+</div>
+<div class="section level2">
+<h2 id="business-day-wait-times">11. Business-Day Wait Times<a class="anchor" aria-label="anchor" href="#business-day-wait-times"></a>
+</h2>
+<p>Mystery-caller wait times are measured in <strong>business
+days</strong> — weekends and US federal holidays are excluded.
+<code><a href="../reference/mysterycall_count_business_days.html">mysterycall_count_business_days()</a></code> counts business days
+between two dates; <code><a href="../reference/mysterycall_business_days.html">mysterycall_business_days()</a></code> applies the
+calculation to every row of a data frame.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># How many business days between a call on a Monday and an appointment on</span></span>
+<span><span class="co"># Friday of the following week?  (Calendar days = 11; business days = 10)</span></span>
+<span><span class="va">bd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_count_business_days.html">mysterycall_count_business_days</a></span><span class="op">(</span></span>
+<span>  start_date <span class="op">=</span> <span class="st">"2024-03-04"</span>,   <span class="co"># Monday</span></span>
+<span>  end_date   <span class="op">=</span> <span class="st">"2024-03-15"</span>    <span class="co"># Friday two weeks later</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Business days:"</span>, <span class="va">bd</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Business days: 9</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Apply to a data frame of completed calls</span></span>
+<span><span class="va">calls_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  npi       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"NPI-"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span>,</span>
+<span>  insurance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Medicaid"</span>, <span class="st">"Private"</span>, <span class="st">"Medicaid"</span>, <span class="st">"Private"</span>, <span class="st">"Medicare"</span>, <span class="st">"Uninsured"</span><span class="op">)</span>,</span>
+<span>  call_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-03-04"</span>, <span class="st">"2024-03-04"</span>, <span class="st">"2024-03-11"</span>,</span>
+<span>                         <span class="st">"2024-03-11"</span>, <span class="st">"2024-03-18"</span>, <span class="st">"2024-03-18"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  appt_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-03-25"</span>, <span class="st">"2024-03-12"</span>, <span class="st">"2024-04-01"</span>,</span>
+<span>                         <span class="st">"2024-03-19"</span>, <span class="st">"2024-03-27"</span>, <span class="st">"2024-04-08"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># mysterycall_business_days() column params: call_col, appt_col, result_col</span></span>
+<span><span class="va">calls_with_bd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_business_days.html">mysterycall_business_days</a></span><span class="op">(</span></span>
+<span>  data       <span class="op">=</span> <span class="va">calls_df</span>,</span>
+<span>  call_col   <span class="op">=</span> <span class="st">"call_date"</span>,</span>
+<span>  appt_col   <span class="op">=</span> <span class="st">"appt_date"</span>,</span>
+<span>  result_col <span class="op">=</span> <span class="st">"wait_days"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Business days computed for 6/6 row(s); stored in column 'wait_days'.</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">calls_with_bd</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"npi"</span>, <span class="st">"insurance"</span>, <span class="st">"call_date"</span>, <span class="st">"appt_date"</span>, <span class="st">"wait_days"</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NPI"</span>, <span class="st">"Insurance"</span>, <span class="st">"Call date"</span>, <span class="st">"Appt date"</span>, <span class="st">"Wait (business days)"</span><span class="op">)</span>,</span>
+<span>  caption   <span class="op">=</span> <span class="st">"Business-day wait times computed by `mysterycall_business_days()`."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Business-day wait times computed by
+<code><a href="../reference/mysterycall_business_days.html">mysterycall_business_days()</a></code>.</caption>
+<thead><tr class="header">
+<th align="left">NPI</th>
+<th align="left">Insurance</th>
+<th align="left">Call date</th>
+<th align="left">Appt date</th>
+<th align="right">Wait (business days)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">NPI-1</td>
+<td align="left">Medicaid</td>
+<td align="left">2024-03-04</td>
+<td align="left">2024-03-25</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">NPI-2</td>
+<td align="left">Private</td>
+<td align="left">2024-03-04</td>
+<td align="left">2024-03-12</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">NPI-3</td>
+<td align="left">Medicaid</td>
+<td align="left">2024-03-11</td>
+<td align="left">2024-04-01</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">NPI-4</td>
+<td align="left">Private</td>
+<td align="left">2024-03-11</td>
+<td align="left">2024-03-19</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">NPI-5</td>
+<td align="left">Medicare</td>
+<td align="left">2024-03-18</td>
+<td align="left">2024-03-27</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">NPI-6</td>
+<td align="left">Uninsured</td>
+<td align="left">2024-03-18</td>
+<td align="left">2024-04-08</td>
+<td align="right">15</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="caller-quality-control">12. Caller Quality Control<a class="anchor" aria-label="anchor" href="#caller-quality-control"></a>
+</h2>
+<p>After data collection is complete, audit each caller’s performance
+before proceeding to analysis.</p>
+<div class="section level3">
+<h3 id="inter-rater-reliability">12.1 Inter-rater reliability<a class="anchor" aria-label="anchor" href="#inter-rater-reliability"></a>
+</h3>
+<p><code><a href="../reference/mysterycall_caller_reliability.html">mysterycall_caller_reliability()</a></code> computes Cohen’s kappa
+(for categorical outcomes) or the intraclass correlation coefficient
+(for numeric outcomes) on records audited by two callers.</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span>
+<span><span class="co"># Long-format audit sample: each record appears twice — once per caller</span></span>
+<span><span class="va">n_records</span> <span class="op">&lt;-</span> <span class="fl">30L</span></span>
+<span><span class="va">audit_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  record_id  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_records</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  caller     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="st">"Bob"</span><span class="op">)</span>, each <span class="op">=</span> <span class="va">n_records</span><span class="op">)</span>,</span>
+<span>  appt_offered <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Yes"</span>, <span class="st">"No"</span><span class="op">)</span>, <span class="va">n_records</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.72</span>, <span class="fl">0.28</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Yes"</span>, <span class="st">"No"</span><span class="op">)</span>, <span class="va">n_records</span>, replace <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.68</span>, <span class="fl">0.32</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_caller_reliability.html">mysterycall_caller_reliability</a></span><span class="op">(</span></span>
+<span>  data        <span class="op">=</span> <span class="va">audit_long</span>,</span>
+<span>  caller_col  <span class="op">=</span> <span class="st">"caller"</span>,</span>
+<span>  outcome_col <span class="op">=</span> <span class="st">"appt_offered"</span>,</span>
+<span>  type        <span class="op">=</span> <span class="st">"kappa"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">rel</span><span class="op">)</span></span>
+<span><span class="co">#&gt; -- mysterycall_caller_reliability --</span></span>
+<span><span class="co">#&gt; Method       : kappa </span></span>
+<span><span class="co">#&gt; Statistic    : 0.3478 </span></span>
+<span><span class="co">#&gt; 95% CI       : [ -0.0087 , 0.7043 ]</span></span>
+<span><span class="co">#&gt; N pairs      : 30 </span></span>
+<span><span class="co">#&gt; Interpretation: fair (Landis &amp; Koch)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="per-caller-productivity">12.2 Per-caller productivity<a class="anchor" aria-label="anchor" href="#per-caller-productivity"></a>
+</h3>
+<p><code><a href="../reference/mysterycall_call_productivity.html">mysterycall_call_productivity()</a></code> tallies completed,
+pending, and failed calls by caller and returns a summary data frame for
+QC review.</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span></span>
+<span><span class="va">n_rows</span> <span class="op">&lt;-</span> <span class="fl">80L</span></span>
+<span><span class="va">prod_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  caller           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Carol"</span>, <span class="st">"Dana"</span><span class="op">)</span>,</span>
+<span>                             <span class="va">n_rows</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  call_date        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-02-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-03-31"</span><span class="op">)</span>,</span>
+<span>                                 by <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span>, <span class="va">n_rows</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  appointment_offered <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span>, <span class="fl">1L</span>, <span class="fl">0L</span><span class="op">)</span>, <span class="va">n_rows</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">prod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_call_productivity.html">mysterycall_call_productivity</a></span><span class="op">(</span></span>
+<span>  data        <span class="op">=</span> <span class="va">prod_df</span>,</span>
+<span>  caller_col  <span class="op">=</span> <span class="st">"caller"</span>,</span>
+<span>  date_col    <span class="op">=</span> <span class="st">"call_date"</span>,</span>
+<span>  outcome_col <span class="op">=</span> <span class="st">"appointment_offered"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">prod</span><span class="op">$</span><span class="va">summary</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Per-caller productivity from `mysterycall_call_productivity()`."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Table: Per-caller productivity from
+<code><a href="../reference/mysterycall_call_productivity.html">mysterycall_call_productivity()</a></code>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

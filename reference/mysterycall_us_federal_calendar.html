@@ -51,6 +51,7 @@ Columbus Day, Thanksgiving) are computed exactly."><meta property="og:image" con
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -103,7 +104,11 @@ current year.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>bizdays</code> calendar object named <code>"USFederal"</code>.</p>
+    <p>An S3 object of class <code>"calendar"</code> (from <code>bizdays</code>) named
+<code>"USFederal"</code>. Pass it to <code><a href="https://rdrr.io/pkg/bizdays/man/bizdays.html" class="external-link">bizdays::bizdays()</a></code> or <code><a href="https://rdrr.io/pkg/bizdays/man/is.bizday.html" class="external-link">bizdays::is.bizday()</a></code>
+for date arithmetic. Contains one holiday entry per year from
+<code>start_year</code> to <code>end_year</code>, with fixed holidays observing the
+Saturday-to-Friday / Sunday-to-Monday shift rule.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -123,7 +128,7 @@ performance, or if you need to inspect the holiday list.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">cal</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_us_federal_calendar</span><span class="op">(</span><span class="fl">2024</span>, <span class="fl">2028</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">bizdays</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/is.bizday.html" class="external-link">is.bizday</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2026-01-19"</span><span class="op">)</span>, <span class="va">cal</span><span class="op">)</span>  <span class="co"># MLK Day → FALSE</span></span></span>
+<span class="r-in"><span><span class="fu">bizdays</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bizdays/man/is.bizday.html" class="external-link">is.bizday</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2026-01-19"</span><span class="op">)</span>, <span class="va">cal</span><span class="op">)</span>  <span class="co"># MLK Day -&gt; FALSE</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 </code></pre></div>
     </div>

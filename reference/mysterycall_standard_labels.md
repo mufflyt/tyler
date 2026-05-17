@@ -10,7 +10,13 @@ mysterycall_standard_labels()
 
 ## Value
 
-A named list of canonical labels for common columns.
+A named `list` with character scalar elements: `npi`
+(`"National Provider Identifier"`), `state` (`"State"`), `city`
+(`"City"`), `call_outcome` (`"Call Outcome"`), `quality`
+(`"Quality Tier"`), `call_time` (`"Call Duration (minutes)"`),
+`hold_time` (`"Hold Duration (minutes)"`), and `eta`
+(`"Estimated Completion"`). Use these as axis or column labels in tables
+and plots for display consistency across the package.
 
 ## See also
 
@@ -26,8 +32,6 @@ Other utilities: `%>%()`,
 [`mysterycall_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_with_backup.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
-[`mysterycall_remove_constants()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_constants.md),
-[`mysterycall_remove_near_zero()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_near_zero.md),
 [`mysterycall_resolve_path()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_resolve_path.md),
 [`mysterycall_save_quality_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_quality_table.md),
 [`mysterycall_scan_for_limits()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scan_for_limits.md),

@@ -48,6 +48,12 @@ mysterycall_equation_figure(
 A `ggplot` object. The x-axis is IRR, the y-axis is required sample size
 per arm, and a vertical dashed line marks IRR = 1 (no effect).
 
+## See also
+
+Other power analysis:
+[`mysterycall_cochran_n()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_cochran_n.md),
+[`mysterycall_poisson_power()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_power.md)
+
 ## Examples
 
 ``` r

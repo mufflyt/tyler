@@ -15,7 +15,7 @@ mysterycall_get_acs_women_18_90(year = 2022, states = NULL, verbose = TRUE)
 
 - year:
 
-  Integer. ACS 5-year survey year (2009–2023). Default: `2022`.
+  Integer. ACS 5-year survey year (2009-2023). Default: `2022`.
 
 - states:
 

@@ -74,8 +74,16 @@ A data.frame with columns:
 
 ## See also
 
-Other inference:
 [`mysterycall_bootstrap_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_ci.md)
+for bootstrap-based interval estimation;
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
+whose coefficients typically feed this function;
+[`stats::p.adjust()`](https://rdrr.io/r/stats/p.adjust.html) for the
+underlying adjustment.
+
+Other inference:
+[`mysterycall_bootstrap_ci()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_bootstrap_ci.md),
+[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md)
 
 ## Examples
 

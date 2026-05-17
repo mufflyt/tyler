@@ -27,9 +27,11 @@ mysterycall_save_quality_table(
 
 - output_format:
 
-  File format for the saved table. Either `"csv"` (default) or
-  `"parquet"`. The file extension of `filepath` is ignored; the format
-  here controls what is written.
+  Character scalar: `"csv"` (default) or `"parquet"`. CSV is written via
+  [`readr::write_csv()`](https://readr.tidyverse.org/reference/write_delim.html);
+  Parquet requires the `arrow` package and is more efficient for large
+  tables. The file extension of `filepath` is ignored; this parameter
+  controls what is actually written.
 
 ## Value
 
@@ -62,8 +64,6 @@ Other utilities: `%>%()`,
 [`mysterycall_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_with_backup.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
-[`mysterycall_remove_constants()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_constants.md),
-[`mysterycall_remove_near_zero()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_near_zero.md),
 [`mysterycall_resolve_path()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_resolve_path.md),
 [`mysterycall_scan_for_limits()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scan_for_limits.md),
 [`mysterycall_standard_labels()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_standard_labels.md),

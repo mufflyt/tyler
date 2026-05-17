@@ -49,6 +49,7 @@ When none match, returns default.'><meta property="og:image" content="https://gi
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -89,17 +90,32 @@ When none match, returns <code>default</code>.</p>
 
 
 <dl><dt id="arg-cert-type">cert_type<a class="anchor" aria-label="anchor" href="#arg-cert-type"></a></dt>
-<dd><p>Character vector of ABOHNS certification type strings.</p></dd>
+<dd><p>Character vector of ABOHNS <code>certification_type</code> strings,
+one element per provider. Values like <code>"Otolaryngology - Head &amp; Neck Surgery + Neurotology"</code> are parsed for subspecialty patterns. Pass <code>NA</code>
+for providers without ABOHNS records; they will receive <code>default</code>.</p></dd>
 
 
 <dt id="arg-default">default<a class="anchor" aria-label="anchor" href="#arg-default"></a></dt>
-<dd><p>Character scalar returned when no subspecialty is detected.
-Default <code>NA_character_</code>.</p></dd>
+<dd><p>Character scalar returned when no subspecialty pattern is
+detected (including <code>NA</code> or blank input). Default <code>NA_character_</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Character vector the same length as <code>cert_type</code>.</p>
+    <p>Character vector the same length as <code>cert_type</code>. Values are one of
+<code>"Otology/Neurotology"</code>, <code>"Pediatric Otolaryngology"</code>,
+<code>"Sleep Medicine"</code>, <code>"Facial Plastic Surgery"</code>, or <code>default</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="authoritative-subspecialty-source">Authoritative subspecialty source<a class="anchor" aria-label="anchor" href="#authoritative-subspecialty-source"></a></h2>
+
+
+<p>This function is the <strong>only authorised way</strong> to derive subspecialty labels
+in the mysterycall workflow. NPPES (<code>taxonomies_desc</code>) and DAC
+(Data at CMS) taxonomy codes reflect broad specialty groupings and must
+not be used to assign subspecialty. Pass the output of this function as
+<code>secondary_col</code> in <code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code> to correctly
+populate subspecialty via board certification evidence only.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -107,13 +123,18 @@ Default <code>NA_character_</code>.</p></dd>
 <code><a href="mysterycall_academic_patterns.html">mysterycall_academic_patterns()</a></code>,
 <code><a href="mysterycall_age_category.html">mysterycall_age_category()</a></code>,
 <code><a href="mysterycall_assign_region.html">mysterycall_assign_region()</a></code>,
+<code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code>,
 <code><a href="mysterycall_classify_medical_school.html">mysterycall_classify_medical_school()</a></code>,
 <code><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting()</a></code>,
 <code><a href="mysterycall_classify_ruca.html">mysterycall_classify_ruca()</a></code>,
 <code><a href="mysterycall_collapse_rare.html">mysterycall_collapse_rare()</a></code>,
 <code><a href="mysterycall_extract_physician_name.html">mysterycall_extract_physician_name()</a></code>,
+<code><a href="mysterycall_genderize.html">mysterycall_genderize()</a></code>,
+<code><a href="mysterycall_get_academic_indicators_summary.html">mysterycall_get_academic_indicators_summary()</a></code>,
 <code><a href="mysterycall_government_patterns.html">mysterycall_government_patterns()</a></code>,
 <code><a href="mysterycall_impute_age.html">mysterycall_impute_age()</a></code>,
+<code><a href="mysterycall_most_common_gender.html">mysterycall_most_common_gender()</a></code>,
+<code><a href="mysterycall_physician_age.html">mysterycall_physician_age()</a></code>,
 <code><a href="mysterycall_recode_credentials.html">mysterycall_recode_credentials()</a></code>,
 <code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code>,
 <code><a href="mysterycall_reorder_by_freq.html">mysterycall_reorder_by_freq()</a></code></p></div>

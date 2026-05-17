@@ -23,24 +23,36 @@ mysterycall_check_normality(data, variable)
 
 ## Value
 
-A list containing the summary statistics (mean and standard deviation if
-normal, median and IQR if not normal).
+A named list with either:
+
+- mean, sd:
+
+  Numeric scalars (if Shapiro-Wilk p \> 0.05, data approximately
+  normal).
+
+- median, iqr:
+
+  Numeric scalars (if Shapiro-Wilk p \<= 0.05, data non-normal).
+
+Also emits a histogram + density plot and a Q-Q plot via side effects.
 
 ## See also
 
+[`mysterycall_prepare_table1_vars()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_prepare_table1_vars.md)
+for downstream variable standardisation;
+[`mysterycall_physician_age()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_physician_age.md)
+for age summary statistics.
+
 Other modeling helpers:
 [`mysterycall_create_formula()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_formula.md),
-[`mysterycall_plot_emmeans()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_emmeans.md),
 [`mysterycall_plot_interaction()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_interaction.md)
 
 ## Examples
 
 ``` r
-# \donttest{
 sample_data <- data.frame(
   business_days_until_appointment = c(1.5, 2.0, 1.8, 2.2, 1.9, 2.1, 2.3)
 )
-
 mysterycall_check_normality(sample_data, "business_days_until_appointment")
 #> Starting normality check and summary calculation for variable: business_days_until_appointment
 #> Data extracted for variable: business_days_until_appointment
@@ -57,5 +69,4 @@ mysterycall_check_normality(sample_data, "business_days_until_appointment")
 #> $sd
 #> [1] 0.2690371
 #> 
-# }
 ```

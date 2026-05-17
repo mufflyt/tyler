@@ -49,6 +49,7 @@ access research:"><meta property="og:image" content="https://github.com/mufflyt/
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -125,29 +126,43 @@ factor with levels <code>c(labels, na_label)</code>. Default <code>FALSE</code>.
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Character vector (or ordered factor) the same length as <code>ruca_code</code>.</p>
+    <p>Character vector the same length as <code>ruca_code</code> with values from
+<code>labels</code> (<code>"Urban"</code>, <code>"Suburban"</code>, <code>"Rural"</code> by default) or <code>na_label</code>
+(<code>"Unknown"</code> by default) for <code>NA</code> inputs.  When <code>as_factor = TRUE</code>,
+returns an ordered factor with levels <code>c(labels, na_label)</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
 
-<table class="table table"><tr><td>RUCA code</td><td>Category</td></tr><tr><td>1-3</td><td>Urban</td></tr><tr><td>4-6</td><td>Suburban</td></tr><tr><td>7-10</td><td>Rural</td></tr></table><p>ZIP-to-RUCA crosswalk files are available from USDA ERS
+<table class="table table"><tr><td>RUCA code</td><td>Category</td></tr><tr><td>1-3</td><td>Urban</td></tr><tr><td>4-6</td><td>Suburban</td></tr><tr><td>7-10</td><td>Rural</td></tr></table><p>The 2010-vintage RUCA codes are the standard crosswalk applied through 2023
+in CMS and HRSA analyses.  Although newer ACS-based updates exist, the
+2010 vintage remains the most widely cited in peer-reviewed healthcare
+access research and is the version bundled in this package.</p>
+<p>ZIP-to-RUCA crosswalk files are available from USDA ERS
 (<a href="https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes" class="external-link">https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes</a>).
 Join your data to the crosswalk first, then pass the resulting <code>ruca_code</code>
 column to this function.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other provider characteristics:
+    <div class="dont-index"><p><code><a href="mysterycall_assign_region.html">mysterycall_assign_region()</a></code>, <code><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting()</a></code>,
+<code><a href="mysterycall_classify_medical_school.html">mysterycall_classify_medical_school()</a></code> for related provider characterizations.</p>
+<p>Other provider characteristics:
 <code><a href="mysterycall_academic_patterns.html">mysterycall_academic_patterns()</a></code>,
 <code><a href="mysterycall_age_category.html">mysterycall_age_category()</a></code>,
 <code><a href="mysterycall_assign_region.html">mysterycall_assign_region()</a></code>,
+<code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code>,
 <code><a href="mysterycall_classify_medical_school.html">mysterycall_classify_medical_school()</a></code>,
 <code><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting()</a></code>,
 <code><a href="mysterycall_collapse_rare.html">mysterycall_collapse_rare()</a></code>,
 <code><a href="mysterycall_extract_physician_name.html">mysterycall_extract_physician_name()</a></code>,
+<code><a href="mysterycall_genderize.html">mysterycall_genderize()</a></code>,
+<code><a href="mysterycall_get_academic_indicators_summary.html">mysterycall_get_academic_indicators_summary()</a></code>,
 <code><a href="mysterycall_government_patterns.html">mysterycall_government_patterns()</a></code>,
 <code><a href="mysterycall_impute_age.html">mysterycall_impute_age()</a></code>,
+<code><a href="mysterycall_most_common_gender.html">mysterycall_most_common_gender()</a></code>,
 <code><a href="mysterycall_parse_certification_subspecialty.html">mysterycall_parse_certification_subspecialty()</a></code>,
+<code><a href="mysterycall_physician_age.html">mysterycall_physician_age()</a></code>,
 <code><a href="mysterycall_recode_credentials.html">mysterycall_recode_credentials()</a></code>,
 <code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code>,
 <code><a href="mysterycall_reorder_by_freq.html">mysterycall_reorder_by_freq()</a></code></p></div>

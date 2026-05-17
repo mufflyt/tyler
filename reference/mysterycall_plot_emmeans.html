@@ -43,6 +43,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -83,19 +84,25 @@
 
 
 <dl><dt id="arg-model-object">model_object<a class="anchor" aria-label="anchor" href="#arg-model-object"></a></dt>
-<dd><p>A fitted model object from which EMMs are to be computed. This can be a generalized linear model (GLM), linear model, or other suitable models.</p></dd>
+<dd><p>A fitted model object of class <code>glm</code>, <code>lm</code>, <code>lmerMod</code>,
+<code>glmerMod</code>, or any class supported by <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code>.</p></dd>
 
 
 <dt id="arg-specs">specs<a class="anchor" aria-label="anchor" href="#arg-specs"></a></dt>
-<dd><p>A character string specifying the predictor variable(s) for which EMMs are to be computed. For example, this could be the treatment groups, scenarios, or demographic variables.</p></dd>
+<dd><p>Character scalar or vector. Predictor variable(s) for which
+marginal means are computed. The first element is used as the x-axis
+variable; the second (if present) becomes the <code>color_by</code> grouping
+variable. Example: <code>c("insurance", "gender")</code>.</p></dd>
 
 
 <dt id="arg-variable-of-interest">variable_of_interest<a class="anchor" aria-label="anchor" href="#arg-variable-of-interest"></a></dt>
-<dd><p>A character string specifying the variable to be plotted on the x-axis. Typically, this would be the same as the <code>specs</code>.</p></dd>
+<dd><p>Character scalar. Label for the x-axis, typically
+equal to the first element of <code>specs</code>.</p></dd>
 
 
 <dt id="arg-color-by">color_by<a class="anchor" aria-label="anchor" href="#arg-color-by"></a></dt>
-<dd><p>A character string specifying the variable used to color the points and error bars. This could be a categorical variable like gender, insurance type, or academic affiliation.</p></dd>
+<dd><p>Character scalar or <code>NULL</code>. Grouping variable name for
+coloring points and error bars. When <code>NULL</code> a single-group plot is drawn.</p></dd>
 
 
 <dt id="arg-output-dir">output_dir<a class="anchor" aria-label="anchor" href="#arg-output-dir"></a></dt>
@@ -105,7 +112,9 @@ be saved. Defaults to a session-specific folder inside <code><a href="https://rd
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisibly returns a list containing the estimated marginal means data (<code>data</code>) and the ggplot object (<code>plot</code>).</p>
+    <p><code><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible()</a></code> named list with two elements: <code>data</code> (data.frame of
+EMMs from <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code>) and <code>plot</code> (<code>ggplot</code> object). A plot
+file is also written to <code>output_dir</code> as a side effect.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -114,10 +123,9 @@ be saved. Defaults to a session-specific folder inside <code><a href="https://rd
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other modeling helpers:
-<code><a href="mysterycall_check_normality.html">mysterycall_check_normality()</a></code>,
-<code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code>,
-<code><a href="mysterycall_plot_interaction.html">mysterycall_plot_interaction()</a></code></p></div>
+    <div class="dont-index"><p>Other plotting:
+<code><a href="mysterycall_plot_disparities.html">mysterycall_plot_disparities()</a></code>,
+<code><a href="mysterycall_plot_source_venn.html">mysterycall_plot_source_venn()</a></code></p></div>
     </div>
 
     <div class="section level2">

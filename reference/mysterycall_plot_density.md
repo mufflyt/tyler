@@ -84,13 +84,22 @@ mysterycall_plot_density(
 
 ## Value
 
-Invisibly returns the generated ggplot object.
+A ggplot2 object (`c("gg", "ggplot")`), returned invisibly. As a side
+effect, writes a `.tiff` and a `.png` file to `output_dir` with
+filenames of the form `<file_prefix>_<timestamp>.tiff/.png`.
 
 ## See also
+
+[`mysterycall_plot_scatter()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_scatter.md)
+for jittered point plots;
+[`mysterycall_plot_line()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_line.md)
+for median-trend line plots; `mysterycall_save_green_journal_figure()`
+to export at journal resolution.
 
 Other mapping:
 [`mysterycall_clear_isochrone_cache()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clear_isochrone_cache.md),
 [`mysterycall_create_isochrones()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_create_isochrones.md),
+[`mysterycall_hrr_maps()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_hrr_maps.md),
 [`mysterycall_isochrones_for_df()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_isochrones_for_df.md),
 [`mysterycall_map_acceptance_rate()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acceptance_rate.md),
 [`mysterycall_map_acog_districts()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_map_acog_districts.md),
@@ -105,12 +114,11 @@ Other mapping:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # interactive()
 example_data <- data.frame(
   insurance = rep(c("Medicaid", "Commercial"), each = 3),
   business_days_until_appointment = c(1.5, 2.2, 3.1, 1.8, 2.5, 2.9)
 )
-
 mysterycall_plot_density(
   data = example_data,
   x_var = "business_days_until_appointment",
@@ -124,5 +132,5 @@ mysterycall_plot_density(
   plot_title = "Example Density Plot",
   verbose = FALSE
 )
-# }
+}
 ```

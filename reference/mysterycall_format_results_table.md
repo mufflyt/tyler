@@ -27,15 +27,22 @@ mysterycall_format_results_table(x, digits = 2L, include_intercept = FALSE)
 
 ## Value
 
-A data frame with columns `Term`, `IRR`, `95% CI`, `p-value`. Rows where
-`p_value < 0.05` carry attribute `"significant_rows"` (row indices) so
-downstream formatters can apply bold styling.
+A data frame with columns `Term`, `IRR`, `95% CI`, `p-value`. The data
+frame carries an integer attribute `"significant_rows"` with the row
+indices where `p_value < 0.05`, allowing downstream formatters to apply
+bold styling. Intercept row is excluded by default.
 
 ## See also
+
+[`mysterycall_poisson_model()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_poisson_model.md)
+which produces the model input;
+[`mysterycall_write_results_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_write_results_paragraph.md)
+to generate a prose summary.
 
 Other manuscript:
 [`mysterycall_methods_paragraph()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_methods_paragraph.md),
 [`mysterycall_sample_size_text()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_sample_size_text.md),
+[`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md),
 [`mysterycall_summarize_demographics()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_summarize_demographics.md)
 
 ## Examples

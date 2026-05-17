@@ -49,6 +49,7 @@ or for further spatial analysis."><meta property="og:image" content="https://git
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -93,14 +94,31 @@ states to ACOG districts. Defaults to the packaged
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An <code>sf</code> object with one row per ACOG district and columns describing
-the district name, subregion, member states, and their abbreviations.</p>
-    </div>
+    <p>An <code>sf</code> object with one row per ACOG district and columns:</p><dl><dt><code>ACOG_District</code></dt>
+<dd><p>Character. ACOG district identifier (e.g.
+<code>"District I"</code>).</p></dd>
+
+<dt><code>Subregion</code></dt>
+<dd><p>Character. Regional grouping of states.</p></dd>
+
+<dt><code>States</code></dt>
+<dd><p>Character. Comma-separated state names in the district.</p></dd>
+
+<dt><code>State_Abbreviations</code></dt>
+<dd><p>Character. Comma-separated 2-letter postal
+codes.</p></dd>
+
+<dt><code>geometry</code></dt>
+<dd><p>sfc_MULTIPOLYGON. District boundaries in EPSG:4326.</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other mapping:
 <code><a href="mysterycall_clear_isochrone_cache.html">mysterycall_clear_isochrone_cache()</a></code>,
 <code><a href="mysterycall_create_isochrones.html">mysterycall_create_isochrones()</a></code>,
+<code><a href="mysterycall_hrr_maps.html">mysterycall_hrr_maps()</a></code>,
 <code><a href="mysterycall_isochrones_for_df.html">mysterycall_isochrones_for_df()</a></code>,
 <code><a href="mysterycall_map_acceptance_rate.html">mysterycall_map_acceptance_rate()</a></code>,
 <code><a href="mysterycall_map_base.html">mysterycall_map_base()</a></code>,

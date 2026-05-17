@@ -15,7 +15,7 @@ mysterycall_get_acs_adults_18_90(year = NULL, states = NULL, verbose = TRUE)
 
 - year:
 
-  Integer. ACS 5-year survey year (2009–2023). Required — no default to
+  Integer. ACS 5-year survey year (2009-2023). Required - no default to
   ensure reproducibility.
 
 - states:

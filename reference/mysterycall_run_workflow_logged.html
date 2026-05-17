@@ -49,6 +49,7 @@ fixed there is automatically inherited here."><meta property="og:image" content=
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -207,7 +208,10 @@ step. Defaults to <code>FALSE</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The same list returned by <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>.</p>
+    <p>Invisibly, the named list returned by <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>.
+Key elements include <code>cleaned_phase1</code> and <code>cleaned_phase2</code> (data frames),
+<code>excluded_records</code> (data frame), and <code>workflow_summary</code> (stage-level
+counts). See <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code> for the complete structure.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -216,7 +220,6 @@ step. Defaults to <code>FALSE</code>.</p></dd>
 <code><a href="mysterycall_clean_phase1.html">mysterycall_clean_phase1()</a></code>,
 <code><a href="mysterycall_clean_phase2.html">mysterycall_clean_phase2()</a></code>,
 <code><a href="mysterycall_print_dashboard.html">mysterycall_print_dashboard()</a></code>,
-<code><a href="mysterycall_rename_columns.html">mysterycall_rename_columns()</a></code>,
 <code><a href="mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code>,
 <code><a href="mysterycall_split_and_save.html">mysterycall_split_and_save()</a></code>,
 <code><a href="mysterycall_verify_artifact.html">mysterycall_verify_artifact()</a></code></p></div>

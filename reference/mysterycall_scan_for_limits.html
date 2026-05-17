@@ -47,6 +47,7 @@ to catch unintentional data limiting."><meta property="og:image" content="https:
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -101,8 +102,28 @@ For example, "test-.*\\.R$" to exclude test files.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame of found issues with columns: file, line, pattern, code.
-Returns empty data frame if no issues found. Also prints warnings.</p>
+    <p>A data frame with one row per detected issue and columns:</p><dl><dt><code>file</code></dt>
+<dd><p>Character. Basename of the scanned R file.</p></dd>
+
+<dt><code>line</code></dt>
+<dd><p>Integer. Line number where the pattern was found.</p></dd>
+
+<dt><code>severity</code></dt>
+<dd><p>Character. One of <code>"CRITICAL"</code>, <code>"HIGH"</code>, or
+<code>"MEDIUM"</code>.</p></dd>
+
+<dt><code>pattern</code></dt>
+<dd><p>Character. Human-readable description of the
+anti-pattern detected.</p></dd>
+
+<dt><code>code</code></dt>
+<dd><p>Character. Trimmed source code line that triggered
+the match.</p></dd>
+
+
+</dl><p>Returns a zero-row data frame with these columns when no issues are
+found. Rows are sorted by severity (CRITICAL first), then file, then
+line number. Also emits <code><a href="https://rdrr.io/r/base/message.html" class="external-link">base::message()</a></code> for each detected issue.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -115,7 +136,9 @@ Returns empty data frame if no issues found. Also prints warnings.</p>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other utilities:
+    <div class="dont-index"><p><code><a href="mysterycall_check_no_limits.html">mysterycall_check_no_limits()</a></code> to validate row counts at runtime;
+<code><a href="mysterycall_check_no_data_loss.html">mysterycall_check_no_data_loss()</a></code>, <code><a href="mysterycall_check_api_response.html">mysterycall_check_api_response()</a></code>.</p>
+<p>Other utilities:
 <code>%&gt;%()</code>,
 <code><a href="mysterycall_assess_data_quality.html">mysterycall_assess_data_quality()</a></code>,
 <code><a href="mysterycall_check_api_response.html">mysterycall_check_api_response()</a></code>,
@@ -128,8 +151,6 @@ Returns empty data frame if no issues found. Also prints warnings.</p>
 <code><a href="mysterycall_export_with_backup.html">mysterycall_export_with_backup()</a></code>,
 <code><a href="mysterycall_preflight_check.html">mysterycall_preflight_check()</a></code>,
 <code><a href="mysterycall_quality_tier.html">mysterycall_quality_tier()</a></code>,
-<code><a href="mysterycall_remove_constants.html">mysterycall_remove_constants()</a></code>,
-<code><a href="mysterycall_remove_near_zero.html">mysterycall_remove_near_zero()</a></code>,
 <code><a href="mysterycall_resolve_path.html">mysterycall_resolve_path()</a></code>,
 <code><a href="mysterycall_save_quality_table.html">mysterycall_save_quality_table()</a></code>,
 <code><a href="mysterycall_standard_labels.html">mysterycall_standard_labels()</a></code>,

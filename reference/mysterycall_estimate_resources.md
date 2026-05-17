@@ -17,16 +17,40 @@ mysterycall_estimate_resources(n_rows)
 
 ## Value
 
-A named list with elements `total_time_hours` (estimated wall time),
-`peak_memory_gb` (estimated peak RAM in GB), and `api_calls` (estimated
-number of external API requests).
+A named `list` with elements:
+
+- `runtime_seconds`:
+
+  `numeric`. Total estimated wall time in seconds.
+
+- `runtime_hours`:
+
+  `numeric`. Total estimated wall time in hours.
+
+- `runtime_str`:
+
+  `character`. Human-readable runtime string (e.g., `"45 minutes"` or
+  `"2h 15m"`).
+
+- `memory_mb`:
+
+  `numeric`. Estimated peak memory in megabytes.
+
+- `memory_gb`:
+
+  `numeric`. Estimated peak memory in gigabytes.
+
+- `memory_str`:
+
+  `character`. Human-readable memory string (e.g., `"1.5 GB"` or
+  `"700 MB"`).
 
 ## Estimation method
 
-Runtime is estimated as `n_rows × 4.5` seconds: 1.5 s/row for NPI
+Runtime is estimated as `n_rows x 4.5` seconds: 1.5 s/row for NPI
 registry lookups, 0.5 s/row for geocoding (assumes a warm Google Maps
 cache), and 2.5 s/row for HERE isochrone generation. Memory is
-`(n_rows × 2) + 500` MB.
+`(n_rows x 2) + 500` MB.
 
 Reference values for the full workflow:
 
@@ -40,13 +64,18 @@ Reference values for the full workflow:
 
 These constants reflect typical US residential broadband with warm API
 caches. Slow networks or cold caches can **triple** the runtime
-estimate. Benchmark on 50–100 rows before committing to a large run.
+estimate. Benchmark on 50-100 rows before committing to a large run.
 
 If only a subset of the pipeline is used (e.g., NPI lookup only), the
 relevant per-row constant is 1.5 s (NPI), 0.5 s (geocoding), or 2.5 s
 (isochrones), not the combined 4.5 s.
 
 ## See also
+
+[`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
+which calls this function;
+[`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md)
+for data completeness scoring.
 
 Other utilities: `%>%()`,
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),
@@ -59,8 +88,6 @@ Other utilities: `%>%()`,
 [`mysterycall_export_with_backup()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_export_with_backup.md),
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md),
 [`mysterycall_quality_tier()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_quality_tier.md),
-[`mysterycall_remove_constants()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_constants.md),
-[`mysterycall_remove_near_zero()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_remove_near_zero.md),
 [`mysterycall_resolve_path()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_resolve_path.md),
 [`mysterycall_save_quality_table()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_quality_table.md),
 [`mysterycall_scan_for_limits()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_scan_for_limits.md),

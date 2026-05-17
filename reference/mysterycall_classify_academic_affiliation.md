@@ -42,7 +42,7 @@ Data frame with one row per input and columns:
 
 - confidence_score:
 
-  Numeric. Confidence in the classification (0–1).
+  Numeric. Confidence in the classification (0-1).
 
 - matched_pattern:
 
@@ -52,10 +52,6 @@ Data frame with one row per input and columns:
 
 [`mysterycall_check_academic_name_patterns`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md),
 [`mysterycall_get_academic_indicators_summary`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.md)
-
-Other classification:
-[`mysterycall_check_academic_name_patterns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_academic_name_patterns.md),
-[`mysterycall_get_academic_indicators_summary()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_academic_indicators_summary.md)
 
 ## Examples
 

@@ -871,6 +871,69 @@ message(
 
 ------------------------------------------------------------------------
 
+## 11. Frequency Helpers: `mysterycall_max_table()` and `mysterycall_min_table()`
+
+These helpers quickly identify the most- and least-common values in any
+vector — useful for sanity-checking free-text columns or building
+footnotes.
+
+``` r
+
+set.seed(3)
+subspecialties <- sample(
+  c("General OB/GYN", "MFM", "GYN Oncology", "REI", "FPMRS", "General OB/GYN",
+    "General OB/GYN", "MFM", "General OB/GYN", "REI"),
+  size = 120, replace = TRUE
+)
+
+# Most common subspecialty
+cat("Most common:\n")
+#> Most common:
+print(mysterycall_max_table(subspecialties))
+#> [1] "General OB/GYN"
+
+# Least common subspecialty
+cat("\nLeast common:\n")
+#> 
+#> Least common:
+print(mysterycall_min_table(subspecialties))
+#> [1] "GYN Oncology"
+```
+
+## 12. Formatting Percentages: `mysterycall_format_pct()`
+
+[`mysterycall_format_pct()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_pct.md)
+converts a numeric proportion to a character string with a configurable
+number of decimal places — useful for inline reporting and table cells.
+
+``` r
+
+rates <- c(0.91, 0.638, 0.54, 0.00, 1.00, 0.085)
+knitr::kable(
+  data.frame(
+    raw_rate     = rates,
+    formatted_1d = mysterycall_format_pct(rates, my_digits = 1),
+    formatted_0d = mysterycall_format_pct(rates, my_digits = 0)
+  ),
+  col.names = c("Raw proportion", "1 decimal place", "0 decimal places"),
+  caption   = "`mysterycall_format_pct()` output for typical acceptance rates."
+)
+```
+
+| Raw proportion | 1 decimal place | 0 decimal places |
+|---------------:|:----------------|:-----------------|
+|          0.910 | 91.0%           | 91%              |
+|          0.638 | 63.8%           | 64%              |
+|          0.540 | 54.0%           | 54%              |
+|          0.000 | 0.0%            | 0%               |
+|          1.000 | 100.0%          | 100%             |
+|          0.085 | 8.5%            | 8%               |
+
+[`mysterycall_format_pct()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_pct.md)
+output for typical acceptance rates. {.table}
+
+------------------------------------------------------------------------
+
 ### A note on journal-specific requirements
 
 **NEJM** — Tables must be submitted as separate files. Use

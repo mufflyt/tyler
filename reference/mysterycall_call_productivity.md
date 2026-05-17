@@ -30,7 +30,8 @@ mysterycall_call_productivity(
 
   Character scalar or NULL. Column containing call dates. Accepts
   `Date`, `POSIXct`, or character (coerced via
-  [`as.Date()`](https://rdrr.io/r/base/as.Date.html)).
+  [`as.Date()`](https://rdrr.io/r/base/as.Date.html)). When `NULL`,
+  `n_days` and `calls_per_day` are `NA` in the output.
 
 - outcome_col:
 
@@ -52,47 +53,54 @@ mysterycall_call_productivity(
 A data frame with one row per caller, sorted by `n_calls` descending.
 Columns:
 
-- caller:
+- `caller`:
 
-  Caller identifier.
+  Character. Caller identifier (values from `caller_col`).
 
-- n_calls:
+- `n_calls`:
 
-  Total calls.
+  Integer. Total number of calls made.
 
-- n_days:
+- `n_days`:
 
-  Unique call dates (NA if `date_col` is NULL).
+  Numeric. Count of unique call dates. `NA` when `date_col` is `NULL`.
 
-- calls_per_day:
+- `calls_per_day`:
 
-  n_calls / n_days (NA if `date_col` is NULL).
+  Numeric. `n_calls / n_days`. `NA` when `date_col` is `NULL`.
 
-- n_accepted:
+- `n_accepted`:
 
-  Sum of `outcome_col` (NA if not provided).
+  Numeric. Sum of `outcome_col`. `NA` when `outcome_col` is `NULL`.
 
-- acceptance_rate:
+- `acceptance_rate`:
 
-  Formatted "XX.X%" (NA if `outcome_col` NULL).
+  Character. Formatted `"XX.X%"`. `NA` when `outcome_col` is `NULL`.
 
-- mean_hold_sec:
+- `mean_hold_sec`:
 
-  Mean hold time in seconds (NA if not provided).
+  Numeric. Mean hold time in seconds. `NA` when `hold_time_col` is
+  `NULL`.
 
-- mean_call_sec:
+- `mean_call_sec`:
 
-  Mean call time in seconds (NA if not provided).
+  Numeric. Mean call time in seconds. `NA` when `call_time_col` is
+  `NULL`.
 
-The attribute `total_calls_all` is set on the returned data frame.
+The attribute `total_calls_all` (integer) is set on the returned data
+frame recording the grand total across all callers.
 
 ## See also
+
+[`mysterycall_caller_reliability()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_caller_reliability.md)
+for inter-rater reliability metrics;
+[`mysterycall_compare_waves()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_compare_waves.md)
+for cross-wave outcome comparisons.
 
 Other workflow:
 [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md),
 [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md),
 [`mysterycall_print_dashboard()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_print_dashboard.md),
-[`mysterycall_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_rename_columns.md),
 [`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md),
 [`mysterycall_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow_logged.md),
 [`mysterycall_split_and_save()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_split_and_save.md),

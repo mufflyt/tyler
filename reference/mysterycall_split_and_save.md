@@ -60,7 +60,12 @@ mysterycall_split_and_save(
 
 ## Value
 
-Invisible list of file paths to the created Excel files
+[`invisible()`](https://rdrr.io/r/base/invisible.html) character vector
+of absolute file paths to the created Excel files. Element 1 is the
+combined "all callers" workbook; subsequent elements are the
+per-assistant split workbooks in the order of `lab_assistant_names`.
+Capture with `paths <- mysterycall_split_and_save(...)` to use the paths
+downstream.
 
 ## Contract
 
@@ -92,7 +97,7 @@ produce highly skewed splits for small rosters.
 ## Performance
 
 O(n log n) due to sorting. Excel I/O via `openxlsx` dominates for large
-rosters; expect ~2–5 s for 500 rows.
+rosters; expect ~2-5 s for 500 rows.
 
 ## Called By
 
@@ -105,7 +110,6 @@ Other workflow:
 [`mysterycall_clean_phase1()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase1.md),
 [`mysterycall_clean_phase2()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_clean_phase2.md),
 [`mysterycall_print_dashboard()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_print_dashboard.md),
-[`mysterycall_rename_columns()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_rename_columns.md),
 [`mysterycall_run_workflow()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow.md),
 [`mysterycall_run_workflow_logged()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_run_workflow_logged.md),
 [`mysterycall_verify_artifact()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_verify_artifact.md)

@@ -45,6 +45,7 @@ organized by evidence tier."><meta property="og:image" content="https://github.c
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -77,18 +78,53 @@ organized by evidence tier.</p>
 
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Named list with elements <code>module_version</code>, <code>created_date</code>,
-<code>indicators</code> (three-tier named list with confidence ranges and
-indicator scores), <code>total_known_institutions</code>, <code>total_patterns</code>,
-and <code>usage_notes</code>.</p>
-    </div>
+    <p>A named list with elements:</p><dl><dt><code>module_version</code></dt>
+<dd><p>Character. Package version string.</p></dd>
+
+<dt><code>created_date</code></dt>
+<dd><p>Character. ISO date string (YYYY-MM-DD).</p></dd>
+
+<dt><code>indicators</code></dt>
+<dd><p>Named list with three sublists:
+<code>tier1_education_training</code>, <code>tier2_research_clinical</code>, and
+<code>tier3_name_patterns</code>, each containing confidence ranges and
+indicator scores.</p></dd>
+
+<dt><code>total_known_institutions</code></dt>
+<dd><p>Integer. Count of known academic
+institutions in the bundled lookup.</p></dd>
+
+<dt><code>total_patterns</code></dt>
+<dd><p>Integer. Count of name-pattern rules.</p></dd>
+
+<dt><code>usage_notes</code></dt>
+<dd><p>Character vector. Recommended usage guidelines.</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="mysterycall_classify_academic_affiliation.html">mysterycall_classify_academic_affiliation</a></code>,
-<code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns</a></code></p>
-<p>Other classification:
+    <div class="dont-index"><p><code><a href="mysterycall_classify_academic_affiliation.html">mysterycall_classify_academic_affiliation()</a></code>,
+<code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code></p>
+<p>Other provider characteristics:
+<code><a href="mysterycall_academic_patterns.html">mysterycall_academic_patterns()</a></code>,
+<code><a href="mysterycall_age_category.html">mysterycall_age_category()</a></code>,
+<code><a href="mysterycall_assign_region.html">mysterycall_assign_region()</a></code>,
 <code><a href="mysterycall_check_academic_name_patterns.html">mysterycall_check_academic_name_patterns()</a></code>,
-<code><a href="mysterycall_classify_academic_affiliation.html">mysterycall_classify_academic_affiliation()</a></code></p></div>
+<code><a href="mysterycall_classify_medical_school.html">mysterycall_classify_medical_school()</a></code>,
+<code><a href="mysterycall_classify_practice_setting.html">mysterycall_classify_practice_setting()</a></code>,
+<code><a href="mysterycall_classify_ruca.html">mysterycall_classify_ruca()</a></code>,
+<code><a href="mysterycall_collapse_rare.html">mysterycall_collapse_rare()</a></code>,
+<code><a href="mysterycall_extract_physician_name.html">mysterycall_extract_physician_name()</a></code>,
+<code><a href="mysterycall_genderize.html">mysterycall_genderize()</a></code>,
+<code><a href="mysterycall_government_patterns.html">mysterycall_government_patterns()</a></code>,
+<code><a href="mysterycall_impute_age.html">mysterycall_impute_age()</a></code>,
+<code><a href="mysterycall_most_common_gender.html">mysterycall_most_common_gender()</a></code>,
+<code><a href="mysterycall_parse_certification_subspecialty.html">mysterycall_parse_certification_subspecialty()</a></code>,
+<code><a href="mysterycall_physician_age.html">mysterycall_physician_age()</a></code>,
+<code><a href="mysterycall_recode_credentials.html">mysterycall_recode_credentials()</a></code>,
+<code><a href="mysterycall_reconcile_specialty.html">mysterycall_reconcile_specialty()</a></code>,
+<code><a href="mysterycall_reorder_by_freq.html">mysterycall_reorder_by_freq()</a></code></p></div>
     </div>
 
     <div class="section level2">

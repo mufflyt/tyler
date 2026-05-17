@@ -63,6 +63,7 @@ getOption("mysterycall.join_report_dir", tempdir()).
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -165,7 +166,13 @@ names. Default <code>c(".x", ".y")</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame: the left-join result.</p>
+    <p>A data frame containing all rows of <code>left</code> joined to matching rows
+of <code>right</code>. Columns from both tables are included; name conflicts gain the
+<code>suffix</code> extensions. Stops with an informative error when: <code>left</code> or
+<code>right</code> is not a data frame; <code>by</code> columns are absent; coverage falls below
+<code>min_coverage</code>; or output rows exceed <code>max_duplication</code> times input rows.
+When <code>write_report = TRUE</code>, a one-row CSV audit record is written to the
+working directory using <code>report_prefix</code> as the filename stem.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

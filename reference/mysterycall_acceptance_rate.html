@@ -49,6 +49,7 @@ test or Fisher's exact test (when any cell falls below min_cell)."><meta propert
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -121,22 +122,28 @@ trigger Fisher's exact test instead of chi-square. Default <code>5</code>.</p></
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A named list with:</p><dl><dt><code>summary</code></dt>
-<dd><p>Tibble with one row per group (or one row overall):
-<code>n_total</code>, <code>n_missing</code>, <code>n_accepted</code>, <code>n_rejected</code>, <code>rate</code>,
-<code>ci_lower</code>, <code>ci_upper</code>.</p></dd>
+<dd><p>Tibble with one row per group (or one row overall).
+When <code>group_by</code> is non-<code>NULL</code>, the first column is named after the
+grouping variable (character). Remaining columns: <code>n_total</code>
+(integer), <code>n_missing</code> (integer), <code>n_accepted</code> (integer),
+<code>n_rejected</code> (integer), <code>rate</code> (numeric, 0-1), <code>ci_lower</code> (numeric,
+0-1), <code>ci_upper</code> (numeric, 0-1).</p></dd>
 
 <dt><code>test</code></dt>
 <dd><p><code>htest</code> object from <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">stats::chisq.test()</a></code> or
 <code><a href="https://rdrr.io/r/stats/fisher.test.html" class="external-link">stats::fisher.test()</a></code>, or <code>NULL</code> when no test was run.</p></dd>
 
 <dt><code>p_value</code></dt>
-<dd><p>Numeric p-value, or <code>NA_real_</code>.</p></dd>
+<dd><p>Numeric p-value extracted from <code>test</code>, or <code>NA_real_</code>
+when no test was run.</p></dd>
 
 <dt><code>test_name</code></dt>
-<dd><p>Character label describing the test used.</p></dd>
+<dd><p>Character. One of <code>"Fisher's exact"</code>,
+<code>"chi-square"</code>, <code>"chi-square (small cells)"</code>, or <code>"none"</code>.</p></dd>
 
 <dt><code>interpretation</code></dt>
-<dd><p>One-sentence plain-language summary.</p></dd>
+<dd><p>Character. One-sentence plain-language summary
+suitable for pasting into a Results section.</p></dd>
 
 
 </dl></div>
@@ -151,7 +158,6 @@ numerics, and character strings <code>"yes"</code>, <code>"y"</code>, <code>"tru
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>, <code><a href="mysterycall_clean_phase2.html">mysterycall_clean_phase2()</a></code></p>
 <p>Other outcomes:
-<code><a href="mysterycall_compare_waves.html">mysterycall_compare_waves()</a></code>,
 <code><a href="mysterycall_irr_plot.html">mysterycall_irr_plot()</a></code>,
 <code><a href="mysterycall_marginal_effects.html">mysterycall_marginal_effects()</a></code>,
 <code><a href="mysterycall_model_metrics.html">mysterycall_model_metrics()</a></code>,
@@ -164,7 +170,6 @@ numerics, and character strings <code>"yes"</code>, <code>"y"</code>, <code>"tru
 <code><a href="mysterycall_plot_sjplot_interaction.html">mysterycall_plot_sjplot_interaction()</a></code>,
 <code><a href="mysterycall_plot_stacked_bar.html">mysterycall_plot_stacked_bar()</a></code>,
 <code><a href="mysterycall_poisson_model.html">mysterycall_poisson_model()</a></code>,
-<code><a href="mysterycall_save_plot.html">mysterycall_save_plot()</a></code>,
 <code><a href="mysterycall_screen_interactions.html">mysterycall_screen_interactions()</a></code>,
 <code><a href="mysterycall_select_best_model.html">mysterycall_select_best_model()</a></code>,
 <code><a href="mysterycall_wait_time_summary.html">mysterycall_wait_time_summary()</a></code>,

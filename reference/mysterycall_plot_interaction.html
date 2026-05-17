@@ -45,6 +45,7 @@ an interaction term, and saves a publication-ready interaction plot."><meta prop
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
     <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/power-analysis.html">Power Analysis and Sample Size for Mystery Caller Studies</a></li>
     <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul></li>
@@ -117,14 +118,18 @@ an interaction term, and saves a publication-ready interaction plot.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with:</p><dl><dt><code>model</code></dt>
-<dd><p>The fitted <code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">lme4::glmer()</a></code> model object.</p></dd>
+    <p>A named list with two elements:</p><dl><dt><code>model</code></dt>
+<dd><p>The fitted <code><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">lme4::glmer()</a></code> model object (class <code>glmerMod</code>).</p></dd>
 
 <dt><code>effects_plot_data</code></dt>
-<dd><p>Summarized predicted values used in the plot.</p></dd>
+<dd><p>A data frame with one row per
+<code>interaction_variable</code> x <code>variable_of_interest</code> combination and columns
+named after those two arguments plus <code>mean_pred</code> (numeric mean predicted
+response on the link scale).</p></dd>
 
 
-</dl></div>
+</dl><p>A PNG file is also written to <code>output_path</code> as a side effect.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function:</p><ol><li><p>loads data from <code>data_path</code>,</p></li>
@@ -140,8 +145,7 @@ to a count-like outcome (for example, business days until appointment).</p>
     <div class="dont-index"><p><code><a href="mysterycall_plot_emmeans.html">mysterycall_plot_emmeans()</a></code>, <code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code></p>
 <p>Other modeling helpers:
 <code><a href="mysterycall_check_normality.html">mysterycall_check_normality()</a></code>,
-<code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code>,
-<code><a href="mysterycall_plot_emmeans.html">mysterycall_plot_emmeans()</a></code></p></div>
+<code><a href="mysterycall_create_formula.html">mysterycall_create_formula()</a></code></p></div>
     </div>
 
     <div class="section level2">
