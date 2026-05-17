@@ -77,7 +77,7 @@ test_that("genderize_fetch surfaces HTTP and API errors", {
   with_mocked_bindings(
     GET = function(url, query, ...) make_genderize_response(list(error = "Too Many Requests"), status = 429L),
     .package = "httr",
-    code = expect_error(mysterycall:::genderize_fetch("Ava"), "Genderize.io request failed")
+    code = expect_error(mysterycall:::genderize_fetch("Ava"), "Genderize.io monthly quota exhausted")
   )
 
   with_mocked_bindings(

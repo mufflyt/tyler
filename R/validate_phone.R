@@ -7,13 +7,18 @@ NULL
 # binding fails when the package is installed, so we store state here instead.
 .nanp_cache_env <- new.env(parent = emptyenv())
 .nanp_cache_env$lookup <- NULL
+.nanp_cache_env$path   <- NULL
 
 .load_nanp_lookup <- function(nanp_path = NULL) {
-  if (!is.null(.nanp_cache_env$lookup)) return(invisible(.nanp_cache_env$lookup))
   path <- if (!is.null(nanp_path)) {
     nanp_path
   } else {
     system.file("extdata", "nanp_area_codes_us.csv", package = "mysterycall")
+  }
+  # Return cached table only when it was loaded from the same path.
+  if (!is.null(.nanp_cache_env$lookup) &&
+      identical(.nanp_cache_env$path, path)) {
+    return(invisible(.nanp_cache_env$lookup))
   }
   if (!nzchar(path) || !file.exists(path)) {
     stop(
@@ -24,7 +29,8 @@ NULL
   tbl <- utils::read.csv(path, stringsAsFactors = FALSE)
   tbl$area_code <- sprintf("%03d", as.integer(tbl$area_code))
   .nanp_cache_env$lookup <- tbl
-  invisible(.nanp_cache_env$lookup)
+  .nanp_cache_env$path   <- path
+  invisible(tbl)
 }
 
 #' Validate North-American (NANP) phone number strings
