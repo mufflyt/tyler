@@ -37,16 +37,22 @@ NULL
 #' @param eps Positive numeric scalar. Step size for numerical differentiation
 #'   of continuous predictors. Default `1e-7`.
 #'
-#' @return A `data.frame` with one row per term--level combination and columns:
+#' @return A `data.frame` with one row per term-level combination and columns:
 #' \describe{
 #'   \item{`term`}{Character. The predictor name (as supplied in `term` or
-#'     derived from the model frame).}
-#'   \item{`level`}{Character. `NA` for continuous predictors; the factor level
-#'     name for categorical predictors.}
-#'   \item{`ame`}{Numeric. The average marginal effect.}
+#'     derived from the model frame). Continuous predictors yield one row;
+#'     categorical predictors yield one row per non-reference level.}
+#'   \item{`level`}{Character or `NA_character_`. `NA_character_` for
+#'     continuous predictors; the factor level name for categorical predictors.
+#'     The reference level is omitted from the output.}
+#'   \item{`ame`}{Numeric. The average marginal effect. For continuous
+#'     predictors, the mean finite-difference derivative across all
+#'     observations. For categorical predictors, the mean difference in
+#'     predicted values versus the reference level.}
 #'   \item{`variable_type`}{Character. Either `"continuous"` or
 #'     `"categorical"`.}
 #' }
+#' Row names are not set. No special class attributes are added.
 #'
 #' @section Standard errors:
 #' This function returns only the AME point estimate. Standard errors and

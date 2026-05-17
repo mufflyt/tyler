@@ -14,8 +14,15 @@ NULL
 #'   (default), the deparsed expression of `x` is used.
 #' @param bins Integer number of histogram bins. Default `30L`.
 #'
-#' @return A named list with elements `raw` and `sqrt_transformed`, each a
-#'   `ggplot` object.
+#' @return A named list with two `ggplot2::ggplot` objects:
+#'   \describe{
+#'     \item{`raw`}{Histogram of `x` with raw counts on the y-axis.}
+#'     \item{`sqrt_transformed`}{Same histogram with a square-root-transformed
+#'       y-axis via [ggplot2::scale_y_sqrt()], improving visibility of
+#'       right-skewed count distributions.}
+#'   }
+#'   Both plots use the same `bins` value. Access elements with `$raw` and
+#'   `$sqrt_transformed` for side-by-side comparison.
 #'
 #' @family outcomes
 #' @export

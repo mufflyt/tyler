@@ -92,7 +92,7 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 #'
 #' Convenience wrapper that applies age imputation, age categorisation, and
 #' gender standardisation in one call.  All output columns are **added** to
-#' the input data frame — originals are never replaced or removed.  Arguments
+#' the input data frame - originals are never replaced or removed.  Arguments
 #' set to `NULL` are silently skipped so you can standardise only the
 #' variables your dataset contains.
 #'
@@ -114,8 +114,21 @@ mysterycall_stratified_sample <- function(data, group_col, n_per_group, seed = N
 #' @param ref_year Integer reference year for age imputation. Default: current
 #'   calendar year.
 #'
-#' @return `data` with zero or more additional standardised columns appended:
-#'   `age_imputed`, `age_category`, `gender_std`, `setting_std`, `region_std`.
+#' @return `data` with zero or more additional standardised columns appended
+#'   (only columns whose source `*_col` parameter was non-`NULL` are created):
+#'   \describe{
+#'     \item{`age_imputed`}{Numeric. Estimated age derived from `grad_year_col`
+#'       as `ref_year - grad_year`. Only added when `grad_year_col` is supplied.}
+#'     \item{`age_category`}{Character. Age group binned from `age_col` or
+#'       `age_imputed` (e.g., `"<35"`, `"35-44"`, `"45-54"`, `"55-64"`,
+#'       `">=65"`). Only added when `age_col` or `grad_year_col` is supplied.}
+#'     \item{`gender_std`}{Character. Standardised gender: `"Male"`, `"Female"`,
+#'       or `"Unknown"`. Only added when `gender_col` is supplied.}
+#'     \item{`setting_std`}{Character. Practice setting, copied from the source
+#'       column. Only added when `setting_col` is supplied.}
+#'     \item{`region_std`}{Character. Region, copied from the source column.
+#'       Only added when `region_col` is supplied.}
+#'   }
 #'
 #' @section Gender standardisation:
 #'   The `gender_std` column is produced by a binary lookup applied

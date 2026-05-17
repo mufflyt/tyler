@@ -22,7 +22,18 @@
 #' @param tracker_step Character string describing the step name used when
 #'   updating `tracker`.
 #'
-#' @return A data frame with latitude and longitude columns added.
+#' @return A data frame with all original columns from the input file plus two
+#'   new numeric columns:
+#'   \describe{
+#'     \item{`latitude`}{Numeric. Geographic latitude in decimal degrees
+#'       (WGS 84). `NA` for addresses that failed geocoding after all retries.}
+#'     \item{`longitude`}{Numeric. Geographic longitude in decimal degrees
+#'       (WGS 84). `NA` for addresses that failed geocoding after all retries.}
+#'   }
+#'   Side effects: when `output_file_path` is non-`NULL`, the enriched data
+#'   frame is written as CSV; when `failed_output_path` is non-`NULL`, rows
+#'   that could not be geocoded are written separately (with a timestamped
+#'   backup if the file already exists).
 #'
 #' @section Requirements:
 #'   Geocoding requires the `ggmap` package (listed in `Suggests`, not

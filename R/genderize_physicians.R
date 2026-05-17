@@ -75,7 +75,7 @@
 #' @seealso [mysterycall_prepare_table1_vars()] for downstream gender
 #'   recoding to `"Male"`/`"Female"`/`"Unknown"`.
 #'
-#' @family gender
+#' @family provider characteristics
 #' @export
 mysterycall_genderize <- function(data_or_path, output_dir = NULL, output_format = c("csv", "parquet")) {
   output_format <- match.arg(output_format)

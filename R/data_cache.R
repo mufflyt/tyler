@@ -14,7 +14,10 @@ NULL
 #'
 #' @param ... Optional path components appended to the cache directory.
 #'
-#' @return A character string with the cache directory path.
+#' @return Character scalar. Absolute path to the cache directory. When `...`
+#'   is empty, returns the cache root (created automatically if absent). When
+#'   `...` supplies path components, they are appended via `file.path()` before
+#'   returning; the directory is not created in that case.
 mysterycall_cache_dir <- function(...) {
   cache_root <- if (getRversion() >= "4.0.0") {
     tools::R_user_dir("mysterycall", which = "cache")

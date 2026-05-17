@@ -301,12 +301,14 @@ normalize_suffix <- function(...) { .Deprecated("mysterycall_normalize_suffix");
 #'
 #' @param addr1 Character scalar for the primary address line.
 #' @param addr2 Character scalar for the secondary address line (optional).
-#'   Default is \code{NA_character_}.
+#'   Default is `NA_character_`.
 #'
-#' @return A list with two elements:
+#' @return A named list with two character elements:
 #'   \describe{
-#'     \item{addr1}{Normalized primary address line.}
-#'     \item{addr2}{Normalized secondary address line (or NA if not provided).}
+#'     \item{`addr1`}{Character. Primary address with unit designators
+#'       standardised to USPS abbreviations (STE, APT, UNIT, FL, RM).}
+#'     \item{`addr2`}{Character or `NA_character_`. Normalized secondary
+#'       address line; `NA_character_` when `addr2` was `NA_character_`.}
 #'   }
 #'
 #' @examples
@@ -346,7 +348,9 @@ normalize_units <- function(...) { .Deprecated("mysterycall_normalize_units"); m
 #'
 #' @param zip Character or numeric vector of ZIP code strings.
 #'
-#' @return Character vector of 5-digit ZIP codes, or \code{NA} for invalid inputs.
+#' @return Character vector of 5-digit ZIP codes, or `NA_character_` for
+#'   inputs that contain no 5-digit sequence. Length-0 input returns
+#'   `character(0)`.
 #'
 #' @examples
 #' mysterycall_normalize_zip5("80111-1234")
@@ -408,24 +412,29 @@ strip_suite <- function(...) { .Deprecated("mysterycall_strip_suite"); mysteryca
 #'
 #' @param df Data frame containing address columns.
 #' @param addr1_col Character name of the primary address column.
-#'   Default: \code{"practice_address1"}.
+#'   Default: `"practice_address1"`.
 #' @param addr2_col Character name of the secondary address column.
-#'   Default: \code{"practice_address2"}.
+#'   Default: `"practice_address2"`.
 #' @param city_col Character name of the city column.
-#'   Default: \code{"practice_city"}.
+#'   Default: `"practice_city"`.
 #' @param state_col Character name of the state column.
-#'   Default: \code{"practice_state"}.
+#'   Default: `"practice_state"`.
 #' @param zip_col Character name of the ZIP code column.
-#'   Default: \code{"practice_zip"}.
+#'   Default: `"practice_zip"`.
 #'
-#' @return The input data frame with original columns modified plus additional
-#'   derived columns:
+#' @return The input data frame with the original address columns normalised
+#'   in-place plus five new derived columns:
 #'   \describe{
-#'     \item{address1_norm}{Fully normalized primary address.}
-#'     \item{address2_norm}{Fully normalized secondary address.}
-#'     \item{address1_no_unit}{Primary address with unit designators removed.}
-#'     \item{is_po_box}{Logical: is this a PO Box address?}
-#'     \item{has_num}{Logical: does the address start with a street number?}
+#'     \item{`address1_norm`}{Character. Fully normalised primary address
+#'       (ASCII, directionals, suffixes, and units standardised).}
+#'     \item{`address2_norm`}{Character or `NA_character_`. Normalised
+#'       secondary address.}
+#'     \item{`address1_no_unit`}{Character. Primary address with all unit
+#'       designators stripped.}
+#'     \item{`is_po_box`}{Logical. `TRUE` if the address matches a PO Box
+#'       pattern.}
+#'     \item{`has_num`}{Logical. `TRUE` if the address begins with a street
+#'       number.}
 #'   }
 #'
 #' @examples
