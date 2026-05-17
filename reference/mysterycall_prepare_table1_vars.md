@@ -67,12 +67,28 @@ mysterycall_prepare_table1_vars(
 
 ## Gender standardisation
 
-The `gender_std` column is produced by a binary lookup: `"m"`/`"male"` →
-`"Male"`, `"f"`/`"female"` → `"Female"`, all other values → `"Unknown"`.
-Non-binary values, `NA`, and any future Genderize.io API additions are
-all mapped to `"Unknown"` without a warning.
+The `gender_std` column is produced by a binary lookup applied
+case-insensitively after whitespace trimming:
+
+|                                                     |                  |
+|-----------------------------------------------------|------------------|
+| **Input value**                                     | **`gender_std`** |
+| `"male"`, `"m"`, `"Male"`, `"M"`                    | `"Male"`         |
+| `"female"`, `"f"`, `"Female"`, `"F"`                | `"Female"`       |
+| `NA`                                                | `"Unknown"`      |
+| `""`, `"unknown"`, `"non-binary"`, any other string | `"Unknown"`      |
+
+Non-binary values and any future Genderize.io API additions are all
+mapped to `"Unknown"` silently. Before calling this function, inspect
+`table(data[[gender_col]], useNA = "always")` to check for unexpected
+values that will be bucketed into `"Unknown"`.
 
 ## See also
+
+[`mysterycall_genderize()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_genderize.md)
+for the upstream API call that produces the raw `gender` column;
+[`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
+to validate data quality before processing.
 
 Other data management:
 [`mysterycall_check_duplicates()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_check_duplicates.md),

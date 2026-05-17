@@ -72,12 +72,33 @@ A data frame with latitude and longitude columns added.
 
 Geocoding requires the `ggmap` package (listed in `Suggests`, not
 `Imports`) and a Google Maps Platform API key with the **Geocoding API**
-enabled. If `ggmap` is not installed the function stops immediately with
-an install message. An invalid or expired key is only detected at the
-first geocoding request — run
+enabled. Steps to obtain a key:
+
+1.  Create a project at <https://console.cloud.google.com/>.
+
+2.  Enable the **Geocoding API** under APIs & Services → Library.
+
+3.  Create a key under APIs & Services → Credentials.
+
+4.  Enable **billing** on the project (required even for free-tier
+    usage; Google provides a \$200/month credit that covers ~40,000
+    geocodes).
+
+Common errors and remedies:
+
+|                       |                                           |
+|-----------------------|-------------------------------------------|
+| **Error message**     | **Cause / fix**                           |
+| `"ggmap is required"` | Run `install.packages("ggmap")`.          |
+| `"REQUEST_DENIED"`    | Geocoding API not enabled for the key.    |
+| `"OVER_QUERY_LIMIT"`  | Daily free quota (40,000 calls) exceeded. |
+| `"INVALID_REQUEST"`   | Malformed address string in the data.     |
+
+An invalid or expired key is only detected at the first geocoding
+request, not at function entry. Run
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
-with `check_apis = TRUE` to validate the key before starting a long
-workflow.
+with `check_apis = TRUE` before a long workflow to catch key problems
+early.
 
 ## See also
 

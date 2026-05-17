@@ -38,8 +38,20 @@ of 10:
 
 - Required column is not character or factor type: −0.5 points
 
-Final score = max(0, 1 − penalties / 10). The 0.70 and 0.80 thresholds
-used by
+Final score = max(0, 1 − penalties / 10).
+
+Worked examples for a 1,000-row physician roster with
+`required_columns = c("first", "last")`:
+
+- All names present, \< 10\\
+
+- 30\\
+
+- 60\\
+
+- Both columns \> 50\\
+
+The 0.70 and 0.80 thresholds in
 [`mysterycall_preflight_check()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_preflight_check.md)
 were chosen to catch severely incomplete data while tolerating modest
 missingness in large rosters.

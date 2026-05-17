@@ -10,8 +10,9 @@ containing addresses and change them to latitude and longitude.
 #### Installation
 
 Before you can harness the power of the `mysterycall_search_by_taxonomy`
-function, it is essential to ensure that you have the `tyler` package
-installed. You can effortlessly install it using the following command:
+function, it is essential to ensure that you have the `mysterycall`
+package installed. You can effortlessly install it using the following
+command:
 
 ``` r
 
@@ -101,99 +102,124 @@ limitations associated with geocoding solely based on zip codes:
 
 ### Step 2: Prepare Your Data
 
-You can provide your data as either a dataframe or a CSV file in the
-argument `input_data`. Under the hood
-[`ggmap::geocode`](https://rdrr.io/pkg/ggmap/man/geocode.html) is
-accessing a Google API.
-[`ggmap::geocode`](https://rdrr.io/pkg/ggmap/man/geocode.html) is the
-program AHRQ uses.
+[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
+accepts a CSV file path. Under the hood it calls the Google Maps
+Geocoding API via
+[`ggmap::geocode()`](https://rdrr.io/pkg/ggmap/man/geocode.html) — the
+same service AHRQ uses for practice-location geocoding. You will need a
+Google Maps API key with the Geocoding API enabled; set it in your
+`.Renviron` file:
 
-- If your data is in a CSV file, pass the file path as the input_data
-  parameter.
+    GOOGLE_MAPS_API_KEY=AIza...
+
+**Deduplicate addresses before geocoding.** If 300 providers share 150
+unique practice addresses, geocode the 150 unique addresses and join
+back — this halves your API usage and cost.
 
 ``` r
 
-output_data <- mysterycall_geocode(
-    file_path ="address_for_geocoding.csv",
-    google_maps_api_key = "123",
-    output_file_path = "data/geocoded_unique_addresses.csv")
+roster <- readr::read_csv("providers.csv")
+
+# Deduplicate: geocode each unique address once
+unique_addresses <- roster |>
+  dplyr::distinct(address, .keep_all = FALSE)
+
+readr::write_csv(unique_addresses, "data/unique_addresses.csv")
+
+geocoded <- mysterycall_geocode(
+  file_path           = "data/unique_addresses.csv",
+  google_maps_api_key = Sys.getenv("GOOGLE_MAPS_API_KEY"),
+  output_file_path    = "data/geocoded_unique_addresses.csv"
+)
 ```
 
-- Sometimes the data needs to have separate `lat` and `long` columns.
-  This code can do that:
+The output CSV adds `lon` and `lat` columns (decimal degrees, WGS84)
+plus a `geocode_status` column (`"OK"`, `"ZERO_RESULTS"`, or
+`"REQUEST_DENIED"`). Always inspect the status column before proceeding:
 
-&nbsp;
+``` r
 
-    geocoded_data1 <- geocoded_data %>%
-            dplyr::mutate(lat = sf::st_coordinates(.)[, "Y"],
-                   long = sf::st_coordinates(.)[, "X"])
+table(geocoded$geocode_status)
+#> OK            ZERO_RESULTS
+#> 147           3
 
-- How do you match the `geocoded_data` with the original dataframe? You
-  can use the `postmastr` package that allows the addresses in both
-  dataframes to be parsed into house number, street, state, etc. Once in
-  their individual parts you can do a join together. This seems janky
-  af.
+# Rows with ZERO_RESULTS need manual address correction
+failed <- geocoded[geocoded$geocode_status != "OK", ]
+```
 
-- postmastr’s functionality rests on an order of operations that must be
-  followed to ensure correct parsing:
+### Step 3: Extract lat / long and rejoin to the full roster
 
-- prep
+The geocoded result has one row per unique address. Rejoin to the full
+provider roster with
+[`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
+so every provider row gets coordinates, and so any address-matching
+failures are visible rather than silent.
 
-- postal code
+``` r
 
-- state
+# Rename output columns to match the isochrone workflow expectation
+geocoded_clean <- geocoded |>
+  dplyr::filter(geocode_status == "OK") |>
+  dplyr::rename(lat = lat, long = lon) |>
+  dplyr::select(address, lat, long)
 
-- city
+roster_geocoded <- mysterycall_safe_left_join(
+  left         = roster,
+  right        = geocoded_clean,
+  by           = "address",
+  label_left   = "provider_roster",
+  label_right  = "geocoded_addresses",
+  min_coverage = 0.97   # flag if > 3 % of providers have no coordinates
+)
+```
 
-- unit
+### Step 4: Extract coordinate columns when needed
 
-- house number
+Some downstream functions
+(e.g. [`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md))
+expect separate numeric `lat` and `long` columns rather than an `sf`
+geometry column. If you are working with an `sf` object, extract
+coordinates with:
 
-- ranged house number
+``` r
 
-- fractional house number
+roster_geocoded <- roster_geocoded |>
+  dplyr::mutate(
+    lat  = sf::st_coordinates(.)[, "Y"],
+    long = sf::st_coordinates(.)[, "X"]
+  )
+```
 
-- house suffix
+### Common address formatting issues
 
-- street directionals
+Google’s geocoder is tolerant but some patterns fail consistently:
 
-- street suffix
+| Problem | Example | Fix |
+|----|----|----|
+| Suite/unit in wrong position | `"Suite 200, 123 Main St"` | Move to end: `"123 Main St Suite 200"` |
+| Missing state | `"123 Main St, Denver"` | Append state: `"123 Main St, Denver, CO"` |
+| PO Box | `"PO Box 1234, Denver CO"` | Use physical address instead |
+| Abbreviation mismatch | `"St." vs "Street"` | Standardize before geocoding |
+| ZIP+4 format | `"80202-1234"` | Truncate to 5-digit ZIP |
 
-- street name
-
-- reconstruct
-
-&nbsp;
-
-    # install.packages("remotes")
-          # remotes::install_github("slu-openGIS/postmastr")
-          library(postmastr)
-          abc <- read_csv(csv_file)
-          abc %>% pm_identify(var = "address") -> sushi2
-          sushi2_min <- pm_prep(sushi2, var = "address", type = "street")
-          pm_postal_all(sushi2_min)
-          sushi2_min <- pm_postal_parse(sushi2_min)
-          moDict <- pm_dictionary(locale = "us", type = "state", case = c("title", "upper"))
-          moDict
-          pm_state_all(sushi2_min, dictionary = moDict) #Checks to make sure that all states have matches
-          sushi2_min <- pm_state_parse(sushi2_min, dictionary = moDict)
-          pm_house_all(sushi2_min)
-          sushi2_min <- pm_house_parse(sushi2_min)
-          sushi2_min <- pm_streetDir_parse(sushi2_min)
-          sushi2_min <- pm_streetSuf_parse(sushi2_min)
-          sushi2_min <- pm_street_parse(sushi2_min, ordinal = TRUE, drop = TRUE)
-          sushi2_parsed <- pm_replace(sushi2_min, source = sushi2)
-          readr::write_csv(sushi2_parsed, "~/Dropbox (Personal)/workforce/Master_References/NPPES/NPPES_November_filtered_data_address_parsed.csv")
+**Do not geocode from ZIP codes alone.** ZIP-code centroids place
+practices at the post-office, not the clinic — a meaningful spatial
+error that compounds in the isochrone step.
 
 ## Conclusion
 
-The `mysterycall_validate_npi` function is a handy tool for cleaning and
-validating datasets with NPI numbers. By following the steps outlined in
-this vignette, you can ensure that your data contains only valid NPIs
-for further analysis and processing.
+[`mysterycall_geocode()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_geocode.md)
+converts raw practice addresses into latitude/longitude coordinates
+suitable for mapping, drive-time modeling, and spatial joins. Combine it
+with `mysterycall_search_by_taxonomy()` to build a fully enriched
+provider roster — from NPI retrieval through geocoded locations — in a
+single reproducible pipeline. Next, pass the geocoded file into
+[`create_isochrones_for_dataframe()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)
+to build drive-time polygons (see
+[`vignette("create_isochrones", package = "mysterycall")`](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md)).
 
 ## Features and bugs
 
-If you have ideas for other features that would make name handling
-easier, or find a bug, the best approach is to either report it or add
-it!
+If you have ideas for other features that would make geocoding easier,
+or find a bug, the best approach is to report it at the package issue
+tracker.

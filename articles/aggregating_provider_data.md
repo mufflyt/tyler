@@ -34,20 +34,31 @@ roster <- mysterycall_search_by_taxonomy(
 ### Add clinician enrichment
 
 Once you have a validated roster, enrich it with clinician-level
-attributes such as demographics or training metadata. In the current
-API, the exported function for this step is
-[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md).
+attributes such as demographics or training metadata. Use
+[`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
+rather than a bare
+[`dplyr::left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
+— it verifies that the enrichment table is unique on `npi` and that at
+least 90 % of roster rows find a match, so silent data-loss from
+mis-typed join keys surfaces immediately.
 
 ``` r
 
 clinician_data <- mysterycall_get_clinician_data(roster)
 
-analysis_base <- roster |>
-  dplyr::left_join(
-    clinician_data,
-    by = "npi",
-    suffix = c("_roster", "_clinician")
-  )
+# Assert the enrichment table is unique before joining
+mysterycall_assert_unique_keys(clinician_data, key_cols = "npi",
+                                label = "cms_clinician_data")
+
+analysis_base <- mysterycall_safe_left_join(
+  left          = roster,
+  right         = clinician_data,
+  by            = "npi",
+  label_left    = "roster",
+  label_right   = "cms_clinician_data",
+  min_coverage  = 0.90,
+  suffix        = c("_roster", "_clinician")
+)
 ```
 
 ### Keep site-level geography separate from clinician-level attributes
@@ -63,33 +74,44 @@ site_table <- analysis_base |>
   dplyr::distinct(npi, address, .keep_all = TRUE)
 ```
 
-After geocoding and travel-time modelling, join the geography back onto
-the analysis table using the columns you preserved upstream.
+After geocoding and travel-time modelling, join the geography back. The
+safe join warns if site addresses don’t round-trip cleanly — a common
+problem when the geocoder normalises whitespace or abbreviations
+differently from the original roster.
 
 ``` r
 
-analysis_with_geo <- analysis_base |>
-  dplyr::left_join(
-    site_geography,
-    by = c("npi", "address")
-  )
+analysis_with_geo <- mysterycall_safe_left_join(
+  left         = analysis_base,
+  right        = site_geography,
+  by           = c("npi", "address"),
+  label_left   = "analysis_base",
+  label_right  = "site_geography",
+  min_coverage = 0.95
+)
 ```
 
 ### Join call outcomes late
 
 Operational call files often contain repeated contacts, reschedules, or
 payer scenarios. It is usually easier to clean those files first and
-join them late in the pipeline.
+join them late in the pipeline. Set `expect_unique_right = FALSE` when
+the Phase 2 file has one row per call attempt rather than one row per
+provider.
 
 ``` r
 
 phase2_clean <- clean_phase_2_data("phase2_results.xlsx")
 
-analysis_ready <- analysis_with_geo |>
-  dplyr::left_join(
-    phase2_clean,
-    by = c("npi", "name")
-  )
+analysis_ready <- mysterycall_safe_left_join(
+  left               = analysis_with_geo,
+  right              = phase2_clean,
+  by                 = c("npi", "name"),
+  label_left         = "analysis_with_geo",
+  label_right        = "phase2_outcomes",
+  expect_unique_right = FALSE,
+  min_coverage       = NULL   # not all providers are called in every wave
+)
 ```
 
 ### Example aggregation patterns
@@ -155,7 +177,7 @@ percentages will be hard to interpret.
 
 ## Next step
 
-Once the unified table exists, the remaining tyler helpers for
+Once the unified table exists, the remaining mysterycall helpers for
 manuscript outputs are mostly summarization and visualization:
 [`table_generate_overall()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md),
 [`table_calculate_percentages()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md),

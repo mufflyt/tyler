@@ -635,6 +635,39 @@ Choropleth maps of appointment acceptance rates by state.
 - [`mysterycall_get_acs_women_18_90()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_acs_women_18_90.md)
   : Get ACS Female Population (Ages 18-90) by Census Tract
 
+## Data Quality and Validation
+
+Validate phone numbers against NANP rules and state geography; parse,
+validate, and reformat free-text physician name strings; safe join
+wrappers with coverage enforcement and right-side uniqueness guards.
+
+- [`phone_validation`](https://mufflyt.github.io/mysterycall/reference/phone_validation.md)
+  : Validate North-American phone numbers
+- [`mysterycall_validate_phone()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_phone.md)
+  : Validate North-American (NANP) phone number strings
+- [`physician_name_parsing`](https://mufflyt.github.io/mysterycall/reference/physician_name_parsing.md)
+  : Parse and validate physician names
+- [`mysterycall_parse_physician_name()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_physician_name.md)
+  : Parse physician names into structured components
+- [`mysterycall_validate_parsed_names()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_parsed_names.md)
+  : Validate parsed physician names for quality issues
+- [`mysterycall_format_physician_name()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_physician_name.md)
+  : Format parsed physician name components into a display string
+- [`mysterycall_test_name_parser()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_test_name_parser.md)
+  : Run the built-in name-parser accuracy suite
+- [`join_safety`](https://mufflyt.github.io/mysterycall/reference/join_safety.md)
+  : Safe join wrappers with coverage validation
+- [`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
+  : Safe left join with coverage validation
+- [`mysterycall_safe_inner_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_inner_join.md)
+  : Safe inner join with cardinality checking
+- [`mysterycall_safe_semi_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_semi_join.md)
+  : Safe semi join with keep-rate enforcement
+- [`mysterycall_safe_anti_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_anti_join.md)
+  : Safe anti join with over-exclusion guard
+- [`mysterycall_assert_unique_keys()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assert_unique_keys.md)
+  : Assert that join key columns are unique
+
 ## Data Cleaning and Processing
 
 Clean Phase 1/2 data, rename columns, recode variables, and impute
@@ -814,6 +847,8 @@ stacked bars.
 - [`mysterycall_plot_inclexcl()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_inclexcl.md)
   : CONSORT-style inclusion/exclusion flowchart for mystery-caller
   studies
+- [`mysterycall_plot_source_venn()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_plot_source_venn.md)
+  : Three-circle Venn diagram for data-source overlap
 - [`mysterycall_flowchart()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_flowchart.md)
   : CONSORT-style inclusion/exclusion flowchart
 - [`mysterycall_save_plot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_save_plot.md)
@@ -1227,6 +1262,14 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
 - [Pipeline
   Guarantees](https://mufflyt.github.io/mysterycall/articles/pipeline-guarantees.md):
 
+- [End-to-End Mystery-Caller Workflow
+  Orchestration](https://mufflyt.github.io/mysterycall/articles/workflow-orchestration.md):
+
+  Run the complete mystery-caller pipeline in one call with
+  mysterycall_run_workflow(), or step through Phase 1 cleaning,
+  caller-list splitting, Phase 2 cleaning, quality-check export, and
+  coverage monitoring individually.
+
 ### Data Collection
 
 - [Search and Process NPI
@@ -1234,6 +1277,15 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
 
   Search the NPI registry from clinician first and last names using the
   current mysterycall interface.
+
+### Data Quality
+
+- [Data Quality: Phone Validation, Name Parsing, and Safe
+  Joins](https://mufflyt.github.io/mysterycall/articles/data-quality.md):
+
+  How to validate NANP phone numbers, parse physician names into
+  structured components, and perform audited joins that guard against
+  row duplication and coverage loss.
 
 ### Geospatial
 
@@ -1256,6 +1308,29 @@ guidelines (TIFF/PDF/PNG/CSV export, Okabe-Ito palette, Albers CRS).
 
   A wrapper on the amazing censusapi package to get US Census Bureau
   data for women only.
+
+- [Provider Classification and Demographic
+  Enrichment](https://mufflyt.github.io/mysterycall/articles/provider-classification.md):
+
+  Classify providers by practice setting, urban/rural geography, census
+  region, and specialty. Impute physician age from graduation year.
+  Backfill gender from the Genderize.io API. Prepare a Table 1-ready
+  data frame.
+
+### Analysis and Reporting
+
+- [Statistical Analysis of Mystery-Caller
+  Data](https://mufflyt.github.io/mysterycall/articles/statistical-analysis.md):
+
+  Poisson mixed-effects regression for wait-time analysis, disparity
+  metrics across insurance types, bootstrap confidence intervals, and
+  multiple- comparison adjustment for mystery-caller studies.
+
+- [Generating Publication
+  Tables](https://mufflyt.github.io/mysterycall/articles/table-generation.md):
+
+  Build Table 1 (baseline characteristics), percentage tables, disparity
+  summaries, and export-ready PDFs from mystery-caller study data.
 
 ### News
 

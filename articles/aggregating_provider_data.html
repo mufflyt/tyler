@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Aggregating Provider Data for Analysis • mysterycall</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -49,9 +54,13 @@
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
+    <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
+    <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -60,6 +69,11 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="../articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
+    <li><a class="dropdown-item" href="../articles/provider-classification.html">Provider Classification and Demographic Enrichment</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
+    <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -129,18 +143,28 @@ files.</p>
 <h3 id="add-clinician-enrichment">Add clinician enrichment<a class="anchor" aria-label="anchor" href="#add-clinician-enrichment"></a>
 </h3>
 <p>Once you have a validated roster, enrich it with clinician-level
-attributes such as demographics or training metadata. In the current
-API, the exported function for this step is
-<code><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data()</a></code>.</p>
+attributes such as demographics or training metadata. Use
+<code><a href="../reference/mysterycall_safe_left_join.html">mysterycall_safe_left_join()</a></code> rather than a bare
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code> — it verifies that the enrichment table
+is unique on <code>npi</code> and that at least 90 % of roster rows find
+a match, so silent data-loss from mis-typed join keys surfaces
+immediately.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clinician_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data</a></span><span class="op">(</span><span class="va">roster</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">analysis_base</span> <span class="op">&lt;-</span> <span class="va">roster</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
-<span>    <span class="va">clinician_data</span>,</span>
-<span>    by <span class="op">=</span> <span class="st">"npi"</span>,</span>
-<span>    suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_roster"</span>, <span class="st">"_clinician"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Assert the enrichment table is unique before joining</span></span>
+<span><span class="fu"><a href="../reference/mysterycall_assert_unique_keys.html">mysterycall_assert_unique_keys</a></span><span class="op">(</span><span class="va">clinician_data</span>, key_cols <span class="op">=</span> <span class="st">"npi"</span>,</span>
+<span>                                label <span class="op">=</span> <span class="st">"cms_clinician_data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">analysis_base</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_safe_left_join.html">mysterycall_safe_left_join</a></span><span class="op">(</span></span>
+<span>  left          <span class="op">=</span> <span class="va">roster</span>,</span>
+<span>  right         <span class="op">=</span> <span class="va">clinician_data</span>,</span>
+<span>  by            <span class="op">=</span> <span class="st">"npi"</span>,</span>
+<span>  label_left    <span class="op">=</span> <span class="st">"roster"</span>,</span>
+<span>  label_right   <span class="op">=</span> <span class="st">"cms_clinician_data"</span>,</span>
+<span>  min_coverage  <span class="op">=</span> <span class="fl">0.90</span>,</span>
+<span>  suffix        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"_roster"</span>, <span class="st">"_clinician"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="keep-site-level-geography-separate-from-clinician-level-attributes">Keep site-level geography separate from clinician-level
@@ -153,29 +177,40 @@ the coordinates back.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">site_table</span> <span class="op">&lt;-</span> <span class="va">analysis_base</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">npi</span>, <span class="va">address</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>After geocoding and travel-time modelling, join the geography back
-onto the analysis table using the columns you preserved upstream.</p>
+<p>After geocoding and travel-time modelling, join the geography back.
+The safe join warns if site addresses don’t round-trip cleanly — a
+common problem when the geocoder normalises whitespace or abbreviations
+differently from the original roster.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">analysis_with_geo</span> <span class="op">&lt;-</span> <span class="va">analysis_base</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
-<span>    <span class="va">site_geography</span>,</span>
-<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"npi"</span>, <span class="st">"address"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">analysis_with_geo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_safe_left_join.html">mysterycall_safe_left_join</a></span><span class="op">(</span></span>
+<span>  left         <span class="op">=</span> <span class="va">analysis_base</span>,</span>
+<span>  right        <span class="op">=</span> <span class="va">site_geography</span>,</span>
+<span>  by           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"npi"</span>, <span class="st">"address"</span><span class="op">)</span>,</span>
+<span>  label_left   <span class="op">=</span> <span class="st">"analysis_base"</span>,</span>
+<span>  label_right  <span class="op">=</span> <span class="st">"site_geography"</span>,</span>
+<span>  min_coverage <span class="op">=</span> <span class="fl">0.95</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="join-call-outcomes-late">Join call outcomes late<a class="anchor" aria-label="anchor" href="#join-call-outcomes-late"></a>
 </h3>
 <p>Operational call files often contain repeated contacts, reschedules,
 or payer scenarios. It is usually easier to clean those files first and
-join them late in the pipeline.</p>
+join them late in the pipeline. Set
+<code>expect_unique_right = FALSE</code> when the Phase 2 file has one
+row per call attempt rather than one row per provider.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phase2_clean</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall-deprecated.html">clean_phase_2_data</a></span><span class="op">(</span><span class="st">"phase2_results.xlsx"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">analysis_ready</span> <span class="op">&lt;-</span> <span class="va">analysis_with_geo</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
-<span>    <span class="va">phase2_clean</span>,</span>
-<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"npi"</span>, <span class="st">"name"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<span><span class="va">analysis_ready</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_safe_left_join.html">mysterycall_safe_left_join</a></span><span class="op">(</span></span>
+<span>  left               <span class="op">=</span> <span class="va">analysis_with_geo</span>,</span>
+<span>  right              <span class="op">=</span> <span class="va">phase2_clean</span>,</span>
+<span>  by                 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"npi"</span>, <span class="st">"name"</span><span class="op">)</span>,</span>
+<span>  label_left         <span class="op">=</span> <span class="st">"analysis_with_geo"</span>,</span>
+<span>  label_right        <span class="op">=</span> <span class="st">"phase2_outcomes"</span>,</span>
+<span>  expect_unique_right <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  min_coverage       <span class="op">=</span> <span class="cn">NULL</span>   <span class="co"># not all providers are called in every wave</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-aggregation-patterns">Example aggregation patterns<a class="anchor" aria-label="anchor" href="#example-aggregation-patterns"></a>
@@ -246,7 +281,7 @@ counts.</li>
 <div class="section level2">
 <h2 id="next-step">Next step<a class="anchor" aria-label="anchor" href="#next-step"></a>
 </h2>
-<p>Once the unified table exists, the remaining tyler helpers for
+<p>Once the unified table exists, the remaining mysterycall helpers for
 manuscript outputs are mostly summarization and visualization:
 <code><a href="../reference/mysterycall-deprecated.html">table_generate_overall()</a></code>,
 <code><a href="../reference/mysterycall-deprecated.html">table_calculate_percentages()</a></code>, and the mapping functions

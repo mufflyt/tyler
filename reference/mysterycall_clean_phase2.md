@@ -50,10 +50,21 @@ A data frame with processed data.
 
 All input column names are converted to **lowercase snake\\case** by
 [`janitor::clean_names()`](https://sfirke.github.io/janitor/reference/clean_names.html)
-before `required_strings` pattern matching. For example,
-`"PhysicianInfo"` becomes `"physician_info"` and `"NPI Registry"`
-becomes `"npi_registry"`. Pass `required_strings` and `standard_names`
-in snake\\case to match the transformed names.
+**unconditionally** before `required_strings` pattern matching.
+Transformation cannot be disabled. Common examples:
+
+|                            |                                        |
+|----------------------------|----------------------------------------|
+| **Input column name**      | **After `clean_names()`**              |
+| `"Physician Information"`  | `"physician_information"`              |
+| `"NPI Number"`             | `"npi_number"`                         |
+| `"Q1-2023 Revenue"`        | `"q1_2023_revenue"`                    |
+| `"able_to_contact_office"` | `"able_to_contact_office"` (unchanged) |
+| `"ContactOfficeYN"`        | `"contact_office_yn"`                  |
+
+To preview the exact names your data will have, run
+`names(janitor::clean_names(your_data))` before calling this function,
+then write `required_strings` to match those transformed names.
 
 ## Output file timestamps
 
@@ -61,7 +72,11 @@ Output filenames include a timestamp from
 [`Sys.time()`](https://rdrr.io/r/base/Sys.time.html), which uses the
 **local system timezone** (not UTC). Filenames produced on systems in
 different timezones will reflect different local times for the same
-wall-clock moment.
+wall-clock moment. To force UTC filenames, wrap the call:
+
+    withr::with_timezone("UTC", {
+      mysterycall_clean_phase2(data, required_strings, standard_names)
+    })
 
 ## See also
 

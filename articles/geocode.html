@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Geocoding • mysterycall</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -49,9 +54,13 @@
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
+    <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
+    <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -60,6 +69,11 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="../articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
+    <li><a class="dropdown-item" href="../articles/provider-classification.html">Provider Classification and Demographic Enrichment</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
+    <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -108,8 +122,8 @@ longitude.</p>
 </h4>
 <p>Before you can harness the power of the
 <code>mysterycall_search_by_taxonomy</code> function, it is essential to
-ensure that you have the <code>tyler</code> package installed. You can
-effortlessly install it using the following command:</p>
+ensure that you have the <code>mysterycall</code> package installed. You
+can effortlessly install it using the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -218,83 +232,151 @@ particular location within a zip code.</p></li>
 <div class="section level3">
 <h3 id="step-2-prepare-your-data">Step 2: Prepare Your Data<a class="anchor" aria-label="anchor" href="#step-2-prepare-your-data"></a>
 </h3>
-<p>You can provide your data as either a dataframe or a CSV file in the
-argument <code>input_data</code>. Under the hood
-<code><a href="https://rdrr.io/pkg/ggmap/man/geocode.html" class="external-link">ggmap::geocode</a></code> is accessing a Google API.
-<code><a href="https://rdrr.io/pkg/ggmap/man/geocode.html" class="external-link">ggmap::geocode</a></code> is the program AHRQ uses.</p>
-<ul>
-<li>If your data is in a CSV file, pass the file path as the input_data
-parameter.</li>
-</ul>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">output_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_geocode.html">mysterycall_geocode</a></span><span class="op">(</span></span>
-<span>    file_path <span class="op">=</span><span class="st">"address_for_geocoding.csv"</span>,</span>
-<span>    google_maps_api_key <span class="op">=</span> <span class="st">"123"</span>,</span>
-<span>    output_file_path <span class="op">=</span> <span class="st">"data/geocoded_unique_addresses.csv"</span><span class="op">)</span></span></code></pre></div>
-<ul>
-<li>Sometimes the data needs to have separate <code>lat</code> and
-<code>long</code> columns. This code can do that:</li>
-</ul>
-<pre><code><span><span class="va">geocoded_data1</span> <span class="op">&lt;-</span> <span class="va">geocoded_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>lat <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">[</span>, <span class="st">"Y"</span><span class="op">]</span>,</span>
-<span>               long <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">[</span>, <span class="st">"X"</span><span class="op">]</span><span class="op">)</span></span></code></pre>
-<ul>
-<li><p>How do you match the <code>geocoded_data</code> with the original
-dataframe? You can use the <code>postmastr</code> package that allows
-the addresses in both dataframes to be parsed into house number, street,
-state, etc. Once in their individual parts you can do a join together.
-This seems janky af.</p></li>
-<li><p>postmastr’s functionality rests on an order of operations that
-must be followed to ensure correct parsing:</p></li>
-<li><p>prep</p></li>
-<li><p>postal code</p></li>
-<li><p>state</p></li>
-<li><p>city</p></li>
-<li><p>unit</p></li>
-<li><p>house number</p></li>
-<li><p>ranged house number</p></li>
-<li><p>fractional house number</p></li>
-<li><p>house suffix</p></li>
-<li><p>street directionals</p></li>
-<li><p>street suffix</p></li>
-<li><p>street name</p></li>
-<li><p>reconstruct</p></li>
-</ul>
-<pre><code><span><span class="co"># install.packages("remotes")</span></span>
-<span>      <span class="co"># remotes::install_github("slu-openGIS/postmastr")</span></span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">postmastr</span><span class="op">)</span></span>
-<span>      <span class="va">abc</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span><span class="va">csv_file</span><span class="op">)</span></span>
-<span>      <span class="va">abc</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">pm_identify</span><span class="op">(</span>var <span class="op">=</span> <span class="st">"address"</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">sushi2</span></span>
-<span>      <span class="va">sushi2_min</span> <span class="op">&lt;-</span> <span class="fu">pm_prep</span><span class="op">(</span><span class="va">sushi2</span>, var <span class="op">=</span> <span class="st">"address"</span>, type <span class="op">=</span> <span class="st">"street"</span><span class="op">)</span></span>
-<span>      <span class="fu">pm_postal_all</span><span class="op">(</span><span class="va">sushi2_min</span><span class="op">)</span></span>
-<span>      <span class="va">sushi2_min</span> <span class="op">&lt;-</span> <span class="fu">pm_postal_parse</span><span class="op">(</span><span class="va">sushi2_min</span><span class="op">)</span></span>
-<span>      <span class="va">moDict</span> <span class="op">&lt;-</span> <span class="fu">pm_dictionary</span><span class="op">(</span>locale <span class="op">=</span> <span class="st">"us"</span>, type <span class="op">=</span> <span class="st">"state"</span>, case <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"upper"</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="va">moDict</span></span>
-<span>      <span class="fu">pm_state_all</span><span class="op">(</span><span class="va">sushi2_min</span>, dictionary <span class="op">=</span> <span class="va">moDict</span><span class="op">)</span> <span class="co">#Checks to make sure that all states have matches</span></span>
-<span>      <span class="va">sushi2_min</span> <span class="op">&lt;-</span> <span class="fu">pm_state_parse</span><span class="op">(</span><span class="va">sushi2_min</span>, dictionary <span class="op">=</span> <span class="va">moDict</span><span class="op">)</span></span>
-<span>      <span class="fu">pm_house_all</span><span class="op">(</span><span class="va">sushi2_min</span><span class="op">)</span></span>
-<span>      <span class="va">sushi2_min</span> <span class="op">&lt;-</span> <span class="fu">pm_house_parse</span><span class="op">(</span><span class="va">sushi2_min</span><span class="op">)</span></span>
-<span>      <span class="va">sushi2_min</span> <span class="op">&lt;-</span> <span class="fu">pm_streetDir_parse</span><span class="op">(</span><span class="va">sushi2_min</span><span class="op">)</span></span>
-<span>      <span class="va">sushi2_min</span> <span class="op">&lt;-</span> <span class="fu">pm_streetSuf_parse</span><span class="op">(</span><span class="va">sushi2_min</span><span class="op">)</span></span>
-<span>      <span class="va">sushi2_min</span> <span class="op">&lt;-</span> <span class="fu">pm_street_parse</span><span class="op">(</span><span class="va">sushi2_min</span>, ordinal <span class="op">=</span> <span class="cn">TRUE</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>      <span class="va">sushi2_parsed</span> <span class="op">&lt;-</span> <span class="fu">pm_replace</span><span class="op">(</span><span class="va">sushi2_min</span>, source <span class="op">=</span> <span class="va">sushi2</span><span class="op">)</span></span>
-<span>      <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="va">sushi2_parsed</span>, <span class="st">"~/Dropbox (Personal)/workforce/Master_References/NPPES/NPPES_November_filtered_data_address_parsed.csv"</span><span class="op">)</span></span></code></pre>
+<p><code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code> accepts a CSV file path. Under the
+hood it calls the Google Maps Geocoding API via
+<code><a href="https://rdrr.io/pkg/ggmap/man/geocode.html" class="external-link">ggmap::geocode()</a></code> — the same service AHRQ uses for
+practice-location geocoding. You will need a Google Maps API key with
+the Geocoding API enabled; set it in your <code>.Renviron</code>
+file:</p>
+<pre><code><span><span class="va">GOOGLE_MAPS_API_KEY</span><span class="op">=</span><span class="va">AIza...</span></span></code></pre>
+<p><strong>Deduplicate addresses before geocoding.</strong> If 300
+providers share 150 unique practice addresses, geocode the 150 unique
+addresses and join back — this halves your API usage and cost.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">roster</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"providers.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Deduplicate: geocode each unique address once</span></span>
+<span><span class="va">unique_addresses</span> <span class="op">&lt;-</span> <span class="va">roster</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">address</span>, .keep_all <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="va">unique_addresses</span>, <span class="st">"data/unique_addresses.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">geocoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_geocode.html">mysterycall_geocode</a></span><span class="op">(</span></span>
+<span>  file_path           <span class="op">=</span> <span class="st">"data/unique_addresses.csv"</span>,</span>
+<span>  google_maps_api_key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_MAPS_API_KEY"</span><span class="op">)</span>,</span>
+<span>  output_file_path    <span class="op">=</span> <span class="st">"data/geocoded_unique_addresses.csv"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The output CSV adds <code>lon</code> and <code>lat</code> columns
+(decimal degrees, WGS84) plus a <code>geocode_status</code> column
+(<code>"OK"</code>, <code>"ZERO_RESULTS"</code>, or
+<code>"REQUEST_DENIED"</code>). Always inspect the status column before
+proceeding:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">geocoded</span><span class="op">$</span><span class="va">geocode_status</span><span class="op">)</span></span>
+<span><span class="co">#&gt; OK            ZERO_RESULTS</span></span>
+<span><span class="co">#&gt; 147           3</span></span>
+<span></span>
+<span><span class="co"># Rows with ZERO_RESULTS need manual address correction</span></span>
+<span><span class="va">failed</span> <span class="op">&lt;-</span> <span class="va">geocoded</span><span class="op">[</span><span class="va">geocoded</span><span class="op">$</span><span class="va">geocode_status</span> <span class="op">!=</span> <span class="st">"OK"</span>, <span class="op">]</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="step-3-extract-lat-long-and-rejoin-to-the-full-roster">Step 3: Extract lat / long and rejoin to the full roster<a class="anchor" aria-label="anchor" href="#step-3-extract-lat-long-and-rejoin-to-the-full-roster"></a>
+</h3>
+<p>The geocoded result has one row per unique address. Rejoin to the
+full provider roster with <code><a href="../reference/mysterycall_safe_left_join.html">mysterycall_safe_left_join()</a></code> so
+every provider row gets coordinates, and so any address-matching
+failures are visible rather than silent.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Rename output columns to match the isochrone workflow expectation</span></span>
+<span><span class="va">geocoded_clean</span> <span class="op">&lt;-</span> <span class="va">geocoded</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">geocode_status</span> <span class="op">==</span> <span class="st">"OK"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>lat <span class="op">=</span> <span class="va">lat</span>, long <span class="op">=</span> <span class="va">lon</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">address</span>, <span class="va">lat</span>, <span class="va">long</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">roster_geocoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_safe_left_join.html">mysterycall_safe_left_join</a></span><span class="op">(</span></span>
+<span>  left         <span class="op">=</span> <span class="va">roster</span>,</span>
+<span>  right        <span class="op">=</span> <span class="va">geocoded_clean</span>,</span>
+<span>  by           <span class="op">=</span> <span class="st">"address"</span>,</span>
+<span>  label_left   <span class="op">=</span> <span class="st">"provider_roster"</span>,</span>
+<span>  label_right  <span class="op">=</span> <span class="st">"geocoded_addresses"</span>,</span>
+<span>  min_coverage <span class="op">=</span> <span class="fl">0.97</span>   <span class="co"># flag if &gt; 3 % of providers have no coordinates</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="step-4-extract-coordinate-columns-when-needed">Step 4: Extract coordinate columns when needed<a class="anchor" aria-label="anchor" href="#step-4-extract-coordinate-columns-when-needed"></a>
+</h3>
+<p>Some downstream functions
+(e.g. <code><a href="../reference/mysterycall-deprecated.html">create_isochrones_for_dataframe()</a></code>) expect separate
+numeric <code>lat</code> and <code>long</code> columns rather than an
+<code>sf</code> geometry column. If you are working with an
+<code>sf</code> object, extract coordinates with:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">roster_geocoded</span> <span class="op">&lt;-</span> <span class="va">roster_geocoded</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    lat  <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">[</span>, <span class="st">"Y"</span><span class="op">]</span>,</span>
+<span>    long <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">[</span>, <span class="st">"X"</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="common-address-formatting-issues">Common address formatting issues<a class="anchor" aria-label="anchor" href="#common-address-formatting-issues"></a>
+</h3>
+<p>Google’s geocoder is tolerant but some patterns fail
+consistently:</p>
+<table class="table">
+<colgroup>
+<col width="39%">
+<col width="39%">
+<col width="21%">
+</colgroup>
+<thead><tr class="header">
+<th>Problem</th>
+<th>Example</th>
+<th>Fix</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Suite/unit in wrong position</td>
+<td><code>"Suite 200, 123 Main St"</code></td>
+<td>Move to end: <code>"123 Main St Suite 200"</code>
+</td>
+</tr>
+<tr class="even">
+<td>Missing state</td>
+<td><code>"123 Main St, Denver"</code></td>
+<td>Append state: <code>"123 Main St, Denver, CO"</code>
+</td>
+</tr>
+<tr class="odd">
+<td>PO Box</td>
+<td><code>"PO Box 1234, Denver CO"</code></td>
+<td>Use physical address instead</td>
+</tr>
+<tr class="even">
+<td>Abbreviation mismatch</td>
+<td><code>"St." vs "Street"</code></td>
+<td>Standardize before geocoding</td>
+</tr>
+<tr class="odd">
+<td>ZIP+4 format</td>
+<td><code>"80202-1234"</code></td>
+<td>Truncate to 5-digit ZIP</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Do not geocode from ZIP codes alone.</strong> ZIP-code
+centroids place practices at the post-office, not the clinic — a
+meaningful spatial error that compounds in the isochrone step.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>The <code>mysterycall_validate_npi</code> function is a handy tool
-for cleaning and validating datasets with NPI numbers. By following the
-steps outlined in this vignette, you can ensure that your data contains
-only valid NPIs for further analysis and processing.</p>
+<p><code><a href="../reference/mysterycall_geocode.html">mysterycall_geocode()</a></code> converts raw practice addresses
+into latitude/longitude coordinates suitable for mapping, drive-time
+modeling, and spatial joins. Combine it with
+<code>mysterycall_search_by_taxonomy()</code> to build a fully enriched
+provider roster — from NPI retrieval through geocoded locations — in a
+single reproducible pipeline. Next, pass the geocoded file into
+<code><a href="../reference/mysterycall-deprecated.html">create_isochrones_for_dataframe()</a></code> to build drive-time
+polygons (see
+<code><a href="../articles/create_isochrones.html">vignette("create_isochrones", package = "mysterycall")</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="features-and-bugs">Features and bugs<a class="anchor" aria-label="anchor" href="#features-and-bugs"></a>
 </h2>
-<p>If you have ideas for other features that would make name handling
-easier, or find a bug, the best approach is to either report it or add
-it!</p>
+<p>If you have ideas for other features that would make geocoding
+easier, or find a bug, the best approach is to report it at the package
+issue tracker.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

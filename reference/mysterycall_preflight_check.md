@@ -85,9 +85,23 @@ Scores below **0.70** cause this function to stop with an error; scores
 between 0.70 and 0.80 emit a warning. A score below 0.70 typically means
 a required name column has more than 50\\
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md)
-for the full penalty schedule.
+for the full penalty schedule and worked examples.
+
+The thresholds are **not configurable** via parameters. To investigate
+quality issues without stopping, call
+[`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md)
+directly and inspect the returned `$issues` list:
+
+    report <- mysterycall_assess_data_quality(my_data)
+    report$score          # numeric 0–1
+    report$issues         # list of issue records with $severity and $message
 
 ## See also
+
+[`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md)
+for the scoring formula and per-issue details;
+[`mysterycall_estimate_resources()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_estimate_resources.md)
+for runtime and memory projections.
 
 Other utilities: `%>%()`,
 [`mysterycall_assess_data_quality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assess_data_quality.md),

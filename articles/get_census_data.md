@@ -290,7 +290,11 @@ always know which release supplied the estimates. For example:
     # Construct: for=block group:*&in=state:01&in=county:*&in=tract:*
     ###########################################################################
 
-    #output GOES HERE!!!!
+    # The returned list contains one data frame per state FIPS code.
+    # Each data frame has columns: GEOID, NAME, and one column per ACS variable
+    # requested (e.g. B01001_001E for total population).
+    # Combine all states into a single data frame with:
+    #   all_census_data <- dplyr::bind_rows(all_census_data)
 
 ### Step 4: The function will retrieve Census data for all specified states and combine it into a single dataframe, which you can use for further analysis.
 
@@ -352,65 +356,157 @@ always know which release supplied the estimates. For example:
 
 ### Step 5: Join the Data to the Block Groups
 
-The code starts by loading a block group shapefile using the
+Load the block group shapefile with
 [`sf::st_read()`](https://r-spatial.github.io/sf/reference/st_read.html)
-function. The shapefile path should be replaced with the actual file
-path. A left join is performed between the “demographics_bg” dataset and
-the “bg_shape” dataset using
-[`dplyr::left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html).
-The join is based on matching the “`geoid`” column from
-“`demographics_bg`” and the “`GEOID`” column from “`bg_shape`”. Always
-join on the GEOID rather than the human-readable name to avoid
-mismatches across vintages.
+and join it to the demographic table on the 12-character GEOID. Always
+join on GEOID rather than the human-readable `NAME` column, because name
+strings differ across ACS vintages (e.g. county name capitalization
+changes).
 
-    # Load the block group shapefile using sf::st_read() function
-    # Replace "/data/shp/block_group/" with the actual file path to the shapefile
-    bg_shape <- sf::st_read(/data/shp/block_group/") %>%
+Use
+[`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
+to catch GEOID type mismatches (integer vs. character) and to verify
+coverage — every block group in the demographic table should find a
+matching geometry.
 
-      # Select only the GEOID and geometry columns from the shapefile
-      dplyr::select(GEOID, geometry)
+``` r
 
-    # Write the block group shapefile with selected columns to a CSV file
-    # This will create a CSV file with GEOID and geometry information
-    bg_shape %>%
-      readr::write_csv("bg_shape_with_geometry.csv")
+# Load the block group shapefile (replace path with your actual file)
+bg_shape <- sf::st_read("data/shp/block_group/") |>
+  dplyr::select(GEOID, geometry)
 
+# Coerce GEOID to character on both sides before joining
+demographics_bg$geoid <- as.character(demographics_bg$geoid)
+bg_shape$GEOID        <- as.character(bg_shape$GEOID)
 
-    # Ensure the GEOID columns are character for the join
-    demographics_bg$geoid <- as.character(demographics_bg$geoid)
+# Safe join: errors if < 99 % of demographic rows find a geometry match
+bg_with_geometry <- mysterycall_safe_left_join(
+  left         = demographics_bg,
+  right        = bg_shape,
+  by           = c("geoid" = "GEOID"),
+  label_left   = "demographics_bg",
+  label_right  = "block_group_shapefile",
+  min_coverage = 0.99
+)
 
+# Convert the joined data frame to an sf object
+bg_sf <- sf::st_as_sf(bg_with_geometry)
 
-    # Perform a left join between the demographics dataset and the block group shapefile
-    # Join the datasets using the "fips_block_group" column from demographics_bg
-    # and the "GEOID" column from bg_shape
+# Save the spatial object for the isochrone intersection step
+sf::st_write(bg_sf, "data/block_groups_with_demographics.gpkg", delete_dsn = TRUE)
+readr::write_rds(bg_sf, "data/block_groups_with_demographics.rds")
+```
 
-    geometry <- dplyr::left_join(x = demographics_bg, 
-              y = bg_shape, 
-              by = c("fips_block_group" = "GEOID"))
+### Step 6: Add Race and Ethnicity Variables
 
-    # Write the resulting dataset with geometry information to a CSV file
-    # This will create a CSV file containing demographic data and geometry information
-    readr::write_csv(geometry, "block_groups_with_geometry.csv")
+The `B02001` (Race) and `B03002` (Hispanic or Latino origin by race) ACS
+tables augment the sex-by-age estimates with race/ethnicity breakdowns
+at the block group level. Fetch them with the same
+[`censusapi::getCensus()`](https://www.hrecht.com/censusapi/reference/getCensus.html)
+pattern and join to the block group table on GEOID.
 
-### Step 6: Get Data regarding Race and Ethnicity
+``` r
+
+# Fetch race table for a single state (repeat across all FIPS codes)
+race_raw <- censusapi::getCensus(
+  name    = "acs/acs5",
+  vintage = 2021,
+  vars    = c("NAME",
+              "B02001_001E",   # total population
+              "B02001_002E",   # White alone
+              "B02001_003E",   # Black or African American alone
+              "B02001_004E",   # American Indian and Alaska Native alone
+              "B02001_005E",   # Asian alone
+              "B02001_006E",   # Native Hawaiian and Other Pacific Islander alone
+              "B02001_007E",   # Some other race alone
+              "B02001_008E"),  # Two or more races
+  region  = "block group:*",
+  regionin = "state:08&in=county:*&in=tract:*"
+)
+
+race_clean <- race_raw |>
+  dplyr::rename(
+    pop_total                 = B02001_001E,
+    pop_white                 = B02001_002E,
+    pop_black                 = B02001_003E,
+    pop_aian                  = B02001_004E,
+    pop_asian                 = B02001_005E,
+    pop_nhpi                  = B02001_006E,
+    pop_other_race            = B02001_007E,
+    pop_two_or_more_races     = B02001_008E
+  ) |>
+  dplyr::mutate(
+    geoid = paste0(state, county, tract, `block group`),
+    pop_nonwhite = pop_total - pop_white
+  )
+
+# Fetch Hispanic origin table (B03002)
+hisp_raw <- censusapi::getCensus(
+  name    = "acs/acs5",
+  vintage = 2021,
+  vars    = c("B03002_001E",   # total
+              "B03002_003E",   # Not Hispanic: White alone
+              "B03002_012E"),  # Hispanic or Latino
+  region  = "block group:*",
+  regionin = "state:08&in=county:*&in=tract:*"
+)
+
+hisp_clean <- hisp_raw |>
+  dplyr::rename(
+    pop_total_hisp  = B03002_001E,
+    pop_nhw         = B03002_003E,   # non-Hispanic White
+    pop_hispanic    = B03002_012E
+  ) |>
+  dplyr::mutate(geoid = paste0(state, county, tract, `block group`))
+
+# Join race and ethnicity onto the block group sf object
+bg_sf_enriched <- bg_sf |>
+  mysterycall_safe_left_join(
+    right        = race_clean[, c("geoid", "pop_white", "pop_nonwhite",
+                                   "pop_black", "pop_asian", "pop_aian")],
+    by           = "geoid",
+    label_left   = "bg_sf",
+    label_right  = "race_B02001",
+    min_coverage = 0.99
+  ) |>
+  mysterycall_safe_left_join(
+    right        = hisp_clean[, c("geoid", "pop_nhw", "pop_hispanic")],
+    by           = "geoid",
+    label_left   = "bg_sf",
+    label_right  = "hispanic_B03002",
+    min_coverage = 0.99
+  )
+```
+
+This enriched block group layer is ready for the isochrone intersection
+step described in
+[`vignette("create_isochrones", package = "mysterycall")`](https://mufflyt.github.io/mysterycall/articles/create_isochrones.md).
 
 ## Usage Tips
 
-- Ensure that you have a valid Census API key to access the data.
-  Replace `"your_census_api_key_here"` with your actual API key in the
-  function call.
-
-- We included a one second pause in the function loop to be mindful of
-  rate limiting and API usage policies when making multiple requests to
-  the Census Bureau’s API.
+- Obtain a Census API key at
+  <https://api.census.gov/data/key_signup.html> and set it with
+  `censusapi::addApiKey("your_key_here")` or
+  `Sys.setenv(CENSUS_KEY = "your_key_here")` before the first call.
+- The function includes a one-second pause between state requests to
+  respect the Census Bureau’s rate limits. For all 50 states this means
+  the full run takes at least 50 seconds — plan accordingly.
+- Pin the `vintage` year across all tables in a single study to ensure
+  consistent geographies; block group boundaries change between ACS
+  releases.
+- For publication, report the ACS vintage year and five-year estimate
+  period (e.g. “2017–2021 ACS 5-year estimates”) in your methods
+  section.
 
 ## Conclusion
 
-The `mysterycall_get_census_data` function simplifies the process of
-obtaining Census data for all states’ block groups.
+[`mysterycall_get_census_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_census_data.md)
+retrieves sex-by-age block group estimates for any set of US states,
+returning a tidy data frame ready for spatial joining and isochrone
+overlap analysis. Supplement it with race and Hispanic-origin tables
+from the same ACS release to support equity-focused access analyses.
 
 ## Features and bugs
 
-If you have ideas for other features that would make name handling
-easier, or find a bug, the best approach is to either report it or add
-it!
+If you have ideas for other features that would make the Census workflow
+easier, or find a bug, report it at the package issue tracker.

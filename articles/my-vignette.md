@@ -69,99 +69,155 @@ Code       Specialization
 
 ### Search by Taxonomy Description
 
-The `mysterycall_search_by_taxonomy` function excels at searching the
-NPI Database for healthcare providers based on taxonomy descriptions.
-This functionality proves invaluable when verifying external data
-regarding subspecialist provider counts and filling in gaps for
-providers who may not be board-certified but are actively practicing
-(board-eligible). This data can be seamlessly integrated with other
-databases, enhancing its utility. For internal use, you can refer to
-`"Exploratory/Workforce/subspecialists_only"`. One significant advantage
-is that all search results include a National Provider Identifier (NPI).
+`mysterycall_search_by_taxonomy()` queries the NPI Registry for
+individual providers whose self-reported taxonomy description matches
+your search string. It is most useful for:
+
+- Building a complete national roster of a subspecialty (e.g.,
+  Gynecologic Oncology) when you don’t have existing name lists.
+- Filling in board-eligible providers who may not appear in
+  board-certification databases.
+- Verifying workforce counts from external databases against NPPES
+  enrollment.
+
+All search results include a National Provider Identifier (NPI), making
+them joinable to CMS Care Compare data and other federal datasets.
 
 ### Example Usage
 
-In this illustrative example, we employ the
-`mysterycall_search_by_taxonomy` function to identify healthcare
-providers specializing in “Hospice and Palliative Medicine” based on
-taxonomy descriptions. The resulting output is a dataframe containing
-information about physicians with either an MD or DO qualification,
-practicing in the United States as individuals, and self-identifying
-with a taxonomy of “Hospice and Palliative Medicine.”
+Search for providers in one or more taxonomy descriptions:
 
 ``` r
 
-# Search for providers based on taxonomy descriptions
-taxonomy_descriptions <- c("Hospice and Palliative Medicine")
+taxonomy_descriptions <- c(
+  "Hospice and Palliative Medicine",
+  "Gynecologic Oncology"
+)
 
 data <- mysterycall_search_by_taxonomy(taxonomy_to_search = taxonomy_descriptions)
 ```
 
-``` r
-
-# Note: basic_credential was removed in the select() statement above
-# So we'll count by basic_gender and state instead
-dplyr::count(data, basic_gender, addresses_state)
-```
-
-You can easily summarize the resulting data frame in a user-friendly
-format.
+Inspect the distribution of results:
 
 ``` r
 
-# Summarize the resulting data frame by state
-data %>%
-  dplyr::count(addresses_state)
+# Providers by gender and state
+dplyr::count(data, basic_gender, addresses_state, sort = TRUE)
+
+# Providers by taxonomy description
+dplyr::count(data, taxonomies_desc, sort = TRUE)
+
+# Check for multiple matches per NPI (cross-state enrollment)
+dplyr::count(data, npi, sort = TRUE) |> dplyr::filter(n > 1)
 ```
 
-We will often need to merge the rows from the `search_taxonomy` data and
-the `get_clinicians` data. These are the steps needed to make the
-structure and names similar to the `get_clinicians` data.
+### Cleaning and standardizing the result
 
-    all_taxonomy_search_data <- data %>% 
-      distinct(npi, .keep_all = TRUE) %>%
-      
-      # Keep only the OBGYN subspecialist taxonomy descriptions.  
-      filter(taxonomies_desc %in% c("Obstetrics & Gynecology, Female Pelvic Medicine and Reconstructive Surgery", "Obstetrics & Gynecology, Gynecologic Oncology", "Obstetrics & Gynecology, Maternal & Fetal Medicine", "Obstetrics & Gynecology, Reproductive Endocrinology")) %>%
-      
-      # Extract the first five of the zip code.  
-      mutate(addresses_postal_code = str_sub(addresses_postal_code,1 ,5)) %>%
-      mutate(basic_enumeration_date = ymd(basic_enumeration_date)) %>%
-      
-      # Pull the year out of the enumeration full data.  
-      mutate(basic_enumeration_date_year = year(basic_enumeration_date), .after = ifelse("basic_enumeration_date" %in% names(.), "basic_enumeration_date", last_col())) %>%
-      mutate(basic_middle_name = str_sub(basic_middle_name,1 ,1)) %>%
-      mutate(across(c(basic_first_name, basic_last_name, basic_middle_name), .fns = ~str_remove_all(., "[[\\p{P}][\\p{S}]]"))) %>%
-      
-      # Get data ready to add these taxonomy rows to the `mysterycall_search_and_process_npi`/GOBA data set.
-      rename(NPI = npi, first_name = basic_first_name, last_name = basic_last_name, middle_name = basic_middle_name, GenderPhysicianCompare = basic_gender, sub1 = taxonomies_desc, city = addresses_city, state = addresses_state, name.x = full_name, `Zip CodePhysicianCompare` = addresses_postal_code) %>%
-      mutate(GenderPhysicianCompare = recode(GenderPhysicianCompare, "F" = "Female", "M" = "Male", type_convert = TRUE)) %>%
-      
-      # Show the subspecialty from goba.  
-      mutate(sub1 = recode(sub1, "Obstetrics & Gynecology, Female Pelvic Medicine and Reconstructive Surgery" = "FPM", "Obstetrics & Gynecology, Gynecologic Oncology" = "ONC", "Obstetrics & Gynecology, Maternal & Fetal Medicine" = "MFM", "Obstetrics & Gynecology, Reproductive Endocrinology" = "REI", type_convert = TRUE))
+The raw output from `mysterycall_search_by_taxonomy()` uses NPPES column
+names (`basic_*`, `addresses_*`). The snippet below renames the key
+columns to match the names expected by
+[`mysterycall_get_clinician_data()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_get_clinician_data.md)
+and other downstream functions, then derives a short subspecialty code.
 
-### Function Details
+``` r
 
-#### Parameters
+# OBGYN subspecialty taxonomy descriptions and their short codes
+obgyn_subspecialties <- c(
+  "Obstetrics & Gynecology, Female Pelvic Medicine and Reconstructive Surgery" = "FPM",
+  "Obstetrics & Gynecology, Gynecologic Oncology"                              = "ONC",
+  "Obstetrics & Gynecology, Maternal & Fetal Medicine"                         = "MFM",
+  "Obstetrics & Gynecology, Reproductive Endocrinology"                        = "REI"
+)
 
-`taxonomy_to_search`: A character vector that should contain the desired
-taxonomy description(s) to be used as search criteria.
+roster_clean <- data |>
+  dplyr::distinct(npi, .keep_all = TRUE) |>
 
-#### Output
+  # Keep only OBGYN subspecialist rows
+  dplyr::filter(taxonomies_desc %in% names(obgyn_subspecialties)) |>
 
-The function returns a data frame that has been filtered to include NPI
-data matching the specified taxonomy description(s).
+  # Standardize fields
+  dplyr::mutate(
+    # 5-digit ZIP only
+    zip5               = stringr::str_sub(addresses_postal_code, 1, 5),
+    # First initial of middle name only
+    basic_middle_name  = stringr::str_sub(basic_middle_name, 1, 1),
+    # Remove punctuation from name fields
+    dplyr::across(
+      c(basic_first_name, basic_last_name, basic_middle_name),
+      ~ stringr::str_remove_all(.x, "[[:punct:]]")
+    ),
+    # Parse enumeration year
+    enumeration_year   = as.integer(
+      format(as.Date(basic_enumeration_date), "%Y")
+    ),
+    # Expand single-letter gender code
+    gender = dplyr::case_match(
+      basic_gender,
+      "F" ~ "Female",
+      "M" ~ "Male",
+      .default = "Unknown"
+    ),
+    # Short subspecialty code via named-vector lookup
+    subspecialty = obgyn_subspecialties[taxonomies_desc]
+  ) |>
+
+  # Rename to common schema
+  dplyr::rename(
+    first_name = basic_first_name,
+    last_name  = basic_last_name,
+    middle_name = basic_middle_name,
+    city       = addresses_city,
+    state      = addresses_state,
+    phone      = addresses_telephone_number
+  ) |>
+
+  dplyr::select(npi, first_name, middle_name, last_name,
+                gender, subspecialty, city, state, zip5,
+                phone, enumeration_year, taxonomies_desc)
+```
+
+### Validating phones after roster construction
+
+Once the roster is clean, validate the phone numbers against the
+provider’s reported state using the NANP helper:
+
+``` r
+
+phone_checks <- do.call(rbind, Map(
+  mysterycall_validate_phone,
+  phone_str      = roster_clean$phone,
+  practice_state = roster_clean$state
+))
+
+table(phone_checks$validity_flag)
+#> valid                  missing   invalid_format
+#> 412                    18            7
+```
+
+### Function reference
+
+| Parameter | Type | Description |
+|----|----|----|
+| `taxonomy_to_search` | character vector | One or more NUCC taxonomy description strings |
+| `states` | character vector | Optional 2-letter state codes to restrict results |
+| `write_snapshot` | logical | Save raw API responses as `.rds` files for offline replay |
+| `notify` | logical | Emit progress messages during the search |
+
+The function returns a data frame with one row per unique
+NPI–taxonomy–address combination, deduplicated on NPI before returning.
 
 ## Conclusion
 
-The `mysterycall_search_by_taxonomy` function stands as a wrapper for
-exploring the NPI Database through taxonomy descriptions. It empowers
-users to identify healthcare providers with precise specializations,
-rendering it a resource for healthcare-related research and in-depth
-analysis.
+`mysterycall_search_by_taxonomy()` is the taxonomy-first entry point for
+roster creation. Pair it with
+[`mysterycall_search_and_process_npi()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_search_and_process_npi.md)
+(name-first) to cross-validate provider counts, and with
+[`mysterycall_validate_phone()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_phone.md)
+and
+[`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
+to build a fully audited enrichment pipeline.
 
 ## Features and bugs
 
-If you have ideas for other features that would make name handling
-easier, or find a bug, the best approach is to either report it or add
-it!
+If you have ideas for other features that would make taxonomy search
+easier, or find a bug, report it at the package issue tracker.

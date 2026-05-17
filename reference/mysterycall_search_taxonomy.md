@@ -70,21 +70,42 @@ description.
 
 ## Output columns
 
-The function retains a curated subset of the columns returned by
-[`npi::npi_flatten()`](https://docs.ropensci.org/npi/reference/npi_flatten.html).
-The following column categories are **always dropped** regardless of
-what the NPI API returns: all `endpoints_*` fields, all `other_names_*`
-fields, all `identifiers_*` fields, supplementary address fields
-(`addresses_address_2`, `addresses_fax_number`,
-`addresses_address_type`, `addresses_country_code`), and several basic
-and taxonomy metadata fields (`basic_last_updated`, `basic_status`,
-`basic_name_prefix`, `basic_name_suffix`, `basic_certification_date`,
-`taxonomies_code`, `taxonomies_taxonomy_group`, `taxonomies_state`,
-`taxonomies_license`). To access dropped columns, call
+The function returns a curated subset of
+[`npi::npi_flatten()`](https://docs.ropensci.org/npi/reference/npi_flatten.html)
+output.
+
+**Retained** (after renaming): `npi`, `first_name`, `last_name`,
+`middle_name`, `credential`, `addresses_city`, `addresses_state`,
+`addresses_postal_code`, `addresses_telephone_number`,
+`addresses_country_name`, `taxonomies_desc`, `taxonomies_primary`,
+`search_term`. Any columns returned by `npi_flatten()` that are *not* on
+the explicit drop list are also retained.
+
+**Always dropped** regardless of what the NPI API returns:
+
+- All `endpoints_*` fields (electronic health endpoint metadata)
+
+- All `other_names_*` fields (former or alternate name records)
+
+- All `identifiers_*` fields (legacy identifier records)
+
+- Supplementary address fields: `addresses_address_2`,
+  `addresses_fax_number`, `addresses_address_type`,
+  `addresses_country_code`
+
+- Basic metadata: `basic_last_updated`, `basic_status`,
+  `basic_name_prefix`, `basic_name_suffix`, `basic_certification_date`
+
+- Secondary taxonomy fields: `taxonomies_code`,
+  `taxonomies_taxonomy_group`, `taxonomies_state`, `taxonomies_license`
+
+- Internal working column: `credential_lower`
+
+To access dropped columns, call
 [`npi::npi_search()`](https://docs.ropensci.org/npi/reference/npi_search.html)
 and
 [`npi::npi_flatten()`](https://docs.ropensci.org/npi/reference/npi_flatten.html)
-directly.
+directly before any filtering.
 
 ## Contract
 

@@ -19,6 +19,86 @@ Released 2026-05-08.
   [`check_normality()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md))
   continue to work as double-deprecated shims.
 
+### ✨ New functions
+
+**Data quality and validation**
+
+- [`mysterycall_validate_phone()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_phone.md)
+  — validates US phone numbers against NANP structural rules (NPA/NXX
+  first-digit constraints, N11 service codes) and optionally checks that
+  the area code belongs to the provider’s reported practice state via a
+  bundled lookup table. Returns a tidy data frame with
+  `phone_e164_valid`, `phone_npa`, `phone_state_from_npa`,
+  `phone_area_code_matches_state`, and `phone_validity_flag` columns.
+  Fully vectorised; lookup table is lazy-loaded and cached per session.
+
+- [`mysterycall_parse_physician_name()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_parse_physician_name.md)
+  — converts free-text physician name strings (board certification data,
+  NPPES, CMS sources) into structured first / middle / last / suffix /
+  title fields with confidence scoring (`high` / `medium` / `low`) and
+  warning flags. Handles DO credential vs. Vietnamese surname
+  disambiguation (`"Robert Smith DO"` → suffix `"DO"`; `"Linda Do"` →
+  last name `"Do"`), three-part comma format (`"Smith, John, Jr."`),
+  hyphenated names, and name particles.
+
+- [`mysterycall_validate_parsed_names()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_validate_parsed_names.md)
+  — extends parse output with quality flags: `has_first`, `has_last`,
+  `is_valid`, `last_is_credential`, `last_is_suffix`, `last_too_short`,
+  `middle_has_particle`, `quality_issue`.
+
+- [`mysterycall_format_physician_name()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_format_physician_name.md)
+  — reassembles parsed components into `"last_first"`, `"first_last"`,
+  or `"formal"` display strings; vectorised.
+
+- [`mysterycall_test_name_parser()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_test_name_parser.md)
+  — runs a 13-case edge-case accuracy suite and prints a per-case report
+  to the console. An extended 30-case benchmark corpus is available in
+  `inst/extdata/name_benchmark_corpus.csv`; the evaluation script is in
+  `data-raw/benchmark_name_parser.R`.
+
+**Safe join wrappers**
+
+- [`mysterycall_safe_left_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_left_join.md)
+  — wraps
+  [`dplyr::left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
+  with key-type harmonisation, right-side uniqueness assertion, coverage
+  threshold enforcement (`min_coverage`, default 0.98),
+  row-multiplication guard (`max_duplication`, default 1.02×), and
+  optional CSV audit report.
+
+- [`mysterycall_safe_inner_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_inner_join.md)
+  — wraps
+  [`dplyr::inner_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
+  with the same guards; default `min_coverage = 0.90`.
+
+- [`mysterycall_safe_semi_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_semi_join.md)
+  — wraps
+  [`dplyr::semi_join()`](https://dplyr.tidyverse.org/reference/filter-joins.html)
+  with a keep-rate threshold; default `min_coverage = 0.50`.
+
+- [`mysterycall_safe_anti_join()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_safe_anti_join.md)
+  — wraps
+  [`dplyr::anti_join()`](https://dplyr.tidyverse.org/reference/filter-joins.html)
+  with an over-exclusion cap (`max_matched`, default 1.0).
+
+- [`mysterycall_assert_unique_keys()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_assert_unique_keys.md)
+  — asserts that specified columns form a unique key; optionally
+  deduplicates (first row kept) instead of erroring.
+
+**Package infrastructure**
+
+- `humaniformat` moved from `Suggests` → `Imports`; the runtime
+  [`requireNamespace()`](https://rdrr.io/r/base/ns-load.html) guard has
+  been removed.
+- 119 new `test_that` blocks across three new test files
+  (`test-validate-phone.R`, `test-parse-physician-name.R`,
+  `test-join-safety.R`).
+- Five new vignettes: `data-quality`, `statistical-analysis`,
+  `provider-classification`, `workflow-orchestration`,
+  `table-generation`.
+- `CITATION.cff` updated with full abstract, keywords, and affiliation.
+- `CONTRIBUTING.md` expanded to a full developer guide.
+
 ### ✅ rOpenSci compliance
 
 - Replaced all 34 `\dontrun{}` blocks with `@examplesIf interactive()`.

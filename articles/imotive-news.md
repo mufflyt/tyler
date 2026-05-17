@@ -2,11 +2,11 @@
 
 ## Overview
 
-The **Imotive** initiative combines tyler’s provider roster tooling with
-streamlined QA helpers so field teams can run end-to-end mystery caller
-studies with less manual coordination. This vignette summarizes the
-highlights from the latest development cycle and surfaces the helpers
-that changed.
+The **Imotive** initiative combines mysterycall’s provider roster
+tooling with streamlined QA helpers so field teams can run end-to-end
+mystery caller studies with less manual coordination. This vignette
+summarizes the highlights from the latest development cycle and surfaces
+the helpers that changed.
 
 ## End-to-end orchestration
 

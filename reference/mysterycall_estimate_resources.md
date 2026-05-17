@@ -26,10 +26,25 @@ number of external API requests).
 Runtime is estimated as `n_rows × 4.5` seconds: 1.5 s/row for NPI
 registry lookups, 0.5 s/row for geocoding (assumes a warm Google Maps
 cache), and 2.5 s/row for HERE isochrone generation. Memory is
-`(n_rows × 2) + 500` MB. These constants were measured on a typical US
-residential broadband connection with warm API caches. Slow networks or
-cold caches can **triple** the runtime estimate. Benchmark on 50–100
-rows before committing to a large run.
+`(n_rows × 2) + 500` MB.
+
+Reference values for the full workflow:
+
+|          |                  |                 |
+|----------|------------------|-----------------|
+| **Rows** | **Est. runtime** | **Est. memory** |
+| 100      | ~8 min           | ~700 MB         |
+| 500      | ~38 min          | ~1.5 GB         |
+| 1,000    | ~75 min          | ~2.5 GB         |
+| 5,000    | ~6.3 h           | ~10.3 GB        |
+
+These constants reflect typical US residential broadband with warm API
+caches. Slow networks or cold caches can **triple** the runtime
+estimate. Benchmark on 50–100 rows before committing to a large run.
+
+If only a subset of the pipeline is used (e.g., NPI lookup only), the
+relevant per-row constant is 1.5 s (NPI), 0.5 s (geocoding), or 2.5 s
+(isochrones), not the combined 4.5 s.
 
 ## See also
 

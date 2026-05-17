@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `tyler` package provides a family of mapping functions for
+The `mysterycall` package provides a family of mapping functions for
 visualizing physician geographic data across the United States. These
 functions cover interactive Leaflet maps centered on ACOG district
 boundaries, static ggplot2 maps of Hospital Referral Regions (HRRs), and

@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Searching the NPI Database Starting with Taxonomy Codes • mysterycall</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -49,9 +54,13 @@
     <li><a class="dropdown-item" href="../articles/my-vignette.html">Searching the NPI Database Starting with Taxonomy Codes</a></li>
     <li><a class="dropdown-item" href="../articles/aggregating_provider_data.html">Aggregating Provider Data for Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/pipeline-guarantees.html">Pipeline Guarantees</a></li>
+    <li><a class="dropdown-item" href="../articles/workflow-orchestration.html">End-to-End Mystery-Caller Workflow Orchestration</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Data Collection</h6></li>
     <li><a class="dropdown-item" href="../articles/search_and_process_npi.html">Search and Process NPI Numbers</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Data Quality</h6></li>
+    <li><a class="dropdown-item" href="../articles/data-quality.html">Data Quality: Phone Validation, Name Parsing, and Safe Joins</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Geospatial</h6></li>
     <li><a class="dropdown-item" href="../articles/geocode.html">Geocoding</a></li>
@@ -60,6 +69,11 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Demographics</h6></li>
     <li><a class="dropdown-item" href="../articles/get_census_data.html">Getting Data from the US Census Bureau for Isochrones</a></li>
+    <li><a class="dropdown-item" href="../articles/provider-classification.html">Provider Classification and Demographic Enrichment</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Analysis and Reporting</h6></li>
+    <li><a class="dropdown-item" href="../articles/statistical-analysis.html">Statistical Analysis of Mystery-Caller Data</a></li>
+    <li><a class="dropdown-item" href="../articles/table-generation.html">Generating Publication Tables</a></li>
     <li><a class="dropdown-item" href="../articles/imotive-news.html">Imotive News &amp; Changelog</a></li>
   </ul>
 </li>
@@ -156,102 +170,182 @@ the <code>mysterycall_search_by_taxonomy</code> function.</p>
 <div class="section level3">
 <h3 id="search-by-taxonomy-description">Search by Taxonomy Description<a class="anchor" aria-label="anchor" href="#search-by-taxonomy-description"></a>
 </h3>
-<p>The <code>mysterycall_search_by_taxonomy</code> function excels at
-searching the NPI Database for healthcare providers based on taxonomy
-descriptions. This functionality proves invaluable when verifying
-external data regarding subspecialist provider counts and filling in
-gaps for providers who may not be board-certified but are actively
-practicing (board-eligible). This data can be seamlessly integrated with
-other databases, enhancing its utility. For internal use, you can refer
-to <code>"Exploratory/Workforce/subspecialists_only"</code>. One
-significant advantage is that all search results include a National
-Provider Identifier (NPI).</p>
+<p><code>mysterycall_search_by_taxonomy()</code> queries the NPI
+Registry for individual providers whose self-reported taxonomy
+description matches your search string. It is most useful for:</p>
+<ul>
+<li>Building a complete national roster of a subspecialty (e.g.,
+Gynecologic Oncology) when you don’t have existing name lists.</li>
+<li>Filling in board-eligible providers who may not appear in
+board-certification databases.</li>
+<li>Verifying workforce counts from external databases against NPPES
+enrollment.</li>
+</ul>
+<p>All search results include a National Provider Identifier (NPI),
+making them joinable to CMS Care Compare data and other federal
+datasets.</p>
 </div>
 <div class="section level3">
 <h3 id="example-usage-1">Example Usage<a class="anchor" aria-label="anchor" href="#example-usage-1"></a>
 </h3>
-<p>In this illustrative example, we employ the
-<code>mysterycall_search_by_taxonomy</code> function to identify
-healthcare providers specializing in “Hospice and Palliative Medicine”
-based on taxonomy descriptions. The resulting output is a dataframe
-containing information about physicians with either an MD or DO
-qualification, practicing in the United States as individuals, and
-self-identifying with a taxonomy of “Hospice and Palliative
-Medicine.”</p>
+<p>Search for providers in one or more taxonomy descriptions:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Search for providers based on taxonomy descriptions</span></span>
-<span><span class="va">taxonomy_descriptions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Hospice and Palliative Medicine"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">taxonomy_descriptions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Hospice and Palliative Medicine"</span>,</span>
+<span>  <span class="st">"Gynecologic Oncology"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">mysterycall_search_by_taxonomy</span><span class="op">(</span>taxonomy_to_search <span class="op">=</span> <span class="va">taxonomy_descriptions</span><span class="op">)</span></span></code></pre></div>
+<p>Inspect the distribution of results:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Note: basic_credential was removed in the select() statement above</span></span>
-<span><span class="co"># So we'll count by basic_gender and state instead</span></span>
-<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">basic_gender</span>, <span class="va">addresses_state</span><span class="op">)</span></span></code></pre></div>
-<p>You can easily summarize the resulting data frame in a user-friendly
-format.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Summarize the resulting data frame by state</span></span>
-<span><span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">addresses_state</span><span class="op">)</span></span></code></pre></div>
-<p>We will often need to merge the rows from the
-<code>search_taxonomy</code> data and the <code>get_clinicians</code>
-data. These are the steps needed to make the structure and names similar
-to the <code>get_clinicians</code> data.</p>
-<pre><code><span><span class="va">all_taxonomy_search_data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">npi</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  </span>
-<span>  <span class="co"># Keep only the OBGYN subspecialist taxonomy descriptions.  </span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">taxonomies_desc</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Obstetrics &amp; Gynecology, Female Pelvic Medicine and Reconstructive Surgery"</span>, <span class="st">"Obstetrics &amp; Gynecology, Gynecologic Oncology"</span>, <span class="st">"Obstetrics &amp; Gynecology, Maternal &amp; Fetal Medicine"</span>, <span class="st">"Obstetrics &amp; Gynecology, Reproductive Endocrinology"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  </span>
-<span>  <span class="co"># Extract the first five of the zip code.  </span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>addresses_postal_code <span class="op">=</span> <span class="fu">str_sub</span><span class="op">(</span><span class="va">addresses_postal_code</span>,<span class="fl">1</span> ,<span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>basic_enumeration_date <span class="op">=</span> <span class="fu">ymd</span><span class="op">(</span><span class="va">basic_enumeration_date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  </span>
-<span>  <span class="co"># Pull the year out of the enumeration full data.  </span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>basic_enumeration_date_year <span class="op">=</span> <span class="fu">year</span><span class="op">(</span><span class="va">basic_enumeration_date</span><span class="op">)</span>, .after <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="st">"basic_enumeration_date"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, <span class="st">"basic_enumeration_date"</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">last_col</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>basic_middle_name <span class="op">=</span> <span class="fu">str_sub</span><span class="op">(</span><span class="va">basic_middle_name</span>,<span class="fl">1</span> ,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">basic_first_name</span>, <span class="va">basic_last_name</span>, <span class="va">basic_middle_name</span><span class="op">)</span>, .fns <span class="op">=</span> <span class="op">~</span><span class="fu">str_remove_all</span><span class="op">(</span><span class="va">.</span>, <span class="st">"[[\\p{P}][\\p{S}]]"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  </span>
-<span>  <span class="co"># Get data ready to add these taxonomy rows to the `mysterycall_search_and_process_npi`/GOBA data set.</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>NPI <span class="op">=</span> <span class="va">npi</span>, first_name <span class="op">=</span> <span class="va">basic_first_name</span>, last_name <span class="op">=</span> <span class="va">basic_last_name</span>, middle_name <span class="op">=</span> <span class="va">basic_middle_name</span>, GenderPhysicianCompare <span class="op">=</span> <span class="va">basic_gender</span>, sub1 <span class="op">=</span> <span class="va">taxonomies_desc</span>, city <span class="op">=</span> <span class="va">addresses_city</span>, state <span class="op">=</span> <span class="va">addresses_state</span>, name.x <span class="op">=</span> <span class="va">full_name</span>, `Zip CodePhysicianCompare` <span class="op">=</span> <span class="va">addresses_postal_code</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>GenderPhysicianCompare <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html" class="external-link">recode</a></span><span class="op">(</span><span class="va">GenderPhysicianCompare</span>, <span class="st">"F"</span> <span class="op">=</span> <span class="st">"Female"</span>, <span class="st">"M"</span> <span class="op">=</span> <span class="st">"Male"</span>, type_convert <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  </span>
-<span>  <span class="co"># Show the subspecialty from goba.  </span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sub1 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html" class="external-link">recode</a></span><span class="op">(</span><span class="va">sub1</span>, <span class="st">"Obstetrics &amp; Gynecology, Female Pelvic Medicine and Reconstructive Surgery"</span> <span class="op">=</span> <span class="st">"FPM"</span>, <span class="st">"Obstetrics &amp; Gynecology, Gynecologic Oncology"</span> <span class="op">=</span> <span class="st">"ONC"</span>, <span class="st">"Obstetrics &amp; Gynecology, Maternal &amp; Fetal Medicine"</span> <span class="op">=</span> <span class="st">"MFM"</span>, <span class="st">"Obstetrics &amp; Gynecology, Reproductive Endocrinology"</span> <span class="op">=</span> <span class="st">"REI"</span>, type_convert <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Providers by gender and state</span></span>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">basic_gender</span>, <span class="va">addresses_state</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Providers by taxonomy description</span></span>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">taxonomies_desc</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Check for multiple matches per NPI (cross-state enrollment)</span></span>
+<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">npi</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="function-details">Function Details<a class="anchor" aria-label="anchor" href="#function-details"></a>
+<h3 id="cleaning-and-standardizing-the-result">Cleaning and standardizing the result<a class="anchor" aria-label="anchor" href="#cleaning-and-standardizing-the-result"></a>
 </h3>
-<div class="section level4">
-<h4 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
-</h4>
-<p><code>taxonomy_to_search</code>: A character vector that should
-contain the desired taxonomy description(s) to be used as search
-criteria.</p>
+<p>The raw output from <code>mysterycall_search_by_taxonomy()</code>
+uses NPPES column names (<code>basic_*</code>,
+<code>addresses_*</code>). The snippet below renames the key columns to
+match the names expected by
+<code><a href="../reference/mysterycall_get_clinician_data.html">mysterycall_get_clinician_data()</a></code> and other downstream
+functions, then derives a short subspecialty code.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># OBGYN subspecialty taxonomy descriptions and their short codes</span></span>
+<span><span class="va">obgyn_subspecialties</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Obstetrics &amp; Gynecology, Female Pelvic Medicine and Reconstructive Surgery"</span> <span class="op">=</span> <span class="st">"FPM"</span>,</span>
+<span>  <span class="st">"Obstetrics &amp; Gynecology, Gynecologic Oncology"</span>                              <span class="op">=</span> <span class="st">"ONC"</span>,</span>
+<span>  <span class="st">"Obstetrics &amp; Gynecology, Maternal &amp; Fetal Medicine"</span>                         <span class="op">=</span> <span class="st">"MFM"</span>,</span>
+<span>  <span class="st">"Obstetrics &amp; Gynecology, Reproductive Endocrinology"</span>                        <span class="op">=</span> <span class="st">"REI"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">roster_clean</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">npi</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span></span>
+<span>  <span class="co"># Keep only OBGYN subspecialist rows</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">taxonomies_desc</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">obgyn_subspecialties</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span></span>
+<span>  <span class="co"># Standardize fields</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    <span class="co"># 5-digit ZIP only</span></span>
+<span>    zip5               <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="va">addresses_postal_code</span>, <span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span>,</span>
+<span>    <span class="co"># First initial of middle name only</span></span>
+<span>    basic_middle_name  <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="va">basic_middle_name</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    <span class="co"># Remove punctuation from name fields</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">basic_first_name</span>, <span class="va">basic_last_name</span>, <span class="va">basic_middle_name</span><span class="op">)</span>,</span>
+<span>      <span class="op">~</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove_all</a></span><span class="op">(</span><span class="va">.x</span>, <span class="st">"[[:punct:]]"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># Parse enumeration year</span></span>
+<span>    enumeration_year   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">basic_enumeration_date</span><span class="op">)</span>, <span class="st">"%Y"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># Expand single-letter gender code</span></span>
+<span>    gender <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html" class="external-link">case_match</a></span><span class="op">(</span></span>
+<span>      <span class="va">basic_gender</span>,</span>
+<span>      <span class="st">"F"</span> <span class="op">~</span> <span class="st">"Female"</span>,</span>
+<span>      <span class="st">"M"</span> <span class="op">~</span> <span class="st">"Male"</span>,</span>
+<span>      .default <span class="op">=</span> <span class="st">"Unknown"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># Short subspecialty code via named-vector lookup</span></span>
+<span>    subspecialty <span class="op">=</span> <span class="va">obgyn_subspecialties</span><span class="op">[</span><span class="va">taxonomies_desc</span><span class="op">]</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span></span>
+<span>  <span class="co"># Rename to common schema</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
+<span>    first_name <span class="op">=</span> <span class="va">basic_first_name</span>,</span>
+<span>    last_name  <span class="op">=</span> <span class="va">basic_last_name</span>,</span>
+<span>    middle_name <span class="op">=</span> <span class="va">basic_middle_name</span>,</span>
+<span>    city       <span class="op">=</span> <span class="va">addresses_city</span>,</span>
+<span>    state      <span class="op">=</span> <span class="va">addresses_state</span>,</span>
+<span>    phone      <span class="op">=</span> <span class="va">addresses_telephone_number</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">npi</span>, <span class="va">first_name</span>, <span class="va">middle_name</span>, <span class="va">last_name</span>,</span>
+<span>                <span class="va">gender</span>, <span class="va">subspecialty</span>, <span class="va">city</span>, <span class="va">state</span>, <span class="va">zip5</span>,</span>
+<span>                <span class="va">phone</span>, <span class="va">enumeration_year</span>, <span class="va">taxonomies_desc</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="output">Output<a class="anchor" aria-label="anchor" href="#output"></a>
-</h4>
-<p>The function returns a data frame that has been filtered to include
-NPI data matching the specified taxonomy description(s).</p>
+<div class="section level3">
+<h3 id="validating-phones-after-roster-construction">Validating phones after roster construction<a class="anchor" aria-label="anchor" href="#validating-phones-after-roster-construction"></a>
+</h3>
+<p>Once the roster is clean, validate the phone numbers against the
+provider’s reported state using the NANP helper:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">phone_checks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Map</a></span><span class="op">(</span></span>
+<span>  <span class="va">mysterycall_validate_phone</span>,</span>
+<span>  phone_str      <span class="op">=</span> <span class="va">roster_clean</span><span class="op">$</span><span class="va">phone</span>,</span>
+<span>  practice_state <span class="op">=</span> <span class="va">roster_clean</span><span class="op">$</span><span class="va">state</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">phone_checks</span><span class="op">$</span><span class="va">validity_flag</span><span class="op">)</span></span>
+<span><span class="co">#&gt; valid                  missing   invalid_format</span></span>
+<span><span class="co">#&gt; 412                    18            7</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="function-reference">Function reference<a class="anchor" aria-label="anchor" href="#function-reference"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="36%">
+<col width="20%">
+<col width="43%">
+</colgroup>
+<thead><tr class="header">
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>taxonomy_to_search</code></td>
+<td>character vector</td>
+<td>One or more NUCC taxonomy description strings</td>
+</tr>
+<tr class="even">
+<td><code>states</code></td>
+<td>character vector</td>
+<td>Optional 2-letter state codes to restrict results</td>
+</tr>
+<tr class="odd">
+<td><code>write_snapshot</code></td>
+<td>logical</td>
+<td>Save raw API responses as <code>.rds</code> files for offline
+replay</td>
+</tr>
+<tr class="even">
+<td><code>notify</code></td>
+<td>logical</td>
+<td>Emit progress messages during the search</td>
+</tr>
+</tbody>
+</table>
+<p>The function returns a data frame with one row per unique
+NPI–taxonomy–address combination, deduplicated on NPI before
+returning.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>The <code>mysterycall_search_by_taxonomy</code> function stands as a
-wrapper for exploring the NPI Database through taxonomy descriptions. It
-empowers users to identify healthcare providers with precise
-specializations, rendering it a resource for healthcare-related research
-and in-depth analysis.</p>
+<p><code>mysterycall_search_by_taxonomy()</code> is the taxonomy-first
+entry point for roster creation. Pair it with
+<code><a href="../reference/mysterycall_search_and_process_npi.html">mysterycall_search_and_process_npi()</a></code> (name-first) to
+cross-validate provider counts, and with
+<code><a href="../reference/mysterycall_validate_phone.html">mysterycall_validate_phone()</a></code> and
+<code><a href="../reference/mysterycall_safe_left_join.html">mysterycall_safe_left_join()</a></code> to build a fully audited
+enrichment pipeline.</p>
 </div>
 <div class="section level2">
 <h2 id="features-and-bugs">Features and bugs<a class="anchor" aria-label="anchor" href="#features-and-bugs"></a>
 </h2>
-<p>If you have ideas for other features that would make name handling
-easier, or find a bug, the best approach is to either report it or add
-it!</p>
+<p>If you have ideas for other features that would make taxonomy search
+easier, or find a bug, report it at the package issue tracker.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
