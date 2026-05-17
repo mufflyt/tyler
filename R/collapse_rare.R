@@ -15,7 +15,10 @@ NULL
 #' @param other_label Character scalar used as the replacement label.
 #'   Default `"Other"`.
 #'
-#' @return A vector of the same type as `x` with rare levels replaced.
+#' @return A vector the same length and type as `x`. Character input returns
+#'   character; factor input returns a factor with updated levels (rare levels
+#'   removed, `other_label` appended at the end if any collapsing occurred).
+#'   Relative order of retained levels is preserved.
 #'
 #' @seealso [mysterycall_reorder_by_freq()] to reorder factor levels by
 #'   frequency; [mysterycall_recode_credentials()] for credential grouping.

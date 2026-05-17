@@ -233,9 +233,9 @@ mysterycall_caller_reliability <- function(
 
 #' Print method for mysterycall_reliability objects
 #'
-#' @param x A \code{mysterycall_reliability} object.
+#' @param x A `mysterycall_reliability` object.
 #' @param ... Ignored.
-#' @return Invisibly returns \code{x}.
+#' @return `invisible(x)`.
 #' @method print mysterycall_reliability
 #' @family caller-management
 #' @export

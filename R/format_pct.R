@@ -25,7 +25,7 @@
 #' no_decimal <- mysterycall_format_pct(0.5, my_digits = 0)
 #' print(no_decimal)  # Output: "50%"
 #'
-#' @family table
+#' @family table helpers
 #' @export
 mysterycall_format_pct <- function(x, my_digits = 1) {
   result <- paste0(formatC(100 * x, format = "f", digits = my_digits), "%")

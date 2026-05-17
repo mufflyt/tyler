@@ -24,7 +24,7 @@
 
 #' Green Journal ggplot2 theme
 #'
-#' Publication-quality theme conforming to \emph{Obstetrics & Gynecology}
+#' Publication-quality theme conforming to *Obstetrics & Gynecology*
 #' (Green Journal, Wolters Kluwer) 2024 author guidelines: white background,
 #' Arial/sans font, black axes with tick marks, minimal gridlines, bottom
 #' legend. Pair with [palette_green_journal()] and

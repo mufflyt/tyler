@@ -27,7 +27,10 @@ NULL
 #' @param max_age Numeric. Maximum plausible physician age. Values above this
 #'   threshold are replaced with `NA`. Default `90`.
 #'
-#' @return Integer vector the same length as `grad_year`.
+#' @return Integer vector the same length as `grad_year`. `NA` is returned
+#'   for elements where `grad_year` is `NA`, where the computed age is below
+#'   `min_age`, or where it exceeds `max_age` (with a [base::warning()] in
+#'   each case).
 #'
 #' @references
 #' Muffly T, et al. Validation of Physician Age Imputation Method

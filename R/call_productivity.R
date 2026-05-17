@@ -6,8 +6,8 @@
 #' @param data A data frame with at least a caller column.
 #' @param caller_col Character scalar: column identifying each caller.
 #' @param date_col Character scalar or NULL. Column containing call dates.
-#'   Accepts \code{Date}, \code{POSIXct}, or character (coerced via
-#'   \code{as.Date()}).
+#'   Accepts `Date`, `POSIXct`, or character (coerced via `as.Date()`).
+#'   When `NULL`, `n_days` and `calls_per_day` are `NA` in the output.
 #' @param outcome_col Character scalar or NULL. Binary (0/1) column indicating
 #'   whether a call resulted in an accepted appointment.
 #' @param hold_time_col Character scalar or NULL. Hold time in seconds
@@ -15,19 +15,26 @@
 #' @param call_time_col Character scalar or NULL. Total call time in seconds
 #'   (numeric) or "MM:SS" format (character).
 #'
-#' @return A data frame with one row per caller, sorted by \code{n_calls}
+#' @return A data frame with one row per caller, sorted by `n_calls`
 #'   descending. Columns:
 #' \describe{
-#'   \item{caller}{Caller identifier.}
-#'   \item{n_calls}{Total calls.}
-#'   \item{n_days}{Unique call dates (NA if \code{date_col} is NULL).}
-#'   \item{calls_per_day}{n_calls / n_days (NA if \code{date_col} is NULL).}
-#'   \item{n_accepted}{Sum of \code{outcome_col} (NA if not provided).}
-#'   \item{acceptance_rate}{Formatted "XX.X%" (NA if \code{outcome_col} NULL).}
-#'   \item{mean_hold_sec}{Mean hold time in seconds (NA if not provided).}
-#'   \item{mean_call_sec}{Mean call time in seconds (NA if not provided).}
+#'   \item{`caller`}{Character. Caller identifier (values from `caller_col`).}
+#'   \item{`n_calls`}{Integer. Total number of calls made.}
+#'   \item{`n_days`}{Numeric. Count of unique call dates. `NA` when
+#'     `date_col` is `NULL`.}
+#'   \item{`calls_per_day`}{Numeric. `n_calls / n_days`. `NA` when
+#'     `date_col` is `NULL`.}
+#'   \item{`n_accepted`}{Numeric. Sum of `outcome_col`. `NA` when
+#'     `outcome_col` is `NULL`.}
+#'   \item{`acceptance_rate`}{Character. Formatted `"XX.X%"`. `NA` when
+#'     `outcome_col` is `NULL`.}
+#'   \item{`mean_hold_sec`}{Numeric. Mean hold time in seconds. `NA` when
+#'     `hold_time_col` is `NULL`.}
+#'   \item{`mean_call_sec`}{Numeric. Mean call time in seconds. `NA` when
+#'     `call_time_col` is `NULL`.}
 #' }
-#' The attribute \code{total_calls_all} is set on the returned data frame.
+#' The attribute `total_calls_all` (integer) is set on the returned data
+#' frame recording the grand total across all callers.
 #'
 #' @examples
 #' df <- data.frame(
