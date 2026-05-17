@@ -31,7 +31,7 @@ plots$qq
 }
 \seealso{
 \code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} to fit the model passed here;
-\code{\link[=mysterycall_plot_effects]{mysterycall_plot_effects()}} for marginal-effect plots;
+\code{\link[=mysterycall_plot_effect]{mysterycall_plot_effect()}} for marginal-effect plots;
 \code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}} to write any element to disk.
 
 Other outcomes: 

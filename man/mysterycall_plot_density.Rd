@@ -74,7 +74,7 @@ mysterycall_plot_density(
 \seealso{
 \code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}} for jittered point plots;
 \code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}} for median-trend line plots;
-\code{\link[=mysterycall_save_green_journal_figure]{mysterycall_save_green_journal_figure()}} to export at journal resolution.
+\code{\link[=save_green_journal_figure]{save_green_journal_figure()}} to export at journal resolution.
 
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},

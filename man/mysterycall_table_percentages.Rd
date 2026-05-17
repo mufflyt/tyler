@@ -19,9 +19,9 @@ of non-missing rows, not rounded).
 }
 \description{
 Counts each level of a categorical variable, computes its share of all
-non-missing rows, and returns \strong{only the level(s) with the highest count}.
+rows (including \code{NA}), and returns \strong{only the level(s) with the highest count}.
 When multiple levels tie for the top count, all tied levels are returned.
-\code{NA} values are excluded from counts and the denominator.
+\code{NA} values are counted as their own level and included in the denominator.
 }
 \examples{
 # "A" is most frequent: returns 1 row
@@ -32,7 +32,7 @@ mysterycall_table_percentages(data_frame, "category")
 df_tie <- data.frame(category = c("A", "B", "A", "B", "C", "C", "C", "A", "B"))
 mysterycall_table_percentages(df_tie, "category")
 
-# NAs are excluded from counts and the denominator
+# NAs are counted as their own level; denominator includes all rows
 df_na <- data.frame(category = c("A", NA, "A", "C", "A", "B", "B", NA))
 mysterycall_table_percentages(df_na, "category")
 

@@ -26,7 +26,7 @@ A data frame with the same row count and all original columns as
 \describe{
 \item{\code{gender}}{Character. \code{"male"}, \code{"female"}, or \code{NA} for ambiguous
 or unknown names.}
-\item{\code{probability}}{Numeric in \link{0, 1}. API prediction confidence.}
+\item{\code{probability}}{Numeric in [0, 1]. API prediction confidence.}
 \item{\code{count}}{Integer. Historical frequency of the name in the
 Genderize.io database.}
 }

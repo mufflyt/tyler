@@ -26,7 +26,7 @@ are stratified by group x wave.}
 
 \item{type}{One of \code{"auto"} (default), \code{"proportion"}, or
 \code{"continuous"}. \code{"auto"} detects based on whether all
-non-missing outcome values are in {0, 1}.}
+non-missing outcome values are in \{0, 1\}.}
 
 \item{ref_wave}{Scalar or NULL. The reference wave against which other
 waves are compared. When NULL, the first wave (sorted
