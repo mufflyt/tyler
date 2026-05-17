@@ -68,6 +68,7 @@ Suggests:
     memoise,
     mockery,
     openxlsx,
+    patchwork,
     progress,
     readxl,
     rmarkdown,

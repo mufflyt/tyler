@@ -146,7 +146,7 @@ mysterycall_rename_columns <- function(data, target_strings, new_names) {
 #' @return A data frame with processed data.
 #'
 #' @section Column name transformation:
-#'   All input column names are converted to **lowercase snake\_case** by
+#'   All input column names are converted to **lowercase snake_case** by
 #'   [janitor::clean_names()] **unconditionally** before `required_strings`
 #'   pattern matching. Transformation cannot be disabled. Common examples:
 #'   \tabular{ll}{

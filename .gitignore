@@ -18,3 +18,4 @@ docs
 tests/testthat/_problems/
 *.Rcheck/
 ..Rcheck/
+/doc/

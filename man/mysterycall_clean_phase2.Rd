@@ -34,7 +34,7 @@ This function reads data from a file or data frame, cleans column names, and app
 }
 \section{Column name transformation}{
 
-All input column names are converted to \strong{lowercase snake\_case} by
+All input column names are converted to \strong{lowercase snake_case} by
 \code{\link[janitor:clean_names]{janitor::clean_names()}} \strong{unconditionally} before \code{required_strings}
 pattern matching. Transformation cannot be disabled. Common examples:
 \tabular{ll}{
