@@ -51,7 +51,7 @@
 #' mysterycall_disparities_table(df, "accepted", "insurance")
 #'
 #' @importFrom stats prop.test binom.test qnorm
-#' @family table
+#' @family table helpers
 #' @seealso [mysterycall_table1_gtsummary()], [mysterycall_bootstrap_ci()]
 #' @export
 mysterycall_disparities_table <- function(
@@ -267,7 +267,7 @@ mysterycall_disparities_table <- function(
 #' @param ... Ignored.
 #' @return Invisibly returns `x`.
 #' @seealso [mysterycall_disparities_table()]
-#' @family table
+#' @family table helpers
 #' @export
 print.mysterycall_disparities_table <- function(x, ...) {
   ref    <- attr(x, "ref_group") %||% x$group[[1L]]

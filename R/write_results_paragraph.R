@@ -3,15 +3,15 @@
 #' Produces a ready-to-paste results sentence describing IRRs from a
 #' multivariable Poisson regression, formatted for clinical manuscripts.
 #'
-#' @param model_result Either a \code{mysterycall_poisson_model} object (with
-#'   element \code{$irr_table}) or a data frame with columns \code{term},
-#'   \code{irr}, \code{ci_lower}, \code{ci_upper}, and \code{p_value}.
+#' @param model_result Either a `mysterycall_poisson_model` object (with
+#'   element `$irr_table`) or a data frame with columns `term`,
+#'   `irr`, `ci_lower`, `ci_upper`, and `p_value`.
 #' @param ref_group Character scalar: the reference group label (e.g.
-#'   \code{"commercial insurance"}).
+#'   `"commercial insurance"`).
 #' @param exposure_col Character scalar: name of the exposure variable whose
-#'   terms are to be described (e.g. \code{"insurance"}).
+#'   terms are to be described (e.g. `"insurance"`).
 #' @param outcome_label Character scalar: human-readable outcome label.
-#'   Default \code{"appointment acceptance"}.
+#'   Default `"appointment acceptance"`.
 #' @param alpha Numeric: significance level. Default 0.05. (Currently reserved
 #'   for future use.)
 #' @param irr_digits Integer: decimal places for IRR. Default 2L.

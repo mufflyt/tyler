@@ -59,13 +59,15 @@ NULL
 #'   \describe{
 #'     \item{`phone_e164_valid`}{Logical. `TRUE` if the number passes all NANP
 #'       syntactic rules.}
-#'     \item{`phone_npa`}{Character. The 3-digit area code, or `NA` when the
-#'       number is syntactically invalid.}
-#'     \item{`phone_state_from_npa`}{Character. The 2-letter state code for the
-#'       area code, or `NA` when the area code is not in the lookup.}
+#'     \item{`phone_npa`}{Character. The 3-digit North American Numbering Plan
+#'       area code, or `NA_character_` when the number is syntactically
+#'       invalid.}
+#'     \item{`phone_state_from_npa`}{Character. The 2-letter US postal
+#'       abbreviation for the area code's registered state, or `NA_character_`
+#'       when the area code is absent from the bundled lookup table.}
 #'     \item{`phone_area_code_matches_state`}{Logical. `TRUE` when
-#'       `phone_state_from_npa` equals `practice_state`; `NA` when
-#'       `practice_state` is `NULL`.}
+#'       `phone_state_from_npa` exactly matches `practice_state`; `FALSE` when
+#'       they differ; `NA` when `practice_state` is `NULL`.}
 #'     \item{`phone_validity_flag`}{Character. One of `"valid"`,
 #'       `"missing"`, `"invalid_format"`, `"unknown_area_code"`, or
 #'       `"area_code_state_mismatch"`.}

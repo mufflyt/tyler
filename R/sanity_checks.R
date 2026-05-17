@@ -11,7 +11,9 @@
 #' @param max_expected Maximum number of rows expected (optional). If provided
 #'   and actual rows exceed this, generates a warning.
 #'
-#' @return Invisible TRUE if passes all checks
+#' @return `invisible(TRUE)` when all checks pass. When a check fails, emits
+#'   a [base::warning()] describing the issue and still returns
+#'   `invisible(TRUE)` so the caller can continue processing.
 #'
 #' @examplesIf interactive()
 #' data <- read_csv("providers.csv")
@@ -99,18 +101,30 @@ mysterycall_check_no_limits <- function(data,
 #' @param exclude_pattern Optional regex pattern of files to exclude from scan.
 #'   For example, "test-.*\\\\.R$" to exclude test files.
 #'
-#' @return A data frame of found issues with columns: file, line, pattern, code.
-#'   Returns empty data frame if no issues found. Also prints warnings.
+#' @return A data frame with one row per detected issue and columns:
+#'   \describe{
+#'     \item{`file`}{Character. Basename of the scanned R file.}
+#'     \item{`line`}{Integer. Line number where the pattern was found.}
+#'     \item{`severity`}{Character. One of `"CRITICAL"`, `"HIGH"`, or
+#'       `"MEDIUM"`.}
+#'     \item{`pattern`}{Character. Human-readable description of the
+#'       anti-pattern detected.}
+#'     \item{`code`}{Character. Trimmed source code line that triggered
+#'       the match.}
+#'   }
+#'   Returns a zero-row data frame with these columns when no issues are
+#'   found. Rows are sorted by severity (CRITICAL first), then file, then
+#'   line number. Also emits [base::message()] for each detected issue.
 #'
 #' @details
 #' Searches for these anti-patterns:
 #' \itemize{
-#'   \item \code{slice_head(n = )}
-#'   \item \code{head(data, n)}
-#'   \item \code{sample_n()}
-#'   \item \code{n_max = }
-#'   \item \code{max_records = }
-#'   \item \code{LIMIT n} (SQL)
+#'   \item `slice_head(n = )`
+#'   \item `head(data, n)`
+#'   \item `sample_n()`
+#'   \item `n_max = `
+#'   \item `max_records = `
+#'   \item `LIMIT n` (SQL)
 #' }
 #'
 #' @examplesIf interactive()
