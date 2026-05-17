@@ -919,3 +919,113 @@ result <- mysterycall_run_workflow_logged(
   log_file         = "/logs/workflow.jsonl"
 )
 ```
+
+---
+
+# 11. Business-Day Wait Times
+
+Mystery-caller wait times are measured in **business days** — weekends and US
+federal holidays are excluded. `mysterycall_count_business_days()` counts
+business days between two dates; `mysterycall_business_days()` applies the
+calculation to every row of a data frame.
+
+```{r business-days-scalar, echo=TRUE, eval=TRUE}
+# How many business days between a call on a Monday and an appointment on
+# Friday of the following week?  (Calendar days = 11; business days = 10)
+bd <- mysterycall_count_business_days(
+  start_date = "2024-03-04",   # Monday
+  end_date   = "2024-03-15"    # Friday two weeks later
+)
+cat("Business days:", bd, "\n")
+```
+
+```{r business-days-df, echo=TRUE, eval=TRUE}
+# Apply to a data frame of completed calls
+calls_df <- data.frame(
+  npi       = paste0("NPI-", 1:6),
+  insurance = c("Medicaid", "Private", "Medicaid", "Private", "Medicare", "Uninsured"),
+  call_date = as.Date(c("2024-03-04", "2024-03-04", "2024-03-11",
+                         "2024-03-11", "2024-03-18", "2024-03-18")),
+  appt_date = as.Date(c("2024-03-25", "2024-03-12", "2024-04-01",
+                         "2024-03-19", "2024-03-27", "2024-04-08"))
+)
+
+# mysterycall_business_days() column params: call_col, appt_col, result_col
+calls_with_bd <- mysterycall_business_days(
+  data       = calls_df,
+  call_col   = "call_date",
+  appt_col   = "appt_date",
+  result_col = "wait_days"
+)
+
+knitr::kable(
+  calls_with_bd[, c("npi", "insurance", "call_date", "appt_date", "wait_days")],
+  col.names = c("NPI", "Insurance", "Call date", "Appt date", "Wait (business days)"),
+  caption   = "Business-day wait times computed by `mysterycall_business_days()`."
+)
+```
+
+---
+
+# 12. Caller Quality Control
+
+After data collection is complete, audit each caller's performance before
+proceeding to analysis.
+
+## 12.1 Inter-rater reliability
+
+`mysterycall_caller_reliability()` computes Cohen's kappa (for categorical
+outcomes) or the intraclass correlation coefficient (for numeric outcomes) on
+records audited by two callers.
+
+```{r caller-reliability, echo=TRUE, eval=TRUE}
+set.seed(7)
+# Long-format audit sample: each record appears twice — once per caller
+n_records <- 30L
+audit_long <- data.frame(
+  record_id  = rep(1:n_records, 2),
+  caller     = rep(c("Alice", "Bob"), each = n_records),
+  appt_offered = c(
+    sample(c("Yes", "No"), n_records, replace = TRUE, prob = c(0.72, 0.28)),
+    sample(c("Yes", "No"), n_records, replace = TRUE, prob = c(0.68, 0.32))
+  )
+)
+
+rel <- mysterycall_caller_reliability(
+  data        = audit_long,
+  caller_col  = "caller",
+  outcome_col = "appt_offered",
+  type        = "kappa"
+)
+
+print(rel)
+```
+
+## 12.2 Per-caller productivity
+
+`mysterycall_call_productivity()` tallies completed, pending, and failed calls
+by caller and returns a summary data frame for QC review.
+
+```{r call-productivity, echo=TRUE, eval=TRUE}
+set.seed(8)
+n_rows <- 80L
+prod_df <- data.frame(
+  caller           = sample(c("Alice", "Bob", "Carol", "Dana"),
+                             n_rows, replace = TRUE),
+  call_date        = sample(seq(as.Date("2024-02-01"), as.Date("2024-03-31"),
+                                 by = "day"), n_rows, replace = TRUE),
+  appointment_offered = sample(c(1L, 1L, 1L, 0L), n_rows, replace = TRUE)
+)
+
+prod <- mysterycall_call_productivity(
+  data        = prod_df,
+  caller_col  = "caller",
+  date_col    = "call_date",
+  outcome_col = "appointment_offered"
+)
+
+knitr::kable(
+  prod$summary,
+  caption = "Per-caller productivity from `mysterycall_call_productivity()`."
+)
+```
