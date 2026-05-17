@@ -20,7 +20,7 @@
 #' The physician count is derived from the first available identifier among
 #' `npi`, `name`, `physician_info`, and `physician_information`.
 #' @seealso [mysterycall_summarize_census()], [mysterycall_get_clinician_data()], [mysterycall_clean_phase1()]
-#' @family summary
+#' @family data quality
 #' @export
 #'
 #' @importFrom dplyr distinct

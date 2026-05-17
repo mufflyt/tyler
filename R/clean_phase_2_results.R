@@ -12,7 +12,7 @@
 #'   `target_strings`.
 #' @return A data frame with matched columns renamed. Unmatched targets are
 #'   silently skipped; a warning is issued when multiple columns match.
-#' @family workflow
+#' @family data management
 #' @export
 #' @importFrom stats setNames
 #' @importFrom utils head
@@ -173,7 +173,8 @@ mysterycall_rename_columns <- function(data, target_strings, new_names) {
 #'   ```
 #'
 #' @seealso [mysterycall_clean_phase1()] for Phase 1 data cleaning;
-#'   [mysterycall_run_workflow()] which orchestrates both phases.
+#'   [mysterycall_run_workflow()] which orchestrates both phases;
+#'   [mysterycall_rename_columns()] for the underlying column-renaming logic.
 #' @family workflow
 #' @export
 #' @importFrom readr read_csv write_csv

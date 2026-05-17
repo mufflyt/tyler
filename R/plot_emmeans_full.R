@@ -41,9 +41,15 @@ NULL
 #'
 #' @return Invisibly, a named list with elements:
 #'   \describe{
-#'     \item{`data`}{`data.frame` from [emmeans::emmeans()].}
-#'     \item{`plot`}{The `ggplot` object.}
+#'     \item{`data`}{`data.frame` from [emmeans::emmeans()] with columns for
+#'       the x-axis variable, `emmean` (or `rate` for Poisson link), `SE`,
+#'       `df`, `lower.CL`/`upper.CL` (or `asymp.LCL`/`asymp.UCL` for large
+#'       samples), and any grouping variable from `specs`. Exact column names
+#'       depend on the model family.}
+#'     \item{`plot`}{`ggplot` object. Print or pass to [ggplot2::ggsave()].}
 #'   }
+#'   Capture with `res <- mysterycall_plot_emmeans_full(...)` to access
+#'   `res$data` and `res$plot`.
 #'
 #' @family outcomes
 #' @export

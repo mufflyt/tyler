@@ -2,14 +2,22 @@
 #'
 #' This function computes the estimated marginal means (EMMs) from a model object, creates a plot of the EMMs with confidence intervals, and saves the plot to a specified directory. This is particularly useful in studies like mystery caller studies where you need to analyze differences in outcomes such as appointment wait times across different groups or treatments.
 #'
-#' @param model_object A fitted model object from which EMMs are to be computed. This can be a generalized linear model (GLM), linear model, or other suitable models.
-#' @param specs A character string specifying the predictor variable(s) for which EMMs are to be computed. For example, this could be the treatment groups, scenarios, or demographic variables.
-#' @param variable_of_interest A character string specifying the variable to be plotted on the x-axis. Typically, this would be the same as the `specs`.
-#' @param color_by A character string specifying the variable used to color the points and error bars. This could be a categorical variable like gender, insurance type, or academic affiliation.
+#' @param model_object A fitted model object of class `glm`, `lm`, `lmerMod`,
+#'   `glmerMod`, or any class supported by [emmeans::emmeans()].
+#' @param specs Character scalar or vector. Predictor variable(s) for which
+#'   marginal means are computed. The first element is used as the x-axis
+#'   variable; the second (if present) becomes the `color_by` grouping
+#'   variable. Example: `c("insurance", "gender")`.
+#' @param variable_of_interest Character scalar. Label for the x-axis, typically
+#'   equal to the first element of `specs`.
+#' @param color_by Character scalar or `NULL`. Grouping variable name for
+#'   coloring points and error bars. When `NULL` a single-group plot is drawn.
 #' @param output_dir A character string specifying the directory where the plot will
 #'   be saved. Defaults to a session-specific folder inside [tempdir()].
 #'
-#' @return Invisibly returns a list containing the estimated marginal means data (`data`) and the ggplot object (`plot`).
+#' @return `invisible()` named list with two elements: `data` (data.frame of
+#'   EMMs from [emmeans::emmeans()]) and `plot` (`ggplot` object). A plot
+#'   file is also written to `output_dir` as a side effect.
 #'
 #' @details The function computes EMMs using the `emmeans` package, which provides adjusted means (or other summary statistics) for the levels of factors, corrected for the influence of other predictors in the model. This is particularly useful in the context of mystery caller studies, where you might want to compare outcomes such as appointment wait times between different insurance types, scenarios, or demographic groups, while controlling for potential confounders.
 #'
@@ -56,7 +64,7 @@
 #'   output_dir = "Figures/InteractionEffects"
 #' )
 #'
-#' @family modeling helpers
+#' @family plotting
 #' @export
 mysterycall_plot_emmeans <- function(model_object, specs, variable_of_interest, color_by = NULL, output_dir = NULL) {
   # Load necessary packages

@@ -74,14 +74,21 @@ NULL
 #'
 #' @return A named list with:
 #' \describe{
-#'   \item{`summary`}{Tibble with one row per group (or one row overall):
-#'     `n`, `n_missing`, `mean`, `sd`, `median`, `q1`, `q3`, `min`, `max`.}
-#'   \item{`test`}{`htest` object from [stats::wilcox.test()] or
-#'     [stats::kruskal.test()], or `NULL` when no test was run.}
-#'   \item{`p_value`}{Numeric p-value, or `NA_real_`.}
-#'   \item{`test_name`}{Character label describing the test used.}
-#'   \item{`interpretation`}{One-sentence plain-language summary suitable for
-#'     pasting into a Results section.}
+#'   \item{`summary`}{Tibble with one row per group (or one row overall).
+#'     When `group_by` is non-`NULL`, the first column is named after the
+#'     grouping variable (character). Remaining columns: `n` (integer),
+#'     `n_missing` (integer), `mean` (numeric), `sd` (numeric), `median`
+#'     (numeric), `q1` (numeric), `q3` (numeric), `min` (numeric), `max`
+#'     (numeric).}
+#'   \item{`test`}{`htest` object from [stats::wilcox.test()] (two groups)
+#'     or [stats::kruskal.test()] (three or more groups), or `NULL` when no
+#'     test was run (i.e., `group_by = NULL`).}
+#'   \item{`p_value`}{Numeric p-value extracted from `test`, or `NA_real_`
+#'     when no test was run.}
+#'   \item{`test_name`}{Character. One of `"Wilcoxon rank-sum"`,
+#'     `"Kruskal-Wallis"`, or `"none"`.}
+#'   \item{`interpretation`}{Character. One-sentence plain-language summary
+#'     suitable for pasting into a Results section.}
 #' }
 #'
 #' @importFrom stats wilcox.test kruskal.test sd median quantile
@@ -250,14 +257,20 @@ mysterycall_wait_time_summary <- function(data,
 #'
 #' @return A named list with:
 #' \describe{
-#'   \item{`summary`}{Tibble with one row per group (or one row overall):
-#'     `n_total`, `n_missing`, `n_accepted`, `n_rejected`, `rate`,
-#'     `ci_lower`, `ci_upper`.}
+#'   \item{`summary`}{Tibble with one row per group (or one row overall).
+#'     When `group_by` is non-`NULL`, the first column is named after the
+#'     grouping variable (character). Remaining columns: `n_total`
+#'     (integer), `n_missing` (integer), `n_accepted` (integer),
+#'     `n_rejected` (integer), `rate` (numeric, 0-1), `ci_lower` (numeric,
+#'     0-1), `ci_upper` (numeric, 0-1).}
 #'   \item{`test`}{`htest` object from [stats::chisq.test()] or
 #'     [stats::fisher.test()], or `NULL` when no test was run.}
-#'   \item{`p_value`}{Numeric p-value, or `NA_real_`.}
-#'   \item{`test_name`}{Character label describing the test used.}
-#'   \item{`interpretation`}{One-sentence plain-language summary.}
+#'   \item{`p_value`}{Numeric p-value extracted from `test`, or `NA_real_`
+#'     when no test was run.}
+#'   \item{`test_name`}{Character. One of `"Fisher's exact"`,
+#'     `"chi-square"`, `"chi-square (small cells)"`, or `"none"`.}
+#'   \item{`interpretation`}{Character. One-sentence plain-language summary
+#'     suitable for pasting into a Results section.}
 #' }
 #'
 #' @importFrom stats prop.test chisq.test fisher.test

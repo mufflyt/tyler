@@ -37,14 +37,30 @@
 #' @param progress_log_format Either "text" (default) to append human readable
 #'   lines to `progress_log` or "csv" to write structured entries with columns
 #'   `timestamp`, `event`, `search_term`, `rows`, and `detail`.
-#' @return A data frame with columns `npi`, `first_name`, `last_name`,
-#'   `middle_name`, `credential`, `taxonomies_desc`, `search_term`, and
-#'   `resume_row_index`.  Rows are deduplicated by NPI and sorted by
-#'   `last_name`, `first_name`.  When `resume = TRUE` and prior results
-#'   exist at `accumulate_path`, previously processed names are excluded and
-#'   the new results are appended to the accumulated file.  Returns an empty
-#'   data frame (with the above columns) when no matches pass the credential
-#'   and taxonomy filters.
+#' @return A data frame with 8 columns:
+#'   \describe{
+#'     \item{`npi`}{Character. 10-digit NPI identifier; deduplicated within
+#'       results.}
+#'     \item{`first_name`}{Character. Provider first name from the NPI
+#'       registry.}
+#'     \item{`last_name`}{Character. Provider last name from the NPI
+#'       registry.}
+#'     \item{`middle_name`}{Character. Provider middle name; `NA` when
+#'       absent.}
+#'     \item{`credential`}{Character. Degree credential string (e.g., `"MD"`,
+#'       `"DO"`).}
+#'     \item{`taxonomies_desc`}{Character. Taxonomy classification from the
+#'       NPI registry.}
+#'     \item{`search_term`}{Character. The `first last` name string that was
+#'       looked up.}
+#'     \item{`resume_row_index`}{Integer. Row number from input `data`;
+#'       disambiguates providers with identical names.}
+#'   }
+#'   Rows are deduplicated by NPI and sorted by `last_name`, `first_name`.
+#'   When `resume = TRUE` and `accumulate_path` already exists, previously
+#'   processed names are skipped and new results are appended to that file.
+#'   Returns an empty data frame with these columns when no matches pass the
+#'   credential and taxonomy filters.
 #'
 #' @seealso [mysterycall_validate_npi()] for downstream NPI validation;
 #'   [mysterycall_run_workflow()] which orchestrates this function;

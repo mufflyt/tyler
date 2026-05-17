@@ -14,7 +14,11 @@
 #'
 #' @importFrom dplyr arrange mutate group_by ungroup n
 #' @importFrom readr read_csv
-#' @return Invisible list of file paths to the created Excel files
+#' @return `invisible()` character vector of absolute file paths to the
+#'   created Excel files. Element 1 is the combined "all callers" workbook;
+#'   subsequent elements are the per-assistant split workbooks in the order of
+#'   `lab_assistant_names`. Capture with
+#'   `paths <- mysterycall_split_and_save(...)` to use the paths downstream.
 #'
 #' @section Contract:
 #' **Inputs:**
