@@ -10,9 +10,9 @@
 #'
 #' @return An `sf` object with one row per HRR and columns:
 #'   \describe{
-#'     \item{`hrrcity`}{Character.  HRR city identifier, e.g. `"CA-Sacramento"`.}
-#'     \item{`hrrnum`}{Integer.  Numeric HRR code from the Dartmouth Atlas.}
-#'     \item{`geometry`}{MULTIPOLYGON in EPSG:4326 (WGS84).}
+#'     \item{`hrrcity`}{Character. HRR city identifier (e.g. `"CA-Sacramento"`).}
+#'     \item{`hrrnum`}{Integer. Numeric HRR code from the Dartmouth Atlas.}
+#'     \item{`geometry`}{sfc_MULTIPOLYGON in EPSG:4326 (WGS84).}
 #'   }
 #'   Additional columns from the raw shapefile may be present.
 #' @seealso [ensure_hrr_shapefile()], [mysterycall_hrr_maps()], [mysterycall_map_base()]
@@ -70,12 +70,14 @@ mysterycall_hrr <- function(remove_HI_AK = TRUE) {
 #' @param width Numeric.  Figure width in inches.  Default `7`.
 #' @param height Numeric.  Figure height in inches.  Default `5`.
 #'
-#' @return Invisibly returns a `grob` object (from `gridExtra::arrangeGrob`)
-#'   containing the arranged multi-panel map.  Side effects: two files are
-#'   written to `output_dir` — `<trait_map>_<honey_map>.tiff` and `.png`.
+#' @return Invisibly returns a `grob` object (from
+#'   `gridExtra::arrangeGrob`) containing the arranged multi-panel map.
+#'   Side effects: writes two files to `output_dir` -
+#'   `<trait_map>_<honey_map>_honey.tiff` and
+#'   `<trait_map>_<honey_map>_honey.png`.
 #' @seealso [mysterycall_hrr()] to obtain the HRR `sf` object;
 #'   [mysterycall_map_base()], [mysterycall_map_block_group()]
-#' @family geospatial plotting
+#' @family mapping
 
 #' @importFrom dplyr mutate group_by summarize filter n
 #' @importFrom ggplot2 geom_sf scale_fill_viridis_c guide_colorbar element_text theme_minimal theme labs

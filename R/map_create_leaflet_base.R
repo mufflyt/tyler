@@ -3,13 +3,12 @@
 #' This function creates a Leaflet BASE map with specific configurations, including the base tile layer, scale bar,
 #' default view settings, and layers control.
 #'
-#' @return Invisibly returns the Leaflet map object.
+#' @return A `leaflet` map object (class `"leaflet"` from the leaflet package)
+#'   pre-configured with tile providers, scale bar, and layer controls.
 #' @family mapping
 #' @export
-#' @examples
-#' \donttest{
+#' @examplesIf interactive()
 #' map <- mysterycall_map_leaflet()
-#' }
 mysterycall_map_leaflet <- function() {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for mysterycall_map_leaflet(). Install with: install.packages('leaflet')", call. = FALSE)

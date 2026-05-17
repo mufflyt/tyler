@@ -213,8 +213,8 @@ MEDICARE_GME_INDICATORS <- c(
 #'                                "Community Hospital",
 #'                                "University of Michigan Medical Center"))
 #'
-#' @seealso \code{\link{mysterycall_classify_academic_affiliation}}
-#' @family classification
+#' @seealso [mysterycall_classify_academic_affiliation()]
+#' @family provider characteristics
 #' @export
 mysterycall_check_academic_name_patterns <- function(org_name, confidence_threshold = 0.85) {
   if (is.null(org_name) || length(org_name) == 0) {
@@ -370,19 +370,28 @@ classify_academic_affiliation <- function(...) { .Deprecated("mysterycall_classi
 #' Creates a comprehensive summary report of all available academic indicators,
 #' organized by evidence tier.
 #'
-#' @return Named list with elements \code{module_version}, \code{created_date},
-#'   \code{indicators} (three-tier named list with confidence ranges and
-#'   indicator scores), \code{total_known_institutions}, \code{total_patterns},
-#'   and \code{usage_notes}.
+#' @return A named list with elements:
+#'   \describe{
+#'     \item{`module_version`}{Character. Package version string.}
+#'     \item{`created_date`}{Character. ISO date string (YYYY-MM-DD).}
+#'     \item{`indicators`}{Named list with three sublists:
+#'       `tier1_education_training`, `tier2_research_clinical`, and
+#'       `tier3_name_patterns`, each containing confidence ranges and
+#'       indicator scores.}
+#'     \item{`total_known_institutions`}{Integer. Count of known academic
+#'       institutions in the bundled lookup.}
+#'     \item{`total_patterns`}{Integer. Count of name-pattern rules.}
+#'     \item{`usage_notes`}{Character vector. Recommended usage guidelines.}
+#'   }
 #'
 #' @examples
 #' summary <- mysterycall_get_academic_indicators_summary()
 #' summary$total_known_institutions
 #' names(summary$indicators)
 #'
-#' @seealso \code{\link{mysterycall_classify_academic_affiliation}},
-#'   \code{\link{mysterycall_check_academic_name_patterns}}
-#' @family classification
+#' @seealso [mysterycall_classify_academic_affiliation()],
+#'   [mysterycall_check_academic_name_patterns()]
+#' @family provider characteristics
 #' @export
 mysterycall_get_academic_indicators_summary <- function() {
   list(

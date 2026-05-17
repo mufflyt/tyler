@@ -9,8 +9,16 @@
 #'   states to ACOG districts. Defaults to the packaged
 #'   `inst/extdata/ACOG_Districts.csv`.
 #'
-#' @return An `sf` object with one row per ACOG district and columns describing
-#'   the district name, subregion, member states, and their abbreviations.
+#' @return An `sf` object with one row per ACOG district and columns:
+#'   \describe{
+#'     \item{`ACOG_District`}{Character. ACOG district identifier (e.g.
+#'       `"District I"`).}
+#'     \item{`Subregion`}{Character. Regional grouping of states.}
+#'     \item{`States`}{Character. Comma-separated state names in the district.}
+#'     \item{`State_Abbreviations`}{Character. Comma-separated 2-letter postal
+#'       codes.}
+#'     \item{`geometry`}{sfc_MULTIPOLYGON. District boundaries in EPSG:4326.}
+#'   }
 #'
 #' @family mapping
 #' @export

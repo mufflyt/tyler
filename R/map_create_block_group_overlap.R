@@ -6,7 +6,8 @@
 #' @param isochrones_data A SpatialPolygonsDataFrame representing isochrone data.
 #' @param output_dir Directory path for exporting the map files. Default is "figures/".
 #'
-#' @return Called for its side effects of saving the block group overlap map as HTML and PNG inside `output_dir`. Returns `NULL` invisibly.
+#' @return `invisible(NULL)`. Side effects: writes the block group overlap map
+#'   as an HTML file and a PNG image to `output_dir`.
 #'
 #' @examplesIf interactive()
 #' # Create and export the map with the default output directory

@@ -16,11 +16,9 @@
 #'
 #' @family mapping
 #' @export
-#' @examples
-#' \donttest{
+#' @examplesIf interactive()
 #' mysterycall_map_base()
 #' mysterycall_map_base("<strong>Custom title</strong>")
-#' }
 mysterycall_map_base <- function(title = NULL, lat = 39.8282, lng = -98.5795, zoom = 4) {
   if (!requireNamespace("leaflet", quietly = TRUE)) {
     stop("Package 'leaflet' is required for mysterycall_map_base(). Install with: install.packages('leaflet')", call. = FALSE)

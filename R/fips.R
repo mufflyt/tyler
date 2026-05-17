@@ -2,10 +2,8 @@
 #'
 #' 3 columns with 51 observations.
 #'
-#' @return A tibble containing Federal Information Processing Standards
-#'   (FIPS) codes for states and counties.
-#'
-#' @format A tibble with 243 rows and 10 variables:
+#' @format A tibble with 243 rows and 10 variables containing Federal
+#'   Information Processing Standards (FIPS) codes for states and counties:
 #' \describe{
 #'   \item{state}{Two-letter postal abbreviation.}
 #'   \item{state_name}{Full state name.}
