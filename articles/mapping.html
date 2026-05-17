@@ -183,6 +183,96 @@ building the sf object:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Arkansas   District VII  District VII  AR                 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> California District IX   District IX   CA                 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Colorado   District VIII District VIII CO</span></span></code></pre></div>
+<p>The table below summarises how many states each district covers:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ACOG_Districts</span><span class="op">)</span></span>
+<span><span class="va">dist_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">State</span> <span class="op">~</span> <span class="va">ACOG_District</span>, data <span class="op">=</span> <span class="va">ACOG_Districts</span>, FUN <span class="op">=</span> <span class="va">length</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dist_summary</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"n_states"</span></span>
+<span><span class="va">dist_summary</span> <span class="op">&lt;-</span> <span class="va">dist_summary</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">dist_summary</span><span class="op">$</span><span class="va">ACOG_District</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">dist_summary</span>,</span>
+<span>  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ACOG District"</span>, <span class="st">"States"</span><span class="op">)</span>,</span>
+<span>  caption   <span class="op">=</span> <span class="st">"Number of US states (and territories) in each ACOG district."</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Number of US states (and territories) in each ACOG
+district.</caption>
+<thead><tr class="header">
+<th align="left">ACOG District</th>
+<th align="right">States</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">District I</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">District II</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">District III</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">District IV</td>
+<td align="right">9</td>
+</tr>
+<tr class="odd">
+<td align="left">District IX</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">District V</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">District VI</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">District VII</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">District VIII</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">District XI</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">District XII</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ACOG_Districts</span><span class="op">)</span></span>
+<span><span class="va">dist_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">State</span> <span class="op">~</span> <span class="va">ACOG_District</span>, data <span class="op">=</span> <span class="va">ACOG_Districts</span>, FUN <span class="op">=</span> <span class="va">length</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dist_counts</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"n_states"</span></span>
+<span><span class="va">dist_counts</span><span class="op">$</span><span class="va">ACOG_District</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
+<span>  <span class="va">dist_counts</span><span class="op">$</span><span class="va">ACOG_District</span>,</span>
+<span>  levels <span class="op">=</span> <span class="va">dist_counts</span><span class="op">$</span><span class="va">ACOG_District</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">dist_counts</span><span class="op">$</span><span class="va">n_states</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">dist_counts</span>,</span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n_states</span>, y <span class="op">=</span> <span class="va">ACOG_District</span>, fill <span class="op">=</span> <span class="va">n_states</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">n_states</span><span class="op">)</span>, hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span>, size <span class="op">=</span> <span class="fl">3.2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"#c6dbef"</span>, high <span class="op">=</span> <span class="st">"#2171b5"</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.15</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Number of states"</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.grid.major.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="mapping_files/figure-html/acog-district-bar-1.png" class="r-plt" alt="State count per ACOG district. Districts vary from 2 (District XI — Puerto Rico / US territories) to 8 states." width="576"><p class="caption">
+State count per ACOG district. Districts vary from 2 (District XI —
+Puerto Rico / US territories) to 8 states.
+</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="physician-dot-map">Physician dot map<a class="anchor" aria-label="anchor" href="#physician-dot-map"></a>
@@ -196,7 +286,7 @@ physician dot according to their district using the viridis
 <code>color_palette</code>), adds a small random jitter to overlapping
 points, and saves the result as a self-contained HTML file plus a PNG
 screenshot to <code>output_dir</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Synthetic provider data — replace with your own data frame</span></span>
@@ -236,7 +326,7 @@ shapefile (~8 MB) from the Dartmouth Atlas on first use, caches it in
 the user’s R cache directory, and returns an <code>sf</code> object in
 CRS 4326. By default Hawaii and Alaska are excluded; set
 <code>remove_HI_AK = FALSE</code> to retain all regions.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
@@ -246,7 +336,7 @@ CRS 4326. By default Hawaii and Alaska are excluded; set
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">hrr_sf</span><span class="op">)</span></span></code></pre></div>
 <p>The returned sf object can be passed directly to
 <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">ggplot2::geom_sf()</a></code> for static publication-ready maps:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">hrr_sf</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#f0f0f0"</span>, color <span class="op">=</span> <span class="st">"#999999"</span>, linewidth <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -256,7 +346,7 @@ physician sf object onto a hexagonal grid, producing a count-per-cell
 choropleth with Alaska, Hawaii, and Puerto Rico insets. The result is
 saved as both TIFF and PNG at journal-ready resolution (600 dpi by
 default).</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># physician_sf must be an sf object with point geometries</span></span>
 <span><span class="fu"><a href="../reference/mysterycall-deprecated.html">hrr_generate_maps</a></span><span class="op">(</span></span>
 <span>  physician_sf <span class="op">=</span> <span class="va">physician_sf</span>,</span>
@@ -282,7 +372,7 @@ Leaflet map that shades block groups by their overlap proportion and
 draws each isochrone (30 / 60 / 120 / 180 minutes) in a distinct color.
 The map is exported as an HTML file and a PNG screenshot to
 <code>output_dir</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mufflyt.github.io/mysterycall/">mysterycall</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># bg_data and isochrones_data are sf objects produced by the isochrone workflow</span></span>

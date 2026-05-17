@@ -448,6 +448,40 @@ for any roster size. The assignment is deterministic given the seed, the
 order of rows in `data`, and the order of names in
 `lab_assistant_names`.
 
+``` r
+
+callers   <- c("Alice", "Bob", "Carol", "Dana", "Eve")
+n_total   <- 198L
+base_load <- n_total %/% length(callers)
+extra     <- n_total %% length(callers)
+loads     <- c(rep(base_load + 1L, extra), rep(base_load, length(callers) - extra))
+
+wb_df <- data.frame(
+  caller = factor(callers, levels = callers),
+  n      = loads
+)
+
+ggplot2::ggplot(wb_df, ggplot2::aes(x = caller, y = n, fill = caller)) +
+  ggplot2::geom_col(width = 0.6) +
+  ggplot2::geom_text(ggplot2::aes(label = n), vjust = -0.4, size = 3.5,
+                      fontface = "bold") +
+  ggplot2::scale_fill_brewer(palette = "Set2", guide = "none") +
+  ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, 0.15)),
+                               limits = c(0, NA)) +
+  ggplot2::labs(x = NULL, y = "Providers assigned") +
+  ggplot2::theme_minimal(base_size = 11) +
+  ggplot2::theme(panel.grid.major.x = ggplot2::element_blank())
+```
+
+![Example round-robin workload distribution across five callers for a
+198-provider roster. Differences of at most 1 provider guarantee
+balanced calling
+burden.](workflow-orchestration_files/figure-html/workload-bar-1.png)
+
+Example round-robin workload distribution across five callers for a
+198-provider roster. Differences of at most 1 provider guarantee
+balanced calling burden.
+
 ### 4.4 Verifying the split: no omissions, no duplicates
 
 Before sending workbooks to callers, verify that every provider appears

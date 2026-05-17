@@ -247,12 +247,56 @@ the primary analysis:
   variance = mean by definition).
 
 **Poisson regression** models the natural logarithm of the expected
-count as a linear function of covariates: log(E\[Y\]) = Xβ. The
-exponentiated coefficients exp(β) are **incidence rate ratios (IRRs)**,
-which have a natural clinical interpretation: an IRR of 1.40 for
-Medicaid vs. Private insurance means that Medicaid patients waited 40 %
-longer than privately insured patients, on average, after adjusting for
-all other covariates in the model.
+count as a linear function of covariates:
+
+``` math
+\log\!\bigl(E[Y]\bigr) = \mathbf{X}\boldsymbol{\beta}
+```
+
+The exponentiated coefficients $`\exp(\beta_k)`$ are **incidence rate
+ratios (IRRs)**, which have a natural clinical interpretation: an IRR of
+1.40 for Medicaid vs. Private insurance means that Medicaid patients
+waited 40 % longer than privately insured patients, on average, after
+adjusting for all other covariates in the model.
+
+``` r
+
+set.seed(42)
+n_per <- 200L
+ins_levels <- c("Medicaid", "Medicare", "Private", "Uninsured")
+lambda_map <- c(Medicaid = 18, Medicare = 12, Private = 10, Uninsured = 16)
+sim_df <- do.call(rbind, lapply(ins_levels, function(ins) {
+  data.frame(
+    insurance = ins,
+    wait_days = rpois(n_per, lambda = lambda_map[ins])
+  )
+}))
+sim_df$insurance <- factor(sim_df$insurance, levels = ins_levels)
+
+ggplot2::ggplot(sim_df, ggplot2::aes(x = wait_days, fill = insurance)) +
+  ggplot2::geom_histogram(binwidth = 2, colour = "white", linewidth = 0.2) +
+  ggplot2::facet_wrap(~ insurance, nrow = 1) +
+  ggplot2::scale_fill_manual(values = c(
+    Medicaid  = "#1b7837",
+    Medicare  = "#4393c3",
+    Private   = "#2166ac",
+    Uninsured = "#d6604d"
+  ), guide = "none") +
+  ggplot2::labs(
+    x = "Wait time (business days)",
+    y = "Number of calls"
+  ) +
+  ggplot2::theme_minimal(base_size = 11) +
+  ggplot2::theme(strip.text = ggplot2::element_text(face = "bold"))
+```
+
+![Simulated wait-time distributions by insurance type. Medicaid and
+Uninsured callers show longer right tails, consistent with Poisson count
+data.](statistical-analysis_files/figure-html/wait-time-dist-1.png)
+
+Simulated wait-time distributions by insurance type. Medicaid and
+Uninsured callers show longer right tails, consistent with Poisson count
+data.
 
 ### 3.2 Why a Random Intercept on Physician?
 
@@ -262,11 +306,17 @@ baseline tendency to have long or short wait times—whatever drives their
 scheduling behaviour that is *not* explained by the covariates.
 Formally, the model is:
 
-    log(E[wait_days_ij]) = β0 + β1·Medicaid_ij + β2·Medicare_ij
-                           + β3·Uninsured_ij + γ_j
-                           γ_j ~ Normal(0, σ²_physician)
+``` math
+\log\!\bigl(E[\text{wait\_days}_{ij} \mid \gamma_j]\bigr)
+  = \beta_0
+  + \beta_1\,\text{Medicaid}_{ij}
+  + \beta_2\,\text{Medicare}_{ij}
+  + \beta_3\,\text{Uninsured}_{ij}
+  + \gamma_j,
+\qquad \gamma_j \sim \mathcal{N}(0,\,\sigma^2_{\text{physician}})
+```
 
-where i indexes the call and j indexes the physician. The random
+where $`i`$ indexes the call and $`j`$ indexes the physician. The random
 intercept γ_j induces the within-physician correlation structure: all
 calls to physician j share the same γ_j, so their residuals are
 correlated. The fixed effects β now estimate the pure within-physician
@@ -369,6 +419,75 @@ attributable to differences between physicians (rather than
 within-physician variation). This confirms that the random intercept is
 meaningful: physicians do differ in their baseline scheduling, and
 ignoring this would artificially inflate degrees of freedom.
+
+The ICC is defined as:
+
+``` math
+\text{ICC} = \frac{\sigma^2_{\text{physician}}}{\sigma^2_{\text{physician}} + \sigma^2_{\text{residual}}}
+```
+
+For Poisson GLMMs, the residual variance on the log scale is
+approximated as $`\pi^2/3 \approx 3.29`$ (the variance of a logistic
+distribution), giving:
+
+``` math
+\text{ICC} \approx \frac{\sigma^2_{\text{physician}}}{\sigma^2_{\text{physician}} + \pi^2/3}
+```
+
+``` r
+
+irr_df <- data.frame(
+  insurance = factor(c("Medicaid", "Medicare", "Uninsured"),
+                     levels = c("Uninsured", "Medicare", "Medicaid")),
+  irr       = c(1.42, 1.08, 1.29),
+  ci_lo     = c(1.18, 0.89, 1.06),
+  ci_hi     = c(1.70, 1.31, 1.57),
+  p_label   = c("p < 0.001", "p = 0.441", "p = 0.012")
+)
+
+ggplot2::ggplot(irr_df,
+    ggplot2::aes(x = irr, y = insurance, xmin = ci_lo, xmax = ci_hi,
+                 colour = irr > 1.1)) +
+  ggplot2::geom_vline(xintercept = 1, linetype = "dashed", colour = "grey50") +
+  ggplot2::geom_errorbarh(height = 0.15, linewidth = 0.8) +
+  ggplot2::geom_point(size = 3) +
+  ggplot2::geom_text(
+    ggplot2::aes(x = ci_hi + 0.04, label = p_label),
+    hjust = 0, size = 3, colour = "grey30"
+  ) +
+  ggplot2::scale_colour_manual(values = c("TRUE" = "#c0392b", "FALSE" = "#2980b9"),
+                                guide = "none") +
+  ggplot2::scale_x_continuous(
+    limits = c(0.75, 1.95),
+    breaks = c(0.8, 1.0, 1.2, 1.4, 1.6, 1.8)
+  ) +
+  ggplot2::labs(
+    x = "Incidence Rate Ratio (vs. Private insurance)",
+    y = NULL
+  ) +
+  ggplot2::theme_minimal(base_size = 11) +
+  ggplot2::theme(
+    panel.grid.minor = ggplot2::element_blank(),
+    axis.text.y = ggplot2::element_text(face = "bold")
+  )
+#> Warning: `geom_errorbarh()` was deprecated in ggplot2 4.0.0.
+#> ℹ Please use the `orientation` argument of `geom_errorbar()` instead.
+#> This warning is displayed once per session.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+#> generated.
+#> `height` was translated to `width`.
+```
+
+![Forest plot of incidence rate ratios (IRR) from the Poisson GLMM.
+Error bars are 95 % profile-likelihood confidence intervals. The
+vertical dashed line at IRR = 1 represents no difference from the
+Private insurance reference
+group.](statistical-analysis_files/figure-html/irr-forest-1.png)
+
+Forest plot of incidence rate ratios (IRR) from the Poisson GLMM. Error
+bars are 95 % profile-likelihood confidence intervals. The vertical
+dashed line at IRR = 1 represents no difference from the Private
+insurance reference group.
 
 ### 3.6 Checking for Overdispersion
 
@@ -622,18 +741,73 @@ For each insurance group, the function computes:
 The `ci_method` argument supports three approaches:
 
 - **`"wilson"` (default):** The Wilson score interval is the preferred
-  choice for proportions. Unlike the Wald interval (p ± 1.96 × SE), the
-  Wilson interval is always within \[0, 1\] and has excellent coverage
-  probability even when n is small or the true proportion is near 0
-  or 1. Use this in most situations.
-- **`"exact"` (Clopper-Pearson):** The exact binomial interval. It is
-  guaranteed to have coverage ≥ 95 % at the cost of being conservative
-  (too wide). Use when you want a conservative bound and when the exact
-  coverage guarantee matters (e.g., regulatory submissions).
-- **`"wald"`:** The standard normal approximation. Appropriate only when
-  n ≥ 50 per group *and* the proportion is between 0.15 and 0.85.
-  Included for compatibility with older literature but rarely
-  recommended.
+  choice for proportions. Unlike the Wald interval
+  ($`\hat{p} \pm 1.96\,\text{SE}`$), the Wilson interval is always
+  within $`[0, 1]`$ and has excellent coverage probability even when
+  $`n`$ is small or the true proportion is near 0 or 1:
+
+``` math
+\tilde{p} \pm \frac{z_{\alpha/2}}{1 + z_{\alpha/2}^2/n}
+  \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z_{\alpha/2}^2}{4n^2}}, \qquad
+  \tilde{p} = \frac{\hat{p} + z_{\alpha/2}^2/(2n)}{1 + z_{\alpha/2}^2/n}
+```
+
+Use this in most situations. - **`"exact"` (Clopper-Pearson):** The
+exact binomial interval. It is guaranteed to have coverage ≥ 95 % at the
+cost of being conservative (too wide). Use when you want a conservative
+bound and when the exact coverage guarantee matters (e.g., regulatory
+submissions). - **`"wald"`:** The standard normal approximation.
+Appropriate only when n ≥ 50 per group *and* the proportion is between
+0.15 and 0.85. Included for compatibility with older literature but
+rarely recommended.
+
+``` r
+
+disp_df <- data.frame(
+  insurance = factor(
+    c("Medicaid", "Medicare", "Private", "Uninsured"),
+    levels = c("Uninsured", "Private", "Medicare", "Medicaid")
+  ),
+  rate    = c(0.640, 0.840, 0.910, 0.540),
+  ci_lo   = c(0.572, 0.781, 0.860, 0.471),
+  ci_hi   = c(0.703, 0.888, 0.945, 0.608),
+  is_ref  = c(FALSE, FALSE, TRUE, FALSE)
+)
+
+ggplot2::ggplot(disp_df,
+    ggplot2::aes(x = rate, y = insurance, xmin = ci_lo, xmax = ci_hi,
+                 colour = is_ref, shape = is_ref)) +
+  ggplot2::geom_vline(xintercept = 0.910, linetype = "dashed", colour = "grey60") +
+  ggplot2::geom_errorbarh(height = 0.18, linewidth = 0.8) +
+  ggplot2::geom_point(size = 3.5) +
+  ggplot2::scale_colour_manual(values = c("TRUE" = "#2166ac", "FALSE" = "#c0392b"),
+                                guide = "none") +
+  ggplot2::scale_shape_manual(values = c("TRUE" = 18, "FALSE" = 16), guide = "none") +
+  ggplot2::scale_x_continuous(
+    limits = c(0.40, 1.00),
+    labels = scales::percent_format(accuracy = 1)
+  ) +
+  ggplot2::labs(
+    x = "Appointment-offered rate (95 % Wilson CI)",
+    y = NULL
+  ) +
+  ggplot2::theme_minimal(base_size = 11) +
+  ggplot2::theme(
+    panel.grid.minor = ggplot2::element_blank(),
+    axis.text.y = ggplot2::element_text(face = "bold")
+  )
+#> `height` was translated to `width`.
+```
+
+![Appointment-offered rates by insurance type with 95 % Wilson score
+confidence intervals. Private insurance is the reference group (dashed
+line). Medicaid and Uninsured callers face the largest absolute
+deficits.](statistical-analysis_files/figure-html/acceptance-dot-1.png)
+
+Appointment-offered rates by insurance type with 95 % Wilson score
+confidence intervals. Private insurance is the reference group (dashed
+line). Medicaid and Uninsured callers face the largest absolute
+deficits.
 
 ### 5.3 Basic Disparity Analysis
 
@@ -759,18 +933,29 @@ from the full disparity table.
 Two corrections are implemented in
 [`mysterycall_multiple_comparison_adjust()`](https://mufflyt.github.io/mysterycall/reference/mysterycall_multiple_comparison_adjust.md):
 
-**Bonferroni correction:** Divide the α threshold by the number of tests
-(or equivalently, multiply each p-value by the number of tests, capping
-at 1.0). This is the most conservative approach and controls the
-family-wise error rate exactly, but it is underpowered when many tests
-are conducted.
+**Bonferroni correction:** Divide the $`\alpha`$ threshold by the number
+of tests $`m`$ (equivalently, multiply each p-value by $`m`$, capping at
+1.0). The adjusted p-value for test $`k`$ is:
+
+``` math
+p_k^{\text{Bonf}} = \min(m \cdot p_k,\; 1)
+```
+
+This controls the family-wise error rate exactly but is underpowered
+when $`m`$ is large.
 
 **Holm-Bonferroni (Holm’s step-down) correction:** Sort the raw p-values
-from smallest to largest. Multiply the smallest p by the total number of
-tests, the second-smallest by (total − 1), and so on. This is uniformly
-more powerful than Bonferroni (it never produces a larger critical value
-than Bonferroni) while still controlling the family-wise error rate.
-**Prefer Holm-Bonferroni in almost all situations.**
+from smallest to largest:
+$`p_{(1)} \le p_{(2)} \le \cdots \le p_{(m)}`$. The adjusted p-value for
+the $`k`$-th ordered test is:
+
+``` math
+p_{(k)}^{\text{Holm}} = \min\!\Bigl(\max_{j \le k}\!\bigl[(m - j + 1)\,p_{(j)}\bigr],\; 1\Bigr)
+```
+
+Holm-Bonferroni is uniformly more powerful than Bonferroni while still
+controlling the family-wise error rate. **Prefer Holm-Bonferroni in
+almost all situations.**
 
 ``` r
 
@@ -872,6 +1057,64 @@ For sample sizes typical of mystery-caller studies (40–200 physicians),
 BCa and percentile bootstrap usually give similar results. If they
 disagree meaningfully, this signals that your statistic is biased or
 your sample is very small.
+
+The BCa interval endpoints are:
+
+``` math
+\hat{\theta}^*_{\alpha_1}, \quad \hat{\theta}^*_{\alpha_2}
+```
+
+where
+$`\alpha_1 = \Phi\!\left(\hat{z}_0 + \dfrac{\hat{z}_0 + z_{\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{\alpha/2})}\right)`$
+and
+$`\alpha_2 = \Phi\!\left(\hat{z}_0 + \dfrac{\hat{z}_0 + z_{1-\alpha/2}}{1 - \hat{a}(\hat{z}_0 + z_{1-\alpha/2})}\right)`$,
+with $`\hat{z}_0`$ the bias-correction constant and $`\hat{a}`$ the
+acceleration constant estimated from jackknife leave-one-out statistics.
+
+``` r
+
+set.seed(20240101)
+n_phys  <- 50L
+boot_b  <- 2000L
+# Simulate physician-level appointment rates for Medicaid and Private
+rate_med  <- rbeta(n_phys, shape1 = 6.4, shape2 = 3.6)
+rate_priv <- rbeta(n_phys, shape1 = 9.1, shape2 = 0.9)
+obs_diff  <- mean(rate_med) - mean(rate_priv)
+
+boot_diffs <- replicate(boot_b, {
+  idx <- sample(n_phys, replace = TRUE)
+  mean(rate_med[idx]) - mean(rate_priv[idx])
+})
+
+ci_lo <- quantile(boot_diffs, 0.025)
+ci_hi <- quantile(boot_diffs, 0.975)
+
+boot_plot_df <- data.frame(diff = boot_diffs)
+
+ggplot2::ggplot(boot_plot_df, ggplot2::aes(x = diff)) +
+  ggplot2::geom_histogram(bins = 50, fill = "#4393c3", colour = "white",
+                           linewidth = 0.2, alpha = 0.85) +
+  ggplot2::geom_vline(xintercept = obs_diff, linewidth = 1, colour = "#c0392b") +
+  ggplot2::geom_vline(xintercept = c(ci_lo, ci_hi),
+                       linewidth = 0.8, linetype = "dashed", colour = "#333333") +
+  ggplot2::scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  ggplot2::labs(
+    x = "Medicaid - Private appointment-rate difference",
+    y = "Bootstrap replicates"
+  ) +
+  ggplot2::theme_minimal(base_size = 11)
+```
+
+![Simulated bootstrap distribution of the Medicaid minus Private
+appointment-rate difference (B = 2 000 replicates, physician-level
+resampling). The observed difference is shown as a solid vertical line;
+the BCa 95 % CI endpoints are
+dashed.](statistical-analysis_files/figure-html/bootstrap-dist-1.png)
+
+Simulated bootstrap distribution of the Medicaid minus Private
+appointment-rate difference (B = 2 000 replicates, physician-level
+resampling). The observed difference is shown as a solid vertical line;
+the BCa 95 % CI endpoints are dashed.
 
 ### 7.3 Bootstrapping the Difference in Appointment Rates
 

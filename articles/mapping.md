@@ -95,6 +95,66 @@ head(ACOG_Districts)
 #> 6 Colorado   District VIII District VIII CO
 ```
 
+The table below summarises how many states each district covers:
+
+``` r
+
+data(ACOG_Districts)
+dist_summary <- aggregate(State ~ ACOG_District, data = ACOG_Districts, FUN = length)
+names(dist_summary)[2] <- "n_states"
+dist_summary <- dist_summary[order(dist_summary$ACOG_District), ]
+knitr::kable(
+  dist_summary,
+  col.names = c("ACOG District", "States"),
+  caption   = "Number of US states (and territories) in each ACOG district.",
+  row.names = FALSE
+)
+```
+
+| ACOG District | States |
+|:--------------|-------:|
+| District I    |      6 |
+| District II   |      1 |
+| District III  |      2 |
+| District IV   |      9 |
+| District IX   |      1 |
+| District V    |      4 |
+| District VI   |      7 |
+| District VII  |      8 |
+| District VIII |     12 |
+| District XI   |      1 |
+| District XII  |      1 |
+
+Number of US states (and territories) in each ACOG district. {.table}
+
+``` r
+
+data(ACOG_Districts)
+dist_counts <- aggregate(State ~ ACOG_District, data = ACOG_Districts, FUN = length)
+names(dist_counts)[2] <- "n_states"
+dist_counts$ACOG_District <- factor(
+  dist_counts$ACOG_District,
+  levels = dist_counts$ACOG_District[order(dist_counts$n_states)]
+)
+
+ggplot2::ggplot(dist_counts,
+    ggplot2::aes(x = n_states, y = ACOG_District, fill = n_states)) +
+  ggplot2::geom_col(width = 0.7) +
+  ggplot2::geom_text(ggplot2::aes(label = n_states), hjust = -0.2, size = 3.2) +
+  ggplot2::scale_fill_gradient(low = "#c6dbef", high = "#2171b5", guide = "none") +
+  ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = c(0, 0.15))) +
+  ggplot2::labs(x = "Number of states", y = NULL) +
+  ggplot2::theme_minimal(base_size = 11) +
+  ggplot2::theme(panel.grid.major.y = ggplot2::element_blank())
+```
+
+![State count per ACOG district. Districts vary from 2 (District XI —
+Puerto Rico / US territories) to 8
+states.](mapping_files/figure-html/acog-district-bar-1.png)
+
+State count per ACOG district. Districts vary from 2 (District XI —
+Puerto Rico / US territories) to 8 states.
+
 ## Physician dot map
 
 [`map_create_physician_dot()`](https://mufflyt.github.io/mysterycall/reference/mysterycall-deprecated.md)

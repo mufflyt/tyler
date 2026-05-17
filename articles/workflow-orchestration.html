@@ -612,13 +612,42 @@ Provider 7 → Bob
 callers for any roster size. The assignment is deterministic given the
 seed, the order of rows in <code>data</code>, and the order of names in
 <code>lab_assistant_names</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">callers</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Carol"</span>, <span class="st">"Dana"</span>, <span class="st">"Eve"</span><span class="op">)</span></span>
+<span><span class="va">n_total</span>   <span class="op">&lt;-</span> <span class="fl">198L</span></span>
+<span><span class="va">base_load</span> <span class="op">&lt;-</span> <span class="va">n_total</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">callers</span><span class="op">)</span></span>
+<span><span class="va">extra</span>     <span class="op">&lt;-</span> <span class="va">n_total</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">callers</span><span class="op">)</span></span>
+<span><span class="va">loads</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">base_load</span> <span class="op">+</span> <span class="fl">1L</span>, <span class="va">extra</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">base_load</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">callers</span><span class="op">)</span> <span class="op">-</span> <span class="va">extra</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">wb_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  caller <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">callers</span>, levels <span class="op">=</span> <span class="va">callers</span><span class="op">)</span>,</span>
+<span>  n      <span class="op">=</span> <span class="va">loads</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wb_df</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">caller</span>, y <span class="op">=</span> <span class="va">n</span>, fill <span class="op">=</span> <span class="va">caller</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">n</span><span class="op">)</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.4</span>, size <span class="op">=</span> <span class="fl">3.5</span>,</span>
+<span>                      fontface <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.15</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                               limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Providers assigned"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>panel.grid.major.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="workflow-orchestration_files/figure-html/workload-bar-1.png" class="r-plt" alt="Example round-robin workload distribution across five callers for a 198-provider roster. Differences of at most 1 provider guarantee balanced calling burden." width="480"><p class="caption">
+Example round-robin workload distribution across five callers for a
+198-provider roster. Differences of at most 1 provider guarantee
+balanced calling burden.
+</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="verifying-the-split-no-omissions-no-duplicates">4.4 Verifying the split: no omissions, no duplicates<a class="anchor" aria-label="anchor" href="#verifying-the-split-no-omissions-no-duplicates"></a>
 </h3>
 <p>Before sending workbooks to callers, verify that every provider
 appears in exactly one workbook:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read all workbooks back and combine</span></span>
 <span><span class="va">all_workbooks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">workbooks</span><span class="op">$</span><span class="va">file_paths</span>, <span class="fu">readxl</span><span class="fu">::</span><span class="va"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">)</span></span>
 <span><span class="va">combined</span>      <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">all_workbooks</span><span class="op">)</span></span>
@@ -695,7 +724,7 @@ with.</p>
 <h3 id="mysterycall_rename_columns-fuzzy-column-name-matching">5.2 <code>mysterycall_rename_columns()</code>: fuzzy column name
 matching<a class="anchor" aria-label="anchor" href="#mysterycall_rename_columns-fuzzy-column-name-matching"></a>
 </h3>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Standardise column names across all returned workbooks</span></span>
 <span><span class="va">renamed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_rename_columns.html">mysterycall_rename_columns</a></span><span class="op">(</span></span>
 <span>  data           <span class="op">=</span> <span class="va">raw_returned_workbook</span>,</span>
@@ -716,7 +745,7 @@ function emits a <strong>warning</strong> rather than an error. This is
 intentional: some callers may legitimately omit optional columns, and a
 warning lets you decide whether the missing column is a problem without
 crashing the pipeline.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># If no column contains "wait", you get:</span></span>
 <span><span class="co">#&gt; Warning in mysterycall_rename_columns():</span></span>
 <span><span class="co">#&gt;   Target substring 'wait' did not match any column name.</span></span>
@@ -727,7 +756,7 @@ crashing the pipeline.</p>
 <h3 id="mysterycall_clean_phase2-the-full-phase-2-cleaning-step">5.3 <code>mysterycall_clean_phase2()</code>: the full Phase 2
 cleaning step<a class="anchor" aria-label="anchor" href="#mysterycall_clean_phase2-the-full-phase-2-cleaning-step"></a>
 </h3>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phase2_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_clean_phase2.html">mysterycall_clean_phase2</a></span><span class="op">(</span></span>
 <span>  data             <span class="op">=</span> <span class="st">"/study/returned_workbooks"</span>,  <span class="co"># directory of Excel files</span></span>
 <span>  output_directory <span class="op">=</span> <span class="st">"/study/phase2_output"</span>,</span>
@@ -746,7 +775,7 @@ approach for the standard workflow.</p>
 is processed directly. This is useful when you have already combined the
 workbooks manually or want to process a single file.</p>
 <p>A complete example showing messy column normalisation:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Simulate two messy returned workbooks</span></span>
 <span><span class="va">alice_wb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  NPI          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1234567893"</span>, <span class="st">"9876543210"</span><span class="op">)</span>,</span>
@@ -779,7 +808,7 @@ The quality check table provides this.</p>
 <div class="section level3">
 <h3 id="what-the-table-contains">6.1 What the table contains<a class="anchor" aria-label="anchor" href="#what-the-table-contains"></a>
 </h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_save_quality_table.html">mysterycall_save_quality_table</a></span><span class="op">(</span></span>
 <span>  data        <span class="op">=</span> <span class="va">phase2_result</span>,</span>
 <span>  output_path <span class="op">=</span> <span class="st">"/study/qa/quality_table.csv"</span>,</span>
@@ -830,7 +859,7 @@ insurance stratum) containing:</p>
 <p>The standard threshold in most mystery-caller protocols is 80%
 completion. Read the table back and flag callers below that
 threshold:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">qa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"/study/qa/quality_table.csv"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Flag callers below 80% completion</span></span>
@@ -858,7 +887,7 @@ zero completed calls.</p>
 <div class="section level3">
 <h3 id="the-all_states-parameter">7.1 The <code>all_states</code> parameter<a class="anchor" aria-label="anchor" href="#the-all_states-parameter"></a>
 </h3>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">not_contacted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_not_contacted_states.html">mysterycall_not_contacted_states</a></span><span class="op">(</span></span>
 <span>  data       <span class="op">=</span> <span class="va">phase2_result</span>,</span>
 <span>  all_states <span class="op">=</span> <span class="va">state.abb</span>           <span class="co"># all 50 states, or a custom list</span></span>
@@ -873,7 +902,7 @@ non-missing.</p>
 <div class="section level3">
 <h3 id="visualising-contacted-vs-not-contacted-states">7.2 Visualising contacted vs not-contacted states<a class="anchor" aria-label="anchor" href="#visualising-contacted-vs-not-contacted-states"></a>
 </h3>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Quick cross-tabulation of states by contact status</span></span>
 <span><span class="va">contacted_states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">phase2_result</span><span class="op">$</span><span class="va">state</span><span class="op">[</span></span>
 <span>  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">phase2_result</span><span class="op">$</span><span class="va">call_outcome</span><span class="op">)</span></span>
@@ -892,7 +921,7 @@ non-missing.</p>
 <div class="section level3">
 <h3 id="filtering-for-follow-up-prioritisation">7.3 Filtering for follow-up prioritisation<a class="anchor" aria-label="anchor" href="#filtering-for-follow-up-prioritisation"></a>
 </h3>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Which specific states need follow-up?</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"States with zero completed calls:\n"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">not_contacted</span><span class="op">$</span><span class="va">state</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
@@ -1010,7 +1039,7 @@ artifacts.</p>
 <div class="section level3">
 <h3 id="the-returned-list-structure">8.2 The returned list structure<a class="anchor" aria-label="anchor" href="#the-returned-list-structure"></a>
 </h3>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "phase1_result"           "validated_npi"</span></span>
 <span><span class="co">#&gt;  [3] "workbook_paths"          "phase2_result"</span></span>
@@ -1025,7 +1054,7 @@ downstream analysis functions just as you would if you had called
 <div class="section level3">
 <h3 id="a-complete-realistic-call">8.3 A complete realistic call<a class="anchor" aria-label="anchor" href="#a-complete-realistic-call"></a>
 </h3>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_run_workflow.html">mysterycall_run_workflow</a></span><span class="op">(</span></span>
 <span>  taxonomy_terms      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"207V00000X"</span>,   <span class="co"># Obstetrics &amp; Gynecology</span></span>
@@ -1054,16 +1083,16 @@ you cannot be present at the console, use
 <strong>functionally identical</strong> to
 <code><a href="../reference/mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code> but wraps every pipeline stage
 in structured JSON logging:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged</a></span><span class="op">(</span></span>
 <span>  <span class="co"># ... same parameters as mysterycall_run_workflow() ...</span></span>
 <span>  log_file <span class="op">=</span> <span class="st">"/network/obgyn_study/logs/workflow_run.jsonl"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Each line of the <code>.jsonl</code> log file contains:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">{</span><span class="dt">"stage"</span><span class="fu">:</span> <span class="st">"phase1_clean"</span><span class="fu">,</span> <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"started"</span><span class="fu">,</span>  <span class="dt">"timestamp"</span><span class="fu">:</span> <span class="st">"2024-03-15T09:22:41Z"</span><span class="fu">,</span> <span class="dt">"input_rows"</span><span class="fu">:</span> <span class="dv">847</span><span class="fu">}</span></span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">{</span><span class="dt">"stage"</span><span class="fu">:</span> <span class="st">"phase1_clean"</span><span class="fu">,</span> <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"completed"</span><span class="fu">,</span> <span class="dt">"timestamp"</span><span class="fu">:</span> <span class="st">"2024-03-15T09:22:43Z"</span><span class="fu">,</span> <span class="dt">"output_rows"</span><span class="fu">:</span> <span class="dv">1694</span><span class="fu">,</span> <span class="dt">"duration_sec"</span><span class="fu">:</span> <span class="fl">2.1</span><span class="fu">}</span></span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="fu">{</span><span class="dt">"stage"</span><span class="fu">:</span> <span class="st">"npi_validate"</span><span class="fu">,</span> <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"started"</span><span class="fu">,</span>  <span class="dt">"timestamp"</span><span class="fu">:</span> <span class="st">"2024-03-15T09:22:43Z"</span><span class="fu">}</span></span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="er">...</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">{</span><span class="dt">"stage"</span><span class="fu">:</span> <span class="st">"phase1_clean"</span><span class="fu">,</span> <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"started"</span><span class="fu">,</span>  <span class="dt">"timestamp"</span><span class="fu">:</span> <span class="st">"2024-03-15T09:22:41Z"</span><span class="fu">,</span> <span class="dt">"input_rows"</span><span class="fu">:</span> <span class="dv">847</span><span class="fu">}</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">{</span><span class="dt">"stage"</span><span class="fu">:</span> <span class="st">"phase1_clean"</span><span class="fu">,</span> <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"completed"</span><span class="fu">,</span> <span class="dt">"timestamp"</span><span class="fu">:</span> <span class="st">"2024-03-15T09:22:43Z"</span><span class="fu">,</span> <span class="dt">"output_rows"</span><span class="fu">:</span> <span class="dv">1694</span><span class="fu">,</span> <span class="dt">"duration_sec"</span><span class="fu">:</span> <span class="fl">2.1</span><span class="fu">}</span></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">{</span><span class="dt">"stage"</span><span class="fu">:</span> <span class="st">"npi_validate"</span><span class="fu">,</span> <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"started"</span><span class="fu">,</span>  <span class="dt">"timestamp"</span><span class="fu">:</span> <span class="st">"2024-03-15T09:22:43Z"</span><span class="fu">}</span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="er">...</span></span></code></pre></div>
 <p>If the workflow crashes mid-run, the log file shows exactly which
 stage failed and what the input state was, so you can restart from that
 stage without re-running earlier steps.</p>
@@ -1076,7 +1105,7 @@ stage without re-running earlier steps.</p>
 <p>After <code><a href="../reference/mysterycall_run_workflow.html">mysterycall_run_workflow()</a></code> returns, the first
 thing to inspect is <code>result$workflow_summary</code>. This is a data
 frame with one row per pipeline stage:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="va">result</span><span class="op">$</span><span class="va">workflow_summary</span>,</span>
 <span>  caption <span class="op">=</span> <span class="st">"Row counts through the pipeline"</span></span>
@@ -1145,7 +1174,7 @@ expected non-contact rate.</li>
 matches the hash stored in your lab notebook entry for this wave of data
 collection.</li>
 </ol>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Programmatic pre-analysis checks</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span></span>
 <span>  <span class="va">result</span><span class="op">$</span><span class="va">workflow_summary</span><span class="op">$</span><span class="va">rows_retained</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">==</span> <span class="fl">100</span>,</span>
@@ -1161,7 +1190,7 @@ collection.</li>
 <h3 id="always-run-the-preflight-check-first">10.1 Always run the preflight check first<a class="anchor" aria-label="anchor" href="#always-run-the-preflight-check-first"></a>
 </h3>
 <p>Before passing any data to the workflow, run:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mysterycall_preflight_check.html">mysterycall_preflight_check</a></span><span class="op">(</span>phase1_data <span class="op">=</span> <span class="va">raw_roster</span><span class="op">)</span></span></code></pre></div>
 <p>This validates that all required columns are present, checks for
 completely empty data frames, and warns about potential encoding
@@ -1180,7 +1209,7 @@ OneDrive) ensures that callers can download their workbooks without
 emailing files and that coordinators can monitor progress in real
 time.</p>
 <p>Avoid paths with spaces. Use hyphens or underscores:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Good</span></span>
 <span><span class="va">output_directory</span> <span class="op">=</span> <span class="st">"/Volumes/ResearchDrive/obgyn_mystery_caller_2024"</span></span>
 <span></span>
@@ -1215,7 +1244,7 @@ Phase 2 alone rather than restarting the entire workflow.</p>
 In large studies, Phase 1 with <code>duplicate_rows = TRUE</code> and
 <code>output_format = "parquet"</code> is typically the fastest
 combination (5–10× faster than CSV for &gt; 5,000 rows).</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Recommended settings for large studies</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mysterycall_run_workflow_logged.html">mysterycall_run_workflow_logged</a></span><span class="op">(</span></span>
 <span>  phase1_data      <span class="op">=</span> <span class="va">large_roster</span>,</span>
