@@ -716,39 +716,31 @@ $$\tilde{p} \pm \frac{z_{\alpha/2}}{1 + z_{\alpha/2}^2/n}
   compatibility with older literature but rarely recommended.
 
 ```{r acceptance-dot, echo=TRUE, eval=TRUE, fig.width=5.5, fig.height=3.2, fig.cap="Appointment-offered rates by insurance type with 95 % Wilson score confidence intervals. Private insurance is the reference group (dashed line). Medicaid and Uninsured callers face the largest absolute deficits."}
-disp_df <- data.frame(
-  insurance = factor(
-    c("Medicaid", "Medicare", "Private", "Uninsured"),
-    levels = c("Uninsured", "Private", "Medicare", "Medicaid")
-  ),
-  rate    = c(0.640, 0.840, 0.910, 0.540),
-  ci_lo   = c(0.572, 0.781, 0.860, 0.471),
-  ci_hi   = c(0.703, 0.888, 0.945, 0.608),
-  is_ref  = c(FALSE, FALSE, TRUE, FALSE)
-)
+# Build a representative disparities table from synthetic data
+set.seed(99)
+n_per   <- 200L
+ins     <- rep(c("Medicaid", "Medicare", "Private", "Uninsured"), each = n_per)
+probs   <- rep(c(0.64, 0.84, 0.91, 0.54), each = n_per)
+demo_df <- data.frame(insurance = ins,
+                       accepted  = rbinom(length(ins), 1L, probs))
 
-ggplot2::ggplot(disp_df,
-    ggplot2::aes(x = rate, y = insurance, xmin = ci_lo, xmax = ci_hi,
-                 colour = is_ref, shape = is_ref)) +
-  ggplot2::geom_vline(xintercept = 0.910, linetype = "dashed", colour = "grey60") +
-  ggplot2::geom_errorbarh(height = 0.18, linewidth = 0.8) +
-  ggplot2::geom_point(size = 3.5) +
-  ggplot2::scale_colour_manual(values = c("TRUE" = "#2166ac", "FALSE" = "#c0392b"),
-                                guide = "none") +
-  ggplot2::scale_shape_manual(values = c("TRUE" = 18, "FALSE" = 16), guide = "none") +
-  ggplot2::scale_x_continuous(
-    limits = c(0.40, 1.00),
-    labels = scales::percent_format(accuracy = 1)
-  ) +
-  ggplot2::labs(
-    x = "Appointment-offered rate (95 % Wilson CI)",
-    y = NULL
-  ) +
-  ggplot2::theme_minimal(base_size = 11) +
-  ggplot2::theme(
-    panel.grid.minor = ggplot2::element_blank(),
-    axis.text.y = ggplot2::element_text(face = "bold")
-  )
+disp_tbl <- mysterycall_disparities_table(demo_df, "accepted", "insurance",
+                                           ref_group = "Private")
+
+# One call replaces 30+ lines of manual ggplot2
+mysterycall_plot_disparities(disp_tbl, metric = "rate")
+```
+
+`mysterycall_plot_disparities()` supports three metrics — switch with `metric`:
+
+```{r disp-abs-diff, echo=TRUE, eval=TRUE, fig.width=5.2, fig.height=3.2, fig.cap="Absolute difference in acceptance rate (percentage points) versus Private insurance. Negative values indicate lower appointment-offered rates."}
+mysterycall_plot_disparities(disp_tbl, metric = "abs_diff",
+                              title = "Absolute disparity (pp vs. Private)")
+```
+
+```{r disp-rr, echo=TRUE, eval=TRUE, fig.width=5.2, fig.height=3.2, fig.cap="Relative risk of being offered an appointment versus Private insurance. Values below 1 indicate lower rates for that group."}
+mysterycall_plot_disparities(disp_tbl, metric = "rel_risk",
+                              title = "Relative risk vs. Private")
 ```
 
 ## 5.3 Basic Disparity Analysis

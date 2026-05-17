@@ -87,7 +87,19 @@ utils::globalVariables(c(
   "address1_norm",
   "tmp_units",
   "tmp_units_addr1",
-  "tmp_units_addr2"
+  "tmp_units_addr2",
+  ".x",
+  ".xmin",
+  ".xmax",
+  ".colour",
+  ".shape",
+  ".p_label",
+  "abs_diff",
+  "rel_risk",
+  "rr_lower",
+  "rr_upper",
+  "p_value_fmt",
+  "p_value"
 ))
 
 .onAttach <- function(libname, pkgname) {

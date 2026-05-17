@@ -268,6 +268,7 @@ reference:
     desc: >
       Publication-ready plots for distributions, interactions, residuals, and stacked bars.
     contents:
+      - mysterycall_plot_disparities
       - mysterycall_plot_stacked_bar
       - mysterycall_plot_interaction
       - mysterycall_plot_density
