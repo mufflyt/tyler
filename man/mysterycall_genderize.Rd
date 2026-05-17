@@ -21,8 +21,17 @@ saved. Defaults to a session-specific subfolder of \code{\link[=tempdir]{tempdir
 output file.}
 }
 \value{
-A data frame matching the input rows with additional columns from
-Genderize.io: typically \code{gender}, \code{probability}, and \code{count}.
+A data frame with the same row count and all original columns as
+\code{data_or_path}, with three new columns appended:
+\describe{
+\item{\code{gender}}{Character. \code{"male"}, \code{"female"}, or \code{NA} for ambiguous
+or unknown names.}
+\item{\code{probability}}{Numeric in \link{0, 1}. API prediction confidence.}
+\item{\code{count}}{Integer. Historical frequency of the name in the
+Genderize.io database.}
+}
+Side effect: the enriched roster is written to \code{output_dir} as CSV or
+Parquet with a timestamp in the filename.
 }
 \description{
 Queries the \href{https://genderize.io}{Genderize.io} API for first-name gender
@@ -42,7 +51,7 @@ responses are stored as \code{NA} in the raw \code{gender} output column. If the
 ever adds non-binary values they will be stored as-is in \code{gender} but will
 be recoded to \code{"Unknown"} by \code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}}.
 
-The \code{probability} column (0–1) reflects the API's prediction confidence.
+The \code{probability} column (0-1) reflects the API's prediction confidence.
 Names with low probability may be genuine but uncommon (e.g., gender-neutral
 names). A common post-processing filter:
 
@@ -89,7 +98,24 @@ result <- mysterycall_genderize(my_dataframe)  # also accepts a data frame direc
 \code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}} for downstream gender
 recoding to \code{"Male"}/\code{"Female"}/\code{"Unknown"}.
 
-Other gender: 
-\code{\link{mysterycall_most_common_gender}()}
+Other provider characteristics: 
+\code{\link{mysterycall_academic_patterns}()},
+\code{\link{mysterycall_age_category}()},
+\code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
+\code{\link{mysterycall_classify_medical_school}()},
+\code{\link{mysterycall_classify_practice_setting}()},
+\code{\link{mysterycall_classify_ruca}()},
+\code{\link{mysterycall_collapse_rare}()},
+\code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
+\code{\link{mysterycall_government_patterns}()},
+\code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
+\code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_physician_age}()},
+\code{\link{mysterycall_recode_credentials}()},
+\code{\link{mysterycall_reconcile_specialty}()},
+\code{\link{mysterycall_reorder_by_freq}()}
 }
-\concept{gender}
+\concept{provider characteristics}

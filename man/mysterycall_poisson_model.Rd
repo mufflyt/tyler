@@ -46,24 +46,28 @@ as a log-offset (e.g. log(exposure time)). When supplied, the term
 \value{
 A list of class \code{mysterycall_poisson_model} containing:
 \describe{
-\item{\code{model}}{The fitted \code{glmerMod} object.}
-\item{\code{irr_table}}{Tibble with one row per fixed-effect term:
-\code{term}, \code{estimate} (log scale), \code{se}, \code{z_value}, \code{p_value},
-\code{p_value_fmt} (character), \code{irr}, \code{ci_lower}, \code{ci_upper}.}
-\item{\code{random_effects}}{Data frame from \code{\link[lme4:VarCorr]{lme4::VarCorr()}} describing
-the random-intercept variance and standard deviation.}
-\item{\code{factor_refs}}{Named list of reference levels for character/factor
-predictors.}
-\item{\code{formula}}{The formula passed to \code{glmer}.}
-\item{\code{n}}{Number of complete-case rows used for fitting.}
-\item{\code{n_dropped}}{Rows excluded due to missing values.}
-\item{\code{n_clusters}}{Number of unique values of \code{random_intercept}.}
-\item{\code{overdispersion}}{Pearson chi-square / residual df. Values
-substantially above 1 suggest overdispersion; consider a negative
-binomial model.}
-\item{\code{convergence}}{List with \code{converged} (logical), \code{singular}
-(logical), and \code{messages} (character).}
-\item{\code{aic}, \code{bic}}{Model information criteria.}
+\item{\code{model}}{\code{glmerMod}. The fitted multilevel Poisson model.}
+\item{\code{irr_table}}{\code{tibble}. One row per fixed-effect term with
+columns: \code{term} (character), \code{estimate} (numeric, log scale),
+\code{se} (numeric), \code{z_value} (numeric), \code{p_value} (numeric),
+\code{p_value_fmt} (character, formatted), \code{irr} (numeric, incidence
+rate ratio), \code{ci_lower} (numeric), \code{ci_upper} (numeric).}
+\item{\code{random_effects}}{\code{data.frame} from \code{\link[lme4:VarCorr]{lme4::VarCorr()}}.
+Describes random-intercept variance and standard deviation.}
+\item{\code{factor_refs}}{\code{list} (named). Reference levels for each
+character/factor predictor.}
+\item{\code{formula}}{\code{formula}. The formula passed to \code{\link[lme4:glmer]{lme4::glmer()}}.}
+\item{\code{n}}{\code{integer}. Number of complete-case rows used for fitting.}
+\item{\code{n_dropped}}{\code{integer}. Rows excluded due to missing values.}
+\item{\code{n_clusters}}{\code{integer}. Number of unique values of
+\code{random_intercept}.}
+\item{\code{overdispersion}}{\code{numeric}. Pearson chi-square / residual df.
+Values substantially above 1 (common threshold: 2) suggest
+overdispersion; consider a negative binomial model.}
+\item{\code{convergence}}{\code{list}. Elements: \code{converged} (logical),
+\code{singular} (logical), \code{messages} (character vector).}
+\item{\code{aic}}{\code{numeric}. Akaike Information Criterion.}
+\item{\code{bic}}{\code{numeric}. Bayesian Information Criterion.}
 }
 }
 \description{
@@ -79,7 +83,7 @@ physicians. Fixed-effect results are returned as incidence rate ratios
 An IRR of 1.40 for \code{insurance_typeMedicaid} means physicians contacted
 with Medicaid insurance had, on average, 40\% longer wait times than the
 reference insurance group. Compute as \code{exp(estimate)} with Wald CI
-\verb{exp(estimate ± z * se)}.
+\verb{exp(estimate +/- z * se)}.
 }
 
 \section{Overdispersion}{
@@ -115,7 +119,6 @@ result$irr_table
 
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -127,7 +130,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_residuals}()},
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

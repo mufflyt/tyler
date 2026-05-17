@@ -14,7 +14,9 @@ mysterycall_remove_near_zero(data_frame, freqCut = 19, uniqueCut = 10)
 \item{uniqueCut}{The percentage of distinct values out of the number of total samples. Defaults to 10.}
 }
 \value{
-A data frame with near-zero variance variables removed.
+A data frame with the same row count as \code{data_frame}, but with
+near-zero variance columns removed. Returns \code{data_frame} unchanged
+when it is empty or no near-zero variance columns are found.
 }
 \description{
 This function takes a data frame and returns a new data frame with near-zero variance variables removed.
@@ -26,24 +28,13 @@ mysterycall_remove_near_zero(df)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other utilities: 
-\code{\link{\%>\%}()},
-\code{\link{mysterycall_assess_data_quality}()},
-\code{\link{mysterycall_check_api_response}()},
-\code{\link{mysterycall_check_data_completeness}()},
-\code{\link{mysterycall_check_dependencies}()},
-\code{\link{mysterycall_check_no_data_loss}()},
-\code{\link{mysterycall_check_no_limits}()},
-\code{\link{mysterycall_download_file}()},
-\code{\link{mysterycall_estimate_resources}()},
-\code{\link{mysterycall_export_with_backup}()},
-\code{\link{mysterycall_preflight_check}()},
-\code{\link{mysterycall_quality_tier}()},
+\code{\link[=mysterycall_remove_constants]{mysterycall_remove_constants()}} to drop columns where every
+value is identical; \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} for pre-processing
+data quality checks.
+
+Other data quality: 
+\code{\link{mysterycall_not_contacted_states}()},
 \code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_resolve_path}()},
-\code{\link{mysterycall_save_quality_table}()},
-\code{\link{mysterycall_scan_for_limits}()},
-\code{\link{mysterycall_standard_labels}()},
-\code{\link{mysterycall_standard_palette}()}
+\code{\link{mysterycall_validate_phone}()}
 }
-\concept{utilities}
+\concept{data quality}

@@ -18,11 +18,11 @@ Invisible NULL
 Complete current step in multi-progress tracker
 }
 \examples{
-\donttest{
-tracker <- mysterycall_multi_step(c("Geocode", "Validate"), 10)
-mysterycall_multi_update(tracker, amount = 10)
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+tracker <- mysterycall_multi_progress(c("Geocode", "Validate"))
+mysterycall_multi_step(tracker, 1, total = 5)
 mysterycall_multi_complete(tracker, result = "ok")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other progress-bars: 

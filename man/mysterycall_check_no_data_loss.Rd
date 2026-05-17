@@ -48,6 +48,9 @@ mysterycall_check_no_data_loss(before, dedup_data, "Deduplication",
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_check_no_limits]{mysterycall_check_no_limits()}}, \code{\link[=mysterycall_check_api_response]{mysterycall_check_api_response()}},
+\code{\link[=mysterycall_scan_for_limits]{mysterycall_scan_for_limits()}} for related sanity-check utilities.
+
 Other utilities: 
 \code{\link{\%>\%}()},
 \code{\link{mysterycall_assess_data_quality}()},
@@ -60,8 +63,6 @@ Other utilities:
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
 \code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_scan_for_limits}()},

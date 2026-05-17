@@ -7,14 +7,22 @@
 mysterycall_hrr(remove_HI_AK = TRUE)
 }
 \arguments{
-\item{remove_HI_AK}{Logical, should Hawaii and Alaska be removed? Default is TRUE.}
+\item{remove_HI_AK}{Logical.  When \code{TRUE} (default), HRRs whose \code{hrrcity}
+starts with \code{"AK"} or \code{"HI"} are dropped from the returned object.}
 }
 \value{
-An sf object containing the hospital referral region data.
+An \code{sf} object with one row per HRR and columns:
+\describe{
+\item{\code{hrrcity}}{Character. HRR city identifier (e.g. \code{"CA-Sacramento"}).}
+\item{\code{hrrnum}}{Integer. Numeric HRR code from the Dartmouth Atlas.}
+\item{\code{geometry}}{sfc_MULTIPOLYGON in EPSG:4326 (WGS84).}
+}
+Additional columns from the raw shapefile may be present.
 }
 \description{
-This function loads the hospital referral region shapefile and optionally removes Hawaii and Alaska.
-The shapefile (~8 MB) is downloaded from the Dartmouth Atlas website on first use and cached in the
+Loads the Dartmouth Atlas Hospital Referral Region (HRR) shapefile,
+transforming it to EPSG:4326 (WGS84) and optionally dropping Alaska and
+Hawaii.  The shapefile (~8 MB) is downloaded on first use and cached in the
 user's R cache directory for subsequent calls.
 }
 \examples{

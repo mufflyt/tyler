@@ -10,7 +10,9 @@ mysterycall_normalize_zip5(zip)
 \item{zip}{Character or numeric vector of ZIP code strings.}
 }
 \value{
-Character vector of 5-digit ZIP codes, or \code{NA} for invalid inputs.
+Character vector of 5-digit ZIP codes, or \code{NA_character_} for
+inputs that contain no 5-digit sequence. Length-0 input returns
+\code{character(0)}.
 }
 \description{
 Extracts the first 5 digits from a ZIP code string, handling ZIP+4 formats

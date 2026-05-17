@@ -52,17 +52,27 @@ names <- c(
 mysterycall_classify_practice_setting(names)
 }
 \seealso{
+\code{\link[=mysterycall_assign_region]{mysterycall_assign_region()}}, \code{\link[=mysterycall_classify_medical_school]{mysterycall_classify_medical_school()}},
+\code{\link[=mysterycall_classify_ruca]{mysterycall_classify_ruca()}},
+\code{\link[=mysterycall_academic_patterns]{mysterycall_academic_patterns()}}, \code{\link[=mysterycall_government_patterns]{mysterycall_government_patterns()}}
+for related provider characterization helpers.
+
 Other provider characteristics: 
 \code{\link{mysterycall_academic_patterns}()},
 \code{\link{mysterycall_age_category}()},
 \code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
 \code{\link{mysterycall_classify_medical_school}()},
 \code{\link{mysterycall_classify_ruca}()},
 \code{\link{mysterycall_collapse_rare}()},
 \code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
 \code{\link{mysterycall_government_patterns}()},
 \code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
 \code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_physician_age}()},
 \code{\link{mysterycall_recode_credentials}()},
 \code{\link{mysterycall_reconcile_specialty}()},
 \code{\link{mysterycall_reorder_by_freq}()}

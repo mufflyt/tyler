@@ -40,14 +40,28 @@ through as \code{region_std}.}
 calendar year.}
 }
 \value{
-\code{data} with zero or more additional standardised columns appended:
-\code{age_imputed}, \code{age_category}, \code{gender_std}, \code{setting_std}, \code{region_std}.
+\code{data} with zero or more additional standardised columns appended
+(only columns whose source \verb{*_col} parameter was non-\code{NULL} are created):
+\describe{
+\item{\code{age_imputed}}{Numeric. Estimated age derived from \code{grad_year_col}
+as \code{ref_year - grad_year}. Only added when \code{grad_year_col} is supplied.}
+\item{\code{age_category}}{Character. Age group binned from \code{age_col} or
+\code{age_imputed} (e.g., \code{"<35"}, \code{"35-44"}, \code{"45-54"}, \code{"55-64"},
+\code{">=65"}). Only added when \code{age_col} or \code{grad_year_col} is supplied.}
+\item{\code{gender_std}}{Character. Standardised gender: \code{"Male"}, \code{"Female"},
+or \code{"Unknown"}. Only added when \code{gender_col} is supplied.}
+\item{\code{setting_std}}{Character. Practice setting, copied from the source
+column. Only added when \code{setting_col} is supplied.}
+\item{\code{region_std}}{Character. Region, copied from the source column.
+Only added when \code{region_col} is supplied.}
+}
 }
 \description{
-A convenience wrapper that applies age imputation, age categorisation, and
-gender standardisation in a single call. Columns are added to (not
-replacing) the input data frame. Only columns explicitly specified are
-processed.
+Convenience wrapper that applies age imputation, age categorisation, and
+gender standardisation in one call.  All output columns are \strong{added} to
+the input data frame - originals are never replaced or removed.  Arguments
+set to \code{NULL} are silently skipped so you can standardise only the
+variables your dataset contains.
 }
 \section{Gender standardisation}{
 
@@ -85,6 +99,7 @@ Other data management:
 \code{\link{mysterycall_extract_zip5}()},
 \code{\link{mysterycall_luhn_check}()},
 \code{\link{mysterycall_merge_with_prefix}()},
+\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_stratified_sample}()}
 }
 \concept{data management}

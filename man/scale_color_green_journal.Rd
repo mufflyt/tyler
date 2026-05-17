@@ -23,6 +23,9 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
   scale_color_green_journal()
 }
 \seealso{
+\code{\link[=scale_fill_green_journal]{scale_fill_green_journal()}} for fill aesthetics;
+\code{\link[=palette_green_journal]{palette_green_journal()}} for the underlying colour values.
+
 Other green-journal-colors: 
 \code{\link{palette_green_journal}()},
 \code{\link{scale_fill_green_journal}()}

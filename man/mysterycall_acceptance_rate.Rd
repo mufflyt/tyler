@@ -33,14 +33,20 @@ trigger Fisher's exact test instead of chi-square. Default \code{5}.}
 \value{
 A named list with:
 \describe{
-\item{\code{summary}}{Tibble with one row per group (or one row overall):
-\code{n_total}, \code{n_missing}, \code{n_accepted}, \code{n_rejected}, \code{rate},
-\code{ci_lower}, \code{ci_upper}.}
+\item{\code{summary}}{Tibble with one row per group (or one row overall).
+When \code{group_by} is non-\code{NULL}, the first column is named after the
+grouping variable (character). Remaining columns: \code{n_total}
+(integer), \code{n_missing} (integer), \code{n_accepted} (integer),
+\code{n_rejected} (integer), \code{rate} (numeric, 0-1), \code{ci_lower} (numeric,
+0-1), \code{ci_upper} (numeric, 0-1).}
 \item{\code{test}}{\code{htest} object from \code{\link[stats:chisq.test]{stats::chisq.test()}} or
 \code{\link[stats:fisher.test]{stats::fisher.test()}}, or \code{NULL} when no test was run.}
-\item{\code{p_value}}{Numeric p-value, or \code{NA_real_}.}
-\item{\code{test_name}}{Character label describing the test used.}
-\item{\code{interpretation}}{One-sentence plain-language summary.}
+\item{\code{p_value}}{Numeric p-value extracted from \code{test}, or \code{NA_real_}
+when no test was run.}
+\item{\code{test_name}}{Character. One of \code{"Fisher's exact"},
+\code{"chi-square"}, \code{"chi-square (small cells)"}, or \code{"none"}.}
+\item{\code{interpretation}}{Character. One-sentence plain-language summary
+suitable for pasting into a Results section.}
 }
 }
 \description{
@@ -67,7 +73,6 @@ mysterycall_acceptance_rate(df, group_by = "insurance")
 \code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}}, \code{\link[=mysterycall_clean_phase2]{mysterycall_clean_phase2()}}
 
 Other outcomes: 
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -80,7 +85,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

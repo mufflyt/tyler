@@ -52,12 +52,19 @@ mysterycall_check_generalist_presence(df, c("city","state"), "specialty",
                                        "General")
 }
 \seealso{
+\code{\link[=mysterycall_caller_reliability]{mysterycall_caller_reliability()}} for inter-rater reliability
+metrics; \code{\link[=mysterycall_assign_scenarios]{mysterycall_assign_scenarios()}} to pair generalists with
+subspecialists once locations are validated;
+\code{\link[=mysterycall_validate_npi]{mysterycall_validate_npi()}} for row-level NPI validation before
+location assignment.
+
 Other data management: 
 \code{\link{mysterycall_check_duplicates}()},
 \code{\link{mysterycall_extract_zip5}()},
 \code{\link{mysterycall_luhn_check}()},
 \code{\link{mysterycall_merge_with_prefix}()},
 \code{\link{mysterycall_prepare_table1_vars}()},
+\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_stratified_sample}()}
 }
 \concept{data management}

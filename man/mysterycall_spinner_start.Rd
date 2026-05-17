@@ -12,17 +12,16 @@ mysterycall_spinner_start(name, msg = NULL)
 \item{msg}{Optional message to display}
 }
 \value{
-Spinner ID
+Spinner ID (a \code{cli} progress bar ID, or \code{NULL} if cli is unavailable).
 }
 \description{
 Shows an animated spinner for operations where total is unknown.
 }
 \examples{
-\donttest{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 id <- mysterycall_spinner_start("Loading data")
-Sys.sleep(0.1)
 mysterycall_spinner_stop(id)
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other progress-bars: 

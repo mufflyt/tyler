@@ -34,7 +34,7 @@ Character vector (or ordered factor) the same length as \code{age}.
 \description{
 Returns a character label for each age, using decade brackets suitable for
 Table 1 demographic summaries. The break points match the standard used in
-mystery caller studies: Under 30, 30–39, 40–49, 50–59, 60–69, 70+.
+mystery caller studies: Under 30, 30-39, 40-49, 50-59, 60-69, 70+.
 }
 \examples{
 ages <- c(28, 35, 47, 55, 63, 72, NA)
@@ -47,14 +47,19 @@ mysterycall_age_category(ages)
 Other provider characteristics: 
 \code{\link{mysterycall_academic_patterns}()},
 \code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
 \code{\link{mysterycall_classify_medical_school}()},
 \code{\link{mysterycall_classify_practice_setting}()},
 \code{\link{mysterycall_classify_ruca}()},
 \code{\link{mysterycall_collapse_rare}()},
 \code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
 \code{\link{mysterycall_government_patterns}()},
 \code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
 \code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_physician_age}()},
 \code{\link{mysterycall_recode_credentials}()},
 \code{\link{mysterycall_reconcile_specialty}()},
 \code{\link{mysterycall_reorder_by_freq}()}

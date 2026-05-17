@@ -7,32 +7,38 @@
 mysterycall_create_formula(data, response_var, random_effect = NULL)
 }
 \arguments{
-\item{data}{A dataframe containing the predictor and response variables.}
+\item{data}{A data frame containing all predictor and response variables.
+Factor columns are detected automatically and included as-is; all other
+non-response columns are treated as fixed-effect predictors.}
 
-\item{response_var}{The name of the response variable in the dataframe.}
+\item{response_var}{Character scalar naming the count/numeric response
+(outcome) column in \code{data}.}
 
-\item{random_effect}{Optional. The name of the random effect variable for the formula.}
+\item{random_effect}{Optional character scalar naming a grouping column to
+add as a random intercept \code{(1 | random_effect)} term, e.g. \code{"physician"}.
+Default \code{NULL} (no random effects; produces a fixed-effects-only formula).}
 }
 \value{
-A formula object suitable for modeling in R.
+A \code{formula} object.  When \code{random_effect} is \code{NULL} the formula is
+suitable for \code{\link[stats:glm]{stats::glm()}}; when provided it is suitable for
+\code{\link[lme4:glmer]{lme4::glmer()}}.
 }
 \description{
 This function creates a formula for a Poisson model based on the provided data,
 response variable, and optional random effect.
 }
 \examples{
-# Example usage:
-response_variable <- "days"
-random_effect_term <- "name"  # Change this to the desired random effect variable
-df3_filtered <- data.frame(days = c(5, 10, 15), age = c(30, 40, 50), name = c("A", "B", "C"))
-formula <- mysterycall_create_formula(df3_filtered, response_variable, random_effect_term)
-formula
+df <- data.frame(days = c(5, 10, 15), age = c(30, 40, 50), name = c("A", "B", "C"))
+mysterycall_create_formula(df, "days", random_effect = "name")
+mysterycall_create_formula(df, "days")  # fixed-effects only
 
 }
 \seealso{
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which uses this formula builder
+internally.
+
 Other modeling helpers: 
 \code{\link{mysterycall_check_normality}()},
-\code{\link{mysterycall_plot_emmeans}()},
 \code{\link{mysterycall_plot_interaction}()}
 }
 \concept{modeling helpers}

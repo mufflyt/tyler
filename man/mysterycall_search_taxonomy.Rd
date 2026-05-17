@@ -41,8 +41,9 @@ the NPI API. Defaults to \code{1200L}.}
 completes (requires the optional \code{beepr} package). Defaults to \code{TRUE}.}
 }
 \value{
-A data frame with filtered NPI data based on the specified taxonomy
-description.
+A data frame of NPPES records matching the requested taxonomy. Key
+columns include \code{npi}, \code{first_name}, \code{last_name}, \code{taxonomies_desc}
+(broad NPPES specialty label), and \code{taxonomies_primary} (logical).
 }
 \description{
 This function searches the NPI Database for healthcare providers based on a
@@ -52,6 +53,18 @@ of state abbreviations via the \code{states} argument; the function will loop ov
 each state and combine the results, effectively bypassing the 1\,200-record
 cap.
 }
+\section{Subspecialty source warning}{
+
+\code{taxonomies_desc} reflects the NPPES taxonomy code the provider self-
+reported to the NPI registry. \strong{Do not use this column to assign
+subspecialty.} NPPES taxonomy codes cannot reliably distinguish
+subspecialties (e.g. Neurotology vs. General Otolaryngology). Subspecialty
+must be derived from board certification data only, using
+\code{\link[=mysterycall_parse_certification_subspecialty]{mysterycall_parse_certification_subspecialty()}} on the ABOHNS
+\code{certification_type} field, then reconciled with
+\code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}}.
+}
+
 \section{Output columns}{
 
 The function returns a curated subset of \code{npi::npi_flatten()} output.
@@ -115,7 +128,7 @@ not error).
 
 O(t * p / 200) HTTP requests where \code{t} = number of state batches and
 \code{p} = max_records (default 1,200). Each page request targets < 200 rows.
-Full national search across all 50 states for one taxonomy takes ~2–5 min
+Full national search across all 50 states for one taxonomy takes ~2-5 min
 depending on registry load. Results are cached in-memory per session when
 \code{use_cache = TRUE}.
 }

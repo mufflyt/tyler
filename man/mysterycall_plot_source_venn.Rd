@@ -58,7 +58,7 @@ from the counts.}
 (\code{.png}, \code{.pdf}, \code{.svg}, etc.).}
 
 \item{width, height}{Numeric.  Plot dimensions in inches passed to
-\code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.  Defaults \code{11} × \code{9}.}
+\code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.  Defaults \code{11} x \code{9}.}
 
 \item{dpi}{Integer.  Resolution for raster output.  Default \code{300}.}
 
@@ -66,8 +66,11 @@ from the counts.}
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.  Default \code{"white"}.}
 }
 \value{
-A \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object (invisibly when \code{output_path} is
-supplied).
+A \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object. Returned visibly when \code{output_path}
+is \code{NULL} so it prints to the active graphics device. Returned
+\code{invisible()} when \code{output_path} is supplied (the save is the intended
+side effect); assign the return value to capture the object for further
+modification.
 }
 \description{
 Visualises how three data sources (A, B, C) cover a universe of providers,
@@ -104,5 +107,9 @@ print(p)
 }
 \seealso{
 \code{\link[ggforce:geom_circle]{ggforce::geom_circle()}}
+
+Other plotting: 
+\code{\link{mysterycall_plot_disparities}()},
+\code{\link{mysterycall_plot_emmeans}()}
 }
 \concept{plotting}

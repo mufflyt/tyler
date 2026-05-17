@@ -12,8 +12,16 @@ states to ACOG districts. Defaults to the packaged
 \code{inst/extdata/ACOG_Districts.csv}.}
 }
 \value{
-An \code{sf} object with one row per ACOG district and columns describing
-the district name, subregion, member states, and their abbreviations.
+An \code{sf} object with one row per ACOG district and columns:
+\describe{
+\item{\code{ACOG_District}}{Character. ACOG district identifier (e.g.
+\code{"District I"}).}
+\item{\code{Subregion}}{Character. Regional grouping of states.}
+\item{\code{States}}{Character. Comma-separated state names in the district.}
+\item{\code{State_Abbreviations}}{Character. Comma-separated 2-letter postal
+codes.}
+\item{\code{geometry}}{sfc_MULTIPOLYGON. District boundaries in EPSG:4326.}
+}
 }
 \description{
 This helper reads the packaged ACOG district lookup table and joins it with
@@ -31,6 +39,7 @@ mysterycall_map_acog_districts("inst/extdata/ACOG_Districts.csv")
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},
 \code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_isochrones_for_df}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_base}()},

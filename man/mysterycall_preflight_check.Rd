@@ -50,7 +50,13 @@ scripts that pass \code{interactive = FALSE}.}
 in \code{input_data}. Defaults to \code{c("first", "last")}.}
 }
 \value{
-Invisible list with check results, or stops with error if checks fail
+\code{invisible()} list with elements: \code{passed} (logical), \code{checks}
+(list of individual check results), \code{errors} (character vector of
+blocking issues), \code{warnings} (character vector of non-blocking issues),
+\code{data} (the validated input data frame), \code{n_rows} (integer), and
+\code{estimates} (list from \code{\link[=mysterycall_estimate_resources]{mysterycall_estimate_resources()}}, or \code{NULL}
+when \code{estimate_resources = FALSE}). Stops with an informative error if
+any required check fails.
 }
 \description{
 Validates all requirements for a successful workflow run including API keys,
@@ -59,7 +65,7 @@ Provides a go/no-go decision before starting long-running operations.
 }
 \section{Data quality thresholds}{
 
-Input data is scored from 0–1 by \code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}}.
+Input data is scored from 0-1 by \code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}}.
 Scores below \strong{0.70} cause this function to stop with an error; scores
 between 0.70 and 0.80 emit a warning. A score below 0.70 typically means
 a required name column has more than 50\\% missing values. See
@@ -71,7 +77,7 @@ quality issues without stopping, call \code{\link[=mysterycall_assess_data_quali
 directly and inspect the returned \verb{$issues} list:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{report <- mysterycall_assess_data_quality(my_data)
-report$score          # numeric 0–1
+report$score          # numeric 0-1
 report$issues         # list of issue records with $severity and $message
 }\if{html}{\out{</div>}}
 }
@@ -111,8 +117,6 @@ Other utilities:
 \code{\link{mysterycall_estimate_resources}()},
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
 \code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_scan_for_limits}()},

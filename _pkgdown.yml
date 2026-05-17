@@ -449,6 +449,7 @@ articles:
     navbar: Analysis and Reporting
     contents:
       - statistical-analysis
+      - power-analysis
       - table-generation
 
   - title: "News"

@@ -17,8 +17,8 @@ ACADEMIC_HOSPITAL_PATTERNS
 }
 \description{
 Tiered list of string patterns indicating academic hospital affiliation,
-organized by confidence level: very_high (0.95–0.99), high (0.85–0.94),
-and moderate (0.75–0.84).
+organized by confidence level: very_high (0.95-0.99), high (0.85-0.94),
+and moderate (0.75-0.84).
 }
 \examples{
 names(ACADEMIC_HOSPITAL_PATTERNS)

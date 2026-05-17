@@ -33,19 +33,21 @@ before bootstrapping to make results reproducible.}
 \code{1 - alpha/2} percentiles. Default 0.05.}
 
 \item{stat}{Character. Statistic to bootstrap. One of
-\code{"proportion"} (mean of a 0/1 variable), \code{"mean"}, or
-\code{"median"}.}
+\code{"proportion"} (mean of a 0/1 variable), \code{"mean"}, or \code{"median"}.}
 }
 \value{
-A data.frame with columns:
+A data frame with one row per group (or \code{"Overall"} when
+\code{group_col} is \code{NULL}) and columns:
 \describe{
-\item{group}{Group label, or \code{"Overall"} when \code{group_col}
-is NULL.}
-\item{n}{Number of non-NA observations used.}
-\item{estimate}{Observed statistic value.}
-\item{lower_ci}{Lower percentile CI bound.}
-\item{upper_ci}{Upper percentile CI bound.}
-\item{n_boot}{Number of bootstrap replicates used.}
+\item{\code{group}}{Character. Group label, or \code{"Overall"} when
+\code{group_col} is \code{NULL}.}
+\item{\code{n}}{Integer. Number of non-NA observations used.}
+\item{\code{estimate}}{Numeric. Observed statistic value (proportion,
+mean, or median depending on \code{stat}).}
+\item{\code{lower_ci}}{Numeric. Lower percentile CI bound at \code{alpha/2}.}
+\item{\code{upper_ci}}{Numeric. Upper percentile CI bound at
+\code{1 - alpha/2}.}
+\item{\code{n_boot}}{Integer. Number of bootstrap replicates used.}
 }
 }
 \description{
@@ -63,7 +65,12 @@ mysterycall_bootstrap_ci(df, "accepted", group_col = "insurance", seed = 1)
 
 }
 \seealso{
+\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}}, \code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}}
+for model-based outcome summaries; \code{\link[=mysterycall_compare_waves]{mysterycall_compare_waves()}} for
+cross-wave significance testing.
+
 Other inference: 
+\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_multiple_comparison_adjust}()}
 }
 \concept{inference}

@@ -41,7 +41,18 @@ marked as complete or failed with an appropriate quality tier.}
 updating \code{tracker}.}
 }
 \value{
-A data frame with latitude and longitude columns added.
+A data frame with all original columns from the input file plus two
+new numeric columns:
+\describe{
+\item{\code{latitude}}{Numeric. Geographic latitude in decimal degrees
+(WGS 84). \code{NA} for addresses that failed geocoding after all retries.}
+\item{\code{longitude}}{Numeric. Geographic longitude in decimal degrees
+(WGS 84). \code{NA} for addresses that failed geocoding after all retries.}
+}
+Side effects: when \code{output_file_path} is non-\code{NULL}, the enriched data
+frame is written as CSV; when \code{failed_output_path} is non-\code{NULL}, rows
+that could not be geocoded are written separately (with a timestamped
+backup if the file already exists).
 }
 \description{
 Reads an input dataset containing an \code{address} column, geocodes the unique
@@ -56,8 +67,8 @@ Geocoding requires the \code{ggmap} package (listed in \code{Suggests}, not
 enabled. Steps to obtain a key:
 \enumerate{
 \item Create a project at \url{https://console.cloud.google.com/}.
-\item Enable the \strong{Geocoding API} under APIs & Services → Library.
-\item Create a key under APIs & Services → Credentials.
+\item Enable the \strong{Geocoding API} under APIs & Services > Library.
+\item Create a key under APIs & Services > Credentials.
 \item Enable \strong{billing} on the project (required even for free-tier usage;
 Google provides a $200/month credit that covers ~40,000 geocodes).
 }
@@ -82,6 +93,10 @@ result <- mysterycall_geocode("addresses.csv", "my_api_key")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} to validate API keys before a long
+workflow; \code{\link[=mysterycall_create_isochrones]{mysterycall_create_isochrones()}} to compute drive-time polygons
+from geocoded coordinates.
+
 Other geospatial helpers: 
 \code{\link{mysterycall_calculate_overlap}()},
 \code{\link{mysterycall_hrr}()}

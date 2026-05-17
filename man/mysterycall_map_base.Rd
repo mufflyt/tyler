@@ -26,15 +26,16 @@ helpers. The map includes multiple tile providers, a scale bar, optional
 title control, and centers on the continental United States by default.
 }
 \examples{
-\donttest{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 mysterycall_map_base()
 mysterycall_map_base("<strong>Custom title</strong>")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},
 \code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_isochrones_for_df}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_acog_districts}()},

@@ -17,8 +17,9 @@ Default \code{FALSE}.}
 }
 \value{
 A data frame with columns \code{Term}, \code{IRR}, \verb{95\% CI}, \code{p-value}.
-Rows where \code{p_value < 0.05} carry attribute \code{"significant_rows"} (row
-indices) so downstream formatters can apply bold styling.
+The data frame carries an integer attribute \code{"significant_rows"} with
+the row indices where \code{p_value < 0.05}, allowing downstream formatters
+to apply bold styling.  Intercept row is excluded by default.
 }
 \description{
 Rounds incidence rate ratios and confidence intervals, combines CI into a
@@ -32,9 +33,13 @@ knitr::kable(tbl)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which produces the model input;
+\code{\link[=mysterycall_write_results_paragraph]{mysterycall_write_results_paragraph()}} to generate a prose summary.
+
 Other manuscript: 
 \code{\link{mysterycall_methods_paragraph}()},
 \code{\link{mysterycall_sample_size_text}()},
+\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_summarize_demographics}()}
 }
 \concept{manuscript}

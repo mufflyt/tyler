@@ -21,7 +21,7 @@ mysterycall_format_duration(125)
 mysterycall_format_duration(3700)
 }
 \seealso{
-Other logging utilities: 
+Other logging: 
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_error}()},
 \code{\link{mysterycall_log_info}()},
@@ -42,4 +42,4 @@ Other logging utilities:
 \code{\link{mysterycall_workflow_end}()},
 \code{\link{mysterycall_workflow_start}()}
 }
-\concept{logging utilities}
+\concept{logging}

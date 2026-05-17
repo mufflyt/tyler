@@ -13,10 +13,12 @@ mysterycall_normalize_units(addr1, addr2 = NA_character_)
 Default is \code{NA_character_}.}
 }
 \value{
-A list with two elements:
+A named list with two character elements:
 \describe{
-\item{addr1}{Normalized primary address line.}
-\item{addr2}{Normalized secondary address line (or NA if not provided).}
+\item{\code{addr1}}{Character. Primary address with unit designators
+standardised to USPS abbreviations (STE, APT, UNIT, FL, RM).}
+\item{\code{addr2}}{Character or \code{NA_character_}. Normalized secondary
+address line; \code{NA_character_} when \code{addr2} was \code{NA_character_}.}
 }
 }
 \description{

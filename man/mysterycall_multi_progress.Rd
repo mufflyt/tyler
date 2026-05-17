@@ -19,25 +19,13 @@ Creates a progress tracker for workflows with multiple major steps.
 Shows overall progress plus current step progress.
 }
 \examples{
-\donttest{
-tracker <- mysterycall_multi_progress(c("Load Data", "Process", "Save"))
-
-# Step 1
-mysterycall_multi_step(tracker, 1, total = 100)
-for (i in 1:100) {
-  mysterycall_multi_update(tracker)
-}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+tracker <- mysterycall_multi_progress(c("Load Data", "Save"))
+mysterycall_multi_step(tracker, 1, total = 5)
+for (i in 1:5) mysterycall_multi_update(tracker)
 mysterycall_multi_complete(tracker)
-
-# Step 2
-mysterycall_multi_step(tracker, 2, total = 50)
-for (i in 1:50) {
-  mysterycall_multi_update(tracker)
-}
-mysterycall_multi_complete(tracker)
-
 mysterycall_multi_done(tracker)
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other progress-bars: 

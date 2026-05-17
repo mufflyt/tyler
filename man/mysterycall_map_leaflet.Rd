@@ -7,21 +7,23 @@
 mysterycall_map_leaflet()
 }
 \value{
-Invisibly returns the Leaflet map object.
+A \code{leaflet} map object (class \code{"leaflet"} from the leaflet package)
+pre-configured with tile providers, scale bar, and layer controls.
 }
 \description{
 This function creates a Leaflet BASE map with specific configurations, including the base tile layer, scale bar,
 default view settings, and layers control.
 }
 \examples{
-\donttest{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 map <- mysterycall_map_leaflet()
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},
 \code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_isochrones_for_df}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_acog_districts}()},

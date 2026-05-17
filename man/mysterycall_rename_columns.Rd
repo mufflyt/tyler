@@ -49,14 +49,13 @@ df <- mysterycall_rename_columns(df,
 print(df)
 }
 \seealso{
-Other workflow: 
-\code{\link{mysterycall_call_productivity}()},
-\code{\link{mysterycall_clean_phase1}()},
-\code{\link{mysterycall_clean_phase2}()},
-\code{\link{mysterycall_print_dashboard}()},
-\code{\link{mysterycall_run_workflow}()},
-\code{\link{mysterycall_run_workflow_logged}()},
-\code{\link{mysterycall_split_and_save}()},
-\code{\link{mysterycall_verify_artifact}()}
+Other data management: 
+\code{\link{mysterycall_check_duplicates}()},
+\code{\link{mysterycall_check_generalist_presence}()},
+\code{\link{mysterycall_extract_zip5}()},
+\code{\link{mysterycall_luhn_check}()},
+\code{\link{mysterycall_merge_with_prefix}()},
+\code{\link{mysterycall_prepare_table1_vars}()},
+\code{\link{mysterycall_stratified_sample}()}
 }
-\concept{workflow}
+\concept{data management}

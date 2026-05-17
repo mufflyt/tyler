@@ -32,12 +32,13 @@ where the plot should be saved. Common extensions: \code{.png}, \code{.pdf},
 \item{...}{Additional arguments forwarded to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.}
 }
 \value{
-The output \code{path}, invisibly.
+The output \code{path} (character scalar), invisibly. Assign the return
+value to capture the path for downstream use; printing is suppressed.
 }
 \description{
 A thin wrapper around \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} that:
 \itemize{
-\item Defaults to 300 dpi, 8 × 6 inches, white background.
+\item Defaults to 300 dpi, 8 x 6 inches, white background.
 \item Creates the output directory automatically if it does not exist.
 \item Returns the output path invisibly so calls can be piped.
 }
@@ -49,24 +50,13 @@ mysterycall_save_plot(p, "figures/mpg_vs_weight.png")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other outcomes: 
-\code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
-\code{\link{mysterycall_irr_plot}()},
-\code{\link{mysterycall_marginal_effects}()},
-\code{\link{mysterycall_model_metrics}()},
-\code{\link{mysterycall_plot_distribution}()},
-\code{\link{mysterycall_plot_effect}()},
-\code{\link{mysterycall_plot_emmeans_full}()},
-\code{\link{mysterycall_plot_emmeans_interaction}()},
-\code{\link{mysterycall_plot_inclexcl}()},
-\code{\link{mysterycall_plot_residuals}()},
-\code{\link{mysterycall_plot_sjplot_interaction}()},
-\code{\link{mysterycall_plot_stacked_bar}()},
-\code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_screen_interactions}()},
-\code{\link{mysterycall_select_best_model}()},
-\code{\link{mysterycall_wait_time_summary}()},
-\code{\link{print.mysterycall_poisson_model}()}
+\code{\link[=mysterycall_plot_stacked_bar]{mysterycall_plot_stacked_bar()}}, \code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}},
+\code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}} for functions that produce plots to pass here.
+
+Other manuscript: 
+\code{\link{mysterycall_format_results_table}()},
+\code{\link{mysterycall_methods_paragraph}()},
+\code{\link{mysterycall_sample_size_text}()},
+\code{\link{mysterycall_summarize_demographics}()}
 }
-\concept{outcomes}
+\concept{manuscript}

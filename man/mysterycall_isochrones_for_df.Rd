@@ -26,7 +26,12 @@ Defaults to a session-specific folder beneath \code{\link[=tempdir]{tempdir()}}.
 Defaults to 240 seconds (~4 minutes).}
 }
 \value{
-A dataframe containing the isochrones data with added 'name' column.
+An sf data frame (class \code{c("sf", "data.frame")}) with one row per
+isochrone polygon. Columns include all original input columns plus \code{name}
+(character label such as \code{"30 minutes"}), \code{range} (drive-time in seconds),
+and geometry. Returns an empty \code{data.frame()} if no valid isochrones were
+generated. Intermediate results are checkpointed as \code{.rds} and \code{.gpkg}
+files in \code{output_dir} at \code{save_interval} seconds.
 }
 \description{
 This function retrieves isochrones for each point in a given dataframe by looping
@@ -38,9 +43,14 @@ isochrones_data <- mysterycall_isochrones_for_df("points.csv")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_create_isochrones]{mysterycall_create_isochrones()}} for single-point isochrone
+creation; \code{\link[=mysterycall_calculate_overlap]{mysterycall_calculate_overlap()}} for the downstream
+block-group intersection step.
+
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},
 \code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_acog_districts}()},
 \code{\link{mysterycall_map_base}()},

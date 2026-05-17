@@ -11,8 +11,12 @@ mysterycall_plot_residuals(model)
 or \code{lm} object.}
 }
 \value{
-A named list with elements \code{residuals_vs_fitted}, \code{qq}, and
-\code{scale_location}, each a \code{ggplot} object.
+A named list with three elements, each a \code{ggplot} object:
+\describe{
+\item{\code{residuals_vs_fitted}}{Pearson residuals vs. fitted values with a horizontal dashed reference at zero.}
+\item{\code{qq}}{Normal Q-Q plot of Pearson residuals.}
+\item{\code{scale_location}}{Square-root of |Pearson residuals| vs. fitted values (spread-location plot).}
+}
 }
 \description{
 Returns a named list of three ggplot2 plots: residuals vs. fitted values,
@@ -26,9 +30,12 @@ plots <- mysterycall_plot_residuals(m)
 plots$qq
 }
 \seealso{
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} to fit the model passed here;
+\code{\link[=mysterycall_plot_effects]{mysterycall_plot_effects()}} for marginal-effect plots;
+\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}} to write any element to disk.
+
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -40,7 +47,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

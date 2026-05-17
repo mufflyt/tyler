@@ -14,7 +14,8 @@ mysterycall_map_block_group(bg_data, isochrones_data, output_dir = "figures/")
 \item{output_dir}{Directory path for exporting the map files. Default is "figures/".}
 }
 \value{
-Called for its side effects of saving the block group overlap map as HTML and PNG inside \code{output_dir}. Returns \code{NULL} invisibly.
+\code{invisible(NULL)}. Side effects: writes the block group overlap map
+as an HTML file and a PNG image to \code{output_dir}.
 }
 \description{
 This function creates a map that displays block groups and their overlap with isochrones.
@@ -34,6 +35,7 @@ mysterycall_map_block_group(block_groups, isochrones_joined_map, "custom_output/
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},
 \code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_isochrones_for_df}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_acog_districts}()},

@@ -8,7 +8,7 @@ mysterycall_extract_zip5(x)
 }
 \arguments{
 \item{x}{Character vector of raw ZIP/postal-code strings (e.g. \code{"80203"},
-\code{"80203-1234"}, \code{"  80203 "}, \code{"8020"} → \code{"08020"}).}
+\code{"80203-1234"}, \code{"  80203 "}, \code{"8020"} -> \code{"08020"}).}
 }
 \value{
 Character vector the same length as \code{x}. Each element is a
@@ -30,6 +30,7 @@ Other data management:
 \code{\link{mysterycall_luhn_check}()},
 \code{\link{mysterycall_merge_with_prefix}()},
 \code{\link{mysterycall_prepare_table1_vars}()},
+\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_stratified_sample}()}
 }
 \concept{data management}

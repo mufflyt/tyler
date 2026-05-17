@@ -17,7 +17,8 @@ mysterycall_clean_phase2(
 
 \item{required_strings}{Vector of substrings for which to search in column names.}
 
-\item{standard_names}{Vector of new names to apply to the matched columns.}
+\item{standard_names}{Character vector of replacement names, the same length
+as \code{required_strings}, applied to matched columns in order.}
 
 \item{output_directory}{Directory where the cleaned dataset should be written.
 Defaults to a session-specific folder inside \code{\link[=tempdir]{tempdir()}} when not provided.}
@@ -82,11 +83,14 @@ print(cleaned_df)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_clean_phase1]{mysterycall_clean_phase1()}} for Phase 1 data cleaning;
+\code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}} which orchestrates both phases;
+\code{\link[=mysterycall_rename_columns]{mysterycall_rename_columns()}} for the underlying column-renaming logic.
+
 Other workflow: 
 \code{\link{mysterycall_call_productivity}()},
 \code{\link{mysterycall_clean_phase1}()},
 \code{\link{mysterycall_print_dashboard}()},
-\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_run_workflow}()},
 \code{\link{mysterycall_run_workflow_logged}()},
 \code{\link{mysterycall_split_and_save}()},

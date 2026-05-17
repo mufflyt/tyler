@@ -50,9 +50,12 @@ mysterycall_screen_interactions(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} to fit the primary model;
+\code{\link[=mysterycall_select_best_model]{mysterycall_select_best_model()}} to rank models by AIC/BIC/LRT;
+\code{\link[=mysterycall_multiple_comparison_adjust]{mysterycall_multiple_comparison_adjust()}} for correcting resulting p-values.
+
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -65,7 +68,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},
 \code{\link{print.mysterycall_poisson_model}()}

@@ -35,16 +35,22 @@ predictions (\code{re.form = NA}) are always used.}
 of continuous predictors. Default \code{1e-7}.}
 }
 \value{
-A \code{data.frame} with one row per term--level combination and columns:
+A \code{data.frame} with one row per term-level combination and columns:
 \describe{
 \item{\code{term}}{Character. The predictor name (as supplied in \code{term} or
-derived from the model frame).}
-\item{\code{level}}{Character. \code{NA} for continuous predictors; the factor level
-name for categorical predictors.}
-\item{\code{ame}}{Numeric. The average marginal effect.}
+derived from the model frame). Continuous predictors yield one row;
+categorical predictors yield one row per non-reference level.}
+\item{\code{level}}{Character or \code{NA_character_}. \code{NA_character_} for
+continuous predictors; the factor level name for categorical predictors.
+The reference level is omitted from the output.}
+\item{\code{ame}}{Numeric. The average marginal effect. For continuous
+predictors, the mean finite-difference derivative across all
+observations. For categorical predictors, the mean difference in
+predicted values versus the reference level.}
 \item{\code{variable_type}}{Character. Either \code{"continuous"} or
 \code{"categorical"}.}
 }
+Row names are not set. No special class attributes are added.
 }
 \description{
 Computes average marginal effects for each predictor in a fitted Poisson
@@ -95,7 +101,6 @@ mysterycall_marginal_effects(m, term = "cyl")
 
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_model_metrics}()},
 \code{\link{mysterycall_plot_distribution}()},
@@ -107,7 +112,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

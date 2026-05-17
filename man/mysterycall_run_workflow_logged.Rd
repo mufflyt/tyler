@@ -92,7 +92,10 @@ from \code{\link[=mysterycall_search_and_process_npi]{mysterycall_search_and_pro
 step. Defaults to \code{FALSE}.}
 }
 \value{
-The same list returned by \code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}}.
+Invisibly, the named list returned by \code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}}.
+Key elements include \code{cleaned_phase1} and \code{cleaned_phase2} (data frames),
+\code{excluded_records} (data frame), and \code{workflow_summary} (stage-level
+counts). See \code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}} for the complete structure.
 }
 \description{
 A thin wrapper around \code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}} that initialises the
@@ -118,7 +121,6 @@ Other workflow:
 \code{\link{mysterycall_clean_phase1}()},
 \code{\link{mysterycall_clean_phase2}()},
 \code{\link{mysterycall_print_dashboard}()},
-\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_run_workflow}()},
 \code{\link{mysterycall_split_and_save}()},
 \code{\link{mysterycall_verify_artifact}()}

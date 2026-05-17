@@ -10,9 +10,17 @@ mysterycall_estimate_resources(n_rows)
 \item{n_rows}{Integer number of input rows.}
 }
 \value{
-A named list with elements \code{total_time_hours} (estimated wall
-time), \code{peak_memory_gb} (estimated peak RAM in GB), and
-\code{api_calls} (estimated number of external API requests).
+A named \code{list} with elements:
+\describe{
+\item{\code{runtime_seconds}}{\code{numeric}. Total estimated wall time in seconds.}
+\item{\code{runtime_hours}}{\code{numeric}. Total estimated wall time in hours.}
+\item{\code{runtime_str}}{\code{character}. Human-readable runtime string
+(e.g., \code{"45 minutes"} or \code{"2h 15m"}).}
+\item{\code{memory_mb}}{\code{numeric}. Estimated peak memory in megabytes.}
+\item{\code{memory_gb}}{\code{numeric}. Estimated peak memory in gigabytes.}
+\item{\code{memory_str}}{\code{character}. Human-readable memory string
+(e.g., \code{"1.5 GB"} or \code{"700 MB"}).}
+}
 }
 \description{
 Projects the approximate runtime and memory requirements for a mystery caller
@@ -20,10 +28,10 @@ workflow based on the number of input rows.
 }
 \section{Estimation method}{
 
-Runtime is estimated as \verb{n_rows × 4.5} seconds: 1.5 s/row for NPI
+Runtime is estimated as \verb{n_rows x 4.5} seconds: 1.5 s/row for NPI
 registry lookups, 0.5 s/row for geocoding (assumes a warm Google Maps
 cache), and 2.5 s/row for HERE isochrone generation. Memory is
-\verb{(n_rows × 2) + 500} MB.
+\verb{(n_rows x 2) + 500} MB.
 
 Reference values for the full workflow:
 \tabular{rrl}{
@@ -35,7 +43,7 @@ Reference values for the full workflow:
 }
 These constants reflect typical US residential broadband with warm API
 caches. Slow networks or cold caches can \strong{triple} the runtime estimate.
-Benchmark on 50–100 rows before committing to a large run.
+Benchmark on 50-100 rows before committing to a large run.
 
 If only a subset of the pipeline is used (e.g., NPI lookup only), the
 relevant per-row constant is 1.5 s (NPI), 0.5 s (geocoding), or 2.5 s
@@ -46,6 +54,9 @@ relevant per-row constant is 1.5 s (NPI), 0.5 s (geocoding), or 2.5 s
 mysterycall_estimate_resources(500)
 }
 \seealso{
+\code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} which calls this function;
+\code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}} for data completeness scoring.
+
 Other utilities: 
 \code{\link{\%>\%}()},
 \code{\link{mysterycall_assess_data_quality}()},
@@ -58,8 +69,6 @@ Other utilities:
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
 \code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_scan_for_limits}()},

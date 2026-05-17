@@ -38,6 +38,7 @@ Other data management:
 \code{\link{mysterycall_extract_zip5}()},
 \code{\link{mysterycall_luhn_check}()},
 \code{\link{mysterycall_merge_with_prefix}()},
-\code{\link{mysterycall_prepare_table1_vars}()}
+\code{\link{mysterycall_prepare_table1_vars}()},
+\code{\link{mysterycall_rename_columns}()}
 }
 \concept{data management}

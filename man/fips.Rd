@@ -5,7 +5,8 @@
 \alias{fips}
 \title{Data of FIPS codes}
 \format{
-A tibble with 243 rows and 10 variables:
+A tibble with 243 rows and 10 variables containing Federal
+Information Processing Standards (FIPS) codes for states and counties:
 \describe{
 \item{state}{Two-letter postal abbreviation.}
 \item{state_name}{Full state name.}
@@ -24,10 +25,6 @@ A tibble with 243 rows and 10 variables:
 }
 \usage{
 fips
-}
-\value{
-A tibble containing Federal Information Processing Standards
-(FIPS) codes for states and counties.
 }
 \description{
 3 columns with 51 observations.

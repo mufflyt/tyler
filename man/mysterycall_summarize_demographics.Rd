@@ -25,7 +25,8 @@ accepted.}
 \code{setting_col}. Default \code{"Academic"}.}
 }
 \value{
-A single character string.
+A single character string describing the physician cohort demographics
+(sex distribution, mean age, practice-setting breakdown).
 }
 \description{
 Builds a compact summary string of the form
@@ -41,9 +42,13 @@ mysterycall_summarize_demographics(df, female_col = "gender",
                                    setting_col = "setting")
 }
 \seealso{
+\code{\link[=mysterycall_methods_paragraph]{mysterycall_methods_paragraph()}} for the full methods section;
+\code{\link[=mysterycall_write_results_paragraph]{mysterycall_write_results_paragraph()}} for the results section.
+
 Other manuscript: 
 \code{\link{mysterycall_format_results_table}()},
 \code{\link{mysterycall_methods_paragraph}()},
-\code{\link{mysterycall_sample_size_text}()}
+\code{\link{mysterycall_sample_size_text}()},
+\code{\link{mysterycall_save_plot}()}
 }
 \concept{manuscript}

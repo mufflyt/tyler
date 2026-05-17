@@ -13,14 +13,14 @@ a character vector in \code{"YYYY-MM-DD"} format. Vectorised.}
 \item{end_date}{Date of the offered appointment. Same types accepted.}
 
 \item{calendar}{A \code{bizdays} calendar from \code{\link[=mysterycall_us_federal_calendar]{mysterycall_us_federal_calendar()}}.
-When \code{NULL} (default) a calendar covering 2021 –
+When \code{NULL} (default) a calendar covering 2021 -
 2036 is built automatically.}
 }
 \value{
 Integer vector the same length as \code{start_date}.
 }
 \description{
-Returns the number of Mon–Fri working days, excluding US federal holidays,
+Returns the number of Mon-Fri working days, excluding US federal holidays,
 between \code{start_date} (exclusive) and \code{end_date} (inclusive). This matches
 the \code{business_days_until_appointment} convention used in mystery caller
 studies: a call made on Monday for an appointment on Friday of the same

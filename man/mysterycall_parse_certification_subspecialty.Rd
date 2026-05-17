@@ -10,13 +10,17 @@ mysterycall_parse_certification_subspecialty(
 )
 }
 \arguments{
-\item{cert_type}{Character vector of ABOHNS certification type strings.}
+\item{cert_type}{Character vector of ABOHNS \code{certification_type} strings,
+one element per provider. Values like \code{"Otolaryngology - Head & Neck Surgery + Neurotology"} are parsed for subspecialty patterns. Pass \code{NA}
+for providers without ABOHNS records; they will receive \code{default}.}
 
-\item{default}{Character scalar returned when no subspecialty is detected.
-Default \code{NA_character_}.}
+\item{default}{Character scalar returned when no subspecialty pattern is
+detected (including \code{NA} or blank input). Default \code{NA_character_}.}
 }
 \value{
-Character vector the same length as \code{cert_type}.
+Character vector the same length as \code{cert_type}. Values are one of
+\code{"Otology/Neurotology"}, \code{"Pediatric Otolaryngology"},
+\code{"Sleep Medicine"}, \code{"Facial Plastic Surgery"}, or \code{default}.
 }
 \description{
 Parses the ABOHNS \code{certification_type} field (e.g. \code{"Otolaryngology - Head & Neck Surgery + Neurotology + Sleep Medicine"}) and returns the
@@ -24,6 +28,16 @@ most-specific subspecialty label. Priority order: Neurotology >
 Pediatric Otolaryngology > Sleep Medicine > Facial Plastic Surgery.
 When none match, returns \code{default}.
 }
+\section{Authoritative subspecialty source}{
+
+This function is the \strong{only authorised way} to derive subspecialty labels
+in the mysterycall workflow. NPPES (\code{taxonomies_desc}) and DAC
+(Data at CMS) taxonomy codes reflect broad specialty groupings and must
+not be used to assign subspecialty. Pass the output of this function as
+\code{secondary_col} in \code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}} to correctly
+populate subspecialty via board certification evidence only.
+}
+
 \examples{
 cert <- c(
   "Otolaryngology - Head & Neck Surgery + Neurotology",
@@ -38,13 +52,18 @@ Other provider characteristics:
 \code{\link{mysterycall_academic_patterns}()},
 \code{\link{mysterycall_age_category}()},
 \code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
 \code{\link{mysterycall_classify_medical_school}()},
 \code{\link{mysterycall_classify_practice_setting}()},
 \code{\link{mysterycall_classify_ruca}()},
 \code{\link{mysterycall_collapse_rare}()},
 \code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
 \code{\link{mysterycall_government_patterns}()},
 \code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
+\code{\link{mysterycall_physician_age}()},
 \code{\link{mysterycall_recode_credentials}()},
 \code{\link{mysterycall_reconcile_specialty}()},
 \code{\link{mysterycall_reorder_by_freq}()}

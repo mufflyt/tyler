@@ -30,6 +30,9 @@ ggplot(tracts_sf) +
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=theme_green_journal_map]{theme_green_journal_map()}} for single-panel maps;
+\code{\link[=theme_green_journal]{theme_green_journal()}} for non-spatial plots.
+
 Other green-journal-themes: 
 \code{\link{theme_green_journal}()},
 \code{\link{theme_green_journal_map}()}

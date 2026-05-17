@@ -11,7 +11,7 @@ lists, and a weighted scoring system across multiple evidence tiers.
 \details{
 Evidence-based indicators with calibrated confidence scores:
 \itemize{
-\item ACGME residency/fellowship programs (0.98–0.99)
+\item ACGME residency/fellowship programs (0.98-0.99)
 \item COTH (Council of Teaching Hospitals) membership (0.95)
 \item Medical school affiliations (0.97)
 \item NIH CTSA awards (0.99)

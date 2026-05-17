@@ -12,7 +12,7 @@ ACGME_PROGRAM_INDICATORS
 }
 \description{
 String patterns indicating ACGME-accredited residency or fellowship programs.
-Confidence: 0.98–0.99.
+Confidence: 0.98-0.99.
 }
 \examples{
 length(ACGME_PROGRAM_INDICATORS)

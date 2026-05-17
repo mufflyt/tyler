@@ -32,10 +32,10 @@ on the linear predictor scale.}
 A \code{ggplot} object.
 }
 \description{
-Calls \code{effects::effect()} on a fitted model and returns a ggplot2 ribbon
+Calls \code{\link[effects:effect]{effects::effect()}} on a fitted model and returns a ggplot2 ribbon
 plot of the marginal predicted values with 95\% confidence bands. Works
 with any model class supported by the \strong{effects} package (lm, glm,
-glmerMod, lmerMod, …).
+glmerMod, lmerMod, ...).
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
@@ -46,7 +46,6 @@ mysterycall_plot_effect(m, "wt")
 \seealso{
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -58,7 +57,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

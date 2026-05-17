@@ -40,4 +40,9 @@ mystery-caller manuscript.
 \examples{
 mysterycall_equation_figure(lambda0 = 14, irr_seq = seq(1.1, 1.8, 0.1))
 }
-\concept{sample size}
+\seealso{
+Other power analysis: 
+\code{\link{mysterycall_cochran_n}()},
+\code{\link{mysterycall_poisson_power}()}
+}
+\concept{power analysis}

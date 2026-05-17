@@ -15,9 +15,10 @@ mysterycall_save_quality_table(
 
 \item{filepath}{The path where the output file should be saved.}
 
-\item{output_format}{File format for the saved table. Either \code{"csv"} (default)
-or \code{"parquet"}. The file extension of \code{filepath} is ignored; the format
-here controls what is written.}
+\item{output_format}{Character scalar: \code{"csv"} (default) or \code{"parquet"}.
+CSV is written via \code{readr::write_csv()}; Parquet requires the \code{arrow}
+package and is more efficient for large tables. The file extension of
+\code{filepath} is ignored; this parameter controls what is actually written.}
 }
 \value{
 The filtered data frame (invisibly). A message is emitted indicating
@@ -57,8 +58,6 @@ Other utilities:
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
 \code{\link{mysterycall_scan_for_limits}()},
 \code{\link{mysterycall_standard_labels}()},

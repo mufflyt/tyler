@@ -10,7 +10,10 @@ mysterycall_validate_npi(input_data)
 \item{input_data}{Either a data frame containing NPI numbers or a path to a CSV file.}
 }
 \value{
-A data frame containing valid NPI numbers, with invalid or missing NPI rows removed.
+A data frame with the same columns as \code{input_data}, plus a logical
+column \code{npi_is_valid}.  Only rows with non-empty, 10-digit, Luhn-valid NPI
+values are returned; the \code{npi} column is always character type.  Returns a
+zero-row data frame (preserving column names) when no rows pass validation.
 }
 \description{
 This function reads a CSV file containing NPI numbers, validates their
@@ -26,7 +29,7 @@ format using the npi package, and removes rows with missing or invalid NPIs.
 
 \strong{Guarantees:}
 \itemize{
-\item Output rows \eqn{\subseteq} input rows — rows are only removed, never added.
+\item Output rows \eqn{\subseteq} input rows  --  rows are only removed, never added.
 \item Every removed row had either \code{NA}, a non-10-digit string, or a failed Luhn
 checksum.
 \item Output NPI column is always character type.
@@ -57,5 +60,11 @@ Expect < 0.1 s for 10,000 rows.
 df <- data.frame(npi = c("1234567893", "0000000000", NA_character_))
 mysterycall_validate_npi(df)
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\code{\link[=mysterycall_luhn_check]{mysterycall_luhn_check()}} for the underlying Luhn checksum;
+\code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}} to retrieve clinician details for
+validated NPIs; \code{\link[=mysterycall_search_and_process_npi]{mysterycall_search_and_process_npi()}} for upstream NPI
+discovery.
 }
 \concept{data-quality}

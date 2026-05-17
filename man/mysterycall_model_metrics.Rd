@@ -11,7 +11,17 @@ mysterycall_model_metrics(model)
 or \code{lm} object.}
 }
 \value{
-A named list with elements \code{mae} and \code{rmse} (numeric scalars).
+A named list with two numeric scalar elements:
+\describe{
+\item{\code{mae}}{Numeric scalar (or \code{NA_real_}). Mean absolute error:
+mean(|observed - fitted|). Measures average prediction error in the
+original response units.}
+\item{\code{rmse}}{Numeric scalar (or \code{NA_real_}). Root-mean-square error:
+sqrt(mean((observed - fitted)^2)). Penalises large errors more
+heavily than MAE.}
+}
+Both elements are \code{NA_real_} when fitted values cannot be extracted
+(e.g., model fitting failed or an unsupported class was passed).
 }
 \description{
 Extracts fitted values and the observed response from a fitted model and
@@ -24,9 +34,11 @@ m <- glm(mpg ~ wt, data = mtcars, family = gaussian())
 mysterycall_model_metrics(m)
 }
 \seealso{
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which produces compatible model
+objects; \code{\link[=mysterycall_select_best_model]{mysterycall_select_best_model()}} for AIC/BIC-based selection.
+
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_plot_distribution}()},
@@ -38,7 +50,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

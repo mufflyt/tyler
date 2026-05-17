@@ -34,7 +34,10 @@ Default \code{"Unknown"}.}
 factor with levels \code{c(labels, na_label)}. Default \code{FALSE}.}
 }
 \value{
-Character vector (or ordered factor) the same length as \code{ruca_code}.
+Character vector the same length as \code{ruca_code} with values from
+\code{labels} (\code{"Urban"}, \code{"Suburban"}, \code{"Rural"} by default) or \code{na_label}
+(\code{"Unknown"} by default) for \code{NA} inputs.  When \code{as_factor = TRUE},
+returns an ordered factor with levels \code{c(labels, na_label)}.
 }
 \description{
 The Rural-Urban Commuting Area (RUCA) classification system assigns numeric
@@ -51,6 +54,11 @@ access research:
 }
 
 
+The 2010-vintage RUCA codes are the standard crosswalk applied through 2023
+in CMS and HRSA analyses.  Although newer ACS-based updates exist, the
+2010 vintage remains the most widely cited in peer-reviewed healthcare
+access research and is the version bundled in this package.
+
 ZIP-to-RUCA crosswalk files are available from USDA ERS
 (\url{https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes}).
 Join your data to the crosswalk first, then pass the resulting \code{ruca_code}
@@ -64,17 +72,25 @@ mysterycall_classify_ruca(codes)
 mysterycall_classify_ruca(codes, as_factor = TRUE)
 }
 \seealso{
+\code{\link[=mysterycall_assign_region]{mysterycall_assign_region()}}, \code{\link[=mysterycall_classify_practice_setting]{mysterycall_classify_practice_setting()}},
+\code{\link[=mysterycall_classify_medical_school]{mysterycall_classify_medical_school()}} for related provider characterizations.
+
 Other provider characteristics: 
 \code{\link{mysterycall_academic_patterns}()},
 \code{\link{mysterycall_age_category}()},
 \code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
 \code{\link{mysterycall_classify_medical_school}()},
 \code{\link{mysterycall_classify_practice_setting}()},
 \code{\link{mysterycall_collapse_rare}()},
 \code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
 \code{\link{mysterycall_government_patterns}()},
 \code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
 \code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_physician_age}()},
 \code{\link{mysterycall_recode_credentials}()},
 \code{\link{mysterycall_reconcile_specialty}()},
 \code{\link{mysterycall_reorder_by_freq}()}

@@ -10,16 +10,20 @@ mysterycall_clear_isochrone_cache()
 Invisibly \code{NULL}.
 }
 \description{
-The \code{\link[=mysterycall_create_isochrones]{mysterycall_create_isochrones()}} function caches every result in memory for the
-duration of the R session. Call this after processing a large batch to
-release that memory.
+\code{\link[=mysterycall_create_isochrones]{mysterycall_create_isochrones()}} caches every result in memory for the
+duration of the R session.  Call this after processing a large batch to
+release that memory.  Has no effect if the \code{memoise} package is not
+installed (memoization is skipped in that case).
 }
 \examples{
 mysterycall_clear_isochrone_cache()
 }
 \seealso{
+\code{\link[=mysterycall_create_isochrones]{mysterycall_create_isochrones()}} which builds the memoized cache.
+
 Other mapping: 
 \code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_isochrones_for_df}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_acog_districts}()},

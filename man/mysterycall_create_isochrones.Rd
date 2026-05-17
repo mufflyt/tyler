@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_isochrones.R
 \name{mysterycall_create_isochrones}
 \alias{mysterycall_create_isochrones}
-\title{Memoized function to try a location with isoline calculations}
+\title{Calculate drive-time isochrones for a location}
 \usage{
 mysterycall_create_isochrones(
   location,
@@ -12,43 +12,48 @@ mysterycall_create_isochrones(
 )
 }
 \arguments{
-\item{location}{An sf object representing the location for which isolines will be calculated.}
+\item{location}{An \code{sf} point object representing the origin location.}
 
-\item{range}{A numeric vector of time ranges in seconds.}
+\item{range}{Numeric vector of drive-time thresholds in \strong{seconds}
+(e.g. \code{c(1800, 3600)} for 30- and 60-minute isochrones).}
 
-\item{posix_time}{A POSIXct object representing the date and time of calculation. Default is "2023-10-20 08:00:00".}
+\item{posix_time}{A \code{POSIXct} scalar giving the departure time used by the
+routing engine.  Defaults to \code{"2023-10-20 08:00:00"} (a weekday morning).}
 
-\item{api_key}{API key for the drive-time routing service. Defaults to the \code{HERE_API_KEY} environment variable.}
+\item{api_key}{HERE API key.  Defaults to the \code{HERE_API_KEY} environment
+variable.  Obtain a free key at \url{https://developer.here.com/}.}
 }
 \value{
-A named list of sf isolines keyed by range in seconds, or a list
-with an \code{error} element if the calculation fails.
+A named \code{list}. On success: one element per value in \code{range},
+named by the drive-time threshold in seconds (e.g., \code{"1800"}), each
+containing an \code{sf} POLYGON object with the isochrone geometry. On
+API failure: a \code{list} with a single \code{error} element (character scalar)
+containing the error message. Detect failures with
+\code{if (!is.null(result$error)) { ... }}.
 }
 \description{
-This function calculates isolines for a given location using a drive-time routing package.
+Computes drive-time isolines (isochrones) for a given point using the HERE
+routing API via the \code{hereR} package.  Results are memoized in memory for the
+duration of the R session so repeated calls with the same inputs are free.
+Use \code{\link[=mysterycall_clear_isochrone_cache]{mysterycall_clear_isochrone_cache()}} to release memory after a batch.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
-# Set your routing API key in your Renviron file using the following steps:
-# 1. Add key to .Renviron
-# 2. Reload .Renviron
-
-# Define a sf object for the location
-location <- sf::st_point(c(-73.987, 40.757))
-
-# Calculate isolines for the location with a 30-minute, 60-minute, 120-minute, and 180-minute range
-isolines <- mysterycall_create_isochrones(location = location, range = c(1800, 3600, 7200, 10800))
-
-# Print the isolines
-print(isolines)
-
-# Free the in-memory cache when done with a batch
+location <- sf::st_sfc(sf::st_point(c(-73.987, 40.757)), crs = 4326)
+isolines <- mysterycall_create_isochrones(
+  location = location,
+  range    = c(1800, 3600)
+)
 mysterycall_clear_isochrone_cache()
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_clear_isochrone_cache]{mysterycall_clear_isochrone_cache()}} to free session memory after
+batch processing; \code{\link[=mysterycall_geocode]{mysterycall_geocode()}} to produce the input coordinates.
+
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_isochrones_for_df}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_acog_districts}()},

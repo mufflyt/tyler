@@ -7,7 +7,14 @@
 mysterycall_standard_labels()
 }
 \value{
-A named list of canonical labels for common columns.
+A named \code{list} with character scalar elements: \code{npi}
+(\code{"National Provider Identifier"}), \code{state} (\code{"State"}),
+\code{city} (\code{"City"}), \code{call_outcome} (\code{"Call Outcome"}),
+\code{quality} (\code{"Quality Tier"}), \code{call_time}
+(\code{"Call Duration (minutes)"}), \code{hold_time}
+(\code{"Hold Duration (minutes)"}), and \code{eta}
+(\code{"Estimated Completion"}). Use these as axis or column labels in
+tables and plots for display consistency across the package.
 }
 \description{
 Retrieve the standard label dictionary used in \code{mysterycall}
@@ -30,8 +37,6 @@ Other utilities:
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
 \code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_scan_for_limits}()},

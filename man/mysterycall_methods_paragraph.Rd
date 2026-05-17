@@ -30,7 +30,8 @@ Default \code{"business days until a new-patient appointment"}.}
 Default \code{"R (R Foundation for Statistical Computing)"}.}
 }
 \value{
-A single character string containing the methods paragraph.
+A single character string containing a ready-to-paste methods
+paragraph describing the mystery-caller study design.
 }
 \description{
 Fills a standard methods template describing the mystery-caller audit
@@ -46,9 +47,14 @@ mysterycall_methods_paragraph(
 )
 }
 \seealso{
+\code{\link[=mysterycall_sample_size_text]{mysterycall_sample_size_text()}} for the sample-size sentence;
+\code{\link[=mysterycall_summarize_demographics]{mysterycall_summarize_demographics()}} for the demographics summary;
+\code{\link[=mysterycall_write_results_paragraph]{mysterycall_write_results_paragraph()}} for the results section.
+
 Other manuscript: 
 \code{\link{mysterycall_format_results_table}()},
 \code{\link{mysterycall_sample_size_text}()},
+\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_summarize_demographics}()}
 }
 \concept{manuscript}

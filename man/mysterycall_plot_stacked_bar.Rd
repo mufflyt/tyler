@@ -51,7 +51,8 @@ descending acceptance rate so the highest-acceptance group appears at the
 top of the flipped chart.}
 }
 \value{
-A \code{ggplot} object.
+A \code{ggplot} object of class \code{c("gg", "ggplot")}. Pass to
+\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}} or \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} to write to disk.
 }
 \description{
 Summarises a binary 0/1 outcome column by a grouping variable and draws a
@@ -69,9 +70,12 @@ mysterycall_plot_stacked_bar(df, outcome_col = "accepted",
                               group_col  = "insurance")
 }
 \seealso{
+\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}} to write the returned plot to disk;
+\code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}} and \code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}} for
+continuous-outcome visualizations.
+
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -83,7 +87,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_residuals}()},
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

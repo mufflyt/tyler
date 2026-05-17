@@ -7,20 +7,43 @@
 mysterycall_get_clinician_data(input_data)
 }
 \arguments{
-\item{input_data}{Either a data frame containing NPI numbers or a path to a CSV file.}
+\item{input_data}{A data frame with an \code{npi} column, or a character scalar
+path to a CSV file that contains an \code{npi} column.}
 }
 \value{
-A tibble with clinician data for the provided NPIs.
+A tibble with one row per valid NPI and columns from
+\code{provider::clinicians()} (name, specialty, address, etc.), plus an
+\code{npi_is_valid} column. Returns a zero-row tibble when no valid NPIs are
+found. Returns \code{NULL} silently per NPI when the \code{provider} package is not
+installed.
 }
 \description{
-This function retrieves clinician data for each valid NPI in the input data frame.
+Retrieves clinician data from the \code{provider} package for each valid NPI in
+the input.  Accepts either a data frame with an \code{npi} column or a path to a
+CSV file.  Invalid NPIs are filtered out via \code{\link[=mysterycall_validate_npi]{mysterycall_validate_npi()}}
+before any API calls are made.
 }
+\section{Subspecialty source warning}{
+
+The \code{taxonomies_desc} column in the returned tibble reflects NPPES
+taxonomy codes (broad specialty groupings from the NPI registry). \strong{Do not
+use \code{taxonomies_desc} to assign subspecialty.} NPPES does not
+reliably distinguish subspecialties such as Neurotology or Pediatric
+Otolaryngology. Subspecialty must be derived exclusively from board
+certification data using \code{\link[=mysterycall_parse_certification_subspecialty]{mysterycall_parse_certification_subspecialty()}}
+and reconciled via \code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}}.
+}
+
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 clinician_df <- mysterycall_get_clinician_data("clinicians.csv")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_luhn_check]{mysterycall_luhn_check()}} to validate NPI checksums;
+\code{\link[=mysterycall_validate_npi]{mysterycall_validate_npi()}} for row-level NPI filtering;
+\code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}} to attach clinician data to a roster.
+
 Other npi: 
 \code{\link{mysterycall_search_and_process_npi}()},
 \code{\link{mysterycall_search_taxonomy}()}

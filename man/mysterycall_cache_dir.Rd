@@ -10,7 +10,10 @@ mysterycall_cache_dir(...)
 \item{...}{Optional path components appended to the cache directory.}
 }
 \value{
-A character string with the cache directory path.
+Character scalar. Absolute path to the cache directory. When \code{...}
+is empty, returns the cache root (created automatically if absent). When
+\code{...} supplies path components, they are appended via \code{file.path()} before
+returning; the directory is not created in that case.
 }
 \description{
 Determine the cache directory used for downloaded resources

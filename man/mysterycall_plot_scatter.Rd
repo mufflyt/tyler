@@ -52,18 +52,21 @@ saved. Defaults to a session-specific folder inside \code{\link[=tempdir]{tempdi
 \item{verbose}{A boolean indicating whether to print messages about the saved plot locations. Default is TRUE.}
 }
 \value{
-Invisibly returns the generated ggplot object.
+A ggplot2 object (\code{c("gg", "ggplot")}), returned invisibly. As a
+side effect, writes a \code{.tiff} and a \code{.png} file to \code{output_dir} with
+filenames of the form \verb{<file_prefix>_<timestamp>.tiff/.png}. Rows
+with zero, negative, or \code{NA} values in \code{y_var} are silently removed
+before plotting.
 }
 \description{
 This function generates a scatter plot designed for mystery caller studies, allowing for the visualization of waiting times or similar outcomes across different categories, such as insurance types. The function supports transformations on the y-axis, custom jitter, and colors each category in the x-axis using the \code{viridis} color palette. The plot is automatically displayed and saved with a specified resolution.
 }
 \examples{
-\donttest{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 example_data <- data.frame(
   insurance = rep(c("Medicaid", "Commercial", "Medicare"), each = 3),
   business_days_until_appointment = c(1.5, 2.0, 2.8, 1.9, 2.4, 2.6, 2.1, 2.7, 3.0)
 )
-
 mysterycall_plot_scatter(
   plot_data = example_data,
   x_var = "insurance",
@@ -77,12 +80,16 @@ mysterycall_plot_scatter(
   plot_title = "Example Scatter Plot",
   verbose = FALSE
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}} for distribution density plots;
+\code{\link[=mysterycall_plot_line]{mysterycall_plot_line()}} for median-trend line plots.
+
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},
 \code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_isochrones_for_df}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_acog_districts}()},

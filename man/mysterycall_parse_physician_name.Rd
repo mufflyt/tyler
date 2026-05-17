@@ -11,8 +11,11 @@ mysterycall_parse_physician_name(physician_name, remove_titles = TRUE)
 \code{"First Last"}, \code{"Last, First"}, \code{"Last, First, Suffix"},
 \code{"First Last, MD"}, and \code{"Dr. First Middle Last Jr., MD FACOG"}.}
 
-\item{remove_titles}{Logical scalar. When \code{TRUE} (default) titles such as
-\code{"Dr."} and \code{"Prof."} are discarded from the \code{title} column.}
+\item{remove_titles}{Logical scalar. When \code{TRUE} (default), leading titles
+(\code{"Dr."}, \code{"Prof."}, \code{"Mr."}, \code{"Mrs."}, \code{"Ms."}) are stripped from the
+name string before parsing; the \code{title} column in the output is \code{NA}.
+When \code{FALSE}, the title is preserved in the \code{title} column and the name
+is parsed without stripping it.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}} with one row per element of \code{physician_name}:

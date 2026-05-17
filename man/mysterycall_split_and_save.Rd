@@ -33,7 +33,11 @@ mysterycall_split_and_save(
 \item{insurance_order}{Vector of insurance types ordered by priority for call scheduling (default is c("Medicaid", "Blue Cross/Blue Shield")).}
 }
 \value{
-Invisible list of file paths to the created Excel files
+\code{invisible()} character vector of absolute file paths to the
+created Excel files. Element 1 is the combined "all callers" workbook;
+subsequent elements are the per-assistant split workbooks in the order of
+\code{lab_assistant_names}. Capture with
+\code{paths <- mysterycall_split_and_save(...)} to use the paths downstream.
 }
 \description{
 This function splits the data based on provided lab assistant names and saves each part as a separate Excel file.
@@ -67,7 +71,7 @@ for small rosters.
 \section{Performance}{
 
 O(n log n) due to sorting. Excel I/O via \code{openxlsx} dominates for large
-rosters; expect ~2–5 s for 500 rows.
+rosters; expect ~2-5 s for 500 rows.
 }
 
 \section{Called By}{
@@ -97,7 +101,6 @@ Other workflow:
 \code{\link{mysterycall_clean_phase1}()},
 \code{\link{mysterycall_clean_phase2}()},
 \code{\link{mysterycall_print_dashboard}()},
-\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_run_workflow}()},
 \code{\link{mysterycall_run_workflow_logged}()},
 \code{\link{mysterycall_verify_artifact}()}

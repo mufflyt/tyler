@@ -13,32 +13,35 @@ mysterycall_assess_data_quality(data, required_columns = c("first", "last"))
 and sufficiently complete. Defaults to \code{c("first", "last")}.}
 }
 \value{
-A named list with elements \code{score} (numeric 0–1) and
+A named list with elements \code{score} (numeric 0-1) and
 \code{issues} (list of issue records with \code{severity} and
 \code{message} fields).
 }
 \description{
-Scores a data frame for completeness and validity and returns a list of
-issues that may affect downstream workflow steps.
+Scores a data frame for completeness and validity on a 0-1 scale, returning
+both the overall score and a detailed list of specific issues that may affect
+downstream workflow steps.  Penalties are applied for missing values in
+required columns (>50\% missing = -3 pts, 20-50\% = -1 pt), excessive
+duplicate rows (>10\% = -1 pt), and non-character NPI or name columns.
 }
 \section{Scoring method}{
 
-Quality is scored on a 0–1 scale by subtracting penalties from a
+Quality is scored on a 0-1 scale by subtracting penalties from a
 maximum of 10:
 \itemize{
-\item Required column with > 50\\% missing values: −3 points
-\item Required column with 20–50\\% missing values: −1 point
-\item More than 10\\% duplicate rows: −1 point
-\item Required column is not character or factor type: −0.5 points
+\item Required column with > 50\\% missing values: -3 points
+\item Required column with 20-50\\% missing values: -1 point
+\item More than 10\\% duplicate rows: -1 point
+\item Required column is not character or factor type: -0.5 points
 }
-Final score = max(0, 1 − penalties / 10).
+Final score = max(0, 1 - penalties / 10).
 
 Worked examples for a 1,000-row physician roster with \code{required_columns = c("first", "last")}:
 \itemize{
-\item All names present, < 10\\% duplicates → \strong{1.00} (100\\%, pass)
-\item 30\\% of \code{first} names missing → \strong{0.90} (90\\%, pass)
-\item 60\\% of \code{first} names missing → \strong{0.70} (70\\%, borderline pass with warning)
-\item Both columns > 50\\% missing (−3 each) → \strong{0.40} (40\\%, preflight stops)
+\item All names present, < 10\\% duplicates -> \strong{1.00} (100\\%, pass)
+\item 30\\% of \code{first} names missing -> \strong{0.90} (90\\%, pass)
+\item 60\\% of \code{first} names missing -> \strong{0.70} (70\\%, borderline pass with warning)
+\item Both columns > 50\\% missing (-3 each) -> \strong{0.40} (40\\%, preflight stops)
 }
 The 0.70 and 0.80 thresholds in \code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} were
 chosen to catch severely incomplete data while tolerating modest
@@ -50,6 +53,9 @@ df <- data.frame(first = c("Jane", NA), last = c("Doe", "Smith"))
 mysterycall_assess_data_quality(df)
 }
 \seealso{
+\code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} which calls this function;
+\code{\link[=mysterycall_estimate_resources]{mysterycall_estimate_resources()}} for runtime/memory projections.
+
 Other utilities: 
 \code{\link{\%>\%}()},
 \code{\link{mysterycall_check_api_response}()},
@@ -62,8 +68,6 @@ Other utilities:
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
 \code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_scan_for_limits}()},

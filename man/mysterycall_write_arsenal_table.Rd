@@ -8,7 +8,7 @@ mysterycall_write_arsenal_table(object, filename, output_dir = NULL)
 }
 \arguments{
 \item{object}{A data frame (e.g. the output of \code{\link[arsenal:summary.tableby]{arsenal::summary.tableby()}})
-to write. Must be a data frame — the function will error otherwise.}
+to write. Must be a data frame  --  the function will error otherwise.}
 
 \item{filename}{The filename without extension for the Word document.}
 
@@ -31,18 +31,10 @@ mysterycall_write_arsenal_table(my_table, "output_table")
 \code{\link[=mysterycall_write_table_pdf]{mysterycall_write_table_pdf()}}, \code{\link[=mysterycall_table_overall]{mysterycall_table_overall()}}
 
 Other table: 
-\code{\link{mysterycall_disparities_table}()},
-\code{\link{mysterycall_format_pct}()},
-\code{\link{mysterycall_max_table}()},
-\code{\link{mysterycall_min_table}()},
-\code{\link{mysterycall_model_table}()},
 \code{\link{mysterycall_table1}()},
 \code{\link{mysterycall_table1_gtsummary}()},
 \code{\link{mysterycall_table_overall}()},
-\code{\link{mysterycall_table_percentages}()},
-\code{\link{mysterycall_table_proportion}()},
 \code{\link{mysterycall_write_table_pdf}()},
-\code{\link{print.mysterycall_disparities_table}()},
 \code{\link{print.mysterycall_table1}()}
 }
 \concept{table}

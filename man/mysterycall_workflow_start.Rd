@@ -24,7 +24,7 @@ Initialize workflow tracking
 mysterycall_workflow_start("Demo Workflow", total_steps = 3)
 }
 \seealso{
-Other logging utilities: 
+Other logging: 
 \code{\link{mysterycall_format_duration}()},
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_error}()},
@@ -45,4 +45,4 @@ Other logging utilities:
 \code{\link{mysterycall_use_quiet_logging}()},
 \code{\link{mysterycall_workflow_end}()}
 }
-\concept{logging utilities}
+\concept{logging}

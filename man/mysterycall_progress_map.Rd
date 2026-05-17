@@ -31,22 +31,13 @@ Convenience wrapper for processing items in batches with automatic progress
 updates and ETA calculations.
 }
 \examples{
-\donttest{
-# Process items with progress bar
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 results <- mysterycall_progress_map(
-  items = 1:100,
-  fn = function(x) { Sys.sleep(0.1); x^2 },
-  name = "Computing squares"
+  items = 1:10,
+  fn    = function(x) x^2,
+  name  = "Computing squares"
 )
-
-# With custom batch size
-results <- mysterycall_progress_map(
-  items = 1:50,
-  fn = function(x) x^2,
-  name = "Computing squares",
-  batch_size = 10  # Update every 10 items
-)
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other progress-bars: 

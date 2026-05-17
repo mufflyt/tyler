@@ -32,7 +32,12 @@ object whose \code{vintage} column matches the provider \code{data_year}.}
 the optional \code{beepr} package is available. Defaults to \code{TRUE}.}
 }
 \value{
-Called for its side effect of saving the intersection overlap shapefile and CSV.
+\code{invisible(NULL)}. As side effects: (1) writes an ESRI shapefile
+(EPSG:4326) of the block-group/isochrone intersection to \code{output_dir},
+(2) writes a CSV with columns \code{GEOID}, \code{intersect_area}, and
+\code{area_method} to the same directory, and (3) emits messages with the
+50th and 75th percentile overlap statistics. If \code{notify = TRUE} and
+\code{beepr} is installed, plays a completion sound.
 }
 \description{
 This function calculates the intersection between block groups and isochrones for a specific drive time and saves the results to a shapefile.  To
@@ -45,6 +50,9 @@ mysterycall_calculate_overlap(block_groups, isochrones_joined, 30L, "data/shp/")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_isochrones_for_df]{mysterycall_isochrones_for_df()}} to generate the \code{isochrones_joined}
+input; \code{\link[=mysterycall_create_isochrones]{mysterycall_create_isochrones()}} for single-point isochrone creation.
+
 Other geospatial helpers: 
 \code{\link{mysterycall_geocode}()},
 \code{\link{mysterycall_hrr}()}

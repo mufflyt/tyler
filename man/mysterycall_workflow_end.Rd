@@ -24,7 +24,7 @@ mysterycall_workflow_end(final_n = 80, input_n = 100)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other logging utilities: 
+Other logging: 
 \code{\link{mysterycall_format_duration}()},
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_error}()},
@@ -45,4 +45,4 @@ Other logging utilities:
 \code{\link{mysterycall_use_quiet_logging}()},
 \code{\link{mysterycall_workflow_start}()}
 }
-\concept{logging utilities}
+\concept{logging}

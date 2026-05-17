@@ -46,18 +46,21 @@ saved. Defaults to a session-specific folder inside \code{\link[=tempdir]{tempdi
 \item{verbose}{A boolean indicating whether to print messages about the saved plot locations. Default is TRUE.}
 }
 \value{
-Invisibly returns the generated ggplot object.
+A ggplot2 object (\code{c("gg", "ggplot")}), returned invisibly. As a
+side effect, writes a \code{.tiff} and a \code{.png} file to \code{output_dir} with
+filenames of the form \verb{<file_prefix>_<timestamp>.tiff/.png}. A
+\code{stat_summary} median line is always overlaid; individual points are
+shown via \code{geom_point}.
 }
 \description{
 This function creates a line plot using ggplot2 with options for transforming the y-axis, grouping lines, and saving the plot with a specified resolution. The plot can be saved in both TIFF and PNG formats with automatic filename generation.
 }
 \examples{
-\donttest{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 example_data <- data.frame(
   insurance = rep(c("Medicaid", "Commercial", "Medicare"), each = 3),
   business_days_until_appointment = c(1.5, 2.1, 2.8, 1.7, 2.3, 2.5, 1.9, 2.6, 3.1)
 )
-
 mysterycall_plot_line(
   plot_data = example_data,
   x_var = "insurance",
@@ -68,12 +71,16 @@ mysterycall_plot_line(
   file_prefix = "demo_line",
   verbose = FALSE
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_plot_scatter]{mysterycall_plot_scatter()}} for jittered point plots;
+\code{\link[=mysterycall_plot_density]{mysterycall_plot_density()}} for density distribution plots.
+
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},
 \code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_isochrones_for_df}()},
 \code{\link{mysterycall_map_acceptance_rate}()},
 \code{\link{mysterycall_map_acog_districts}()},

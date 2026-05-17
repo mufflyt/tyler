@@ -12,33 +12,28 @@ mysterycall_max_table(InVec, mult = FALSE)
 \item{mult}{Logical value indicating whether to return multiple maximum values or just the first one. Default is FALSE.}
 }
 \value{
-If \code{mult} is FALSE, returns the level corresponding to the maximum value of the factor variable.
-If \code{mult} is TRUE, returns a character vector containing all the levels with the maximum value.
+Character scalar (\code{mult = FALSE}) or character vector (\code{mult = TRUE})
+containing the factor level(s) with the maximum frequency. Returns
+\code{character(0)} for a zero-length input.
 }
 \description{
 This function returns the level(s) corresponding to the maximum value(s) of a factor variable.
 }
 \examples{
 vec <- factor(c("A", "B", "A", "C", "B", "B"))
-mysterycall_max_table(vec) # Returns "B"
-mysterycall_max_table(vec, mult = TRUE) # Returns "B"
+mysterycall_max_table(vec)           # "B"
+mysterycall_max_table(vec, mult = TRUE)  # "B"
 }
 \seealso{
 \code{\link[=mysterycall_min_table]{mysterycall_min_table()}}
 
-Other table: 
+Other table helpers: 
 \code{\link{mysterycall_disparities_table}()},
 \code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_min_table}()},
 \code{\link{mysterycall_model_table}()},
-\code{\link{mysterycall_table1}()},
-\code{\link{mysterycall_table1_gtsummary}()},
-\code{\link{mysterycall_table_overall}()},
 \code{\link{mysterycall_table_percentages}()},
 \code{\link{mysterycall_table_proportion}()},
-\code{\link{mysterycall_write_arsenal_table}()},
-\code{\link{mysterycall_write_table_pdf}()},
-\code{\link{print.mysterycall_disparities_table}()},
-\code{\link{print.mysterycall_table1}()}
+\code{\link{print.mysterycall_disparities_table}()}
 }
-\concept{table}
+\concept{table helpers}

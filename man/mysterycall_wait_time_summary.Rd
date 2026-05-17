@@ -27,14 +27,21 @@ full dataset and no test is run.}
 \value{
 A named list with:
 \describe{
-\item{\code{summary}}{Tibble with one row per group (or one row overall):
-\code{n}, \code{n_missing}, \code{mean}, \code{sd}, \code{median}, \code{q1}, \code{q3}, \code{min}, \code{max}.}
-\item{\code{test}}{\code{htest} object from \code{\link[stats:wilcox.test]{stats::wilcox.test()}} or
-\code{\link[stats:kruskal.test]{stats::kruskal.test()}}, or \code{NULL} when no test was run.}
-\item{\code{p_value}}{Numeric p-value, or \code{NA_real_}.}
-\item{\code{test_name}}{Character label describing the test used.}
-\item{\code{interpretation}}{One-sentence plain-language summary suitable for
-pasting into a Results section.}
+\item{\code{summary}}{Tibble with one row per group (or one row overall).
+When \code{group_by} is non-\code{NULL}, the first column is named after the
+grouping variable (character). Remaining columns: \code{n} (integer),
+\code{n_missing} (integer), \code{mean} (numeric), \code{sd} (numeric), \code{median}
+(numeric), \code{q1} (numeric), \code{q3} (numeric), \code{min} (numeric), \code{max}
+(numeric).}
+\item{\code{test}}{\code{htest} object from \code{\link[stats:wilcox.test]{stats::wilcox.test()}} (two groups)
+or \code{\link[stats:kruskal.test]{stats::kruskal.test()}} (three or more groups), or \code{NULL} when no
+test was run (i.e., \code{group_by = NULL}).}
+\item{\code{p_value}}{Numeric p-value extracted from \code{test}, or \code{NA_real_}
+when no test was run.}
+\item{\code{test_name}}{Character. One of \code{"Wilcoxon rank-sum"},
+\code{"Kruskal-Wallis"}, or \code{"none"}.}
+\item{\code{interpretation}}{Character. One-sentence plain-language summary
+suitable for pasting into a Results section.}
 }
 }
 \description{
@@ -62,7 +69,6 @@ mysterycall_wait_time_summary(df, group_by = "insurance")
 
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -75,7 +81,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{print.mysterycall_poisson_model}()}

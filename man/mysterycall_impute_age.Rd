@@ -29,7 +29,10 @@ threshold are replaced with \code{NA}. Default \code{25}.}
 threshold are replaced with \code{NA}. Default \code{90}.}
 }
 \value{
-Integer vector the same length as \code{grad_year}.
+Integer vector the same length as \code{grad_year}. \code{NA} is returned
+for elements where \code{grad_year} is \code{NA}, where the computed age is below
+\code{min_age}, or where it exceeds \code{max_age} (with a \code{\link[base:warning]{base::warning()}} in
+each case).
 }
 \description{
 Estimates a physician's current age as:
@@ -44,7 +47,7 @@ Implausible results (age < 0 after computing, or age < \code{min_age}) are set
 to \code{NA} with a warning.
 }
 \examples{
-# Physician who graduated in 1995; current year 2026 → age ≈ 58
+# Physician who graduated in 1995; current year 2026 -> age ~ 58
 mysterycall_impute_age(1995)
 
 # Vectorized
@@ -61,13 +64,18 @@ Other provider characteristics:
 \code{\link{mysterycall_academic_patterns}()},
 \code{\link{mysterycall_age_category}()},
 \code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
 \code{\link{mysterycall_classify_medical_school}()},
 \code{\link{mysterycall_classify_practice_setting}()},
 \code{\link{mysterycall_classify_ruca}()},
 \code{\link{mysterycall_collapse_rare}()},
 \code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
 \code{\link{mysterycall_government_patterns}()},
+\code{\link{mysterycall_most_common_gender}()},
 \code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_physician_age}()},
 \code{\link{mysterycall_recode_credentials}()},
 \code{\link{mysterycall_reconcile_specialty}()},
 \code{\link{mysterycall_reorder_by_freq}()}

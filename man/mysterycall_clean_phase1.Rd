@@ -50,7 +50,9 @@ lowercase hex string (SHA-256) or \code{NULL} (default). Ignored silently if
 not a valid hex digest.}
 }
 \value{
-Invisibly returns the cleaned data frame with the following attributes:
+Invisibly returns the cleaned data frame (side effect: files are
+written to \code{output_directory}).  The returned object carries these
+attributes:
 \itemize{
 \item \code{audit_trail}: List containing processing metadata (timestamps, row counts, flags)
 \item \code{processing_timestamp}: Time when processing completed
@@ -171,11 +173,13 @@ mysterycall_clean_phase1(phase1_data)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_clean_phase2]{mysterycall_clean_phase2()}} for Phase 2 data cleaning;
+\code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}} which orchestrates both phases.
+
 Other workflow: 
 \code{\link{mysterycall_call_productivity}()},
 \code{\link{mysterycall_clean_phase2}()},
 \code{\link{mysterycall_print_dashboard}()},
-\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_run_workflow}()},
 \code{\link{mysterycall_run_workflow_logged}()},
 \code{\link{mysterycall_split_and_save}()},

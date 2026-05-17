@@ -12,25 +12,29 @@ mysterycall_check_normality(data, variable)
 \item{variable}{A string specifying the column name of the variable to be checked and summarized.}
 }
 \value{
-A list containing the summary statistics (mean and standard deviation if normal, median and IQR if not normal).
+A named list with either:
+\describe{
+\item{mean, sd}{Numeric scalars (if Shapiro-Wilk p > 0.05, data approximately normal).}
+\item{median, iqr}{Numeric scalars (if Shapiro-Wilk p <= 0.05, data non-normal).}
+}
+Also emits a histogram + density plot and a Q-Q plot via side effects.
 }
 \description{
 This function checks the normality of a specified variable in a dataframe using the Shapiro-Wilk test
 and provides summary statistics (mean and standard deviation if normal, median and IQR if not normal).
 }
 \examples{
-\donttest{
 sample_data <- data.frame(
   business_days_until_appointment = c(1.5, 2.0, 1.8, 2.2, 1.9, 2.1, 2.3)
 )
-
 mysterycall_check_normality(sample_data, "business_days_until_appointment")
 }
-}
 \seealso{
+\code{\link[=mysterycall_prepare_table1_vars]{mysterycall_prepare_table1_vars()}} for downstream variable
+standardisation; \code{\link[=mysterycall_physician_age]{mysterycall_physician_age()}} for age summary statistics.
+
 Other modeling helpers: 
 \code{\link{mysterycall_create_formula}()},
-\code{\link{mysterycall_plot_emmeans}()},
 \code{\link{mysterycall_plot_interaction}()}
 }
 \concept{modeling helpers}

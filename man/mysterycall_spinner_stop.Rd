@@ -12,16 +12,16 @@ mysterycall_spinner_stop(id, result = "done")
 \item{result}{Result message}
 }
 \value{
-Invisible NULL
+\code{invisible(NULL)}
 }
 \description{
 Stop a spinner
 }
 \examples{
-\donttest{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 id <- mysterycall_spinner_start("Loading data")
 mysterycall_spinner_stop(id, result = "done")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other progress-bars: 

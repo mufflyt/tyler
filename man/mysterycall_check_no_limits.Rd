@@ -23,7 +23,9 @@ and actual rows are less, generates a warning.}
 and actual rows exceed this, generates a warning.}
 }
 \value{
-Invisible TRUE if passes all checks
+\code{invisible(TRUE)} when all checks pass. When a check fails, emits
+a \code{\link[base:warning]{base::warning()}} describing the issue and still returns
+\code{invisible(TRUE)} so the caller can continue processing.
 }
 \description{
 Checks for common anti-patterns that limit data processing. This function
@@ -40,6 +42,9 @@ mysterycall_check_no_limits(npi_results, "NPI search results", min_expected = 10
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_check_no_data_loss]{mysterycall_check_no_data_loss()}}, \code{\link[=mysterycall_check_api_response]{mysterycall_check_api_response()}},
+\code{\link[=mysterycall_scan_for_limits]{mysterycall_scan_for_limits()}} for related sanity-check utilities.
+
 Other utilities: 
 \code{\link{\%>\%}()},
 \code{\link{mysterycall_assess_data_quality}()},
@@ -52,8 +57,6 @@ Other utilities:
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
 \code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_scan_for_limits}()},

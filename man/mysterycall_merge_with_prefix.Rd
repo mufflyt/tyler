@@ -31,8 +31,11 @@ Default \code{"y_"}.}
 \code{"right"}.}
 }
 \value{
-A data frame with key columns first, followed by prefixed columns
-from \code{x}, followed by prefixed columns from \code{y}.
+A data frame in this column order: (1) join key columns (names
+unchanged), (2) non-key columns of \code{x} with \code{prefix_x} prepended (e.g.
+\code{"specialty"} becomes \code{"npi_specialty"}), (3) non-key columns of \code{y} with
+\code{prefix_y} prepended. Row order follows base R \code{merge()} (sorted by key).
+For \code{join_type = "left"}, unmatched \code{y} columns are \code{NA}.
 }
 \description{
 Renames all non-key columns in \code{x} with \code{prefix_x} and all non-key
@@ -49,12 +52,17 @@ mysterycall_merge_with_prefix(registry, abohns, by = "npi",
                                prefix_x = "npi_", prefix_y = "abohns_")
 }
 \seealso{
+\code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}} for joins with duplicate-key
+warnings; \code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}} for post-join specialty
+harmonisation.
+
 Other data management: 
 \code{\link{mysterycall_check_duplicates}()},
 \code{\link{mysterycall_check_generalist_presence}()},
 \code{\link{mysterycall_extract_zip5}()},
 \code{\link{mysterycall_luhn_check}()},
 \code{\link{mysterycall_prepare_table1_vars}()},
+\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_stratified_sample}()}
 }
 \concept{data management}

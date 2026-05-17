@@ -17,7 +17,11 @@ current year, which covers retrospective data collection.}
 current year.}
 }
 \value{
-A \code{bizdays} calendar object named \code{"USFederal"}.
+An S3 object of class \code{"calendar"} (from \code{bizdays}) named
+\code{"USFederal"}. Pass it to \code{\link[bizdays:bizdays]{bizdays::bizdays()}} or \code{\link[bizdays:is.bizday]{bizdays::is.bizday()}}
+for date arithmetic. Contains one holiday entry per year from
+\code{start_year} to \code{end_year}, with fixed holidays observing the
+Saturday-to-Friday / Sunday-to-Monday shift rule.
 }
 \description{
 Creates a \code{\link[bizdays:create.calendar]{bizdays::create.calendar()}} object covering all 11 US federal
@@ -35,7 +39,7 @@ performance, or if you need to inspect the holiday list.
 \examples{
 \dontshow{if (requireNamespace("bizdays", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 cal <- mysterycall_us_federal_calendar(2024, 2028)
-bizdays::is.bizday(as.Date("2026-01-19"), cal)  # MLK Day → FALSE
+bizdays::is.bizday(as.Date("2026-01-19"), cal)  # MLK Day -> FALSE
 \dontshow{\}) # examplesIf}
 }
 \seealso{

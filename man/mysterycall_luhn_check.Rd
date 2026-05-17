@@ -26,12 +26,17 @@ mysterycall_luhn_check(c("1234567893", "9999999999", NA))
 # df[mysterycall_luhn_check(df$npi), ]
 }
 \seealso{
+\code{\link[=mysterycall_validate_npi]{mysterycall_validate_npi()}} for row-level NPI validation with
+filtering; \code{\link[=mysterycall_get_clinician_data]{mysterycall_get_clinician_data()}} to retrieve clinician detail
+records for validated NPIs.
+
 Other data management: 
 \code{\link{mysterycall_check_duplicates}()},
 \code{\link{mysterycall_check_generalist_presence}()},
 \code{\link{mysterycall_extract_zip5}()},
 \code{\link{mysterycall_merge_with_prefix}()},
 \code{\link{mysterycall_prepare_table1_vars}()},
+\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_stratified_sample}()}
 }
 \concept{data management}

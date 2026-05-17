@@ -16,24 +16,21 @@
 Invisibly returns \code{x}.
 }
 \description{
-Print a mysterycall_disparities_table
+Prints a formatted table of disparity metrics with group sizes, acceptance
+rates, Wilson confidence intervals, absolute risk differences, relative risks,
+and p-values versus the reference group.  Column headers are labelled using
+the \code{ci_method} and \code{alpha} attributes stored on the object.
 }
 \seealso{
 \code{\link[=mysterycall_disparities_table]{mysterycall_disparities_table()}}
 
-Other table: 
+Other table helpers: 
 \code{\link{mysterycall_disparities_table}()},
 \code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_max_table}()},
 \code{\link{mysterycall_min_table}()},
 \code{\link{mysterycall_model_table}()},
-\code{\link{mysterycall_table1}()},
-\code{\link{mysterycall_table1_gtsummary}()},
-\code{\link{mysterycall_table_overall}()},
 \code{\link{mysterycall_table_percentages}()},
-\code{\link{mysterycall_table_proportion}()},
-\code{\link{mysterycall_write_arsenal_table}()},
-\code{\link{mysterycall_write_table_pdf}()},
-\code{\link{print.mysterycall_table1}()}
+\code{\link{mysterycall_table_proportion}()}
 }
-\concept{table}
+\concept{table helpers}

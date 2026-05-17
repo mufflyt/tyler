@@ -32,7 +32,10 @@ identifies generalist providers who will receive scenario assignments.}
 \code{c("Neurotology" = "Neurotology", "Pediatric Otolaryngology" = "Pediatric Otolaryngology")}.
 Each name is a value that appears in \code{specialty_col}; each value is the
 scenario label that will be assigned to generalists in cities where that
-subspecialty is present.}
+subspecialty is present. \strong{The subspecialty values used as names here must
+derive from board certification data (e.g. ABOHNS via
+\code{\link[=mysterycall_parse_certification_subspecialty]{mysterycall_parse_certification_subspecialty()}}) and must not come from
+NPPES \code{taxonomies_desc} or DAC taxonomy codes.}}
 
 \item{id_col}{Optional character scalar. Column used to sort rows within each
 location group before round-robin assignment. When \code{NULL} (default) the
@@ -74,5 +77,10 @@ mysterycall_assign_scenarios(
                        "Pediatric Otolaryngology"  = "Pediatric Otolaryngology"),
   id_col           = "id"
 )
+}
+\seealso{
+\code{\link[=mysterycall_check_generalist_presence]{mysterycall_check_generalist_presence()}} to validate paired
+generalist coverage before assigning scenarios;
+\code{\link[=mysterycall_reconcile_specialty]{mysterycall_reconcile_specialty()}} for specialty harmonisation.
 }
 \concept{study design}

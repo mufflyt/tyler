@@ -2,23 +2,30 @@
 % Please edit documentation in R/physician_age.R
 \name{mysterycall_physician_age}
 \alias{mysterycall_physician_age}
-\title{Calculate and Summarize Physician Age}
+\title{Summarise physician age as median (IQR) text}
 \usage{
 mysterycall_physician_age(data, age_column)
 }
 \arguments{
 \item{data}{A data frame containing the age data.}
 
-\item{age_column}{A character string representing the name of the column in \code{data} that contains the age data.}
+\item{age_column}{Character scalar naming the numeric column in \code{data} that
+holds physician ages.}
 }
 \value{
-A character string summarizing the median age and IQR of the specified age column in the dataset.
+A single character string of the form
+\code{"The median age was XX.XX years (IQR: Q1.X--Q3.X years)."} where
+the median is rounded to 2 decimal places and IQR bounds to 1.
 }
 \description{
-This function calculates the median age, as well as the 25th and 75th percentiles (Interquartile Range, IQR) of a specified age column in a data frame. It returns a sentence summarizing these statistics.
+Computes the median, Q1, and Q3 of a numeric age column (ignoring \code{NA})
+and returns a ready-to-paste sentence for manuscript methods or results
+sections.
 }
 \details{
-The function calculates the median, 25th percentile (Q1), and 75th percentile (Q3) of the age data, rounding the results to two decimal places for the median and one decimal place for the percentiles. It then constructs a summary sentence describing these statistics.
+\code{NA} values in \code{age_column} are removed before computing quantiles
+(i.e., \code{na.rm = TRUE}).  All quantiles use the default R \code{type = 7}
+interpolation.
 }
 \examples{
 # Example 1: Basic usage with a small dataset
@@ -38,7 +45,27 @@ print(summary_sentence)
 
 }
 \seealso{
-Other summary: 
-\code{\link{mysterycall_not_contacted_states}()}
+\code{\link[=mysterycall_impute_age]{mysterycall_impute_age()}} to derive age from graduation year;
+\code{\link[=mysterycall_age_category]{mysterycall_age_category()}} to bin ages into publication-ready groups.
+
+Other provider characteristics: 
+\code{\link{mysterycall_academic_patterns}()},
+\code{\link{mysterycall_age_category}()},
+\code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
+\code{\link{mysterycall_classify_medical_school}()},
+\code{\link{mysterycall_classify_practice_setting}()},
+\code{\link{mysterycall_classify_ruca}()},
+\code{\link{mysterycall_collapse_rare}()},
+\code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
+\code{\link{mysterycall_government_patterns}()},
+\code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
+\code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_recode_credentials}()},
+\code{\link{mysterycall_reconcile_specialty}()},
+\code{\link{mysterycall_reorder_by_freq}()}
 }
-\concept{summary}
+\concept{provider characteristics}

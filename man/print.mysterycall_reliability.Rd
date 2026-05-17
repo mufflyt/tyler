@@ -12,7 +12,7 @@
 \item{...}{Ignored.}
 }
 \value{
-Invisibly returns \code{x}.
+\code{invisible(x)}.
 }
 \description{
 Print method for mysterycall_reliability objects

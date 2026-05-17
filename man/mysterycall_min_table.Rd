@@ -7,38 +7,36 @@
 mysterycall_min_table(InVec, mult = FALSE)
 }
 \arguments{
-\item{InVec}{Input vector, expected to be a factor variable or convertible to a factor.}
+\item{InVec}{A vector or factor. Non-factor inputs are coerced to factor
+via \code{factor()}. The function counts occurrences of each resulting level.}
 
-\item{mult}{Logical value indicating whether to return multiple minimum values or just the first one. Default is FALSE.}
+\item{mult}{Logical scalar. If \code{TRUE}, all levels tied for the minimum
+count are returned. If \code{FALSE} (default), only the first such level is
+returned (via \code{which.min()}).}
 }
 \value{
-If \code{mult} is FALSE, returns the level corresponding to the minimum value of the factor variable.
-If \code{mult} is TRUE, returns a character vector containing all the levels with the minimum value.
+Character scalar (\code{mult = FALSE}) or character vector (\code{mult = TRUE})
+of the factor level(s) with the minimum frequency. Returns \code{character(0)}
+for a zero-length input.
 }
 \description{
 This function returns the level(s) corresponding to the minimum value(s) of a factor variable.
 }
 \examples{
 vec <- factor(c("A", "B", "A", "C", "B", "B"))
-mysterycall_min_table(vec) # Returns "C"
-mysterycall_min_table(vec, mult = TRUE) # Returns "C"
+mysterycall_min_table(vec)           # "C"
+mysterycall_min_table(vec, mult = TRUE)  # "C"
 }
 \seealso{
 \code{\link[=mysterycall_max_table]{mysterycall_max_table()}}
 
-Other table: 
+Other table helpers: 
 \code{\link{mysterycall_disparities_table}()},
 \code{\link{mysterycall_format_pct}()},
 \code{\link{mysterycall_max_table}()},
 \code{\link{mysterycall_model_table}()},
-\code{\link{mysterycall_table1}()},
-\code{\link{mysterycall_table1_gtsummary}()},
-\code{\link{mysterycall_table_overall}()},
 \code{\link{mysterycall_table_percentages}()},
 \code{\link{mysterycall_table_proportion}()},
-\code{\link{mysterycall_write_arsenal_table}()},
-\code{\link{mysterycall_write_table_pdf}()},
-\code{\link{print.mysterycall_disparities_table}()},
-\code{\link{print.mysterycall_table1}()}
+\code{\link{print.mysterycall_disparities_table}()}
 }
-\concept{table}
+\concept{table helpers}

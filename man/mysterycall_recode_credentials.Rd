@@ -10,7 +10,9 @@ mysterycall_recode_credentials(x, other_label = "Other")
 \item{x}{Character vector of raw credential strings.}
 
 \item{other_label}{Character scalar returned when neither MD nor DO pattern
-matches. Default \code{"Other"}.}
+matches. Default \code{"Other"}. This label covers all non-physician
+credentials such as PA, NP, RN, DDS, DMD, MBBS, and any unrecognised
+free-text strings.}
 }
 \value{
 Character vector the same length as \code{x}. \code{NA} inputs return \code{NA}.
@@ -27,7 +29,7 @@ Recognised patterns:
 \item{\code{"MD"}}{\code{M.D.}, \code{MD}, \code{MD/PhD}, \code{MD-PhD}, \verb{MD, PhD},
 \verb{doctor of medicine}, \code{allopathic}}
 \item{\code{"DO"}}{\code{D.O.}, \code{DO}, \code{D.O.M.}, \code{osteopathic}}
-\item{\code{"Other"}}{everything else (PA, NP, RN, DDS, DMD, MBBS, …)}
+\item{\code{"Other"}}{everything else (PA, NP, RN, DDS, DMD, MBBS, ...)}
 }
 }
 \examples{
@@ -39,14 +41,19 @@ Other provider characteristics:
 \code{\link{mysterycall_academic_patterns}()},
 \code{\link{mysterycall_age_category}()},
 \code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
 \code{\link{mysterycall_classify_medical_school}()},
 \code{\link{mysterycall_classify_practice_setting}()},
 \code{\link{mysterycall_classify_ruca}()},
 \code{\link{mysterycall_collapse_rare}()},
 \code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
 \code{\link{mysterycall_government_patterns}()},
 \code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
 \code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_physician_age}()},
 \code{\link{mysterycall_reconcile_specialty}()},
 \code{\link{mysterycall_reorder_by_freq}()}
 }

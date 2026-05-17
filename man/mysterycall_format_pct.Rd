@@ -38,19 +38,13 @@ print(no_decimal)  # Output: "50\%"
 
 }
 \seealso{
-Other table: 
+Other table helpers: 
 \code{\link{mysterycall_disparities_table}()},
 \code{\link{mysterycall_max_table}()},
 \code{\link{mysterycall_min_table}()},
 \code{\link{mysterycall_model_table}()},
-\code{\link{mysterycall_table1}()},
-\code{\link{mysterycall_table1_gtsummary}()},
-\code{\link{mysterycall_table_overall}()},
 \code{\link{mysterycall_table_percentages}()},
 \code{\link{mysterycall_table_proportion}()},
-\code{\link{mysterycall_write_arsenal_table}()},
-\code{\link{mysterycall_write_table_pdf}()},
-\code{\link{print.mysterycall_disparities_table}()},
-\code{\link{print.mysterycall_table1}()}
+\code{\link{print.mysterycall_disparities_table}()}
 }
-\concept{table}
+\concept{table helpers}

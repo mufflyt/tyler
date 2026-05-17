@@ -16,11 +16,17 @@ mysterycall_reconcile_specialty(
 \arguments{
 \item{data}{A data frame.}
 
-\item{primary_col}{Character scalar. Column containing the primary specialty
-label (e.g. from NPI registry).}
+\item{primary_col}{Character scalar. Column containing the broad specialty
+label from a registry source such as NPPES or DAC (e.g.
+\code{"Otolaryngology - Head & Neck Surgery"}). Do not use this column to
+carry subspecialty values; subspecialty must come via \code{secondary_col}
+from board certification data only.}
 
-\item{secondary_col}{Optional character scalar. Column containing an
-alternative specialty label (e.g. from board certification data).}
+\item{secondary_col}{Optional character scalar. Column containing a
+subspecialty label derived \strong{exclusively from board certification data}
+(e.g. ABOHNS \code{certification_type} parsed by
+\code{\link[=mysterycall_parse_certification_subspecialty]{mysterycall_parse_certification_subspecialty()}}). DAC and NPPES columns
+must not be passed here for subspecialty purposes.}
 
 \item{default}{Character scalar. The "uninformative" label that triggers
 tier-2 or tier-3 logic. Default \code{"General"}.}
@@ -33,22 +39,42 @@ recording the tier (\code{"high"}, \code{"medium"}, or \code{"low"}).
 Default \code{"specialty_confidence"}.}
 }
 \value{
-\code{data} with \code{primary_col} values possibly updated (tier-2 rows
-receive the secondary value) and two new audit columns appended.
+The input \code{data} frame with the same row count, where:
+\itemize{
+\item \code{primary_col} is updated: tier-2 rows receive the \code{secondary_col} value.
+\item A new character column (named by \code{source_col}) records which source was
+used (\code{"primary"}, \code{"secondary"}, or \code{"default"}).
+\item A new character column (named by \code{confidence_col}) records the
+resolution tier (\code{"high"}, \code{"medium"}, or \code{"low"}).
+}
 }
 \description{
 Applies a three-tier decision rule:
 \enumerate{
-\item \strong{Tier 1 (high)}: primary column is non-missing and non-default —
+\item \strong{Tier 1 (high)}: primary column is non-missing and non-default -
 use it as-is.
 \item \strong{Tier 2 (medium)}: primary is missing or the default label, but
-the secondary column is informative — adopt the secondary value.
-\item \strong{Tier 3 (low)}: both sources are uninformative — set specialty to
+the secondary column is informative - adopt the secondary value.
+\item \strong{Tier 3 (low)}: both sources are uninformative - set specialty to
 \code{default}.
 }
 Two audit columns are appended: one recording which source was used and one
 recording the confidence tier.
 }
+\section{Subspecialty source rule}{
+
+\strong{Subspecialty values must only come from board certification data.}
+NPPES (\code{taxonomies_desc}) and DAC (Data at CMS) report broad specialty
+taxonomy codes that do not reliably distinguish subspecialties such as
+Neurotology or Pediatric Otolaryngology. Always supply board certification
+data (e.g. ABOHNS) in \code{secondary_col} when subspecialty resolution is
+needed. Passing an NPPES or DAC column as \code{secondary_col} for subspecialty
+will produce incorrect Tier-2 assignments that appear valid but are not.
+Use \code{\link[=mysterycall_parse_certification_subspecialty]{mysterycall_parse_certification_subspecialty()}} to derive a
+subspecialty column from the ABOHNS \code{certification_type} field before
+calling this function.
+}
+
 \examples{
 df <- data.frame(
   specialty_npi   = c("Otolaryngology", "General", NA, "Rhinology"),
@@ -65,14 +91,19 @@ Other provider characteristics:
 \code{\link{mysterycall_academic_patterns}()},
 \code{\link{mysterycall_age_category}()},
 \code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
 \code{\link{mysterycall_classify_medical_school}()},
 \code{\link{mysterycall_classify_practice_setting}()},
 \code{\link{mysterycall_classify_ruca}()},
 \code{\link{mysterycall_collapse_rare}()},
 \code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
 \code{\link{mysterycall_government_patterns}()},
 \code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
 \code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_physician_age}()},
 \code{\link{mysterycall_recode_credentials}()},
 \code{\link{mysterycall_reorder_by_freq}()}
 }

@@ -22,8 +22,17 @@ mysterycall_check_data_completeness(
 between 0 and 1 determining the quality tier.}
 }
 \value{
-A list containing \code{summary} (tibble of completeness metrics) and
-\code{quality} (overall quality tier).
+A named list with three elements:
+\describe{
+\item{\code{summary}}{A \code{\link[tibble:tibble]{tibble::tibble()}} with one row per entry in \code{required}
+(plus one uniqueness row when \code{id_cols} is supplied). Columns: \code{column}
+(character), \code{completeness} (numeric, proportion 0-1 of non-missing
+values), \code{missing} (numeric, \code{1 - completeness}).}
+\item{\code{quality}}{Character scalar: \code{"high"}, \code{"medium"}, or \code{"low"} based
+on the mean completeness score relative to \code{thresholds}.}
+\item{\code{score}}{Numeric scalar. Mean completeness across all \code{required}
+columns (and the uniqueness row when \code{id_cols} is supplied).}
+}
 }
 \description{
 Assess completeness for required data columns
@@ -45,8 +54,6 @@ Other utilities:
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
 \code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_scan_for_limits}()},

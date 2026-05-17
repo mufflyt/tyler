@@ -13,19 +13,27 @@ mysterycall_plot_emmeans(
 )
 }
 \arguments{
-\item{model_object}{A fitted model object from which EMMs are to be computed. This can be a generalized linear model (GLM), linear model, or other suitable models.}
+\item{model_object}{A fitted model object of class \code{glm}, \code{lm}, \code{lmerMod},
+\code{glmerMod}, or any class supported by \code{\link[emmeans:emmeans]{emmeans::emmeans()}}.}
 
-\item{specs}{A character string specifying the predictor variable(s) for which EMMs are to be computed. For example, this could be the treatment groups, scenarios, or demographic variables.}
+\item{specs}{Character scalar or vector. Predictor variable(s) for which
+marginal means are computed. The first element is used as the x-axis
+variable; the second (if present) becomes the \code{color_by} grouping
+variable. Example: \code{c("insurance", "gender")}.}
 
-\item{variable_of_interest}{A character string specifying the variable to be plotted on the x-axis. Typically, this would be the same as the \code{specs}.}
+\item{variable_of_interest}{Character scalar. Label for the x-axis, typically
+equal to the first element of \code{specs}.}
 
-\item{color_by}{A character string specifying the variable used to color the points and error bars. This could be a categorical variable like gender, insurance type, or academic affiliation.}
+\item{color_by}{Character scalar or \code{NULL}. Grouping variable name for
+coloring points and error bars. When \code{NULL} a single-group plot is drawn.}
 
 \item{output_dir}{A character string specifying the directory where the plot will
 be saved. Defaults to a session-specific folder inside \code{\link[=tempdir]{tempdir()}}.}
 }
 \value{
-Invisibly returns a list containing the estimated marginal means data (\code{data}) and the ggplot object (\code{plot}).
+\code{invisible()} named list with two elements: \code{data} (data.frame of
+EMMs from \code{\link[emmeans:emmeans]{emmeans::emmeans()}}) and \code{plot} (\code{ggplot} object). A plot
+file is also written to \code{output_dir} as a side effect.
 }
 \description{
 This function computes the estimated marginal means (EMMs) from a model object, creates a plot of the EMMs with confidence intervals, and saves the plot to a specified directory. This is particularly useful in studies like mystery caller studies where you need to analyze differences in outcomes such as appointment wait times across different groups or treatments.
@@ -79,9 +87,8 @@ result <- mysterycall_plot_emmeans(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other modeling helpers: 
-\code{\link{mysterycall_check_normality}()},
-\code{\link{mysterycall_create_formula}()},
-\code{\link{mysterycall_plot_interaction}()}
+Other plotting: 
+\code{\link{mysterycall_plot_disparities}()},
+\code{\link{mysterycall_plot_source_venn}()}
 }
-\concept{modeling helpers}
+\concept{plotting}

@@ -10,7 +10,10 @@ mysterycall_remove_constants(data_frame)
 \item{data_frame}{A data frame from which constant variables should be removed.}
 }
 \value{
-A data frame with constant variables removed.
+A data frame with the same row count as \code{data_frame} but with
+zero-variance columns (all values identical after coercion to character)
+removed. Returns \code{data_frame} unchanged when it is empty or has no
+constant columns.
 }
 \description{
 This function takes a data frame and returns a new data frame with constant variables removed.
@@ -21,24 +24,12 @@ mysterycall_remove_constants(df)
 
 }
 \seealso{
-Other utilities: 
-\code{\link{\%>\%}()},
-\code{\link{mysterycall_assess_data_quality}()},
-\code{\link{mysterycall_check_api_response}()},
-\code{\link{mysterycall_check_data_completeness}()},
-\code{\link{mysterycall_check_dependencies}()},
-\code{\link{mysterycall_check_no_data_loss}()},
-\code{\link{mysterycall_check_no_limits}()},
-\code{\link{mysterycall_download_file}()},
-\code{\link{mysterycall_estimate_resources}()},
-\code{\link{mysterycall_export_with_backup}()},
-\code{\link{mysterycall_preflight_check}()},
-\code{\link{mysterycall_quality_tier}()},
+\code{\link[=mysterycall_preflight_check]{mysterycall_preflight_check()}} to audit data quality before
+removal; \code{\link[=mysterycall_assess_data_quality]{mysterycall_assess_data_quality()}} for missingness scoring.
+
+Other data quality: 
+\code{\link{mysterycall_not_contacted_states}()},
 \code{\link{mysterycall_remove_near_zero}()},
-\code{\link{mysterycall_resolve_path}()},
-\code{\link{mysterycall_save_quality_table}()},
-\code{\link{mysterycall_scan_for_limits}()},
-\code{\link{mysterycall_standard_labels}()},
-\code{\link{mysterycall_standard_palette}()}
+\code{\link{mysterycall_validate_phone}()}
 }
-\concept{utilities}
+\concept{data quality}

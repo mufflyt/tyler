@@ -9,20 +9,26 @@
 \arguments{
 \item{x}{A \code{mysterycall_poisson_model} object.}
 
-\item{digits}{Integer decimal places for coefficient display. Default \code{3}.}
+\item{digits}{Integer. Decimal places for coefficient display. Default \code{3}.}
 
 \item{...}{Ignored.}
 }
 \value{
-Invisibly returns \code{x}.
+\code{invisible(x)} (the original model list, returned silently so
+the print method can be used in pipes without printing twice).
 }
 \description{
-Print method for mysterycall_poisson_model objects
+Displays a formatted console summary of the fitted model: sample size,
+number of physicians, AIC/BIC, any convergence warnings, reference levels
+for each factor, and a fixed-effects table with incidence rate ratios (IRR),
+Wald 95\% CIs, and p-values.
 }
 \seealso{
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which produces this object;
+\code{\link[=mysterycall_irr_plot]{mysterycall_irr_plot()}} to visualise the same IRR estimates.
+
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -35,7 +41,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()}

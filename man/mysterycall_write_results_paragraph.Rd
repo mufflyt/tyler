@@ -17,7 +17,7 @@ mysterycall_write_results_paragraph(
 }
 \arguments{
 \item{model_result}{Either a \code{mysterycall_poisson_model} object (with
-element \code{$irr_table}) or a data frame with columns \code{term},
+element \verb{$irr_table}) or a data frame with columns \code{term},
 \code{irr}, \code{ci_lower}, \code{ci_upper}, and \code{p_value}.}
 
 \item{ref_group}{Character scalar: the reference group label (e.g.
@@ -56,5 +56,10 @@ irr_tbl <- data.frame(
 )
 mysterycall_write_results_paragraph(irr_tbl, "commercial insurance", "insurance")
 
+}
+\seealso{
+\code{\link[=mysterycall_poisson_model]{mysterycall_poisson_model()}} which produces the \code{model_result}
+input; \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}} for tabular summaries of the
+same outcome data.
 }
 \concept{reporting}

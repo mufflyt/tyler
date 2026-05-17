@@ -34,23 +34,11 @@ Creates an animated progress bar with ETA, percentage, and custom formatting.
 Uses the cli package for cross-platform compatibility and beautiful output.
 }
 \examples{
-\donttest{
-# Simple progress bar
-pb_id <- mysterycall_progress_bar("Processing", total = 100)
-for (i in 1:100) {
-  Sys.sleep(0.1)
-  mysterycall_progress_update(pb_id)
-}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+pb_id <- mysterycall_progress_bar("Processing", total = 10)
+for (i in 1:10) mysterycall_progress_update(pb_id)
 mysterycall_progress_done(pb_id)
-
-# With custom message
-pb_id <- mysterycall_progress_bar("Geocoding addresses", total = 500)
-for (i in 1:500) {
-  # do work
-  mysterycall_progress_update(pb_id, status = sprintf("Address \%d", i))
-}
-mysterycall_progress_done(pb_id, result = "All addresses geocoded!")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other progress-bars: 

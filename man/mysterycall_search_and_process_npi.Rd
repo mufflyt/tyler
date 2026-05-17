@@ -23,7 +23,8 @@ mysterycall_search_and_process_npi(
 )
 }
 \arguments{
-\item{data}{A data frame with columns 'first' and 'last' containing the names to search.}
+\item{data}{A data frame with columns \code{first} and \code{last} containing the
+provider names to search.}
 
 \item{enumeration_type}{The enumeration type for NPI search (e.g., "ind", "org", "all"). Default is "ind".}
 
@@ -68,12 +69,38 @@ lines to \code{progress_log} or "csv" to write structured entries with columns
 \code{timestamp}, \code{event}, \code{search_term}, \code{rows}, and \code{detail}.}
 }
 \value{
-A data frame containing the processed NPI search results.
+A data frame with 8 columns:
+\describe{
+\item{\code{npi}}{Character. 10-digit NPI identifier; deduplicated within
+results.}
+\item{\code{first_name}}{Character. Provider first name from the NPI
+registry.}
+\item{\code{last_name}}{Character. Provider last name from the NPI
+registry.}
+\item{\code{middle_name}}{Character. Provider middle name; \code{NA} when
+absent.}
+\item{\code{credential}}{Character. Degree credential string (e.g., \code{"MD"},
+\code{"DO"}).}
+\item{\code{taxonomies_desc}}{Character. Taxonomy classification from the
+NPI registry.}
+\item{\code{search_term}}{Character. The \verb{first last} name string that was
+looked up.}
+\item{\code{resume_row_index}}{Integer. Row number from input \code{data};
+disambiguates providers with identical names.}
+}
+Rows are deduplicated by NPI and sorted by \code{last_name}, \code{first_name}.
+When \code{resume = TRUE} and \code{accumulate_path} already exists, previously
+processed names are skipped and new results are appended to that file.
+Returns an empty data frame with these columns when no matches pass the
+credential and taxonomy filters.
 }
 \description{
-This function takes an input data frame containing first and last names, performs NPI search and processing,
-and filters results based on specified taxonomies. It supports customization for enumeration type, search limit,
-and filtering credentials.
+Searches the NPI registry by provider name, filters by taxonomy and
+credentials, and accumulates results across batches.  Supports resume
+capability for interrupted runs (via \code{resume = TRUE}), structured logging to
+CSV or plain-text files, and optional progress callbacks for long-running
+workflows.  Failed searches are automatically retried (up to 3 attempts)
+with exponential backoff.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
@@ -82,6 +109,10 @@ results <- mysterycall_search_and_process_npi(df)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_validate_npi]{mysterycall_validate_npi()}} for downstream NPI validation;
+\code{\link[=mysterycall_run_workflow]{mysterycall_run_workflow()}} which orchestrates this function;
+\code{\link[=mysterycall_search_taxonomy]{mysterycall_search_taxonomy()}} for taxonomy-based registry searches.
+
 Other npi: 
 \code{\link{mysterycall_get_clinician_data}()},
 \code{\link{mysterycall_search_taxonomy}()}

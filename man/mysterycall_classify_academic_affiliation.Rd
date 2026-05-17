@@ -25,7 +25,7 @@ same length as \code{org_name} if provided. Default: \code{NULL}.}
 Data frame with one row per input and columns:
 \describe{
 \item{academic_classification}{Character. "Academic" or "Non-Academic".}
-\item{confidence_score}{Numeric. Confidence in the classification (0–1).}
+\item{confidence_score}{Numeric. Confidence in the classification (0-1).}
 \item{matched_pattern}{Character. Highest-scoring pattern match, or NA.}
 }
 }
@@ -42,9 +42,5 @@ classify_academic_affiliation("Community Regional Hospital")
 \seealso{
 \code{\link{mysterycall_check_academic_name_patterns}},
 \code{\link{mysterycall_get_academic_indicators_summary}}
-
-Other classification: 
-\code{\link{mysterycall_check_academic_name_patterns}()},
-\code{\link{mysterycall_get_academic_indicators_summary}()}
 }
 \concept{classification}

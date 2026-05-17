@@ -41,7 +41,8 @@ at 9.0 in (Green Journal maximum).}
 \item{csv}{Logical. Export CSV (default \code{TRUE}).}
 }
 \value{
-Invisible character vector of paths written.
+Invisible character vector of file paths written (PNG, PDF, and/or
+CSV depending on arguments).
 }
 \description{
 Exports a ggplot in all formats needed for journal submission:
@@ -63,5 +64,9 @@ save_green_journal_figure(p, "figures/fig1", layout = "double_column")
 # Creates: figures/fig1.tiff  figures/fig1.pdf  figures/fig1.png
 #          figures/fig1_data.csv
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\code{\link[=theme_green_journal]{theme_green_journal()}}, \code{\link[=theme_green_journal_map]{theme_green_journal_map()}} for themes
+to apply before saving; \code{\link[=palette_green_journal]{palette_green_journal()}} for the colour palette.
 }
 \concept{green-journal-output}

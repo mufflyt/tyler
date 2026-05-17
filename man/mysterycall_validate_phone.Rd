@@ -24,13 +24,15 @@ A data frame with one row per element of \code{phone_str} and columns:
 \describe{
 \item{\code{phone_e164_valid}}{Logical. \code{TRUE} if the number passes all NANP
 syntactic rules.}
-\item{\code{phone_npa}}{Character. The 3-digit area code, or \code{NA} when the
-number is syntactically invalid.}
-\item{\code{phone_state_from_npa}}{Character. The 2-letter state code for the
-area code, or \code{NA} when the area code is not in the lookup.}
+\item{\code{phone_npa}}{Character. The 3-digit North American Numbering Plan
+area code, or \code{NA_character_} when the number is syntactically
+invalid.}
+\item{\code{phone_state_from_npa}}{Character. The 2-letter US postal
+abbreviation for the area code's registered state, or \code{NA_character_}
+when the area code is absent from the bundled lookup table.}
 \item{\code{phone_area_code_matches_state}}{Logical. \code{TRUE} when
-\code{phone_state_from_npa} equals \code{practice_state}; \code{NA} when
-\code{practice_state} is \code{NULL}.}
+\code{phone_state_from_npa} exactly matches \code{practice_state}; \code{FALSE} when
+they differ; \code{NA} when \code{practice_state} is \code{NULL}.}
 \item{\code{phone_validity_flag}}{Character. One of \code{"valid"},
 \code{"missing"}, \code{"invalid_format"}, \code{"unknown_area_code"}, or
 \code{"area_code_state_mismatch"}.}
@@ -46,8 +48,8 @@ Syntactic validity rules applied:
 \itemize{
 \item Exactly 10 digits after stripping non-digits (an optional leading
 \code{"1"} country code is dropped first).
-\item NPA first digit (N) is 2–9.
-\item NXX first digit (N) is 2–9.
+\item NPA first digit (N) is 2-9.
+\item NXX first digit (N) is 2-9.
 \item NXX is not an N11 code (e.g. 911, 411, 211).
 }
 
@@ -79,5 +81,10 @@ mysterycall_validate_phone(c("2125551234", "0005551234"), practice_state = NULL)
 \code{\link[=mysterycall_parse_physician_name]{mysterycall_parse_physician_name()}} to structure name strings;
 \code{\link[=mysterycall_validate_parsed_names]{mysterycall_validate_parsed_names()}} for name-level quality checks;
 \code{\link[=mysterycall_safe_left_join]{mysterycall_safe_left_join()}} to attach validated phone data to a roster.
+
+Other data quality: 
+\code{\link{mysterycall_not_contacted_states}()},
+\code{\link{mysterycall_remove_constants}()},
+\code{\link{mysterycall_remove_near_zero}()}
 }
 \concept{data quality}

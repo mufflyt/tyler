@@ -13,12 +13,12 @@ mysterycall_caps(x)
 Character vector in uppercase with normalized ASCII and whitespace.
 }
 \description{
-Normalizes ASCII characters and converts the result to uppercase — the
+Normalizes ASCII characters and converts the result to uppercase  --  the
 standard format for USPS address comparison.
 }
 \examples{
 mysterycall_caps("123 main street")
-mysterycall_caps("456 oak ave #100")
+mysterycall_caps("456 oak ave #100")
 
 }
 \seealso{

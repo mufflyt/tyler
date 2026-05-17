@@ -34,7 +34,13 @@ the bottom box gains an extra line listing subspecialty counts
 \item{font_size}{Integer. Font size in points. Default \code{10L}.}
 }
 \value{
-A DiagrammeR \code{grViz} object (renders in RMarkdown / Viewer).
+A \code{DiagrammeR::grViz} object representing the CONSORT flow diagram.
+Renders automatically in the RStudio Viewer and RMarkdown HTML output.
+To export to SVG or PDF:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{svg_text <- DiagrammeRsvg::export_svg(diagram)
+rsvg::rsvg_pdf(chartr("\\n", "", svg_text), "consort.pdf")
+}\if{html}{\out{</div>}}
 }
 \description{
 Builds a DiagrammeR DOT diagram tailored to mystery-caller study reporting.
@@ -67,9 +73,11 @@ mysterycall_plot_inclexcl(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_flowchart]{mysterycall_flowchart()}} for a generic multi-step flowchart;
+\code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}} to compute the counts that feed this diagram.
+
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -81,7 +89,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

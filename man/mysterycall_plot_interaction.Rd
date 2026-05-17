@@ -30,11 +30,15 @@ mysterycall_plot_interaction(
 \item{resolution}{Integer DPI used when saving the plot. Defaults to \code{100}.}
 }
 \value{
-A list with:
+A named list with two elements:
 \describe{
-\item{\code{model}}{The fitted \code{lme4::glmer()} model object.}
-\item{\code{effects_plot_data}}{Summarized predicted values used in the plot.}
+\item{\code{model}}{The fitted \code{lme4::glmer()} model object (class \code{glmerMod}).}
+\item{\code{effects_plot_data}}{A data frame with one row per
+\code{interaction_variable} x \code{variable_of_interest} combination and columns
+named after those two arguments plus \code{mean_pred} (numeric mean predicted
+response on the link scale).}
 }
+A PNG file is also written to \code{output_path} as a side effect.
 }
 \description{
 Reads an \code{.rds} dataset, fits a Poisson generalized linear mixed model with
@@ -94,7 +98,6 @@ result <- mysterycall_plot_interaction(
 
 Other modeling helpers: 
 \code{\link{mysterycall_check_normality}()},
-\code{\link{mysterycall_create_formula}()},
-\code{\link{mysterycall_plot_emmeans}()}
+\code{\link{mysterycall_create_formula}()}
 }
 \concept{modeling helpers}

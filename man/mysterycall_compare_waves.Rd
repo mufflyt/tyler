@@ -26,7 +26,7 @@ are stratified by group x wave.}
 
 \item{type}{One of \code{"auto"} (default), \code{"proportion"}, or
 \code{"continuous"}. \code{"auto"} detects based on whether all
-non-missing outcome values are in \{0, 1\}.}
+non-missing outcome values are in {0, 1}.}
 
 \item{ref_wave}{Scalar or NULL. The reference wave against which other
 waves are compared. When NULL, the first wave (sorted
@@ -34,11 +34,11 @@ alphabetically/numerically) is used.}
 }
 \value{
 A data frame. For proportion outcomes: columns \code{wave},
-(\code{group},) \code{n}, \code{n_accepted}, \code{rate},
-\code{lower_ci}, \code{upper_ci}, \code{p_vs_ref}. For continuous
-outcomes: columns \code{wave}, (\code{group},) \code{n}, \code{mean},
-\code{median}, \code{sd}, \code{iqr}, \code{p_vs_ref}. The attribute
-\code{ref_wave} is set on the returned data frame.
+(\code{group},) \code{n}, \code{n_accepted}, \code{rate}, \code{lower_ci}, \code{upper_ci},
+\code{p_vs_ref}. For continuous outcomes: columns \code{wave}, (\code{group},)
+\code{n}, \code{mean}, \code{median}, \code{sd}, \code{iqr}, \code{p_vs_ref}. The \code{group}
+column is only present when \code{group_col} is non-\code{NULL}. The
+attribute \code{ref_wave} is set on the returned data frame.
 }
 \description{
 Calculates per-wave (and optionally per-group) summary statistics and
@@ -53,24 +53,12 @@ mysterycall_compare_waves(df, "wave", "outcome")
 
 }
 \seealso{
-Other outcomes: 
-\code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_irr_plot}()},
-\code{\link{mysterycall_marginal_effects}()},
-\code{\link{mysterycall_model_metrics}()},
-\code{\link{mysterycall_plot_distribution}()},
-\code{\link{mysterycall_plot_effect}()},
-\code{\link{mysterycall_plot_emmeans_full}()},
-\code{\link{mysterycall_plot_emmeans_interaction}()},
-\code{\link{mysterycall_plot_inclexcl}()},
-\code{\link{mysterycall_plot_residuals}()},
-\code{\link{mysterycall_plot_sjplot_interaction}()},
-\code{\link{mysterycall_plot_stacked_bar}()},
-\code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
-\code{\link{mysterycall_screen_interactions}()},
-\code{\link{mysterycall_select_best_model}()},
-\code{\link{mysterycall_wait_time_summary}()},
-\code{\link{print.mysterycall_poisson_model}()}
+\code{\link[=mysterycall_wait_time_summary]{mysterycall_wait_time_summary()}}, \code{\link[=mysterycall_acceptance_rate]{mysterycall_acceptance_rate()}}
+for detailed single-wave outcome analysis; \code{\link[=mysterycall_bootstrap_ci]{mysterycall_bootstrap_ci()}}
+for non-parametric confidence intervals.
+
+Other inference: 
+\code{\link{mysterycall_bootstrap_ci}()},
+\code{\link{mysterycall_multiple_comparison_adjust}()}
 }
-\concept{outcomes}
+\concept{inference}

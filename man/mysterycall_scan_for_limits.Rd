@@ -19,8 +19,20 @@ mysterycall_scan_for_limits(
 For example, "test-.*\\\\.R$" to exclude test files.}
 }
 \value{
-A data frame of found issues with columns: file, line, pattern, code.
-Returns empty data frame if no issues found. Also prints warnings.
+A data frame with one row per detected issue and columns:
+\describe{
+\item{\code{file}}{Character. Basename of the scanned R file.}
+\item{\code{line}}{Integer. Line number where the pattern was found.}
+\item{\code{severity}}{Character. One of \code{"CRITICAL"}, \code{"HIGH"}, or
+\code{"MEDIUM"}.}
+\item{\code{pattern}}{Character. Human-readable description of the
+anti-pattern detected.}
+\item{\code{code}}{Character. Trimmed source code line that triggered
+the match.}
+}
+Returns a zero-row data frame with these columns when no issues are
+found. Rows are sorted by severity (CRITICAL first), then file, then
+line number. Also emits \code{\link[base:message]{base::message()}} for each detected issue.
 }
 \description{
 Scans R source files for common limiting anti-patterns that violate the
@@ -33,9 +45,9 @@ Searches for these anti-patterns:
 \item \code{slice_head(n = )}
 \item \code{head(data, n)}
 \item \code{sample_n()}
-\item \code{n_max = }
-\item \code{max_records = }
-\item \code{LIMIT n} (SQL)
+\item \verb{n_max = }
+\item \verb{max_records = }
+\item \verb{LIMIT n} (SQL)
 }
 }
 \examples{
@@ -48,6 +60,9 @@ issues <- mysterycall_scan_for_limits("R/", exclude_pattern = "deprecated")
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+\code{\link[=mysterycall_check_no_limits]{mysterycall_check_no_limits()}} to validate row counts at runtime;
+\code{\link[=mysterycall_check_no_data_loss]{mysterycall_check_no_data_loss()}}, \code{\link[=mysterycall_check_api_response]{mysterycall_check_api_response()}}.
+
 Other utilities: 
 \code{\link{\%>\%}()},
 \code{\link{mysterycall_assess_data_quality}()},
@@ -61,8 +76,6 @@ Other utilities:
 \code{\link{mysterycall_export_with_backup}()},
 \code{\link{mysterycall_preflight_check}()},
 \code{\link{mysterycall_quality_tier}()},
-\code{\link{mysterycall_remove_constants}()},
-\code{\link{mysterycall_remove_near_zero}()},
 \code{\link{mysterycall_resolve_path}()},
 \code{\link{mysterycall_save_quality_table}()},
 \code{\link{mysterycall_standard_labels}()},

@@ -48,7 +48,13 @@ names. Default \code{c(".x", ".y")}.}
 \item{report_prefix}{Character scalar. Filename prefix for the audit CSV.}
 }
 \value{
-A data frame: the left-join result.
+A data frame containing all rows of \code{left} joined to matching rows
+of \code{right}. Columns from both tables are included; name conflicts gain the
+\code{suffix} extensions. Stops with an informative error when: \code{left} or
+\code{right} is not a data frame; \code{by} columns are absent; coverage falls below
+\code{min_coverage}; or output rows exceed \code{max_duplication} times input rows.
+When \code{write_report = TRUE}, a one-row CSV audit record is written to the
+working directory using \code{report_prefix} as the filename stem.
 }
 \description{
 Wraps \code{\link[dplyr:mutate-joins]{dplyr::left_join()}} with:

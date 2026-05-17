@@ -15,8 +15,15 @@ mysterycall_plot_distribution(x, title = NULL, bins = 30L)
 \item{bins}{Integer number of histogram bins. Default \code{30L}.}
 }
 \value{
-A named list with elements \code{raw} and \code{sqrt_transformed}, each a
-\code{ggplot} object.
+A named list with two \code{ggplot2::ggplot} objects:
+\describe{
+\item{\code{raw}}{Histogram of \code{x} with raw counts on the y-axis.}
+\item{\code{sqrt_transformed}}{Same histogram with a square-root-transformed
+y-axis via \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_sqrt()}}, improving visibility of
+right-skewed count distributions.}
+}
+Both plots use the same \code{bins} value. Access elements with \verb{$raw} and
+\verb{$sqrt_transformed} for side-by-side comparison.
 }
 \description{
 Returns two ggplot2 histograms side-by-side as a named list. The first
@@ -30,7 +37,6 @@ plots$raw
 \seealso{
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -42,7 +48,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

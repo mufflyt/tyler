@@ -49,9 +49,15 @@ groups; \code{FALSE} uses shapes and linetypes for greyscale output.}
 \value{
 Invisibly, a named list with elements:
 \describe{
-\item{\code{data}}{\code{data.frame} from \code{\link[emmeans:emmeans]{emmeans::emmeans()}}.}
-\item{\code{plot}}{The \code{ggplot} object.}
+\item{\code{data}}{\code{data.frame} from \code{\link[emmeans:emmeans]{emmeans::emmeans()}} with columns for
+the x-axis variable, \code{emmean} (or \code{rate} for Poisson link), \code{SE},
+\code{df}, \code{lower.CL}/\code{upper.CL} (or \code{asymp.LCL}/\code{asymp.UCL} for large
+samples), and any grouping variable from \code{specs}. Exact column names
+depend on the model family.}
+\item{\code{plot}}{\code{ggplot} object. Print or pass to \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}.}
 }
+Capture with \code{res <- mysterycall_plot_emmeans_full(...)} to access
+\code{res$data} and \code{res$plot}.
 }
 \description{
 Extends \code{\link[=mysterycall_plot_emmeans_interaction]{mysterycall_plot_emmeans_interaction()}} with three enhancements
@@ -84,7 +90,6 @@ res$plot
 \seealso{
 Other outcomes: 
 \code{\link{mysterycall_acceptance_rate}()},
-\code{\link{mysterycall_compare_waves}()},
 \code{\link{mysterycall_irr_plot}()},
 \code{\link{mysterycall_marginal_effects}()},
 \code{\link{mysterycall_model_metrics}()},
@@ -96,7 +101,6 @@ Other outcomes:
 \code{\link{mysterycall_plot_sjplot_interaction}()},
 \code{\link{mysterycall_plot_stacked_bar}()},
 \code{\link{mysterycall_poisson_model}()},
-\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_screen_interactions}()},
 \code{\link{mysterycall_select_best_model}()},
 \code{\link{mysterycall_wait_time_summary}()},

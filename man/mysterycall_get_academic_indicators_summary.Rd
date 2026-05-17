@@ -7,10 +7,19 @@
 mysterycall_get_academic_indicators_summary()
 }
 \value{
-Named list with elements \code{module_version}, \code{created_date},
-\code{indicators} (three-tier named list with confidence ranges and
-indicator scores), \code{total_known_institutions}, \code{total_patterns},
-and \code{usage_notes}.
+A named list with elements:
+\describe{
+\item{\code{module_version}}{Character. Package version string.}
+\item{\code{created_date}}{Character. ISO date string (YYYY-MM-DD).}
+\item{\code{indicators}}{Named list with three sublists:
+\code{tier1_education_training}, \code{tier2_research_clinical}, and
+\code{tier3_name_patterns}, each containing confidence ranges and
+indicator scores.}
+\item{\code{total_known_institutions}}{Integer. Count of known academic
+institutions in the bundled lookup.}
+\item{\code{total_patterns}}{Integer. Count of name-pattern rules.}
+\item{\code{usage_notes}}{Character vector. Recommended usage guidelines.}
+}
 }
 \description{
 Creates a comprehensive summary report of all available academic indicators,
@@ -23,11 +32,27 @@ names(summary$indicators)
 
 }
 \seealso{
-\code{\link{mysterycall_classify_academic_affiliation}},
-\code{\link{mysterycall_check_academic_name_patterns}}
+\code{\link[=mysterycall_classify_academic_affiliation]{mysterycall_classify_academic_affiliation()}},
+\code{\link[=mysterycall_check_academic_name_patterns]{mysterycall_check_academic_name_patterns()}}
 
-Other classification: 
+Other provider characteristics: 
+\code{\link{mysterycall_academic_patterns}()},
+\code{\link{mysterycall_age_category}()},
+\code{\link{mysterycall_assign_region}()},
 \code{\link{mysterycall_check_academic_name_patterns}()},
-\code{\link{mysterycall_classify_academic_affiliation}()}
+\code{\link{mysterycall_classify_medical_school}()},
+\code{\link{mysterycall_classify_practice_setting}()},
+\code{\link{mysterycall_classify_ruca}()},
+\code{\link{mysterycall_collapse_rare}()},
+\code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_government_patterns}()},
+\code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
+\code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_physician_age}()},
+\code{\link{mysterycall_recode_credentials}()},
+\code{\link{mysterycall_reconcile_specialty}()},
+\code{\link{mysterycall_reorder_by_freq}()}
 }
-\concept{classification}
+\concept{provider characteristics}

@@ -18,10 +18,20 @@ mysterycall_get_census_data(
 \item{api_key}{Census API key to use for requests. Defaults to the \code{CENSUS_API_KEY} environment variable.}
 }
 \value{
-A tibble containing Census block group data for the requested
-states. The result includes padded 2020 FIPS columns (\code{statefp},
-\code{countyfp}, \code{tractce}, \code{block_group}, \code{geoid}) and a \code{vintage} column
-indicating the Census vintage that supplied the estimates.
+A tibble with one row per Census block group. Columns include:
+\describe{
+\item{\code{statefp}}{Character. Zero-padded 2-digit state FIPS code.}
+\item{\code{countyfp}}{Character. Zero-padded 3-digit county FIPS code.}
+\item{\code{tractce}}{Character. Zero-padded 6-digit Census tract code.}
+\item{\code{block_group}}{Character. Single-digit block group identifier.}
+\item{\code{geoid}}{Character. Full 12-digit block group GEOID
+(\code{statefp + countyfp + tractce + block_group}).}
+\item{\code{vintage}}{Integer. The ACS vintage year supplied via \code{vintage}.}
+\item{Population columns}{Numeric. ACS 5-year estimates for total
+population and sex-by-age detail (\code{B01001_*E} variables).}
+}
+Returns an empty tibble when \code{us_fips_list} is length zero. States whose
+API call fails emit a warning and are silently skipped.
 }
 \description{
 This function retrieves Census data of all state block groups by looping

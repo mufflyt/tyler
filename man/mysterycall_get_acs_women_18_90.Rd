@@ -7,7 +7,7 @@
 mysterycall_get_acs_women_18_90(year = 2022, states = NULL, verbose = TRUE)
 }
 \arguments{
-\item{year}{Integer. ACS 5-year survey year (2009–2023). Default: \code{2022}.}
+\item{year}{Integer. ACS 5-year survey year (2009-2023). Default: \code{2022}.}
 
 \item{states}{Character vector of two-letter state abbreviations, or
 \code{NULL} to download all states (slow, ~30 min). Default: \code{NULL}.}

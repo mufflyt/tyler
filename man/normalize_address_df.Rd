@@ -32,14 +32,19 @@ Default: \code{"practice_state"}.}
 Default: \code{"practice_zip"}.}
 }
 \value{
-The input data frame with original columns modified plus additional
-derived columns:
+The input data frame with the original address columns normalised
+in-place plus five new derived columns:
 \describe{
-\item{address1_norm}{Fully normalized primary address.}
-\item{address2_norm}{Fully normalized secondary address.}
-\item{address1_no_unit}{Primary address with unit designators removed.}
-\item{is_po_box}{Logical: is this a PO Box address?}
-\item{has_num}{Logical: does the address start with a street number?}
+\item{\code{address1_norm}}{Character. Fully normalised primary address
+(ASCII, directionals, suffixes, and units standardised).}
+\item{\code{address2_norm}}{Character or \code{NA_character_}. Normalised
+secondary address.}
+\item{\code{address1_no_unit}}{Character. Primary address with all unit
+designators stripped.}
+\item{\code{is_po_box}}{Logical. \code{TRUE} if the address matches a PO Box
+pattern.}
+\item{\code{has_num}}{Logical. \code{TRUE} if the address begins with a street
+number.}
 }
 }
 \description{

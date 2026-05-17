@@ -37,7 +37,7 @@ mysterycall_progress_start(tr, "Geocode")
 mysterycall_progress_finish(tr, "Geocode", score = 0.92)
 }
 \seealso{
-Other logging utilities: 
+Other logging: 
 \code{\link{mysterycall_format_duration}()},
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_error}()},
@@ -58,4 +58,4 @@ Other logging utilities:
 \code{\link{mysterycall_workflow_end}()},
 \code{\link{mysterycall_workflow_start}()}
 }
-\concept{logging utilities}
+\concept{logging}

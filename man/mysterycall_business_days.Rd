@@ -35,7 +35,7 @@ calling this function many times to avoid rebuilding it on each call.}
 }
 \description{
 The primary outcome in mystery caller studies is
-\code{business_days_until_appointment}: the number of Mon–Fri working days
+\code{business_days_until_appointment}: the number of Mon-Fri working days
 (excluding US federal holidays) between the call date and the offered
 appointment date. These helpers build a \code{bizdays} calendar from US
 federal holidays and compute that column for a data frame.

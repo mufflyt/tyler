@@ -13,7 +13,8 @@ mysterycall_sample_size_text(N, margin_of_error = 0.05)
 Default \code{0.05} (+/-5\%).}
 }
 \value{
-A single character string.
+A single character string ready to paste into a manuscript methods
+section describing the required sample size.
 }
 \description{
 Calls \code{\link[=mysterycall_cochran_n]{mysterycall_cochran_n()}} and returns a ready-to-paste sentence for
@@ -23,9 +24,13 @@ the methods section of a mystery-caller manuscript.
 mysterycall_sample_size_text(369)
 }
 \seealso{
+\code{\link[=mysterycall_cochran_n]{mysterycall_cochran_n()}} for the underlying sample-size formula;
+\code{\link[=mysterycall_methods_paragraph]{mysterycall_methods_paragraph()}} to generate the full methods paragraph.
+
 Other manuscript: 
 \code{\link{mysterycall_format_results_table}()},
 \code{\link{mysterycall_methods_paragraph}()},
+\code{\link{mysterycall_save_plot}()},
 \code{\link{mysterycall_summarize_demographics}()}
 }
 \concept{manuscript}

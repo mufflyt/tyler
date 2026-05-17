@@ -7,7 +7,7 @@
 mysterycall_get_acs_adults_18_90(year = NULL, states = NULL, verbose = TRUE)
 }
 \arguments{
-\item{year}{Integer. ACS 5-year survey year (2009–2023). Required — no
+\item{year}{Integer. ACS 5-year survey year (2009-2023). Required - no
 default to ensure reproducibility.}
 
 \item{states}{Character vector of two-letter state abbreviations, or

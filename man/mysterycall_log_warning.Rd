@@ -23,7 +23,7 @@ Log warning message
 mysterycall_log_warning("Missing API key", fix = "Set GOOGLE_API_KEY env var")
 }
 \seealso{
-Other logging utilities: 
+Other logging: 
 \code{\link{mysterycall_format_duration}()},
 \code{\link{mysterycall_log_cache_hit}()},
 \code{\link{mysterycall_log_error}()},
@@ -44,4 +44,4 @@ Other logging utilities:
 \code{\link{mysterycall_workflow_end}()},
 \code{\link{mysterycall_workflow_start}()}
 }
-\concept{logging utilities}
+\concept{logging}

@@ -63,7 +63,9 @@ Default \code{7}.}
 Default \code{300L}.}
 }
 \value{
-The ggplot object, invisibly.
+A \code{ggplot} object of class \code{c("gg", "ggplot")}, returned invisibly.
+When \code{save_path} is not \code{NULL}, also writes the plot to disk via
+\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}}.
 }
 \description{
 Draws a choropleth map of appointment acceptance rates using base-R map
@@ -78,9 +80,13 @@ df <- data.frame(
 mysterycall_map_acceptance_rate(df, region_col = "state", rate_col = "rate")
 }
 \seealso{
+\code{\link[=mysterycall_save_plot]{mysterycall_save_plot()}} to write the result to disk;
+\code{\link[=mysterycall_hrr_maps]{mysterycall_hrr_maps()}} for HRR-level choropleth maps.
+
 Other mapping: 
 \code{\link{mysterycall_clear_isochrone_cache}()},
 \code{\link{mysterycall_create_isochrones}()},
+\code{\link{mysterycall_hrr_maps}()},
 \code{\link{mysterycall_isochrones_for_df}()},
 \code{\link{mysterycall_map_acog_districts}()},
 \code{\link{mysterycall_map_base}()},

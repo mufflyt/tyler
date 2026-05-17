@@ -16,7 +16,10 @@ observations are collapsed. Default \code{50L}.}
 Default \code{"Other"}.}
 }
 \value{
-A vector of the same type as \code{x} with rare levels replaced.
+A vector the same length and type as \code{x}. Character input returns
+character; factor input returns a factor with updated levels (rare levels
+removed, \code{other_label} appended at the end if any collapsing occurred).
+Relative order of retained levels is preserved.
 }
 \description{
 Replaces any level (or unique value) that appears fewer than \code{threshold}
@@ -28,17 +31,25 @@ x <- c(rep("Otolaryngology", 80), rep("Urology", 30), rep("Dermatology", 5))
 mysterycall_collapse_rare(x, threshold = 10)
 }
 \seealso{
+\code{\link[=mysterycall_reorder_by_freq]{mysterycall_reorder_by_freq()}} to reorder factor levels by
+frequency; \code{\link[=mysterycall_recode_credentials]{mysterycall_recode_credentials()}} for credential grouping.
+
 Other provider characteristics: 
 \code{\link{mysterycall_academic_patterns}()},
 \code{\link{mysterycall_age_category}()},
 \code{\link{mysterycall_assign_region}()},
+\code{\link{mysterycall_check_academic_name_patterns}()},
 \code{\link{mysterycall_classify_medical_school}()},
 \code{\link{mysterycall_classify_practice_setting}()},
 \code{\link{mysterycall_classify_ruca}()},
 \code{\link{mysterycall_extract_physician_name}()},
+\code{\link{mysterycall_genderize}()},
+\code{\link{mysterycall_get_academic_indicators_summary}()},
 \code{\link{mysterycall_government_patterns}()},
 \code{\link{mysterycall_impute_age}()},
+\code{\link{mysterycall_most_common_gender}()},
 \code{\link{mysterycall_parse_certification_subspecialty}()},
+\code{\link{mysterycall_physician_age}()},
 \code{\link{mysterycall_recode_credentials}()},
 \code{\link{mysterycall_reconcile_specialty}()},
 \code{\link{mysterycall_reorder_by_freq}()}

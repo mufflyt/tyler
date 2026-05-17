@@ -19,8 +19,8 @@ mysterycall_call_productivity(
 \item{caller_col}{Character scalar: column identifying each caller.}
 
 \item{date_col}{Character scalar or NULL. Column containing call dates.
-Accepts \code{Date}, \code{POSIXct}, or character (coerced via
-\code{as.Date()}).}
+Accepts \code{Date}, \code{POSIXct}, or character (coerced via \code{as.Date()}).
+When \code{NULL}, \code{n_days} and \code{calls_per_day} are \code{NA} in the output.}
 
 \item{outcome_col}{Character scalar or NULL. Binary (0/1) column indicating
 whether a call resulted in an accepted appointment.}
@@ -35,16 +35,23 @@ whether a call resulted in an accepted appointment.}
 A data frame with one row per caller, sorted by \code{n_calls}
 descending. Columns:
 \describe{
-\item{caller}{Caller identifier.}
-\item{n_calls}{Total calls.}
-\item{n_days}{Unique call dates (NA if \code{date_col} is NULL).}
-\item{calls_per_day}{n_calls / n_days (NA if \code{date_col} is NULL).}
-\item{n_accepted}{Sum of \code{outcome_col} (NA if not provided).}
-\item{acceptance_rate}{Formatted "XX.X\%" (NA if \code{outcome_col} NULL).}
-\item{mean_hold_sec}{Mean hold time in seconds (NA if not provided).}
-\item{mean_call_sec}{Mean call time in seconds (NA if not provided).}
+\item{\code{caller}}{Character. Caller identifier (values from \code{caller_col}).}
+\item{\code{n_calls}}{Integer. Total number of calls made.}
+\item{\code{n_days}}{Numeric. Count of unique call dates. \code{NA} when
+\code{date_col} is \code{NULL}.}
+\item{\code{calls_per_day}}{Numeric. \code{n_calls / n_days}. \code{NA} when
+\code{date_col} is \code{NULL}.}
+\item{\code{n_accepted}}{Numeric. Sum of \code{outcome_col}. \code{NA} when
+\code{outcome_col} is \code{NULL}.}
+\item{\code{acceptance_rate}}{Character. Formatted \code{"XX.X\%"}. \code{NA} when
+\code{outcome_col} is \code{NULL}.}
+\item{\code{mean_hold_sec}}{Numeric. Mean hold time in seconds. \code{NA} when
+\code{hold_time_col} is \code{NULL}.}
+\item{\code{mean_call_sec}}{Numeric. Mean call time in seconds. \code{NA} when
+\code{call_time_col} is \code{NULL}.}
 }
-The attribute \code{total_calls_all} is set on the returned data frame.
+The attribute \code{total_calls_all} (integer) is set on the returned data
+frame recording the grand total across all callers.
 }
 \description{
 Summarises call volume, scheduling rates, and time metrics for each
@@ -59,11 +66,13 @@ mysterycall_call_productivity(df, "caller", outcome_col = "outcome")
 
 }
 \seealso{
+\code{\link[=mysterycall_caller_reliability]{mysterycall_caller_reliability()}} for inter-rater reliability
+metrics; \code{\link[=mysterycall_compare_waves]{mysterycall_compare_waves()}} for cross-wave outcome comparisons.
+
 Other workflow: 
 \code{\link{mysterycall_clean_phase1}()},
 \code{\link{mysterycall_clean_phase2}()},
 \code{\link{mysterycall_print_dashboard}()},
-\code{\link{mysterycall_rename_columns}()},
 \code{\link{mysterycall_run_workflow}()},
 \code{\link{mysterycall_run_workflow_logged}()},
 \code{\link{mysterycall_split_and_save}()},
